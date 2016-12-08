@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="learning_path">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="control_mode"
+            type="text"
+            length="255"
+            fixed="1"
+            default="" />
+        <property
+            name="version"
+            type="text"
+            length="10"
+            fixed="1"
+            default="chamilo" />
+        <property
+            name="path"
+            type="text"
+            length="255"
+            fixed="1" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+</object>

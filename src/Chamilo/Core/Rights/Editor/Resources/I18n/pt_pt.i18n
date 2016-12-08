@@ -1,0 +1,35 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\new_rights_editor_manager
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+AdvancedRightsEditor = "Individual rights"
+Children = "Children"
+Everyone = "To everyone"
+Inherit = "Inherit"
+Inheritance = "Inheritance"
+InheritRights = "Inherit rights"
+LockedFalse = "Settings not locked"
+LockedTrue = "Settings locked"
+NoContextGiven = "No context given"
+NoEntitiesSelected = "No entities selected"
+NoInherit = "No inherit"
+NoLocationSelected = "No location selected"
+NoLocationsSelected = "No locations selected"
+OnlyForMe = "Only for me"
+Rights = "Rights"
+RightsChanged = "Rights changed"
+RightsNotChanged = "Rights not changed"
+RightUpdated = "Right updated"
+RightUpdateFailed = "Failed to update right"
+Root = "Root"
+SelectSpecificEntities = "To specific selection"
+SimpleRightsEditor = "Global rights"
+UseSpecificRights = "Use specific rights"
+RightsEditorManagerSimpleRightsEditorComponent = "Edit rights (global)"
+RightsEditorManagerAdvancedRightsEditorComponent = "Edit rights (individual)"
+
+RightsEditorManagerManagerComponent = ""
+Grant = ""
+Deny = ""
+TypeName = "Rights Editor Manager (New)"

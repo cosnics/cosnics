@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Metadata">
+    <settings>
+        <category name="general">
+            <setting
+                name="default_namespace"
+                field="select"
+                default="0">
+                <options
+                    type="dynamic"
+                    source="retrieve_namespaces" />
+            </setting>
+        </category>
+    </settings>
+</package>

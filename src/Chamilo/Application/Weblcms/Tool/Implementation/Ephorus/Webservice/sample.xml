@@ -1,0 +1,2774 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <report xmlns="http://reporting.ephorus.org/">
+            <document_guid>55dc2a85-017f-49b0-a740-23372df544bc</document_guid>
+            <student_number>123</student_number>
+            <student_name>firstName middleName lastName</student_name>
+            <document_subject>test v4 - lastName - 123</document_subject>
+            <document_comment>student's comment</document_comment>
+            <document_date>15-09-2010 09:09</document_date>
+            <document_percentage>99</document_percentage>
+            <duplicate_original_guid />
+            <duplicate_student_name />
+            <duplicate_student_number />
+            <status>1</status>
+            <status_description>Ok</status_description>
+            <profile>Standard</profile>
+            <summary>
+                <document xmlns="">
+                    <open id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <open id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <open id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <open id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    And
+                    <open id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <open id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    so even though we face the difficulties of today
+                    and tomorrow,
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    I still have a dream. It is a dream deeply rooted
+                    in the American dream.&#xD;
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that one day this nation will rise
+                    up and live out the true meaning of its creed: ...We hold these truths
+                    to be self-evident, that all
+                    men are created equal....
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that one day on the red hills of
+                    Georgia, the sons of former slaves and the sons of former
+                    <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">slave</added>
+                        </added>
+                    </added>
+                    <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">owners</added>
+                        </added>
+                    </added>
+                    will be able to sit down together at
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">the</added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    table of brotherhood.&#xD;
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that one day even the state of
+                    Mississippi, a state sweltering with the heat of injustice,
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    sweltering with the heat of
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    oppression, will be transformed into an oasis of
+                    freedom and justice.&#xD;
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that my four
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">little</added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    children will one day live in a nation where they will not be judged by the
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">color</added>
+                        </added>
+                    </added>
+                    of their skin
+                    <close id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <close id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <close id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <close id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    <close id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <close id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    (words added)
+                    <open id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <open id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <open id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <open id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    <open id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <open id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    but by the content of their character. &#xD;
+                    I have a dream today!&#xD;
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that one day,
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    down in Alabama, with its vicious racists, with
+                    its governor having his lips dripping with the words of
+                    ...interposition... and ...nullification...
+                    <added id="bff2c472-5404-4100-b5d8-737daaab3938">
+                        <added id="bfb82106-6479-4e7a-887b-e47b94cb472d">
+                            <added id="94c8504c-2e04-4c7b-8083-bdf253756a9d">--</added>
+                        </added>
+                    </added>
+                    one day right there in Alabama
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    little black boys and black girls will be able to
+                    join hands with little white boys and white girls
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    as sisters and brothers.&#xD;
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream today!&#xD;
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    I have a dream that one day every valley shall be
+                    exalted,
+                    <added id="bff2c472-5404-4100-b5d8-737daaab3938">
+                        <added id="bfb82106-6479-4e7a-887b-e47b94cb472d">
+                            <added id="94c8504c-2e04-4c7b-8083-bdf253756a9d">
+                                <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                                    <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                                        <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                            <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                                <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                                    <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                                        <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">and</added>
+                                                    </added>
+                                                </added>
+                                            </added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    every hill and mountain shall be made low, the rough places will be made plain, and the crooked
+                    places will be made
+                    straight; ...and the glory of the Lord shall be revealed and all flesh shall see
+                    it
+                    <added id="ceb261e9-a2d1-46fe-8e50-3733f2bef847">together...</added>
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    This
+                    <close id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <close id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <close id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <close id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    <close id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <close id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    part of the text is completely original. I did not
+                    copy this from someone else or take it from the Internet. &#xD;
+                    <open id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <open id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <open id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <open id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <open id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <open id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <open id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <open id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                    This
+                    <open id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <open id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <open id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <open id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    <open id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <open id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    is our hope,
+                    <added id="bff2c472-5404-4100-b5d8-737daaab3938">
+                        <added id="bfb82106-6479-4e7a-887b-e47b94cb472d">
+                            <added id="94c8504c-2e04-4c7b-8083-bdf253756a9d">
+                                <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                                    <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                                        <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                            <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                                <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                                    <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                                        <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">and</added>
+                                                    </added>
+                                                </added>
+                                            </added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    this is the faith
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">that</added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    I
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">go</added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">back</added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    to the South
+                    <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                        <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                            <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                    <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                        <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                            <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">with.&#xD; </added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    With this faith, we will be able to hew out of the mountain of despair a stone of hope. With this
+                    faith, we will be able
+                    to transform the jangling discords of our nation into a beautiful symphony of
+                    brotherhood. With this faith, we will be
+                    able to work together, to pray together, to struggle
+                    together, to go to jail together, to stand up for freedom together,
+                    knowing that we will be free
+                    <added id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9">
+                        <added id="d9ccd10f-26e4-4e08-943f-e6008687001f">
+                            <added id="ceb261e9-a2d1-46fe-8e50-3733f2bef847">
+                                <added id="e305fef9-cbad-499e-80ff-74648d7018d6">
+                                    <added id="bff2c472-5404-4100-b5d8-737daaab3938">
+                                        <added id="bfb82106-6479-4e7a-887b-e47b94cb472d">
+                                            <added id="94c8504c-2e04-4c7b-8083-bdf253756a9d">
+                                                <added id="efc0ec79-f40c-43c5-b98a-d025937d7303">
+                                                    <added id="7ff695b5-bc6b-4d16-8622-6e250547e4d3">
+                                                        <added id="5b136a0d-2917-40e2-a02b-e78d69ac5b51">
+                                                            <added id="a078515b-66a2-43e0-bdc3-ad19e76f3e94">
+                                                                <added id="b0e9ff92-93a6-48b9-a543-f3f2557be654">
+                                                                    <added id="a28de942-99b9-4888-a887-2293628758fd">
+                                                                        <added id="133e29fb-315f-4b4d-ad46-cd5dce212726">
+                                                                            some
+                                                                        </added>
+                                                                    </added>
+                                                                </added>
+                                                            </added>
+                                                        </added>
+                                                    </added>
+                                                </added>
+                                            </added>
+                                        </added>
+                                    </added>
+                                </added>
+                            </added>
+                        </added>
+                    </added>
+                    day.
+                    <close id="d2aecdf5-a985-49b3-96e0-68b39d3fbdf9" />
+                    <close id="d9ccd10f-26e4-4e08-943f-e6008687001f" />
+                    <close id="ceb261e9-a2d1-46fe-8e50-3733f2bef847" />
+                    <close id="e305fef9-cbad-499e-80ff-74648d7018d6" />
+                    <close id="bff2c472-5404-4100-b5d8-737daaab3938" />
+                    <close id="bfb82106-6479-4e7a-887b-e47b94cb472d" />
+                    <close id="94c8504c-2e04-4c7b-8083-bdf253756a9d" />
+                    <close id="efc0ec79-f40c-43c5-b98a-d025937d7303" />
+                    <close id="7ff695b5-bc6b-4d16-8622-6e250547e4d3" />
+                    <close id="5b136a0d-2917-40e2-a02b-e78d69ac5b51" />
+                    <close id="a078515b-66a2-43e0-bdc3-ad19e76f3e94" />
+                    <close id="b0e9ff92-93a6-48b9-a543-f3f2557be654" />
+                    <close id="a28de942-99b9-4888-a887-2293628758fd" />
+                    <close id="133e29fb-315f-4b4d-ad46-cd5dce212726" />
+                </document>
+            </summary>
+            <results>
+                <result>
+                    <result_guid>d2aecdf5-a985-49b3-96e0-68b39d3fbdf9</result_guid>
+                    <url>80cf7fc5-b5e6-4be6-95b9-cefea56be99e\2010\8\ff1c716f-e0a0-4afe-88e5-df4277a6014b.doc</url>
+                    <mimetype>text/html</mimetype>
+                    <type>local</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    And so even though we face the difficulties of today and tomorrow, I still have a dream.
+                                    It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>And so even though we face the difficulties of today and tomorrow, I still
+                                    have a dream. It is a
+                                    dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and
+                                    live out the true meaning
+                                    of its creed:</vergelijk>
+                                ...We hold these truths to be self-evident, that all men
+                                are created equal....
+                                <vergelijk>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day, down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of ...interposition... and
+                                    ...nullification... -- one day right there in Alabama little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as sisters and
+                                    brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the crooked places will be
+                                    made straight;</origineel>
+                                ...and the glory of the Lord shall be revealed and all flesh
+                                shall see it together...
+                                <origineel>&#xD;
+                                    This
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    ...interposition... and
+                                    ...nullification... -- one day right there in Alabama little black boys and black
+                                    girls will be able to join hands with little white boys and white girls as sisters
+                                    and brothers.&#xD;
+                                    I
+                                    have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and
+                                    mountain shall be made low, the rough places will be made plain, and the crooked
+                                    places will be made
+                                    straight;</vergelijk>
+                                ...and the glory of the Lord shall be
+                                revealed and all flesh shall see it together...
+                                <vergelijk>&#xD;
+                                    This
+                                </vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <original_guid>ff1c716f-e0a0-4afe-88e5-df4277a6014b</original_guid>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>d9ccd10f-26e4-4e08-943f-e6008687001f</result_guid>
+                    <url>http://www.mochamomma.com/</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    And so even though we face the difficulties of today and tomorrow, I still have a dream.
+                                    It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>And so even though we face the difficulties of today and tomorrow, I still
+                                    have a dream. It is a
+                                    dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and
+                                    live out the true meaning
+                                    of its creed:</vergelijk>
+                                ...We hold these truths to be self-evident, that all men
+                                are created equal....
+                                <vergelijk>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day, down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of ...interposition... and
+                                    ...nullification... -- one day right there in Alabama little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as sisters and
+                                    brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the crooked places will be
+                                    made straight;</origineel>
+                                ...and the glory of the Lord shall be revealed and all flesh
+                                shall see it together...
+                                <origineel>&#xD;
+                                    This
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    ...interposition... and
+                                    ...nullification... ... one day right there in Alabama little black boys and
+                                    black
+                                    girls will be able to join hands with little white boys and white girls as sisters
+                                    and
+                                    brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and
+                                    every hill and
+                                    mountain shall be made low, the rough places will be made plain, and the crooked
+                                    places
+                                    will be made straight;</vergelijk>
+                                ...and the glory of the Lord shall be
+                                revealed and all flesh shall see it together....
+                                <vergelijk>&#xD;
+                                    This
+                                </vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>ceb261e9-a2d1-46fe-8e50-3733f2bef847</result_guid>
+                    <url>http://www.americanrhetoric.com/speeches/mlkihaveadream.htm</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    And so even though we face the difficulties of today and tomorrow, I still have a dream.
+                                    It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>And so even though we face the difficulties of today and tomorrow, I still
+                                    have a dream. It is a
+                                    dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and
+                                    live out the true meaning
+                                    of its creed: "We hold these truths to be self-evident, that all men are
+                                    created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I
+                                    have a dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    ...interposition... and
+                                    ...nullification... -- one day right there in Alabama little black boys and black
+                                    girls will be able to join hands with little white boys and white girls as sisters
+                                    and brothers.&#xD;
+                                    I
+                                    have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and
+                                    mountain shall be made low, the rough places will be made plain, and the crooked
+                                    places will be made
+                                    straight; ...and the glory of the Lord shall be revealed and all
+                                    flesh shall see it
+                                </origineel>
+                                <addedword>together...&#xD; </addedword>
+                                <origineel>This</origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    "interposition" and
+                                    "nullification" -- one day right there in Alabama little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as sisters and
+                                    brothers.&#xD;
+                                    I have a
+                                    dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and
+                                    mountain
+                                    shall be made low, the rough places will be made plain, and the crooked
+                                    places will be made straight;
+                                    "and the glory of the Lord shall be revealed and all
+                                    flesh shall see it
+                                </vergelijk>
+                                <removedword>together."2&#xD; </removedword>
+                                <vergelijk>This</vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>e305fef9-cbad-499e-80ff-74648d7018d6</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/24467</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    And so even though we face the difficulties of today and tomorrow, I still have a dream.
+                                    It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>And so even though we face the difficulties of today and tomorrow, I still
+                                    have a dream. It is a
+                                    dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and
+                                    live out the true meaning
+                                    of its creed: "We hold these truths to be self-evident, that all men are
+                                    created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I
+                                    have a dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>
+                                    but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day, down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of ...interposition... and
+                                    ...nullification... -- one day right there in Alabama little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as sisters and
+                                    brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the crooked places will be
+                                    made straight;</origineel>
+                                ...and the glory of the Lord shall be revealed and all flesh
+                                shall see it together...
+                                <origineel>&#xD;
+                                    This
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    "interposition" and
+                                    "nullification" -- one day right there in Alabama little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as sisters and
+                                    brothers.&#xD;
+                                    I have a
+                                    dream today!&#xD;
+                                    I have a dream that one day every valley shall be exalted, and every hill and
+                                    mountain
+                                    shall be made low, the rough places will be made plain, and the crooked
+                                    places will be made straight;
+                                    "and the glory of the Lord shall be revealed and all
+                                    flesh shall see it together."&#xD;
+                                    This
+                                </vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope, and this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will
+                                    be able to hew out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to
+                                    transform the jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith,
+                                    we will be able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>bff2c472-5404-4100-b5d8-737daaab3938</result_guid>
+                    <url>http://www.usconstitution.net/dream.html</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>so
+                                    even though we face the difficulties of today and tomorrow, I still have a dream. It is
+                                    a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>so even though we face the difficulties of today and tomorrow, I still have a
+                                    dream. It is a dream
+                                    deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live
+                                    out the true meaning
+                                    of its creed: "We hold these truths to be self-evident: that all men are created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of Georgia the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    ...interposition... and
+                                    ...nullification...
+                                </origineel>
+                                <addedword>--</addedword>
+                                <origineel>one day right there in Alabama little black boys and black girls will be able
+                                    to join hands with
+                                    little white boys and white girls as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream
+                                    that one day every valley shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel>&#xD;
+                                    This
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    interposition and nullification;
+                                    one day right there in Alabama, little black boys and black girls will
+                                    be able to
+                                    join hands with little white boys and white girls as sisters and brothers.&#xD;
+                                    I have a dream
+                                    today.&#xD;
+                                    I have a dream that one day every valley shall be exalted, every hill and mountain
+                                    shall be
+                                    made low, the rough places will be made plain, and the crooked places will
+                                    be made straight, and the
+                                    glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD;
+                                    This
+                                </vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will be able to hew
+                                    out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to transform the
+                                    jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith, we will be
+                                    able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for
+                                    freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope. This is the faith that I go back to the South with. With this
+                                    faith we will be able
+                                    to hew out of the mountain of despair a stone of hope. With
+                                    this faith we will be able to transform the
+                                    jangling discords of our nation into a
+                                    beautiful symphony of brotherhood. With this faith we will be able
+                                    to work together,
+                                    to pray together, to struggle together, to go to jail together, to stand up for
+                                    freedom
+                                    together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>bfb82106-6479-4e7a-887b-e47b94cb472d</result_guid>
+                    <url>http://eatdrinkandbemarysue.wordpress.com/</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>93</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>so
+                                    even though we face the difficulties of today and tomorrow, I still have a dream. It is
+                                    a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </origineel>
+                                <vergelijk>so even though we face the difficulties of today and tomorrow, I still have a
+                                    dream. It is a dream
+                                    deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live
+                                    out the true meaning
+                                    of its creed:</vergelijk>
+                                ...We hold these truths to be self-evident: that all men
+                                are created equal....
+                                <vergelijk>&#xD;
+                                    I have a dream that one day on the red hills of Georgia the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at the table
+                                    of brotherhood.&#xD;
+                                    I have a
+                                    dream that one day even the state of Mississippi, a state sweltering with
+                                    the heat of injustice,
+                                    sweltering with the heat of oppression, will be transformed
+                                    into an oasis of freedom and justice.&#xD;
+                                    I
+                                    have a dream that my four little children will one day live in a nation where they
+                                    will not be judged by
+                                    the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    ...interposition... and
+                                    ...nullification...
+                                </origineel>
+                                <addedword>--</addedword>
+                                <origineel>one day right there in Alabama little black boys and black girls will be able
+                                    to join hands with
+                                    little white boys and white girls as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream
+                                    that one day every valley shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel>&#xD;
+                                    This
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day,
+                                    down in Alabama, with its vicious racists, with its
+                                    governor having his lips dripping with the words of
+                                    interposition and nullification;
+                                    one day right there in Alabama, little black boys and black girls will
+                                    be able to
+                                    join hands with little white boys and white girls as sisters and brothers.&#xD;
+                                    I have a dream
+                                    today.&#xD;
+                                    I have a dream that one day every valley shall be exalted, every hill and mountain
+                                    shall be
+                                    made low, the rough places will be made plain, and the crooked places will
+                                    be made straight, and the
+                                    glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD;
+                                    This
+                                </vergelijk>
+                            </result>
+                            <fragment>part of the text is completely original. I did not copy this from someone else or
+                                take it from the
+                                Internet.&#xD;
+                                This
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will be able to hew
+                                    out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to transform the
+                                    jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith, we will be
+                                    able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for
+                                    freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>is our hope. This is the faith that I go back to the South with. With this
+                                    faith we will be able
+                                    to hew out of the mountain of despair a stone of hope. With
+                                    this faith we will be able to transform the
+                                    jangling discords of our nation into a
+                                    beautiful symphony of brotherhood. With this faith we will be able
+                                    to work together,
+                                    to pray together, to struggle together, to go to jail together, to stand up for
+                                    freedom
+                                    together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>94c8504c-2e04-4c7b-8083-bdf253756a9d</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/26821</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>88</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>so even though we face the difficulties of today and tomorrow, I still have a
+                                    dream. It is a dream
+                                    deeply rooted in the American dream.&#xD; </origineel>
+                                <vergelijk>so even though we face the difficulties of today and tomorrow, I still have a
+                                    dream. It is a dream
+                                    deeply rooted in the American dream.&#xD; </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    have a dream that one day this nation will rise up and live out the true meaning of its
+                                    creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are created
+                                equal....
+                                <origineel></origineel>
+                                <vergelijk>I have a dream that one day this nation will rise up and live out the true
+                                    meaning of its creed:
+                                    "We hold these truths to be self-evident: that all men are
+                                    created equal."&#xD; </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I have a dream that one day on the red hills of Georgia, the sons of former
+                                    slaves and the sons of
+                                    former slave owners will be able to sit down together at the
+                                    table of brotherhood.&#xD; </origineel>
+                                <vergelijk>I have a dream that one day on the red hills of Georgia the sons of former
+                                    slaves and the sons of
+                                    former slave owners will be able to sit down together at the
+                                    table of brotherhood.&#xD; </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I have a dream that one day even the state of Mississippi, a state sweltering
+                                    with the heat of
+                                    injustice, sweltering with the heat of oppression, will be
+                                    transformed into an oasis of freedom and
+                                    justice.&#xD; </origineel>
+                                <vergelijk>I have a dream that one day even the state of Mississippi, a state sweltering
+                                    with the heat of
+                                    injustice, sweltering with the heat of oppression, will be
+                                    transformed into an oasis of freedom and
+                                    justice.&#xD; </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I have a dream that my four little children will one day live in a nation
+                                    where they will not be
+                                    judged by the color of their skin
+                                </origineel>
+                                <vergelijk>I have a dream that my four little children will one day live in a nation
+                                    where they will not be
+                                    judged by the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added) but by the content of their character.&#xD;
+                                I have a dream today!&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I have a dream that one day, down in Alabama, with its vicious racists, with
+                                    its governor having
+                                    his lips dripping with the words of ...interposition... and
+                                    ...nullification...
+                                </origineel>
+                                <addedword>--</addedword>
+                                <origineel>one day right there in Alabama little black boys and black girls will be able
+                                    to join hands with
+                                    little white boys and white girls as sisters and brothers.&#xD; </origineel>
+                                <vergelijk>I have a dream that one day, down in Alabama, with its vicious racists, with
+                                    its governor having
+                                    his lips dripping with the words of interposition and
+                                    nullification; one day right there in Alabama,
+                                    little black boys and black girls
+                                    will be able to join hands with little white boys and white girls as
+                                    sisters and
+                                    brothers.&#xD; </vergelijk>
+                            </result>
+                            <fragment>I have a dream today!&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I have a dream that one day every valley shall be exalted,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>I have a dream that one day every valley shall be exalted, every hill and
+                                    mountain shall be made
+                                    low, the rough places will be made plain, and the crooked
+                                    places will be made straight, and the glory of
+                                    the Lord shall be revealed, and all
+                                    flesh shall see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith that I go back to the South with.&#xD;
+                                    With this faith, we will be able to hew
+                                    out of the mountain of despair a stone of
+                                    hope. With this faith, we will be able to transform the
+                                    jangling discords of our
+                                    nation into a beautiful symphony of brotherhood. With this faith, we will be
+                                    able to
+                                    work together, to pray together, to struggle together, to go to jail together, to
+                                    stand up for
+                                    freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith that I go back to the South with. With
+                                    this faith we will be
+                                    able to hew out of the mountain of despair a stone of hope.
+                                    With this faith we will be able to transform
+                                    the jangling discords of our nation
+                                    into a beautiful symphony of brotherhood. With this faith we will be
+                                    able to work
+                                    together, to pray together, to struggle together, to go to jail together, to stand
+                                    up for
+                                    freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>efc0ec79-f40c-43c5-b98a-d025937d7303</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/11213</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>79</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at
+                                </origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream. I
+                                    have a dream that one
+                                    day this nation will rise up and live out the true meaning of
+                                    its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal." I have a dream that one day on the red hills of Georgia
+                                    the sons of former
+                                    slaves and the sons of former slave owners will be able to sit down together at
+                                </vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood. I have a dream that one day even the state of
+                                    Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                </origineel>
+                                <addedword>color</addedword>
+                                <origineel>of their skin</origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice. I have
+                                    a dream that my four
+                                    children will one day live in a nation where they will not be
+                                    judged by the
+                                </vergelijk>
+                                <removedword>colour</removedword>
+                                <vergelijk>of their skin</vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character. I have a dream today. I have a dream
+                                    that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers. I have a dream today. I have a dream that one day
+                                    every valley shall be
+                                    exalted, every hill and mountain shall be made low, the rough
+                                    places will be made plain, and the crooked
+                                    places will be made straight, and the
+                                    glory of the Lord shall be revealed, and all flesh shall see it
+                                    together.
+                                </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.</vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>7ff695b5-bc6b-4d16-8622-6e250547e4d3</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/23688</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>79</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at
+                                </origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that
+                                    one day this nation will rise up and live out the true meaning
+                                    of its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of
+                                    Georgia the sons of former slaves
+                                    and the sons of former slave owners will be able to sit down together
+                                    at
+                                </vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                </origineel>
+                                <addedword>color</addedword>
+                                <origineel>of their skin</origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four children will one day live in a nation where they will
+                                    not be judged by the
+                                </vergelijk>
+                                <removedword>colour</removedword>
+                                <vergelijk>of their skin</vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted, every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the
+                                    crooked places will
+                                    be made straight, and the glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>5b136a0d-2917-40e2-a02b-e78d69ac5b51</result_guid>
+                    <url>http://www.mlkonline.net/dream.html</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>79</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at
+                                </origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that
+                                    one day this nation will rise up and live out the true meaning
+                                    of its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of
+                                    Georgia the sons of former slaves
+                                    and the sons of former slave owners will be able to sit down together
+                                    at
+                                </vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                    color of their skin
+                                </origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four children will one day live in a nation where they will
+                                    not be judged by the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted, every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the
+                                    crooked places will
+                                    be made straight, and the glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>a078515b-66a2-43e0-bdc3-ad19e76f3e94</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/21834</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>78</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former
+                                </origineel>
+                                <addedword>slave</addedword>
+                                <addedword>owners</addedword>
+                                <origineel>will be able to sit down together at</origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that
+                                    one day this nation will rise up and live out the true meaning
+                                    of its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal." I have a dream that one day on the red hills of Georgia
+                                    the sons of former
+                                    slaves and the sons of former
+                                </vergelijk>
+                                <removedword>slaveowners</removedword>
+                                <vergelijk>will be able to sit down together at</vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood. I have a dream that one day even the state of
+                                    Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                    color of their skin
+                                </origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice. I have
+                                    a dream that my four
+                                    children will one day live in a nation where they will not be
+                                    judged by the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character. I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers. I have a dream today. I have a dream that one day
+                                    every valley shall be
+                                    exalted, every hill and mountain shall be made low, the rough
+                                    places will be made plain, and the crooked
+                                    places will be made straight, and the
+                                    glory of the Lord shall be revealed, and all flesh shall see it
+                                    together.
+                                </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>b0e9ff92-93a6-48b9-a543-f3f2557be654</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/15222</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>79</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former slave owners will be able to sit down together at
+                                </origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that
+                                    one day this nation will rise up and live out the true meaning
+                                    of its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of
+                                    Georgia the sons of former slaves
+                                    and the sons of former slave owners will be able to sit down together
+                                    at
+                                </vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                </origineel>
+                                <addedword>color</addedword>
+                                <origineel>of their skin</origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four children will one day live in a nation where they will
+                                    not be judged by the
+                                </vergelijk>
+                                <removedword>colour</removedword>
+                                <vergelijk>of their skin</vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted, every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the
+                                    crooked places will
+                                    be made straight, and the glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>a28de942-99b9-4888-a887-2293628758fd</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/7599</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>78</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former
+                                </origineel>
+                                <addedword>slave</addedword>
+                                <addedword>owners</addedword>
+                                <origineel>will be able to sit down together at</origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I&#xD;
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream
+                                    that one day this nation will rise up and live out the true meaning
+                                    of its creed:&#xD;
+                                    "We hold these
+                                    truths to be self-evident: that all men are created equal."&#xD;
+                                    I have a dream that one day on the red
+                                    hills of Georgia the sons of former slaves
+                                    and the sons&#xD;
+                                    of former
+                                </vergelijk>
+                                <removedword>slaveowners</removedword>
+                                <vergelijk>will be able to sit down together at</vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the&#xD;
+                                    heat of injustice
+                                </vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                    color of their skin
+                                </origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four children will one day live in a nation where they will
+                                    not be&#xD;
+                                    judged by the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white&#xD;
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted, every hill and mountain
+                                    shall be&#xD;
+                                    made low, the rough places will be made plain, and
+                                    the crooked places will be made
+                                    straight,&#xD;
+                                    and the glory of the Lord shall be revealed, and all flesh
+                                    shall see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able&#xD;
+                                    to hew out of the mountain of despair a stone
+                                    of hope. With this faith we will be
+                                    able to&#xD;
+                                    transform the jangling discords of our nation into a
+                                    beautiful symphony of
+                                    brotherhood. With&#xD;
+                                    this faith we will be able to work together, to pray
+                                    together, to struggle together,
+                                    to go to jail&#xD;
+                                    together, to stand up for freedom together, knowing
+                                    that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+                <result>
+                    <result_guid>133e29fb-315f-4b4d-ad46-cd5dce212726</result_guid>
+                    <url>http://www.scholieren.com/werkstukken/28806</url>
+                    <mimetype>text/html</mimetype>
+                    <type>internet</type>
+                    <percent>78</percent>
+                    <diff>
+                        <document xmlns="">
+                            <fragment>And so even though we face the difficulties of today and tomorrow,</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>I
+                                    still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that one day this nation will rise up and live out the true meaning of
+                                    its creed:</origineel>
+                                ...We hold these truths to be self-evident, that all men are
+                                created equal....
+                                <origineel>&#xD;
+                                    I have a dream that one day on the red hills of Georgia, the sons of former slaves
+                                    and the
+                                    sons of former
+                                </origineel>
+                                <addedword>slave</addedword>
+                                <addedword>owners</addedword>
+                                <origineel>will be able to sit down together at</origineel>
+                                <addedword>the</addedword>
+                                <origineel>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a state
+                                    sweltering with
+                                    the heat of injustice,
+                                </origineel>
+                                <vergelijk>I still have a dream. It is a dream deeply rooted in the American dream.&#xD;
+                                    I have a dream that
+                                    one day this nation will rise up and live out the true meaning
+                                    of its creed: "We hold these truths to be
+                                    self-evident: that all men are created
+                                    equal."&#xD;
+                                    I have a dream that one day on the red hills of
+                                    Georgia the sons of former slaves
+                                    and the sons of former
+                                </vergelijk>
+                                <removedword>slaveowners</removedword>
+                                <vergelijk>will be able to sit down together at</vergelijk>
+                                <removedword>a</removedword>
+                                <vergelijk>table of brotherhood.&#xD;
+                                    I have a dream that one day even the state of Mississippi, a
+                                </vergelijk>
+                                <removedword>desert</removedword>
+                                <vergelijk>state, sweltering with the heat of injustice</vergelijk>
+                            </result>
+                            <fragment>sweltering with the heat of</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four
+                                </origineel>
+                                <addedword>little</addedword>
+                                <origineel>children will one day live in a nation where they will not be judged by the
+                                    color of their skin
+                                </origineel>
+                                <vergelijk>oppression, will be transformed into an oasis of freedom and justice.&#xD;
+                                    I have a dream that my
+                                    four children will one day live in a nation where they will
+                                    not be judged by the color of their skin
+                                </vergelijk>
+                            </result>
+                            <fragment>(words added)</fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>but by the content of their character.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day,
+                                </origineel>
+                                <vergelijk>but by the content of their character.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day
+                                </vergelijk>
+                            </result>
+                            <fragment>down in Alabama, with its vicious racists, with its governor having his lips
+                                dripping with the words of
+                                ...interposition... and ...nullification... -- one day right
+                                there in Alabama
+                            </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </origineel>
+                                <vergelijk>little black boys and black girls will be able to join hands with little
+                                    white boys and white
+                                    girls
+                                </vergelijk>
+                            </result>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>as sisters and brothers.&#xD;
+                                    I have a dream today!&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted,
+                                </origineel>
+                                <addedword>and</addedword>
+                                <origineel>every hill and mountain shall be made low, the rough places will be made
+                                    plain, and the crooked
+                                    places will be made straight;</origineel>
+                                ...and the glory of
+                                the Lord shall be revealed and all flesh shall see it together...
+                                <origineel></origineel>
+                                <vergelijk>as sisters and brothers.&#xD;
+                                    I have a dream today.&#xD;
+                                    I have a dream that one day every valley
+                                    shall be exalted, every hill and mountain
+                                    shall be made low, the rough places will be made plain, and the
+                                    crooked places will
+                                    be made straight, and the glory of the Lord shall be revealed, and all flesh shall
+                                    see it together.&#xD; </vergelijk>
+                            </result>
+                            <fragment>This part of the text is completely original. I did not copy this from someone
+                                else or take it from the
+                                Internet.&#xD; </fragment>
+                            <result
+                                authenticity="100"
+                                match="100"
+                                hopsrelwords="100"
+                                words="500"
+                                hops="0">
+                                <origineel>This is our hope,</origineel>
+                                <addedword>and</addedword>
+                                <origineel>this is the faith</origineel>
+                                <addedword>that</addedword>
+                                <origineel>I</origineel>
+                                <addedword>go</addedword>
+                                <addedword>back</addedword>
+                                <origineel>to the South</origineel>
+                                <addedword>with.&#xD; </addedword>
+                                <origineel>With this faith, we will be able to hew out of the mountain of despair a
+                                    stone of hope. With this
+                                    faith, we will be able to transform the jangling discords
+                                    of our nation into a beautiful symphony of
+                                    brotherhood. With this faith, we will be
+                                    able to work together, to pray together, to struggle together,
+                                    to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </origineel>
+                                <addedword>some</addedword>
+                                <origineel>day.</origineel>
+                                <vergelijk>This is our hope. This is the faith</vergelijk>
+                                <removedword>with</removedword>
+                                <vergelijk>I</vergelijk>
+                                <removedword>return</removedword>
+                                <vergelijk>to the South. With this faith we will be able to hew out of the mountain of
+                                    despair a stone of
+                                    hope. With this faith we will be able to transform the jangling
+                                    discords of our nation into a beautiful
+                                    symphony of brotherhood. With this faith we
+                                    will be able to work together, to pray together, to struggle
+                                    together, to go to jail
+                                    together, to stand up for freedom together, knowing that we will be free
+                                </vergelijk>
+                                <removedword>one</removedword>
+                                <vergelijk>day.&#xD; </vergelijk>
+                            </result>
+                        </document>
+                    </diff>
+                    <student_number />
+                    <student_name />
+                </result>
+            </results>
+        </report>
+    </s:Body>
+</s:Envelope>

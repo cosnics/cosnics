@@ -1,0 +1,140 @@
+default:
+  calls:
+    error_reporting: 22519 # E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'http://localhost/chamilo/web/' # Change to your local Chamilo base url
+      sessions:
+        default:
+          goutte:
+            guzzle_parameters:
+              defaults:
+                verify: false # Turn of errors on self-signed SSL certificates
+
+      #show_auto: true # Run a command when a test fails (uncomment one of the following commands)
+      #show_cmd: cat %s >> files/temp/behat_dump.html # Dump all HTML to file (Linux)
+      #show_cmd: type %s >> files/temp/behat_dump.html # Dump all HTML to file (Windows)
+      #show_cmd: firefox %s # Open a tab for each failed test in Firefox (Linux)
+      #show_cmd: '"C:\Program Files (x86)\Mozilla Firefox\Firefox.exe" %s' # Open a tab for each failed test in Firefox (Windows)
+      goutte: ~
+  suites:
+    core_admin:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Admin/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Admin\Test\Acceptance\Behat\Context'
+    core_group:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Group/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Group\Test\Acceptance\Behat\Context'
+    core_help:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Help/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Help\Test\Acceptance\Behat\Context'
+    core_home:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Home/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Home\Test\Acceptance\Behat\Context'
+    core_install:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Install/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Install\Test\Acceptance\Behat\Context'
+    core_lynx:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Lynx/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Lynx\Test\Acceptance\Behat\Context'
+    core_menu:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Menu/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Menu\Test\Acceptance\Behat\Context'
+    core_metadata:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Metadata/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Metadata\Test\Acceptance\Behat\Context'
+    core_reporting:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Reporting/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Reporting\Test\Acceptance\Behat\Context'
+    core_repository:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Repository/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Repository\Test\Acceptance\Behat\Context'
+    core_repository_implementation_office365:
+      ##
+      # This suite expects that you have already created the following files and folders via the office365/OneDrive site:
+      # - Book.xlsx
+      # - Folder1
+      #   - Document.xlsx 
+      #
+      # Note: Comment out line starting with 'tags:' in order to activate office365 tests 
+      #
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Repository/Implementation/Office365/Test/Acceptance/Behat/Features'
+      contexts:
+        - 'Chamilo\Core\Repository\Implementation\Office365\Test\Acceptance\Behat\FeatureContext':
+            - client_id: 
+              client_secret: 
+              user_id: 
+              password: 
+              use_lcms4_urls: false
+      filters:
+        # Comment out this line in order to activate test requiring office365. 
+        tags: ~@office365available
+    core_repository_implementation_office365_video:
+      ##
+      # This suite expects that you have already created the following channel and video via the office365/video site:
+      # - Channel1
+      #   - Video1 
+      #
+      # Note: Comment out line starting with 'tags:' in order to activate office365 tests 
+      #
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Repository/Implementation/Office365Video/Test/Acceptance/Behat/Features'
+      contexts:
+        - 'Chamilo\Core\Repository\Implementation\Office365Video\Test\Acceptance\Behat\FeatureContext':
+            - client_id: 
+              client_secret: 
+              root_site: 
+              user_id: 
+              password:
+              use_lcms4_urls: false
+      filters:
+        # Comment out this line in order to activate test requiring office365. 
+        tags: ~@office365available
+    core_rights:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Rights/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Rights\Test\Acceptance\Behat\Context'
+    core_tracking:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Tracking/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Tracking\Test\Acceptance\Behat\Context'
+    core_user:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/User/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\User\Test\Acceptance\Behat\Context'
