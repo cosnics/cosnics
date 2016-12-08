@@ -307,7 +307,7 @@ class Manager implements PublicationInterface
     {
         $applicationContext = \Chamilo\Application\Portfolio\Manager::context();
         
-        $locations = new Locations($applicationContext);
+        $locations = new Locations(__NAMESPACE__);
         $allowed_types = Portfolio::get_allowed_types();
         
         $condition = new EqualityCondition(
@@ -321,7 +321,7 @@ class Manager implements PublicationInterface
         {
             $locations->add_location(
                 new Location(
-                    $applicationContext, 
+                    __NAMESPACE__,
                     Translation::get('TypeName', null, $applicationContext), 
                     $user->getId(), 
                     $userPublication->getId()));
