@@ -98,7 +98,7 @@ class UnsubscriberComponent extends Manager
                 ($failures ? true : false), 
                 array(
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, 
-                    self::PARAM_GROUP_ID => $groupreluser->get_group_id()));
+                    self::PARAM_GROUP_ID => $this->getRequest()->get(self::PARAM_GROUP_ID)));
         }
         else
         {
