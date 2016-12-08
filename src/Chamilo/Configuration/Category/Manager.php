@@ -10,6 +10,7 @@ abstract class Manager extends Application
 {
     const PARAM_ACTION = 'category_action';
     const PARAM_CATEGORY_ID = 'category_id';
+    const PARAM_CATEGORY_ID_TO_DELETE = 'delete_category_id';
     const PARAM_DIRECTION = 'direction';
     const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
     const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
@@ -89,7 +90,7 @@ abstract class Manager extends Application
     public function get_impact_view_url($category_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_IMPACT_VIEW, self :: PARAM_CATEGORY_ID => $category_id));
+            array(self :: PARAM_ACTION => self :: ACTION_IMPACT_VIEW, self::PARAM_CATEGORY_ID_TO_DELETE => $category_id));
     }
 
     public function set_subcategories_allowed($subcategories_allowed)
