@@ -59,8 +59,8 @@ abstract class AbstractMailer implements MailerInterface
         {
             return $mail->getFromName();
         }
-        
-        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_name'));
+
+        return $this->getAdministratorName();
     }
 
     /**
@@ -93,8 +93,8 @@ abstract class AbstractMailer implements MailerInterface
         {
             return $mail->getReplyName();
         }
-        
-        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_name'));
+
+        return $this->getAdministratorName();
     }
 
     /**
@@ -154,5 +154,16 @@ abstract class AbstractMailer implements MailerInterface
         // {
         // throw new \RuntimeException('Could not create a mail log');
         // }
+    }
+
+    /**
+     * Returns the name of the administrator from the platform settings
+     *
+     * @return string
+     */
+    protected function getAdministratorName()
+    {
+        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_firstname')) .
+        $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_surname'));
     }
 }
