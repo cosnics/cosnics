@@ -10,7 +10,9 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -134,10 +136,19 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
             if (! $course_id)
             {
-                throw new \Exception(Translation :: get('NoCourseSelected'));
+                throw new NoObjectSelectedException(
+                    Translation::getInstance()->getTranslation('Course', null, Manager::context())
+                );
             }
 
             $this->course = CourseDataManager :: retrieve_by_id(Course :: class_name(), $course_id);
+
+            if(empty($this->course)) {
+                throw new ObjectNotExistException(
+                    Translation::getInstance()->getTranslation('Course', null, Manager::context()),
+                    $course_id
+                );
+            }
         }
 
         return $this->course;
