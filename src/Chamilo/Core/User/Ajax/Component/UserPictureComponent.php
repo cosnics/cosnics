@@ -2,8 +2,12 @@
 namespace Chamilo\Core\User\Ajax\Component;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
@@ -32,12 +36,28 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     }
 
     /**
-     * @return User
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws NoObjectSelectedException
+     * @throws ObjectNotExistException
      */
     protected function getUserFromRequest()
     {
-        $userId = $this->getRequest()->query->get(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
+        $userId = $this->getRequest()->get(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
+
+        if(empty($userId)) {
+            throw new NoObjectSelectedException(
+                Translation::getInstance()->getTranslation('User', null, Manager::context())
+            );
+        }
+
         $user = DataManager:: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User:: class_name(), $userId);
+
+        if(empty($user)) {
+            throw new ObjectNotExistException(
+                Translation::getInstance()->getTranslation('User', null, Manager::context()),
+                $userId
+            );
+        }
 
         return $user;
     }
