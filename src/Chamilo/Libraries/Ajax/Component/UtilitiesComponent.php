@@ -51,7 +51,11 @@ class UtilitiesComponent extends \Chamilo\Libraries\Ajax\Manager
         {
             // Retrieve platform paths
             case 'path' :
-                $properties[self :: PROPERTY_RESULT] = Path :: get(Request :: post(self :: PARAM_PATH));
+                if(Request::post(self::PARAM_PATH) != 'WEB_PATH') {
+                    throw new \Exception('Invalid Path parameter: ' . Request::post(self::PARAM_PATH));
+                }
+
+                $properties[self :: PROPERTY_RESULT] = Path::getInstance()->getBasePath(true);
                 break;
 
             // Retrieve the current theme
