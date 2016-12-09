@@ -1,0 +1,258 @@
+.reportoptions, .option {
+	color: Black;
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	float: right;
+}
+
+.ephorus-report-result a {
+	color: #FF9B04;
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	font-decoration: underline;
+}
+
+.summary_table {
+	color: Black;
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	width: 100%;
+}
+
+.summary_origineel {
+	color: Black;
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	width: 100%;
+}
+
+.summary_found {
+	color: #FF9B04;
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+}
+
+.summary_added {
+	color: #000000;
+	font-size: 12px;
+	font-family: Ubuntu, Arial;
+}
+
+.summary_removed {
+	color: #0099FF;
+	font-style: italic;
+	font-size: 12px;
+	font-family: Ubuntu, Arial;
+}
+
+.origineel {
+	border: solid 1px #CCCCCC;
+	background-color: white;
+}
+
+.RadioTable INPUT {
+	width: 16px;
+	height: 16px;
+}
+
+.result_origineel {
+	border-left: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	color: #FF9B04;
+	background-color: White;
+	text-decoration: none;
+	padding-left: 6px;
+	padding-top: 1px;
+	font-size: 12px;
+	font-family: Ubuntu, Arial;
+}
+
+.result_vergelijk {
+	border-left: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	background-color: White;
+	color: black;
+	padding-left: 6px;
+	padding-top: 1px;
+	font-size: 12px;
+	font-family: Ubuntu, Arial;
+}
+
+.result_header_origineel {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	font-weight: bold;
+	color: #0099FF;
+	background-color: White;
+	border-left: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	padding-left: 6px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+.result_header_vergelijk {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	color: #0099FF;
+	font-weight: bold;
+	background-color: White;
+	border-left: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	padding-left: 6px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+.report_table_header {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	color: #0099FF;
+	font-weight: bold;
+}
+
+.report_table_font {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	color: #000000;
+}
+
+.report_table_header_b {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	color: black;
+	font-weight: bold;
+}
+
+.report_table_font_b, td {
+	font-family: Ubuntu, Arial;
+	font-size: 12px;
+	color: black;
+}
+
+.minFont {
+	font-family: Ubuntu, Verdana;
+	font-size: 7pt;
+}
+
+.tableTop {
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	padding-left: 5px;
+}
+
+.tableTop2 {
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	padding-left: 5px;
+}
+
+.tableLeft {
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	padding-left: 5px;
+}
+
+.tableMiddle {
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+}
+
+.tableRight {
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	padding-left: 5px;
+}
+
+.tableRight1 {
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-left-color: #ffffff;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	padding-left: 5px;
+}
+
+.tableBottom {
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+}
+
+.tableFull {
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+	border-bottom-color: #CCCCCC;
+	border-bottom-width: 1px;
+	border-bottom-style: Solid;
+}
+
+.tableFullTop {
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+	border-left-color: #CCCCCC;
+	border-left-width: 1px;
+	border-left-style: Solid;
+}
+
+.tableTopRight {
+	border-top-color: #CCCCCC;
+	border-top-width: 1px;
+	border-top-style: Solid;
+	border-right-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: Solid;
+}
+
+.button_print {
+	text-decoration: none;
+	font-weight: bold;
+	color: #4171B5;
+	outline: none;
+	padding-bottom: 20px;
+}

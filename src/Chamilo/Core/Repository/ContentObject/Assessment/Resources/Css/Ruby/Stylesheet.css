@@ -1,0 +1,107 @@
+@import url('../Aqua/Stylesheet.css');
+
+/*********************************************
+ * GENERAL STYLES FOR DISPLAYING ASSESSMENTS *
+ *********************************************/
+div.assessment div.description {
+	padding: 6px 10px 6px 10px;
+	border: 1px solid #CECECE;
+	background-color: #F4F4F4;
+}
+
+div.question div.title {
+	color: #9e021b;
+	font-weight: bold;
+	font-size: 12px;
+	/*margin-bottom: 10px;*/
+}
+
+div.question div.title div.number, div.question div.title div.text {
+	border: 1px solid #CECECE;
+	background: #9e021b
+		url(../../../../../../../Configuration/Resources/Images/Ruby/Background/TableHeader.png)
+		repeat-x;
+}
+
+div.question div.answer div.description {
+	padding: 6px 10px 6px 10px;
+	border: 1px solid #CECECE;
+	border-top: 0px solid white;
+}
+
+div.question div.answer div.with_borders {
+	padding: 10px;
+	border: 1px solid #CECECE;
+	border-top: 0px solid white;
+}
+
+div.question div.answer div.splitter {
+	border: 1px solid #CECECE;
+	border-top: 0px solid white;
+	background: #F4F4F4;
+	color: #9e021b;
+	font-weight: bold;
+	font-size: 11px;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
+		sans-serif;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	padding: 3px 10px 3px 10px;
+}
+
+div.question div.answer div.slider {
+	float: left;
+	width: 300px;
+	margin-left: 0.6em;
+	margin-top: 0.2em;
+	margin-bottom: 0.6em;
+	background-color: #F4F4F4;
+}
+
+div.question div.answer div.caption {
+	float: left;
+	font-weight: bold;
+	color: #9e021b;
+	margin-left: 20px;
+}
+
+#selected_image, .selected_image, #hotspot_image, .hotspot_image {
+	position: relative;
+}
+
+.hotspot_image_display {
+	border: 1px solid #CECECE;
+	margin-bottom: 10px;
+}
+
+#hotspot_container, .hotspot_container {
+	float: left;
+	position: relative;
+	padding: 1px;
+	background-color: #CECECE;
+}
+
+div.description_hotspot {
+	padding: 10px 10px 10px 10px;
+	border: 1px solid #CECECE;
+	border-top: 0px solid white;
+}
+
+div.time_left, div.time_left_alert {
+	float: right;
+	padding: 6px 10px 6px 10px;
+	border: 1px solid #CECECE;
+	background-color: #F4F4F4;
+	color: #996900;
+	text-align: center;
+	margin-top: -10px;
+}
+
+ul.tree-menu li div a.assessment, ul.tree-menu li div a.type_assessment,
+	ul.tree-menu li div a.type_assessment_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
+
+button.hint, a.hint_button {
+	background-image: url(../../Images/Ruby/Buttons/Hint.png);
+}

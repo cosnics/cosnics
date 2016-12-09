@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="fill_in_blanks_question">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="answer_text"
+            type="text"
+            notnull="1" />
+        <property
+            name="question_type"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="1" />
+        <property
+            name="case_sensitive"
+            type="boolean"
+            default="1" />
+        <property
+            name="field_option"
+            type="integer"
+            unsigned="0"
+            notnull="0" />
+        <property
+            name="default_positive_score"
+            type="integer"
+            unsigned="0"
+            notnull="1"
+            default="1" />
+        <property
+            name="default_negative_score"
+            type="integer"
+            unsigned="0"
+            notnull="1"
+            default="0" />
+        <property
+            name="show_inline"
+            type="boolean"
+            default="1" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+</object>

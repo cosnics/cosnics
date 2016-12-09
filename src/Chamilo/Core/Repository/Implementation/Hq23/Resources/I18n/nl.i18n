@@ -1,0 +1,30 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\hq23
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "23"
+DeleteSuccesfull = "Succesvol verwijderd"
+DeleteFailed = "Verwijderen mislukt"
+ExportSuccesfull = "Succesvol geëxporteerd"
+ExportFailed = "Exporteren mislukt"
+ContentObjectUpdatedSuccessful = "Content Object successvol bijgewerkt"
+ContentObjectUpdatedFailed = "Bijwerken Content Object mislukt"
+ExternalRepositoryObjectUpdatedFailed = "Bijwerken extern Content Object mislukt"
+ImportSuccesfull = "Succesvol geïmporteerd"
+ImportFailed = "Importeren mislukt"
+Hq23UploadProblem = "Probleem bij bijwerken HQ23"
+Title = "Titel"
+ThisFieldIsRequired = "Dit veld is verplicht"
+Tags = "Tags"
+Description = "Beschrijving"
+Edit = "Bewerk"
+Reset = "Reset"
+FileName = "Bestandsnaam"
+Create = "Maak"
+MyPhotos = "Mijn fotos"
+Public = "Publiek"
+AvailableSizes = "Beschibare groottes"
+License = "Licentie"
+Credentials = "Toegewezen rechten"
+SessionToken = "Session token"

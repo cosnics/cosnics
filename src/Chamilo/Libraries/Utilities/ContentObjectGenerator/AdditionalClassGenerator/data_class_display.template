@@ -1,0 +1,10 @@
+/**
+ * {DESCRIPTION}
+ *
+ * @package repository.lib.content_object.{TYPE}
+ * @author {AUTHOR}
+ */
+ 
+class {OBJECT_CLASS}Display extends ContentObjectDisplay
+{
+}

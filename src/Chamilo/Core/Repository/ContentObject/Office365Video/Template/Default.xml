@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Office365Video">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Office 365 Video</translation>
+            <translation language="nl">Office 365 Video</translation>
+            <translation language="fr">Office 365 Video</translation>
+            <translation language="de">Office 365 Video</translation>
+        </variable>
+    </translations>
+</template>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="workspace_entity_relation">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="workspace_id"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="entity_type"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="entity_id"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="rights"
+            type="integer"
+            notnull="1"
+            default="0" />
+    </properties>
+    <index
+        name="relation"
+        type="unique">
+        <indexproperty name="workspace_id" />
+        <indexproperty name="entity_type" />
+        <indexproperty name="entity_id" />
+    </index>
+</object>

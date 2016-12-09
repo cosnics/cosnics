@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\repository\user_view
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "User view"
+BrowserComponent = "Browse user views"
+CreatorComponent = "Create user view"
+DeleterComponent = "Delete user view"
+UpdaterComponent = "Update user view"
+UserViewNameNotUnique = "User view name is not unique"
+UserView = "User view"
+UserViews = "User views"
+SelectTypesToShow = "Select types to show"

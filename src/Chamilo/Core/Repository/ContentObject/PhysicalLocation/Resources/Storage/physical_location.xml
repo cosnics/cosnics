@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="physical_location">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="location"
+            type="text"
+            length="255"
+            notnull="1" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+</object>
