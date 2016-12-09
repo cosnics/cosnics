@@ -497,7 +497,7 @@ abstract class Table
          * We don't want paging to be registered because the number of pages can be different
          * depending on the search parameter
          */
-        unset($filterParameters[HtmlTable::PARAM_PAGE_NUMBER]);
+        unset($filterParameters[$this->table->getParameterName(HtmlTable::PARAM_PAGE_NUMBER)]);
 
         $searchForm->registerTableParametersInSearchForm($filterParameters);
     }
