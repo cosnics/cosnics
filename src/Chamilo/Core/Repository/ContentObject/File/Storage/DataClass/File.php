@@ -497,8 +497,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag :: DISPOSITION_INLINE,
-            $fileName,
-            $safeFileName);
+            $safeFileName
+        );
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
         $response->setCallback(function () use($file) {
