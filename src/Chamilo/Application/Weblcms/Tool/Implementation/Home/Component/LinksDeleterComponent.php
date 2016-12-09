@@ -11,10 +11,10 @@ class LinksDeleterComponent extends Manager
 
     public function run()
     {
-        $pub_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $pub_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $pub_id);
         
         $publication->set_show_on_homepage(0);
@@ -22,6 +22,6 @@ class LinksDeleterComponent extends Manager
         
         $message = $succes ? 'PublicationRemovedFromHomepage' : 'PublicationNotRemovedFromHomepage';
         
-        $this->redirect(Translation :: get($message), ! $succes, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $this->redirect(Translation::get($message), ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

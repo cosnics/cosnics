@@ -23,37 +23,37 @@ class RightsComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->check_allowed();
-
-        $item_id = Request :: get(self :: PARAM_ITEM);
-        $this->set_parameter(self :: PARAM_ITEM, $item_id);
+        
+        $item_id = Request::get(self::PARAM_ITEM);
+        $this->set_parameter(self::PARAM_ITEM, $item_id);
         if (! $item_id)
         {
-            $location = array(Rights :: get_instance()->get_root(self :: package()));
+            $location = array(Rights::getInstance()->get_root(self::package()));
         }
         else
         {
             $location = array(
-                Rights :: get_instance()->get_location_by_identifier(self :: package(), Rights :: TYPE_ITEM, $item_id));
+                Rights::getInstance()->get_location_by_identifier(self::package(), Rights::TYPE_ITEM, $item_id));
         }
-
+        
         $entities = array();
-        $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
-
+        $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Rights\Editor\Manager :: context(),
+            \Chamilo\Core\Rights\Editor\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
+        
         $component = $factory->getComponent();
-        $component->set_context(self :: package());
+        $component->set_context(self::package());
         $component->set_locations($location);
         $component->set_entities($entities);
-
+        
         return $component->run();
     }
 
     public function get_available_rights($location)
     {
-        return Rights :: get_instance()->get_available_rights();
+        return Rights::getInstance()->get_available_rights();
     }
 }

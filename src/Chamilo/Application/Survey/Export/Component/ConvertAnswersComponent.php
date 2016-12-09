@@ -5,8 +5,8 @@ use Chamilo\Application\Survey\Cron\Storage\DataClass\ExportJob;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -27,27 +27,28 @@ class ConvertAnswersComponent extends Manager
      */
     function run()
     {
-        $ids = Request :: get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
-
+        $ids = Request::get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-
-                $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'Chamilo\Application\Survey');
-
+                
+                $cron_enabled = Configuration::getInstance()->get_setting(
+                    array('Chamilo\Application\Survey', 'enable_export_cron_job'));
+                
                 $publication_id = $id;
-
+                
                 if (! $cron_enabled)
                 {
                     $this->delete_old_tracker_data($id);
                     $this->update_tracker_data($id);
-                    $status = SynchronizeAnswer :: STATUS_SYNCHRONIZED;
+                    $status = SynchronizeAnswer::STATUS_SYNCHRONIZED;
                 }
                 else
                 {
@@ -55,25 +56,25 @@ class ConvertAnswersComponent extends Manager
                     $export_job->set_user_id($this->get_user_id());
                     $export_job->set_publication_id($publication_id);
                     $export_job->set_export_template_id(0);
-                    $export_job->set_status(ExportJob :: STATUS_NEW);
-                    $export_job->set_export_type(ExportJob :: EXPORT_TYPE_SYNCHRONIZE_ANSWERS);
+                    $export_job->set_status(ExportJob::STATUS_NEW);
+                    $export_job->set_export_type(ExportJob::EXPORT_TYPE_SYNCHRONIZE_ANSWERS);
                     $export_job->set_UUID(0);
                     if ($export_job->create())
                     {
-                        $status = SynchronizeAnswer :: STATUS_SYNCHRONISATION_IN_QUEUE;
+                        $status = SynchronizeAnswer::STATUS_SYNCHRONISATION_IN_QUEUE;
                     }
                     else
                     {
-                        $status = SynchronizeAnswer :: STATUS_SYNCHRONISATION_NOT_IN_QUEUE;
+                        $status = SynchronizeAnswer::STATUS_SYNCHRONISATION_NOT_IN_QUEUE;
                     }
                 }
-
-                $condition = new EqualityCondition(SynchronizeAnswer :: PROPERTY_SURVEY_PUBLICATION_ID, $id);
+                
+                $condition = new EqualityCondition(SynchronizeAnswer::PROPERTY_SURVEY_PUBLICATION_ID, $id);
                 // $tracker = Tracker :: get_singular_data(
                 // SynchronizeAnswer :: CLASS_NAME,
                 // \Chamilo\Application\Survey\Manager :: APPLICATION_NAME,
                 // $condition);
-
+                
                 // if ($tracker)
                 // {
                 // $tracker->set_created(time());
@@ -92,42 +93,42 @@ class ConvertAnswersComponent extends Manager
                 // $parameters);
                 // }
             }
-
+            
             $this->redirect(
-                Translation :: get('AnswersSyncronized'),
-                false,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE, Manager :: PARAM_PUBLICATION_ID => $id));
+                Translation::get('AnswersSyncronized'), 
+                false, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE, Manager::PARAM_PUBLICATION_ID => $id));
         }
         else
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoPublicationSelected')));
+            $this->display_error_page(htmlentities(Translation::get('NoPublicationSelected')));
         }
     }
 
     public function update_tracker_data($publication_id)
     {
-        $condition = new EqualityCondition(Answer :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $condition = new EqualityCondition(Answer::PROPERTY_PUBLICATION_ID, $publication_id);
         // $trackers = Tracker :: get_data(
         // Answer :: CLASS_NAME,
         // \Chamilo\Application\Survey\Manager :: APPLICATION_NAME,
         // $condition);
-
+        
         $question_types = array();
         $answer_count = 0;
         $count = 0;
-
+        
         // while ($tracker = $trackers->next_result())
         // {
         // $complex_question_id = $tracker->get_question_cid();
         // $object = $this->get_question($complex_question_id);
-
+        
         // $type = $object->get_type();
-
+        
         // switch ($type)
         // {
         // case SurveyMultipleChoiceQuestion :: get_type_name() :
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $option_id)
         // {
         // // $parameters = array();
@@ -150,15 +151,15 @@ class ConvertAnswersComponent extends Manager
         // // SAVE_MULTIPLE_CHOICE_QUESTION_ANSWER_EVENT, Manager :: APPLICATION_NAME, $parameters);
         // }
         // break;
-
+        
         // case SurveyMatrixQuestion :: get_type_name() :
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $ids => $match_id)
         // {
         // $ids = explode('_', $ids);
         // $option_id = $ids[1];
-
+        
         // // $parameters = array();
         // // $parameters[SurveyMatrixQuestionAnswerTracker :: PROPERTY_SURVEY_PARTICIPANT_ID] =
         // // $tracker->get_survey_participant_id();
@@ -179,10 +180,10 @@ class ConvertAnswersComponent extends Manager
         // // Manager :: APPLICATION_NAME, $parameters);
         // }
         // break;
-
+        
         // case SurveySelectQuestion :: get_type_name() :
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $option_id)
         // {
         // // $parameters = array();
@@ -204,15 +205,15 @@ class ConvertAnswersComponent extends Manager
         // // Manager :: APPLICATION_NAME, $parameters);
         // }
         // break;
-
+        
         // case SurveyMatchingQuestion :: get_type_name() :
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $ids => $match_id)
         // {
         // $ids = explode('_', $ids);
         // $option_id = $ids[1];
-
+        
         // // $parameters = array();
         // // $parameters[SurveyMatchingQuestionAnswerTracker :: PROPERTY_SURVEY_PARTICIPANT_ID] =
         // // $tracker->get_survey_participant_id();
@@ -234,10 +235,10 @@ class ConvertAnswersComponent extends Manager
         // // Manager :: APPLICATION_NAME, $parameters);
         // }
         // break;
-
+        
         // case SurveyOpenQuestion :: get_type_name() :
         // $answer = $tracker->get_answer();
-
+        
         // $text = $this->transcode_string(array_pop($answer));
         // if (strlen(strip_tags($text)) > 0)
         // {
@@ -261,11 +262,11 @@ class ConvertAnswersComponent extends Manager
         // // :: APPLICATION_NAME, $parameters);
         // }
         // break;
-
+        
         // case SurveyRatingQuestion :: get_type_name() :
-
+        
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $rating)
         // {
         // // $parameters = array();
@@ -293,7 +294,7 @@ class ConvertAnswersComponent extends Manager
 
     private function delete_old_tracker_data($publication_id)
     {
-
+        
         // $condition = new EqualityCondition(SurveyMatrixQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMatrixQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -302,7 +303,7 @@ class ConvertAnswersComponent extends Manager
         // {
         // $tracker->delete();
         // }
-
+        
         // $condition = new EqualityCondition(SurveyMultipleChoiceQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMultipleChoiceQuestionAnswerTracker :: CLASS_NAME,
@@ -311,7 +312,7 @@ class ConvertAnswersComponent extends Manager
         // {
         // $tracker->delete();
         // }
-
+        
         // $condition = new EqualityCondition(SurveyMatchingQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMatchingQuestionAnswerTracker :: CLASS_NAME,
@@ -320,7 +321,7 @@ class ConvertAnswersComponent extends Manager
         // {
         // $tracker->delete();
         // }
-
+        
         // $condition = new EqualityCondition(SurveySelectQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveySelectQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -329,7 +330,7 @@ class ConvertAnswersComponent extends Manager
         // {
         // $tracker->delete();
         // }
-
+        
         // $condition = new EqualityCondition(SurveyRatingQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyRatingQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -338,7 +339,7 @@ class ConvertAnswersComponent extends Manager
         // {
         // $tracker->delete();
         // }
-
+        
         // $condition = new EqualityCondition(SurveyOpenQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyOpenQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager ::
@@ -353,8 +354,8 @@ class ConvertAnswersComponent extends Manager
     {
         if (! isset($this->questions_cache) || ! isset($this->questions_cache[$complex_id]))
         {
-            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ComplexContentObjectItem :: class_name(),
+            $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class_name(), 
                 $complex_id);
             $this->questions_cache[$complex_id] = $complex_question->get_ref_object();
         }

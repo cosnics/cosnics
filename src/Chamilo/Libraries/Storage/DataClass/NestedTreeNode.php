@@ -23,11 +23,11 @@ abstract class NestedTreeNode extends NestedSet
     {
         if (! $recursive)
         {
-            return parent :: count_children($condition);
+            return parent::count_children($condition);
         }
         else
         {
-            return parent :: count_descendants($condition);
+            return parent::count_descendants($condition);
         }
     }
 
@@ -41,11 +41,11 @@ abstract class NestedTreeNode extends NestedSet
     {
         if (! $recursive)
         {
-            return parent :: get_children($condition);
+            return parent::get_children($condition);
         }
         else
         {
-            return parent :: get_descendants($condition);
+            return parent::get_descendants($condition);
         }
     }
 
@@ -57,7 +57,7 @@ abstract class NestedTreeNode extends NestedSet
      */
     public function count_parents($include_self = true, $condition = null)
     {
-        return parent :: count_ancestors($include_self, $condition);
+        return parent::count_ancestors($include_self, $condition);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class NestedTreeNode extends NestedSet
      */
     public function get_parents($include_self = true, $condition = null)
     {
-        return parent :: get_ancestors($include_self, $condition);
+        return parent::get_ancestors($include_self, $condition);
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class NestedTreeNode extends NestedSet
      */
     public function is_child_of($node)
     {
-        return parent :: is_descendant_of($node);
+        return parent::is_descendant_of($node);
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class NestedTreeNode extends NestedSet
      */
     public function is_parent_of($node)
     {
-        return parent :: is_ancestor_of($node);
+        return parent::is_ancestor_of($node);
     }
 
     /**
@@ -101,14 +101,14 @@ abstract class NestedTreeNode extends NestedSet
     {
         if ($new_previous_id != 0)
         {
-            return parent :: move(self :: AS_NEXT_SIBLING_OF, $new_previous_id);
+            return parent::move(self::AS_NEXT_SIBLING_OF, $new_previous_id);
         }
         else
         {
             if ($new_parent_id == 0)
                 $new_parent_id = $this->get_parent_id();
             
-            return parent :: move(self :: AS_LAST_CHILD_OF, $new_parent_id);
+            return parent::move(self::AS_LAST_CHILD_OF, $new_parent_id);
         }
     }
 
@@ -123,11 +123,11 @@ abstract class NestedTreeNode extends NestedSet
         
         if ($previous_id)
         {
-            return parent :: create(parent :: AS_NEXT_SIBLING_OF, $previous_id);
+            return parent::create(parent::AS_NEXT_SIBLING_OF, $previous_id);
         }
         else
         {
-            return parent :: create(parent :: AS_LAST_CHILD_OF, $parent_id);
+            return parent::create(parent::AS_LAST_CHILD_OF, $parent_id);
         }
     }
 }

@@ -1,19 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="lpi_attempt_objective">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="lpi_view_id" type="integer" unsigned="1" notnull="1" />
-		<property name="objective_id" type="text" length="100" />
-		<property name="score_raw" type="float" />
-		<property name="score_max" type="float" />
-		<property name="score_min" type="float" />
-		<property name="status" type="text" length="32" notnull="1" />
-		<property name="display_order" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="lpi_view_id">
-		<indexproperty name="lpi_view_id" />
-	</index>
-	<index name="objective_id">
-		<indexproperty name="objective_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="lpi_view_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="objective_id"
+            type="text"
+            length="100" />
+        <property
+            name="score_raw"
+            type="float" />
+        <property
+            name="score_max"
+            type="float" />
+        <property
+            name="score_min"
+            type="float" />
+        <property
+            name="status"
+            type="text"
+            length="32"
+            notnull="1" />
+        <property
+            name="display_order"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="lpi_view_id">
+        <indexproperty name="lpi_view_id" />
+    </index>
+    <index name="objective_id">
+        <indexproperty name="objective_id" />
+    </index>
 </object>

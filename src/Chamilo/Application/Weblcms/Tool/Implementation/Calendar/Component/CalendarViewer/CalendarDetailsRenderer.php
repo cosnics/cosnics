@@ -15,7 +15,7 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
 
     public function __construct($browser)
     {
-        parent :: __construct($browser);
+        parent::__construct($browser);
     }
 
     public function render_description($publication)
@@ -23,11 +23,11 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $event = $publication->get_content_object();
         $html[] = '<em>';
         // TODO: date formatting
-        $html[] = htmlentities(Translation :: get('From', null, Utilities :: COMMON_LIBRARIES)) . ': ' .
+        $html[] = htmlentities(Translation::get('From', null, Utilities::COMMON_LIBRARIES)) . ': ' .
              date('r', $event->get_start_date());
         $html[] = '<br />';
         // TODO: date formatting
-        $html[] = htmlentities(Translation :: get('To', null, Utilities :: COMMON_LIBRARIES)) . ': ' .
+        $html[] = htmlentities(Translation::get('To', null, Utilities::COMMON_LIBRARIES)) . ': ' .
              date('r', $event->get_end_date());
         $html[] = '</em>';
         $html[] = '<br />';
@@ -37,6 +37,6 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
 
     public function as_html()
     {
-        return parent :: as_html();
+        return parent::as_html();
     }
 }

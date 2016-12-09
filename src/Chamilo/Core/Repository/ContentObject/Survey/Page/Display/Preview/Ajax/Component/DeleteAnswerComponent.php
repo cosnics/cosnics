@@ -6,14 +6,15 @@ use Chamilo\Libraries\Platform\Session\Session;
 
 class DeleteAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Manager
 {
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETERS);
+        return array(self::PARAM_PARAMETERS);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -21,9 +22,9 @@ class DeleteAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Surve
     {
         $result = new JsonAjaxResult(200);
         
-        $parameters = $this->getPostDataValue(self :: PARAM_PARAMETERS);
-        $complex_question_id = $parameters[self :: PARAM_COMPLEX_QUESTION_ID];
-        $answer = $parameters[self :: PARAM_ANSWER];
+        $parameters = $this->getPostDataValue(self::PARAM_PARAMETERS);
+        $complex_question_id = $parameters[self::PARAM_COMPLEX_QUESTION_ID];
+        $answer = $parameters[self::PARAM_ANSWER];
         $this->delete_answer($complex_question_id, $answer);
         
         $result->display();
@@ -31,8 +32,8 @@ class DeleteAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Surve
 
     function delete_answer($complex_question_id, $answer)
     {
-        $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        $answer_id = $answer[self :: PARAM_ANSWER_ID];
+        $answers = Session::retrieve(self::TEMPORARY_STORAGE);
+        $answer_id = $answer[self::PARAM_ANSWER_ID];
         
         if ($answer_id)
         {
@@ -43,7 +44,7 @@ class DeleteAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Surve
             unset($answers[$complex_question_id]);
         }
         
-        Session :: register(self :: TEMPORARY_STORAGE, $answers);
+        Session::register(self::TEMPORARY_STORAGE, $answers);
     }
 }
 ?>

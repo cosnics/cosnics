@@ -24,27 +24,27 @@ class DateTime extends ContentObject implements Versionable
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_question()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTION);
+        return $this->get_additional_property(self::PROPERTY_QUESTION);
     }
 
     public function set_question($question)
     {
-        return $this->set_additional_property(self :: PROPERTY_QUESTION, $question);
+        return $this->set_additional_property(self::PROPERTY_QUESTION, $question);
     }
 
     public function get_instruction()
     {
-        return $this->get_additional_property(self :: PROPERTY_INSTRUCTION);
+        return $this->get_additional_property(self::PROPERTY_INSTRUCTION);
     }
 
     public function set_instruction($instruction)
     {
-        return $this->set_additional_property(self :: PROPERTY_INSTRUCTION, $instruction);
+        return $this->set_additional_property(self::PROPERTY_INSTRUCTION, $instruction);
     }
 
     public function has_instruction()
@@ -55,17 +55,17 @@ class DateTime extends ContentObject implements Versionable
 
     public function get_question_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTION_TYPE);
+        return $this->get_additional_property(self::PROPERTY_QUESTION_TYPE);
     }
 
     public function set_question_type($question_type)
     {
-        return $this->set_additional_property(self :: PROPERTY_QUESTION_TYPE, $question_type);
+        return $this->set_additional_property(self::PROPERTY_QUESTION_TYPE, $question_type);
     }
 
     static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_QUESTION, self :: PROPERTY_INSTRUCTION, self :: PROPERTY_QUESTION_TYPE);
+        return array(self::PROPERTY_QUESTION, self::PROPERTY_INSTRUCTION, self::PROPERTY_QUESTION_TYPE);
     }
 }
 

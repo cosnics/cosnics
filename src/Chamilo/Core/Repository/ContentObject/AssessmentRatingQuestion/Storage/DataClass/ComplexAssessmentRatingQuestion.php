@@ -23,7 +23,7 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      */
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_WEIGHT, self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -32,7 +32,7 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      */
     public function get_weight()
     {
-        return $this->get_additional_property(self :: PROPERTY_WEIGHT);
+        return $this->get_additional_property(self::PROPERTY_WEIGHT);
     }
 
     /**
@@ -41,7 +41,7 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      */
     public function set_weight($value)
     {
-        $this->set_additional_property(self :: PROPERTY_WEIGHT, $value);
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 
     /**
@@ -50,7 +50,7 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -59,6 +59,6 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      */
     public function set_show_answer_feedback($value)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
     }
 }

@@ -13,15 +13,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core
     // Actions
     const ACTION_TABLE = 'Table';
     const ACTION_GRAPH = 'Graph';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_GRAPH;
-
+    const DEFAULT_ACTION = self::ACTION_GRAPH;
+    
     // Url Creation
     function get_viewer_url($question_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_TABLE, TableTemplate :: PARAM_QUESTION_ID => $question_id));
+            array(self::PARAM_ACTION => self::ACTION_TABLE, TableTemplate::PARAM_QUESTION_ID => $question_id));
     }
 
     /**
@@ -30,7 +30,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core
      */
     static public function get_available_actions()
     {
-        return array(self :: ACTION_TABLE, self :: ACTION_GRAPH);
+        return array(self::ACTION_TABLE, self::ACTION_GRAPH);
     }
 }
 ?>

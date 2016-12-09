@@ -26,59 +26,59 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $element_ids = $this->getRequest()->get(self :: PARAM_ELEMENT_ID);
-        $this->set_parameter(self :: PARAM_ELEMENT_ID, $element_ids);
-
+        
+        $element_ids = $this->getRequest()->get(self::PARAM_ELEMENT_ID);
+        $this->set_parameter(self::PARAM_ELEMENT_ID, $element_ids);
+        
         try
         {
             if (empty($element_ids))
             {
-                throw new NoObjectSelectedException(Translation :: get('Element'));
+                throw new NoObjectSelectedException(Translation::get('Element'));
             }
-
+            
             if (! is_array($element_ids))
             {
                 $element_ids = array($element_ids);
             }
-
+            
             foreach ($element_ids as $element_id)
             {
-                $element = DataManager :: retrieve_by_id(Element :: class_name(), $element_id);
-
+                $element = DataManager::retrieve_by_id(Element::class_name(), $element_id);
+                
                 if (! $element->delete())
                 {
                     throw new \Exception(
-                        Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('Element')),
-                            Utilities :: COMMON_LIBRARIES));
+                        Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('Element')), 
+                            Utilities::COMMON_LIBRARIES));
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('Element')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('Element')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
+        
         $this->redirect(
-            $message,
-            ! $success,
+            $message, 
+            ! $success, 
             array(
-                self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $element->get_schema_id()));
+                self::PARAM_ACTION => self::ACTION_BROWSE, 
+                \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $element->get_schema_id()));
     }
 
     /**
      * Adds additional breadcrumbs
-     *
+     * 
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -86,9 +86,7 @@ class DeleterComponent extends Manager
     {
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
-                    array(self :: PARAM_ELEMENT_ID)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE), array(self::PARAM_ELEMENT_ID)), 
+                Translation::get('BrowserComponent')));
     }
 }

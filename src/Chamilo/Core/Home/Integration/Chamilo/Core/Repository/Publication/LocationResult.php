@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  * Displays a location where a content object is published
- *
+ * 
  * @author Sven vanpoucke - Hogeschool Gent
  */
 class LocationResult extends ContextLocationResult
@@ -22,7 +22,7 @@ class LocationResult extends ContextLocationResult
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Home\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Home\Manager::DEFAULT_ACTION;
-
+        
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }

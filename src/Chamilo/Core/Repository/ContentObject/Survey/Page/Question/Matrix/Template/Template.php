@@ -20,21 +20,21 @@ class Template extends \Chamilo\Core\Repository\Common\Template\Template impleme
      */
     public static function parse(DOMXPath $dom_xpath)
     {
-        $language = Translation :: getInstance()->getLanguageIsocode();
+        $language = Translation::getInstance()->getLanguageIsocode();
         
-        $template_configuration = TemplateConfiguration :: get($dom_xpath);
-        $template_translation = TemplateTranslation :: get($dom_xpath);
+        $template_configuration = TemplateConfiguration::get($dom_xpath);
+        $template_translation = TemplateTranslation::get($dom_xpath);
         
         $content_object = new Matrix();
         
         $content_object->set_matrix_type($dom_xpath->query('/template/properties/matrix_type')->item(0)->nodeValue);
         $content_object->set_question(
             $template_translation->translate(
-                $language,
+                $language, 
                 $dom_xpath->query('/template/properties/question')->item(0)->nodeValue));
         $content_object->set_instruction(
             $template_translation->translate(
-                $language,
+                $language, 
                 $dom_xpath->query('/template/properties/instruction')->item(0)->nodeValue));
         
         $options = $dom_xpath->query('/template/properties/options/option');
@@ -44,7 +44,7 @@ class Template extends \Chamilo\Core\Repository\Common\Template\Template impleme
             $question_option = new MatrixOption();
             $question_option->set_value($template_translation->translate($language, $option->nodeValue));
             $question_option->set_display_order($option->getAttribute('display_order'));
-        
+            
             $content_object->add_option($question_option);
         }
         
@@ -55,7 +55,7 @@ class Template extends \Chamilo\Core\Repository\Common\Template\Template impleme
             $question_match = new MatrixMatch();
             $question_match->set_value($template_translation->translate($language, $option->nodeValue));
             $question_match->set_display_order($option->getAttribute('display_order'));
-        
+            
             $content_object->add_match($question_match);
         }
         

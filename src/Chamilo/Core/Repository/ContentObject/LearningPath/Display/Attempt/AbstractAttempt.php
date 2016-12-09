@@ -22,9 +22,9 @@ abstract class AbstractAttempt extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_USER_ID;
-        $extended_property_names[] = self :: PROPERTY_PROGRESS;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_USER_ID;
+        $extended_property_names[] = self::PROPERTY_PROGRESS;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -33,7 +33,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_progress()
     {
-        return $this->get_default_property(self :: PROPERTY_PROGRESS);
+        return $this->get_default_property(self::PROPERTY_PROGRESS);
     }
 
     /**
@@ -60,6 +60,6 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_progress($progress)
     {
-        $this->set_default_property(self :: PROPERTY_PROGRESS, $progress);
+        $this->set_default_property(self::PROPERTY_PROGRESS, $progress);
     }
 }

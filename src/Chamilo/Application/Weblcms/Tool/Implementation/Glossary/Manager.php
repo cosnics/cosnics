@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\Glossary;
 
 /**
  * $Id: glossary_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.glossary
  */
 
@@ -19,14 +19,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Glossary :: class_name());
+        return array(Glossary::class_name());
     }
 
     public function get_available_browser_types()
     {
         $browser_types = array();
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_TABLE;
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_LIST;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
         return $browser_types;
     }
 }

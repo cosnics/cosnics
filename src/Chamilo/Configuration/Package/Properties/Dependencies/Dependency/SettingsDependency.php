@@ -37,10 +37,10 @@ class SettingsDependency extends Dependency
     public function check()
     {
         $setting = ini_get($this->get_id());
-        $message = Translation :: get('DependencyCheckSetting') . ': ' . $this->as_html() . ' ' . Translation :: get(
+        $message = Translation::get('DependencyCheckSetting') . ': ' . $this->as_html() . ' ' . Translation::get(
             'Found', 
             array(), 
-            Utilities :: COMMON_LIBRARIES) . ': ' . $setting;
+            Utilities::COMMON_LIBRARIES) . ': ' . $setting;
         $value = $this->get_value();
         $this->logger->add_message($message);
         return $this->compare($value['type'], $value['_content'], $setting);
@@ -59,13 +59,13 @@ class SettingsDependency extends Dependency
     public function as_html()
     {
         $value = $this->get_value();
-        return $this->get_id() . '. ' . Translation :: get('Expecting', array(), Utilities :: COMMON_LIBRARIES) . ': ' .
+        return $this->get_id() . '. ' . Translation::get('Expecting', array(), Utilities::COMMON_LIBRARIES) . ': ' .
              $value['_content'];
     }
 
     public static function dom_node($dom_xpath, $dom_node)
     {
-        $dependency = parent :: dom_node($dom_xpath, $dom_node);
+        $dependency = parent::dom_node($dom_xpath, $dom_node);
         $dependency->set_value($dom_xpath->query('value', $dom_node)->item(0)->nodeValue);
         return $dependency;
     }

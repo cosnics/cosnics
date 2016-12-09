@@ -16,15 +16,15 @@ class MatchQuestionComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        $value = Request :: post('value');
-        $action = Request :: post('action');
-
+        $value = Request::post('value');
+        $action = Request::post('action');
+        
         switch ($action)
         {
             case 'skip_match' :
                 $_SESSION['match_skip_options'][] = $value;
         }
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

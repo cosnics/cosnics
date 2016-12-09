@@ -35,11 +35,9 @@ class ItemRepository
     public function findItems()
     {
         $orderBy = array();
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT));
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT));
-
-        return DataManager :: retrieves(
-            Item :: class_name(),
-            new DataClassRetrievesParameters(null, null, null, $orderBy));
+        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT));
+        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
+        
+        return DataManager::retrieves(Item::class_name(), new DataClassRetrievesParameters(null, null, null, $orderBy));
     }
 }

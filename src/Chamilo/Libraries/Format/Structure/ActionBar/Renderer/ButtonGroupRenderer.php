@@ -73,7 +73,7 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
         foreach ($this->getButtonGroup()->getButtons() as $button)
         {
             $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities :: getInstance()->getClassnameFromObject($button) . 'Renderer';
+                 ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
             $renderer = new $rendererClassName($button);
             
             $html[] = $renderer->render($button);

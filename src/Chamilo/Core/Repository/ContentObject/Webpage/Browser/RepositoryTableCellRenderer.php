@@ -14,10 +14,10 @@ class RepositoryTableCellRenderer extends \Chamilo\Core\Repository\Table\Content
     {
         switch ($column->get_name())
         {
-            case Webpage :: PROPERTY_FILESIZE :
-                return Filesystem :: format_file_size($content_object->get_filesize());
+            case Webpage::PROPERTY_FILESIZE :
+                return Filesystem::format_file_size($content_object->get_filesize());
         }
         
-        return parent :: render_cell($column, $content_object);
+        return parent::render_cell($column, $content_object);
     }
 }

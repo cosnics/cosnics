@@ -32,38 +32,38 @@ class Executer
     {
         $this->application = $application;
         $this->name = $name;
-        $this->title = $title ? $title : Translation :: get(
-            (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+        $this->title = $title ? $title : Translation::get(
+            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), 
             $application->context());
     }
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add_help('dynamic form general');
-
+        
         $form = new ExecuteForm(
-            $this->get_form(),
-            $this->application->get_url(),
-            $this->application->get_user(),
+            $this->get_form(), 
+            $this->application->get_url(), 
+            $this->application->get_user(), 
             $this->title);
-
+        
         if ($form->validate())
         {
             $success = $form->update_values();
             $this->application->redirect(
-                Translation :: get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'),
-                ($success ? false : true),
+                Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), 
+                ($success ? false : true), 
                 array());
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->application->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->application->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -72,13 +72,13 @@ class Executer
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_APPLICATION),
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
             new StaticConditionVariable($this->application->context()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_NAME),
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
             new StaticConditionVariable($this->name));
         $condition = new AndCondition($conditions);
-
-        return DataManager :: retrieve(Instance :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return DataManager::retrieve(Instance::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

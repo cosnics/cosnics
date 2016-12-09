@@ -16,19 +16,19 @@ class Html5MediaValidator
 
     public function is_container($extension, $mimetype, $codecs)
     {
-        if ($extension && ! in_array($extension, Html5Format :: get_extensions()))
+        if ($extension && ! in_array($extension, Html5Format::get_extensions()))
         {
             return false;
         }
         
-        if ($mimetype && ! in_array($mimetype, Html5Format :: get_mimetypes()))
+        if ($mimetype && ! in_array($mimetype, Html5Format::get_mimetypes()))
         {
             return false;
         }
         
         if (count($codecs) > 1)
         {
-            $value = Html5Format :: codecs_compatible();
+            $value = Html5Format::codecs_compatible();
             if (key_exists($codecs[0], $value) && in_array($codecs[1], $value[$codecs[0]]))
             {
                 return true;

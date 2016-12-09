@@ -16,111 +16,111 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
     public static function get_actions()
     {
         $links = array();
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_TYPE_MANAGER));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_TYPE_MANAGER));
         $links[] = new DynamicAction(
-            Translation :: get('CourseTypeList'),
-            Translation :: get('CourseTypeListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Translation::get('CourseTypeList'), 
+            Translation::get('CourseTypeListDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_COURSE_MANAGER));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_COURSE_MANAGER));
         $links[] = new DynamicAction(
-            Translation :: get('CourseList'),
-            Translation :: get('ListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Translation::get('CourseList'), 
+            Translation::get('ListDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_COURSE_MANAGER,
-                \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_CREATE));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_COURSE_MANAGER, 
+                \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_CREATE));
         $links[] = new DynamicAction(
-            Translation :: get('CreateCourse'),
-            Translation :: get('CreateDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Add'),
+            Translation::get('CreateCourse'), 
+            Translation::get('CreateDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Add'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_IMPORT_COURSES));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSES));
         $links[] = new DynamicAction(
-            Translation :: get('Import'),
-            Translation :: get('ImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Translation::get('Import'), 
+            Translation::get('ImportDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_REQUEST_BROWSER));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_REQUEST_BROWSER));
         $links[] = new DynamicAction(
-            Translation :: get('RequestList'),
-            Translation :: get('RequestDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Translation::get('RequestList'), 
+            Translation::get('RequestDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_CATEGORY_MANAGER));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_CATEGORY_MANAGER));
         $links[] = new DynamicAction(
-            Translation :: get('CourseCategoryManagement'),
-            Translation :: get('CourseCategoryManagementDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Category'),
+            Translation::get('CourseCategoryManagement'), 
+            Translation::get('CourseCategoryManagementDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Category'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_IMPORT_COURSE_USERS));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSE_USERS));
         $links[] = new DynamicAction(
-            Translation :: get('UserImport'),
-            Translation :: get('UserImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Translation::get('UserImport'), 
+            Translation::get('UserImportDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_COURSE_MANAGER));
-        $info = new Actions(\Chamilo\Application\Weblcms\Manager :: context(), $links, $redirect->getUrl());
-
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_COURSE_MANAGER));
+        $info = new Actions(\Chamilo\Application\Weblcms\Manager::context(), $links, $redirect->getUrl());
+        
         return $info;
     }
 
     public static function get_import_actions()
     {
         $links = array();
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_IMPORT_COURSES));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSES));
         $links[] = new DynamicAction(
-            Translation :: get('ImportCourses'),
-            Translation :: get('ImportCoursesDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Translation::get('ImportCourses'), 
+            Translation::get('ImportCoursesDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_IMPORT_COURSE_USERS));
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSE_USERS));
         $links[] = new DynamicAction(
-            Translation :: get('UserImport'),
-            Translation :: get('UserImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Translation::get('UserImport'), 
+            Translation::get('UserImportDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), 
             $redirect->getUrl());
-
+        
         return $links;
     }
 }

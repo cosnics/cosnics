@@ -30,27 +30,27 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
      */
     public function get_actions($relationType)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                        Manager :: PARAM_RELATION_ID => $relationType->get_id())), 
-                ToolbarItem :: DISPLAY_ICON));
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
+                        Manager::PARAM_RELATION_ID => $relationType->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_RELATION_ID => $relationType->get_id())), 
-                ToolbarItem :: DISPLAY_ICON, 
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_RELATION_ID => $relationType->get_id())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
         
         return $toolbar->as_html();

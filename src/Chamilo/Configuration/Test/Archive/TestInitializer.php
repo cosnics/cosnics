@@ -21,12 +21,12 @@ class TestInitializer
      */
     public static function init()
     {
-        self :: initDefaultTimezone();
-        self :: initIncludePath();
-        self :: initAutoload();
-        self :: initPHPSettings();
-        self :: initServerGlobals();
-        self :: initGlobals();
+        self::initDefaultTimezone();
+        self::initIncludePath();
+        self::initAutoload();
+        self::initPHPSettings();
+        self::initServerGlobals();
+        self::initGlobals();
     }
 
     /**
@@ -42,9 +42,9 @@ class TestInitializer
      */
     private static function initIncludePath()
     {
-        $pearPath = realpath(Path :: getInstance()->getPluginPath() . 'pear');
-        $googleLibraryPath = realpath(Path :: getInstance()->getPluginPath() . 'google/library');
-        $scriptLibrariesPath = realpath(Path :: getInstance()->getBasePath() . 'script/lib');
+        $pearPath = realpath(Path::getInstance()->getPluginPath() . 'pear');
+        $googleLibraryPath = realpath(Path::getInstance()->getPluginPath() . 'google/library');
+        $scriptLibrariesPath = realpath(Path::getInstance()->getBasePath() . 'script/lib');
         
         $path = array($pearPath, $googleLibraryPath, $scriptLibrariesPath);
         $new_include_path = implode(PATH_SEPARATOR, $path) . PATH_SEPARATOR . get_include_path();
@@ -74,4 +74,4 @@ class TestInitializer
     }
 }
 
-TestInitializer :: init();
+TestInitializer::init();

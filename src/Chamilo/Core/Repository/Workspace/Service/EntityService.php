@@ -24,17 +24,17 @@ class EntityService
     public function getEntitiesForUser(User $user)
     {
         $entities = array();
-
-        $entities[UserEntity :: ENTITY_TYPE] = array($user->get_id());
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = array();
-
+        
+        $entities[UserEntity::ENTITY_TYPE] = array($user->get_id());
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = array();
+        
         $userGroupIdentifiers = $user->get_groups(true);
-
+        
         foreach ($userGroupIdentifiers as $userGroupIdentifier)
         {
-            $entities[PlatformGroupEntity :: ENTITY_TYPE][] = $userGroupIdentifier;
+            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $userGroupIdentifier;
         }
-
+        
         return $entities;
     }
 
@@ -46,15 +46,15 @@ class EntityService
     public function getEntitiesForGroup(Group $group)
     {
         $entities = array();
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = array();
-
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = array();
+        
         $ancestorGroups = $group->get_ancestors();
-
+        
         while ($ancestorGroup = $ancestorGroups->next_result())
         {
-            $entities[PlatformGroupEntity :: ENTITY_TYPE][] = $ancestorGroup->getId();
+            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $ancestorGroup->getId();
         }
-
+        
         return $entities;
     }
 }

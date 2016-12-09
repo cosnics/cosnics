@@ -16,7 +16,8 @@
         "kigkonsult/icalcreator": "*",
         "fastfeed/fastfeed": "=0.4.0",
         "simplepie/simplepie": "1.*",
-        "sentry/sentry": "*"
+        "sentry/sentry": "*",
+        "google/recaptcha": "~1.1"
     },
     "require-dev" : {
         "friendsofphp/php-cs-fixer" : "1.*"

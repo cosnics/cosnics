@@ -23,11 +23,11 @@ class ActivityComponent extends ItemComponent implements TableSupport
     {
         $activity_table = new ActivityTable($this);
         
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), 
-                Translation :: get('ActivityComponent')));
+                $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
+                Translation::get('ActivityComponent')));
         
         $html = array();
         

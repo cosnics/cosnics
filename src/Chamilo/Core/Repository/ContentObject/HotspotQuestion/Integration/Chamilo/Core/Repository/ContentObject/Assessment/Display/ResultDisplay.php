@@ -34,7 +34,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
         
-        $scaledDimensions = Utilities :: scaleDimensions(
+        $scaledDimensions = Utilities::scaleDimensions(
             600, 
             450, 
             array('width' => $dimensions[0], 'height' => $dimensions[1]));
@@ -44,14 +44,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
              $question_id . '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] .
              'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
              $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
-             'px;background-image: url(' . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+             'px;background-image: url(' . \Chamilo\Core\Repository\Manager::get_document_downloader_url(
                 $image_object->get_id(), 
                 $image_object->calculate_security_code()) . ')"></div></div>';
         $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js') . '"></script>';
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'HotspotQuestionResultDisplay.js');
         $html[] = '<div class="clear"></div></div>';
         
@@ -79,11 +79,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $html[] = '<th class="list"></th>';
         }
         
-        $html[] = '<th>' . Translation :: get('Answer') . '</th>';
+        $html[] = '<th>' . Translation::get('Answer') . '</th>';
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -99,14 +99,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($configuration->show_correction() || $configuration->show_solution())
             {
-                $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('AnswerCorrect') : Theme :: getInstance()->getImage(
+                $html[] = '<td>' . ($valid_answer ? Theme::getInstance()->getImage('AnswerCorrect') : Theme::getInstance()->getImage(
                     'AnswerWrong')) . '</td>';
             }
             
             $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_answer());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
             
-            if (AnswerFeedbackDisplay :: allowed(
+            if (AnswerFeedbackDisplay::allowed(
                 $configuration, 
                 $this->get_complex_content_object_question(), 
                 true, 
@@ -140,11 +140,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         switch ($is_inside)
         {
-            case PointInPolygon :: POINT_INSIDE :
+            case PointInPolygon::POINT_INSIDE :
                 return true;
-            case PointInPolygon :: POINT_BOUNDARY :
+            case PointInPolygon::POINT_BOUNDARY :
                 return true;
-            case PointInPolygon :: POINT_VERTEX :
+            case PointInPolygon::POINT_VERTEX :
                 return true;
         }
         

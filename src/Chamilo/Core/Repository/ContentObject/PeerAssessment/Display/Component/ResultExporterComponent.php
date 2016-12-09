@@ -15,27 +15,27 @@ class ResultExporterComponent extends Manager
 
     public function run()
     {
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
+        if (! $this->is_allowed(self::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
-        $type = Request :: get(self :: PARAM_EXPORT_TYPE);
-
+        
+        $type = Request::get(self::PARAM_EXPORT_TYPE);
+        
         $template = new ResultReportingTemplate($this);
-
-        $file_path = TemplateRenditionImplementation :: launch(
-            $this,
-            $template,
-            TemplateRendition :: FORMAT_XLSX,
-            TemplateRendition :: VIEW_BASIC);
-
-        $file_properties = FileProperties :: from_path($file_path);
-
-        Filesystem :: file_send_for_download(
-            $file_path,
-            true,
-            $file_properties->get_name_extension(),
+        
+        $file_path = TemplateRenditionImplementation::launch(
+            $this, 
+            $template, 
+            TemplateRendition::FORMAT_XLSX, 
+            TemplateRendition::VIEW_BASIC);
+        
+        $file_properties = FileProperties::from_path($file_path);
+        
+        Filesystem::file_send_for_download(
+            $file_path, 
+            true, 
+            $file_properties->get_name_extension(), 
             $file_properties->get_type());
         exit();
     }

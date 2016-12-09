@@ -35,10 +35,10 @@ abstract class CredentialsAuthentication extends Authentication
     public function __construct($userName = null)
     {
         $this->userName = $userName;
-
-        if($userName)
+        
+        if ($userName)
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager:: retrieveUserByUsername($userName);
+            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieveUserByUsername($userName);
         }
     }
 
@@ -71,7 +71,7 @@ abstract class CredentialsAuthentication extends Authentication
 
     /**
      * Checks if the given username and password are valid
-     *
+     * 
      * @param string $password
      * @return boolean
      * @throws AuthenticationException
@@ -97,8 +97,8 @@ abstract class CredentialsAuthentication extends Authentication
      */
     public function logout($user)
     {
-        parent :: logout($user);
-
+        parent::logout($user);
+        
         $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();

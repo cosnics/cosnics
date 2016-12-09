@@ -24,19 +24,19 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
      */
     public function run()
     {
-        $object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
-        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $object_id);
+        $object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $object_id);
         
         if (! $object_id)
         {
             throw new \Exception(
-                Translation :: get(
+                Translation::get(
                     'NoObjectSelected', 
-                    array('OBJECT' => Translation :: get('ContentObject')), 
-                    Utilities :: COMMON_LIBRARIES));
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES));
         }
         
-        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
+        $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
         $valid_types = array(
             'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File', 
             'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage', 
@@ -45,16 +45,16 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         
         if (! $object || ! in_array($object->get_type(), $valid_types))
         {
-            throw new \Exception(Translation :: get('ContentObjectMustBeDocument'));
+            throw new \Exception(Translation::get('ContentObjectMustBeDocument'));
         }
         
-        $security_code = Request :: get(ContentObject :: PARAM_SECURITY_CODE);
+        $security_code = Request::get(ContentObject::PARAM_SECURITY_CODE);
         if ($security_code != $object->calculate_security_code())
         {
-            throw new UserException(Translation :: get('SecurityCodeNotValid', null, Utilities :: COMMON_LIBRARIES));
+            throw new UserException(Translation::get('SecurityCodeNotValid', null, Utilities::COMMON_LIBRARIES));
         }
         
-        if (Request :: get('display') == 1)
+        if (Request::get('display') == 1)
         {
             $object->open_in_browser();
         }

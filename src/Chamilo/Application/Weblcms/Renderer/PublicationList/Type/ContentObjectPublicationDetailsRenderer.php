@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * $Id: content_object_publication_details_renderer.class.php 216 2009-11-13
  * 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.browser.list_renderer
  */
 /**
@@ -26,14 +26,14 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
     public function get_publications()
     {
         $publication_id = $this->get_tool_browser()->get_publication_id();
-
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_ID), 
             new StaticConditionVariable($publication_id));
-
-        return DataManager :: retrieve_content_object_publications($condition, array(), 0, 1)->as_array();
+        
+        return DataManager::retrieve_content_object_publications($condition, array(), 0, 1)->as_array();
     }
 
     /**
@@ -43,9 +43,9 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
     public function as_html()
     {
         $this->get_tool_browser()->get_parent()->set_parameter(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, 
             $this->get_tool_browser()->get_publication_id());
-
-        return parent :: as_html();
+        
+        return parent::as_html();
     }
 }

@@ -27,30 +27,30 @@ class ListRenderer extends FullRenderer
      */
     public function getEvents($startTime, $endTime)
     {
-        $events = parent :: getEvents($startTime, $endTime);
-
+        $events = parent::getEvents($startTime, $endTime);
+        
         $structuredEvents = array();
-
+        
         foreach ($events as $event)
         {
             $startDate = $event->getStartDate();
             $dateKey = mktime(0, 0, 0, date('n', $startDate), date('j', $startDate), date('Y', $startDate));
-
+            
             if (! isset($structuredEvents[$dateKey]))
             {
                 $structuredEvents[$dateKey] = array();
             }
-
+            
             $structuredEvents[$dateKey][] = $event;
         }
-
+        
         ksort($structuredEvents);
-
+        
         foreach ($structuredEvents as $dateKey => &$dateEvents)
         {
             usort($dateEvents, array($this, "orderEvents"));
         }
-
+        
         return $structuredEvents;
     }
 
@@ -91,17 +91,17 @@ class ListRenderer extends FullRenderer
     {
         $startTime = $this->getDisplayTime();
         $endTime = $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
-
+        
         $html = array();
-
+        
         if (count($events) > 0)
         {
             $html[] = '<div class="table-calendar table-calendar-list">';
-
+            
             foreach ($events as $dateKey => $dateEvents)
             {
                 $hiddenEvents = 0;
-
+                
                 foreach ($dateEvents as $dateEvent)
                 {
                     if (! $this->isSourceVisible($dateEvent->getSource()))
@@ -109,59 +109,59 @@ class ListRenderer extends FullRenderer
                         $hiddenEvents ++;
                     }
                 }
-
+                
                 $allEventsAreHidden = ($hiddenEvents == count($dateEvents));
-
+                
                 $html[] = '<div class="row' . ($allEventsAreHidden ? ' event-container-hidden' : '') . '">';
-
+                
                 $html[] = '<div class="col-xs-12 table-calendar-list-date">';
                 $html[] = date('D, d M', $dateKey);
                 $html[] = '</div>';
-
+                
                 $html[] = '<div class="col-xs-12 table-calendar-list-events">';
                 $html[] = '<ul class="list-group">';
-
+                
                 foreach ($dateEvents as $dateEvent)
                 {
                     $eventRendererFactory = new EventRendererFactory($this, $dateEvent);
-
+                    
                     $html[] = '<li class="list-group-item ">';
                     $html[] = $eventRendererFactory->render();
                     $html[] = '</li>';
                 }
-
+                
                 $html[] = '</ul>';
                 $html[] = '</div>';
-
+                
                 $html[] = '</div>';
             }
-
+            
             $html[] = '</div>';
         }
         else
         {
-            $html[] = Display :: normal_message(Translation :: get('NoUpcomingEvents'), true);
+            $html[] = Display::normal_message(Translation::get('NoUpcomingEvents'), true);
         }
-
+        
         return implode('', $html);
     }
 
     /**
      * Adds a navigation bar to the calendar
-     *
+     * 
      * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
      */
     public function renderNavigation()
     {
         $urlFormat = $this->determineNavigationUrl();
-        $todayUrl = str_replace(Calendar :: TIME_PLACEHOLDER, time(), $urlFormat);
-
+        $todayUrl = str_replace(Calendar::TIME_PLACEHOLDER, time(), $urlFormat);
+        
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
-
+        
         $buttonToolBar->addItem(
-            new Button(Translation :: get('Today'), new BootstrapGlyph('home'), $todayUrl, Button :: DISPLAY_ICON));
-
+            new Button(Translation::get('Today'), new BootstrapGlyph('home'), $todayUrl, Button::DISPLAY_ICON));
+        
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         return $buttonToolbarRenderer->render();
     }

@@ -3,3 +3,22 @@ img.chamilo-menu-my-account-photo {
 	max-width: 200px;
 	max-height: 200px;
 }
+
+.anonymous-page {
+	margin-top: 30px;
+}
+
+.anonymous-form-container {
+	max-width: 500px;
+	margin: auto;
+	text-align: center;
+}
+
+.anonymous-view-button {
+	width: 304px;
+	height: 40px;
+}
+
+.g-recaptcha {
+	display: inline-block;
+}

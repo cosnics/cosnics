@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 /**
  * * *************************************************************************** Data privider for a course subgroup
  * browser table.
- *
+ * 
  * @author Stijn Van Hoecke ****************************************************************************
  */
 class SubSubscribedPlatformGroupTableDataProvider extends DataClassTableDataProvider
@@ -16,13 +16,13 @@ class SubSubscribedPlatformGroupTableDataProvider extends DataClassTableDataProv
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return \Chamilo\Core\Group\Storage\DataManager :: retrieves(
-            Group :: class_name(),
+        return \Chamilo\Core\Group\Storage\DataManager::retrieves(
+            Group::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
-        return \Chamilo\Core\Group\Storage\DataManager :: count(Group :: class_name(), $condition);
+        return \Chamilo\Core\Group\Storage\DataManager::count(Group::class_name(), $condition);
     }
 }

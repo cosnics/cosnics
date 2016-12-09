@@ -38,11 +38,11 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getContentObjectRelationService()->getAvailableWorkspacesForContentObjectsAndUser(
-            $this->getWorkspaceService(),
-            $this->getSelectedContentObjects(),
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->getWorkspaceService(), 
+            $this->getSelectedContentObjects(), 
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -53,8 +53,8 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return $this->getContentObjectRelationService()->countAvailableWorkspacesForContentObjectsAndUser(
-            $this->getWorkspaceService(),
-            $this->getSelectedContentObjects(),
+            $this->getWorkspaceService(), 
+            $this->getSelectedContentObjects(), 
             $this->get_component()->get_user());
     }
 
@@ -68,7 +68,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
-
+        
         return $this->workspaceService;
     }
 
@@ -82,7 +82,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
         {
             $this->contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
         }
-
+        
         return $this->contentObjectRelationService;
     }
 
@@ -92,22 +92,22 @@ class ShareTableDataProvider extends DataClassTableDataProvider
      */
     protected function getSelectedContentObjects()
     {
-        $contentObjectIdentifiers = $this->get_component()->get_parameter(Manager :: PARAM_CONTENT_OBJECT_ID);
+        $contentObjectIdentifiers = $this->get_component()->get_parameter(Manager::PARAM_CONTENT_OBJECT_ID);
         if (! is_array($contentObjectIdentifiers))
         {
             $contentObjectIdentifiers = array($contentObjectIdentifiers);
         }
-
+        
         $contentObjects = array();
-
+        
         foreach ($contentObjectIdentifiers as $contentObjectIdentifier)
         {
             $contentObject = new ContentObject();
             $contentObject->setId($contentObjectIdentifier);
-
+            
             $contentObjects[] = $contentObject;
         }
-
+        
         return $contentObjects;
     }
 }

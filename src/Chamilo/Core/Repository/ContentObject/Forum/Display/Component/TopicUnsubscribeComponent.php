@@ -19,22 +19,22 @@ class TopicUnsubscribeComponent extends Manager
     public function run()
     {
         $success = false;
-        $subscribe_id = Request :: get(self :: PARAM_SUBSCRIBE_ID);
+        $subscribe_id = Request::get(self::PARAM_SUBSCRIBE_ID);
         
         if ($subscribe_id)
         {
-            $subscribe = DataManager :: retrieve_subscribe($subscribe_id, null);
+            $subscribe = DataManager::retrieve_subscribe($subscribe_id, null);
             $success = $subscribe && $subscribe->delete();
         }
         
-        $message = Translation :: get(
+        $message = Translation::get(
             $success ? 'SuccesUnsubscribe' : 'UnSuccesUnSubscribe', 
             null, 
-            ContentObject :: get_content_object_type_namespace('forum_topic'));
+            ContentObject::get_content_object_type_namespace('forum_topic'));
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         $this->redirect($message, ($success ? false : true), $params);
     }
 }

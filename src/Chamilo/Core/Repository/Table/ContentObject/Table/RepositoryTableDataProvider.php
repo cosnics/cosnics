@@ -12,33 +12,30 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $orderProperty = null)
     {
-        $filterData = FilterData:: get_instance($this->get_component()->get_repository_browser()->getWorkspace());
+        $filterData = FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace());
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-
+        
         return $contentObjectService->getContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $this->get_component()->get_repository_browser()->getWorkspace(),
-            ConditionFilterRenderer:: factory(
-                $filterData, $this->get_component()->get_repository_browser()->getWorkspace()
-            ),
-            $count,
-            $offset,
-            $orderProperty
-        );
+            $filterData->getTypeDataClass(), 
+            $this->get_component()->get_repository_browser()->getWorkspace(), 
+            ConditionFilterRenderer::factory(
+                $filterData, 
+                $this->get_component()->get_repository_browser()->getWorkspace()), 
+            $count, 
+            $offset, 
+            $orderProperty);
     }
 
     public function count_data($condition)
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-        $filterData = FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace());
-
+        $filterData = FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace());
+        
         return $contentObjectService->countContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $this->get_component()->get_repository_browser()->getWorkspace(),
-            ConditionFilterRenderer:: factory(
-                $filterData, $this->get_component()->get_repository_browser()->getWorkspace()
-            )
-        );
-
+            $filterData->getTypeDataClass(), 
+            $this->get_component()->get_repository_browser()->getWorkspace(), 
+            ConditionFilterRenderer::factory(
+                $filterData, 
+                $this->get_component()->get_repository_browser()->getWorkspace()));
     }
 }

@@ -12,13 +12,22 @@ use Chamilo\Libraries\File\Redirect;
  */
 class FeatureContext extends MinkContext
 {
+    /**
+     *  'I go to application "Chamilo\Core\Repository" ...' 
+     *
+     *  If $shouldUseLcms4Urls is true: we use the URL /index.php?application=repository
+     *  Else: we generate the URL by calling Chamilo\Libraries\File\Redirect  
+     *
+     *  See iGoToApplication(...) and iAmInApplicationAndDoAction(...).
+     */
+    protected $shouldUseLcms4Urls = false;
 
     /**
      * @BeforeSuite
      */
     public static function installChamilo()
     {
-        $config_file = Path :: getInstance()->getStoragePath() . 'configuration/command_line_configuration.php';
+        $config_file = Path::getInstance()->getStoragePath() . 'configuration/command_line_configuration.php';
         $installer = new CommandLineInstaller($config_file);
         $installer->run();
     }
@@ -95,29 +104,61 @@ class FeatureContext extends MinkContext
     /**
      * Go to an application
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)"$/
-     *
+     * 
      * @param unknown $application
      */
     public function iGoToApplication($application)
     {
-        $redirect = new Redirect(array(Application :: PARAM_CONTEXT => $application));
+        if (! $this->shouldUseLcms4Urls)
+        {
+            $redirect = new Redirect(array(Application::PARAM_CONTEXT => $application));
+            $this->visit($redirect->getUrl());
+        }
+        else
+        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'. 
+            $application = strtolower(array_pop(explode('\\', $application)));
+            $this->visit('/index.php?application=' . $application);
+        }
 
-        $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
     }
 
     /**
      * Go to an application and do an action
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)" and do action "(?P<action>[^"]+)"$/
-     *
+     * 
      * @param unknown $application
      */
     public function iAmInApplicationAndDoAction($application, $action)
     {
-        $redirect = new Redirect(
-            array(Application :: PARAM_CONTEXT => $application, Application :: PARAM_ACTION => $action));
+        if (! $this->shouldUseLcms4Urls)
+        {
+            $redirect = new Redirect(
+                array(Application::PARAM_CONTEXT => $application, Application::PARAM_ACTION => $action));
+        
+            $this->visit($redirect->getUrl());
+        }
+        else
+        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
+            $application = strtolower(array_pop(explode('\\', $application)));
+            $this->visit('/index.php?application=' . $application . '&go=' . $action);
+        }
 
-        $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
+    }
+
+    /**
+     * @When /^I follow "([^"]*)" in the row containing "([^"]*)"$/
+     */
+    public function iFollowInTheRowContaining($linkName, $rowText)
+    {
+        /** @var $row \Behat\Mink\Element\NodeElement */
+        $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
+        if (! $row) 
+        {
+            throw new \Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
+        }
+
+        $row->clickLink($linkName);
     }
 }

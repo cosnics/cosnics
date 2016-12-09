@@ -59,12 +59,12 @@ class FormProcessorFactory
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Chamilo\Core\Repository\Common\Import\FormProcessor
      */
-    public function getFormProcessor($type, $userIdentifier, WorkspaceInterface $workspace, $formValues,
+    public function getFormProcessor($type, $userIdentifier, WorkspaceInterface $workspace, $formValues, 
         Request $request)
     {
-        $type = (string) StringUtilities :: getInstance()->createString($type)->upperCamelize();
+        $type = (string) StringUtilities::getInstance()->createString($type)->upperCamelize();
         $className = __NAMESPACE__ . '\\' . $type . '\FormProcessor';
-
+        
         return new $className($userIdentifier, $workspace, $formValues, $request);
     }
 
@@ -74,11 +74,11 @@ class FormProcessorFactory
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            self :: $instance = new static(StringUtilities :: getInstance());
+            self::$instance = new static(StringUtilities::getInstance());
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
 }

@@ -40,10 +40,10 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     public static function get_default_property_names($extended_property_names = array())
     {
         $default_property_names = array();
-        $default_property_names[] = self :: PROPERTY_ID;
-        $default_property_names[] = self :: PROPERTY_PUBLICATION_ID;
-        $default_property_names[] = self :: PROPERTY_NODE_ID;
-        $default_property_names[] = self :: PROPERTY_INHERIT;
+        $default_property_names[] = self::PROPERTY_ID;
+        $default_property_names[] = self::PROPERTY_PUBLICATION_ID;
+        $default_property_names[] = self::PROPERTY_NODE_ID;
+        $default_property_names[] = self::PROPERTY_INHERIT;
         
         return $default_property_names;
     }
@@ -54,7 +54,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function get_publication_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -63,7 +63,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -72,7 +72,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function get_node_id()
     {
-        return $this->get_default_property(self :: PROPERTY_NODE_ID);
+        return $this->get_default_property(self::PROPERTY_NODE_ID);
     }
 
     /**
@@ -81,7 +81,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function set_node_id($node_id)
     {
-        $this->set_default_property(self :: PROPERTY_NODE_ID, $node_id);
+        $this->set_default_property(self::PROPERTY_NODE_ID, $node_id);
     }
 
     /**
@@ -90,7 +90,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     /**
@@ -139,18 +139,18 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_PUBLICATION_ID), 
                 new StaticConditionVariable($this->get_publication_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_NODE_ID), 
+                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID), 
                 new StaticConditionVariable($this->get_node_id()));
             $condition = new AndCondition($conditions);
             
-            return DataManager :: deletes(RightsLocation :: class_name(), $condition);
+            return DataManager::deletes(RightsLocation::class_name(), $condition);
         }
         else
         {
-            return DataClass :: create();
+            return DataClass::create();
         }
     }
 
@@ -161,7 +161,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function clear_rights()
     {
-        return DataManager :: delete_rights_location_entity_rights($this);
+        return DataManager::delete_rights_location_entity_rights($this);
     }
 
     /**
@@ -172,6 +172,6 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function clear_right($right_id)
     {
-        return DataManager :: delete_rights_location_entity_rights($this, null, null, $right_id);
+        return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
     }
 }

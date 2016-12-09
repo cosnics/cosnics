@@ -15,14 +15,14 @@ class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
 
     /**
      * Inherited
-     *
+     * 
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
     {
-        $this->set_publication_id($parameters[self :: PROPERTY_PUBLICATION_ID]);
-        $this->set_name($parameters[self :: PROPERTY_NAME]);
-        $this->set_description($parameters[self :: PROPERTY_DESCRIPTION]);
+        $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
+        $this->set_name($parameters[self::PROPERTY_NAME]);
+        $this->set_description($parameters[self::PROPERTY_DESCRIPTION]);
     }
 
     /**
@@ -30,8 +30,8 @@ class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
      */
     static function get_default_property_names()
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_PUBLICATION_ID, self :: PROPERTY_NAME, self :: PROPERTY_DESCRIPTION));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_PUBLICATION_ID, self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION));
     }
 
     function __call($name, array $arguments)
@@ -44,7 +44,7 @@ class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

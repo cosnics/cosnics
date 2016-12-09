@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * $Id: course_type_select_form.class.php 2 2010-02-25 11:43:06Z Yannick &
  * Tristan $
- *
+ * 
  * @package application.lib.weblcms.course_type
  */
 class CourseTypeSelectForm extends FormValidator
@@ -26,16 +26,16 @@ class CourseTypeSelectForm extends FormValidator
 
     public function __construct($action)
     {
-        parent :: __construct('course_type_select', 'post', $action);
+        parent::__construct('course_type_select', 'post', $action);
         $this->build_form();
         $this->setDefaults();
     }
 
     public function build_form()
     {
-        $this->addElement('hidden', Course :: PROPERTY_ID);
-
-        $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
+        $this->addElement('hidden', Course::PROPERTY_ID);
+        
+        $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
         $course_types = array();
         $this->size = $course_type_objects->size();
         if ($this->size == 1)
@@ -49,25 +49,25 @@ class CourseTypeSelectForm extends FormValidator
                 $course_types[$course_type->get_id()] = $course_type->get_name();
             }
         }
-
-        $this->addElement('select', self :: SELECT_ELEMENT, Translation :: get('CourseType'), $course_types);
+        
+        $this->addElement('select', self::SELECT_ELEMENT, Translation::get('CourseType'), $course_types);
         $this->addRule(
-            'CourseType',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'CourseType', 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Select', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Select', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -76,7 +76,7 @@ class CourseTypeSelectForm extends FormValidator
         if ($this->size != 1)
         {
             $values = $this->exportValues();
-            return $values[self :: SELECT_ELEMENT];
+            return $values[self::SELECT_ELEMENT];
         }
         else
         {

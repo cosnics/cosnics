@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: assessment_multiple_choice_question.class.php$
- *
+ * 
  * @package repository.lib.content_object.multiple_choice_question
  */
 class AssessmentMultipleChoiceQuestion extends ContentObject implements Versionable
@@ -23,12 +23,12 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     {
         $options = $this->get_options();
         $options[] = $option;
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     /**
@@ -37,7 +37,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self :: PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -57,7 +57,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -68,37 +68,37 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     public function set_answer_type($type)
     {
-        return $this->set_additional_property(self :: PROPERTY_ANSWER_TYPE, $type);
+        return $this->set_additional_property(self::PROPERTY_ANSWER_TYPE, $type);
     }
 
     public function get_answer_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_ANSWER_TYPE);
+        return $this->get_additional_property(self::PROPERTY_ANSWER_TYPE);
     }
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self :: PROPERTY_HINT, $hint);
+        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
     }
 
     public function get_hint()
     {
-        return $this->get_additional_property(self :: PROPERTY_HINT);
+        return $this->get_additional_property(self::PROPERTY_HINT);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_ANSWER_TYPE, self :: PROPERTY_OPTIONS, self :: PROPERTY_HINT);
+        return array(self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
 
     public function has_hint()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_hint(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
@@ -107,10 +107,10 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     public function get_maximum_score()
     {
         $max = 0;
-
+        
         switch ($this->get_answer_type())
         {
-            case self :: ANSWER_TYPE_CHECKBOX :
+            case self::ANSWER_TYPE_CHECKBOX :
                 foreach ($this->get_options() as $option)
                 {
                     if ($option->is_correct())
@@ -119,7 +119,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
                     }
                 }
                 break;
-            case self :: ANSWER_TYPE_RADIO :
+            case self::ANSWER_TYPE_RADIO :
                 foreach ($this->get_options() as $option)
                 {
                     if ($option->is_correct())
@@ -129,10 +129,10 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
                 }
                 break;
         }
-
+        
         return $max;
     }
-
+    
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -141,11 +141,11 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     *
+     * 
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())
     {
-        return parent :: get_html_editors(array(self :: PROPERTY_HINT));
+        return parent::get_html_editors(array(self::PROPERTY_HINT));
     }
 }

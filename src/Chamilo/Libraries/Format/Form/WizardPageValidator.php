@@ -42,7 +42,7 @@ class WizardPageValidator extends FormValidator
      */
     public function __construct($formName, $method = 'post', $action = '', $target = '', $attributes = null)
     {
-        parent :: __construct($formName, $method, $action, $target, $attributes);
+        parent::__construct($formName, $method, $action, $target, $attributes);
     }
 
     /**
@@ -165,7 +165,7 @@ class WizardPageValidator extends FormValidator
      */
     public function exportValues($elementList = null, $filterInternal = false)
     {
-        $values = parent :: exportValues($elementList);
+        $values = parent::exportValues($elementList);
         if ($filterInternal)
         {
             foreach (array_keys($values) as $key)

@@ -27,7 +27,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -41,7 +41,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         if (! is_null($image))
         {
             $dimensions = getimagesize($image->get_full_path());
-            $scaledDimensions = Utilities :: scaleDimensions(
+            $scaledDimensions = Utilities::scaleDimensions(
                 600, 
                 450, 
                 array('width' => $dimensions[0], 'height' => $dimensions[1]));
@@ -49,7 +49,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
                  $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
                  'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
-                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager::get_document_downloader_url(
                     $image->get_id(), 
                     $image->calculate_security_code()) . ')"></div></div>';
         }
@@ -63,7 +63,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th></th>';
-        $html[] = '<th>' . Translation :: get('HotspotTableTitle') . '</th>';
+        $html[] = '<th>' . Translation::get('HotspotTableTitle') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
@@ -82,11 +82,11 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Rendition.js');
         
         return implode(PHP_EOL, $html);

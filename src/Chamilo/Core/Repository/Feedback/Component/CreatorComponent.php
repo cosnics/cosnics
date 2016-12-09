@@ -23,49 +23,49 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $form = new FeedbackForm($this->get_url());
-
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
+                
                 $feedback = $this->get_parent()->get_feedback();
                 $feedback = $this->get_parent()->get_feedback();
                 $feedback->set_user_id($this->get_user_id());
-                $feedback->set_comment($values[Feedback :: PROPERTY_COMMENT]);
+                $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
                 $feedback->set_creation_date(time());
                 $feedback->set_modification_date(time());
-
+                
                 $success = $feedback->create();
-
+                
                 $this->notifyNewFeedback($feedback);
-
+                
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-                $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Feedback')),
-                    Utilities :: COMMON_LIBRARIES);
+                
+                $message = Translation::get(
+                    $translation, 
+                    array('OBJECT' => Translation::get('Feedback')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
             }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

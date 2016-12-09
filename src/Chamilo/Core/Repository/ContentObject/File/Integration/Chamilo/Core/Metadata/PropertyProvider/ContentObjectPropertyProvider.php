@@ -23,7 +23,7 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getEntityType()
     {
-        return File :: class_name();
+        return File::class_name();
     }
 
     /**
@@ -32,12 +32,12 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getAvailableProperties()
     {
-        $availableProperties = parent :: getAvailableProperties();
-
-        $availableProperties[] = self :: PROPERTY_FILENAME;
-        $availableProperties[] = self :: PROPERTY_FILE_EXTENSION;
-        $availableProperties[] = self :: PROPERTY_FILESIZE;
-
+        $availableProperties = parent::getAvailableProperties();
+        
+        $availableProperties[] = self::PROPERTY_FILENAME;
+        $availableProperties[] = self::PROPERTY_FILE_EXTENSION;
+        $availableProperties[] = self::PROPERTY_FILESIZE;
+        
         return $availableProperties;
     }
 
@@ -49,10 +49,10 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
     {
         switch ($property)
         {
-            case self :: PROPERTY_FILE_EXTENSION :
+            case self::PROPERTY_FILE_EXTENSION :
                 return $contentObject->get_extension();
         }
-
-        return parent :: renderProperty($property, $contentObject);
+        
+        return parent::renderProperty($property, $contentObject);
     }
 }

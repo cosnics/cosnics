@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: course_group_subscribed_user_browser_table_data_provider.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableDataProvider extends DataClassTableDataProvider
@@ -17,7 +17,7 @@ class CourseGroupTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Gets the users
-     *
+     * 
      * @param $offset int
      * @param $count int
      * @param $order_property string
@@ -25,18 +25,18 @@ class CourseGroupTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieves(
-            CourseGroup :: class_name(),
+        return DataManager::retrieves(
+            CourseGroup::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Gets the number of users in the table
-     *
+     * 
      * @return int
      */
     public function count_data($condition)
     {
-        return DataManager :: count(CourseGroup :: class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseGroup::class_name(), new DataClassCountParameters($condition));
     }
 }

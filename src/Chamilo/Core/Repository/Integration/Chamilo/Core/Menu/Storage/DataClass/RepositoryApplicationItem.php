@@ -12,6 +12,7 @@ use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
  */
 class RepositoryApplicationItem extends ApplicationItem
 {
+
     public static function get_table_name()
     {
         return ApplicationItem::get_table_name();
@@ -19,14 +20,13 @@ class RepositoryApplicationItem extends ApplicationItem
 
     /**
      * @inheritdoc
-     *
      * Override needed because the database table parent is Item, not ApplicationItem.
      * See Chamilo\Libraries\Storage\DataManager\Doctrine\Database Create function
-     *
+     * 
      * @return string
      */
     public static function parent_class_name()
     {
-        return get_parent_class(ApplicationItem :: class_name());
+        return get_parent_class(ApplicationItem::class_name());
     }
 }

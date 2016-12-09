@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class WorkspaceUserFavourite extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_USER_ID = 'user_id';
@@ -31,7 +31,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_WORKSPACE_ID, self :: PROPERTY_USER_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_USER_ID));
     }
 
     /**
@@ -40,7 +40,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function get_workspace_id()
     {
-        return $this->get_default_property(self :: PROPERTY_WORKSPACE_ID);
+        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -51,9 +51,9 @@ class WorkspaceUserFavourite extends DataClass
     {
         if (! isset($this->workspace))
         {
-            $this->workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $this->get_workspace_id());
+            $this->workspace = DataManager::retrieve_by_id(Workspace::class_name(), $this->get_workspace_id());
         }
-
+        
         return $this->workspace;
     }
 
@@ -63,7 +63,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function set_workspace_id($workspace_id)
     {
-        $this->set_default_property(self :: PROPERTY_WORKSPACE_ID, $workspace_id);
+        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 
     /**
@@ -72,7 +72,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -81,6 +81,6 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 }

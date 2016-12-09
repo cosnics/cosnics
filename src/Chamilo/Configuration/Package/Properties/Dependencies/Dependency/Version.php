@@ -78,7 +78,7 @@ class Version
 
     public function get_operator_name()
     {
-        return self :: operator_name($this->get_operator());
+        return self::operator_name($this->get_operator());
     }
 
     /**
@@ -90,23 +90,23 @@ class Version
     {
         switch ($operator)
         {
-            case self :: OPERATOR_EQUAL :
-                return Translation :: get('ShortEqual');
+            case self::OPERATOR_EQUAL :
+                return Translation::get('ShortEqual');
                 break;
-            case self :: OPERATOR_NOT_EQUAL :
-                return Translation :: get('ShortNotEqual');
+            case self::OPERATOR_NOT_EQUAL :
+                return Translation::get('ShortNotEqual');
                 break;
-            case self :: OPERATOR_GREATER_THEN :
-                return Translation :: get('ShortGreater');
+            case self::OPERATOR_GREATER_THEN :
+                return Translation::get('ShortGreater');
                 break;
-            case self :: OPERATOR_GREATER_THEN_OR_EQUAL :
-                return Translation :: get('ShortGreaterThenOrEqual');
+            case self::OPERATOR_GREATER_THEN_OR_EQUAL :
+                return Translation::get('ShortGreaterThenOrEqual');
                 break;
-            case self :: OPERATOR_LESS_THEN :
-                return Translation :: get('ShortLessThen');
+            case self::OPERATOR_LESS_THEN :
+                return Translation::get('ShortLessThen');
                 break;
-            case self :: OPERATOR_LESS_THEN_OR_EQUAL :
-                return Translation :: get('ShortLessThenOrEqual');
+            case self::OPERATOR_LESS_THEN_OR_EQUAL :
+                return Translation::get('ShortLessThenOrEqual');
                 break;
         }
     }
@@ -122,22 +122,22 @@ class Version
     {
         switch ($type)
         {
-            case self :: OPERATOR_EQUAL :
+            case self::OPERATOR_EQUAL :
                 return version_compare($reference, $value, '==');
                 break;
-            case self :: OPERATOR_NOT_EQUAL :
+            case self::OPERATOR_NOT_EQUAL :
                 return version_compare($reference, $value, '!=');
                 break;
-            case self :: OPERATOR_GREATER_THEN :
+            case self::OPERATOR_GREATER_THEN :
                 return version_compare($value, $reference, '>');
                 break;
-            case self :: OPERATOR_GREATER_THEN_OR_EQUAL :
+            case self::OPERATOR_GREATER_THEN_OR_EQUAL :
                 return version_compare($value, $reference, '>=');
                 break;
-            case self :: OPERATOR_LESS_THEN :
+            case self::OPERATOR_LESS_THEN :
                 return version_compare($value, $reference, '<');
                 break;
-            case self :: OPERATOR_LESS_THEN_OR_EQUAL :
+            case self::OPERATOR_LESS_THEN_OR_EQUAL :
                 return version_compare($value, $reference, '<=');
                 break;
             default :

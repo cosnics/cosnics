@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\PackagesContentFinder;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Abstract class that can be used to loop through a set of given packages and list content in an array based on
@@ -9,7 +9,7 @@ use Chamilo\Libraries\File\Path;
  * These conditions must be defined in the extensions of this class. Uses a PHP based cache.
  * For example: scan for directories with a given path, scan for files with a given path, scan for classes
  * Class PackagesContentFinder
- *
+ * 
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -18,33 +18,33 @@ abstract class PackagesContentFinder
 
     /**
      * The packages in which the system must be searching
-     *
+     * 
      * @var string[]
      */
     private $packages;
 
     /**
      * The location of the cache file
-     *
+     * 
      * @var string
      */
     private $cacheFile;
 
     /**
      * The path generator class
-     *
-     * @var Path
+     * 
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
     private $pathGenerator;
 
     /**
      * Constructor
-     *
-     * @param Path $pathGenerator
+     * 
+     * @param \Chamilo\Libraries\File\PathBuilder $pathGenerator
      * @param array $packages
      * @param string $cacheFile
      */
-    public function __construct(Path $pathGenerator, array $packages = array(), $cacheFile = null)
+    public function __construct(PathBuilder $pathGenerator, array $packages = array(), $cacheFile = null)
     {
         $this->packages = $packages;
         $this->cacheFile = $cacheFile;
@@ -53,7 +53,7 @@ abstract class PackagesContentFinder
 
     /**
      * Locates the content, either from the given cache or by searching through the given set of packages
-     *
+     * 
      * @throws \Exception
      *
      * @return string[]
@@ -63,7 +63,7 @@ abstract class PackagesContentFinder
         if (isset($this->cacheFile) && file_exists($this->cacheFile))
         {
             $content = require ($this->cacheFile);
-
+            
             if (! empty($content) && ! is_array($content))
             {
                 throw new \Exception(
@@ -73,24 +73,24 @@ abstract class PackagesContentFinder
         else
         {
             $content = array();
-
+            
             foreach ($this->packages as $package)
             {
                 $content = array_merge($content, $this->handlePackage($package));
             }
-
+            
             if (isset($this->cacheFile))
             {
                 file_put_contents($this->cacheFile, sprintf('<?php return %s;', var_export($content, true)));
             }
         }
-
+        
         return $content;
     }
 
     /**
      * Returns the full path to the given package
-     *
+     * 
      * @param string $package
      *
      * @return string
@@ -102,7 +102,7 @@ abstract class PackagesContentFinder
 
     /**
      * Handles a single package
-     *
+     * 
      * @param string $package
      *
      * @return array

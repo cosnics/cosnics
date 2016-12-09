@@ -56,7 +56,7 @@ class Timer
      */
     public function get_time_in_hours()
     {
-        return DatetimeUtilities :: convert_seconds_to_hours($this->get_time());
+        return DatetimeUtilities::convert_seconds_to_hours($this->get_time());
     }
 
     /**

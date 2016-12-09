@@ -30,36 +30,36 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $policy = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-        $fallback = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
-
-        if ($policy == Calculator :: POLICY_USER && ! $fallback)
+        $policy = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+        $fallback = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+        
+        if ($policy == Calculator::POLICY_USER && ! $fallback)
         {
             $property = new FunctionConditionVariable(
-                FunctionConditionVariable :: SUM,
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_DISK_QUOTA),
+                FunctionConditionVariable::SUM, 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_DISK_QUOTA), 
                 'disk_quota');
-
+            
             $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
-
-            $record = DataManager :: record(User :: class_name(), $parameters);
+            
+            $record = DataManager::record(User::class_name(), $parameters);
             $totalQuota = $record['disk_quota'];
         }
         else
         {
-            $users = DataManager :: retrieves(User :: class_name(), new DataClassRetrievesParameters());
-
+            $users = DataManager::retrieves(User::class_name(), new DataClassRetrievesParameters());
+            
             $totalQuota = 0;
-
+            
             while ($user = $users->next_result())
             {
                 $calculator = new Calculator($user);
                 $totalQuota += $calculator->getMaximumUserDiskQuota();
             }
-
+            
             $totalQuota;
         }
-
+        
         return $this->getCacheProvider()->save($identifier, $totalQuota);
     }
 
@@ -78,7 +78,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function getIdentifiers()
     {
-        return array(self :: IDENTIFIER_TOTAL_USER_DISK_QUOTA);
+        return array(self::IDENTIFIER_TOTAL_USER_DISK_QUOTA);
     }
 
     /**
@@ -87,6 +87,6 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function getTotalUserDiskQuota()
     {
-        return $this->getForIdentifier(self :: IDENTIFIER_TOTAL_USER_DISK_QUOTA);
+        return $this->getForIdentifier(self::IDENTIFIER_TOTAL_USER_DISK_QUOTA);
     }
 }

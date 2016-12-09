@@ -66,7 +66,7 @@ class PersonalWorkspace implements WorkspaceInterface
      */
     public function getWorkspaceType()
     {
-        return self :: WORKSPACE_TYPE;
+        return self::WORKSPACE_TYPE;
     }
 
     /*
@@ -75,7 +75,7 @@ class PersonalWorkspace implements WorkspaceInterface
      */
     public function getTitle()
     {
-        return Translation :: get('MyRepository');
+        return Translation::get('MyRepository');
     }
 
     /**

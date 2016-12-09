@@ -12,11 +12,11 @@ class RequestTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager :: retrieves(AccountRequest :: class_name(), $parameters);
+        return DataManager::retrieves(AccountRequest::class_name(), $parameters);
     }
 
     public function count_data($condition)
     {
-        return DataManager :: count(AccountRequest :: class_name(), $condition);
+        return DataManager::count(AccountRequest::class_name(), $condition);
     }
 }

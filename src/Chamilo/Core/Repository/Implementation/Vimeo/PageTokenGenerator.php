@@ -37,17 +37,17 @@ class PageTokenGenerator
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            self :: $instance = new static();
+            self::$instance = new static();
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
 
     public function __construct()
     {
-        self :: $characterMap = array_merge(range("A", "Z", 4), range("c", "z", 4), range(0, 9, 4));
+        self::$characterMap = array_merge(range("A", "Z", 4), range("c", "z", 4), range(0, 9, 4));
         $this->pageTokenCache = array();
     }
 
@@ -69,13 +69,13 @@ class PageTokenGenerator
             else
             {
                 $tokenParts = array();
-
+                
                 // The first character of the token is always the same
-                $tokenParts[] = self :: PREFIX;
-
+                $tokenParts[] = self::PREFIX;
+                
                 // Determine the start index of the first video to return
                 $startIndex = 1 + ($pageNumber - 1) * $maximumNumberOfResults;
-
+                
                 /*
                  * Determine the first character.
                  * It is basically the startIndex divided by 16 and rounded down. The value is corrected for value 16
@@ -84,19 +84,19 @@ class PageTokenGenerator
                  */
                 $floor = floor($startIndex / 16);
                 $floor = ($startIndex % 16) == 0 ? $floor - 1 : $floor;
-
+                
                 if ($floor >= 16)
                 {
                     $floor = $floor - 8;
-
+                    
                     if ($floor >= 16)
                     {
                         $floor = $floor - 8;
                     }
                 }
-
+                
                 $tokenParts[] = chr(ord('A') + $floor);
-
+                
                 /*
                  * Determine the second character
                  * The characterMapIndex is determined by taking the moduls from the startIndex by 16 and once again
@@ -106,9 +106,9 @@ class PageTokenGenerator
                 $characterMapIndex = ($startIndex % 16);
                 $characterMapIndex = $characterMapIndex == 0 ? 16 : $characterMapIndex;
                 $characterMapIndex = $characterMapIndex - 1;
-
-                $tokenParts[] = self :: $characterMap[$characterMapIndex];
-
+                
+                $tokenParts[] = self::$characterMap[$characterMapIndex];
+                
                 /*
                  * Determine the extra character, if it is required.
                  * For each startIndex greater then 128 an extra character is added to the pageToken. It is basically
@@ -116,10 +116,10 @@ class PageTokenGenerator
                  * to never be higher then 127. Consecutive loops restart from I to P. If the startIndex is bigger then
                  * 128 an addition E is added, if not a Q is added.
                  */
-
+                
                 $floor = floor($startIndex / 128);
                 $floor = ($startIndex % 128) == 0 ? $floor - 1 : $floor;
-
+                
                 if ($startIndex > 128)
                 {
                     $tokenParts[] = chr(ord('A') + $floor);
@@ -129,14 +129,14 @@ class PageTokenGenerator
                 {
                     $tokenParts[] = 'Q';
                 }
-
+                
                 // The last two characters of the token are always the same
-                $tokenParts[] = self :: POSTFIX;
-
+                $tokenParts[] = self::POSTFIX;
+                
                 $this->pageTokenCache[$maximumNumberOfResults][$pageNumber] = implode('', $tokenParts);
             }
         }
-
+        
         return $this->pageTokenCache[$maximumNumberOfResults][$pageNumber];
     }
 }

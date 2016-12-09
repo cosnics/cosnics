@@ -17,17 +17,17 @@ class ComplexMatching extends ComplexContentObjectItem implements PageDisplayIte
 
     static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_VISIBLE);
+        return array(self::PROPERTY_VISIBLE);
     }
 
     function get_visible()
     {
-        return $this->get_additional_property(self :: PROPERTY_VISIBLE);
+        return $this->get_additional_property(self::PROPERTY_VISIBLE);
     }
 
     function set_visible($value)
     {
-        $this->set_additional_property(self :: PROPERTY_VISIBLE, $value);
+        $this->set_additional_property(self::PROPERTY_VISIBLE, $value);
     }
 
     function is_visible()
@@ -57,10 +57,10 @@ class ComplexMatching extends ComplexContentObjectItem implements PageDisplayIte
             
             $answer_ids[] = $answerId . '_' . $option->get_id();
         }
-
+        
         return $answer_ids;
     }
-    
+
     function getDataAttributes()
     {
         return null;

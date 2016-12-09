@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataClass\Phy
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return PhysicalLocation :: class_name();
+        return PhysicalLocation::class_name();
     }
 }

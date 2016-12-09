@@ -42,7 +42,7 @@ class PlatformPackageBundles
 
     /**
      * A list of packages grouped by package type
-     *
+     * 
      * @var string[][]
      */
     private $type_packages;
@@ -60,12 +60,12 @@ class PlatformPackageBundles
      */
     public static function getInstance($mode = self :: MODE_ALL)
     {
-        if (! isset(self :: $instance[$mode]))
+        if (! isset(self::$instance[$mode]))
         {
-            self :: $instance[$mode] = new self($mode);
+            self::$instance[$mode] = new self($mode);
         }
-
-        return self :: $instance[$mode];
+        
+        return self::$instance[$mode];
     }
 
     /**
@@ -102,7 +102,7 @@ class PlatformPackageBundles
         {
             $this->types = array_keys($this->get_type_packages());
         }
-
+        
         return $this->types;
     }
 
@@ -112,7 +112,7 @@ class PlatformPackageBundles
         {
             $this->packages = $this->package_list->get_list(true);
         }
-
+        
         return $this->packages;
     }
 
@@ -126,7 +126,7 @@ class PlatformPackageBundles
         {
             $this->type_packages = $this->package_list->get_all_packages(true);
         }
-
+        
         return $this->type_packages;
     }
 
@@ -148,7 +148,7 @@ class PlatformPackageBundles
         {
             $this->packageBundlesCacheService = new PackageBundlesCacheService();
         }
-
+        
         return $this->packageBundlesCacheService;
     }
 
@@ -173,6 +173,6 @@ class PlatformPackageBundles
      */
     public static function get_modes()
     {
-        return array(self :: MODE_ALL, self :: MODE_AVAILABLE, self :: MODE_INSTALLED);
+        return array(self::MODE_ALL, self::MODE_AVAILABLE, self::MODE_INSTALLED);
     }
 }

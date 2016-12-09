@@ -51,14 +51,14 @@ abstract class MediaPackageParser
             return false;
         }
         $class_file = __DIR__ . '/media_package/' . $type . '.class.php';
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'MediaPackageParser';
         return new $class($response);
     }
 
     public static function process_get($response)
     {
-        $parser = self :: get($response);
+        $parser = self::get($response);
         return $parser->process();
     }
 

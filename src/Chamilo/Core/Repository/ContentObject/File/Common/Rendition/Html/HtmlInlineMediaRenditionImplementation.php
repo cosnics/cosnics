@@ -28,12 +28,12 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
     {
         $html = array();
         
-        $titleVariable = StringUtilities :: getInstance()->createString($this->getMediaElementType())->upperCamelize() .
+        $titleVariable = StringUtilities::getInstance()->createString($this->getMediaElementType())->upperCamelize() .
              'PlaybackNotSupportedTitle';
         
         $html[] = '<div class="alert alert-warning media-element-js-playback-error ' . ($show ? 'show' : 'hidden') . '">';
-        $html[] = '<h4>' . Translation :: get($titleVariable) . '</h4>';
-        $html[] = Translation :: get('PlaybackNotSupported');
+        $html[] = '<h4>' . Translation::get($titleVariable) . '</h4>';
+        $html[] = Translation::get('PlaybackNotSupported');
         $html[] = '<br />';
         $html[] = $this->renderActions('btn-warning');
         $html[] = '</div>';

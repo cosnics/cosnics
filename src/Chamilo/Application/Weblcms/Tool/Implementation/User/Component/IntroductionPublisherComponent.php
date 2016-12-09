@@ -16,8 +16,8 @@ class IntroductionPublisherComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB))),
-                Translation :: get('UserToolUnsubscribeUserBrowserComponent')));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB))), 
+                Translation::get('UserToolUnsubscribeUserBrowserComponent')));
     }
 }

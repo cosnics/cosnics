@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 
 /**
  *
@@ -26,9 +28,9 @@ class Translation
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
 
     /**
      * Instance of this class for the singleton pattern
@@ -42,12 +44,6 @@ class Translation
      * @var string
      */
     private static $calledClass;
-
-    /**
-     *
-     * @var string[]
-     */
-    private static $recentlyAdded;
 
     /**
      * Language strings defined in the language-files.
@@ -65,20 +61,6 @@ class Translation
     private $languageIsocode;
 
     /**
-     * To determine wether we should show the variable in a tooltip window or not (used for translation purposes)
-     *
-     * @var boolean
-     */
-    private $showTranslationVariable;
-
-    /**
-     * Determines whether or not to use the caching
-     *
-     * @var boolean
-     */
-    private $usesCaching = true;
-
-    /**
      * A list with reserved words that can not be used as a variable in the translation files
      *
      * @var string[]
@@ -89,32 +71,25 @@ class Translation
      *
      * @var \Chamilo\Libraries\Platform\TranslationCacheService
      */
-    private $cacheService;
+    private $translationCacheService;
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param string $languageIsoCode
      */
-    private function __construct(Configuration $configuration, ClassnameUtilities $classnameUtilities,
-        Path $pathUtilities)
+    public function __construct(ClassnameUtilities $classnameUtilities, PathBuilder $pathBuilder,
+        TranslationCacheService $translationCacheService, $languageIsoCode)
     {
-        $this->configuration = $configuration;
         $this->classnameUtilities = $classnameUtilities;
-        $this->pathUtilities = $pathUtilities;
-
-        $this->languageIsocode = $this->configuration->get_setting(array('Chamilo\Core\Admin', 'platform_language'));
-        $this->showTranslationVariable = $this->configuration->get_setting(
-            array('Chamilo\Core\Admin', 'show_variable_in_translation'));
-        $this->usesCaching = ! $this->configuration->get_setting(
-            array('Chamilo\Core\Admin', 'write_new_variables_to_translation_file'));
+        $this->pathBuilder = $pathBuilder;
+        $this->translationCacheService = $translationCacheService;
+        $this->languageIsocode = $languageIsoCode;
 
         $this->strings = array();
-
-        if ($this->usesCaching)
-        {
-            $this->strings[$this->languageIsocode] = $this->getCacheService()->getForIdentifier($this->languageIsocode);
-        }
+        $this->strings[$this->languageIsocode] = $this->getTranslationCacheService()->getForIdentifier(
+            $this->languageIsocode);
     }
 
     /**
@@ -137,24 +112,6 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Configuration\Configuration
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Configuration $configuration
-     */
-    public function setConfiguration($configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
     public function getClassnameUtilities()
@@ -173,20 +130,20 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getPathUtilities()
+    public function getPathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->pathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
-    public function setPathUtilities($pathUtilities)
+    public function setPathBuilder($pathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -195,15 +152,21 @@ class Translation
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            $configuraton = \Chamilo\Configuration\Configuration :: get_instance();
-            $classnameUtilities = ClassnameUtilities :: getInstance();
-            $pathUtilities = Path :: getInstance();
-            self :: $instance = new static($configuraton, $classnameUtilities, $pathUtilities);
+            $classnameUtilities = ClassnameUtilities::getInstance();
+            $pathBuilder = new PathBuilder($classnameUtilities);
+            $fileConfigurationConsulter = new ConfigurationConsulter(
+                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
+
+            self::$instance = new static(
+                $classnameUtilities,
+                $pathBuilder,
+                new TranslationCacheService(),
+                $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language')));
         }
 
-        return static :: $instance;
+        return static::$instance;
     }
 
     /**
@@ -216,10 +179,10 @@ class Translation
      */
     public static function get($variable, $parameters = array(), $context = null, $isocode = null)
     {
-        $instance = self :: getInstance();
+        $instance = self::getInstance();
 
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        self :: $calledClass = $backtrace[1]['class'];
+        self::$calledClass = $backtrace[1]['class'];
 
         return $instance->getTranslation($variable, $parameters, $context, $isocode);
     }
@@ -228,14 +191,9 @@ class Translation
      *
      * @return \Chamilo\Libraries\Platform\TranslationCacheService
      */
-    public function getCacheService()
+    public function getTranslationCacheService()
     {
-        if (! isset($this->cacheService))
-        {
-            $this->cacheService = new TranslationCacheService();
-        }
-
-        return $this->cacheService;
+        return $this->translationCacheService;
     }
 
     /**
@@ -290,13 +248,13 @@ class Translation
 
         if (! $context)
         {
-            if (count(explode('\\', self :: $calledClass)) > 1)
+            if (count(explode('\\', self::$calledClass)) > 1)
             {
-                $context = $this->getClassnameUtilities()->getNamespaceFromClassname(self :: $calledClass);
+                $context = $this->getClassnameUtilities()->getNamespaceFromClassname(self::$calledClass);
             }
         }
 
-        if (! isset($strings[$language]) && $this->usesCaching)
+        if (! isset($strings[$language]))
         {
             $this->loadCache($language);
         }
@@ -318,28 +276,8 @@ class Translation
             }
             else
             {
-
-                if (is_null($value) && ! $this->usesCaching &&
-                     ! array_key_exists($variable, $strings[$language][$context]) &&
-                     count($strings[$language][$context]) > 0)
-                {
-                    $this->writeLanguageVariable($language, $context, $variable);
-                }
-
-                if ($this->getConfiguration()->get_setting(array('Chamilo\Core\Admin', 'hide_dcda_markup')))
-                {
-                    return $variable;
-                }
-                else
-                {
-                    return '[CDA context={' . $context . '}]' . $variable . '[/CDA]';
-                }
+                return $variable;
             }
-        }
-
-        if ($this->showTranslationVariable)
-        {
-            return '<span title="' . htmlentities($context . ' - ' . $variable) . '">' . $value . '</span>';
         }
 
         return $value;
@@ -351,45 +289,6 @@ class Translation
      */
     private function loadCache($language)
     {
-        $this->strings[$language] = $this->getCacheService()->getForIdentifier($language);
-    }
-
-    /**
-     *
-     * @param string $language
-     * @param string $context
-     * @param string $variable
-     */
-    private function writeLanguageVariable($language, $context, $variable)
-    {
-        if (in_array(strtolower($variable), $this->reservedWords))
-        {
-            return;
-        }
-
-        if (! in_array($variable, self :: $recentlyAdded[$language][$context]))
-        {
-            $path = $this->getPathUtilities()->namespaceToFullPath($context) . '/resources/i18n/' . $language . '.i18n';
-
-            if (is_writable(dirname($path)))
-            {
-                if (! $handle = fopen($path, 'a'))
-                {
-                    return;
-                }
-
-                $string = "\n" . $variable . ' = ""';
-
-                // Write $somecontent to our opened file
-                if (fwrite($handle, $string) === FALSE)
-                {
-                    return;
-                }
-
-                fclose($handle);
-
-                self :: $recentlyAdded[$language][$context][] = $variable;
-            }
-        }
+        $this->strings[$language] = $this->getTranslationCacheService()->getForIdentifier($language);
     }
 }

@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Menu\Renderer\Menu\Type;
 
 use Chamilo\Core\Menu\Renderer\Menu\Renderer;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -18,21 +17,21 @@ class Bar extends Renderer
 {
     const TYPE = 'Bar';
 
-    public function display_menu_header()
+    public function display_menu_header($numberOfItems = 0)
     {
         $html = array();
-
+        
         $class = 'navbar navbar-chamilo navbar-default';
-
-        if (! $this->get_user() instanceof User)
+        
+        if ($numberOfItems == 0)
         {
             $class .= ' navbar-no-items';
         }
-
+        
         $html[] = '<nav class="' . $class . '">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
-
+        
         $html[] = '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
         $html[] = '<span class="sr-only">Toggle navigation</span>';
         $html[] = '<span class="icon-bar"></span>';
@@ -40,39 +39,39 @@ class Bar extends Renderer
         $html[] = '<span class="icon-bar"></span>';
         $html[] = '</button>';
         $html[] = $this->renderBrand();
-
+        
         $html[] = '</div>';
         $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
         $html[] = '<ul class="nav navbar-nav navbar-right">';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function display_menu_footer()
     {
         $html = array();
-
+        
         $html[] = '</ul>';
         $html[] = '</nav>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function renderBrand()
     {
-        $siteName = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
-        $brandImage = PlatformSetting :: get('brand_image', 'Chamilo\Core\Menu');
-
+        $siteName = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $brandImage = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'brand_image'));
+        
         if ($brandImage)
         {
             $brandSource = $brandImage;
         }
         else
         {
-            $brandSource = Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
+            $brandSource = Theme::getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
-
-        return '<a class="navbar-brand" href="' . Path :: getInstance()->getBasePath(true) . '">' . '<img alt="' .
+        
+        return '<a class="navbar-brand" href="' . Path::getInstance()->getBasePath(true) . '">' . '<img alt="' .
              $siteName . '" src="' . $brandSource . '"></a>';
     }
 

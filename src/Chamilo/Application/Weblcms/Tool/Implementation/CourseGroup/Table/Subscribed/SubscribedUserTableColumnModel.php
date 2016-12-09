@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 /**
  * $Id: course_group_subscribed_user_browser_table_column_model.class.php 216
  * 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class SubscribedUserTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -33,7 +33,7 @@ class SubscribedUserTableColumnModel extends RecordTableColumnModel implements T
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                CourseGroupUserRelation::class_name(),
+                CourseGroupUserRelation::class_name(), 
                 CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME));
     }
 }

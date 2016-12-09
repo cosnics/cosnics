@@ -1,5 +1,6 @@
 ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
-	.treeview .list-group .list-group-item .icon.node-icon.type_portfolio, .treeview .list-group .list-group-item .icon.node-icon.type_portfolio_default,
+	.treeview .list-group .list-group-item .icon.node-icon.type_portfolio,
+	.treeview .list-group .list-group-item .icon.node-icon.type_portfolio_default,
 	ul.tree-menu li div a.type_portfolio_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

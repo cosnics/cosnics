@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: course_sections_visibility_changer.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_sections.component
  */
 class VisibilityChangerComponent extends Manager
@@ -23,31 +23,31 @@ class VisibilityChangerComponent extends Manager
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-
-        $ids = Request :: get(self :: PARAM_COURSE_SECTION_ID);
+        
+        $ids = Request::get(self::PARAM_COURSE_SECTION_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-                $course_section = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                    CourseSection :: class_name(),
+                $course_section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                    CourseSection::class_name(), 
                     (int) $id);
-
+                
                 $course_section->set_visible(! $course_section->is_visible());
-
+                
                 if (! $course_section->update())
                 {
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -70,15 +70,15 @@ class VisibilityChangerComponent extends Manager
                     $message = 'SelectedCourseSectionsVisibilityChanged';
                 }
             }
-
+            
             $this->redirect(
-                Translation :: get($message),
-                ($failures != 0 ? true : false),
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_COURSE_SECTIONS));
+                Translation::get($message), 
+                ($failures != 0 ? true : false), 
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
         }
         else
         {
-            return $this->display_error_page(htmlentities(Translation :: get('NoCourseSectionsSelected')));
+            return $this->display_error_page(htmlentities(Translation::get('NoCourseSectionsSelected')));
         }
     }
 }

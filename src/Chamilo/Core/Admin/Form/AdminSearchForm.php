@@ -62,27 +62,27 @@ class AdminSearchForm extends FormValidator
 
     /**
      * Creates a new search form
-     *
+     * 
      * @param $manager The admin manager in which this search form will be displayed
      * @param $url string The location to which the search request should be posted.
      */
     public function __construct($manager, $url, $form_id = '')
     {
-        parent :: __construct(self :: FORM_NAME . $form_id, 'post', $url);
-        $this->updateAttributes(array('id' => self :: FORM_NAME . $form_id));
+        parent::__construct(self::FORM_NAME . $form_id, 'post', $url);
+        $this->updateAttributes(array('id' => self::FORM_NAME . $form_id));
         $this->renderer = clone $this->defaultRenderer();
         $this->manager = $manager;
         $this->frozen_elements = array();
-
+        
         $this->build_simple_search_form();
-
+        
         $this->autofreeze();
         $this->accept($this->renderer);
     }
 
     /**
      * Gets the frozen element values
-     *
+     * 
      * @return array
      */
     public function get_frozen_values()
@@ -106,7 +106,7 @@ class AdminSearchForm extends FormValidator
         }
         foreach ($this->frozen_elements as $element)
         {
-            $element->setValue(Request :: get($element->getName()));
+            $element->setValue(Request::get($element->getName()));
         }
     }
 
@@ -118,13 +118,13 @@ class AdminSearchForm extends FormValidator
         $this->renderer->setFormTemplate(
             '<form {attributes}><div class="admin_search_form">{content}</div><div class="clear">&nbsp;</div></form>');
         $this->renderer->setElementTemplate('<div class="form-row"><div class="formw">{element}</div></div>');
-
+        
         $this->frozen_elements[] = $this->addElement(
-            'text',
-            self :: PARAM_SIMPLE_SEARCH_QUERY,
-            Translation :: get('Search'),
+            'text', 
+            self::PARAM_SIMPLE_SEARCH_QUERY, 
+            Translation::get('Search'), 
             'size="20"');
-        $this->addElement('style_submit_button', 'submit', Translation :: get('Search'), null, null, 'search');
+        $this->addElement('style_submit_button', 'submit', Translation::get('Search'), null, null, 'search');
     }
 
     /**
@@ -141,7 +141,7 @@ class AdminSearchForm extends FormValidator
 
     /**
      * Get the search condition
-     *
+     * 
      * @return Condition The search condition
      */
     public function get_condition()
@@ -151,19 +151,19 @@ class AdminSearchForm extends FormValidator
 
     /**
      * Gets the conditions that this form introduces.
-     *
+     * 
      * @return array The conditions.
      */
     private function get_search_conditions()
     {
         $values = $this->exportValues();
-        $query = $values[self :: PARAM_SIMPLE_SEARCH_QUERY];
+        $query = $values[self::PARAM_SIMPLE_SEARCH_QUERY];
         return null;
     }
 
     /**
      * Determines if the user is currently searching from the admin.
-     *
+     * 
      * @return boolean True if the user is searching.
      */
     public function validate()

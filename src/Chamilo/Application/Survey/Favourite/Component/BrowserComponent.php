@@ -22,13 +22,13 @@ class BrowserComponent extends Manager implements TableSupport
     public function run()
     {
         $table = new FavouriteTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -36,8 +36,8 @@ class BrowserComponent extends Manager implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationUserFavourite :: class_name(),
-                PublicationUserFavourite :: PROPERTY_USER_ID),
+                PublicationUserFavourite::class_name(), 
+                PublicationUserFavourite::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
     }
 }

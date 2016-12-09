@@ -86,15 +86,15 @@ class EntryDownloader
     protected function getEntityArchiveFileName($entityType, $entityIdentifier)
     {
         $entityRenderer = $this->getAssignmentDataProvider()->getEntityRendererForEntityTypeAndId(
-            $entityType,
+            $entityType, 
             $entityIdentifier);
-
+        
         $entityName = $entityRenderer->getEntityName();
-
+        
         $archiveFileNameParts = array();
         $archiveFileNameParts[] = $this->getAssignmentName();
         $archiveFileNameParts[] = $entityName;
-
+        
         return implode(' - ', $archiveFileNameParts);
     }
 
@@ -137,9 +137,9 @@ class EntryDownloader
     {
         $entries = $this->getAssignmentDataProvider()->findEntriesByIdentifiers($entryIdentifiers);
         $entry = $entries[0];
-
+        
         return $this->compressEntries(
-            $this->getEntityArchiveFileName($entry->getEntityType(), $entry->getEntityId()),
+            $this->getEntityArchiveFileName($entry->getEntityType(), $entry->getEntityId()), 
             $entries);
     }
 
@@ -152,7 +152,7 @@ class EntryDownloader
     public function downloadForEntityTypeAndIdentifier(Request $request, $entityType, $entityIdentifier)
     {
         return $this->downloadEntries(
-            $request,
+            $request, 
             $this->compressForEntityTypeAndIdentifier($entityType, $entityIdentifier));
     }
 
@@ -165,9 +165,9 @@ class EntryDownloader
     public function compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
     {
         $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
-            $entityType,
+            $entityType, 
             array($entityIdentifier));
-
+        
         return $this->compressEntries($this->getEntityArchiveFileName($entityType, $entityIdentifier), $entries);
     }
 
@@ -180,7 +180,7 @@ class EntryDownloader
     public function downloadForEntityTypeAndIdentifiers(Request $request, $entityType, $entityIdentifiers)
     {
         return $this->downloadEntries(
-            $request,
+            $request, 
             $this->compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers));
     }
 
@@ -193,9 +193,9 @@ class EntryDownloader
     public function compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
     {
         $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
-            $entityType,
+            $entityType, 
             $entityIdentifiers);
-
+        
         return $this->compressEntries($this->getAssignmentName(), $entries);
     }
 
@@ -214,21 +214,21 @@ class EntryDownloader
      */
     public function downloadByRequest(Request $request)
     {
-        $entryIdentifiers = $request->get(Manager :: PARAM_ENTRY_ID);
-
+        $entryIdentifiers = $request->get(Manager::PARAM_ENTRY_ID);
+        
         if (! is_null($entryIdentifiers))
         {
             if (! is_array($entryIdentifiers))
             {
                 $entryIdentifiers = array($entryIdentifiers);
             }
-
+            
             return $this->downloadByEntryIdentifiers($request, $entryIdentifiers);
         }
-
-        $entityType = $request->get(Manager :: PARAM_ENTITY_TYPE);
-        $entityIdentifiers = $request->get(Manager :: PARAM_ENTITY_ID);
-
+        
+        $entityType = $request->get(Manager::PARAM_ENTITY_TYPE);
+        $entityIdentifiers = $request->get(Manager::PARAM_ENTITY_ID);
+        
         if (! is_null($entityType) && ! is_null($entityIdentifiers))
         {
             if (! is_array($entityIdentifiers))
@@ -240,7 +240,7 @@ class EntryDownloader
                 return $this->downloadForEntityTypeAndIdentifiers($request, $entityType, $entityIdentifiers);
             }
         }
-
+        
         return $this->downloadAll($request);
     }
 
@@ -262,34 +262,34 @@ class EntryDownloader
      */
     protected function compressEntries($fileName, $entries)
     {
-        $temporaryPath = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
+        $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
         $archiveController = new ArchiveController($temporaryPath, $fileName);
-
+        
         foreach ($entries as $entry)
         {
             $entityRenderer = $this->getAssignmentDataProvider()->getEntityRendererForEntityTypeAndId(
-                $entry->getEntityType(),
+                $entry->getEntityType(), 
                 $entry->getEntityId());
-
+            
             $entityName = $entityRenderer->getEntityName();
             $contentObject = $entry->getContentObject();
-
+            
             $virtualTargetFolder = $entityName;
             $systemTargetFolder = $temporaryPath . DIRECTORY_SEPARATOR . $virtualTargetFolder;
-
+            
             $entryName = $contentObject->get_filename();
-
+            
             if (strpos($contentObject->get_filename(), $contentObject->get_title()) === false)
             {
                 $entryName = $contentObject->get_title() . ' - ' . $entryName;
             }
-
-            $entryFileName = basename(Filesystem :: create_unique_name($systemTargetFolder, $entryName));
+            
+            $entryFileName = basename(Filesystem::create_unique_name($systemTargetFolder, $entryName));
             $virtualTargetPath = $virtualTargetFolder . DIRECTORY_SEPARATOR . $entryFileName;
-
+            
             $archiveController->addPath($contentObject->get_full_path(), $virtualTargetPath);
         }
-
+        
         return $archiveController->getArchivePath();
     }
 
@@ -302,13 +302,13 @@ class EntryDownloader
     protected function downloadEntries(Request $request, $archivePath)
     {
         $archiveName = basename($archivePath);
-        $archiveSafeName = Filesystem :: create_safe_name($archiveName);
-
+        $archiveSafeName = Filesystem::create_safe_name($archiveName);
+        
         $response = new BinaryFileResponse($archivePath, 200, array('Content-Type' => 'application/zip'));
-        $response->setContentDisposition(ResponseHeaderBag :: DISPOSITION_ATTACHMENT, $archiveName, $archiveSafeName);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archiveName, $archiveSafeName);
         $response->prepare($request);
         $response->send();
-
-        Filesystem :: remove($archivePath);
+        
+        Filesystem::remove($archivePath);
     }
 }

@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -35,12 +38,6 @@ class Theme
 
     /**
      *
-     * @var string
-     */
-    private $namespace;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Utilities\StringUtilities
      */
     private $stringUtilities;
@@ -53,9 +50,9 @@ class Theme
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
 
     /**
      *
@@ -63,17 +60,20 @@ class Theme
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            $theme = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'theme');
-            $stringUtilities = StringUtilities :: getInstance();
-            $classnameUtilities = ClassnameUtilities :: getInstance();
-            $pathUtilities = Path :: getInstance();
+            $stringUtilities = new StringUtilities();
+            $classnameUtilities = new ClassnameUtilities($stringUtilities);
+            $pathBuilder = new PathBuilder($classnameUtilities);
+            $fileConfigurationConsulter = new ConfigurationConsulter(
+                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
 
-            self :: $instance = new static($theme, $stringUtilities, $classnameUtilities, $pathUtilities);
+            $theme = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'theme'));
+
+            self::$instance = new static($theme, $stringUtilities, $classnameUtilities, $pathBuilder);
         }
 
-        return static :: $instance;
+        return static::$instance;
     }
 
     /**
@@ -82,15 +82,15 @@ class Theme
      * @param string $theme
      * @param StringUtilities $stringUtilities
      * @param ClassnameUtilities $classnameUtilities
-     * @param Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
     public function __construct($theme, StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities,
-        Path $pathUtilities)
+        PathBuilder $pathBuilder)
     {
         $this->theme = $theme;
         $this->stringUtilities = $stringUtilities;
         $this->classnameUtilities = $classnameUtilities;
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -113,24 +113,6 @@ class Theme
 
     /**
      *
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
-    /**
-     *
-     * @param string $namespace
-     */
-    public function setNamespace($namespace)
-    {
-        $this->namespace = $namespace;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities()
@@ -142,7 +124,7 @@ class Theme
      *
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      */
-    public function setStringUtilities($stringUtilities)
+    public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
@@ -167,35 +149,36 @@ class Theme
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getPathUtilities()
+    public function getPathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->pathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
-    public function setPathUtilities($pathUtilities)
+    public function setPathBuilder($pathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
      *
      * @param string $namespace
      * @param boolean $web
-     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g. .../Chamilo/Configuration/Resources/Css/Aqua/.
-     *                              Else, selected theme will be ignored, e.g. .../Chamilo/Configuration/Resources/Css/
+     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g.
+     *        .../Chamilo/Configuration/Resources/Css/Aqua/.
+     *        Else, selected theme will be ignored, e.g. .../Chamilo/Configuration/Resources/Css/
      * @return string
      */
     public function getCssPath($namespace = null, $web = true, $includeTheme = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
 
-        $cssPath = $this->pathUtilities->getResourcesPath($namespace, $web) . 'Css' . $directory_separator;
+        $cssPath = $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Css' . $directory_separator;
 
         if ($includeTheme)
         {
@@ -245,7 +228,7 @@ class Theme
             $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
         }
 
-        return $this->pathUtilities->getResourcesPath($context, $web) . 'Images' . $directory_separator .
+        return $this->getPathBuilder()->getResourcesPath($context, $web) . 'Images' . $directory_separator .
              $this->getTheme() . $directory_separator;
     }
 
@@ -259,7 +242,7 @@ class Theme
     public function getFileExtension($type, $size = self :: ICON_MINI, $web = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-        return $this->pathUtilities->getResourcesPath('Chamilo\Configuration', $web) . 'File' . $directory_separator .
+        return $this->getPathBuilder()->getResourcesPath('Chamilo\Configuration', $web) . 'File' . $directory_separator .
              'Extension' . $directory_separator . $type . $directory_separator . $size . '.png';
     }
 
@@ -272,13 +255,13 @@ class Theme
         $options = array();
 
         $path = $this->getCssPath('Chamilo\Configuration', false, false);
-        $directories = Filesystem :: get_directory_content($path, Filesystem :: LIST_DIRECTORIES, false);
+        $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
 
         foreach ($directories as $index => & $directory)
         {
             if (substr($directory, 0, 1) != '.')
             {
-                $options[$directory] = (string) $this->stringUtilities->createString($directory)->upperCamelize();
+                $options[$directory] = (string) $this->getStringUtilities()->createString($directory)->upperCamelize();
             }
         }
 
@@ -302,7 +285,7 @@ class Theme
         {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $calledClass = $backtrace[1]['class'];
-            $context = $this->classnameUtilities->getNamespaceFromClassname($calledClass);
+            $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
         }
 
         $icon = new ToolbarItem(
@@ -345,5 +328,26 @@ class Theme
     public function getCommonImagePath($image, $extension = 'png', $web = true)
     {
         return $this->getImagePath('Chamilo\Configuration', $image, $extension, $web);
+    }
+
+    /**
+     *
+     * @param string $namespace
+     * @param boolean $web
+     * @param boolean $includeTheme
+     * @return string
+     */
+    public function getTemplatePath($namespace = null, $web = true, $includeTheme = true)
+    {
+        $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
+
+        $cssPath = $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Templates' . $directory_separator;
+
+        if ($includeTheme)
+        {
+            $cssPath .= $this->getTheme() . $directory_separator;
+        }
+
+        return $cssPath;
     }
 }

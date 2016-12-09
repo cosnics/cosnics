@@ -15,7 +15,7 @@ class DynamicFormElementsTab extends DynamicTab
      */
     public function __construct($id, $name, $image, $element)
     {
-        parent :: __construct($id, $name, $image);
+        parent::__construct($id, $name, $image);
         $this->element = $element;
     }
 

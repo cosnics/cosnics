@@ -49,7 +49,7 @@ class BrowserComponent extends TabComponent implements TableSupport
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
+        
         return $this->buttonToolbarRenderer;
     }
 
@@ -62,9 +62,9 @@ class BrowserComponent extends TabComponent implements TableSupport
         
         $searchConditions = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)));
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)));
         
         if ($searchConditions)
         {
@@ -72,7 +72,7 @@ class BrowserComponent extends TabComponent implements TableSupport
         }
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), 
             new StaticConditionVariable(1));
         
         return new AndCondition($conditions);

@@ -15,6 +15,6 @@ class ComplexPortfolio extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(Portfolio :: class_name(), PortfolioItem :: class_name());
+        return array(Portfolio::class_name(), PortfolioItem::class_name());
     }
 }

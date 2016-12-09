@@ -7,5 +7,5 @@ use Chamilo\Libraries\Format\Table\Interfaces\TablePageSelectionProhibition;
 
 class ExternalObjectTable extends DataClassTable implements TablePageSelectionProhibition
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_EXTERNAL_REPOSITORY_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_EXTERNAL_REPOSITORY_ID;
 }

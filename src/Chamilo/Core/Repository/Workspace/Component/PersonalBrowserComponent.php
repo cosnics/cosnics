@@ -17,13 +17,13 @@ class PersonalBrowserComponent extends TabComponent implements TableSupport
     public function build()
     {
         $table = new PersonalWorkspaceTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 

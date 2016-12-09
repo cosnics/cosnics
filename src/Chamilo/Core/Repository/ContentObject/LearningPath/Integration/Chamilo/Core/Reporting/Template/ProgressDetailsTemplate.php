@@ -22,7 +22,7 @@ class ProgressDetailsTemplate extends ReportingTemplate implements NoBlockTabsAl
      */
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         $this->add_reporting_block(new ProgressDetailsInformationBlock($this));
         $this->add_reporting_block(new ProgressDetailsBlock($this));
     }

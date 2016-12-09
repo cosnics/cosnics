@@ -35,7 +35,7 @@ class SubscriberComponent extends Manager
                 
                 if (! $notification->update())
                 {
-                    throw new \Exception(Translation :: get('FeedbackNotificationNotUpdated'));
+                    throw new \Exception(Translation::get('FeedbackNotificationNotUpdated'));
                 }
             }
             elseif (! $notification instanceof Notification)
@@ -47,12 +47,12 @@ class SubscriberComponent extends Manager
                 
                 if (! $notification->create())
                 {
-                    throw new \Exception(Translation :: get('FeedbackNotificationNotAdded'));
+                    throw new \Exception(Translation::get('FeedbackNotificationNotAdded'));
                 }
             }
             
             $success = true;
-            $message = Translation :: get('FeedbackNotificationAdded');
+            $message = Translation::get('FeedbackNotificationAdded');
         }
         catch (\Exception $ex)
         {
@@ -60,6 +60,6 @@ class SubscriberComponent extends Manager
             $message = $ex->getMessage();
         }
         
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

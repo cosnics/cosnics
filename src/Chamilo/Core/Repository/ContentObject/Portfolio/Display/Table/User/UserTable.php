@@ -12,5 +12,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
  */
 class UserTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_VIRTUAL_USER_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_VIRTUAL_USER_ID;
 }

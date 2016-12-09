@@ -107,7 +107,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
     {
         if (! isset($this->formValidator))
         {
-            return new FormValidator(self :: FORM_NAME);
+            return new FormValidator(self::FORM_NAME);
         }
         
         return $this->formValidator;
@@ -204,7 +204,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
     public function getAttributes()
     {
         $attributes = array();
-        $attributes[self :: DATA_NODE_ID] = $this->getNodeId();
+        $attributes[self::DATA_NODE_ID] = $this->getNodeId();
         return $attributes;
     }
 }

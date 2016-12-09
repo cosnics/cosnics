@@ -84,30 +84,30 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
 
     public function run()
     {
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
-        if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $publication) ||
-             ! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) ||
+             ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $this->redirect(
                 null, 
                 false, 
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_STUDENT_BROWSE_SUBMISSIONS, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id()));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_STUDENT_BROWSE_SUBMISSIONS, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()));
         }
         
         $this->assignment = $publication->get_content_object();
         
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail::getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMITTERS, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id())), 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id())), 
             $this->assignment->get_title());
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
         
@@ -131,19 +131,19 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
      */
     private function get_submitters_data()
     {
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
         // Users
-        $this->users = \Chamilo\Application\Weblcms\Storage\DataManager :: get_publication_target_users_by_publication_id(
+        $this->users = \Chamilo\Application\Weblcms\Storage\DataManager::get_publication_target_users_by_publication_id(
             $this->get_publication_id());
         // Course groups
-        $this->course_groups = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_course_groups(
+        $this->course_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_course_groups(
             $this->get_publication_id(), 
             $publication->get_course_id())->as_array();
         // Platform groups
-        $this->platform_groups = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_platform_groups(
+        $this->platform_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_platform_groups(
             $this->get_publication_id(), 
             $publication->get_course_id())->as_array();
     }
@@ -158,14 +158,14 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $html[] = $this->render_header();
         
         $html[] = '<div class="announcements level_1" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagePath('ContentObject/Introduction') . ');">';
+             Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ');">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_html();
         $html[] = '</div><br />';
         
         // retrieve group submissions allowed
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
         $assignment = $publication->get_content_object();
@@ -173,7 +173,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         
         if ($allow_group_submissions == 0)
         {
-            $this->submitter_type = AssignmentSubmission :: SUBMITTER_TYPE_USER;
+            $this->submitter_type = AssignmentSubmission::SUBMITTER_TYPE_USER;
             
             $users_table = new SubmissionUsersBrowserTable($this);
             $users_html = $users_table->as_html();
@@ -182,45 +182,45 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         else
         {
             // Create tabs per submitter type
-            $type = Request :: get(self :: PARAM_TYPE);
+            $type = Request::get(self::PARAM_TYPE);
             if ($type == null)
             {
-                $type = self :: TYPE_COURSE_GROUP;
+                $type = self::TYPE_COURSE_GROUP;
             }
             switch ($type)
             {
-                case self :: TYPE_COURSE_GROUP :
-                    $this->submitter_type = AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP;
+                case self::TYPE_COURSE_GROUP :
+                    $this->submitter_type = AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP;
                     $course_groups_table = new SubmissionCourseGroupsBrowserTable($this);
                     $content_table = $course_groups_table->as_html();
                     $selected_course_group = true;
                     break;
-                case self :: TYPE_GROUP :
-                    $this->submitter_type = AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP;
+                case self::TYPE_GROUP :
+                    $this->submitter_type = AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP;
                     $groups_table = new SubmissionGroupsBrowserTable($this);
                     $content_table = $groups_table->as_html();
-                    $parameters[] = $parameters[self :: PARAM_TYPE] = self :: TYPE_GROUP;
+                    $parameters[] = $parameters[self::PARAM_TYPE] = self::TYPE_GROUP;
                     $selected_group = true;
                     break;
             }
             $parameters_course_group = $this->get_parameters();
-            $parameters_course_group[self :: PARAM_TYPE] = self :: TYPE_COURSE_GROUP;
+            $parameters_course_group[self::PARAM_TYPE] = self::TYPE_COURSE_GROUP;
             $link_course_group = $this->get_url($parameters_course_group);
             $parameters_group = $this->get_parameters();
-            $parameters_group[self :: PARAM_TYPE] = self :: TYPE_GROUP;
+            $parameters_group[self::PARAM_TYPE] = self::TYPE_GROUP;
             $link_group = $this->get_url($parameters_group);
             
             $tabs = new DynamicVisualTabsRenderer('submissions', $content_table);
             $tab_course_group = new DynamicVisualTab(
                 'tab_course_group', 
-                Translation :: get('CourseGroups'), 
+                Translation::get('CourseGroups'), 
                 null, 
                 $link_course_group, 
                 $selected_course_group);
             $tabs->add_tab($tab_course_group);
             $tab_group = new DynamicVisualTab(
                 'tab_group', 
-                Translation :: get('Groups'), 
+                Translation::get('Groups'), 
                 null, 
                 $link_group, 
                 $selected_group);
@@ -255,46 +255,46 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         // Reporting title
         $html[] = '<div class="title" style="border-bottom:1px dotted #D3D3D3;width:100%;border-top:1px dotted #D3D3D3;
             padding-top:5px">';
-        $html[] = Translation :: get('Reporting');
+        $html[] = Translation::get('Reporting');
         $html[] = '</div><div class="clear">&nbsp;</div><br />';
         
         $html[] = '<div style="font-weight:bold;float:left">';
         
         if (! $this->assignment->get_allow_group_submissions())
         {
-            $html[] = Translation :: get('UsersSubmissions') . ':&nbsp;<br />';
-            $html[] = Translation :: get('UsersFeedback') . ':&nbsp;<br />';
+            $html[] = Translation::get('UsersSubmissions') . ':&nbsp;<br />';
+            $html[] = Translation::get('UsersFeedback') . ':&nbsp;<br />';
             
             if ($this->assignment->get_allow_late_submissions())
             {
-                $html[] = Translation :: get('UsersLateSubmissions') . ':&nbsp;<br />';
+                $html[] = Translation::get('UsersLateSubmissions') . ':&nbsp;<br />';
             }
         }
         else
         {
-            $type = Request :: get(self :: PARAM_TYPE);
+            $type = Request::get(self::PARAM_TYPE);
             
             if ($type == null)
             {
-                $type = self :: TYPE_COURSE_GROUP;
+                $type = self::TYPE_COURSE_GROUP;
             }
             switch ($type)
             {
-                case self :: TYPE_COURSE_GROUP :
-                    $html[] = Translation :: get('CourseGroupsSubmissions') . ':&nbsp;<br />';
-                    $html[] = Translation :: get('CourseGroupsFeedback') . ':&nbsp;<br />';
+                case self::TYPE_COURSE_GROUP :
+                    $html[] = Translation::get('CourseGroupsSubmissions') . ':&nbsp;<br />';
+                    $html[] = Translation::get('CourseGroupsFeedback') . ':&nbsp;<br />';
                     if ($this->assignment->get_allow_late_submissions())
                     {
-                        $html[] = Translation :: get('CourseGroupsLateSubmissions') . ':&nbsp;<br />';
+                        $html[] = Translation::get('CourseGroupsLateSubmissions') . ':&nbsp;<br />';
                     }
                     break;
                 
-                case self :: TYPE_GROUP :
-                    $html[] = Translation :: get('PlatformGroupsSubmissions') . ':&nbsp;<br />';
-                    $html[] = Translation :: get('PlatformGroupsFeedback') . ':&nbsp;<br />';
+                case self::TYPE_GROUP :
+                    $html[] = Translation::get('PlatformGroupsSubmissions') . ':&nbsp;<br />';
+                    $html[] = Translation::get('PlatformGroupsFeedback') . ':&nbsp;<br />';
                     if ($this->assignment->get_allow_late_submissions())
                     {
-                        $html[] = Translation :: get('PlatformGroupsLateSubmissions') . ':&nbsp;<br />';
+                        $html[] = Translation::get('PlatformGroupsLateSubmissions') . ':&nbsp;<br />';
                     }
                     break;
             }
@@ -318,22 +318,22 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
     {
         if (! $this->assignment->get_allow_group_submissions())
         {
-            return $this->get_reporting_data_html(AssignmentSubmission :: SUBMITTER_TYPE_USER);
+            return $this->get_reporting_data_html(AssignmentSubmission::SUBMITTER_TYPE_USER);
         }
         else
         {
-            $type = Request :: get(self :: PARAM_TYPE);
+            $type = Request::get(self::PARAM_TYPE);
             
             if ($type == null)
             {
-                $type = self :: TYPE_COURSE_GROUP;
+                $type = self::TYPE_COURSE_GROUP;
             }
             switch ($type)
             {
-                case self :: TYPE_COURSE_GROUP :
-                    return $this->get_reporting_data_html(AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP);
-                case self :: TYPE_GROUP :
-                    return $this->get_reporting_data_html(AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP);
+                case self::TYPE_COURSE_GROUP :
+                    return $this->get_reporting_data_html(AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP);
+                case self::TYPE_GROUP :
+                    return $this->get_reporting_data_html(AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP);
             }
         }
     }
@@ -356,13 +356,13 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         
         switch ($submitter_type)
         {
-            case AssignmentSubmission :: SUBMITTER_TYPE_USER :
+            case AssignmentSubmission::SUBMITTER_TYPE_USER :
                 $submitters = $this->users;
                 break;
-            case AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
+            case AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
                 $submitters = $this->course_groups;
                 break;
-            case AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
+            case AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
                 $submitters = $this->platform_groups;
                 break;
         }
@@ -372,16 +372,16 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
             
             switch ($submitter_type)
             {
-                case AssignmentSubmission :: SUBMITTER_TYPE_USER :
+                case AssignmentSubmission::SUBMITTER_TYPE_USER :
                     $submissions_tracker = $this->get_submissions_tracker(
                         $submitter_type, 
-                        $submitter[User :: PROPERTY_ID]);
+                        $submitter[User::PROPERTY_ID]);
                     $feedbacks_tracker = $this->get_submitter_feedbacks(
                         $submitter_type, 
-                        $submitter[User :: PROPERTY_ID]);
+                        $submitter[User::PROPERTY_ID]);
                     break;
-                case AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
-                case AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
+                case AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
+                case AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
                     $submissions_tracker = $this->get_submissions_tracker($submitter_type, $submitter->get_id());
                     $feedbacks_tracker = $this->get_submitter_feedbacks($submitter_type, $submitter->get_id());
                     break;
@@ -422,84 +422,84 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
     {
         if (! isset($this->buttonToolbarRenderer))
         {
-            $type = Request :: get(self :: PARAM_TYPE);
-            $url = $this->get_url(array(self :: PARAM_TYPE => $type));
+            $type = Request::get(self::PARAM_TYPE);
+            $url = $this->get_url(array(self::PARAM_TYPE => $type));
             
             $buttonToolbar = new ButtonToolBar($url);
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+            if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
             {
                 if ($this->get_submission_trackers_by_publication($this->get_publication_id()))
                 {
                     $commonActions->addButton(
                         new Button(
-                            Translation :: get('DownloadAllSubmissions'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Download'), 
+                            Translation::get('DownloadAllSubmissions'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Download'), 
                             $this->get_url(
                                 array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SUBMISSIONS)), 
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SUBMISSIONS)), 
+                            ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 }
                 
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('ScoresOverview'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'), 
+                        Translation::get('ScoresOverview'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Statistics'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING, 
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseAssignmentSubmittersTemplate :: class_name(), 
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: ACTION_VIEW)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING, 
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseAssignmentSubmittersTemplate::class_name(), 
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('SubmissionsOverview'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'), 
+                        Translation::get('SubmissionsOverview'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Statistics'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING, 
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentSubmissionsTemplate :: class_name(), 
-                                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: ACTION_VIEW)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING, 
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentSubmissionsTemplate::class_name(), 
+                                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 $course = $this->get_course();
-                $ephorus_tool = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_tool_by_name(
+                $ephorus_tool = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name(
                     'Ephorus');
                 if ($ephorus_tool && $course->get_course_setting(
-                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting :: COURSE_SETTING_TOOL_ACTIVE, 
+                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting::COURSE_SETTING_TOOL_ACTIVE, 
                     $ephorus_tool->get_id()))
                 {
                     $toolActions->addButton(
                         new Button(
-                            Translation :: get('EphorusOverview'), 
-                            Theme :: getInstance()->getImagePath(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace('Ephorus'),
+                            Translation::get('EphorusOverview'), 
+                            Theme::getInstance()->getImagePath(
+                                \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace('Ephorus'), 
                                 'Logo/16'), 
                             $this->get_url(
                                 array(
-                                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'Ephorus',
-                                    \Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION => $this->get_publication_id(), 
-                                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: ACTION_ASSIGNMENT_BROWSER)), 
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Ephorus', 
+                                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $this->get_publication_id(), 
+                                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::ACTION_ASSIGNMENT_BROWSER)), 
+                            ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 }
             }
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('SubmissionSubmit'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('SubmissionSubmit'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
                     $this->get_url($this->generate_add_submission_url()), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $url, 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, 
                     false));
             
             $buttonToolbar->addButtonGroup($commonActions);
@@ -523,16 +523,16 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         if ($this->assignment->get_allow_group_submissions())
         {
             return array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id());
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id());
         }
         else
         {
             return array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id(), 
-                self :: PARAM_TARGET_ID => $this->get_user_id(), 
-                self :: PARAM_SUBMITTER_TYPE => AssignmentSubmission :: SUBMITTER_TYPE_USER);
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id(), 
+                self::PARAM_TARGET_ID => $this->get_user_id(), 
+                self::PARAM_SUBMITTER_TYPE => AssignmentSubmission::SUBMITTER_TYPE_USER);
         }
     }
 
@@ -551,22 +551,22 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         {
             switch ($this->get_submitter_type())
             {
-                case AssignmentSubmission :: SUBMITTER_TYPE_USER :
+                case AssignmentSubmission::SUBMITTER_TYPE_USER :
                     $conditions = array();
                     $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
                         '*' . $query . '*');
                     $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
                         '*' . $query . '*');
                     return new OrCondition($conditions);
-                case AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
+                case AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
                     return new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), 
                         '*' . $query . '*');
-                case AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
+                case AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
                     return new PatternMatchCondition(
-                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME), 
+                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), 
                         '*' . $query . '*');
             }
         }
@@ -577,7 +577,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
     {
         $html = array();
         
-        $html[] = parent :: render_header();
+        $html[] = parent::render_header();
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
@@ -592,8 +592,8 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
     public function get_additional_parameters()
     {
         return array(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, 
-            self :: PARAM_TARGET_ID, 
-            self :: PARAM_TYPE);
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, 
+            self::PARAM_TARGET_ID, 
+            self::PARAM_TYPE);
     }
 }

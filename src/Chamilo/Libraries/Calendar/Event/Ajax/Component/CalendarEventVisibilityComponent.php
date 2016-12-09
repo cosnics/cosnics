@@ -29,7 +29,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_SOURCE);
+        return array(self::PARAM_SOURCE);
     }
 
     /*
@@ -40,21 +40,21 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
         $source = $this->getPostDataValue(self :: PARAM_SOURCE);
         $context = ClassnameUtilities::getInstance()->getNamespaceParent(static :: context(), 2) . '\Storage\DataClass';
         $visibilityClass = $context . '\Visibility';
-
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($visibilityClass, Visibility :: PROPERTY_USER_ID),
+            new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($visibilityClass, Visibility :: PROPERTY_SOURCE),
+            new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_SOURCE), 
             new StaticConditionVariable($source));
         $condition = new AndCondition($conditions);
-
+        
         // Retrieve the visibility object from storage
         $visibility = $this->retrieveVisibility($condition);
-
+        
         $result = new JsonAjaxResult();
-
+        
         if ($visibility instanceof Visibility)
         {
             if ($visibility->delete())
@@ -64,21 +64,21 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
             else
             {
                 $result->error(
-                    500,
-                    Translation :: get(
-                        'ObjectNotDeleted',
-                        array('OBJECT' => Translation :: get('Visibility')),
-                        Utilities :: COMMON_LIBRARIES));
+                    500, 
+                    Translation::get(
+                        'ObjectNotDeleted', 
+                        array('OBJECT' => Translation::get('Visibility')), 
+                        Utilities::COMMON_LIBRARIES));
             }
         }
         else
         {
-            $data = $this->getPostDataValue(self :: PARAM_DATA);
-
+            $data = $this->getPostDataValue(self::PARAM_DATA);
+            
             $visibility = new $visibilityClass();
             $visibility->setUserId($this->get_user_id());
             $visibility->setSource($source);
-
+            
             if ($visibility->create())
             {
                 $result->success();
@@ -86,14 +86,14 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
             else
             {
                 $result->error(
-                    500,
-                    Translation :: get(
-                        'ObjectNotCreated',
-                        array('OBJECT' => Translation :: get('Visibility')),
-                        Utilities :: COMMON_LIBRARIES));
+                    500, 
+                    Translation::get(
+                        'ObjectNotCreated', 
+                        array('OBJECT' => Translation::get('Visibility')), 
+                        Utilities::COMMON_LIBRARIES));
             }
         }
-
+        
         $result->display();
     }
 

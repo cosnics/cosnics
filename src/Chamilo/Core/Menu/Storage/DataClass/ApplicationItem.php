@@ -71,8 +71,9 @@ class ApplicationItem extends Item
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_USE_TRANSLATION, self::PROPERTY_APPLICATION, self::PROPERTY_COMPONENT,
-            self::PROPERTY_EXTRA_PARAMETERS
-        );
+            self::PROPERTY_USE_TRANSLATION, 
+            self::PROPERTY_APPLICATION, 
+            self::PROPERTY_COMPONENT, 
+            self::PROPERTY_EXTRA_PARAMETERS);
     }
 }

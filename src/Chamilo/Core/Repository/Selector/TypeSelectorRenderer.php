@@ -60,19 +60,19 @@ abstract class TypeSelectorRenderer
 
     public static function factory($type, Application $parent, TypeSelector $type_selector)
     {
-        $class_name = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class_name = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'TypeSelectorRenderer';
         $arguments = func_get_args();
         
         switch ($type)
         {
-            case self :: TYPE_FORM :
+            case self::TYPE_FORM :
                 return new $class_name($parent, $type_selector, $arguments[3]);
                 break;
-            case self :: TYPE_TABS :
+            case self::TYPE_TABS :
                 return new $class_name($parent, $type_selector, $arguments[3], $arguments[4]);
                 break;
-            case self :: TYPE_FULL :
+            case self::TYPE_FULL :
                 return new $class_name($parent, $type_selector, $arguments[3], $arguments[4], $arguments[5]);
                 break;
         }

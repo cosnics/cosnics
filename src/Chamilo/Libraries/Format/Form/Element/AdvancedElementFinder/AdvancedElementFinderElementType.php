@@ -56,7 +56,7 @@ class AdvancedElementFinderElementType
      */
     public function get_id()
     {
-        return $this->get_property(self :: PROPERTY_ID);
+        return $this->get_property(self::PROPERTY_ID);
     }
 
     /**
@@ -66,7 +66,7 @@ class AdvancedElementFinderElementType
      */
     public function set_id($id)
     {
-        $this->set_property(self :: PROPERTY_ID, $id);
+        $this->set_property(self::PROPERTY_ID, $id);
     }
 
     /**
@@ -76,7 +76,7 @@ class AdvancedElementFinderElementType
      */
     public function get_name()
     {
-        return $this->get_property(self :: PROPERTY_NAME);
+        return $this->get_property(self::PROPERTY_NAME);
     }
 
     /**
@@ -86,7 +86,7 @@ class AdvancedElementFinderElementType
      */
     public function set_name($name)
     {
-        $this->set_property(self :: PROPERTY_NAME, $name);
+        $this->set_property(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -96,7 +96,7 @@ class AdvancedElementFinderElementType
      */
     public function set_context($context)
     {
-        $this->set_property(self :: PROPERTY_CONTEXT, $context);
+        $this->set_property(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -106,7 +106,7 @@ class AdvancedElementFinderElementType
      */
     public function set_method($method)
     {
-        $this->set_property(self :: PROPERTY_METHOD, $method);
+        $this->set_property(self::PROPERTY_METHOD, $method);
     }
 
     /**
@@ -116,7 +116,7 @@ class AdvancedElementFinderElementType
      */
     public function set_parameters($parameters)
     {
-        $this->set_property(self :: PROPERTY_PARAMETERS, $parameters);
+        $this->set_property(self::PROPERTY_PARAMETERS, $parameters);
     }
 
     /**

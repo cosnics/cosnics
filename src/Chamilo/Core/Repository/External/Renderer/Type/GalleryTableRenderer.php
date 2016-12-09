@@ -27,6 +27,6 @@ class GalleryTableRenderer extends Renderer implements TableSupport
      */
     public function as_html()
     {
-        return ExternalObjectGalleryTable :: factory($this)->as_html();
+        return ExternalObjectGalleryTable::factory($this)->as_html();
     }
 }

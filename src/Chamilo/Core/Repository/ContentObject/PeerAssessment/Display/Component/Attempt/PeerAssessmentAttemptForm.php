@@ -24,33 +24,33 @@ class PeerAssessmentAttemptForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     function __construct(ViewerComponent $viewer)
     {
         $this->viewer = $viewer;
-
-        parent :: __construct(self :: FORM_NAME, 'post', $this->viewer->get_url());
-
+        
+        parent::__construct(self::FORM_NAME, 'post', $this->viewer->get_url());
+        
         $this->add_general();
         $this->add_buttons();
     }
 
     private function add_general()
     {
-        $this->add_textfield(self :: PARAM_TITLE, Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES));
+        $this->add_textfield(self::PARAM_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES));
         $this->add_html_editor(
-            self :: PARAM_DESCRIPTION,
-            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES));
+            self::PARAM_DESCRIPTION, 
+            Translation::get('Description', null, Utilities::COMMON_LIBRARIES));
         $this->add_timewindow(
-            self :: PARAM_START_DATE,
-            self :: PARAM_END_DATE,
-            Translation :: get('StartDate'),
-            Translation :: get('EndDate'),
+            self::PARAM_START_DATE, 
+            self::PARAM_END_DATE, 
+            Translation::get('StartDate'), 
+            Translation::get('EndDate'), 
             false);
-        $this->add_textfield(self :: PARAM_WEIGHT, Translation :: get('Weight'));
-
+        $this->add_textfield(self::PARAM_WEIGHT, Translation::get('Weight'));
+        
         $this->addElement('hidden', 'id');
         $this->addElement('hidden', 'publication_id');
     }
@@ -58,8 +58,8 @@ class PeerAssessmentAttemptForm extends FormValidator
     private function add_buttons()
     {
         $this->addElement(
-            'style_submit_button',
-            FormValidator :: PARAM_SUBMIT,
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            FormValidator::PARAM_SUBMIT, 
+            Translation::get('Submit', null, Utilities::COMMON_LIBRARIES));
     }
 }

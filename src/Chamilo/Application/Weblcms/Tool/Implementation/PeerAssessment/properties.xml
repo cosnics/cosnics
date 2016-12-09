@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tool name="peer_assessment">
-	<properties>
-		<property name="section" value="basic" />
-	</properties>
+    <properties>
+        <property
+            name="section"
+            value="basic" />
+    </properties>
 </tool>

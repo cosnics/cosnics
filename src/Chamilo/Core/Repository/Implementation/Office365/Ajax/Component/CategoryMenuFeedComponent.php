@@ -15,18 +15,18 @@ class CategoryMenuFeedComponent extends \Chamilo\Core\Repository\Implementation\
     function run()
     {
         $groups_tree = array();
-
-        $parent_id = Request :: get('parent_id');
+        
+        $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT), 
             new StaticConditionVariable($parent_id));
-        $categories_tree = DataManager :: retrieve_categories(
-            $condition,
-            null,
-            null,
+        $categories_tree = DataManager::retrieve_categories(
+            $condition, 
+            null, 
+            null, 
             new OrderBy(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_NAME)));
-
+                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME)));
+    
     /**
      * // header('Content-Type: text/xml');
      * // echo '<?xml version="1.0" encoding="UTF-8"?>' .

@@ -35,7 +35,7 @@ class FillInBlanksQuestionAnswer
     /**
      *
      * @param string $text formats question [answer 1(feedback 1)=score 1, answer 2=score 2, answer 3(feedback 3)]
-     *            question 2 [answer 1, answer 2].
+     *        question 2 [answer 1, answer 2].
      * @param int $default_positive_score The score that should be added as default (when score is missing)
      * @return array of question's answers
      */
@@ -44,7 +44,7 @@ class FillInBlanksQuestionAnswer
         $result = array();
         
         $questions = array();
-        preg_match_all(self :: QUESTIONS_REGEX, $text, $questions);
+        preg_match_all(self::QUESTIONS_REGEX, $text, $questions);
         
         foreach ($questions[1] as $question_id => $question)
         {
@@ -53,7 +53,7 @@ class FillInBlanksQuestionAnswer
              * The parts are parsed to give the following groups 0 => entire string 1 => value itself 2 => size given by
              * regex question (null otherwise) 3 => feedback 4 => score
              */
-            preg_match_all(self :: PARTS_REGEX, $question, $answers);
+            preg_match_all(self::PARTS_REGEX, $question, $answers);
             
             foreach ($answers[1] as $answer_id => $answer)
             {
@@ -98,7 +98,7 @@ class FillInBlanksQuestionAnswer
     public static function get_number_of_questions($text)
     {
         $matches = array();
-        return preg_match_all(self :: QUESTIONS_REGEX, $text, $matches);
+        return preg_match_all(self::QUESTIONS_REGEX, $text, $matches);
     }
 
     private $value;
@@ -130,7 +130,7 @@ class FillInBlanksQuestionAnswer
 
     public function has_comment()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_comment(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_comment(), true);
     }
 
     public function get_hint()
@@ -140,7 +140,7 @@ class FillInBlanksQuestionAnswer
 
     public function has_hint()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_hint(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
     }
 
     public function get_value()
@@ -174,7 +174,7 @@ class FillInBlanksQuestionAnswer
      */
     public function check_regex()
     {
-        $pattern = self :: REGEX_REGEX;
+        $pattern = self::REGEX_REGEX;
         return preg_match($pattern, $this->get_value());
     }
 
@@ -186,7 +186,7 @@ class FillInBlanksQuestionAnswer
     public function get_regex_pattern()
     {
         $regex_parts = array();
-        preg_match(self :: REGEX_REGEX, $this->get_value(), $regex_parts);
+        preg_match(self::REGEX_REGEX, $this->get_value(), $regex_parts);
         $pattern = $regex_parts[2];
         return $pattern;
     }
@@ -199,7 +199,7 @@ class FillInBlanksQuestionAnswer
     private function regex_size()
     {
         $regex_parts = array();
-        preg_match(self :: REGEX_REGEX, $this->get_value(), $regex_parts);
+        preg_match(self::REGEX_REGEX, $this->get_value(), $regex_parts);
         return $regex_parts[1];
     }
 

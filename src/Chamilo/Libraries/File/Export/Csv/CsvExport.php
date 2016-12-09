@@ -2,8 +2,10 @@
 namespace Chamilo\Libraries\File\Export\Csv;
 
 use Chamilo\Libraries\File\Export\Export;
+
 /**
  * $Id: csv_export.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * 
  * @package common.export.csv
  */
 /**
@@ -27,6 +29,6 @@ class CsvExport extends Export
 
     public function get_type()
     {
-        return self :: EXPORT_TYPE;
+        return self::EXPORT_TYPE;
     }
 }

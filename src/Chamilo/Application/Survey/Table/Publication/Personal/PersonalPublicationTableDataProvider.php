@@ -28,9 +28,9 @@ class PersonalPublicationTableDataProvider extends PublicationTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getPublicationService()->getPublicationsByCreator(
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -53,7 +53,7 @@ class PersonalPublicationTableDataProvider extends PublicationTableDataProvider
         {
             $this->publicationService = new PublicationService(new PublicationRepository());
         }
-
+        
         return $this->publicationService;
     }
 }

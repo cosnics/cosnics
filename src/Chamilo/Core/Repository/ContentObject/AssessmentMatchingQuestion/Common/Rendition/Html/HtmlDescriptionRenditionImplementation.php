@@ -11,7 +11,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -28,7 +28,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('PossibleMatches') . '</th>';
+        $table_header[] = '<th>' . Translation::get('PossibleMatches') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
@@ -59,7 +59,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('MatchOptionAnswer') . '</th>';
+        $table_header[] = '<th>' . Translation::get('MatchOptionAnswer') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';

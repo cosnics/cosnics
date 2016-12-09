@@ -83,7 +83,7 @@ class TemplateConfiguration
         }
         else
         {
-            return $template_configuration_class_name :: parse($dom_xpath);
+            return $template_configuration_class_name::parse($dom_xpath);
         }
     }
 }

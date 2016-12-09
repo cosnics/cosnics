@@ -5,7 +5,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Dataclass generator used to generate rights xml files
- *
+ * 
  * @author Sven Vanpoucke
  */
 class RightsGenerator
@@ -24,7 +24,7 @@ class RightsGenerator
 
     /**
      * Generate a rights xml file with the given info
-     *
+     * 
      * @param string $location - The location of the class
      * @param string $application_name - The name of the application
      */
@@ -37,13 +37,13 @@ class RightsGenerator
             $location (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
                  '_locations.xml',
                 'w+');
-
+        
         if ($file)
         {
             $this->template->set_filenames(array('rights' => 'rights.template'));
-
+            
             $this->template->assign_vars(array('APPLICATION_NAME' => $application_name));
-
+            
             $string = trim($this->template->pparse_return('rights'));
             fwrite($file, $string);
             fclose($file);

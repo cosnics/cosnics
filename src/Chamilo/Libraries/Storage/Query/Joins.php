@@ -19,7 +19,7 @@ class Joins implements \Countable
 
     /**
      * Constructor
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Join[] $joins
      */
     public function __construct($joins = array())
@@ -29,7 +29,7 @@ class Joins implements \Countable
 
     /**
      * Gets the joins
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\Join[]
      */
     public function get()
@@ -49,14 +49,14 @@ class Joins implements \Countable
     public function getHashParts()
     {
         $hashes = array();
-
+        
         foreach ($this->joins as $join)
         {
             $hashes[] = $join->getHashParts();
         }
-
+        
         sort($hashes);
-
+        
         return $hashes;
     }
 
@@ -80,12 +80,12 @@ class Joins implements \Countable
 
     /**
      * Merges the given dataclass properties into this one
-     *
+     * 
      * @param Joins $joinsToMerge
      */
     public function merge(Joins $joinsToMerge = null)
     {
-        if(!$joinsToMerge instanceof Joins)
+        if (! $joinsToMerge instanceof Joins)
         {
             return;
         }

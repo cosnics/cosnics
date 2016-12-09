@@ -11,12 +11,12 @@ use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ResourceComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport,
+class ResourceComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport, 
     NoVisitTraceComponentInterface
 {
 
     public function run()
     {
-        \Chamilo\Libraries\Format\Utilities\ResourceUtilities :: launch($this->getRequest());
+        \Chamilo\Libraries\Format\Utilities\ResourceUtilities::launch($this->getRequest());
     }
 }

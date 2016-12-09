@@ -29,47 +29,47 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $relationInstanceIds = $this->getRequest()->get(self :: PARAM_RELATION_INSTANCE_ID);
-
+        
+        $relationInstanceIds = $this->getRequest()->get(self::PARAM_RELATION_INSTANCE_ID);
+        
         try
         {
             if (empty($relationInstanceIds))
             {
-                throw new NoObjectSelectedException(Translation :: get('RelationInstance'));
+                throw new NoObjectSelectedException(Translation::get('RelationInstance'));
             }
-
+            
             if (! is_array($relationInstanceIds))
             {
                 $relationInstanceIds = array($relationInstanceIds);
             }
-
+            
             foreach ($relationInstanceIds as $relationInstanceId)
             {
-                $relationInstance = DataManager :: retrieve_by_id(RelationInstance :: class_name(), $relationInstanceId);
-
+                $relationInstance = DataManager::retrieve_by_id(RelationInstance::class_name(), $relationInstanceId);
+                
                 if (! $relationInstance->delete())
                 {
                     throw new \Exception(
-                        Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('RelationInstance')),
-                            Utilities :: COMMON_LIBRARIES));
+                        Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('RelationInstance')), 
+                            Utilities::COMMON_LIBRARIES));
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('RelationInstance')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('RelationInstance')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

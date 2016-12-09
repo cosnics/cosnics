@@ -19,8 +19,8 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($action, $bitbucket)
     {
-        parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-
+        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
+        
         $this->bitbucket = $bitbucket;
         $this->build();
     }
@@ -28,21 +28,21 @@ class ExternalObjectForm extends FormValidator
     public function build()
     {
         $this->addElement('hidden', 'id');
-        $this->addElement('text', 'name', Translation :: get('Name'));
-        $this->addElement('textarea', 'description', Translation :: get('Description'));
-        $this->addElement('text', 'website', Translation :: get('Website'));
+        $this->addElement('text', 'name', Translation::get('Name'));
+        $this->addElement('textarea', 'description', Translation::get('Description'));
+        $this->addElement('text', 'website', Translation::get('Website'));
         $this->addElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
-
+        
         $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
                      'PrivilegeGrantingForm.js'));
     }
 
@@ -61,13 +61,13 @@ class ExternalObjectForm extends FormValidator
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-
-        $defaults[ExternalObject :: PROPERTY_ID] = $external_repository_object->get_id();
-        $defaults[ExternalObject :: PROPERTY_TITLE] = $external_repository_object->get_title();
-        $defaults[ExternalObject :: PROPERTY_DESCRIPTION] = html_entity_decode(
+        
+        $defaults[ExternalObject::PROPERTY_ID] = $external_repository_object->get_id();
+        $defaults[ExternalObject::PROPERTY_TITLE] = $external_repository_object->get_title();
+        $defaults[ExternalObject::PROPERTY_DESCRIPTION] = html_entity_decode(
             $external_repository_object->get_description());
-        $defaults[ExternalObject :: PROPERTY_WEBSITE] = $external_repository_object->get_website();
-
-        parent :: setDefaults($defaults);
+        $defaults[ExternalObject::PROPERTY_WEBSITE] = $external_repository_object->get_website();
+        
+        parent::setDefaults($defaults);
     }
 }

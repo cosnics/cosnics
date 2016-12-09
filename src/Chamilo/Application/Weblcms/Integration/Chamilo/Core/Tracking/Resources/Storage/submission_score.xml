@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="submission_score">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="submission_id" type="integer" unsigned="1" notnull="1" />
-		<property name="created" type="integer" unsigned="1" notnull="1" />
-		<property name="modified" type="integer" unsigned="1" notnull="1" />
-		<property name="user_id" type="integer" unsigned="1" notnull="1" />
-		<property name="score" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="id">
-		<indexproperty name="id" />
-	</index>
-	<index name="submission_id">
-		<indexproperty name="submission_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="submission_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="created"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="modified"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="score"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="id">
+        <indexproperty name="id" />
+    </index>
+    <index name="submission_id">
+        <indexproperty name="submission_id" />
+    </index>
 </object>

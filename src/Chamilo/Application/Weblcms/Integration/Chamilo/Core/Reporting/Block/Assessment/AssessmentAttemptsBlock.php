@@ -21,8 +21,8 @@ class AssessmentAttemptsBlock extends AssessmentAttemptsUserBlock
     protected function get_reporting_data_rows()
     {
         return array_merge(
-            array(Translation :: get('Name'), Translation :: get('OfficialCode')), 
-            parent :: get_reporting_data_rows());
+            array(Translation::get('Name'), Translation::get('OfficialCode')), 
+            parent::get_reporting_data_rows());
     }
 
     /**
@@ -34,12 +34,12 @@ class AssessmentAttemptsBlock extends AssessmentAttemptsUserBlock
      */
     protected function add_additional_information_for_attempt($assessment_attempt, $counter, $reporting_data)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            User :: class_name(), 
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            User::class_name(), 
             $assessment_attempt->get_user_id());
         
-        $reporting_data->add_data_category_row($counter, Translation :: get('Name'), $user->get_fullname());
+        $reporting_data->add_data_category_row($counter, Translation::get('Name'), $user->get_fullname());
         
-        $reporting_data->add_data_category_row($counter, Translation :: get('OfficialCode'), $user->get_official_code());
+        $reporting_data->add_data_category_row($counter, Translation::get('OfficialCode'), $user->get_official_code());
     }
 }

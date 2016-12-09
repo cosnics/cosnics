@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Table column model for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EntityTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -18,8 +18,8 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     public function initialize_columns()
     {
         $helper_class = $this->get_table()->get_helper_class_name();
-
-        foreach ($helper_class :: get_table_columns() as $column)
+        
+        foreach ($helper_class::get_table_columns() as $column)
         {
             $this->add_column($column);
         }

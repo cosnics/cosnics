@@ -34,20 +34,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary :: class_name(),
+                Vocabulary::class_name(), 
                 new ComparisonCondition(
-                    new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID),
-                    ComparisonCondition :: EQUAL,
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID))));
-
-        return self :: count(
-            User :: class_name(),
+                    new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                    ComparisonCondition::EQUAL, 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
+        
+        return self::count(
+            User::class_name(), 
             new DataClassCountParameters(
-                $condition,
-                $joins,
+                $condition, 
+                $joins, 
                 new FunctionConditionVariable(
-                    FunctionConditionVariable :: DISTINCT,
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID))));
+                    FunctionConditionVariable::DISTINCT, 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
     }
 
     /**
@@ -62,20 +62,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary :: class_name(),
+                Vocabulary::class_name(), 
                 new ComparisonCondition(
-                    new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID),
-                    ComparisonCondition :: EQUAL,
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID))));
-
+                    new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                    ComparisonCondition::EQUAL, 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
+        
         $properties = new DataClassProperties(
             array(
                 new FunctionConditionVariable(
-                    FunctionConditionVariable :: DISTINCT,
-                    new PropertiesConditionVariable(User :: class_name()))));
-
+                    FunctionConditionVariable::DISTINCT, 
+                    new PropertiesConditionVariable(User::class_name()))));
+        
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
-
-        return self :: records(User :: class_name(), $parameters);
+        
+        return self::records(User::class_name(), $parameters);
     }
 }

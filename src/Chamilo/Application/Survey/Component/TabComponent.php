@@ -28,117 +28,118 @@ abstract class TabComponent extends Manager
     {
         $this->tabsRenderer = new DynamicVisualTabsRenderer('publication');
         
-        if(RightsService :: getInstance()->canPublish($this->get_user(), $this->getCurrentPublication())){
+        if (RightsService::getInstance()->canPublish($this->get_user(), $this->getCurrentPublication()))
+        {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_CREATE,
-                    Translation :: get(self :: ACTION_CREATE . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_CREATE),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
-                    $this->get_action() == self :: ACTION_CREATE,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_CREATE, 
+                    Translation::get(self::ACTION_CREATE . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_CREATE), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), 
+                    $this->get_action() == self::ACTION_CREATE, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
-
+        
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self :: ACTION_FAVOURITE,
-                Translation :: get(self :: ACTION_FAVOURITE . 'Component'),
-                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_FAVOURITE),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_FAVOURITE)),
-                $this->get_action() == self :: ACTION_FAVOURITE,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
+                self::ACTION_FAVOURITE, 
+                Translation::get(self::ACTION_FAVOURITE . 'Component'), 
+                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_FAVOURITE), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_FAVOURITE)), 
+                $this->get_action() == self::ACTION_FAVOURITE, 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self :: ACTION_BROWSE_PERSONAL,
-                Translation :: get(self :: ACTION_BROWSE_PERSONAL . 'Component'),
-                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_PERSONAL),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_PERSONAL)),
-                $this->get_action() == self :: ACTION_BROWSE_PERSONAL,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
+                self::ACTION_BROWSE_PERSONAL, 
+                Translation::get(self::ACTION_BROWSE_PERSONAL . 'Component'), 
+                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE_PERSONAL), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_PERSONAL)), 
+                $this->get_action() == self::ACTION_BROWSE_PERSONAL, 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self :: ACTION_BROWSE_SHARED,
-                Translation :: get(self :: ACTION_BROWSE_SHARED . 'Component'),
-                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_SHARED),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_SHARED)),
-                $this->get_action() == self :: ACTION_BROWSE_SHARED,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
+                self::ACTION_BROWSE_SHARED, 
+                Translation::get(self::ACTION_BROWSE_SHARED . 'Component'), 
+                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE_SHARED), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_SHARED)), 
+                $this->get_action() == self::ACTION_BROWSE_SHARED, 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
         if ($this->get_user()->is_platform_admin())
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_BROWSE,
-                    Translation :: get(self :: ACTION_BROWSE . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
-                    $this->get_action() == self :: ACTION_BROWSE,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_BROWSE, 
+                    Translation::get(self::ACTION_BROWSE . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), 
+                    $this->get_action() == self::ACTION_BROWSE, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
             
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_RIGHTS,
-                    Translation :: get(self :: ACTION_APPLICATION_RIGHTS . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_RIGHTS),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_APPLICATION_RIGHTS)),
-                    $this->get_action() == self :: ACTION_APPLICATION_RIGHTS,
-                    false,
-                    DynamicVisualTab :: POSITION_RIGHT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_RIGHTS, 
+                    Translation::get(self::ACTION_APPLICATION_RIGHTS . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_RIGHTS), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_APPLICATION_RIGHTS)), 
+                    $this->get_action() == self::ACTION_APPLICATION_RIGHTS, 
+                    false, 
+                    DynamicVisualTab::POSITION_RIGHT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
-
-        if ($this->get_action() == self :: ACTION_UPDATE)
+        
+        if ($this->get_action() == self::ACTION_UPDATE)
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_UPDATE,
-                    Translation :: get(self :: ACTION_UPDATE . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_UPDATE),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPDATE)),
-                    $this->get_action() == self :: ACTION_UPDATE,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_UPDATE, 
+                    Translation::get(self::ACTION_UPDATE . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_UPDATE), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE)), 
+                    $this->get_action() == self::ACTION_UPDATE, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
-
-        if ($this->get_action() == self :: ACTION_RIGHTS)
+        
+        if ($this->get_action() == self::ACTION_RIGHTS)
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_RIGHTS,
-                    Translation :: get(self :: ACTION_RIGHTS . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_RIGHTS),
-                    $this->get_url(array(self :: ACTION_RIGHTS => self :: ACTION_RIGHTS)),
-                    $this->get_action() == self :: ACTION_RIGHTS,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_RIGHTS, 
+                    Translation::get(self::ACTION_RIGHTS . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_RIGHTS), 
+                    $this->get_url(array(self::ACTION_RIGHTS => self::ACTION_RIGHTS)), 
+                    $this->get_action() == self::ACTION_RIGHTS, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
-
-        if ($this->get_action() == self :: ACTION_MAIL)
+        
+        if ($this->get_action() == self::ACTION_MAIL)
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_MAIL,
-                    Translation :: get(self :: ACTION_MAIL . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MAIL),
-                    $this->get_url(array(self :: ACTION_MAIL => self :: ACTION_MAIL)),
-                    $this->get_action() == self :: ACTION_MAIL,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_MAIL, 
+                    Translation::get(self::ACTION_MAIL . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_MAIL), 
+                    $this->get_url(array(self::ACTION_MAIL => self::ACTION_MAIL)), 
+                    $this->get_action() == self::ACTION_MAIL, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
         
         return $this->build();
@@ -153,10 +154,10 @@ abstract class TabComponent extends Manager
     public function render_header()
     {
         $html = array();
-
-        $html[] = parent :: render_header();
+        
+        $html[] = parent::render_header();
         $html[] = $this->getTabsRenderer()->renderHeader();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -167,16 +168,16 @@ abstract class TabComponent extends Manager
     public function render_footer()
     {
         $html = array();
-
+        
         $html[] = $this->getTabsRenderer()->renderFooter();
-        $html[] = parent :: render_footer();
-
+        $html[] = parent::render_footer();
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Get the TabsRenderer
-     *
+     * 
      * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
      */
     public function getTabsRenderer()

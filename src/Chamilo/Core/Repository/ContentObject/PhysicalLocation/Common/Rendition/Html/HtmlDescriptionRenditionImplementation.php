@@ -11,14 +11,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
     {
         $object = $this->get_content_object();
         $replace = array();
-
+        
         $replace[] = '<div class="panel panel-default">';
         
         $replace[] = '<div class="panel-heading">';
@@ -33,24 +33,23 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         
         $replace[] = '</div>';
         
-
         return implode(PHP_EOL, $replace);
     }
 
     public function get_javascript($object)
     {
         $html = array();
-
+        
         $html[] = '<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>';
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
                  'Plugin/GoogleMaps.js');
         $html[] = '<div id="map_canvas" style="width:100%; border: 1px solid black; height:500px"></div>';
         $html[] = '<script type="text/javascript">';
         $html[] = 'initialize(12);';
         $html[] = 'codeAddress(\'' . $object->get_location() . '\', \'' . $object->get_title() . '\');';
         $html[] = '</script>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

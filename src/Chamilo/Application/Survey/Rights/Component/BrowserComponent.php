@@ -35,8 +35,8 @@ class BrowserComponent extends TabComponent implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(), 
-                PublicationEntityRelation :: PROPERTY_PUBLICATION_ID), 
+                PublicationEntityRelation::class_name(), 
+                PublicationEntityRelation::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->getCurrentPublication()->getId()));
     }
 }

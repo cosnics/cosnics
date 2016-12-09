@@ -16,7 +16,7 @@ class Plain extends RestData
         }
         else
         {
-            throw new Exception(Translation :: get('NotAString'));
+            throw new Exception(Translation::get('NotAString'));
         }
     }
 }

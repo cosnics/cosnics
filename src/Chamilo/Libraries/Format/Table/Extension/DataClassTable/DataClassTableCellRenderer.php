@@ -17,10 +17,10 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
      * Implemented Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Renders a single cell
-     *
+     * 
      * @param DataClassColumn $column
      * @param DataClass $data_class
      *
@@ -30,16 +30,16 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
     {
         if ($column instanceof ActionsTableColumn)
         {
-            return parent :: render_cell($column, $data_class);
+            return parent::render_cell($column, $data_class);
         }
-
+        
         return $data_class->get_default_property($column->get_name());
     }
 
     /**
      * Define the unique identifier for the DataClass needed for e.g.
      * checkboxes
-     *
+     * 
      * @param DataClass $data_class
      *
      * @return int

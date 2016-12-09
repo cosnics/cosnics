@@ -132,7 +132,7 @@ controlbar plugin
 }
 
 .ppcontrols.active {
-	filter: alpha(opacity =100);
+	filter: alpha(opacity = 100);
 	-moz-opacity: 1;
 	-khtml-opacity: 1;
 	opacity: 1;
@@ -145,11 +145,11 @@ controlbar plugin
 }
 
 .ppcontrols.inactive {
-	filter: alpha(opacity=0);
+	filter: alpha(opacity = 0);
 	-moz-opacity: 0;
 	-khtml-opacity: 0;
 	opacity: 0;
-	filter: alpha(opacity=0);
+	filter: alpha(opacity = 0);
 	-webkit-backface-visibility: hidden;
 	-webkit-transform: translate3d(0, 0, 0);
 	-webkit-transition: opacity 0.5s linear;

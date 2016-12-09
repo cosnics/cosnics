@@ -42,7 +42,7 @@ class CourseGroupUserExportExtender implements UserExportExtender
     {
         $headers = array();
         
-        $headers[self :: EXPORT_COLUMN_COURSE_GROUPS] = Translation :: get('CourseGroups');
+        $headers[self::EXPORT_COLUMN_COURSE_GROUPS] = Translation::get('CourseGroups');
         
         return $headers;
     }
@@ -58,7 +58,7 @@ class CourseGroupUserExportExtender implements UserExportExtender
     {
         $data = array();
         
-        $course_groups = DataManager :: retrieve_course_groups_from_user($user->get_id(), $this->course_id);
+        $course_groups = DataManager::retrieve_course_groups_from_user($user->get_id(), $this->course_id);
         
         $course_groups_subscribed = array();
         while ($course_group = $course_groups->next_result())
@@ -66,7 +66,7 @@ class CourseGroupUserExportExtender implements UserExportExtender
             $course_groups_subscribed[] = $course_group->get_name();
         }
         
-        $data[self :: EXPORT_COLUMN_COURSE_GROUPS] = implode(", ", $course_groups_subscribed);
+        $data[self::EXPORT_COLUMN_COURSE_GROUPS] = implode(", ", $course_groups_subscribed);
         
         return $data;
     }

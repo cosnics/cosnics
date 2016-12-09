@@ -23,7 +23,7 @@ class Youtube extends ContentObject implements Versionable, Includeable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_video_url()
@@ -32,7 +32,7 @@ class Youtube extends ContentObject implements Versionable, Includeable
         
         if ($synchronization_data)
         {
-            return sprintf(self :: YOUTUBE_PLAYER_URI, $synchronization_data->get_external_object_id());
+            return sprintf(self::YOUTUBE_PLAYER_URI, $synchronization_data->get_external_object_id());
         }
     }
 
@@ -40,15 +40,15 @@ class Youtube extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_IMPLEMENTATION), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION), 
             new StaticConditionVariable('Chamilo\Core\Repository\Implementation\Youtube'));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED), 
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
         
-        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            Instance :: class_name(), 
+        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+            Instance::class_name(), 
             new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;
     }

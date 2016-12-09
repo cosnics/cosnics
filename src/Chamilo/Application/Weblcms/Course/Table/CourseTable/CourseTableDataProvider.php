@@ -33,7 +33,7 @@ class CourseTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_courses_with_course_type($condition, $offset, $count, $order_property);
+        return DataManager::retrieve_courses_with_course_type($condition, $offset, $count, $order_property);
     }
 
     /**
@@ -45,6 +45,6 @@ class CourseTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_courses_with_course_type($condition);
+        return DataManager::count_courses_with_course_type($condition);
     }
 }

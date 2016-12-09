@@ -11,5 +11,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
  */
 class InstanceTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_INSTANCE_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_INSTANCE_ID;
 }

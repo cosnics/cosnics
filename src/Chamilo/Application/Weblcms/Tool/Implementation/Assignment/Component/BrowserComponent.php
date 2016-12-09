@@ -24,31 +24,31 @@ class BrowserComponent extends Manager
     public function get_tool_actions()
     {
         $tool_actions = array();
-
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $tool_actions[] = new Button(
-                Translation :: get('ScoresOverview'),
-                new BootstrapGlyph('stats'),
+                Translation::get('ScoresOverview'), 
+                new BootstrapGlyph('stats'), 
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING,
-                        \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate :: class_name(),
-                        \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: ACTION_VIEW)),
-                Button :: DISPLAY_ICON_AND_LABEL);
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING, 
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(), 
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)), 
+                Button::DISPLAY_ICON_AND_LABEL);
         }
-
+        
         return $tool_actions;
     }
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            Assignment :: class_name(),
-            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
-        $calendar_event = ContentObject :: factory(CalendarEvent :: class_name());
-
+        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            Assignment::class_name(), 
+            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+        
+        $calendar_event = ContentObject::factory(CalendarEvent::class_name());
+        
         $calendar_event->set_title($object->get_title());
         $calendar_event->set_description($object->get_description());
         if ($object instanceof Assignment)
@@ -61,9 +61,9 @@ class BrowserComponent extends Manager
             $calendar_event->set_start_date($object->get_start_date());
             $calendar_event->set_end_date($object->get_end_date());
         }
-
-        $calendar_event->set_frequency(CalendarEvent :: FREQUENCY_NONE);
-
+        
+        $calendar_event->set_frequency(CalendarEvent::FREQUENCY_NONE);
+        
         return $calendar_event;
     }
 

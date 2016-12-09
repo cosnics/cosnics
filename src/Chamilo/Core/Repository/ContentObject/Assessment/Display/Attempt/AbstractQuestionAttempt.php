@@ -25,12 +25,12 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_QUESTION_COMPLEX_ID;
-        $extended_property_names[] = self :: PROPERTY_ANSWER;
-        $extended_property_names[] = self :: PROPERTY_FEEDBACK;
-        $extended_property_names[] = self :: PROPERTY_SCORE;
-        $extended_property_names[] = self :: PROPERTY_HINT;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_QUESTION_COMPLEX_ID;
+        $extended_property_names[] = self::PROPERTY_ANSWER;
+        $extended_property_names[] = self::PROPERTY_FEEDBACK;
+        $extended_property_names[] = self::PROPERTY_SCORE;
+        $extended_property_names[] = self::PROPERTY_HINT;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function get_question_complex_id()
     {
-        return $this->get_default_property(self :: PROPERTY_QUESTION_COMPLEX_ID);
+        return $this->get_default_property(self::PROPERTY_QUESTION_COMPLEX_ID);
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function set_question_complex_id($question_complex_id)
     {
-        $this->set_default_property(self :: PROPERTY_QUESTION_COMPLEX_ID, $question_complex_id);
+        $this->set_default_property(self::PROPERTY_QUESTION_COMPLEX_ID, $question_complex_id);
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function get_answer()
     {
-        return $this->get_default_property(self :: PROPERTY_ANSWER);
+        return $this->get_default_property(self::PROPERTY_ANSWER);
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function set_answer($answer)
     {
-        $this->set_default_property(self :: PROPERTY_ANSWER, $answer);
+        $this->set_default_property(self::PROPERTY_ANSWER, $answer);
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function get_score()
     {
-        return $this->get_default_property(self :: PROPERTY_SCORE);
+        return $this->get_default_property(self::PROPERTY_SCORE);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function set_score($score)
     {
-        $this->set_default_property(self :: PROPERTY_SCORE, $score);
+        $this->set_default_property(self::PROPERTY_SCORE, $score);
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function get_feedback()
     {
-        return $this->get_default_property(self :: PROPERTY_FEEDBACK);
+        return $this->get_default_property(self::PROPERTY_FEEDBACK);
     }
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function set_feedback($feedback)
     {
-        $this->set_default_property(self :: PROPERTY_FEEDBACK, $feedback);
+        $this->set_default_property(self::PROPERTY_FEEDBACK, $feedback);
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function get_hint()
     {
-        return $this->get_default_property(self :: PROPERTY_HINT);
+        return $this->get_default_property(self::PROPERTY_HINT);
     }
 
     /**
@@ -120,6 +120,6 @@ abstract class AbstractQuestionAttempt extends DataClass
      */
     public function set_hint($hint)
     {
-        $this->set_default_property(self :: PROPERTY_HINT, $hint);
+        $this->set_default_property(self::PROPERTY_HINT, $hint);
     }
 }

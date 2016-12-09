@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: forum_topic_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.forum_topic
  */
 class ForumTopicForm extends ContentObjectForm
@@ -16,7 +16,7 @@ class ForumTopicForm extends ContentObjectForm
 
     /**
      * Creates a new ForumTopic.
-     *
+     * 
      * @return ForumTopic
      */
     public function create_content_object()
@@ -24,46 +24,46 @@ class ForumTopicForm extends ContentObjectForm
         $object = new ForumTopic();
         $object->set_locked(false);
         $this->set_content_object($object);
-
-        return parent :: create_content_object();
+        
+        return parent::create_content_object();
     }
 
     /**
      * Updates a ForumTopic.
-     *
+     * 
      * @return ForumTopic
      */
     public function update_content_object()
     {
         $object = $this->get_content_object();
-        $object->set_locked($this->exportValue(ForumTopic :: PROPERTY_LOCKED));
-
-        return parent :: update_content_object();
+        $object->set_locked($this->exportValue(ForumTopic::PROPERTY_LOCKED));
+        
+        return parent::update_content_object();
     }
 
     /**
      * Build the creation form to create a ForumTopic.
-     *
+     * 
      * @param type $default_content_object
      */
     public function build_creation_form($default_content_object = null)
     {
-        parent :: build_creation_form();
+        parent::build_creation_form();
     }
 
     /**
      * Build the editing form to edit a ForumTopic.
-     *
+     * 
      * @param type $object
      */
     public function build_editing_form($object)
     {
-        parent :: build_editing_form();
-        $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
+        parent::build_editing_form();
+        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         $this->addElement(
-            'checkbox',
-            'locked',
-            Translation :: get('Locked', null, 'Chamilo\Core\Repository\ContentObject\Forum'));
+            'checkbox', 
+            'locked', 
+            Translation::get('Locked', null, 'Chamilo\Core\Repository\ContentObject\Forum'));
         $this->addElement('category');
     }
 
@@ -72,8 +72,8 @@ class ForumTopicForm extends ContentObjectForm
         $object = $this->get_content_object();
         if ($object != null)
         {
-            $defaults[ForumTopic :: PROPERTY_LOCKED] = $object->get_locked();
+            $defaults[ForumTopic::PROPERTY_LOCKED] = $object->get_locked();
         }
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 }

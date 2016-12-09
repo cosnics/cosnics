@@ -22,7 +22,7 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_LOCATIONS, self :: PARAM_RIGHTS);
+        return array(self::PARAM_LOCATIONS, self::PARAM_RIGHTS);
     }
 
     /**
@@ -30,10 +30,10 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
      */
     public function run()
     {
-        $locations = $this->getPostDataValue(self :: PARAM_LOCATIONS);
+        $locations = $this->getPostDataValue(self::PARAM_LOCATIONS);
         $locations = json_decode($locations);
         
-        $rights = $this->getPostDataValue(self :: PARAM_RIGHTS);
+        $rights = $this->getPostDataValue(self::PARAM_RIGHTS);
         $rights = explode('|', $rights);
         
         $context = $rights['1'];
@@ -41,7 +41,7 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
         $entity_type = $rights['3'];
         $entity_item_id = $rights['4'];
         
-        $rights_util = RightsUtil :: get_instance();
+        $rights_util = RightsUtil::getInstance();
         
         if (isset($context) && isset($right_id) && isset($entity_type) && isset($entity_item_id) && isset($locations) &&
              count($locations) > 0)
@@ -50,7 +50,7 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
             $context_class = ($context . '\RightsLocation');
             
             $first_location_id = $locations[0];
-            $first_location = $context_dm :: retrieve_by_id($context_class :: class_name(), $first_location_id);
+            $first_location = $context_dm::retrieve_by_id($context_class::class_name(), $first_location_id);
             
             $value = $rights_util->is_allowed_for_rights_entity_item_no_inherit(
                 $context, 
@@ -83,12 +83,12 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
             }
             
             $result = new JsonAjaxResult();
-            $result->set_property(self :: PROPERTY_NEW_CLASS, $new_class);
+            $result->set_property(self::PROPERTY_NEW_CLASS, $new_class);
             $result->display();
         }
         else
         {
-            JsonAjaxResult :: bad_request();
+            JsonAjaxResult::bad_request();
         }
     }
 }

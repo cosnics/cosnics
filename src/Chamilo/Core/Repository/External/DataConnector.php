@@ -74,13 +74,13 @@ abstract class DataConnector
      * @param $external_repository_instance ExternalRepository
      * @return DataConnector
      */
-    public static function get_instance($external_repository_instance)
+    public static function getInstance($external_repository_instance)
     {
-        if (! isset(self :: $instances[$external_repository_instance->get_id()]))
+        if (! isset(self::$instances[$external_repository_instance->get_id()]))
         {
-            self :: $instances[$external_repository_instance->get_id()] = self :: factory($external_repository_instance);
+            self::$instances[$external_repository_instance->get_id()] = self::factory($external_repository_instance);
         }
-        return self :: $instances[$external_repository_instance->get_id()];
+        return self::$instances[$external_repository_instance->get_id()];
     }
 
     /**

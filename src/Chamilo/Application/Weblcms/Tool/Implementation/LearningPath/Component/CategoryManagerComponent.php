@@ -9,6 +9,6 @@ class CategoryManagerComponent extends Manager implements DelegateComponent
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID);
+        return array(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID);
     }
 }

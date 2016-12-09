@@ -36,12 +36,14 @@
 
 .row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item:first-child
 	{
-/* 	padding-top: 10px; */
+	/* 	padding-top: 10px; */
+	
 }
 
 .row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item:last-child
 	{
-/* 	padding-bottom: 10px; */
+	/* 	padding-bottom: 10px; */
+	
 }
 
 @media ( min-width : 768px) {

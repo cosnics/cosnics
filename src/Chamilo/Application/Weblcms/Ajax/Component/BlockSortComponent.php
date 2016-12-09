@@ -20,13 +20,13 @@ class BlockSortComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
     {
         $block_data = explode('&', $jquery);
         $blocks = array();
-
+        
         foreach ($block_data as $block)
         {
             $block_split = explode('=', $block);
             $blocks[] = $block_split[1];
         }
-
+        
         return $blocks;
     }
 
@@ -34,22 +34,22 @@ class BlockSortComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
     {
         $section_id = explode($_POST['id']);
         $blocks = $this->unserialize_jquery($_POST['order']);
-
+        
         $i = 1;
         foreach ($blocks as $block_id)
         {
-            $block = DataManager :: retrieve_by_id(CourseModule :: class_name(), $block_id);
+            $block = DataManager::retrieve_by_id(CourseModule::class_name(), $block_id);
             $block->set_sort($i);
             $block->update();
             $i ++;
         }
-
+        
         $json_result['success'] = '1';
-        $json_result['message'] = Translation :: get(
-            'ObjectAdded',
-            array('OBJECT' => Translation :: get('Block')),
-            Utilities :: COMMON_LIBRARIES);
-
+        $json_result['message'] = Translation::get(
+            'ObjectAdded', 
+            array('OBJECT' => Translation::get('Block')), 
+            Utilities::COMMON_LIBRARIES);
+        
         // Return a JSON object
         echo json_encode($json_result);
     }

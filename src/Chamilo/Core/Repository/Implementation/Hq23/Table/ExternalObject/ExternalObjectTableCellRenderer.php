@@ -11,9 +11,9 @@ class ExternalObjectTableCellRenderer extends DefaultExternalTableCellRenderer
     {
         switch ($column->get_name())
         {
-            case ExternalObject :: PROPERTY_LICENSE :
+            case ExternalObject::PROPERTY_LICENSE :
                 return $object->get_license_icon();
         }
-        return parent :: render_cell($column, $object);
+        return parent::render_cell($column, $object);
     }
 }

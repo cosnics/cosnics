@@ -8,40 +8,40 @@ use Chamilo\Libraries\Platform\Session\Session;
 class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Ajax\Manager
 {
     const PARAM_PARAMETER = 'parameter';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETER);
+        return array(self::PARAM_PARAMETER);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
-        $parameter = $this->getPostDataValue(self :: PARAM_PARAMETER);
+        $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
         
-        $session = unserialize(Session :: retrieve('advanced_filter'));
+        $session = unserialize(Session::retrieve('advanced_filter'));
         
         if ($parameter[1] == 'system_announcement')
         {
             switch ($parameter[2])
             {
                 case 'icon' :
-                    unset($session[SystemAnnouncement :: PROPERTY_ICON]);
+                    unset($session[SystemAnnouncement::PROPERTY_ICON]);
                     break;
             }
             
-            Session :: register('advanced_filter', serialize($session));
-            JsonAjaxResult :: success();
+            Session::register('advanced_filter', serialize($session));
+            JsonAjaxResult::success();
         }
         else
         {
-            JsonAjaxResult :: bad_request();
+            JsonAjaxResult::bad_request();
         }
     }
 }

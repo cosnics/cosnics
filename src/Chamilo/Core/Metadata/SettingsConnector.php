@@ -23,12 +23,12 @@ class SettingsConnector
      */
     public function retrieve_namespaces()
     {
-        $namespaces = DataManager :: retrieves(Schema :: class_name(), new DataClassRetrievesParameters());
-
+        $namespaces = DataManager::retrieves(Schema::class_name(), new DataClassRetrievesParameters());
+        
         if ($namespaces->size())
         {
-            $spaces[0] = Translation :: get('SelectNamespace');
-
+            $spaces[0] = Translation::get('SelectNamespace');
+            
             while ($namespace = $namespaces->next_result())
             {
                 $spaces[$namespace->get_id()] = $namespace->get_name();
@@ -36,9 +36,9 @@ class SettingsConnector
         }
         else
         {
-            $spaces[0] = Translation :: get('NoNamespaceDefined');
+            $spaces[0] = Translation::get('NoNamespaceDefined');
         }
-
+        
         return $spaces;
     }
 }

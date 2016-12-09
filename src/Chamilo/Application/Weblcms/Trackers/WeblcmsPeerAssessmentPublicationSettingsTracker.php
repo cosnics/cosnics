@@ -20,19 +20,19 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
 
     /**
      * Inherited
-     *
+     * 
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
     {
-        $this->set_publication_id($parameters[self :: PROPERTY_PUBLICATION_ID]);
-        $this->set_direct_subscribe_available($parameters[self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE]);
-        $this->set_unsubscribe_available($parameters[self :: PROPERTY_UNSUBSCRIBE_AVAILABLE]);
-        $this->set_subscription_deadline($parameters[self :: PROPERTY_SUBSCRIPTION_DEADLINE]);
-        $this->set_min_group_members($parameters[self :: PROPERTY_MIN_GROUP_MEMBERS]);
-        $this->set_max_group_members($parameters[self :: PROPERTY_MAX_GROUP_MEMBERS]);
-        $this->set_filter_min_max($parameters[self :: PROPERTY_FILTER_MIN_MAX]);
-        $this->set_filter_self($parameters[self :: PROPERTY_FILTER_SELF]);
+        $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
+        $this->set_direct_subscribe_available($parameters[self::PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE]);
+        $this->set_unsubscribe_available($parameters[self::PROPERTY_UNSUBSCRIBE_AVAILABLE]);
+        $this->set_subscription_deadline($parameters[self::PROPERTY_SUBSCRIPTION_DEADLINE]);
+        $this->set_min_group_members($parameters[self::PROPERTY_MIN_GROUP_MEMBERS]);
+        $this->set_max_group_members($parameters[self::PROPERTY_MAX_GROUP_MEMBERS]);
+        $this->set_filter_min_max($parameters[self::PROPERTY_FILTER_MIN_MAX]);
+        $this->set_filter_self($parameters[self::PROPERTY_FILTER_SELF]);
     }
 
     /**
@@ -40,16 +40,16 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
      */
     static function get_default_property_names()
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE,
-                self :: PROPERTY_UNSUBSCRIBE_AVAILABLE,
-                self :: PROPERTY_SUBSCRIPTION_DEADLINE,
-                self :: PROPERTY_MIN_GROUP_MEMBERS,
-                self :: PROPERTY_MAX_GROUP_MEMBERS,
-                self :: PROPERTY_FILTER_MIN_MAX,
-                self :: PROPERTY_FILTER_SELF));
+                self::PROPERTY_PUBLICATION_ID, 
+                self::PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE, 
+                self::PROPERTY_UNSUBSCRIBE_AVAILABLE, 
+                self::PROPERTY_SUBSCRIPTION_DEADLINE, 
+                self::PROPERTY_MIN_GROUP_MEMBERS, 
+                self::PROPERTY_MAX_GROUP_MEMBERS, 
+                self::PROPERTY_FILTER_MIN_MAX, 
+                self::PROPERTY_FILTER_SELF));
     }
 
     /*
@@ -67,7 +67,7 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

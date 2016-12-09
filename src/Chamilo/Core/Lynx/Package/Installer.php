@@ -19,7 +19,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $source->set_description(
             'Packages which are officialy supported by the Chamilo Connect community are listed in this repository.');
         $source->set_uri('http://packages.chamilo.org');
-        $source->set_status(Source :: STATUS_INACTIVE);
+        $source->set_status(Source::STATUS_INACTIVE);
         
         if (! $source->create())
         {
@@ -30,7 +30,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $source->set_name('Edison Testserver');
         $source->set_description('Testserver for package management development. Hosted by Hogeschool Gent.');
         $source->set_uri('http://edison.hogent.be/package_server');
-        $source->set_status(Source :: STATUS_ACTIVE);
+        $source->set_status(Source::STATUS_ACTIVE);
         
         if (! $source->create())
         {
@@ -41,7 +41,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $source->set_name('Localhost');
         $source->set_description('Local test-repository for package management development.');
         $source->set_uri(substr($values['platform_url'], 0, strlen($values['platform_url'] - 1)));
-        $source->set_status(Source :: STATUS_ACTIVE);
+        $source->set_status(Source::STATUS_ACTIVE);
         
         if (! $source->create())
         {

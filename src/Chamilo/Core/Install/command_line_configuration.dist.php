@@ -16,8 +16,6 @@ $values['database_username'] = 'root';
 $values['database_password'] = '';
 
 $values['platform_language'] = 'en';
-$values['platform_url'] = 'http://localhost/chamilo/web/';
-$values['url_append'] = '/chamilo/web/index.php';
 
 $values['admin_email'] = '';
 $values['admin_surname'] = '';
@@ -33,8 +31,6 @@ $values['organization_url'] = 'www.chamilo.org';
 $values['self_reg'] = '0';
 
 $values['hashing_algorithm'] = 'sha1';
-
-$values['server_type'] = 'test';
 
 $values['external_instance'] = array();
 $values['install'] = array();

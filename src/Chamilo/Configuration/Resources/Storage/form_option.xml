@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="form_option">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="name" type="text" length="100" notnull="1" default="" />
-		<property name="display_order" type="integer" unsigned="1" notnull="1" />
-		<property name="dynamic_form_element_id" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="name">
-		<indexproperty name="name" />
-	</index>
-	<index name="dynamic_form_element_id">
-		<indexproperty name="dynamic_form_element_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="name"
+            type="text"
+            length="100"
+            notnull="1"
+            default="" />
+        <property
+            name="display_order"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="dynamic_form_element_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="name">
+        <indexproperty name="name" />
+    </index>
+    <index name="dynamic_form_element_id">
+        <indexproperty name="dynamic_form_element_id" />
+    </index>
 </object>

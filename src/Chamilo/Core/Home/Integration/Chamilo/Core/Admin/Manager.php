@@ -15,21 +15,21 @@ class Manager implements ActionsSupportInterface
     public static function get_actions()
     {
         $links = array();
-
+        
         $rightsContext = \Chamilo\Core\Home\Rights\Manager::context();
-
+        
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => $rightsContext,
+                Application::PARAM_CONTEXT => $rightsContext, 
                 \Chamilo\Core\Home\Manager::PARAM_ACTION => \Chamilo\Core\Home\Rights\Manager::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES));
         $links[] = new DynamicAction(
-            Translation::get('BrowseBlockTypeTargetEntitiesComponent', null, $rightsContext),
-            Translation::get('BrowseBlockTypeTargetEntitiesComponentDescription', null, $rightsContext),
-            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Translation::get('BrowseBlockTypeTargetEntitiesComponent', null, $rightsContext), 
+            Translation::get('BrowseBlockTypeTargetEntitiesComponentDescription', null, $rightsContext), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'), 
             $redirect->getUrl());
-
+        
         $info = new Actions(\Chamilo\Core\Home\Manager::context(), $links);
-
+        
         return $info;
     }
 }

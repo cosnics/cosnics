@@ -51,15 +51,15 @@ abstract class ToolListRenderer
      */
     public static function factory($type, $parent, $visible_tools = array())
     {
-        $type = StringUtilities :: getInstance()->createString($type)->upperCamelize()->__toString();
+        $type = StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
         $type .= 'ToolListRenderer';
         $class = __NAMESPACE__ . '\Type\\' . $type;
-
+        
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('CanNotLoadToolListRenderer'));
+            throw new Exception(Translation::get('CanNotLoadToolListRenderer'));
         }
-
+        
         return new $class($parent, $visible_tools);
     }
 

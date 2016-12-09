@@ -5,6 +5,7 @@ use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -19,7 +20,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'publication_action';
     const PARAM_PUBLICATION_ID = 'publication_id';
     const PARAM_SELECTED_PUBLICATION_ID = 'selected_publication_id';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
@@ -37,9 +38,20 @@ abstract class Manager extends Application
     const ACTION_MAIL = 'Mailer';
     const ACTION_TAKE = 'Taker';
     const ACTION_REPORT = 'Reporting';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_FAVOURITE;
+    const DEFAULT_ACTION = self::ACTION_FAVOURITE;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+        
+        $this->checkAuthorization(Manager::context());
+    }
 
     /**
      *
@@ -68,6 +80,6 @@ abstract class Manager extends Application
      */
     public function getCurrentPublicationIdentifier()
     {
-        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
     }
 }

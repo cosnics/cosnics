@@ -13,8 +13,10 @@ class AnnouncerComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Admin\Announcement\Manager :: context(),
+            \Chamilo\Core\Admin\Announcement\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

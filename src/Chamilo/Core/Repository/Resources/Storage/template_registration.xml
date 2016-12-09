@@ -1,17 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="template_registration">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" unsigned="1" notnull="1" default="0" />
-		<property name="creator_id" type="integer" unsigned="1" notnull="1" default="0" />
-		<property name="is_default" type="boolean" notnull="1" default="0" />
-		<property name="content_object_type" type="text" length="255" notnull="1" />
-		<property name="name" type="text" length="255" notnull="1" />
-		<property name="template" type="text" notnull="1" />
-	</properties>
-	<index name="template_registration" type="unique">
-		<indexproperty name="content_object_type" />
-		<indexproperty name="name" />
-		<indexproperty name="user_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="creator_id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="is_default"
+            type="boolean"
+            notnull="1"
+            default="0" />
+        <property
+            name="content_object_type"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="name"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="template"
+            type="text"
+            notnull="1" />
+    </properties>
+    <index
+        name="template_registration"
+        type="unique">
+        <indexproperty name="content_object_type" />
+        <indexproperty name="name" />
+        <indexproperty name="user_id" />
+    </index>
 </object>

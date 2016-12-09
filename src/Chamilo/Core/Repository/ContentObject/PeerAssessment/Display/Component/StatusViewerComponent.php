@@ -24,11 +24,11 @@ class StatusViewerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
-            $this->redirect(null, null, array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS));
+        if (! $this->is_allowed(self::EDIT_RIGHT))
+            $this->redirect(null, null, array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
         
-        $this->publication_id = Request :: get(self :: PARAM_PUBLICATION);
-        $this->group_id = Request :: get(self :: PARAM_GROUP);
+        $this->publication_id = Request::get(self::PARAM_PUBLICATION);
+        $this->group_id = Request::get(self::PARAM_GROUP);
         
         $html = array();
         
@@ -52,7 +52,7 @@ class StatusViewerComponent extends Manager
             // loop through the groups
             foreach ($groups as $g)
             {
-                $url = $this->get_url(array(self :: PARAM_GROUP => $g->get_id()));
+                $url = $this->get_url(array(self::PARAM_GROUP => $g->get_id()));
                 
                 $tab = new DynamicVisualTab('tab_' + $g->get_id(), $g->get_name(), null, $url);
                 
@@ -71,9 +71,9 @@ class StatusViewerComponent extends Manager
         else
         {
             $this->redirect(
-                Translation :: get('NoGroupsDefined'), 
+                Translation::get('NoGroupsDefined'), 
                 1, 
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS));
+                array(self::PARAM_ACTION => self::ACTION_VIEW_USER_ATTEMPT_STATUS));
         }
     }
 
@@ -86,7 +86,7 @@ class StatusViewerComponent extends Manager
         $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th>' . Translation :: get('User') . '</th>';
+        $html[] = '<th>' . Translation::get('User') . '</th>';
         
         foreach ($attempts as $a)
         {
@@ -146,19 +146,19 @@ class StatusViewerComponent extends Manager
     {
         $root_content_object = $this->get_root_content_object();
         $assessment_type = $root_content_object->get_assessment_type();
-        if ($assessment_type == PeerAssessment :: TYPE_BOTH || $assessment_type == PeerAssessment :: TYPE_SCORES)
+        if ($assessment_type == PeerAssessment::TYPE_BOTH || $assessment_type == PeerAssessment::TYPE_SCORES)
         {
-            return '<div>' . Translation :: get('Progress') . ': <b>' . round($status->get_progress()) . '%</b></div>';
+            return '<div>' . Translation::get('Progress') . ': <b>' . round($status->get_progress()) . '%</b></div>';
         }
         else
         {
             if (is_null($status->get_progress()))
             {
-                return Translation :: get('NoFeedbackGiven');
+                return Translation::get('NoFeedbackGiven');
             }
             else
             {
-                return Translation :: get('FeedbackGiven');
+                return Translation::get('FeedbackGiven');
             }
         }
     }
@@ -166,15 +166,15 @@ class StatusViewerComponent extends Manager
     private function render_details_link($status)
     {
         $item = new ToolbarItem(
-            Translation :: get('Details'), 
-            Theme :: getInstance()->getCommonImagePath(
+            Translation::get('Details'), 
+            Theme::getInstance()->getCommonImagePath(
                 (($status->get_progress() > 0) ? 'Action/Details' : 'Action/DetailsNa')), 
             $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_USER_STATUS, 
-                    self :: PARAM_ATTEMPT => $status->get_attempt_id(), 
-                    self :: PARAM_USER => $status->get_user_id())), 
-            ToolbarItem :: DISPLAY_ICON);
+                    self::PARAM_ACTION => self::ACTION_VIEW_USER_STATUS, 
+                    self::PARAM_ATTEMPT => $status->get_attempt_id(), 
+                    self::PARAM_USER => $status->get_user_id())), 
+            ToolbarItem::DISPLAY_ICON);
         
         return $item->as_html();
     }
@@ -182,33 +182,33 @@ class StatusViewerComponent extends Manager
     private function render_closed_status($status, $attempt)
     {
         $item = new ToolbarItem();
-        $item->set_display(ToolbarItem :: DISPLAY_ICON);
+        $item->set_display(ToolbarItem::DISPLAY_ICON);
         $item->set_href(
             $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_TOGGLE_CLOSE_USER_ATTEMPT, 
-                    self :: PARAM_ATTEMPT => $status->get_attempt_id(), 
-                    self :: PARAM_USER => $status->get_user_id())));
+                    self::PARAM_ACTION => self::ACTION_TOGGLE_CLOSE_USER_ATTEMPT, 
+                    self::PARAM_ATTEMPT => $status->get_attempt_id(), 
+                    self::PARAM_USER => $status->get_user_id())));
         
         if ($status->get_closed() === null)
         {
-            $item->set_label(Translation :: get('StatusOpen') . ' ' . Translation :: get('CloseStatus'));
-            $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/LockNa'));
+            $item->set_label(Translation::get('StatusOpen') . ' ' . Translation::get('CloseStatus'));
+            $item->set_image(Theme::getInstance()->getCommonImagePath('Action/LockNa'));
         }
         else
         {
             if ($status->get_closed() < $attempt->get_end_date())
             {
                 $item->set_label(
-                    Translation :: get('AttemptClosed') . ': ' . date('d/m/Y', $status->get_closed()) . '. ' .
-                         Translation :: get('OpenStatus'));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/SettingTrueLocked'));
+                    Translation::get('AttemptClosed') . ': ' . date('d/m/Y', $status->get_closed()) . '. ' .
+                         Translation::get('OpenStatus'));
+                $item->set_image(Theme::getInstance()->getCommonImagePath('Action/SettingTrueLocked'));
             }
             else
             {
                 $item->set_label(
-                    Translation :: get('AttemptClosedAfterDeadline') . ': ' . date('d/m/Y', $status->get_closed()));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/SettingFalseLocked'));
+                    Translation::get('AttemptClosedAfterDeadline') . ': ' . date('d/m/Y', $status->get_closed()));
+                $item->set_image(Theme::getInstance()->getCommonImagePath('Action/SettingFalseLocked'));
                 $item->set_href(null);
             }
         }

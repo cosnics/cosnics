@@ -12,5 +12,5 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class EntityTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
 {
-    const TABLE_IDENTIFIER = User :: PROPERTY_ID;
+    const TABLE_IDENTIFIER = User::PROPERTY_ID;
 }

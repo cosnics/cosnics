@@ -16,12 +16,12 @@ class OrCondition extends MultipleAggregateCondition
      * @var string
      */
     const OPERATOR = ' OR ';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.MultipleAggregateCondition::get_operator()
      */
     public function get_operator()
     {
-        return self :: OPERATOR;
+        return self::OPERATOR;
     }
 }

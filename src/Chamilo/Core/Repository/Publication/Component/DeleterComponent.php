@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: publication_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 /**
@@ -24,40 +24,40 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $id = Request :: get(self :: PARAM_PUBLICATION_ID);
-        $application = Request :: get(self :: PARAM_PUBLICATION_APPLICATION);
-        $this->set_parameter(self :: PARAM_PUBLICATION_ID, $id);
-        $this->set_parameter(self :: PARAM_PUBLICATION_APPLICATION, $application);
-
+        $id = Request::get(self::PARAM_PUBLICATION_ID);
+        $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
+        $this->set_parameter(self::PARAM_PUBLICATION_ID, $id);
+        $this->set_parameter(self::PARAM_PUBLICATION_APPLICATION, $application);
+        
         if (! empty($id) && ! empty($application))
         {
-            $succes = DataManager :: delete_content_object_publication($application, $id);
-
+            $succes = DataManager::delete_content_object_publication($application, $id);
+            
             if ($succes)
             {
-                $message = Translation :: get(
-                    'ObjectDeleted',
-                    array('OBJECT' => Translation :: get('Publication')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectDeleted', 
+                    array('OBJECT' => Translation::get('Publication')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             else
             {
-                $message = Translation :: get(
-                    'ObjectNotDeleted',
-                    array('OBJECT' => Translation :: get('Publication')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectNotDeleted', 
+                    array('OBJECT' => Translation::get('Publication')), 
+                    Utilities::COMMON_LIBRARIES);
             }
-
-            $this->redirect($message, ! $succes, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('ContentObject')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 }

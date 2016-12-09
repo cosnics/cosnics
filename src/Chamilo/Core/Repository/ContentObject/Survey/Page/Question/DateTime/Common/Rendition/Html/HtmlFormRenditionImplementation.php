@@ -20,7 +20,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         $questionId = $this->getQuestionId();
@@ -30,13 +30,13 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $tableHeader[] = '<thead>';
         $tableHeader[] = '<tr>';
         
-        if ($question->get_question_type() == DateTime :: TYPE_DATE)
+        if ($question->get_question_type() == DateTime::TYPE_DATE)
         {
-            $tableHeader[] = '<th class="info" >' . Translation :: get('EnterDate') . '</th>';
+            $tableHeader[] = '<th class="info" >' . Translation::get('EnterDate') . '</th>';
         }
-        elseif ($question->get_question_type() == DateTime :: TYPE_TIME)
+        elseif ($question->get_question_type() == DateTime::TYPE_TIME)
         {
-            $html[] = '<th class="info" >' . Translation :: get('EnterTime') . '</th>';
+            $html[] = '<th class="info" >' . Translation::get('EnterTime') . '</th>';
         }
         
         $tableHeader[] = '</tr>';
@@ -59,12 +59,12 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $attributes = $this->getAttributes();
         
-        if ($question->get_question_type() == DateTime :: TYPE_DATE)
+        if ($question->get_question_type() == DateTime::TYPE_DATE)
         {
             $formValidator->add_datepicker($questionName, '', false, $attributes);
         }
         
-        if ($question->get_question_type() == DateTime :: TYPE_TIME)
+        if ($question->get_question_type() == DateTime::TYPE_TIME)
         {
             $formValidator->add_timepicker($questionName);
         }

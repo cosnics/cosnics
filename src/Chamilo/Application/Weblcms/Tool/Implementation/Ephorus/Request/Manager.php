@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 
 abstract class Manager extends Application
 {
-
+    
     /**
      * **************************************************************************************************************
      * PARAMETERS *
@@ -24,11 +24,11 @@ abstract class Manager extends Application
     const ACTION_VIEW_RESULT = 'ResultViewer';
     const ACTION_EXPORT_RESULT = 'ResultExporter';
     const ACTION_CHANGE_INDEX_VISIBILITY = 'IndexVisibilityChanger';
-    const DEFAULT_ACTION = self :: ACTION_VIEW_RESULT;
+    const DEFAULT_ACTION = self::ACTION_VIEW_RESULT;
 
     /**
      * Constructor Check if the parent component inherits the required marker interface
-     *
+     * 
      * @param $parent
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -38,31 +38,31 @@ abstract class Manager extends Application
             throw new \Exception(
                 'Components that use the ephorus request submanager need to implement the EphorusRequestSupport');
         }
-
-        parent :: __construct($applicationConfiguration);
+        
+        parent::__construct($applicationConfiguration);
     }
 
     /**
      * Returns a url for a given action
-     *
+     * 
      * @param $action string
      * @param $parameters string[] - Optional parameters
      * @return string
      */
     protected function get_action_url($action, $parameters = array())
     {
-        $parameters[self :: PARAM_ACTION] = $action;
-
+        $parameters[self::PARAM_ACTION] = $action;
+        
         return $this->get_url($parameters);
     }
 
     /**
      * Returns the parent component
-     *
+     * 
      * @return EphorusRequestSupport
      */
     public function get_parent()
     {
-        return parent :: get_parent();
+        return parent::get_parent();
     }
 }

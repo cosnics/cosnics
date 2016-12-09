@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents the parameters to retrieve (a) foreign object(s) with lazy loading.
- *
+ * 
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -20,24 +20,24 @@ class ForeignObjectsParameters
      * Properties
      * **************************************************************************************************************
      */
-
+    
     /**
      * The base dataclass object for which we want to retrieve the foreign objects
-     *
+     * 
      * @var DataClass
      */
     private $base_object;
 
     /**
      * The classname for the foreign object
-     *
+     * 
      * @var string
      */
     private $foreign_class;
 
     /**
      * The foreign key property
-     *
+     * 
      * @var string
      */
     private $foreign_key;
@@ -56,13 +56,13 @@ class ForeignObjectsParameters
 
     /**
      * Returns the condition for the foreign objects retrieval
-     *
+     * 
      * @return Condition
      */
     public function get_condition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable($this->get_foreign_class(), DataClass :: PROPERTY_ID),
+            new PropertyConditionVariable($this->get_foreign_class(), DataClass::PROPERTY_ID), 
             new StaticConditionVariable($this->get_base_object()->get_default_property($this->get_foreign_key())));
     }
 
@@ -71,15 +71,15 @@ class ForeignObjectsParameters
      * Helper Functionality
      * **************************************************************************************************************
      */
-
+    
     /**
      * Generates a key property with the given class name
-     *
+     * 
      * @param string $class_name
      */
     protected function generate_key($class_name)
     {
-        return $class_name :: get_table_name() . '_' . DataClass :: PROPERTY_ID;
+        return $class_name::get_table_name() . '_' . DataClass::PROPERTY_ID;
     }
 
     /**
@@ -87,10 +87,10 @@ class ForeignObjectsParameters
      * Getters and Setters
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the base object
-     *
+     * 
      * @return DataClass
      */
     public function get_base_object()
@@ -100,7 +100,7 @@ class ForeignObjectsParameters
 
     /**
      * Returns the classname for the foreign object
-     *
+     * 
      * @return string
      */
     public function get_foreign_class()
@@ -110,7 +110,7 @@ class ForeignObjectsParameters
 
     /**
      * Returns the foreign key property
-     *
+     * 
      * @return string
      */
     public function get_foreign_key()
@@ -120,7 +120,7 @@ class ForeignObjectsParameters
 
     /**
      * Sets the base object
-     *
+     * 
      * @param DataClass $base_object
      */
     public function set_base_object(DataClass $base_object)
@@ -130,7 +130,7 @@ class ForeignObjectsParameters
 
     /**
      * Sets the classname for the foreign object
-     *
+     * 
      * @param string $foreign_class
      */
     public function set_foreign_class($foreign_class)
@@ -140,7 +140,7 @@ class ForeignObjectsParameters
 
     /**
      * Sets the foreign key property
-     *
+     * 
      * @param string $foreign_key
      */
     public function set_foreign_key($foreign_key)
@@ -149,7 +149,7 @@ class ForeignObjectsParameters
         {
             $foreign_key = $this->generate_key($this->get_foreign_class());
         }
-
+        
         $this->foreign_key = $foreign_key;
     }
 }

@@ -53,19 +53,19 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
 
     public function run()
     {
-        $elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID);
+        $elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
         
         if (! $this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
         
         if (! $this->getSelectedElement()->usesVocabulary())
         {
-            throw new \Exception(Translation :: get('NoVocabularyAllowed'));
+            throw new \Exception(Translation::get('NoVocabularyAllowed'));
         }
         
-        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         
         $content = $this->getContent();
         
@@ -98,20 +98,20 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
                 $vocabularyItemValues[] = $item;
             }
             
-            $resource_manager = ResourceManager :: get_instance();
-            $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
+            $resource_manager = ResourceManager::getInstance();
+            $plugin_path = Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
                  'Plugin/Bootstrap/Tagsinput/';
             
             $html[] = '<script type="text/javascript">';
             $html[] = 'var selectedVocabularyItems = ' . json_encode($vocabularyItemValues) . ';';
             $html[] = 'var elementIdentifier = ' . json_encode(
                 $this->getRequest()->query->get(
-                    \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: PARAM_ELEMENT_IDENTIFIER)) . ';';
+                    \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER)) . ';';
             $html[] = '</script>';
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
             $html[] = $resource_manager->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Selection.js');
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Selection.js');
         }
         else
         {
@@ -152,7 +152,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         $conditions = array();
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_VALUE)));
+            array(new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE)));
         
         if ($searchCondition)
         {
@@ -160,8 +160,8 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         
         $conditions[] = $this->getVocabularyCondition();
@@ -178,16 +178,16 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         if ($element->isVocabularyUserDefined())
         {
             $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID), 
-                ComparisonCondition :: EQUAL, 
+                new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                ComparisonCondition::EQUAL, 
                 new StaticConditionVariable($this->get_user_id()));
         }
         
         if ($element->isVocabularyPredefined())
         {
             $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID), 
-                ComparisonCondition :: EQUAL, 
+                new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                ComparisonCondition::EQUAL, 
                 new StaticConditionVariable(0));
         }
         
@@ -199,12 +199,12 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
         $conditions = array();
         $conditions[] = $this->getVocabularyCondition();
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ID), 
+            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ID), 
             $vocabularyIds);
         
         $condition = new AndCondition($conditions);
         
-        return DataManager :: retrieves(Vocabulary :: class_name(), new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(Vocabulary::class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -215,7 +215,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
     {
         if (! isset($this->elementId))
         {
-            $this->elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID);
+            $this->elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
         }
         return $this->elementId;
     }
@@ -228,8 +228,8 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
     {
         if (! isset($this->element))
         {
-            $this->element = DataManager :: retrieve_by_id(
-                \Chamilo\Core\Metadata\Storage\DataClass\Element :: class_name(), 
+            $this->element = DataManager::retrieve_by_id(
+                \Chamilo\Core\Metadata\Storage\DataClass\Element::class_name(), 
                 $this->getSelectedElementId());
         }
         
@@ -242,7 +242,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
      */
     public function getSelectedVocabularyId()
     {
-        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_VOCABULARY_ID);
+        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
     }
 
     /**
@@ -252,13 +252,13 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
      */
     public function getRequiredPostParameters()
     {
-        return array(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID);
+        return array(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
     }
 
     public function get_additional_parameters()
     {
         return array(
-            \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID, 
-            \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: PARAM_ELEMENT_IDENTIFIER);
+            \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID, 
+            \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER);
     }
 }

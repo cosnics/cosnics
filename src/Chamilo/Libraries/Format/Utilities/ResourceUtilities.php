@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -17,15 +21,8 @@ abstract class ResourceUtilities
 {
     const PARAM_TYPE = 'type';
     const PARAM_THEME = 'theme';
-    const PARAM_SERVER_TYPE = 'serverType';
     const PARAM_CONTEXT = 'context';
     const DEFAULT_CHARSET = 'utf-8';
-
-    /**
-     *
-     * @var string
-     */
-    private $serverType;
 
     /**
      *
@@ -35,21 +32,21 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @var boolean
-     */
-    private $cachingEnabled;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Format\Theme
      */
     private $themeUtilities;
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    private $configurablePathBuilder;
 
     /**
      *
@@ -58,40 +55,30 @@ abstract class ResourceUtilities
     private $classnameUtilties;
 
     /**
+     *
      * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
 
     /**
      *
-     * @param string $serverType
      * @param string $context
      * @param Theme $themeUtilities
-     * @param Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct(
-        $serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
-        ClassnameUtilities $classnameUtilities, \Symfony\Component\HttpFoundation\Request $request
-    )
+    public function __construct($context = __NAMESPACE__, Theme $themeUtilities, PathBuilder $pathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, ClassnameUtilities $classnameUtilities,
+        \Symfony\Component\HttpFoundation\Request $request)
     {
-        $this->serverType = $serverType;
         $this->context = $context;
-        $this->cachingEnabled = $this->serverType == 'production';
         $this->themeUtilities = $themeUtilities;
-        $this->pathUtilities = $pathUtilities;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->pathBuilder = $pathBuilder;
         $this->classnameUtilities = $classnameUtilities;
         $this->request = $request;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getServerType()
-    {
-        return $this->serverType;
     }
 
     /**
@@ -105,29 +92,11 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return boolean
-     */
-    public function getCachingEnabled()
-    {
-        return $this->cachingEnabled;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities()
     {
         return $this->themeUtilities;
-    }
-
-    /**
-     *
-     * @param string $serverType
-     */
-    public function setServerType($serverType)
-    {
-        $this->serverType = $serverType;
     }
 
     /**
@@ -141,15 +110,6 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @param boolean $cachingEnabled
-     */
-    public function setCachingEnabled($cachingEnabled)
-    {
-        $this->cachingEnabled = $cachingEnabled;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
     public function setThemeUtilities($themeUtilities)
@@ -159,20 +119,38 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
      */
-    public function getPathUtilities()
+    public function getConfigurablePathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->configurablePathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function setPathUtilities($pathUtilities)
+    public function setConfigurablePathBuilder($configurablePathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\PathBuilder
+     */
+    public function getPathBuilder()
+    {
+        return $this->pathBuilder;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     */
+    public function setPathBuilder($pathBuilder)
+    {
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -185,6 +163,7 @@ abstract class ResourceUtilities
     }
 
     /**
+     *
      * @return \Symfony\Component\HttpFoundation\Request
      */
     public function getRequest()
@@ -193,6 +172,7 @@ abstract class ResourceUtilities
     }
 
     /**
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function setRequest($request)
@@ -211,31 +191,38 @@ abstract class ResourceUtilities
 
     static public function launch(\Symfony\Component\HttpFoundation\Request $request)
     {
-        $type = Request:: get(self :: PARAM_TYPE, null);
+        $type = Request::get(self::PARAM_TYPE, null);
 
         if ($type)
         {
-            $classname = __NAMESPACE__ . '\\' . StringUtilities:: getInstance()->createString($type)->upperCamelize() .
-                'Utilities';
+            $classname = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
+                 'Utilities';
 
             if (class_exists($classname))
             {
-                $theme = Request:: get(self :: PARAM_THEME);
-                $serverType = Request:: get(self :: PARAM_SERVER_TYPE, 'production');
-                $context = Request:: get(self :: PARAM_CONTEXT, __NAMESPACE__);
+                $theme = Request::get(self::PARAM_THEME);
+                $context = Request::get(self::PARAM_CONTEXT, __NAMESPACE__);
 
-                $themeUtilities = new Theme(
-                    $theme,
-                    StringUtilities:: getInstance(),
-                    ClassnameUtilities:: getInstance(),
-                    Path:: getInstance()
-                );
-                $pathUtilities = Path:: getInstance();
-                $classnameUtilities = ClassnameUtilities:: getInstance();
+                $stringUtilities = new StringUtilities();
+                $classnameUtilities = new ClassnameUtilities($stringUtilities);
+                $pathBuilder = new PathBuilder($classnameUtilities);
+
+                $fileConfigurationConsulter = new ConfigurationConsulter(
+                    new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
+
+                $configurablePathBuilder = new ConfigurablePathBuilder(
+                    $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+
+                $themeUtilities = new Theme($theme, $stringUtilities, $classnameUtilities, $pathBuilder);
 
                 $utilities = new $classname(
-                    $serverType, $context, $themeUtilities, $pathUtilities, $classnameUtilities, $request
-                );
+                    $context,
+                    $themeUtilities,
+                    $pathBuilder,
+                    $configurablePathBuilder,
+                    $classnameUtilities,
+                    $request);
+
                 $utilities->run();
             }
         }

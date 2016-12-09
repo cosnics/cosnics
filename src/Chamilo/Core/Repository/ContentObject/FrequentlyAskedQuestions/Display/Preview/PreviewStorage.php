@@ -23,13 +23,13 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\portfolio\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new PreviewStorage();
+            self::$instance = new PreviewStorage();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -38,7 +38,7 @@ class PreviewStorage
     public function __construct()
     {
         $storage = $this->get_storage();
-
+        
         if (! isset($storage))
         {
             $this->set_storage(array());
@@ -47,7 +47,7 @@ class PreviewStorage
 
     /**
      * Empty the storage
-     *
+     * 
      * @return boolean
      */
     public function reset()
@@ -61,7 +61,7 @@ class PreviewStorage
      */
     public function get_storage()
     {
-        return unserialize(Session :: retrieve(__NAMESPACE__));
+        return unserialize(Session::retrieve(__NAMESPACE__));
     }
 
     /**
@@ -71,7 +71,7 @@ class PreviewStorage
      */
     public function set_storage($data)
     {
-        Session :: register(__NAMESPACE__, serialize($data));
+        Session::register(__NAMESPACE__, serialize($data));
         return true;
     }
 

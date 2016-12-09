@@ -71,9 +71,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $short_path = $this->work_dir . "/this";
         
         $this->assertFileNotExists($short_path);
-        Filesystem :: create_dir($long_path);
+        Filesystem::create_dir($long_path);
         $this->assertFileExists($long_path);
-        Filesystem :: remove($short_path);
+        Filesystem::remove($short_path);
         $this->assertFileNotExists($short_path);
     }
 
@@ -83,7 +83,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         
         $this->assertFileNotExists($dest_file);
         $this->assertFileExists($this->source_file);
-        Filesystem :: copy_file($this->source_file, $dest_file);
+        Filesystem::copy_file($this->source_file, $dest_file);
         $this->assertFileExists($dest_file);
         $this->assertFileExists($this->source_file);
         $this->assertFileEquals($this->source_file, $dest_file);
@@ -95,7 +95,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         
         $this->assertFileNotExists($dest_dir);
         $this->assertFileExists($this->source_dir);
-        Filesystem :: recurse_copy($this->source_dir, $dest_dir);
+        Filesystem::recurse_copy($this->source_dir, $dest_dir);
         $this->assertFileExists($this->source_dir);
         $this->assertFileExists($dest_dir);
         $this->assertFileExists($dest_dir . '/file1');
@@ -110,7 +110,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         
         $this->assertFileNotExists($dest_dir);
         $this->assertFileExists($this->source_dir);
-        Filesystem :: recurse_move($this->source_dir, $dest_dir);
+        Filesystem::recurse_move($this->source_dir, $dest_dir);
         $this->assertFileNotExists($this->source_dir);
         $this->assertFileExists($dest_dir);
         $this->assertFileExists($dest_dir . '/file1');

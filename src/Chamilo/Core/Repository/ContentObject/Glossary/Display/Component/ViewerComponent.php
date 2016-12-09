@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: glossary_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.glossary.component
  */
 
@@ -40,63 +40,63 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->to_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the component as html string
-     *
+     * 
      * @return string
      */
     public function to_html()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
+        
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
+        
         $object = $this->get_parent()->get_root_content_object($this);
-        $trail = BreadcrumbTrail :: get_instance();
-
+        $trail = BreadcrumbTrail::getInstance();
+        
         if (! is_array($object))
         {
             $trail->add(new Breadcrumb($this->get_url(), $object->get_title()));
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = GlossaryRendererFactory :: launch($this->get_view(), $this, $object, $query);
-
+        $html[] = GlossaryRendererFactory::launch($this->get_view(), $this, $object, $query);
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the view type
-     *
+     * 
      * @return string
      */
     public function get_view()
     {
-        $view = Request :: get(self :: PARAM_VIEW);
-
+        $view = Request::get(self::PARAM_VIEW);
+        
         if (! $view)
         {
-            $view = GlossaryRendererFactory :: TYPE_TABLE;
+            $view = GlossaryRendererFactory::TYPE_TABLE;
         }
-
+        
         return $view;
     }
 
     /**
      * Builds and returns the actionbar
-     *
+     * 
      * @return ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
@@ -105,54 +105,54 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
-
+            
             if ($this->get_parent()->is_allowed_to_add_child())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('CreateItem'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                        Translation::get('CreateItem'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Create'), 
                         $this->get_url(
                             array(
-                                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
-                                self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(), 
+                                self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
-
+            
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('TableView', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(array(self :: PARAM_VIEW => GlossaryRendererFactory :: TYPE_TABLE)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('TableView', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_TABLE)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ListView', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(array(self :: PARAM_VIEW => GlossaryRendererFactory :: TYPE_LIST)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
+                    Translation::get('ListView', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_LIST)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+            
             $buttonToolbar->addItem($commonActions);
-
+            
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
+        
         return $this->buttonToolbarRenderer;
     }
 
     /**
      * Returns the additional parameters for registration
-     *
+     * 
      * @return array
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_VIEW);
+        return array(self::PARAM_VIEW);
     }
 
     /**
      * Checks whether or not the content object can be edited
-     *
+     * 
      * @return boolean
      */
     public function is_allowed_to_edit_content_object()
@@ -162,7 +162,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Checks whether or not a child can be deleted
-     *
+     * 
      * @return boolean
      */
     public function is_allowed_to_delete_child()

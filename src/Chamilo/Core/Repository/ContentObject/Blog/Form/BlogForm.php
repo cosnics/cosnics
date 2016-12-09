@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 
 /**
  * $Id: blog_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.blog
  */
 
@@ -15,27 +15,27 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
  */
 class BlogForm extends ContentObjectForm
 {
-
+    
     // Inherited
     public function create_content_object()
     {
         $object = new Blog();
-
+        
         $blogLayouts = array_keys(Blog::get_available_blog_layouts());
         $object->set_blog_layout($blogLayouts[0]);
-
+        
         $this->set_content_object($object);
-
+        
         return parent::create_content_object();
     }
 
     public function update_content_object()
     {
         $object = $this->get_content_object();
-
+        
         $blogLayouts = array_keys(Blog::get_available_blog_layouts());
         $object->set_blog_layout($blogLayouts[0]);
-
+        
         return parent::update_content_object();
     }
 

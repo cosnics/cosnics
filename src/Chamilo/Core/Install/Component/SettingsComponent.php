@@ -25,22 +25,28 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
+     *
+     * @var \Chamilo\Core\Install\Form\SettingsForm
+     */
+    private $settingsForm;
+
+    /**
      * Runs this component and displays its output.
      */
     public function run()
     {
         $this->checkInstallationAllowed();
-        
-        $form = new SettingsForm($this, $this->get_url());
+
+        $form = $this->getSettingsForm();
 
         if ($form->validate())
         {
             $settingsValues = $form->exportValues();
-            Session :: register(self :: PARAM_SETTINGS, serialize($settingsValues));
+            Session::register(self::PARAM_SETTINGS, serialize($settingsValues));
 
             $settingsDisplayer = new SettingsOverview($settingsValues);
             $wizardHeader = $this->getWizardHeader();
-            $wizardHeader->setSelectedStepIndex(array_search(self :: ACTION_OVERVIEW, $this->getWizardHeaderActions()));
+            $wizardHeader->setSelectedStepIndex(array_search(self::ACTION_OVERVIEW, $this->getWizardHeaderActions()));
 
             $content = array();
 
@@ -65,6 +71,20 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
     /**
      *
+     * @return \Chamilo\Core\Install\Form\SettingsForm
+     */
+    public function getSettingsForm()
+    {
+        if (! isset($this->settingsForm))
+        {
+            $this->settingsForm = new SettingsForm($this, $this->get_url());
+        }
+
+        return $this->settingsForm;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getButtons()
@@ -73,16 +93,16 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
+                Translation::get('Previous', null, Utilities::COMMON_LIBRARIES),
                 new BootstrapGlyph('chevron-left'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SETTINGS))));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS))));
 
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('Install'),
+                Translation::get('Install'),
                 new BootstrapGlyph('ok'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_INSTALL_PLATFORM)),
-                Button :: DISPLAY_ICON_AND_LABEL,
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM)),
+                Button::DISPLAY_ICON_AND_LABEL,
                 false,
                 'btn-success'));
 
@@ -94,26 +114,34 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     public function getInfo()
     {
         $html = array();
-        $html[] = Translation :: get('SettingsComponentInformation');
-        $html[] = '<br /><br />';
 
-        $html[] = '<a class="btn btn-default" disabled="disabled"><img src="' . Theme :: getInstance()->getImagePath(
-            'Chamilo\Configuration',
-            'Logo/22Na') . '"> ';
-        $html[] = Translation :: get('CorePackage');
-        $html[] = '</a>';
+        if ($this->getSettingsForm()->validate())
+        {
+            $html[] = Translation::get('SettingsOverviewInformation');
+        }
+        else
+        {
+            $html[] = Translation::get('SettingsComponentInformation');
+            $html[] = '<br /><br />';
 
-        $html[] = '<a class="btn btn-default"><img src="' . Theme :: getInstance()->getImagePath(
-            'Chamilo\Configuration',
-            'Logo/22') . '"> ';
-        $html[] = Translation :: get('AvailablePackage');
-        $html[] = '</a>';
+            $html[] = '<a class="btn btn-default" disabled="disabled"><img src="' . Theme::getInstance()->getImagePath(
+                'Chamilo\Configuration',
+                'Logo/22Na') . '"> ';
+            $html[] = Translation::get('CorePackage');
+            $html[] = '</a>';
 
-        $html[] = '<a class="btn btn-success"><img src="' . Theme :: getInstance()->getImagePath(
-            'Chamilo\Configuration',
-            'Logo/22') . '"> ';
-        $html[] = Translation :: get('SelectedPackage');
-        $html[] = '</a>';
+            $html[] = '<a class="btn btn-default"><img src="' . Theme::getInstance()->getImagePath(
+                'Chamilo\Configuration',
+                'Logo/22') . '"> ';
+            $html[] = Translation::get('AvailablePackage');
+            $html[] = '</a>';
+
+            $html[] = '<a class="btn btn-success"><img src="' . Theme::getInstance()->getImagePath(
+                'Chamilo\Configuration',
+                'Logo/22') . '"> ';
+            $html[] = Translation::get('SelectedPackage');
+            $html[] = '</a>';
+        }
 
         return implode(PHP_EOL, $html);
     }

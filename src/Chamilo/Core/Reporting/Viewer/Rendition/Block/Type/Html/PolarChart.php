@@ -95,7 +95,7 @@ class PolarChart extends Chart
             /* Set the default font properties */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() .
+                    'FontName' => Path::getInstance()->getVendorPath() .
                          'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 8, 
                         'R' => 0, 

@@ -81,30 +81,30 @@ class EntityTranslationFormService
     {
         if (! $this->getFormValidator() instanceof FormValidator)
         {
-            throw new \Exception(Translation :: get('NoFormValidatorSet'));
+            throw new \Exception(Translation::get('NoFormValidatorSet'));
         }
-
-        $this->getFormValidator()->addElement('category', Translation :: get('Translations'));
-
-        $languages = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            Language :: class_name(),
+        
+        $this->getFormValidator()->addElement('category', Translation::get('Translations'));
+        
+        $languages = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+            Language::class_name(), 
             new DataClassRetrievesParameters());
-        $platformLanguage = Configuration :: get('Chamilo\Core\Admin', 'platform_language');
-
+        $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
+        
         while ($language = $languages->next_result())
         {
-            $fieldName = EntityTranslationService :: PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
+            $fieldName = EntityTranslationService::PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
             $this->getFormValidator()->addElement('text', $fieldName, $language->get_original_name());
-
+            
             if ($language->get_isocode() == $platformLanguage)
             {
                 $this->getFormValidator()->addRule(
-                    $fieldName,
-                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+                    $fieldName, 
+                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
                     'required');
             }
         }
-
+        
         $this->getFormValidator()->addElement('category');
     }
 
@@ -112,16 +112,16 @@ class EntityTranslationFormService
     {
         if (! $this->getFormValidator() instanceof FormValidator)
         {
-            throw new \Exception(Translation :: get('NoFormValidatorSet'));
+            throw new \Exception(Translation::get('NoFormValidatorSet'));
         }
-
+        
         $defaults = array();
-
+        
         foreach ($this->getEntityTranslationImplementation()->getTranslations() as $isocode => $translation)
         {
-            $defaults[EntityTranslationService :: PROPERTY_TRANSLATION][$isocode] = $translation->get_value();
+            $defaults[EntityTranslationService::PROPERTY_TRANSLATION][$isocode] = $translation->get_value();
         }
-
+        
         $this->getFormValidator()->setDefaults($defaults);
     }
 }

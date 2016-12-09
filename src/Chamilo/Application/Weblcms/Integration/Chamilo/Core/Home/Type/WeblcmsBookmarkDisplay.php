@@ -15,10 +15,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Block to display all bookmarks foor the handbooks application
- *
+ * 
  * @package handbook.block
  */
-class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block implements
+class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block implements 
     ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
@@ -50,21 +50,21 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
 
     /**
      * Returns the html to display when the block is configured.
-     *
+     * 
      * @return string
      */
     public function displayContent()
     {
         $bookmarks = $this->getBookmarks();
-
+        
         while ($bookmark = $bookmarks->next_result())
         {
-            $display = ContentObjectRenditionImplementation :: factory(
-                $bookmark,
-                ContentObjectRendition :: FORMAT_HTML,
-                ContentObjectRendition :: VIEW_SHORT,
+            $display = ContentObjectRenditionImplementation::factory(
+                $bookmark, 
+                ContentObjectRendition::FORMAT_HTML, 
+                ContentObjectRendition::VIEW_SHORT, 
                 $this);
-
+            
             $html[] = $display->render();
             $html[] = '</br>';
         }
@@ -73,7 +73,7 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
 
     public function showWhenEmpty()
     {
-        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_EMPTY, true);
+        return $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_EMPTY, true);
     }
 
     public function isEmpty()
@@ -85,19 +85,19 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Bookmark :: class_name(), Bookmark :: PROPERTY_APPLICATION),
-            new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager :: package()));
+            new PropertyConditionVariable(Bookmark::class_name(), Bookmark::PROPERTY_APPLICATION), 
+            new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager::package()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session :: get_user_id()));
-
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new StaticConditionVariable(Session::get_user_id()));
+        
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters($condition);
-
-        $bookmarks_resultset = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-            Bookmark :: class_name(),
+        
+        $bookmarks_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            Bookmark::class_name(), 
             $parameters);
-
+        
         return $bookmarks_resultset;
     }
 
@@ -107,6 +107,6 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
      */
     public function getConfigurationVariables()
     {
-        return array(self :: CONFIGURATION_SHOW_EMPTY);
+        return array(self::CONFIGURATION_SHOW_EMPTY);
     }
 }

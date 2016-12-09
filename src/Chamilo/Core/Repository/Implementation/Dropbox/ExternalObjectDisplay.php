@@ -8,7 +8,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         $object = $this->get_object();
         
-        $properties = parent :: get_display_properties();
+        $properties = parent::get_display_properties();
         return $properties;
     }
 

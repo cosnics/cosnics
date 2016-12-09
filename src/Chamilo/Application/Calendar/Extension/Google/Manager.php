@@ -12,11 +12,11 @@ abstract class Manager extends Application
 {
     // Parameters
     const PARAM_ACTION = 'google_action';
-
+    
     // Actions
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_LOGIN;
+    const DEFAULT_ACTION = self::ACTION_LOGIN;
 }

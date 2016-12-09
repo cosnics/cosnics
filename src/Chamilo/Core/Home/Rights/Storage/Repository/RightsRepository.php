@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Database repository for the rights entities
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class RightsRepository
@@ -30,7 +30,7 @@ class RightsRepository
 
     /**
      * Clears the target entities for a given element
-     *
+     * 
      * @param Element $element
      *
      * @return bool
@@ -38,13 +38,13 @@ class RightsRepository
     public function clearTargetEntitiesForElement(Element $element)
     {
         return DataManager::deletes(
-            ElementTargetEntity::class_name(),
+            ElementTargetEntity::class_name(), 
             $this->getElementTargetEntityConditionByElement($element));
     }
 
     /**
      * Clears the target entities for a given block type
-     *
+     * 
      * @param string $blockType
      *
      * @return bool
@@ -52,13 +52,13 @@ class RightsRepository
     public function clearTargetEntitiesForBlockType($blockType)
     {
         return DataManager::deletes(
-            BlockTypeTargetEntity::class_name(),
+            BlockTypeTargetEntity::class_name(), 
             $this->getBlockTypeTargetEntityConditionByBlockType($blockType));
     }
 
     /**
      * Finds the target entities for a given element
-     *
+     * 
      * @param Element $element
      *
      * @return ElementTargetEntity[]
@@ -66,13 +66,13 @@ class RightsRepository
     public function findTargetEntitiesForElement(Element $element)
     {
         return DataManager::retrieves(
-            ElementTargetEntity::class_name(),
+            ElementTargetEntity::class_name(), 
             new DataClassRetrievesParameters($this->getElementTargetEntityConditionByElement($element)))->as_array();
     }
 
     /**
      * Finds the target entities for a given block type
-     *
+     * 
      * @param string $blockType
      *
      * @return BlockTypeTargetEntity[]
@@ -80,13 +80,13 @@ class RightsRepository
     public function findTargetEntitiesForBlockType($blockType)
     {
         return DataManager::retrieves(
-            BlockTypeTargetEntity::class_name(),
+            BlockTypeTargetEntity::class_name(), 
             new DataClassRetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType)))->as_array();
     }
 
     /**
      * Finds the element target entities
-     *
+     * 
      * @return ElementTargetEntity[]
      */
     public function findElementTargetEntities()
@@ -96,7 +96,7 @@ class RightsRepository
 
     /**
      * Finds the block type target entities
-     *
+     * 
      * @return BlockTypeTargetEntity[]
      */
     public function findBlockTypeTargetEntities()
@@ -106,28 +106,28 @@ class RightsRepository
 
     /**
      * Finds the element id's that have not been attached to any entities
-     *
+     * 
      * @return int[]
      */
     public function findElementIdsWithNoTargetEntities()
     {
         $targetedEntityIds = DataManager::distinct(
-            ElementTargetEntity::class_name(),
+            ElementTargetEntity::class_name(), 
             new DataClassDistinctParameters(null, ElementTargetEntity::PROPERTY_ELEMENT_ID));
-
+        
         $condition = new NotCondition(
             new InCondition(
-                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID),
+                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
                 $targetedEntityIds));
-
+        
         return DataManager::distinct(
-            Element::class_name(),
+            Element::class_name(), 
             new DataClassDistinctParameters($condition, Element::PROPERTY_ID));
     }
 
     /**
      * Finds the element ids that have been attached to entities to which the given user belongs
-     *
+     * 
      * @param User $user
      *
      * @return int[]
@@ -135,27 +135,27 @@ class RightsRepository
     public function findElementIdsTargetedForUser(User $user)
     {
         return DataManager::distinct(
-            ElementTargetEntity::class_name(),
+            ElementTargetEntity::class_name(), 
             new DataClassDistinctParameters(
-                $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class_name(), $user),
+                $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class_name(), $user), 
                 ElementTargetEntity::PROPERTY_ELEMENT_ID));
     }
 
     /**
      * Returns the block types that have been targeted to a specific user
-     *
+     * 
      * @return string[]
      */
     public function findTargetedBlockTypes()
     {
         return DataManager::distinct(
-            BlockTypeTargetEntity::class_name(),
+            BlockTypeTargetEntity::class_name(), 
             new DataClassDistinctParameters(null, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
     }
 
     /**
      * Finds the block type classes that have been attached to entities to which the given user belongs
-     *
+     * 
      * @param User $user
      *
      * @return string[]
@@ -163,15 +163,15 @@ class RightsRepository
     public function findBlockTypesTargetedForUser(User $user)
     {
         return DataManager::distinct(
-            BlockTypeTargetEntity::class_name(),
+            BlockTypeTargetEntity::class_name(), 
             new DataClassDistinctParameters(
-                $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class_name(), $user),
+                $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class_name(), $user), 
                 BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
     }
 
     /**
      * Returns the conditions to retrieve target entities for a given user
-     *
+     * 
      * @param string $targetEntitiesClassName
      * @param User $user
      *
@@ -180,42 +180,42 @@ class RightsRepository
     protected function getTargetEntitiesConditionForUser($targetEntitiesClassName, User $user)
     {
         $condition = null;
-
+        
         if (! $user->is_platform_admin())
         {
             $conditions = array();
-
+            
             $userConditions = array();
-
+            
             $userConditions[] = new EqualityCondition(
-                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable(UserEntity::ENTITY_TYPE));
-
+            
             $userConditions[] = new EqualityCondition(
-                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID),
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID), 
                 new StaticConditionVariable($user->getId()));
-
+            
             $conditions[] = new AndCondition($userConditions);
-
+            
             $groupConditions[] = new EqualityCondition(
-                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable(PlatformGroupEntity::ENTITY_TYPE));
-
+            
             $groupConditions[] = new InCondition(
-                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID),
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID), 
                 $user->get_groups(true));
-
+            
             $conditions[] = new AndCondition($groupConditions);
-
+            
             $condition = new OrCondition($conditions);
         }
-
+        
         return $condition;
     }
 
     /**
      * Returns a condition for the ElementTargetEntity data class by a given element
-     *
+     * 
      * @param Element $element
      *
      * @return EqualityCondition
@@ -223,13 +223,13 @@ class RightsRepository
     protected function getElementTargetEntityConditionByElement(Element $element)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ElementTargetEntity::class_name(), ElementTargetEntity::PROPERTY_ELEMENT_ID),
+            new PropertyConditionVariable(ElementTargetEntity::class_name(), ElementTargetEntity::PROPERTY_ELEMENT_ID), 
             new StaticConditionVariable($element->getId()));
     }
 
     /**
      * Returns a condition for the BlockTypeTargetEntity data class by a given block type
-     *
+     * 
      * @param string $blockType
      *
      * @return EqualityCondition
@@ -238,8 +238,8 @@ class RightsRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                BlockTypeTargetEntity::class_name(),
-                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE),
+                BlockTypeTargetEntity::class_name(), 
+                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE), 
             new StaticConditionVariable($blockType));
     }
 }

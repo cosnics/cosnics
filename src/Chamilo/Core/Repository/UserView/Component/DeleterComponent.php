@@ -21,74 +21,74 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self :: PARAM_USER_VIEW_ID);
-        $this->set_parameter(self :: PARAM_USER_VIEW_ID, $ids);
-
+        $ids = $this->getRequest()->get(self::PARAM_USER_VIEW_ID);
+        $this->set_parameter(self::PARAM_USER_VIEW_ID, $ids);
+        
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $user_view_id)
             {
                 $uv = new UserView();
                 $uv->set_id($user_view_id);
-
+                
                 if (! $uv->delete())
                 {
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation :: get(
-                        'ObjectNotDeleted',
-                        array('OBJECT' => Translation :: get('UserView')),
-                        Utilities :: COMMON_LIBRARIES);
+                    $message = Translation::get(
+                        'ObjectNotDeleted', 
+                        array('OBJECT' => Translation::get('UserView')), 
+                        Utilities::COMMON_LIBRARIES);
                 }
                 else
                 {
-                    $message = Translation :: get(
-                        'ObjectsNotDeleted',
-                        array('OBJECT' => Translation :: get('UserViews')),
-                        Utilities :: COMMON_LIBRARIES);
+                    $message = Translation::get(
+                        'ObjectsNotDeleted', 
+                        array('OBJECT' => Translation::get('UserViews')), 
+                        Utilities::COMMON_LIBRARIES);
                 }
             }
             else
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation :: get(
-                        'ObjectDeleted',
-                        array('OBJECT' => Translation :: get('UserView')),
-                        Utilities :: COMMON_LIBRARIES);
+                    $message = Translation::get(
+                        'ObjectDeleted', 
+                        array('OBJECT' => Translation::get('UserView')), 
+                        Utilities::COMMON_LIBRARIES);
                 }
                 else
                 {
-                    $message = Translation :: get(
-                        'ObjectsDeleted',
-                        array('OBJECT' => Translation :: get('UserViews')),
-                        Utilities :: COMMON_LIBRARIES);
+                    $message = Translation::get(
+                        'ObjectsDeleted', 
+                        array('OBJECT' => Translation::get('UserViews')), 
+                        Utilities::COMMON_LIBRARIES);
                 }
             }
-
-            $this->redirect($message, $failures ? true : false, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, $failures ? true : false, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('UserView')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('UserView')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 }

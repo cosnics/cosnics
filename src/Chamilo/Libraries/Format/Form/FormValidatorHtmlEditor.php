@@ -36,12 +36,12 @@ class FormValidatorHtmlEditor
         $this->label = $label;
         $this->required = $required;
         $this->options = $options;
-
+        
         if (! array_key_exists('class', $attributes))
         {
             $attributes['class'] = 'html_editor';
         }
-
+        
         $this->attributes = $attributes;
     }
 
@@ -49,13 +49,13 @@ class FormValidatorHtmlEditor
     {
         $form = $this->get_form();
         $element = $this->create();
-
+        
         $form->addElement($element);
         $form->applyFilter($this->get_name(), 'trim');
-
+        
         if ($this->get_required())
         {
-            $form->addRule($this->get_name(), Translation :: get('ThisFieldIsRequired'), 'required');
+            $form->addRule($this->get_name(), Translation::get('ThisFieldIsRequired'), 'required');
         }
     }
 
@@ -68,7 +68,7 @@ class FormValidatorHtmlEditor
 
     public function render()
     {
-        return FormValidator :: createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
+        return FormValidator::createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
     }
 
     public function get_form()
@@ -150,12 +150,13 @@ class FormValidatorHtmlEditor
 
     public static function factory($type, $name, $label, $required = true, $options = array(), $attributes = array())
     {
-        $class = __NAMESPACE__ . '\\' . 'FormValidator' . StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'HtmlEditor';
-
+        $class = __NAMESPACE__ . '\\' . 'FormValidator' .
+             StringUtilities::getInstance()->createString($type)->upperCamelize() . 'HtmlEditor';
+        
         if (class_exists($class))
         {
-            $options = FormValidatorHtmlEditorOptions :: factory($type, $options);
-
+            $options = FormValidatorHtmlEditorOptions::factory($type, $options);
+            
             if ($options)
             {
                 return new $class($name, $label, $required, $options, $attributes);

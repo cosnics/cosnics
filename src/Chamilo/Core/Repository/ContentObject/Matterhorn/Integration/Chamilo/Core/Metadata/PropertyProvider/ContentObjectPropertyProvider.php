@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhor
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Matterhorn :: class_name();
+        return Matterhorn::class_name();
     }
 }

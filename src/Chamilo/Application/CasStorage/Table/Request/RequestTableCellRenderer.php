@@ -19,83 +19,83 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         switch ($column->get_name())
         {
-            case AccountRequest :: PROPERTY_REQUESTER_ID :
+            case AccountRequest::PROPERTY_REQUESTER_ID :
                 return $object->get_requester_user()->get_fullname();
-            case AccountRequest :: PROPERTY_REQUEST_DATE :
-                return DatetimeUtilities :: format_locale_date(null, $object->get_request_date());
-            case AccountRequest :: PROPERTY_STATUS :
+            case AccountRequest::PROPERTY_REQUEST_DATE :
+                return DatetimeUtilities::format_locale_date(null, $object->get_request_date());
+            case AccountRequest::PROPERTY_STATUS :
                 return $object->get_status_icon();
         }
-        return parent :: render_cell($column, $object);
+        return parent::render_cell($column, $object);
     }
 
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_EDIT,
-                        Manager :: PARAM_REQUEST_ID => $object->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
+                        Manager::PARAM_ACTION => Manager::ACTION_EDIT, 
+                        Manager::PARAM_REQUEST_ID => $object->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_REQUEST_ID => $object->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_REQUEST_ID => $object->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         if ($object->is_pending() || $object->is_rejected())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Accept'),
+                    Translation::get('Accept', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Accept'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_ACCEPT,
-                            Manager :: PARAM_REQUEST_ID => $object->get_id())),
-                    ToolbarItem :: DISPLAY_ICON));
+                            Manager::PARAM_ACTION => Manager::ACTION_ACCEPT, 
+                            Manager::PARAM_REQUEST_ID => $object->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('AcceptNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/AcceptNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
+                    Translation::get('AcceptNotAvailable', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/AcceptNa'), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON));
         }
-
+        
         if ($object->is_pending())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Reject'),
+                    Translation::get('Reject', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Reject'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_REJECT,
-                            Manager :: PARAM_REQUEST_ID => $object->get_id())),
-                    ToolbarItem :: DISPLAY_ICON));
+                            Manager::PARAM_ACTION => Manager::ACTION_REJECT, 
+                            Manager::PARAM_REQUEST_ID => $object->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('RejectNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/RejectNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
+                    Translation::get('RejectNotAvailable', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/RejectNa'), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON));
         }
-
+        
         return $toolbar->as_html();
     }
 }

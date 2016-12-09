@@ -25,19 +25,19 @@ class FavouriteTableCellRenderer extends WorkspaceTableCellRenderer
     public function get_actions($workspace)
     {
         $toolbar = $this->getToolbar($workspace);
-
+        
         $unfavouriteItem = new ToolbarItem(
-            Translation :: get('Unfavourite', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Delete'),
+            Translation::get('Unfavourite', null, Utilities::COMMON_LIBRARIES), 
+            Theme::getInstance()->getImagePath(Manager::context(), 'Action/Delete'), 
             $this->get_component()->get_url(
                 array(
-                    Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                    \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
-            ToolbarItem :: DISPLAY_ICON,
+                    Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                    \Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID => $workspace->get_id())), 
+            ToolbarItem::DISPLAY_ICON, 
             true);
-
+        
         $toolbar->replace_item($unfavouriteItem, 0);
-
+        
         return $toolbar->as_html();
     }
 }

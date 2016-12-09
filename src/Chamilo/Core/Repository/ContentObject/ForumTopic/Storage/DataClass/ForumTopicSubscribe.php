@@ -8,12 +8,12 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Dataclass that describes a Forum Topic Subsribe.
- *
+ * 
  * @author Maarten Volckaert - Hogeschool Gent
  */
 class ForumTopicSubscribe extends DataClass
 {
-
+    
     /**
      * Represents the id of the user who is subscribing.
      */
@@ -28,71 +28,71 @@ class ForumTopicSubscribe extends DataClass
      * Getters *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the type name of this class.
-     *
+     * 
      * @return ForumTopicSubscribe
      *
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
         ;
     }
 
     /**
      * Get the default properties of all content object attachments.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_FORUM_TOPIC_ID, self :: PROPERTY_USER_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_FORUM_TOPIC_ID, self::PROPERTY_USER_ID));
     }
 
     /**
      * Gets the data manager of the forum topic subscribe object.
-     *
+     * 
      * @return \core\repository\content_object\forum_topic\DataManager Returns a data manager object for database
      *         communication
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     /**
      * Gets the id of the forum topic.
-     *
+     * 
      * @return int The id of the forum topic
      */
     public function get_forum_topic_id()
     {
-        return $this->get_default_property(self :: PROPERTY_FORUM_TOPIC_ID);
+        return $this->get_default_property(self::PROPERTY_FORUM_TOPIC_ID);
     }
 
     /**
      * Gets the id of the user that is subscribing.
-     *
+     * 
      * @return int Returns the id of the user that is subscribing.
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
      * Returns a user object of this subscribe
-     *
+     * 
      * @return User
      */
     public function get_user()
     {
         if (! isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                User :: class_name(),
+            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                User::class_name(), 
                 (int) $this->get_user_id());
         }
         return $this->user;
@@ -105,21 +105,21 @@ class ForumTopicSubscribe extends DataClass
      */
     /**
      * Sets the ID of this object's forum topic.
-     *
+     * 
      * @param int $forum_topic_id The forum topic id.
      */
     public function set_forum_topic_id($forum_topic_id)
     {
-        $this->set_default_property(self :: PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
+        $this->set_default_property(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
     }
 
     /**
      * Sets the ID of this object's user.
-     *
+     * 
      * @param int $user_id The user id.
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 }

@@ -20,23 +20,23 @@ class PageForm extends ContentObjectForm
     function setDefaults($defaults = array ())
     {
         $object = $this->get_content_object();
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     protected function build_creation_form()
     {
         $html_editor_options = array();
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
         
-        parent :: build_creation_form();
+        parent::build_creation_form();
     }
     
     // Inherited
     protected function build_editing_form()
     {
         $html_editor_options = array();
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
-        parent :: build_editing_form();
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
+        parent::build_editing_form();
     }
     
     // Inherited
@@ -46,7 +46,7 @@ class PageForm extends ContentObjectForm
         $values = $this->exportValues();
         
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 
     function update_content_object()
@@ -55,7 +55,7 @@ class PageForm extends ContentObjectForm
         $values = $this->exportValues();
         
         $this->set_content_object($object);
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 }
 ?>

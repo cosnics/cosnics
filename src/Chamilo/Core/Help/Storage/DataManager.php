@@ -16,17 +16,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(HelpItem :: class_name(), HelpItem :: PROPERTY_CONTEXT), 
+            new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_CONTEXT), 
             new StaticConditionVariable($context));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(HelpItem :: class_name(), HelpItem :: PROPERTY_IDENTIFIER), 
+            new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_IDENTIFIER), 
             new StaticConditionVariable($identifier));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(HelpItem :: class_name(), HelpItem :: PROPERTY_LANGUAGE), 
+            new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_LANGUAGE), 
             new StaticConditionVariable($language));
         
         $condition = new AndCondition($conditions);
         
-        return self :: retrieve(HelpItem :: class_name(), new DataClassRetrieveParameters($condition));
+        return self::retrieve(HelpItem::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

@@ -17,12 +17,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: category_menu.class.php 191 2009-11-13 11:50:28Z chellee $
- *
+ * 
  * @package application.common.category_manager
  */
 /**
  * This class provides a navigation menu to allow a user to browse through his reservations categories
- *
+ * 
  * @author Sven Vanpoucke
  */
 class CategoryMenu extends HtmlMenu
@@ -40,7 +40,7 @@ class CategoryMenu extends HtmlMenu
 
     /**
      * Creates a new category navigation menu.
-     *
+     * 
      * @param int $owner The ID of the owner of the categories to provide in this menu.
      * @param int $current_category The ID of the current category in the menu.
      * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
@@ -51,7 +51,7 @@ class CategoryMenu extends HtmlMenu
         $this->current_item = $current_item;
         $this->category_manager = $category_manager;
         $menu = $this->get_menu();
-        parent :: __construct($menu);
+        parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_item));
     }
@@ -59,26 +59,26 @@ class CategoryMenu extends HtmlMenu
     public function get_menu()
     {
         $menu = array();
-
+        
         $menu_item = array();
-        $menu_item['title'] = Translation :: get('Categories');
+        $menu_item['title'] = Translation::get('Categories');
         $menu_item['url'] = $this->get_url();
-
+        
         $sub_menu_items = $this->get_menu_items(0);
         if (count($sub_menu_items) > 0)
         {
             $menu_item['sub'] = $sub_menu_items;
         }
-
+        
         $menu_item['class'] = 'type_category';
-        $menu_item[OptionsMenuRenderer :: KEY_ID] = 0;
+        $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
         $menu[0] = $menu_item;
         return $menu;
     }
 
     /**
      * Returns the menu items.
-     *
+     * 
      * @param array $extra_items An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -86,20 +86,20 @@ class CategoryMenu extends HtmlMenu
     private function get_menu_items($parent_id)
     {
         $category_class_name = get_class($this->category_manager->get_category());
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($category_class_name :: class_name(), $category_class_name :: PROPERTY_PARENT),
+            new PropertyConditionVariable($category_class_name::class_name(), $category_class_name::PROPERTY_PARENT), 
             new StaticConditionVariable($parent_id));
-
+        
         $objects = $this->category_manager->retrieve_categories(
-            $condition,
-            null,
-            null,
+            $condition, 
+            null, 
+            null, 
             new OrderBy(
                 new PropertyConditionVariable(
-                    $category_class_name :: class_name(),
-                    $category_class_name :: PROPERTY_DISPLAY_ORDER)));
-
+                    $category_class_name::class_name(), 
+                    $category_class_name::PROPERTY_DISPLAY_ORDER)));
+        
         while ($object = $objects->next_result())
         {
             if ($object)
@@ -107,20 +107,20 @@ class CategoryMenu extends HtmlMenu
                 $menu_item = array();
                 $menu_item['title'] = $object->get_name();
                 $menu_item['url'] = $this->get_url($object->get_id());
-
+                
                 $sub_menu_items = $this->get_menu_items($object->get_id());
-
+                
                 if (count($sub_menu_items) > 0)
                 {
                     $menu_item['sub'] = $sub_menu_items;
                 }
-
+                
                 $menu_item['class'] = 'type_category';
-                $menu_item[OptionsMenuRenderer :: KEY_ID] = $object->get_id();
+                $menu_item[OptionsMenuRenderer::KEY_ID] = $object->get_id();
                 $menu[$object->get_id()] = $menu_item;
             }
         }
-
+        
         return $menu;
     }
 
@@ -128,23 +128,23 @@ class CategoryMenu extends HtmlMenu
     {
         if (! $id)
             $id = 0;
-
-        return $this->category_manager->get_url(array(Manager :: PARAM_CATEGORY_ID => $id));
+        
+        return $this->category_manager->get_url(array(Manager::PARAM_CATEGORY_ID => $id));
     }
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     *
+     * 
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)
         {
-            if ($crumb['title'] == Translation :: get('Categories'))
+            if ($crumb['title'] == Translation::get('Categories'))
                 continue;
             $trail->add(new Breadcrumb($crumb['url'], $crumb['title']));
         }
@@ -153,7 +153,7 @@ class CategoryMenu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     *
+     * 
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -165,6 +165,6 @@ class CategoryMenu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 }

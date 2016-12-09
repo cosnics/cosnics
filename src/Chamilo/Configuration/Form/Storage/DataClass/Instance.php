@@ -22,36 +22,36 @@ class Instance extends DataClass
 
     public function __construct($defaultProperties)
     {
-        parent :: __construct($defaultProperties);
-
+        parent::__construct($defaultProperties);
+        
         // $this->elements = array();
     }
 
     public function get_name()
     {
-        return $this->get_default_property(self :: PROPERTY_NAME);
+        return $this->get_default_property(self::PROPERTY_NAME);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self :: PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     public function get_application()
     {
-        return $this->get_default_property(self :: PROPERTY_APPLICATION);
+        return $this->get_default_property(self::PROPERTY_APPLICATION);
     }
 
     public function set_application($application)
     {
-        $this->set_default_property(self :: PROPERTY_APPLICATION, $application);
+        $this->set_default_property(self::PROPERTY_APPLICATION, $application);
     }
 
     public function get_elements()
     {
         if (! $this->elements)
             $this->load_elements();
-
+        
         return $this->elements;
     }
 
@@ -71,7 +71,7 @@ class Instance extends DataClass
         {
             $elements = array($elements);
         }
-
+        
         foreach ($elements as $element)
         {
             $this->elements[] = $element;
@@ -81,22 +81,22 @@ class Instance extends DataClass
     public function load_elements()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_DYNAMIC_FORM_ID),
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
             new StaticConditionVariable($this->get_id()));
-        $elements = DataManager :: retrieve_dynamic_form_elements($condition);
+        $elements = DataManager::retrieve_dynamic_form_elements($condition);
         $this->set_elements($elements->as_array());
-
+        
         return $this->elements;
     }
 
     /**
      * Get the default properties of all user course categories.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_NAME, self :: PROPERTY_APPLICATION));
+        return parent::get_default_property_names(array(self::PROPERTY_NAME, self::PROPERTY_APPLICATION));
     }
 
     /**
@@ -104,6 +104,6 @@ class Instance extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 }

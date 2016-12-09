@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="Chamilo\Core\Tracking">
-	<settings>
-		<category name="general">
-			<setting name="last_time_archived" field="text" default="" locked="true" />
-			<setting name="enable_tracking" field="text" default="1" locked="true" />
-			<!--<options type="static"> <option name="enable_tracking" value="1" /> </options> </setting> -->
-		</category>
-	</settings>
+    <settings>
+        <category name="general">
+            <setting
+                name="last_time_archived"
+                field="text"
+                default=""
+                locked="true" />
+            <setting
+                name="enable_tracking"
+                field="text"
+                default="1"
+                locked="true" />
+            <!--<options type="static"> <option name="enable_tracking" value="1" /> </options> </setting> -->
+        </category>
+    </settings>
 </package>

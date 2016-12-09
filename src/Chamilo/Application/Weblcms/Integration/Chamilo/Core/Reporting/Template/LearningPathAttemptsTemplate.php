@@ -23,10 +23,10 @@ class LearningPathAttemptsTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
-        $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
-        $this->tool = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL);
+        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->tool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
         $this->add_reporting_block(new LearningPathAttemptsBlock($this));
 
         $parent->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION, $this->publication_id);

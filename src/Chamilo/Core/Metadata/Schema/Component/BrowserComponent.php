@@ -81,9 +81,9 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -102,6 +102,6 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         return $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Schema :: class_name(), Schema :: PROPERTY_NAME)));
+            array(new PropertyConditionVariable(Schema::class_name(), Schema::PROPERTY_NAME)));
     }
 }

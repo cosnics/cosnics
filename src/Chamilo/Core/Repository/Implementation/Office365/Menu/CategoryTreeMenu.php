@@ -9,10 +9,9 @@ use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
-
 /**
  * This class provides a navigation menu to allow a user to browse through repository categories
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CategoryTreeMenu extends GenericTree
@@ -30,7 +29,7 @@ class CategoryTreeMenu extends GenericTree
 
     /**
      * Creates a new category navigation menu.
-     *
+     * 
      * @param $parent - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
@@ -38,8 +37,8 @@ class CategoryTreeMenu extends GenericTree
     {
         $this->connector = $connector;
         $this->additional_items = $additional_items;
-
-        parent :: __construct();
+        
+        parent::__construct();
     }
 
     /**
@@ -47,8 +46,8 @@ class CategoryTreeMenu extends GenericTree
      */
     public function build_tree()
     {
-        parent :: build_tree();
-
+        parent::build_tree();
+        
         foreach ($this->additional_items as $additional_item)
         {
             $this->tree[] = $additional_item;
@@ -57,7 +56,7 @@ class CategoryTreeMenu extends GenericTree
 
     /**
      * Returns the url of a node
-     *
+     * 
      * @param int $node_id
      *
      * @return string
@@ -65,17 +64,17 @@ class CategoryTreeMenu extends GenericTree
     public function get_node_url($node_id)
     {
         $parameters = array();
-        $parameters[Application :: PARAM_CONTEXT] = Manager :: context();
-        $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $this->get_connector()->get_external_repository_instance_id();
-        $parameters[Manager :: PARAM_FOLDER] = $node_id;
-        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+        $parameters[Application::PARAM_CONTEXT] = Manager::context();
+        $parameters[Manager::PARAM_EXTERNAL_REPOSITORY] = $this->get_connector()->get_external_repository_instance_id();
+        $parameters[Manager::PARAM_FOLDER] = $node_id;
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }
 
     public function get_current_node_id()
     {
-        return Request :: get(Manager :: PARAM_FOLDER);
+        return Request::get(Manager::PARAM_FOLDER);
     }
 
     public function get_node($node_id)
@@ -97,8 +96,8 @@ class CategoryTreeMenu extends GenericTree
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager :: package(),
-                \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager :: ACTION_CATEGORY_MENU_FEED));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager::package(), 
+                \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Implementation\Office365\Ajax\Manager::ACTION_CATEGORY_MENU_FEED));
         return $redirect->getUrl();
     }
 
@@ -109,12 +108,12 @@ class CategoryTreeMenu extends GenericTree
 
     public function get_root_node_class()
     {
-        return self :: ROOT_NODE_CLASS;
+        return self::ROOT_NODE_CLASS;
     }
 
     public function get_node_class($node)
     {
-        return self :: CATEGORY_CLASS;
+        return self::CATEGORY_CLASS;
     }
 
     public function get_root_node_id()
@@ -124,7 +123,7 @@ class CategoryTreeMenu extends GenericTree
 
     public function get_root_node_title()
     {
-        return Translation :: get('RootMenuTitle');
+        return Translation::get('RootMenuTitle');
     }
 
     public function get_node_title($node)

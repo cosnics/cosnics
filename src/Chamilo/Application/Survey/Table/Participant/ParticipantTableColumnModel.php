@@ -13,14 +13,14 @@ class ParticipantTableColumnModel extends DataClassTableColumnModel implements T
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(User :: PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(Participant :: class_name(), Participant :: PROPERTY_STATUS));
+        $this->add_column(new StaticTableColumn(User::PROPERTY_USERNAME));
+        $this->add_column(new DataClassPropertyTableColumn(Participant::class_name(), Participant::PROPERTY_STATUS));
         $this->add_column(
-            new DataClassPropertyTableColumn(Participant :: class_name(), Participant :: PROPERTY_PROGRESS));
+            new DataClassPropertyTableColumn(Participant::class_name(), Participant::PROPERTY_PROGRESS));
         $this->add_column(
-            new DataClassPropertyTableColumn(Participant :: class_name(), Participant :: PROPERTY_START_TIME));
+            new DataClassPropertyTableColumn(Participant::class_name(), Participant::PROPERTY_START_TIME));
         $this->add_column(
-            new DataClassPropertyTableColumn(Participant :: class_name(), Participant :: PROPERTY_TOTAL_TIME));
+            new DataClassPropertyTableColumn(Participant::class_name(), Participant::PROPERTY_TOTAL_TIME));
     }
 }
 ?>

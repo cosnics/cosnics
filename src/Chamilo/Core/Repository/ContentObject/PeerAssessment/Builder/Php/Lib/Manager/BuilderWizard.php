@@ -2,13 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager;
 
 use Chamilo\Libraries\Platform\Translation;
+
 /*
  * To change this template, choose Tools | Templates and open the template in the editor.
  */
 
 /**
  * Description of builder_wizard
- *
+ * 
  * @author jevdheyd
  */
 class BuilderWizard
@@ -38,7 +39,7 @@ class BuilderWizard
 
     /**
      * creates a html menu if the wizard is not considered to be completed
-     *
+     * 
      * @param string $page_id
      * @return string
      */
@@ -53,7 +54,7 @@ class BuilderWizard
                 $next = null;
                 $found = false;
                 $display = true;
-
+                
                 foreach ($this->pages as $page)
                 {
                     /*
@@ -71,7 +72,7 @@ class BuilderWizard
                         }
                         continue;
                     }
-
+                    
                     if (! $found && ! $page->get_completed())
                     {
                         $previous = $page;
@@ -82,28 +83,28 @@ class BuilderWizard
                         break;
                     }
                 }
-
+                
                 // build menu
-
+                
                 if (! is_null($previous))
                     $previous = '<a href="' . $this->builder->get_url($previous->get_params()) . '"> << ' .
-                         Translation :: get($previous->get_title()) . '</a>';
+                         Translation::get($previous->get_title()) . '</a>';
                 if (! is_null($next))
                     $next = '<a href="' . $this->builder->get_url($next->get_params()) . '"> ' .
-                         Translation :: get($next->get_title()) . ' >></a>';
-
+                         Translation::get($next->get_title()) . ' >></a>';
+                
                 if (($previous || $next) && $found && $display)
-                    $this->menu = '<div class="wizard"><h3>' . Translation :: get('WizardTitle') . '</h3>' . $previous .
+                    $this->menu = '<div class="wizard"><h3>' . Translation::get('WizardTitle') . '</h3>' . $previous .
                          $current . ' - ' . $next . '</div>';
             }
         }
-
+        
         return $this->menu;
     }
 
     /**
      * status of the wizard either false or a page_id
-     *
+     * 
      * @param type $status
      */
     function set_complete($complete)

@@ -45,16 +45,16 @@ class RelationInstanceForm extends FormValidator
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
      * @param string $postUrl
      */
-    public function __construct(RelationInstance $relationInstance, $sourceEntities, $relations, $targetEntities,
+    public function __construct(RelationInstance $relationInstance, $sourceEntities, $relations, $targetEntities, 
         $postUrl)
     {
-        parent :: __construct('relation', 'post', $postUrl);
-
+        parent::__construct('relation', 'post', $postUrl);
+        
         $this->relationInstance = $relationInstance;
         $this->sourceEntities = $sourceEntities;
         $this->relations = $relations;
         $this->targetEntities = $targetEntities;
-
+        
         $this->buildForm();
     }
 
@@ -66,31 +66,31 @@ class RelationInstanceForm extends FormValidator
         $this->addSourceEntities();
         $this->addRelations();
         $this->addTargetEntities();
-
+        
         $this->addSaveResetButtons();
     }
 
     private function addSourceEntities()
     {
         $this->addSelect(
-            RelationInstanceService :: PROPERTY_SOURCE,
-            Translation :: get('SelectSourceEntities'),
+            RelationInstanceService::PROPERTY_SOURCE, 
+            Translation::get('SelectSourceEntities'), 
             $this->getSourceEntityOptions());
     }
 
     private function addTargetEntities()
     {
         $this->addSelect(
-            RelationInstanceService :: PROPERTY_TARGET,
-            Translation :: get('SelectTargetEntities'),
+            RelationInstanceService::PROPERTY_TARGET, 
+            Translation::get('SelectTargetEntities'), 
             $this->getTargetEntityOptions());
     }
 
     private function addRelations()
     {
         $this->addSelect(
-            RelationInstance :: PROPERTY_RELATION_ID,
-            Translation :: get('SelectRelations'),
+            RelationInstance::PROPERTY_RELATION_ID, 
+            Translation::get('SelectRelations'), 
             $this->getRelationOptions());
     }
 
@@ -101,13 +101,13 @@ class RelationInstanceForm extends FormValidator
     private function getRelationOptions()
     {
         $relationOptions = array();
-
+        
         foreach ($this->relations as $relation)
         {
             $relationOptions[$relation->get_id()] = $relation->getTranslationByIsocode(
-                Translation :: getInstance()->getLanguageIsocode());
+                Translation::getInstance()->getLanguageIsocode());
         }
-
+        
         return $relationOptions;
     }
 
@@ -138,14 +138,14 @@ class RelationInstanceForm extends FormValidator
     {
         $entityConditionService = new EntityConditionService();
         $expandedEntities = $entityConditionService->expandEntities($entities);
-
+        
         $options = array();
-
+        
         foreach ($expandedEntities as $expandedEntity)
         {
             $options[$expandedEntity->getSerialization()] = $expandedEntity->getName();
         }
-
+        
         return $options;
     }
 
@@ -159,13 +159,13 @@ class RelationInstanceForm extends FormValidator
     private function addSelect($name, $label, $options, $allowsMultiple = true)
     {
         $numberOfOptions = count($options);
-
+        
         if ($numberOfOptions == 1)
         {
             $optionKeys = array_keys($options);
             $onlyOptionKey = array_pop($optionKeys);
             $onlyOptionValue = array_pop($options);
-
+            
             $this->addElement('hidden', $name . '[]', $onlyOptionKey);
             $this->addElement('static', null, $label, $onlyOptionValue);
         }
@@ -173,7 +173,7 @@ class RelationInstanceForm extends FormValidator
         {
             $relationSelect = $this->addElement('select', $name, $label, $options);
             $relationSelect->setMultiple($allowsMultiple);
-
+            
             if ($numberOfOptions < 10)
             {
                 $relationSelect->setSize($numberOfOptions);

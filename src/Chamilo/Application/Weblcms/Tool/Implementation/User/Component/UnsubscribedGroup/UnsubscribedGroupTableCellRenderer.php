@@ -18,10 +18,10 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed
  * course group browser table.
- *
+ * 
  * @author Stijn Van Hoecke ****************************************************************************
  */
-class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer implements
+class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
@@ -72,8 +72,8 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
         }
 
         // construct
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+        
         if ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
                     WeblcmsRights :: EDIT_RIGHT
                 ) && CourseManagementRights:: get_instance()->is_allowed_for_platform_group(
@@ -83,7 +83,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
                 ))
         )
         {
-
+            
             $subscribe_group_users = $this->get_component()->get_course()->get_course_setting(
                 'allow_subscribe_users_from_group',
                 $this->get_component()->get_tool_id()
@@ -106,7 +106,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
                     )
                 );
             }
-
+            
             // subscribe group
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBE_GROUPS;
             $parameters[Manager :: PARAM_TAB] = Request:: get(Manager :: PARAM_TAB);
@@ -122,7 +122,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
                 )
             );
         }
-
+        
         // return
         return $toolbar->as_html();
     }

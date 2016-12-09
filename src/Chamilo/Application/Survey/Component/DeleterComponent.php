@@ -24,52 +24,52 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $publicationIdentifiers = $this->getRequest()->get(self :: PARAM_PUBLICATION_ID);
-
+        $publicationIdentifiers = $this->getRequest()->get(self::PARAM_PUBLICATION_ID);
+        
         try
         {
             if (empty($publicationIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('Publication'));
+                throw new NoObjectSelectedException(Translation::get('Publication'));
             }
-
+            
             if (! is_array($publicationIdentifiers))
             {
                 $publicationIdentifiers = array($publicationIdentifiers);
             }
-
+            
             $publicationService = new PublicationService(new PublicationRepository());
-            $rightsService = RightsService :: getInstance();
-
+            $rightsService = RightsService::getInstance();
+            
             foreach ($publicationIdentifiers as $publicationIdentifier)
             {
                 $publication = $publicationService->getPublicationByIdentifier($publicationIdentifier);
-
+                
                 if ($rightsService->hasPublicationCreatorRights($this->get_user(), $publication))
                 {
                     if (! $publicationService->deletePublication($publication))
                     {
                         throw new \Exception(
-                            Translation :: get(
-                                'ObjectNotDeleted',
-                                array('OBJECT' => Translation :: get('Publication')),
-                                Utilities :: COMMON_LIBRARIES));
+                            Translation::get(
+                                'ObjectNotDeleted', 
+                                array('OBJECT' => Translation::get('Publication')), 
+                                Utilities::COMMON_LIBRARIES));
                     }
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('Publication')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('Publication')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

@@ -18,9 +18,9 @@ class PdfExport extends Export
         $data = $this->get_data();
         if (is_array($data))
         {
-            require_once Path :: getInstance()->getPluginPath() . 'ezpdf/class.ezpdf.php';
+            require_once Path::getInstance()->getPluginPath() . 'ezpdf/class.ezpdf.php';
             $pdf = & new Cezpdf();
-            $pdf->selectFont(Path :: getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
+            $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
             foreach ($data as $datapair)
             {
                 $title = $datapair['key'];
@@ -39,6 +39,6 @@ class PdfExport extends Export
 
     public function get_type()
     {
-        return self :: EXPORT_TYPE;
+        return self::EXPORT_TYPE;
     }
 }

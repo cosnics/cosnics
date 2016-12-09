@@ -16,19 +16,19 @@ class Xml extends RestResult
      */
     public function get_response_content($parse = self :: PARSE_DOM)
     {
-        if ($parse == self :: PARSE_DOM)
+        if ($parse == self::PARSE_DOM)
         {
             $document = new DOMDocument();
-            $document->loadXML(parent :: get_response_content(false));
+            $document->loadXML(parent::get_response_content(false));
             return $document;
         }
-        elseif ($parse == self :: PARSE_SIMPLEXML)
+        elseif ($parse == self::PARSE_SIMPLEXML)
         {
-            return new SimpleXMLElement(parent :: get_response_content());
+            return new SimpleXMLElement(parent::get_response_content());
         }
         else
         {
-            parent :: get_response_content(false);
+            parent::get_response_content(false);
         }
     }
 }

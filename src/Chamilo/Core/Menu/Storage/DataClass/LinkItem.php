@@ -21,38 +21,38 @@ class LinkItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function get_url()
     {
-        return $this->get_additional_property(self :: PROPERTY_URL);
+        return $this->get_additional_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_additional_property(self :: PROPERTY_URL, $url);
+        return $this->set_additional_property(self::PROPERTY_URL, $url);
     }
 
     public function get_target()
     {
-        return $this->get_additional_property(self :: PROPERTY_TARGET);
+        return $this->get_additional_property(self::PROPERTY_TARGET);
     }
 
     public function set_target($target)
     {
-        return $this->set_additional_property(self :: PROPERTY_TARGET, $target);
+        return $this->set_additional_property(self::PROPERTY_TARGET, $target);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_URL, self :: PROPERTY_TARGET);
+        return array(self::PROPERTY_URL, self::PROPERTY_TARGET);
     }
 
     /**
@@ -61,7 +61,7 @@ class LinkItem extends Item
      */
     public function get_target_string()
     {
-        return self :: target_string($this->get_target());
+        return self::target_string($this->get_target());
     }
 
     /**
@@ -72,16 +72,16 @@ class LinkItem extends Item
     {
         switch ($target)
         {
-            case self :: TARGET_BLANK :
+            case self::TARGET_BLANK :
                 return '_blank';
                 break;
-            case self :: TARGET_SELF :
+            case self::TARGET_SELF :
                 return '_self';
                 break;
-            case self :: TARGET_PARENT :
+            case self::TARGET_PARENT :
                 return '_parent';
                 break;
-            case self :: TARGET_TOP :
+            case self::TARGET_TOP :
                 return '_top';
                 break;
         }
@@ -90,12 +90,12 @@ class LinkItem extends Item
     public function get_target_types($types_only = false)
     {
         $types = array();
-
-        $types[self :: TARGET_BLANK] = self :: target_string(self :: TARGET_BLANK);
-        $types[self :: TARGET_SELF] = self :: target_string(self :: TARGET_SELF);
-        $types[self :: TARGET_PARENT] = self :: target_string(self :: TARGET_PARENT);
-        $types[self :: TARGET_TOP] = self :: target_string(self :: TARGET_TOP);
-
+        
+        $types[self::TARGET_BLANK] = self::target_string(self::TARGET_BLANK);
+        $types[self::TARGET_SELF] = self::target_string(self::TARGET_SELF);
+        $types[self::TARGET_PARENT] = self::target_string(self::TARGET_PARENT);
+        $types[self::TARGET_TOP] = self::target_string(self::TARGET_TOP);
+        
         return ($types_only ? array_keys($types) : $types);
     }
 }

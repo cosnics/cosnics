@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Feed to return users
- *
+ * 
  * @author Sven Vanpoucke
  * @package application.weblcms
  */
@@ -37,36 +37,36 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
     public function run()
     {
         $result = new JsonAjaxResult();
-
-        $search_query = Request :: post(self :: PARAM_SEARCH_QUERY);
-
+        
+        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        
         $elements = $this->get_elements();
-
+        
         $elements = $elements->as_array();
-
-        $result->set_property(self :: PROPERTY_ELEMENTS, $elements);
-        $result->set_property(self :: PROPERTY_TOTAL_ELEMENTS, $this->user_count);
-
+        
+        $result->set_property(self::PROPERTY_ELEMENTS, $elements);
+        $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
+        
         $result->display();
     }
 
     /**
      * Returns all the elements for this feed
-     *
+     * 
      * @return AdvancedElementFinderElements
      */
     private function get_elements()
     {
         $elements = new AdvancedElementFinderElements();
-
+        
         // Add user category
         $user_category = new AdvancedElementFinderElement(
-            'users',
-            'category',
-            Translation :: get('Users'),
-            Translation :: get('Users'));
+            'users', 
+            'category', 
+            Translation::get('Users'), 
+            Translation::get('Users'));
         $elements->add_element($user_category);
-
+        
         $users = $this->retrieve_users();
         if ($users)
         {
@@ -75,78 +75,78 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
                 $user_category->add_child($this->get_element_for_user($user));
             }
         }
-
+        
         return $elements;
     }
 
     /**
      * Retrieves the users from the course (direct subscribed and group subscribed)
-     *
+     * 
      * @return ResultSet
      */
     public function retrieve_users()
     {
-        $search_query = Request :: post(self :: PARAM_SEARCH_QUERY);
-
+        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
-            $conditions[] = Utilities :: query_to_condition(
-                $search_query,
+            $conditions[] = Utilities::query_to_condition(
+                $search_query, 
                 array(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)));
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)));
         }
-
+        
         // Only include active users
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ACTIVE),
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), 
             new StaticConditionVariable(1));
-
+        
         // Combine the conditions
         $count = count($conditions);
         if ($count > 1)
         {
             $condition = new AndCondition($conditions);
         }
-
+        
         if ($count == 1)
         {
             $condition = $conditions[0];
         }
-
-        $this->user_count = DataManager :: count(User :: class_name(), $condition);
+        
+        $this->user_count = DataManager::count(User::class_name(), $condition);
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            100,
-            $this->get_offset(),
+            $condition, 
+            100, 
+            $this->get_offset(), 
             array(
-                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME))));
-
-        return DataManager :: retrieves(User :: class_name(), $parameters);
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)), 
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
+        
+        return DataManager::retrieves(User::class_name(), $parameters);
     }
 
     /**
      * Returns the selected offset
-     *
+     * 
      * @return int
      */
     protected function get_offset()
     {
-        $offset = Request :: post(self :: PARAM_OFFSET);
+        $offset = Request::post(self::PARAM_OFFSET);
         if (! isset($offset) || is_null($offset))
         {
             $offset = 0;
         }
-
+        
         return $offset;
     }
 
     /**
      * Returns the advanced element finder element for the given user
-     *
+     * 
      * @param $user User
      *
      * @return AdvancedElementFinderElement
@@ -154,9 +154,9 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
     protected function get_element_for_user($user)
     {
         return new AdvancedElementFinderElement(
-            'user_' . $user->get_id(),
-            'type type_user',
-            $user->get_fullname(),
+            'user_' . $user->get_id(), 
+            'type type_user', 
+            $user->get_fullname(), 
             $user->get_official_code());
     }
 

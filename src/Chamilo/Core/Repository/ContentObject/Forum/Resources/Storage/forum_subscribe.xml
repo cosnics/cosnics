@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="forum_subscribe">
-	<properties>
-		<property name="id" type="integer" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" notnull="1" default="0" />
-		<property name="forum_id" type="integer" notnull="1" default="0" />
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="forum_id"
+            type="integer"
+            notnull="1"
+            default="0" />
 
-	</properties>
+    </properties>
 
 
-	<index name="user_id">
-		<indexproperty name="user_id" />
-	</index>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
 
-	<index name="forum_id">
-		<indexproperty name="forum_id" />
-	</index>
+    <index name="forum_id">
+        <indexproperty name="forum_id" />
+    </index>
 </object>

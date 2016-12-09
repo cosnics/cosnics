@@ -16,7 +16,7 @@ class DynamicContentTab extends DynamicTab
      */
     public function __construct($id, $name, $image, $content, $display = self::DISPLAY_ICON_AND_TITLE)
     {
-        parent :: __construct($id, $name, $image, $display);
+        parent::__construct($id, $name, $image, $display);
         $this->content = $content;
     }
 

@@ -9,18 +9,18 @@ abstract class ContentObjectActivator extends \Chamilo\Configuration\Package\Act
 
     public function run()
     {
-        $success = parent :: run();
+        $success = parent::run();
         
         if (! $success)
         {
             return false;
         }
         
-        $success = DataManager :: activate_content_object_type(self :: context());
+        $success = DataManager::activate_content_object_type(self::context());
         
         if (! $success)
         {
-            $this->failed(Translation :: get('ContentObjectStatusUpdateFailed'));
+            $this->failed(Translation::get('ContentObjectStatusUpdateFailed'));
         }
         else
         {

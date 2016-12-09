@@ -19,16 +19,16 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      */
     public function build()
     {
-        parent :: build();
+        parent::build();
         
         $form_validator = $this->get_form_validitor();
         $renderer = $this->get_renderer();
         
-        $form_validator->addElement('category', Translation :: get('Icon'));
-        $options = SystemAnnouncement :: get_possible_icons();
+        $form_validator->addElement('category', Translation::get('Icon'));
+        $options = SystemAnnouncement::get_possible_icons();
         asort($options);
-        $options = array(0 => '-- ' . Translation :: get('SelectIcon') . ' --') + $options;
-        $form_validator->addElement('select', FilterData :: FILTER_ICON, Translation :: get('Icon'), $options);
+        $options = array(0 => '-- ' . Translation::get('SelectIcon') . ' --') + $options;
+        $form_validator->addElement('select', FilterData::FILTER_ICON, Translation::get('Icon'), $options);
         
         $form_validator->addElement('category');
     }
@@ -41,7 +41,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
     {
         $filter_data = $this->get_filter_data();
         
-        $defaults[FilterData :: FILTER_ICON] = $filter_data->get_filter_property(FilterData :: FILTER_ICON);
-        parent :: set_defaults($defaults);
+        $defaults[FilterData::FILTER_ICON] = $filter_data->get_filter_property(FilterData::FILTER_ICON);
+        parent::set_defaults($defaults);
     }
 }

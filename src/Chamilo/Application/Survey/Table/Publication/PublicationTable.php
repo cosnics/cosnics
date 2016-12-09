@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class PublicationTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_PUBLICATION_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
     /**
      *
@@ -26,23 +26,23 @@ class PublicationTable extends DataClassTable implements TableFormActionsSupport
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
-
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                        \Chamilo\Application\Survey\Favourite\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager :: ACTION_CREATE)),
-                Translation :: get('FavouriteSelected', null, Utilities :: COMMON_LIBRARIES),
+                        Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE, 
+                        \Chamilo\Application\Survey\Favourite\Manager::PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager::ACTION_CREATE)), 
+                Translation::get('FavouriteSelected', null, Utilities::COMMON_LIBRARIES), 
                 true));
-
+        
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
-                Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES),
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
+                Translation::get('DeleteSelected', null, Utilities::COMMON_LIBRARIES), 
                 true));
-
+        
         return $actions;
     }
 }

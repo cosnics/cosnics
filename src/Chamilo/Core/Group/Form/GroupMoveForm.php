@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: group_move_form.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package groups.lib.forms
  */
 class GroupMoveForm extends FormValidator
@@ -24,25 +24,25 @@ class GroupMoveForm extends FormValidator
 
     public function __construct($group, $action, $user)
     {
-        parent :: __construct('group_move', 'post', $action);
+        parent::__construct('group_move', 'post', $action);
         $this->group = $group;
-
+        
         $this->build_form();
-
+        
         $this->setDefaults();
     }
 
     public function build_form()
     {
-        $this->addElement('select', self :: PROPERTY_LOCATION, Translation :: get('NewLocation'), $this->get_groups());
+        $this->addElement('select', self::PROPERTY_LOCATION, Translation::get('NewLocation'), $this->get_groups());
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Move', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'move');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -53,13 +53,13 @@ class GroupMoveForm extends FormValidator
 
     public function get_new_parent()
     {
-        return $this->exportValue(self :: PROPERTY_LOCATION);
+        return $this->exportValue(self::PROPERTY_LOCATION);
     }
 
     public function get_groups()
     {
         $group = $this->group;
-
+        
         $group_menu = new GroupMenu($group->get_id(), null, true, true);
         $renderer = new OptionsMenuRenderer();
         $group_menu->render($renderer, 'sitemap');
@@ -68,13 +68,13 @@ class GroupMoveForm extends FormValidator
 
     /**
      * Sets default values.
-     *
+     * 
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())
     {
         $group = $this->group;
-        $defaults[self :: PROPERTY_LOCATION] = $group->get_parent();
-        parent :: setDefaults($defaults);
+        $defaults[self::PROPERTY_LOCATION] = $group->get_parent();
+        parent::setDefaults($defaults);
     }
 }

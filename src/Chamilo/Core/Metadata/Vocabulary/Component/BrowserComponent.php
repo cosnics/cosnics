@@ -51,7 +51,7 @@ class BrowserComponent extends Manager implements TableSupport
         
         if (! $this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
         
         $content = $this->getContent();
@@ -73,16 +73,16 @@ class BrowserComponent extends Manager implements TableSupport
         
         if ($userId != 0)
         {
-            $user = DataManager :: retrieve_by_id(User :: class_name(), $userId);
+            $user = DataManager::retrieve_by_id(User::class_name(), $userId);
             $breadcrumbTitle = $user->get_fullname();
         }
         else
         {
-            $breadcrumbTitle = Translation :: get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
+            $breadcrumbTitle = Translation::get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
         }
         
-        BreadcrumbTrail :: get_instance()->add(
-            new Breadcrumb($this->get_url(array(Manager :: PARAM_USER_ID => $userId)), $breadcrumbTitle));
+        BreadcrumbTrail::getInstance()->add(
+            new Breadcrumb($this->get_url(array(Manager::PARAM_USER_ID => $userId)), $breadcrumbTitle));
         
         $html = array();
         
@@ -107,13 +107,13 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
-                            \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(), 
-                            self :: PARAM_USER_ID => $this->getSelectedUserId()))));
+                            self::PARAM_ACTION => self::ACTION_CREATE, 
+                            \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->getSelectedElementId(), 
+                            self::PARAM_USER_ID => $this->getSelectedUserId()))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -134,7 +134,7 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_VALUE)));
+            array(new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE)));
         
         if ($searchCondition)
         {
@@ -142,15 +142,15 @@ class BrowserComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         
         $userId = $this->getSelectedUserId();
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($userId));
         
         return new AndCondition($conditions);

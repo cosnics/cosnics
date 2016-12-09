@@ -32,8 +32,8 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $blog = $this->get_root_content_object();
-        $trail = BreadcrumbTrail :: get_instance();
-        $blog_layout = BlogLayout :: factory($this, $blog);
+        $trail = BreadcrumbTrail::getInstance();
+        $blog_layout = BlogLayout::factory($this, $blog);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
         
@@ -56,13 +56,13 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('CreateItem', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                        Translation::get('CreateItem', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Create'), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                                self :: PARAM_TYPE => BlogItem :: class_name())), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM, 
+                                self::PARAM_TYPE => BlogItem::class_name())), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
             $buttonToolbar->addButtonGroup($commonActions);

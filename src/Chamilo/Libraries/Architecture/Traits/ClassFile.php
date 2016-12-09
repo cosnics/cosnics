@@ -11,19 +11,16 @@ trait ClassFile
      *
      * @return string
      */
-    protected function get_classname_from_php_file($file)
+    protected function getClassNameFromPHPFile($file)
     {
         $fp = fopen($file, 'r');
         $class = $buffer = '';
         $i = 0;
-        
-        while (! $class)
+
+        $inNamespace = false;
+
+        while (!feof($fp))
         {
-            if (feof($fp))
-            {
-                break;
-            }
-            
             $buffer .= fread($fp, 512);
             $tokens = @token_get_all($buffer);
             
@@ -34,6 +31,36 @@ trait ClassFile
             
             for (; $i < count($tokens); $i ++)
             {
+                if($tokens[$i][0] === T_NAMESPACE)
+                {
+                    $inNamespace = true;
+                }
+
+                if($tokens[$i][0] === T_STRING)
+                {
+                    if($inNamespace)
+                    {
+                        $class .= $tokens[$i][1];
+                    }
+                }
+
+                if($tokens[$i][0] === T_NS_SEPARATOR)
+                {
+                    if($inNamespace)
+                    {
+                        $class .= $tokens[$i][1];
+                    }
+                }
+
+                if($tokens[$i] === ';')
+                {
+                    if($inNamespace)
+                    {
+                        $class .= '\\';
+                        $inNamespace = false;
+                    }
+                }
+
                 if ($tokens[$i][0] === T_CLASS)
                 {
                     for ($j = $i + 1; $j < count($tokens); $j ++)
@@ -41,7 +68,8 @@ trait ClassFile
                         if ($tokens[$j] === '{')
                         {
                             fclose($fp);
-                            return $tokens[$i + 2][1];
+                            $class .= $tokens[$i + 2][1];
+                            return $class;
                         }
                     }
                 }

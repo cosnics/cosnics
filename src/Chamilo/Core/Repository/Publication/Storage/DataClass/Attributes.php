@@ -7,12 +7,12 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: content_object_publication_attributes.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib
  */
 /**
  * Instances of this class group generic information about a publication of an object within an application.
- *
+ * 
  * @author Bart Mollet
  * @author Tim De Pauw
  * @author Hans De Bisschop
@@ -30,97 +30,97 @@ class Attributes extends DataClass
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_TITLE;
-        $extended_property_names[] = self :: PROPERTY_APPLICATION;
-        $extended_property_names[] = self :: PROPERTY_LOCATION;
-        $extended_property_names[] = self :: PROPERTY_DATE;
-        $extended_property_names[] = self :: PROPERTY_CONTENT_OBJECT_ID;
-        $extended_property_names[] = self :: PROPERTY_PUBLISHER_ID;
-        $extended_property_names[] = self :: PROPERTY_URL;
-
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_TITLE;
+        $extended_property_names[] = self::PROPERTY_APPLICATION;
+        $extended_property_names[] = self::PROPERTY_LOCATION;
+        $extended_property_names[] = self::PROPERTY_DATE;
+        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extended_property_names[] = self::PROPERTY_PUBLISHER_ID;
+        $extended_property_names[] = self::PROPERTY_URL;
+        
+        return parent::get_default_property_names($extended_property_names);
     }
 
     public function get_title()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     public function set_title($title)
     {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     public function get_application()
     {
-        return $this->get_default_property(self :: PROPERTY_APPLICATION);
+        return $this->get_default_property(self::PROPERTY_APPLICATION);
     }
 
     public function set_application($application)
     {
-        $this->set_default_property(self :: PROPERTY_APPLICATION, $application);
+        $this->set_default_property(self::PROPERTY_APPLICATION, $application);
     }
 
     public function get_location()
     {
-        return $this->get_default_property(self :: PROPERTY_LOCATION);
+        return $this->get_default_property(self::PROPERTY_LOCATION);
     }
 
     public function set_location($location)
     {
-        $this->set_default_property(self :: PROPERTY_LOCATION, $location);
+        $this->set_default_property(self::PROPERTY_LOCATION, $location);
     }
 
     public function get_date()
     {
-        return $this->get_default_property(self :: PROPERTY_DATE);
+        return $this->get_default_property(self::PROPERTY_DATE);
     }
 
     public function set_date($date)
     {
-        $this->set_default_property(self :: PROPERTY_DATE, $date);
+        $this->set_default_property(self::PROPERTY_DATE, $date);
     }
 
     public function get_content_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     public function get_publisher_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLISHER_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLISHER_ID);
     }
 
     public function set_publisher_id($publisher_id)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLISHER_ID, $publisher_id);
+        $this->set_default_property(self::PROPERTY_PUBLISHER_ID, $publisher_id);
     }
 
     public function get_url()
     {
-        return $this->get_default_property(self :: PROPERTY_URL);
+        return $this->get_default_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        $this->set_default_property(self :: PROPERTY_URL, $url);
+        $this->set_default_property(self::PROPERTY_URL, $url);
     }
 
     public function get_content_object()
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), 
             $this->get_content_object_id());
     }
 
     public function update()
     {
-        $success = DataManager :: update_content_object_publication_id($this);
+        $success = DataManager::update_content_object_publication_id($this);
         if (! $success)
         {
             return false;
@@ -131,7 +131,7 @@ class Attributes extends DataClass
     /**
      * * BACKWARDS COMPATIBILITY WRAPPER METHODS **
      */
-
+    
     /**
      *
      * @deprecated

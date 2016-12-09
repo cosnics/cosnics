@@ -19,15 +19,15 @@ class EditorComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $id = Request :: get(self :: PARAM_EXPORT_TEMPLATE_ID);
+        $publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
+        $id = Request::get(self::PARAM_EXPORT_TEMPLATE_ID);
         
-        if (RightsService :: getInstance())
+        if (RightsService::getInstance())
         {
             
-            $template = DataManager :: retrieve_export_template_by_id($id);
+            $template = DataManager::retrieve_export_template_by_id($id);
             
-            $form = new ExportTemplateForm(ExportTemplateForm :: TYPE_EDIT, $this->get_url(), $template);
+            $form = new ExportTemplateForm(ExportTemplateForm::TYPE_EDIT, $this->get_url(), $template);
             
             if ($form->validate())
             {
@@ -42,12 +42,12 @@ class EditorComponent extends Manager
                 }
                 
                 $this->redirect(
-                    Translation :: get($message), 
+                    Translation::get($message), 
                     ! $success, 
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        Manager :: PARAM_PUBLICATION_ID => $publication_id, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT_TEMPLATES));
+                        self::PARAM_ACTION => self::ACTION_BROWSE, 
+                        Manager::PARAM_PUBLICATION_ID => $publication_id, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT_TEMPLATES));
             }
             else
             {
@@ -68,23 +68,23 @@ class EditorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT)), 
-                Translation :: get('BrowserComponent')));
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT)), 
+                Translation::get('BrowserComponent')));
         
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID), 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT_TEMPLATES)), 
-                Translation :: get('BrowserComponent')));
+                        self::PARAM_ACTION => self::ACTION_BROWSE, 
+                        Manager::PARAM_PUBLICATION_ID => Request::get(Manager::PARAM_PUBLICATION_ID), 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT_TEMPLATES)), 
+                Translation::get('BrowserComponent')));
     }
 
     function get_parameters()
     {
-        return array(Manager :: PARAM_PUBLICATION_ID, self :: PARAM_EXPORT_TEMPLATE_ID);
+        return array(Manager::PARAM_PUBLICATION_ID, self::PARAM_EXPORT_TEMPLATE_ID);
     }
 }
 ?>

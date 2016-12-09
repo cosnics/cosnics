@@ -7,6 +7,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use DataClassIterator now
  */
 class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
 {
@@ -21,11 +22,11 @@ class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassR
     {
         $objects = array();
         
-        while ($record = $handle->fetch(\PDO :: FETCH_ASSOC))
+        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $objects[] = $this->get_object($class_name, $this->process_record($record));
         }
         
-        parent :: __construct($class_name, $objects);
+        parent::__construct($class_name, $objects);
     }
 }

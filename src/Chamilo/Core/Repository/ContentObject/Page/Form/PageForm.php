@@ -12,6 +12,6 @@ class PageForm extends ContentObjectForm
     {
         $object = new Page();
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 }

@@ -18,7 +18,7 @@ use Exception;
  */
 class SynchronizationData extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_CREATED = 'created';
     const PROPERTY_MODIFIED = 'modified';
@@ -29,14 +29,14 @@ class SynchronizationData extends DataClass
     const PROPERTY_EXTERNAL_OBJECT_TIMESTAMP = 'external_object_timestamp';
     const PROPERTY_EXTERNAL_USER_ID = 'external_user_id';
     const PROPERTY_STATE = 'state';
-
+    
     // Synchronization statuses
     const SYNC_STATUS_ERROR = 0;
     const SYNC_STATUS_EXTERNAL = 1;
     const SYNC_STATUS_INTERNAL = 2;
     const SYNC_STATUS_IDENTICAL = 3;
     const SYNC_STATUS_CONFLICT = 4;
-
+    
     // Synchrnization link statuses
     const STATE_ACTIVE = 1;
     const STATE_INACTIVE = 0;
@@ -73,7 +73,7 @@ class SynchronizationData extends DataClass
     {
         if (isset($content_object_id) && is_numeric($content_object_id))
         {
-            $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+            $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
         }
     }
 
@@ -83,7 +83,7 @@ class SynchronizationData extends DataClass
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -92,9 +92,9 @@ class SynchronizationData extends DataClass
      */
     public function set_external_object_id($external_object_id)
     {
-        if (StringUtilities :: getInstance()->hasValue($external_object_id))
+        if (StringUtilities::getInstance()->hasValue($external_object_id))
         {
-            $this->set_default_property(self :: PROPERTY_EXTERNAL_OBJECT_ID, $external_object_id);
+            $this->set_default_property(self::PROPERTY_EXTERNAL_OBJECT_ID, $external_object_id);
         }
     }
 
@@ -104,7 +104,7 @@ class SynchronizationData extends DataClass
      */
     public function get_external_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_OBJECT_ID);
     }
 
     /**
@@ -115,7 +115,7 @@ class SynchronizationData extends DataClass
     {
         if (isset($datetime) && is_numeric($datetime))
         {
-            $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_TIMESTAMP, $datetime);
+            $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_TIMESTAMP, $datetime);
         }
     }
 
@@ -125,7 +125,7 @@ class SynchronizationData extends DataClass
      */
     public function get_content_object_timestamp()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_TIMESTAMP);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_TIMESTAMP);
     }
 
     /**
@@ -136,7 +136,7 @@ class SynchronizationData extends DataClass
     {
         if (isset($datetime) && is_numeric($datetime))
         {
-            $this->set_default_property(self :: PROPERTY_EXTERNAL_OBJECT_TIMESTAMP, $datetime);
+            $this->set_default_property(self::PROPERTY_EXTERNAL_OBJECT_TIMESTAMP, $datetime);
         }
     }
 
@@ -146,7 +146,7 @@ class SynchronizationData extends DataClass
      */
     public function get_external_object_timestamp()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_OBJECT_TIMESTAMP);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_OBJECT_TIMESTAMP);
     }
 
     /**
@@ -157,7 +157,7 @@ class SynchronizationData extends DataClass
     {
         if (isset($external_id) && is_numeric($external_id))
         {
-            $this->set_default_property(self :: PROPERTY_EXTERNAL_ID, $external_id);
+            $this->set_default_property(self::PROPERTY_EXTERNAL_ID, $external_id);
         }
     }
 
@@ -167,7 +167,7 @@ class SynchronizationData extends DataClass
      */
     public function get_external_id()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_ID);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_ID);
     }
 
     /**
@@ -176,9 +176,9 @@ class SynchronizationData extends DataClass
      */
     public function set_external_user_id($external_user_id)
     {
-        if (StringUtilities :: getInstance()->hasValue($external_user_id))
+        if (StringUtilities::getInstance()->hasValue($external_user_id))
         {
-            $this->set_default_property(self :: PROPERTY_EXTERNAL_USER_ID, $external_user_id);
+            $this->set_default_property(self::PROPERTY_EXTERNAL_USER_ID, $external_user_id);
         }
     }
 
@@ -188,7 +188,7 @@ class SynchronizationData extends DataClass
      */
     public function get_external_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_USER_ID);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_USER_ID);
     }
 
     /**
@@ -197,7 +197,7 @@ class SynchronizationData extends DataClass
      */
     public function set_state($state)
     {
-        $this->set_default_property(self :: PROPERTY_STATE, $state);
+        $this->set_default_property(self::PROPERTY_STATE, $state);
     }
 
     /**
@@ -206,33 +206,33 @@ class SynchronizationData extends DataClass
      */
     public function get_state()
     {
-        return $this->get_default_property(self :: PROPERTY_STATE);
+        return $this->get_default_property(self::PROPERTY_STATE);
     }
 
     public function set_creation_date($created)
     {
         if (isset($created))
         {
-            $this->set_default_property(self :: PROPERTY_CREATED, $created);
+            $this->set_default_property(self::PROPERTY_CREATED, $created);
         }
     }
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATED);
+        return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
     public function set_modification_date($modified)
     {
         if (isset($modified))
         {
-            $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
+            $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
         }
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIED);
+        return $this->get_default_property(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -241,17 +241,17 @@ class SynchronizationData extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_CREATED;
-        $extended_property_names[] = self :: PROPERTY_MODIFIED;
-        $extended_property_names[] = self :: PROPERTY_CONTENT_OBJECT_ID;
-        $extended_property_names[] = self :: PROPERTY_CONTENT_OBJECT_TIMESTAMP;
-        $extended_property_names[] = self :: PROPERTY_EXTERNAL_ID;
-        $extended_property_names[] = self :: PROPERTY_EXTERNAL_OBJECT_ID;
-        $extended_property_names[] = self :: PROPERTY_EXTERNAL_OBJECT_TIMESTAMP;
-        $extended_property_names[] = self :: PROPERTY_EXTERNAL_USER_ID;
-        $extended_property_names[] = self :: PROPERTY_STATE;
-
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_CREATED;
+        $extended_property_names[] = self::PROPERTY_MODIFIED;
+        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_TIMESTAMP;
+        $extended_property_names[] = self::PROPERTY_EXTERNAL_ID;
+        $extended_property_names[] = self::PROPERTY_EXTERNAL_OBJECT_ID;
+        $extended_property_names[] = self::PROPERTY_EXTERNAL_OBJECT_TIMESTAMP;
+        $extended_property_names[] = self::PROPERTY_EXTERNAL_USER_ID;
+        $extended_property_names[] = self::PROPERTY_STATE;
+        
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -263,7 +263,7 @@ class SynchronizationData extends DataClass
         $now = time();
         $this->set_creation_date($now);
         $this->set_modification_date($now);
-        return parent :: create();
+        return parent::create();
     }
 
     /**
@@ -276,9 +276,9 @@ class SynchronizationData extends DataClass
         {
             throw new Exception('ExternalSync object could not be saved as its identity is not set');
         }
-
+        
         $this->set_modification_date(time());
-        return parent :: update();
+        return parent::update();
     }
 
     /**
@@ -289,8 +289,8 @@ class SynchronizationData extends DataClass
     {
         if (! isset($this->content_object))
         {
-            $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+            $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $this->get_content_object_id());
         }
         return $this->content_object;
@@ -306,11 +306,11 @@ class SynchronizationData extends DataClass
         {
             if (! $this->get_external())
             {
-                throw new \Exception(Translation :: get('NoExternalnstanceFound'));
+                throw new \Exception(Translation::get('NoExternalnstanceFound'));
             }
-
-            $this->external_object = \Chamilo\Core\Repository\External\DataConnector :: get_instance(
-                $this->get_external())->retrieve_external_object($this);
+            
+            $this->external_object = \Chamilo\Core\Repository\External\DataConnector::getInstance($this->get_external())->retrieve_external_object(
+                $this);
         }
         return $this->external_object;
     }
@@ -323,7 +323,7 @@ class SynchronizationData extends DataClass
     {
         if (! isset($this->external))
         {
-            $this->external = DataManager :: retrieve_by_id(Instance :: class_name(), $this->get_external_id());
+            $this->external = DataManager::retrieve_by_id(Instance::class_name(), $this->get_external_id());
         }
         return $this->external;
     }
@@ -340,43 +340,43 @@ class SynchronizationData extends DataClass
             {
                 $external_object_date = $this->get_external_object()->get_created();
             }
-
+            
             if ($content_object_date > $this->get_content_object_timestamp())
             {
                 if ($external_object_date > $this->get_external_object_timestamp())
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_CONFLICT;
+                    $this->synchronization_status = self::SYNC_STATUS_CONFLICT;
                 }
                 elseif ($external_object_date == $this->get_external_object_timestamp())
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_EXTERNAL;
+                    $this->synchronization_status = self::SYNC_STATUS_EXTERNAL;
                 }
                 else
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_ERROR;
+                    $this->synchronization_status = self::SYNC_STATUS_ERROR;
                 }
             }
             elseif ($content_object_date == $this->get_content_object_timestamp())
             {
                 if ($external_object_date > $this->get_external_object_timestamp())
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_INTERNAL;
+                    $this->synchronization_status = self::SYNC_STATUS_INTERNAL;
                 }
                 elseif ($external_object_date == $this->get_external_object_timestamp())
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_IDENTICAL;
+                    $this->synchronization_status = self::SYNC_STATUS_IDENTICAL;
                 }
                 else
                 {
-                    $this->synchronization_status = self :: SYNC_STATUS_ERROR;
+                    $this->synchronization_status = self::SYNC_STATUS_ERROR;
                 }
             }
             else
             {
-                $this->synchronization_status = self :: SYNC_STATUS_ERROR;
+                $this->synchronization_status = self::SYNC_STATUS_ERROR;
             }
         }
-
+        
         return $this->synchronization_status;
     }
 
@@ -384,7 +384,7 @@ class SynchronizationData extends DataClass
      * *********************************************************************** Fat model methods
      * ***********************************************************************
      */
-
+    
     /**
      *
      * @param $content_object_id int
@@ -393,9 +393,9 @@ class SynchronizationData extends DataClass
     public static function get_by_content_object_id($content_object_id)
     {
         $conditions = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object_id));
-        return DataManager :: retrieve_synchronization_data($conditions);
+        return DataManager::retrieve_synchronization_data($conditions);
     }
 
     /**
@@ -408,13 +408,13 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
-        return DataManager :: retrieve_synchronization_data($condition);
+        return DataManager::retrieve_synchronization_data($condition);
     }
 
     /**
@@ -427,14 +427,14 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_OBJECT_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_OBJECT_ID), 
             new StaticConditionVariable($external_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
-
-        return DataManager :: retrieve_synchronization_data($conditions);
+        
+        return DataManager::retrieve_synchronization_data($conditions);
     }
 
     /**
@@ -453,7 +453,7 @@ class SynchronizationData extends DataClass
         $sync->set_external_object_id((string) $external_object->get_id());
         $sync->set_external_object_timestamp($external_object->get_modified());
         $sync->set_external_user_id($external_object->get_owner_id());
-        $sync->set_state(self :: STATE_ACTIVE);
+        $sync->set_state(self::STATE_ACTIVE);
         return $sync->create();
     }
 }

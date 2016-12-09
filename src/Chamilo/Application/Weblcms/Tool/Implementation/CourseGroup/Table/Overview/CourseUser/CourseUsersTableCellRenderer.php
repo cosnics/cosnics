@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer
 
 /**
  * Cell renderer for the course users table
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
 class CourseUsersTableCellRenderer extends RecordTableCellRenderer
@@ -18,10 +18,10 @@ class CourseUsersTableCellRenderer extends RecordTableCellRenderer
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Renders a given cell.
-     *
+     * 
      * @param $column type
      * @param mixed[] $course_user
      *
@@ -31,14 +31,14 @@ class CourseUsersTableCellRenderer extends RecordTableCellRenderer
     {
         switch ($column->get_name())
         {
-            case CourseUsersTableColumnModel :: COLUMN_COURSE_GROUPS :
+            case CourseUsersTableColumnModel::COLUMN_COURSE_GROUPS :
                 {
-                    return DataManager :: get_course_groups_from_user_as_string(
-                        $course_user[User :: PROPERTY_ID],
+                    return DataManager::get_course_groups_from_user_as_string(
+                        $course_user[User::PROPERTY_ID], 
                         $this->get_component()->get_course_id());
                 }
         }
-
-        return parent :: render_cell($column, $course_user);
+        
+        return parent::render_cell($column, $course_user);
     }
 }

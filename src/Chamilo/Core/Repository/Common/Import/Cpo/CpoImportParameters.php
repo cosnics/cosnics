@@ -11,7 +11,7 @@ class CpoImportParameters extends ImportParameters
 
     public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $workspace, $category);
+        parent::__construct($type, $user, $workspace, $category);
         $this->file = $file;
     }
 

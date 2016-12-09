@@ -20,8 +20,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        parent :: __construct($external_repository, $application);
-        $this->set_parameter(self :: PARAM_FEED_TYPE, Request :: get(self :: PARAM_FEED_TYPE));
+        parent::__construct($external_repository, $application);
+        $this->set_parameter(self::PARAM_FEED_TYPE, Request::get(self::PARAM_FEED_TYPE));
     }
 
     /*
@@ -48,9 +48,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
@@ -60,17 +60,17 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         $general = array();
-        $general['title'] = Translation :: get('Dropbox');
+        $general['title'] = Translation::get('Dropbox');
         $general['url'] = $this->get_url(
-            array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_GENERAL),
-            array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
+            array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL), 
+            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
         $general['class'] = 'home';
         $menu_items[] = $general;
-
+        
         $folders = $this->get_external_repository_manager_connector()->retrieve_folders(
-            $this->get_url(array(self :: PARAM_FOLDER => '__PLACEHOLDER__')));
+            $this->get_url(array(self::PARAM_FOLDER => '__PLACEHOLDER__')));
         $menu_items = array_merge($menu_items, $folders);
         return $menu_items;
     }
@@ -81,18 +81,18 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(
-            self :: ACTION_BROWSE_EXTERNAL_REPOSITORY,
-            self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY,
-            self :: ACTION_EXPORT_EXTERNAL_REPOSITORY);
-
+            self::ACTION_BROWSE_EXTERNAL_REPOSITORY, 
+            self::ACTION_UPLOAD_EXTERNAL_REPOSITORY, 
+            self::ACTION_EXPORT_EXTERNAL_REPOSITORY);
+        
         $is_platform = $this->get_user()->is_platform_admin() && (count(
-            Setting :: get_all($this->get_external_repository()->get_id())) > 0);
-
+            Setting::get_all($this->get_external_repository()->get_id())) > 0);
+        
         if ($is_platform)
         {
-            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+            $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
-
+        
         return $actions;
     }
 
@@ -101,7 +101,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_available_renderers()
     {
-        return array(Renderer :: TYPE_TABLE);
+        return array(Renderer::TYPE_TABLE);
     }
 
     /*
@@ -117,6 +117,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 }

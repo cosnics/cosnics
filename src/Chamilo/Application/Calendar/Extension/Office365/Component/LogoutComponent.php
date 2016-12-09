@@ -22,17 +22,16 @@ class LogoutComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository::getInstance());
         $isSuccessful = $calendarService->logout();
-
+        
         if ($isSuccessful)
         {
             $availabilityService = new AvailabilityService(new AvailabilityRepository());
-            $availabilityService->deleteAvailabilityByCalendarType(self :: package());
+            $availabilityService->deleteAvailabilityByCalendarType(self::package());
         }
-
-        $nextAction = new Redirect(
-            array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
+        
+        $nextAction = new Redirect(array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
         $nextAction->toUrl();
     }
 }

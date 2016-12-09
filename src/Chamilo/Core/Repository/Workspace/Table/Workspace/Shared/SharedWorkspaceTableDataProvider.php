@@ -23,9 +23,9 @@ class SharedWorkspaceTableDataProvider extends WorkspaceTableDataProvider
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
         return $workspaceService->getSharedWorkspacesForUser(
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 

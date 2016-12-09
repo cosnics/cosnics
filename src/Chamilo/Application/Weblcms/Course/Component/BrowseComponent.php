@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Table\CourseTable\CourseTable;
 use Chamilo\Application\Weblcms\Menu\CourseCategoryMenu;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -53,20 +52,15 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        if ($this->can_view_component())
-        {
-            $html = array();
-            
-            $html[] = $this->render_header();
-            $html[] = $this->get_html();
-            $html[] = $this->render_footer();
-            
-            return implode(PHP_EOL, $html);
-        }
-        else
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkComponentAuthorization();
+        
+        $html = array();
+        
+        $html[] = $this->render_header();
+        $html[] = $this->get_html();
+        $html[] = $this->render_footer();
+        
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -80,18 +74,18 @@ class BrowseComponent extends Manager implements TableSupport
     {
         $conditions = array();
         
-        $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
+        $category_id = Request::get(self::PARAM_CATEGORY_ID);
         if ($category_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY_ID), 
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID), 
                 new StaticConditionVariable($category_id));
         }
         
         $search_condition = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE), 
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_VISUAL_CODE)));
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE), 
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE)));
         
         if ($search_condition)
         {
@@ -126,9 +120,9 @@ class BrowseComponent extends Manager implements TableSupport
         
         $temp_replacement = '__CATEGORY_ID__';
         
-        $url_format = $this->get_url(array(self :: PARAM_CATEGORY_ID => $temp_replacement));
+        $url_format = $this->get_url(array(self::PARAM_CATEGORY_ID => $temp_replacement));
         
-        $category_menu = new CourseCategoryMenu(Request :: get(self :: PARAM_CATEGORY_ID), $url_format);
+        $category_menu = new CourseCategoryMenu(Request::get(self::PARAM_CATEGORY_ID), $url_format);
         
         $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">';
         $html[] = $category_menu->render_as_tree();
@@ -162,9 +156,9 @@ class BrowseComponent extends Manager implements TableSupport
      * 
      * @return boolean
      */
-    protected function can_view_component()
+    protected function checkComponentAuthorization()
     {
-        return $this->get_user()->is_platform_admin();
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
     }
 
     protected function getButtonToolbarRenderer()
@@ -176,17 +170,17 @@ class BrowseComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
                     $this->get_create_course_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -203,12 +197,12 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function get_parameters()
     {
-        $parameters = parent :: get_parameters();
-        $parameters[self :: PARAM_CATEGORY_ID] = Request :: get(self :: PARAM_CATEGORY_ID);
+        $parameters = parent::get_parameters();
+        $parameters[self::PARAM_CATEGORY_ID] = Request::get(self::PARAM_CATEGORY_ID);
         
         if (isset($this->buttonToolbarRenderer))
         {
-            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+            $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         }
         
         return $parameters;

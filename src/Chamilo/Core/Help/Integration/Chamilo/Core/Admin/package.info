@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Admin</name>
-		<code>Admin</code>
-		<context>Chamilo\Core\Help\Integration\Chamilo\Core\Admin</context>
-		<type>Chamilo\Core\Help\Integration</type>
-		<category />
-		<authors />
-		<version>5.0.0</version>
-		<description />
-		<pre-depends>
-			<dependencies operator="1">
-				<dependency type="registration">
-					<id>Chamilo\Core\Help</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
-				<dependency type="registration">
-					<id>Chamilo\Core\Admin</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
-			</dependencies>
-		</pre-depends>
-	</package>
+    <package>
+        <name>Admin</name>
+        <code>Admin</code>
+        <context>Chamilo\Core\Help\Integration\Chamilo\Core\Admin</context>
+        <type>Chamilo\Core\Help\Integration</type>
+        <category />
+        <authors />
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependencies operator="1">
+                <dependency type="registration">
+                    <id>Chamilo\Core\Help</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+                <dependency type="registration">
+                    <id>Chamilo\Core\Admin</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+            </dependencies>
+        </pre-depends>
+    </package>
 </packages>

@@ -16,13 +16,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer
 {
+
     /*
      * (non-PHPdoc) @see \core\repository\FilterRenderer::render()
      */
     public function render()
     {
         $filter_data = $this->get_filter_data();
-        $general_condition = parent :: render();
+        $general_condition = parent::render();
         
         $conditions = array();
         
@@ -31,11 +32,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             $conditions[] = $general_condition;
         }
         
-        if ($filter_data->has_filter_property(FilterData :: FILTER_ICON))
+        if ($filter_data->has_filter_property(FilterData::FILTER_ICON))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(SystemAnnouncement :: class_name(), SystemAnnouncement :: PROPERTY_ICON), 
-                new StaticConditionVariable($filter_data->get_filter_property(FilterData :: FILTER_ICON)));
+                new PropertyConditionVariable(SystemAnnouncement::class_name(), SystemAnnouncement::PROPERTY_ICON), 
+                new StaticConditionVariable($filter_data->get_filter_property(FilterData::FILTER_ICON)));
         }
         
         if (count($conditions) > 0)

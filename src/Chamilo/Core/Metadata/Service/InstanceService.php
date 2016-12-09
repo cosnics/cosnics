@@ -23,7 +23,7 @@ class InstanceService
         {
             return false;
         }
-
+        
         foreach ($selectedSchemaIds as $selectedSchemaId)
         {
             $schemaInstance = new SchemaInstance();
@@ -32,10 +32,10 @@ class InstanceService
             $schemaInstance->set_schema_id($selectedSchemaId);
             $schemaInstance->set_user_id($user->get_id());
             $schemaInstance->set_creation_date(time());
-
+            
             $schemaInstance->create();
         }
-
+        
         return 'schema-' . $schemaInstance->get_id();
     }
 }

@@ -29,19 +29,19 @@ class PeerAssessmentGroupForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     function __construct(ViewerComponent $viewer, $group_id, $url, $type = self :: FORM_TYPE_CREATE)
     {
         $this->viewer = $viewer;
         $this->group_id = $group_id;
-
-        parent :: __construct(self :: FORM_NAME, 'post', $url);
-
+        
+        parent::__construct(self::FORM_NAME, 'post', $url);
+        
         $this->build_basic_form();
-
-        if ($type == self :: FORM_TYPE_CREATE)
+        
+        if ($type == self::FORM_TYPE_CREATE)
         {
             $this->build_create_buttons();
         }
@@ -54,26 +54,26 @@ class PeerAssessmentGroupForm extends FormValidator
     private function build_create_buttons()
     {
         $this->addElement(
-            'style_submit_button',
-            FormValidator :: PARAM_SUBMIT,
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            FormValidator::PARAM_SUBMIT, 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
     }
 
     private function build_edit_buttons()
     {
         $this->addElement(
-            'style_submit_button',
-            FormValidator :: PARAM_SUBMIT,
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            FormValidator::PARAM_SUBMIT, 
+            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES));
     }
 
     private function build_basic_form()
     {
-        $this->add_textfield(self :: PARAM_NAME, Translation :: get('Name', null, Utilities :: COMMON_LIBRARIES));
+        $this->add_textfield(self::PARAM_NAME, Translation::get('Name', null, Utilities::COMMON_LIBRARIES));
         $this->add_html_editor(
-            self :: PARAM_DESCRIPTION,
-            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES));
-
+            self::PARAM_DESCRIPTION, 
+            Translation::get('Description', null, Utilities::COMMON_LIBRARIES));
+        
         $current = array();
         // set defaults if there are any
         if (! is_null($this->group_id))
@@ -82,26 +82,26 @@ class PeerAssessmentGroupForm extends FormValidator
             foreach ($group_users as $user)
             {
                 $current[] = array(
-                    'id' => self :: PARAM_USER . '_' . $user->get_id(),
-                    'classes' => 'type type_user',
-                    'title' => $user->get_firstname() . ' ' . $user->get_lastname(),
+                    'id' => self::PARAM_USER . '_' . $user->get_id(), 
+                    'classes' => 'type type_user', 
+                    'title' => $user->get_firstname() . ' ' . $user->get_lastname(), 
                     'description' => $user->get_username());
             }
         }
         $locale = array(
-            'Display' => Translation :: get('SelectGroupUsers', null, Utilities :: COMMON_LIBRARIES),
-            'Searching' => Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES),
-            'NoResults' => Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES),
-            'Error' => Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES),
+            'Display' => Translation::get('SelectGroupUsers', null, Utilities::COMMON_LIBRARIES), 
+            'Searching' => Translation::get('Searching', null, Utilities::COMMON_LIBRARIES), 
+            'NoResults' => Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES), 
+            'Error' => Translation::get('Error', null, Utilities::COMMON_LIBRARIES), 
             'load_elements' => true);
-
+        
         $elem = $this->addElement(
-            'user_group_finder',
-            Manager :: PARAM_GROUP_USERS,
-            Translation :: get('SubscribeUsers', null, Utilities :: COMMON_LIBRARIES),
-            $this->viewer->get_group_feed_path(),
-            $locale,
-            $current,
+            'user_group_finder', 
+            Manager::PARAM_GROUP_USERS, 
+            Translation::get('SubscribeUsers', null, Utilities::COMMON_LIBRARIES), 
+            $this->viewer->get_group_feed_path(), 
+            $locale, 
+            $current, 
             array('load_elements' => true));
     }
 
@@ -114,19 +114,19 @@ class PeerAssessmentGroupForm extends FormValidator
         {
             $group_users_arr = $this->viewer->get_group_users($this->group_id);
             $group_users = array();
-
+            
             foreach ($group_users_arr as $user)
             {
                 $group_users[$user->get_id()] = $user->get_id();
             }
-
-            $values = $this->exportValue(Manager :: PARAM_GROUP_USERS);
-
+            
+            $values = $this->exportValue(Manager::PARAM_GROUP_USERS);
+            
             foreach ($values as $type => $elements)
             {
                 foreach ($elements as $id)
                 {
-                    if ($type == self :: PARAM_USER)
+                    if ($type == self::PARAM_USER)
                     {
                         // type = user
                         if (! in_array($id, $group_users))
@@ -138,8 +138,8 @@ class PeerAssessmentGroupForm extends FormValidator
                             }
                             else
                             {
-                                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                                     $id);
                                 $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
                             }
@@ -150,10 +150,10 @@ class PeerAssessmentGroupForm extends FormValidator
                         }
                     }
                     // type = group
-                    elseif ($type == self :: PARAM_GROUP)
+                    elseif ($type == self::PARAM_GROUP)
                     {
                         $context_group_users = $this->viewer->get_context_group_users($id);
-
+                        
                         foreach ($context_group_users as $user)
                         {
                             if (! in_array($user->get_id(), $group_users))
@@ -178,16 +178,16 @@ class PeerAssessmentGroupForm extends FormValidator
                     }
                 }
             }
-
+            
             // remove remaining users
             foreach ($group_users as $user_id)
             {
                 $this->viewer->remove_user_from_group($user_id, $this->group_id);
             }
         }
-
+        
         if (count($already_enrolled) > 0)
-            $this->enroll_errors = implode(',', $already_enrolled) . ' ' . Translation :: get('AlreadyEnrolled');
+            $this->enroll_errors = implode(',', $already_enrolled) . ' ' . Translation::get('AlreadyEnrolled');
     }
 
     function get_enroll_errors()

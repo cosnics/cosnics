@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Office365Video</name>
-		<code>Office365Video</code>
-		<type>Chamilo\Core\Repository\Implementation</type>
-		<context>Chamilo\Core\Repository\Implementation\Office365Video</context>
-		<category>Streaming</category>
-		<authors>
-			<author>
-				<name>Andras Zolnay</name>
-				<email>a.zolnay@edufiles.nl</email>
-				<company>edufiles</company>
-			</author>
-		</authors>
-		<version>5.0.0</version>
-		<description>
-      Office 365 Video is an intranet website portal where people can post and view videos. It's a streaming video service that's available
-      with SharePoint Online in Office 365. Share videos of executive communications or recordings of classes, meetings, presentations, or
-      training sessions, for example. Office 365 Video displays a thumbnail image of each video on the site.
-		</description>
-		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Core\Repository</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
-		</pre-depends>
-		<extra>
-			<default-install>1</default-install>
-		</extra>
-	</package>
+    <package>
+        <name>Office365Video</name>
+        <code>Office365Video</code>
+        <type>Chamilo\Core\Repository\Implementation</type>
+        <context>Chamilo\Core\Repository\Implementation\Office365Video</context>
+        <category>Streaming</category>
+        <authors>
+            <author>
+                <name>Andras Zolnay</name>
+                <email>a.zolnay@edufiles.nl</email>
+                <company>edufiles</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description>
+            Office 365 Video is an intranet website portal where people can post and view videos. It's a streaming video service that's available
+            with SharePoint Online in Office 365. Share videos of executive communications or recordings of classes, meetings, presentations, or
+            training sessions, for example. Office 365 Video displays a thumbnail image of each video on the site.
+        </description>
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+        <extra>
+            <default-install>1</default-install>
+        </extra>
+    </package>
 </packages>

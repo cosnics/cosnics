@@ -10,13 +10,13 @@ class LpHotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\
 
     public function run()
     {
-        $id = Request :: post('id');
-        $score = Request :: post('score');
-
-        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-            LearningPathItemAttempt :: class_name(),
+        $id = Request::post('id');
+        $score = Request::post('score');
+        
+        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+            LearningPathItemAttempt::class_name(), 
             $id);
-
+        
         if ($attempt instanceof LearningPathItemAttempt)
         {
             $attempt->set_score($score);
@@ -24,7 +24,7 @@ class LpHotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\
             $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
             $attempt->update();
         }
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

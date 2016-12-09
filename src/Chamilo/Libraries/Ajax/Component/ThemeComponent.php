@@ -15,6 +15,6 @@ class ThemeComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        echo Theme :: get_theme();
+        echo Theme::get_theme();
     }
 }

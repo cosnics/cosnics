@@ -10,6 +10,6 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 
     public function render($parameters)
     {
-        return $this->get_track_element($parameters[self :: PARAM_WIDTH], $parameters[self :: PARAM_HEIGHT]);
+        return $this->get_track_element($parameters[self::PARAM_WIDTH], $parameters[self::PARAM_HEIGHT]);
     }
 }

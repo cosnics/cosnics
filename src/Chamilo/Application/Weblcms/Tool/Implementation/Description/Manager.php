@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Descript
 
 /**
  * $Id: description_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.description
  */
 
@@ -24,6 +24,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Description :: class_name()/*, File :: class_name(), Page :: class_name(), Webpage :: class_name()*/);
+        return array(Description::class_name()/*, File :: class_name(), Page :: class_name(), Webpage :: class_name()*/);
     }
 }

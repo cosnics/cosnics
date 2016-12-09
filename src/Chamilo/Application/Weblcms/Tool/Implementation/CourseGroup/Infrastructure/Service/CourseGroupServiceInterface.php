@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -7,14 +6,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Interface for a course group service
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface CourseGroupServiceInterface
 {
+
     /**
      * Creates a document category for a given course group
-     *
+     * 
      * @param CourseGroup $courseGroup
      *
      * @throws \Exception
@@ -23,7 +23,7 @@ interface CourseGroupServiceInterface
 
     /**
      * Creates a forum for a given course group
-     *
+     * 
      * @param CourseGroup $courseGroup
      * @param User $user
      *
@@ -33,7 +33,7 @@ interface CourseGroupServiceInterface
 
     /**
      * Counts the course groups in a given course
-     *
+     * 
      * @param int $courseId
      *
      * @return int

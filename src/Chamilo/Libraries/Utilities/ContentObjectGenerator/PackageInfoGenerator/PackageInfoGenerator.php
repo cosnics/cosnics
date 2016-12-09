@@ -33,7 +33,7 @@ class PackageInfoGenerator
         $this->template = new MyTemplate();
         $this->template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -46,7 +46,7 @@ class PackageInfoGenerator
         {
             $this->template->set_filenames(array('package_info' => 'package_info.template'));
             
-            $name = (string) StringUtilities :: getInstance()->createString($xml_definition['name'])->humanize()->toTitleCase();
+            $name = (string) StringUtilities::getInstance()->createString($xml_definition['name'])->humanize()->toTitleCase();
             
             $this->template->assign_vars(
                 array(
@@ -72,7 +72,7 @@ class PackageInfoGenerator
         $this->template = new MyTemplate();
         $this->template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $xml_definition['name'] . '/settings';
+        $location = Path::get_repository_path() . 'lib/content_object/' . $xml_definition['name'] . '/settings';
         
         if (! is_dir($location))
         {
@@ -85,7 +85,7 @@ class PackageInfoGenerator
         {
             $this->template->set_filenames(array('settings' => 'settings.template'));
             
-            $name = (string) StringUtilities :: getInstance()->createString($xml_definition['name'])->humanize()->toTitleCase();
+            $name = (string) StringUtilities::getInstance()->createString($xml_definition['name'])->humanize()->toTitleCase();
             
             $this->template->assign_vars(array('CODE' => $xml_definition['name']));
             

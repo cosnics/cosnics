@@ -15,19 +15,16 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(AccountRequest :: class_name(), AccountRequest :: PROPERTY_FIRST_NAME));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_FIRST_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(AccountRequest :: class_name(), AccountRequest :: PROPERTY_LAST_NAME));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_LAST_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(AccountRequest :: class_name(), AccountRequest :: PROPERTY_EMAIL));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_EMAIL));
         $this->add_column(
-            new DataClassPropertyTableColumn(
-                AccountRequest :: class_name(), 
-                AccountRequest :: PROPERTY_REQUESTER_ID, 
-                false));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_REQUESTER_ID, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(AccountRequest :: class_name(), AccountRequest :: PROPERTY_REQUEST_DATE));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_REQUEST_DATE));
         $this->add_column(
-            new DataClassPropertyTableColumn(AccountRequest :: class_name(), AccountRequest :: PROPERTY_STATUS));
+            new DataClassPropertyTableColumn(AccountRequest::class_name(), AccountRequest::PROPERTY_STATUS));
     }
 }

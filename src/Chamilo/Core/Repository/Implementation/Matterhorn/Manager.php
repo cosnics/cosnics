@@ -47,9 +47,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
@@ -59,7 +59,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         return $menu_items;
     }
 
@@ -69,16 +69,16 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array();
-        $actions[] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-        $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
+        $actions[] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+        $actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
         // $actions[] = self :: ACTION_BROWSE_WORKFLOW;
-
+        
         $is_platform = $this->get_user()->is_platform_admin();
         $has_settings = $this->get_external_repository()->has_settings();
-
+        
         if ($has_settings && $is_platform)
         {
-            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+            $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
         return $actions;
     }
@@ -88,7 +88,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_available_renderers()
     {
-        return array(Renderer :: TYPE_GALLERY, Renderer :: TYPE_SLIDESHOW, Renderer :: TYPE_TABLE);
+        return array(Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE);
     }
 
     /*
@@ -96,15 +96,15 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_content_object_type_conditions()
     {
-        $video_types = File :: get_video_types();
+        $video_types = File::get_video_types();
         $video_conditions = array();
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File :: class_name, File :: PROPERTY_FILENAME),
+                new PropertyConditionVariable(File::class_name, File::PROPERTY_FILENAME), 
                 '*.' . $video_type);
         }
-
+        
         return new OrCondition($video_conditions);
     }
 
@@ -114,7 +114,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 
     public function get_instance_identifier()
@@ -124,23 +124,23 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_external_repository_object_actions(\Chamilo\Core\Repository\External\ExternalObject $object)
     {
-        $toolbar_items = parent :: get_external_repository_object_actions($object);
-
+        $toolbar_items = parent::get_external_repository_object_actions($object);
+        
         if ($object->is_deletable())
         {
             $parameters = array();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_EXTERNAL_REPOSITORY;
-            $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_EXTERNAL_REPOSITORY;
+            $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
             $deleting_url = $this->get_url($parameters);
-
-            $toolbar_items[self :: ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation :: get('DeleteRepository'),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $deleting_url,
-                ToolbarItem :: DISPLAY_ICON,
+            
+            $toolbar_items[self::ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
+                Translation::get('DeleteRepository'), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                $deleting_url, 
+                ToolbarItem::DISPLAY_ICON, 
                 true);
         }
-
+        
         return $toolbar_items;
     }
 }

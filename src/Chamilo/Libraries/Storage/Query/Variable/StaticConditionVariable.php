@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 
 /**
  * A ConditionVariable that describes a static value
- *
+ * 
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -14,14 +14,14 @@ class StaticConditionVariable extends ConditionVariable
 
     /**
      * A static value that should remain unchanged in the Condition
-     *
+     * 
      * @var string
      */
     private $value;
 
     /**
      * Whether or not the variable should be quoted
-     *
+     * 
      * @var boolean
      */
     private $quote;
@@ -75,11 +75,11 @@ class StaticConditionVariable extends ConditionVariable
 
     public function getHashParts()
     {
-        $hashParts = ConditionVariable :: getHashParts();
-
+        $hashParts = ConditionVariable::getHashParts();
+        
         $hashParts[] = $this->get_value();
         $hashParts[] = $this->get_quote();
-
+        
         return $hashParts;
     }
 }

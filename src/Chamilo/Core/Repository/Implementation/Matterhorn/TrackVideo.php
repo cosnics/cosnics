@@ -139,8 +139,8 @@ class TrackVideo
             $html[] = $this->get_device();
         }
         $html[] = $this->get_encoder();
-        $html[] = round($this->get_bitrate() / 1000) . Translation :: get('kbps');
-        $html[] = $this->get_framerate() . Translation :: get('fps');
+        $html[] = round($this->get_bitrate() / 1000) . Translation::get('kbps');
+        $html[] = $this->get_framerate() . Translation::get('fps');
         $html[] = $this->get_resolution();
         
         return implode(", ", $html);
@@ -148,7 +148,7 @@ class TrackVideo
 
     public function is_html5()
     {
-        return Html5MediaValidator :: is_video($this->get_encoder());
+        return Html5MediaValidator::is_video($this->get_encoder());
     }
 
     public function get_height()

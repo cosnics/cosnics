@@ -18,57 +18,56 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: forum_subforum_creator.class.php 205 2009-11-13 12:57:33Z vanpouckesven $
- *
+ * 
  * @package repository.lib.complex_display.forum.component
  */
-class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, 
     DelegateComponent
 {
 
     public function run()
     {
         $forum = $this->getForum();
-
+        
         if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $forum->get_owner_id() ||
-            $this->isForumManager($this->get_user())
-        )
+             $this->isForumManager($this->get_user()))
         {
-
-            if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+            
+            if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
             {
-
+                
                 $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
-
+                
                 $exclude[] = $this->get_root_content_object()->get_id();
-
-                BreadcrumbTrail :: get_instance()->add(
+                
+                BreadcrumbTrail::getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
+                                self::PARAM_ACTION => self::ACTION_VIEW_FORUM, 
+                                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)), 
                         $this->get_root_content_object()->get_title()));
-
+                
                 if ($this->get_complex_content_object_item())
                 {
-
+                    
                     $forums_with_key_cloi = array();
                     $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
-                        $this->get_root_content_object()->get_id(),
+                        $this->get_root_content_object()->get_id(), 
                         $this->get_complex_content_object_item()->get_id());
-
+                    
                     if ($forums_with_key_cloi)
                     {
-
+                        
                         foreach ($forums_with_key_cloi as $key => $value)
                         {
-
-                            BreadcrumbTrail :: get_instance()->add(
+                            
+                            BreadcrumbTrail::getInstance()->add(
                                 new Breadcrumb(
                                     $this->get_url(
                                         array(
-                                            self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                                            self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
+                                            self::PARAM_ACTION => self::ACTION_VIEW_FORUM, 
+                                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)), 
                                     $value->get_title()));
                         }
                     }
@@ -77,27 +76,27 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                         throw new \Exception('The forum you requested has not been found');
                     }
                 }
-
+                
                 $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-                $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
-
+                $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
+                
                 $factory = new ApplicationFactory(
-                    \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                    \Chamilo\Core\Repository\Viewer\Manager::context(), 
                     $applicationConfiguration);
                 $component = $factory->getComponent();
-                $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
-                $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_SUBFORUM);
+                $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+                $component->set_parameter(self::PARAM_ACTION, self::ACTION_CREATE_SUBFORUM);
                 $component->set_parameter(
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID, 
                     $this->get_complex_content_object_item_id());
                 $component->set_excluded_objects($exclude);
-
+                
                 return $component->run();
             }
             else
             {
-                $cloi = ComplexContentObjectItem :: factory(Forum :: class_name());
-
+                $cloi = ComplexContentObjectItem::factory(Forum::class_name());
+                
                 if ($this->get_complex_content_object_item())
                 {
                     $cloi->set_parent($this->get_complex_content_object_item()->get_ref());
@@ -106,14 +105,14 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                 {
                     $cloi->set_parent($this->get_root_content_object_id());
                 }
-
-                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
+                
+                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
                 $cloi->set_user_id($this->get_user_id());
                 $cloi->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order($cloi->get_parent()));
-
+                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($cloi->get_parent()));
+                
                 $success = $cloi->create();
-
+                
                 $this->my_redirect($success);
             }
         }
@@ -127,20 +126,20 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
     {
         $items = array();
         $items = array_merge($items, $this->retrieve_used_items_parents($object));
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
-                new StaticConditionVariable($object),
-                ComplexContentObjectItem :: get_table_name()));
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
+                new StaticConditionVariable($object), 
+                ComplexContentObjectItem::get_table_name()));
         while ($complex_content_object_item = $complex_content_object_items->next_result())
         {
-
+            
             if ($complex_content_object_item->is_complex())
             {
-
+                
                 $items[] = $complex_content_object_item->get_ref();
                 $items = array_merge($items, $this->retrieve_used_items($complex_content_object_item->get_ref()));
             }
@@ -152,20 +151,20 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
     {
         $items = array();
         $items[] = $object_id;
-        $complex_content_object_items_parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        $complex_content_object_items_parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_REF),
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_REF), 
                 new StaticConditionVariable($object_id)));
         while ($complex_content_object_item_parent = $complex_content_object_items_parent->next_result())
         {
             if ($complex_content_object_item_parent->is_complex())
             {
-
+                
                 $items = array_merge(
-                    $items,
+                    $items, 
                     $this->retrieve_used_items_parents($complex_content_object_item_parent->get_parent()));
             }
         }
@@ -175,20 +174,20 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
     private function my_redirect($success)
     {
         $message = htmlentities(
-            Translation :: get(
-                ($success ? 'ObjectCreated' : 'ObjectNotCreated'),
-                array('OBJECT' => Translation :: get('Subforum')),
-                Utilities :: COMMON_LIBRARIES));
-
+            Translation::get(
+                ($success ? 'ObjectCreated' : 'ObjectNotCreated'), 
+                array('OBJECT' => Translation::get('Subforum')), 
+                Utilities::COMMON_LIBRARIES));
+        
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        
         $this->redirect($message, ($success ? false : true), $params);
     }
 
     public function get_allowed_content_object_types()
     {
-        return array(Forum :: class_name());
+        return array(Forum::class_name());
     }
 }

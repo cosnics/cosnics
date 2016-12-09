@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Extends SubmissionBrowserTableColumnModel to include the group members column.
- *
+ * 
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
@@ -22,9 +22,9 @@ class SubmissionGroupsBrowserTableColumnModel extends SubmissionBrowserTableColu
     public function initialize_columns()
     {
         $this->add_group_name_column();
-        $this->add_column(new StaticTableColumn(Manager :: PROPERTY_GROUP_MEMBERS));
-
-        parent :: initialize_columns();
+        $this->add_column(new StaticTableColumn(Manager::PROPERTY_GROUP_MEMBERS));
+        
+        parent::initialize_columns();
     }
 
     /**
@@ -32,6 +32,6 @@ class SubmissionGroupsBrowserTableColumnModel extends SubmissionBrowserTableColu
      */
     protected function add_group_name_column()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
     }
 }

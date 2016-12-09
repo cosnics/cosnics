@@ -17,6 +17,6 @@ class LearningPathForm extends ContentObjectForm
         $object = new LearningPath();
         $object->set_version('chamilo');
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 }

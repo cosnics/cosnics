@@ -24,102 +24,102 @@ class VimeoContentObjectImportController extends ContentObjectImportController
     public function run()
     {
         $url = $this->get_parameters()->get_url();
-
-        if (self :: is_available())
+        
+        if (self::is_available())
         {
             $url_parts = parse_url($url);
-
+            
             parse_str($url_parts['query'], $url_query);
-
+            
             if (strpos($url_parts['host'], 'vimeo.com') !== false)
             {
                 $external_id = substr($url_parts['path'], 1);
-
+                
                 if (! is_numeric($external_id))
                 {
-                    $this->add_message(Translation :: get('ObjectNotImported'), self :: TYPE_ERROR);
+                    $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
                 }
             }
             else
             {
-                $this->add_message(Translation :: get('ObjectNotImported'), self :: TYPE_ERROR);
+                $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
             }
-
-            if (! $this->has_messages(self :: TYPE_ERROR))
+            
+            if (! $this->has_messages(self::TYPE_ERROR))
             {
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TYPE),
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
                     new StaticConditionVariable(
-                        \Chamilo\Core\Repository\External\Manager :: get_namespace(self :: FORMAT)));
+                        \Chamilo\Core\Repository\External\Manager::get_namespace(self::FORMAT)));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_ENABLED),
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
-
-                $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
+                
+                $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
                     new DataClassRetrievesParameters($condition));
-
+                
                 $external_repository = $external_repositories->next_result();
-                $vimeo_connector = DataConnector :: get_instance($external_repository);
+                $vimeo_connector = DataConnector::getInstance($external_repository);
                 $external_object = $vimeo_connector->retrieve_external_repository_object($external_id);
-
-                $vimeo = ContentObject :: factory(Vimeo :: get_type_name());
+                
+                $vimeo = ContentObject::factory(Vimeo::get_type_name());
                 $vimeo->set_title($external_object->get_title());
                 $vimeo->set_description($external_object->get_description());
                 $vimeo->set_owner_id($this->get_parameters()->get_user());
                 $vimeo->set_parent_id($this->determine_parent_id());
-
+                
                 if ($vimeo->create())
                 {
                     $this->process_workspace($vimeo);
-
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: quicksave(
-                        $vimeo,
-                        $external_object,
+                    
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::quicksave(
+                        $vimeo, 
+                        $external_object, 
                         $external_repository->get_id());
-                    $this->add_message(Translation :: get('ObjectImported'), self :: TYPE_CONFIRM);
+                    $this->add_message(Translation::get('ObjectImported'), self::TYPE_CONFIRM);
                     return array($vimeo->get_id());
                 }
                 else
                 {
-                    $this->add_message(Translation :: get('ObjectNotImported'), self :: TYPE_ERROR);
+                    $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
                 }
             }
         }
         else
         {
-            $this->add_message(Translation :: get('VimeoObjectNotAvailable'), self :: TYPE_WARNING);
+            $this->add_message(Translation::get('VimeoObjectNotAvailable'), self::TYPE_WARNING);
         }
     }
 
     public static function is_available()
     {
-        $vimeo_object_available = in_array(self :: FORMAT, DataManager :: get_registered_types(true));
-
+        $vimeo_object_available = in_array(self::FORMAT, DataManager::get_registered_types(true));
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TYPE),
-            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace(self :: FORMAT)));
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager::get_namespace(self::FORMAT)));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_ENABLED),
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-
-        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
+        
+        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
             new DataClassRetrievesParameters($condition));
         $vimeo_connector_available = $external_repositories->size() == 1;
-
+        
         return $vimeo_object_available && $vimeo_connector_available;
     }
 
@@ -149,8 +149,8 @@ class VimeoContentObjectImportController extends ContentObjectImportController
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
-                $this->get_parameters()->getWorkspace()->getId(),
-                $contentObject->getId(),
+                $this->get_parameters()->getWorkspace()->getId(), 
+                $contentObject->getId(), 
                 $this->get_parameters()->get_category());
         }
     }

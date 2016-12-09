@@ -26,7 +26,7 @@ class PhysicalLocationDifference extends ContentObjectDifference
         $version_string = explode("\n", strip_tags($version_string));
         
         $html = array();
-        $html[] = parent :: render();
+        $html[] = parent::render();
         
         $difference = new \Diff($version_string, $object_string);
         $renderer = new \Diff_Renderer_Html_SideBySide();

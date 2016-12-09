@@ -12,5 +12,4 @@ namespace Chamilo\Application\Survey\Package;
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
-    
 }

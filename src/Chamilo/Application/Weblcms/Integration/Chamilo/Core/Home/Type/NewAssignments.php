@@ -25,12 +25,12 @@ class NewAssignments extends NewBlock
      */
     public function displayNewItem($publication)
     {
-        if ($publication[ContentObject :: PROPERTY_TYPE] != Assignment :: class_name())
+        if ($publication[ContentObject::PROPERTY_TYPE] != Assignment::class_name())
         {
             return;
         }
-
-        return parent :: displayNewItem($publication);
+        
+        return parent::displayNewItem($publication);
     }
 
     /**
@@ -39,7 +39,7 @@ class NewAssignments extends NewBlock
      */
     public function getContentObjectTypes()
     {
-        return array(Assignment :: class_name());
+        return array(Assignment::class_name());
     }
 
     /**
@@ -58,14 +58,14 @@ class NewAssignments extends NewBlock
     public function getCourseViewerLink(Course $course, $publication)
     {
         $parameters = array(
-            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id(),
-            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-            \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => NewBlock :: TOOL_ASSIGNMENT,
-            \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]);
-
+            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id(), 
+            Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
+            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT, 
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMITTERS, 
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => ContentObjectRenderer::TYPE_TABLE, 
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]);
+        
         return $this->getLink($parameters);
     }
 
@@ -75,10 +75,10 @@ class NewAssignments extends NewBlock
      */
     public function getBadgeContent($publication)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            Assignment :: class_name(),
-            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            Assignment::class_name(), 
+            $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+        
         return '<span class="badge badge-date">' . date('j M Y', $content_object->get_start_time()) . ' - ' .
              date('j M Y', $content_object->get_end_time()) . '</span>';
     }

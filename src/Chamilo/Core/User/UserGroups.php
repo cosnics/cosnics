@@ -20,7 +20,7 @@ class UserGroups
 
     /**
      * Constructor
-     *
+     * 
      * @param $user_id int
      * @param $border boolean Indicates if a border should be included
      */
@@ -32,7 +32,7 @@ class UserGroups
 
     /**
      * Returns a HTML representation of the user details
-     *
+     * 
      * @return string
      * @todo Implement further details
      */
@@ -47,15 +47,15 @@ class UserGroups
         {
             $html[] = 'class="vertical_space"';
         }
-        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
-            \Chamilo\Core\Group\Manager :: context(),
+        $html[] = 'style="clear: both;background-image: url(' . Theme::getInstance()->getImagePath(
+            \Chamilo\Core\Group\Manager::context(), 
             'Logo/22') . ');">';
         $html[] = '<div class="title">';
-        $html[] = Translation :: get('PlatformGroups', null, Utilities :: COMMON_LIBRARIES);
+        $html[] = Translation::get('PlatformGroups', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="description">';
         $html[] = '<ul>';
-        $group_relations = \Chamilo\Core\Group\Storage\DataManager :: retrieve_user_groups($this->user_id);
+        $group_relations = \Chamilo\Core\Group\Storage\DataManager::retrieve_user_groups($this->user_id);
         if ($group_relations->size() > 0)
         {
             while ($group = $group_relations->next_result())
@@ -70,7 +70,7 @@ class UserGroups
         }
         else
         {
-            $html[] = Translation :: get('NoPlatformGroupSubscriptions', null, Utilities :: COMMON_LIBRARIES);
+            $html[] = Translation::get('NoPlatformGroupSubscriptions', null, Utilities::COMMON_LIBRARIES);
         }
         $html[] = '</ul>';
         $html[] = '</div>';

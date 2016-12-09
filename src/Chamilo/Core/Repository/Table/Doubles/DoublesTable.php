@@ -10,7 +10,7 @@ class DoublesTable extends RepositoryTable
 
     public function __construct($component, $is_detail = false)
     {
-        parent :: __construct($component);
+        parent::__construct($component);
         $this->is_detail = $is_detail;
     }
 

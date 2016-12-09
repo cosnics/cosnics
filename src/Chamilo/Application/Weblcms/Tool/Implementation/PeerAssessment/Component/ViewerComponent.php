@@ -13,23 +13,23 @@ class ViewerComponent extends Manager
     function get_tool_actions()
     {
         $tool_actions = array();
-
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $tool_actions[] = new ToolbarItem(
-                Translation :: get('Test'),
-                Theme :: getInstance()->getCommonImagePath('Action/Import'),
-                '#',
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+                Translation::get('Test'), 
+                Theme::getInstance()->getCommonImagePath('Action/Import'), 
+                '#', 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL);
         }
-
+        
         /*
          * if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT)) { $action_name = Translation ::
          * get('ViewResultsSummary'); } else { $action_name = Translation :: get('ViewResults'); } $tool_actions[] = new
          * ToolbarItem( $action_name, Theme :: getInstance()->getCommonImagePath('action_view_results'), '#',
          * ToolbarItem :: DISPLAY_ICON_AND_LABEL );
          */
-
+        
         return $tool_actions;
     }
 }

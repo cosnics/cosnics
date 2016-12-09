@@ -8,7 +8,7 @@ use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderIn
 
 /**
  * Settings provider for external repositories to support the microsoft client service
- *
+ * 
  * @author Andras Zolnay - edufiles
  */
 abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements 
@@ -17,20 +17,20 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
 
     /**
      * Constructor
-     *
+     * 
      * @param Instance $externalRepositoryInstance
      * @param User $user
      */
     public function __construct(Instance $externalRepositoryInstance, User $user)
     {
-        parent :: __construct($externalRepositoryInstance, $user);
+        parent::__construct($externalRepositoryInstance, $user);
     }
 
     /**
      * Return the tenant need to constuct Microsoft service URL's.
-     * Allowed values: common, organizations, consumers, and tenant identifiers.  
+     * Allowed values: common, organizations, consumers, and tenant identifiers.
      * If no tenant given by user, 'common' is returned.
-     *
+     * 
      * @return string
      *
      * @see MicrosoftClientSettingsProviderInterface::getTenant()
@@ -38,18 +38,18 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
     public function getTenant()
     {
         $tenant = Setting::get('tenant', $this->externalRepositoryInstance->getId());
-
+        
         if (empty($tenant))
         {
             return 'common';
         }
-
+        
         return $tenant;
     }
-    
+
     /**
      * Returns the security access token for the microsoft client
-     *
+     * 
      * @return \stdClass
      */
     public function getAccessToken()
@@ -57,7 +57,7 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
         $accessTokenString = $this->getUserSettingValue('session_token');
         if (! is_null($accessTokenString))
         {
-            return json_decode($accessTokenString); 
+            return json_decode($accessTokenString);
         }
         
         return null;
@@ -65,7 +65,7 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
 
     /**
      * Stores the access token from the microsoft client
-     *
+     * 
      * @param \stdClass $accessToken
      *
      * @return bool
@@ -77,7 +77,7 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
 
     /**
      * Removes the access token
-     *
+     * 
      * @return bool
      */
     public function removeAccessToken()

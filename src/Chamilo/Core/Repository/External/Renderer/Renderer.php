@@ -26,14 +26,14 @@ abstract class Renderer
 
     public static function factory($type, $external_repository_browser)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Renderer';
-
+        
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('RendererTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('RendererTypeDoesNotExist', array('type' => $type)));
         }
-
+        
         return new $class($external_repository_browser);
     }
 
@@ -57,9 +57,9 @@ abstract class Renderer
     public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
     {
         return $this->get_external_repository_browser()->retrieve_external_repository_objects(
-            $condition,
-            $order_property,
-            $offset,
+            $condition, 
+            $order_property, 
+            $offset, 
             $count);
     }
 

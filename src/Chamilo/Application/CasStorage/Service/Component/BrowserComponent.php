@@ -31,7 +31,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add_help('cas_user general');
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -60,13 +60,13 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $query_conditions = array();
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Service :: class_name(), Service :: PROPERTY_NAME), 
+                new PropertyConditionVariable(Service::class_name(), Service::PROPERTY_NAME), 
                 '*' . $query . '*');
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Service :: class_name(), Service :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(Service::class_name(), Service::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Service :: class_name(), Service :: PROPERTY_SERVICE_ID), 
+                new PropertyConditionVariable(Service::class_name(), Service::PROPERTY_SERVICE_ID), 
                 '*' . $query . '*');
             $conditions[] = new OrCondition($query_conditions);
         }
@@ -92,9 +92,9 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('CreateService'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Create'), 
-                        $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_CREATE))));
+                        Translation::get('CreateService'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                        $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_CREATE))));
             }
             $buttonToolbar->addButtonGroup($commonActions);
             

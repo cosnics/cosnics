@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
@@ -9,7 +10,6 @@ use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,6 +31,7 @@ class HomeService
     private $homeRepository;
 
     /**
+     *
      * @var ElementRightsService
      */
     protected $elementRightsService;
@@ -66,7 +67,7 @@ class HomeService
 
     /**
      * Returns a home element by an identifier
-     *
+     * 
      * @param int $elementIdentifier
      *
      * @return Element
@@ -97,6 +98,7 @@ class HomeService
     }
 
     /**
+     *
      * @param User $user
      *
      * @return bool
@@ -105,38 +107,38 @@ class HomeService
     {
         $defaultElementResultSet = $this->getElementsByUserIdentifier(0);
         $defaultElements = array();
-
+        
         $elementIdentifierMap = array();
-
+        
         while ($defaultElement = $defaultElementResultSet->next_result())
         {
-            if($this->elementRightsService->canUserViewElement($user, $defaultElement))
+            if ($this->elementRightsService->canUserViewElement($user, $defaultElement))
             {
                 $defaultElements[$defaultElement->get_type()][$defaultElement->getParentId()][] = $defaultElement;
             }
         }
-
+        
         // Process tabs
         $this->createDefaultElementsByUserIdentifier(
-            Tab :: class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Tab::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         // Process columns
         $this->createDefaultElementsByUserIdentifier(
-            Column :: class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Column::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         // Process blocks
         $this->createDefaultElementsByUserIdentifier(
-            Block :: class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Block::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         return true;
     }
 
@@ -147,7 +149,7 @@ class HomeService
      * @param integer[] $elementIdentifierMap
      * @param integer $userIdentifier
      */
-    private function createDefaultElementsByUserIdentifier($elementType, $defaultElements, &$elementIdentifierMap,
+    private function createDefaultElementsByUserIdentifier($elementType, $defaultElements, &$elementIdentifierMap, 
         $userIdentifier)
     {
         foreach ($defaultElements[$elementType] as $typeParentId => $typeElements)
@@ -160,30 +162,30 @@ class HomeService
                 }
             }
         }
-
+        
         return true;
     }
 
     private function createDefaultElementByUserIdentifier(&$elementIdentifierMap, Element $element, $userIdentifier)
     {
         $originalIdentifier = $element->getId();
-
+        
         $element->setUserId($userIdentifier);
-
+        
         if (! $element->isOnTopLevel())
         {
             $element->setParentId($elementIdentifierMap[$element->getParentId()]);
         }
-
+        
         $result = $element->create();
-
+        
         $elementIdentifierMap[$originalIdentifier] = $element->get_id();
-
+        
         if (! $result)
         {
-            throw new \Exception(Translation :: get('HomepageDefaultCreationFailed'));
+            throw new \Exception(Translation::get('HomepageDefaultCreationFailed'));
         }
-
+        
         return true;
     }
 
@@ -198,8 +200,8 @@ class HomeService
         if (! isset($this->elements))
         {
             $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
-            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-
+            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+            
             if ($userHomeAllowed && $user instanceof User)
             {
                 if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
@@ -207,15 +209,15 @@ class HomeService
                     $this->createDefaultHomeByUserIdentifier($user);
                 }
             }
-
+            
             $elementsResultSet = $this->getElementsByUserIdentifier($homeUserIdentifier);
-
+            
             while ($element = $elementsResultSet->next_result())
             {
                 $this->elements[$element->get_type()][$element->getParentId()][] = $element;
             }
         }
-
+        
         if (isset($this->elements[$type]) && isset($this->elements[$type][$parentIdentifier]))
         {
             return $this->elements[$type][$parentIdentifier];
@@ -235,9 +237,9 @@ class HomeService
     {
         if (! isset($this->homeUserIdentifier))
         {
-            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-            $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
-
+            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+            $generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
+            
             // Get user id
             if ($user instanceof User && $generalMode && $user->is_platform_admin())
             {
@@ -252,7 +254,7 @@ class HomeService
                 $this->homeUserIdentifier = 0;
             }
         }
-
+        
         return $this->homeUserIdentifier;
     }
 
@@ -263,7 +265,7 @@ class HomeService
      */
     public function getCurrentTabIdentifier(Request $request)
     {
-        return $request->query->get(self :: PARAM_TAB_ID);
+        return $request->query->get(self::PARAM_TAB_ID);
     }
 
     /**
@@ -272,7 +274,7 @@ class HomeService
      */
     public function isUserHomeAllowed()
     {
-        return (boolean) PlatformSetting :: get('allow_user_home', Manager :: context());
+        return (boolean) Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
     }
 
     /**
@@ -281,7 +283,7 @@ class HomeService
      */
     public function isInGeneralMode()
     {
-        return (boolean) \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        return (boolean) \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
     }
 
     /**
@@ -291,13 +293,13 @@ class HomeService
      */
     public function userHasMultipleTabs(User $user = null)
     {
-        $tabs = $this->getElements($user, Tab :: class_name());
+        $tabs = $this->getElements($user, Tab::class_name());
         return count($tabs) > 1;
     }
 
     public function tabByUserAndIdentifierHasMultipleColumns(User $user = null, $tabIdentifier)
     {
-        $columns = $this->getElements($user, Column :: class_name(), $tabIdentifier);
+        $columns = $this->getElements($user, Column::class_name(), $tabIdentifier);
         return count($columns) > 1;
     }
 

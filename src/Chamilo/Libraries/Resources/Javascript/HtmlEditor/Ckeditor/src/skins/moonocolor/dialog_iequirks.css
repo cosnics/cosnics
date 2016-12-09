@@ -15,7 +15,6 @@ Quirks mode only.
 @import url("dialog_ie.css");
 
 /* [IE7-8] Filter on footer causes background artifacts when opening dialog. */
-.cke_dialog_footer
-{
+.cke_dialog_footer {
 	filter: "";
 }

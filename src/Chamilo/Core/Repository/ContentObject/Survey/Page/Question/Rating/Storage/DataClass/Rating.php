@@ -23,47 +23,47 @@ class Rating extends ContentObject implements Versionable
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     function get_low()
     {
-        return $this->get_additional_property(self :: PROPERTY_LOW);
+        return $this->get_additional_property(self::PROPERTY_LOW);
     }
 
     function get_high()
     {
-        return $this->get_additional_property(self :: PROPERTY_HIGH);
+        return $this->get_additional_property(self::PROPERTY_HIGH);
     }
 
     function set_low($value)
     {
-        $this->set_additional_property(self :: PROPERTY_LOW, $value);
+        $this->set_additional_property(self::PROPERTY_LOW, $value);
     }
 
     function set_high($value)
     {
-        $this->set_additional_property(self :: PROPERTY_HIGH, $value);
+        $this->set_additional_property(self::PROPERTY_HIGH, $value);
     }
 
     public function get_question()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTION);
+        return $this->get_additional_property(self::PROPERTY_QUESTION);
     }
 
     public function set_question($question)
     {
-        return $this->set_additional_property(self :: PROPERTY_QUESTION, $question);
+        return $this->set_additional_property(self::PROPERTY_QUESTION, $question);
     }
 
     public function get_instruction()
     {
-        return $this->get_additional_property(self :: PROPERTY_INSTRUCTION);
+        return $this->get_additional_property(self::PROPERTY_INSTRUCTION);
     }
 
     public function set_instruction($instruction)
     {
-        return $this->set_additional_property(self :: PROPERTY_INSTRUCTION, $instruction);
+        return $this->set_additional_property(self::PROPERTY_INSTRUCTION, $instruction);
     }
 
     public function has_instruction()
@@ -74,11 +74,7 @@ class Rating extends ContentObject implements Versionable
 
     static function get_additional_property_names()
     {
-        return array(
-            self :: PROPERTY_LOW,
-            self :: PROPERTY_HIGH,
-            self :: PROPERTY_QUESTION,
-            self :: PROPERTY_INSTRUCTION);
+        return array(self::PROPERTY_LOW, self::PROPERTY_HIGH, self::PROPERTY_QUESTION, self::PROPERTY_INSTRUCTION);
     }
 }
 

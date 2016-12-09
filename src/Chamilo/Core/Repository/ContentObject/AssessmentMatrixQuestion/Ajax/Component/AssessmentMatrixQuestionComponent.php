@@ -16,9 +16,9 @@ class AssessmentMatrixQuestionComponent extends \Chamilo\Core\Repository\Content
 
     public function run()
     {
-        $value = Request :: post('value');
-        $action = Request :: post('action');
-
+        $value = Request::post('value');
+        $action = Request::post('action');
+        
         switch ($action)
         {
             case 'skip_option' :
@@ -28,7 +28,7 @@ class AssessmentMatrixQuestionComponent extends \Chamilo\Core\Repository\Content
                 $_SESSION['mq_skip_matches'][] = $value;
                 break;
         }
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

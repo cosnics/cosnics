@@ -26,21 +26,21 @@ class BrowserComponent extends Manager implements TableSupport
     public function run()
     {
         $table = new FavouriteTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
-        if(!$this->hasFavourites())
+        
+        if (! $this->hasFavourites())
         {
             $html[] = '<div class="alert alert-info">';
             $html[] = Translation::getInstance()->getTranslation('FavouritesInfo', null, Manager::context());
             $html[] = '</div>';
         }
-
+        
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -48,21 +48,21 @@ class BrowserComponent extends Manager implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceUserFavourite :: class_name(),
-                WorkspaceUserFavourite :: PROPERTY_USER_ID),
+                WorkspaceUserFavourite::class_name(), 
+                WorkspaceUserFavourite::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
     }
 
     /**
      * Checks if the current user has favourites
-     *
+     * 
      * @return bool
      */
     protected function hasFavourites()
     {
         return ($this->getWorkspaceService()->countWorkspaceFavouritesByUser(
-                $this->getEntityService(),
-                $this->getUser()) > 0);
+            $this->getEntityService(), 
+            $this->getUser()) > 0);
     }
 
     /**
@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $this->entityService = new EntityService();
         }
-
+        
         return $this->entityService;
     }
 
@@ -89,7 +89,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
-
+        
         return $this->workspaceService;
     }
 }

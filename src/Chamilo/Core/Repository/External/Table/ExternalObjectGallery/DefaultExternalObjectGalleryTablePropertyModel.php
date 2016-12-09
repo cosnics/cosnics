@@ -14,8 +14,8 @@ abstract class DefaultExternalObjectGalleryTablePropertyModel extends DataClassG
     public function initialize_properties()
     {
         $connector = $this->get_component()->get_external_repository_browser()->get_parent()->get_external_repository_manager_connector();
-
-        foreach ($connector :: get_sort_properties() as $property)
+        
+        foreach ($connector::get_sort_properties() as $property)
         {
             $this->add_property(new DataClassGalleryTableProperty($property->get_class(), $property->get_property()));
         }

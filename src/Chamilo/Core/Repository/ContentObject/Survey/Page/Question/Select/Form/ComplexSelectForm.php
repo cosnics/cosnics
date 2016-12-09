@@ -19,7 +19,7 @@ class ComplexSelectForm extends ComplexContentObjectItemForm
 
     public function get_elements()
     {
-        $elements[] = $this->createElement('checkbox', ComplexSelect :: PROPERTY_VISIBLE, Translation :: get('Visible'));
+        $elements[] = $this->createElement('checkbox', ComplexSelect::PROPERTY_VISIBLE, Translation::get('Visible'));
         return $elements;
     }
 
@@ -29,7 +29,7 @@ class ComplexSelectForm extends ComplexContentObjectItemForm
         
         if (isset($cloi))
         {
-            $defaults[ComplexSelect :: PROPERTY_VISIBLE] = $cloi->get_visible();
+            $defaults[ComplexSelect::PROPERTY_VISIBLE] = $cloi->get_visible();
         }
         
         return $defaults;
@@ -38,8 +38,8 @@ class ComplexSelectForm extends ComplexContentObjectItemForm
     function update_from_values($values)
     {
         $cloi = $this->get_complex_content_object_item();
-        $cloi->set_visible($values[ComplexSelect :: PROPERTY_VISIBLE]);
-        return parent :: update();
+        $cloi->set_visible($values[ComplexSelect::PROPERTY_VISIBLE]);
+        return parent::update();
     }
 }
 ?>

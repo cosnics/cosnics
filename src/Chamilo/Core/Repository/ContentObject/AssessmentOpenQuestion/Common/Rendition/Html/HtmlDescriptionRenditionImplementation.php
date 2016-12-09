@@ -11,7 +11,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -22,16 +22,16 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         switch ($type_id)
         {
             case 1 :
-                $type = Translation :: get('OpenQuestion');
+                $type = Translation::get('OpenQuestion');
                 break;
             case 2 :
-                $type = Translation :: get('OpenQuestionWithDocument');
+                $type = Translation::get('OpenQuestionWithDocument');
                 break;
             case 3 :
-                $type = Translation :: get('DocumentQuestion');
+                $type = Translation::get('DocumentQuestion');
                 break;
             default :
-                $type = Translation :: get('OpenQuestion');
+                $type = Translation::get('OpenQuestion');
                 break;
         }
         
@@ -42,11 +42,11 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</thead>';
         $html[] = '<tbody>';
         $html[] = '<tr class="row_even">';
-        $html[] = '<td>' . Translation :: get('Type', null, Utilities :: COMMON_LIBRARIES) . '</td>';
+        $html[] = '<td>' . Translation::get('Type', null, Utilities::COMMON_LIBRARIES) . '</td>';
         $html[] = '<td>' . $type . '</td>';
         $html[] = '</tr>';
         $html[] = '<tr class="row_odd">';
-        $html[] = '<td>' . Translation :: get('Feedback') . '</td>';
+        $html[] = '<td>' . Translation::get('Feedback') . '</td>';
         $html[] = '<td>' . $object->get_feedback() . '</td>';
         $html[] = '</tr>';
         $html[] = '</tbody>';

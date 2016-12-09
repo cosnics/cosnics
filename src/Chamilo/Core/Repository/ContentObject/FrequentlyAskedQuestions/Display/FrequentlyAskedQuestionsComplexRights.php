@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 /**
  * Interface that indicates an implementer supports rights configuration on individual portfolio items and provides the
  * mehtods that should be implemented to achieve that support
- *
+ * 
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -15,7 +15,7 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Get the RightsLocations corresponding with the given ComplexContentObjectPathNodes
-     *
+     * 
      * @param \core\repository\common\path\ComplexContentObjectPathNode $nodes
      * @return \rights\RightsLocation[]
      */
@@ -23,21 +23,21 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Get the different rights which are supported by the implementer
-     *
+     * 
      * @return int[string]
      */
     public function get_available_rights();
 
     /**
      * Get the different types a rights-entities which are supported by the implementer
-     *
+     * 
      * @return \rights\RightsEntity[]
      */
     public function get_entities();
 
     /**
      * Get the selected entities for a given ComplexContentObjectPathNode
-     *
+     * 
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      * @return \libraries\storage\ResultSet
      */
@@ -45,7 +45,7 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Invert the set rights value for a given right, entity id, entity type and location id
-     *
+     * 
      * @param int $right_id
      * @param int $entity_id
      * @param int $entity_type
@@ -61,7 +61,7 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Retrieve a set of users which can be emulated in the implementing context
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      * @param int $count
      * @param int $offset
@@ -72,14 +72,14 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Count the set of users which can be emulated in the implementing context
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      */
     public function count_frequently_asked_questions_possible_view_users($condition);
 
     /**
      * Set the virtual user id
-     *
+     * 
      * @param int $virtual_user_id
      * @return boolean
      */
@@ -87,7 +87,7 @@ interface FrequentlyAskedQuestionsComplexRights
 
     /**
      * Returns the virtual user (if any)
-     *
+     * 
      * @return \core\user\User
      */
     public function get_frequently_asked_questions_virtual_user();

@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: wiki_homepage_setter.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.wiki.component
  */
 /*
@@ -20,9 +20,9 @@ class WikiHomepageSetterComponent extends Manager
 
     public function run()
     {
-        $page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(),
-            Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+        $page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(), 
+            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         /*
          * If the wiki_page isn't empy the homepage will be set
          */
@@ -31,16 +31,16 @@ class WikiHomepageSetterComponent extends Manager
             $page->set_is_homepage(true);
             $page->update();
             $this->redirect(
-                Translation :: get('HomepageSelected'),
-                false,
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI, 'pid' => Request :: get('pid')));
+                Translation::get('HomepageSelected'), 
+                false, 
+                array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => Request::get('pid')));
         }
         else
         {
             $this->redirect(
-                Translation :: get('HomepageNotSelected'),
-                true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_WIKI));
+                Translation::get('HomepageNotSelected'), 
+                true, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI));
         }
     }
 }

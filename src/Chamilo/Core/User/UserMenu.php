@@ -9,12 +9,12 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: user_menu.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib
  */
 /**
  * This class provides a navigation menu to allow a user to browse through users.
- *
+ * 
  * @author Sven Vanpoucke
  * @author Bart Mollet
  * @author Hans De Bisschop
@@ -36,7 +36,7 @@ class UserMenu extends HtmlMenu
 
     /**
      * Creates a new user navigation menu.
-     *
+     * 
      * @param int $current_category The ID of the current category in the menu.
      * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
      *        string "?firstletter=%s".
@@ -46,14 +46,14 @@ class UserMenu extends HtmlMenu
     {
         $this->urlFmt = $url_format;
         $menu = $this->get_menu_items($extra_items);
-        parent :: __construct($menu);
+        parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
 
     /**
      * Returns the menu items.
-     *
+     * 
      * @param array $extra_items An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -65,21 +65,21 @@ class UserMenu extends HtmlMenu
         {
             $menu = array_merge($menu, $extra_items);
         }
-
+        
         $home = array();
-        $home['title'] = Translation :: get('Home');
+        $home['title'] = Translation::get('Home');
         $home['url'] = $this->get_home_url();
         $home['class'] = 'home';
         $home_item[] = $home;
         for ($i = 0; $i <= 7; $i ++)
         {
-            $menu_item['title'] = Translation :: get(chr(65 + (3 * $i)) . chr(67 + (3 * $i)));
+            $menu_item['title'] = Translation::get(chr(65 + (3 * $i)) . chr(67 + (3 * $i)));
             $menu_item['url'] = $this->get_category_url(chr(65 + (3 * $i)));
             $menu_item['class'] = 'type_category';
             $home_item[] = $menu_item;
         }
         $menu_item = array();
-        $menu_item['title'] = Translation :: get('YZ');
+        $menu_item['title'] = Translation::get('YZ');
         $menu_item['url'] = $this->get_category_url(chr(89));
         $menu_item['class'] = 'type_category';
         $home_item[] = $menu_item;
@@ -89,7 +89,7 @@ class UserMenu extends HtmlMenu
 
     /**
      * Gets the URL of a given category
-     *
+     * 
      * @param int $category The id of the category
      * @return string The requested URL
      */
@@ -101,7 +101,7 @@ class UserMenu extends HtmlMenu
 
     /**
      * Gets the HOME URL
-     *
+     * 
      * @param int $category The id of the category
      * @return string The requested URL
      */
@@ -113,7 +113,7 @@ class UserMenu extends HtmlMenu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     *
+     * 
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -130,7 +130,7 @@ class UserMenu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     *
+     * 
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -142,6 +142,6 @@ class UserMenu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 }

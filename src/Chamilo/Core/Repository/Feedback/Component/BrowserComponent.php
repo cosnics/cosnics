@@ -30,50 +30,51 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        if (! $this->get_parent()->is_allowed_to_view_feedback() && ! $this->get_parent()->is_allowed_to_create_feedback())
+        if (! $this->get_parent()->is_allowed_to_view_feedback() &&
+             ! $this->get_parent()->is_allowed_to_create_feedback())
         {
             throw new NotAllowedException();
         }
-
+        
         $form = new FeedbackForm($this, $this->get_url());
-
+        
         if ($form->validate())
         {
             if (! $this->get_parent()->is_allowed_to_create_feedback())
             {
                 throw new NotAllowedException();
             }
-
+            
             $values = $form->exportValues();
-
+            
             // Create the feedback
             $feedback = $this->get_parent()->get_feedback();
-
+            
             $feedback->set_user_id($this->get_user_id());
             $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
             $feedback->set_creation_date(time());
             $feedback->set_modification_date(time());
-
+            
             $success = $feedback->create();
-
+            
             $this->notifyNewFeedback($feedback);
-
+            
             $this->redirect(
                 Translation::get(
-                    $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                    array('OBJECT' => Translation::get('Feedback')),
-                    Utilities::COMMON_LIBRARIES),
+                    $success ? 'ObjectCreated' : 'ObjectNotCreated', 
+                    array('OBJECT' => Translation::get('Feedback')), 
+                    Utilities::COMMON_LIBRARIES), 
                 ! $success);
         }
         else
-
+        
         {
             $html = array();
-
+            
             $feedbacks = $this->get_parent()->retrieve_feedbacks(
-                $this->getPager()->getNumberOfItemsPerPage(),
+                $this->getPager()->getNumberOfItemsPerPage(), 
                 $this->getPager()->getCurrentRangeOffset());
-
+            
             if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
@@ -82,110 +83,110 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = Translation::get('NoFeedbackYet');
                 $html[] = '</div>';
             }
-
+            
             if ($feedbacks->size() > 0)
             {
                 if (! $this->get_parent()->is_allowed_to_create_feedback())
                 {
                     $html[] = $this->renderFeedbackButtonToolbar();
                 }
-
+                
                 $html[] = '<h3>';
                 $html[] = Translation::get('Feedback');
                 $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
-
+                
                 $html[] = '<div class="panel panel-default panel-feedback">';
                 $html[] = '<div class="list-group">';
-
+                
                 while ($feedback = $feedbacks->next_result())
                 {
                     $html[] = '<div class="list-group-item">';
-
+                    
                     $profilePhotoUrl = new Redirect(
                         array(
-                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                            Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(), 
+                            Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE, 
                             \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
-
+                    
                     $html[] = '<img class="panel-feedback-profile pull-left" src="' . $profilePhotoUrl->getUrl() . '" />';
-
+                    
                     $html[] = '<div class="pull-right">';
-
+                    
                     if ($this->get_parent()->is_allowed_to_update_feedback($feedback))
                     {
                         $html[] = $this->render_update_action($feedback);
                     }
-
+                    
                     if ($this->get_parent()->is_allowed_to_delete_feedback($feedback))
                     {
                         $html[] = $this->render_delete_action($feedback);
                     }
-
+                    
                     $html[] = '</div>';
-
+                    
                     $html[] = '<h4 class="list-group-item-heading">' . $feedback->get_user()->get_fullname() .
                          ' <small>(' . $this->format_date($feedback->get_creation_date()) . ')</small></h4>';
                     $html[] = '<p class="list-group-item-text">' . $feedback->get_comment() . '</p>';
-
+                    
                     $html[] = '</div>';
                 }
-
+                
                 $html[] = '</div>';
                 $html[] = '</div>';
-
+                
                 if ($this->get_parent()->count_feedbacks() > $feedbacks->size())
                 {
                     $html[] = '<div class="row">';
                     $html[] = '<div class="col-xs-12 feedback-pagination">';
                     $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
-                        $this->get_parameters(),
+                        $this->get_parameters(), 
                         self::PARAM_PAGE_NUMBER);
                     $html[] = '</div>';
                     $html[] = '</div>';
                 }
             }
-
+            
             if ($this->get_parent()->is_allowed_to_create_feedback())
             {
                 $html[] = $this->renderFeedbackButtonToolbar();
-
+                
                 $html[] = '<h3>';
                 $html[] = Translation::get('AddFeedback');
                 $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
-
+                
                 $html[] = $form->toHtml();
             }
-
+            
             return implode(PHP_EOL, $html);
         }
     }
 
     /**
      * Renders the feedback button
-     *
+     * 
      * @return ButtonToolBar|string
      */
     protected function renderFeedbackButtonToolbar()
     {
         $buttonToolbar = new ButtonToolBar(null, array(), array('receive-feedback-buttons'));
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-
+        
         if (! $this->get_application() instanceof FeedbackNotificationSupport)
         {
             return $buttonToolbarRenderer->render();
         }
-
+        
         $hasNotification = false;
-
+        
         $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback();
         $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback();
-
+        
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
             $baseParameters = array();
-
+            
             if ($isAllowedToViewFeedback)
             {
                 $feedbackCount = $this->get_parent()->count_feedbacks();
@@ -197,35 +198,35 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $feedbackCount = 0;
                 $hasNotification = false;
             }
-
+            
             $actionsGenerator = new ActionsGenerator(
-                $this->get_application(),
-                $baseParameters,
-                $isAllowedToViewFeedback,
-                $feedbackCount,
+                $this->get_application(), 
+                $baseParameters, 
+                $isAllowedToViewFeedback, 
+                $feedbackCount, 
                 $hasNotification);
-
+            
             $buttonToolbar->addItems($actionsGenerator->run());
         }
-
+        
         $html = array();
-
+        
         $html[] = '<div class="receive-feedback-spacer"></div>';
-
+        
         if ($hasNotification)
         {
             $html[] = '<div class="alert alert-info alert-receive-feedback">';
             $html[] = '<div class="pull-left receive-feedback-info">Nieuwe feedback wordt naar jouw e-mail verzonden.</div>';
         }
-
+        
         $html[] = $buttonToolbarRenderer->render();
-
+        
         if ($hasNotification)
         {
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -239,15 +240,15 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $delete_url = $this->get_url(
             array(
-                Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
                 Manager::PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
-
+        
         $bootstrapGlyph = new BootstrapGlyph('remove');
         $title = Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $delete_link = '<a title="' . htmlentities($title) . '" href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES)) . '\');">' .
              $bootstrapGlyph->render() . '</a>';
-
+        
         return $delete_link;
     }
 
@@ -261,14 +262,14 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $update_url = $this->get_url(
             array(
-                Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
+                Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
                 Manager::PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
-
+        
         $bootstrapGlyph = new BootstrapGlyph('pencil');
         $title = Translation::get('Edit', null, Utilities::COMMON_LIBRARIES);
         $update_link = '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() .
              '</a>';
-
+        
         return $update_link;
     }
 
@@ -281,7 +282,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function format_date($date)
     {
         $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-
+        
         return DatetimeUtilities::format_locale_date($date_format, $date);
     }
 
@@ -312,12 +313,12 @@ class BrowserComponent extends Manager implements DelegateComponent
         if (is_null($this->pager))
         {
             $this->pager = new Pager(
-                $this->getCount(),
-                1,
-                $this->get_parent()->count_feedbacks(),
+                $this->getCount(), 
+                1, 
+                $this->get_parent()->count_feedbacks(), 
                 $this->getPageNumber());
         }
-
+        
         return $this->pager;
     }
 
@@ -331,7 +332,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $this->pagerRenderer = new PagerRenderer($this->getPager());
         }
-
+        
         return $this->pagerRenderer;
     }
 }

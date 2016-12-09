@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Controller to create the schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -32,51 +32,51 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $relation = new Relation();
-
+        
         $form = new RelationForm($relation, new EntityTranslationFormService($relation), $this->get_url());
-
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
-                $relation->set_name($values[Relation :: PROPERTY_NAME]);
+                
+                $relation->set_name($values[Relation::PROPERTY_NAME]);
                 $success = $relation->create();
-
+                
                 if ($success)
                 {
-                    $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($relation);
+                    $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($relation);
                     $entityTranslationService = new EntityTranslationService($entity);
                     $success = $entityTranslationService->createEntityTranslations(
-                        $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
+                        $values[EntityTranslationService::PROPERTY_TRANSLATION]);
                 }
-
+                
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-                $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Relation')),
-                    Utilities :: COMMON_LIBRARIES);
+                
+                $message = Translation::get(
+                    $translation, 
+                    array('OBJECT' => Translation::get('Relation')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
             }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

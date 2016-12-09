@@ -3,6 +3,7 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -61,12 +62,12 @@ class SettingsOverview
 
         $html[] = '<div class="form-horizontal form-install-settings">';
 
-        $html[] = $this->renderSection(Translation :: get('Database'), $this->getDatabaseContent());
-        $html[] = $this->renderSection(Translation :: get('SelectedPackages'), $this->getSelectedPackages());
-        $html[] = $this->renderSection(Translation :: get('GeneralProperties'), $this->getGeneralPropertiesContent());
-        $html[] = $this->renderSection(Translation :: get('Administrator'), $this->getAdministratorContent());
-        $html[] = $this->renderSection(Translation :: get('Platform'), $this->getPlatformContent());
-        $html[] = $this->renderSection(Translation :: get('Storage'), $this->getStorageContent());
+        $html[] = $this->renderSection(Translation::get('Database'), $this->getDatabaseContent());
+        $html[] = $this->renderSection(Translation::get('SelectedPackages'), $this->getSelectedPackages());
+        $html[] = $this->renderSection(Translation::get('GeneralProperties'), $this->getGeneralPropertiesContent());
+        $html[] = $this->renderSection(Translation::get('Administrator'), $this->getAdministratorContent());
+        $html[] = $this->renderSection(Translation::get('Platform'), $this->getPlatformContent());
+        $html[] = $this->renderSection(Translation::get('Storage'), $this->getStorageContent());
 
         $html[] = '</div>';
 
@@ -81,21 +82,21 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation :: get('DatabaseDriver'), $this->getSettingValue('database_driver'));
-        $html[] = $this->renderSetting(Translation :: get('DatabaseHost'), $this->getSettingValue('database_host'));
-        $html[] = $this->renderSetting(Translation :: get('DatabaseName'), $this->getSettingValue('database_name'));
-        $html[] = $this->renderSetting(Translation :: get('DatabaseLogin'), $this->getSettingValue('database_username'));
+        $html[] = $this->renderSetting(Translation::get('DatabaseDriver'), $this->getSettingValue('database_driver'));
+        $html[] = $this->renderSetting(Translation::get('DatabaseHost'), $this->getSettingValue('database_host'));
+        $html[] = $this->renderSetting(Translation::get('DatabaseName'), $this->getSettingValue('database_name'));
+        $html[] = $this->renderSetting(Translation::get('DatabaseLogin'), $this->getSettingValue('database_username'));
 
         $html[] = $this->renderSetting(
-            Translation :: get('DatabasePassword'),
+            Translation::get('DatabasePassword'),
             $this->getSettingValue('database_password'));
 
         $html[] = $this->renderSetting(
-            Translation :: get('DatabaseExists'),
-            $this->getSettingValue('database_exists') ? Translation :: get(
+            Translation::get('DatabaseExists'),
+            $this->getSettingValue('database_exists') ? Translation::get(
                 'ConfirmYes',
                 null,
-                Utilities :: COMMON_LIBRARIES) : Translation :: get('ConfirmNo', null, Utilities :: COMMON_LIBRARIES));
+                Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
 
         return implode(PHP_EOL, $html);
     }
@@ -108,9 +109,7 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation :: get('MainLang'), $this->getSettingValue('platform_language'));
-        $html[] = $this->renderSetting(Translation :: get('ChamiloURL'), $this->getSettingValue('platform_url'));
-        $html[] = $this->renderSetting(Translation :: get('ServerType'), $this->getSettingValue('server_type'));
+        $html[] = $this->renderSetting(Translation::get('MainLang'), $this->getSettingValue('platform_language'));
 
         return implode(PHP_EOL, $html);
     }
@@ -123,12 +122,12 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation :: get('AdminEmail'), $this->getSettingValue('admin_email'));
-        $html[] = $this->renderSetting(Translation :: get('AdminLastName'), $this->getSettingValue('admin_surname'));
-        $html[] = $this->renderSetting(Translation :: get('AdminFirstName'), $this->getSettingValue('admin_firstname'));
-        $html[] = $this->renderSetting(Translation :: get('AdminPhone'), $this->getSettingValue('admin_phone'));
-        $html[] = $this->renderSetting(Translation :: get('AdminLogin'), $this->getSettingValue('admin_username'));
-        $html[] = $this->renderSetting(Translation :: get('AdminPass'), $this->getSettingValue('admin_password'));
+        $html[] = $this->renderSetting(Translation::get('AdminEmail'), $this->getSettingValue('admin_email'));
+        $html[] = $this->renderSetting(Translation::get('AdminLastName'), $this->getSettingValue('admin_surname'));
+        $html[] = $this->renderSetting(Translation::get('AdminFirstName'), $this->getSettingValue('admin_firstname'));
+        $html[] = $this->renderSetting(Translation::get('AdminPhone'), $this->getSettingValue('admin_phone'));
+        $html[] = $this->renderSetting(Translation::get('AdminLogin'), $this->getSettingValue('admin_username'));
+        $html[] = $this->renderSetting(Translation::get('AdminPass'), $this->getSettingValue('admin_password'));
 
         return implode(PHP_EOL, $html);
     }
@@ -141,20 +140,20 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation :: get('CampusName'), $this->getSettingValue('platform_name'));
+        $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('platform_name'));
 
         $html[] = $this->renderSetting(
-            Translation :: get('InstituteShortName'),
+            Translation::get('InstituteShortName'),
             $this->getSettingValue('organization_name'));
 
-        $html[] = $this->renderSetting(Translation :: get('InstituteURL'), $this->getSettingValue('organization_url'));
+        $html[] = $this->renderSetting(Translation::get('InstituteURL'), $this->getSettingValue('organization_url'));
 
         $html[] = $this->renderSetting(
-            Translation :: get('AllowSelfReg'),
-            Translation :: get(($this->getSettingValue('self_reg') == 1 ? 'Yes' : 'No')));
+            Translation::get('AllowSelfReg'),
+            Translation::get(($this->getSettingValue('self_reg') == 1 ? 'Yes' : 'No')));
 
         $html[] = $this->renderSetting(
-            Translation :: get('HashingAlgorithm'),
+            Translation::get('HashingAlgorithm'),
             $this->getSettingValue('hashing_algorithm'));
 
         return implode(PHP_EOL, $html);
@@ -168,18 +167,16 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation :: get('ArchivePath'), $this->getSettingValue('archive_path'));
-        $html[] = $this->renderSetting(Translation :: get('CachePath'), $this->getSettingValue('cache_path'));
-        $html[] = $this->renderSetting(Translation :: get('GarbagePath'), $this->getSettingValue('garbage_path'));
+        $html[] = $this->renderSetting(Translation::get('ArchivePath'), $this->getSettingValue('archive_path'));
+        $html[] = $this->renderSetting(Translation::get('CachePath'), $this->getSettingValue('cache_path'));
+        $html[] = $this->renderSetting(Translation::get('GarbagePath'), $this->getSettingValue('garbage_path'));
+        $html[] = $this->renderSetting(Translation::get('HotpotatoesPath'), $this->getSettingValue('hotpotatoes_path'));
+        $html[] = $this->renderSetting(Translation::get('LogsPath'), $this->getSettingValue('logs_path'));
+        $html[] = $this->renderSetting(Translation::get('RepositoryPath'), $this->getSettingValue('repository_path'));
+        $html[] = $this->renderSetting(Translation::get('ScormPath'), $this->getSettingValue('scorm_path'));
+        $html[] = $this->renderSetting(Translation::get('TempPath'), $this->getSettingValue('temp_path'));
         $html[] = $this->renderSetting(
-            Translation :: get('HotpotatoesPath'),
-            $this->getSettingValue('hotpotatoes_path'));
-        $html[] = $this->renderSetting(Translation :: get('LogsPath'), $this->getSettingValue('logs_path'));
-        $html[] = $this->renderSetting(Translation :: get('RepositoryPath'), $this->getSettingValue('repository_path'));
-        $html[] = $this->renderSetting(Translation :: get('ScormPath'), $this->getSettingValue('scorm_path'));
-        $html[] = $this->renderSetting(Translation :: get('TempPath'), $this->getSettingValue('temp_path'));
-        $html[] = $this->renderSetting(
-            Translation :: get('UserpicturesPath'),
+            Translation::get('UserpicturesPath'),
             $this->getSettingValue('userpictures_path'));
 
         return implode(PHP_EOL, $html);
@@ -198,11 +195,37 @@ class SettingsOverview
         {
             if (isset($value) && $value == '1')
             {
-                $selectedPackages[] = Translation :: get('TypeName', null, $context);
+                $selectedPackages[] = $context;
             }
         }
 
-        return implode(', ', $selectedPackages);
+        $html = array();
+
+        if (count($selectedPackages) > 0)
+        {
+            $html = array();
+
+            $html[] = '<div class="package-list">';
+            $html[] = '<div class="package-list-items row">';
+
+            foreach ($selectedPackages as $package)
+            {
+                $iconSource = Theme::getInstance()->getImagePath($package, 'Logo/22');
+
+                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<a class="btn btn-default"><img src="' . $iconSource . '"> ';
+
+                $html[] = Translation::get('TypeName', null, $package);
+                $html[] = '</a>';
+                $html[] = '</div>';
+            }
+
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

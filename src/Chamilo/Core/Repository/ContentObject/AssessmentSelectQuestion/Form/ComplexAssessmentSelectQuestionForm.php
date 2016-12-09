@@ -26,29 +26,29 @@ class ComplexAssessmentSelectQuestionForm extends ComplexContentObjectItemForm
         
         $elements[] = $this->createElement(
             'checkbox', 
-            self :: PROPERTY_RECALCULATE_WEIGHT, 
-            Translation :: get('RecalculateWeight'));
+            self::PROPERTY_RECALCULATE_WEIGHT, 
+            Translation::get('RecalculateWeight'));
         
         $elements[] = $this->createElement(
             'text', 
-            ComplexAssessmentSelectQuestion :: PROPERTY_WEIGHT, 
-            Translation :: get('Weight'), 
+            ComplexAssessmentSelectQuestion::PROPERTY_WEIGHT, 
+            Translation::get('Weight'), 
             array('size' => 50, 'disabled' => 'disabled'));
         
         $elements[] = $this->createElement(
             'checkbox', 
-            ComplexAssessmentSelectQuestion :: PROPERTY_RANDOM, 
-            Translation :: get('RandomizeOptions'));
+            ComplexAssessmentSelectQuestion::PROPERTY_RANDOM, 
+            Translation::get('RandomizeOptions'));
         
-        $elements[] = ConfigurationForm :: build_answer_feedback(
+        $elements[] = ConfigurationForm::build_answer_feedback(
             $this, 
             array(
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_ALL));
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_ALL));
         
         return $elements;
     }
@@ -82,19 +82,19 @@ class ComplexAssessmentSelectQuestionForm extends ComplexContentObjectItemForm
         $complex_content_object_item = $this->get_complex_content_object_item();
         $this->set_values($complex_content_object_item, $values);
         
-        return parent :: update();
+        return parent::update();
     }
 
     private function set_values($complex_content_object_item, $values)
     {
-        if ($values[self :: PROPERTY_RECALCULATE_WEIGHT] == 1)
+        if ($values[self::PROPERTY_RECALCULATE_WEIGHT] == 1)
         {
             $complex_content_object_item->set_weight(
                 $complex_content_object_item->get_ref_object()->get_default_weight());
         }
         else
         {
-            $complex_content_object_item->set_weight($values[ComplexAssessmentSelectQuestion :: PROPERTY_WEIGHT]);
+            $complex_content_object_item->set_weight($values[ComplexAssessmentSelectQuestion::PROPERTY_WEIGHT]);
         }
         
         $complex_content_object_item->set_random($values[ComplexAssessmentSelectQuestion::PROPERTY_RANDOM]);

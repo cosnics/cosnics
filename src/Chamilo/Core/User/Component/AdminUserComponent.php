@@ -18,15 +18,15 @@ class AdminUserComponent extends Manager
      */
     public function run()
     {
-        $admin_user = \Chamilo\Libraries\Platform\Session\Session :: retrieve('_as_admin');
-
+        $admin_user = \Chamilo\Libraries\Platform\Session\Session::retrieve('_as_admin');
+        
         if ($admin_user)
         {
-            $checkurl = \Chamilo\Libraries\Platform\Session\Session :: retrieve('checkChamiloURL');
-            \Chamilo\Libraries\Platform\Session\Session :: clear();
-            \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $admin_user);
-            \Chamilo\Libraries\Platform\Session\Session :: register('checkChamiloURL', $checkurl);
-
+            $checkurl = \Chamilo\Libraries\Platform\Session\Session::retrieve('checkChamiloURL');
+            \Chamilo\Libraries\Platform\Session\Session::clear();
+            \Chamilo\Libraries\Platform\Session\Session::register('_uid', $admin_user);
+            \Chamilo\Libraries\Platform\Session\Session::register('checkChamiloURL', $checkurl);
+            
             $redirect = new Redirect();
             $redirect->toUrl();
         }

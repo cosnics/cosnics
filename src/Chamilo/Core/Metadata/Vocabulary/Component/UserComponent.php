@@ -44,7 +44,7 @@ class UserComponent extends Manager implements TableSupport
         
         if (! $this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
         
         $html = array();
@@ -77,7 +77,7 @@ class UserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar(
                 $this->get_url(
-                    array(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId())));
+                    array(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->getSelectedElementId())));
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
         
@@ -97,10 +97,10 @@ class UserComponent extends Manager implements TableSupport
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)));
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)));
         
         if ($searchCondition)
         {
@@ -108,8 +108,8 @@ class UserComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         
         return new AndCondition($conditions);

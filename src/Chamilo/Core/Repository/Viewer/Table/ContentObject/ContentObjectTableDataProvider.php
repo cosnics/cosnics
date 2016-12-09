@@ -19,15 +19,15 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-
+        
         return $contentObjectService->getContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
-            $this->get_component()->getWorkspace(),
+            ContentObject::class_name(), 
+            $this->get_component()->getWorkspace(), 
             ConditionFilterRenderer::factory(
-                $this->get_component()->getFilterData(),
-                $this->get_component()->getWorkspace()),
-            $count,
-            $offset,
+                $this->get_component()->getFilterData(), 
+                $this->get_component()->getWorkspace()), 
+            $count, 
+            $offset, 
             $order_property);
     }
 
@@ -37,12 +37,12 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-
+        
         return $contentObjectService->countContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
-            $this->get_component()->getWorkspace(),
+            ContentObject::class_name(), 
+            $this->get_component()->getWorkspace(), 
             ConditionFilterRenderer::factory(
-                $this->get_component()->getFilterData(),
+                $this->get_component()->getFilterData(), 
                 $this->get_component()->getWorkspace()));
     }
 }

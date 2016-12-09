@@ -12,6 +12,7 @@ use Chamilo\Application\Survey\Export\Table\TemplateTable\ExportTemplateTable;
 use Chamilo\Application\Survey\Export\Table\TrackerTable\ExportTable;
 use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -21,7 +22,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -53,9 +53,9 @@ class BrowserComponent extends Manager implements TableSupport
      */
     function run()
     {
-        $this->publication_id = Request :: get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        $this->publication_id = Request::get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
         
-        if (! RightsService :: getInstance())
+        if (! RightsService::getInstance())
         {
             throw new NotAllowedException();
         }
@@ -76,37 +76,38 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $html = array();
         
-        $tabs = new DynamicTabsRenderer(self :: class_name());
+        $tabs = new DynamicTabsRenderer(self::class_name());
         
         $table = new ExportTemplateTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_EXPORT_TEMPLATES, 
-                Translation :: get('ExportTemplates'), 
-                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
+                self::TAB_EXPORT_TEMPLATES, 
+                Translation::get('ExportTemplates'), 
+                Theme::getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
                 $table->as_html()));
         
-        if (RightsService :: getInstance())
+        if (RightsService::getInstance())
         {
             $table = new ExportRegistrationTable($this);
             $tabs->add_tab(
                 new DynamicContentTab(
-                    self :: TAB_EXPORT_REGISTRATIONS, 
-                    Translation :: get('AddExportTemplate'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
+                    self::TAB_EXPORT_REGISTRATIONS, 
+                    Translation::get('AddExportTemplate'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
                     $table->as_html()));
         }
         
-        $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'Chamilo\Application\Survey');
+        $cron_enabled = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Survey', 'enable_export_cron_job'));
         
         if ($cron_enabled)
         {
             $table = new ExportTable($this);
             $tabs->add_tab(
                 new DynamicContentTab(
-                    self :: TAB_EXPORT_TACKERS, 
-                    Translation :: get('ExportTrackers'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
+                    self::TAB_EXPORT_TACKERS, 
+                    Translation::get('ExportTrackers'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
                     $table->as_html()));
         }
         
@@ -121,7 +122,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_PUBLICATION_ID), 
+            new PropertyConditionVariable(ExportTemplate::class_name(), ExportTemplate::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->publication_id));
         
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
@@ -130,10 +131,10 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_NAME), 
+                new PropertyConditionVariable(ExportTemplate::class_name(), ExportTemplate::PROPERTY_NAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ExportTemplate::class_name(), ExportTemplate::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             $conditions[] = new OrCondition($or_conditions);
         }
@@ -145,10 +146,10 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Export::class_name(), Export::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $job_condition = new EqualityCondition(
-            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_EXPORT_JOB_ID), 
+            new PropertyConditionVariable(Export::class_name(), Export::PROPERTY_EXPORT_JOB_ID), 
             new StaticConditionVariable(0));
         $conditions[] = new NotCondition($job_condition);
         
@@ -158,10 +159,10 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_NAME), 
+                new PropertyConditionVariable(Export::class_name(), Export::PROPERTY_TEMPLATE_NAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_DESCRIPTION), 
+                new PropertyConditionVariable(Export::class_name(), Export::PROPERTY_TEMPLATE_DESCRIPTION), 
                 '*' . $query . '*');
             $or_condition = new OrCondition($or_conditions);
             $conditions[] = $or_condition;
@@ -179,12 +180,10 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportRegistration :: class_name(), ExportRegistration :: PROPERTY_NAME), 
+                new PropertyConditionVariable(ExportRegistration::class_name(), ExportRegistration::PROPERTY_NAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(
-                    ExportRegistration :: class_name(), 
-                    ExportRegistration :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ExportRegistration::class_name(), ExportRegistration::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             $condition = new OrCondition($or_conditions);
         }
@@ -198,12 +197,12 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             
-            $publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
+            $publication = DataManager::retrieve_by_id(Publication::class_name(), $this->publication_id);
             
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    SynchronizeAnswer :: class_name(), 
-                    SynchronizeAnswer :: PROPERTY_SURVEY_PUBLICATION_ID), 
+                    SynchronizeAnswer::class_name(), 
+                    SynchronizeAnswer::PROPERTY_SURVEY_PUBLICATION_ID), 
                 new StaticConditionVariable($this->publication_id));
             
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -221,7 +220,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         if ($date == 0)
         {
-            return Translation :: get('NoDate');
+            return Translation::get('NoDate');
         }
         else
         {
@@ -235,27 +234,27 @@ class BrowserComponent extends Manager implements TableSupport
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => \Chamilo\Application\Survey\Component\BrowserComponent :: TAB_EXPORT)), 
-                Translation :: get('BrowserComponent')));
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => \Chamilo\Application\Survey\Component\BrowserComponent::TAB_EXPORT)), 
+                Translation::get('BrowserComponent')));
     }
 
     function get_parameters()
     {
-        return array(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return array(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
     }
 
     public function get_table_condition($object_table_class_name)
     {
         switch ($object_table_class_name)
         {
-            case ExportRegistrationTable :: class_name() :
+            case ExportRegistrationTable::class_name() :
                 return $this->get_export_registration_condition();
                 break;
-            case ExportTemplateTable :: class_name() :
+            case ExportTemplateTable::class_name() :
                 return $this->get_export_template_condition();
                 break;
-            case ExportTable :: class_name() :
+            case ExportTable::class_name() :
                 return $this->get_export_tracker_condition();
                 break;
         }

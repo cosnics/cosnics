@@ -22,57 +22,58 @@ class UpdaterComponent extends TabComponent
     public function build()
     {
         $entityRelation = $this->getCurrentEntityRelation();
-
+        
         if (! $entityRelation instanceof PublicationEntityRelation)
         {
-            throw new ObjectNotExistException(Translation :: get('PublicationEntityRelation'));
+            throw new ObjectNotExistException(Translation::get('PublicationEntityRelation'));
         }
-
+        
         $form = new RightsForm(
-            $this->get_url(array(self :: PARAM_ENTITY_RELATION_ID => $this->getCurrentEntityRelation()->getId())),
-            $entityRelation, $this->determineRightType());
-
+            $this->get_url(array(self::PARAM_ENTITY_RELATION_ID => $this->getCurrentEntityRelation()->getId())), 
+            $entityRelation, 
+            $this->determineRightType());
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
-                $rightsService = RightsService :: getInstance();
-
+                
+                $rightsService = RightsService::getInstance();
+                
                 $right = $rightsService->getAggregatedRight(
-                    (int) $values[RightsForm :: PROPERTY_TAKE],
-                    (int) $values[RightsForm :: PROPERTY_MAIL],
-                    (int) $values[RightsForm :: PROPERTY_REPORT],
-                    (int) $values[RightsForm :: PROPERTY_MANAGE],
-                    (int) $values[RightsForm :: PROPERTY_PUBLISH]);
+                    (int) $values[RightsForm::PROPERTY_TAKE], 
+                    (int) $values[RightsForm::PROPERTY_MAIL], 
+                    (int) $values[RightsForm::PROPERTY_REPORT], 
+                    (int) $values[RightsForm::PROPERTY_MANAGE], 
+                    (int) $values[RightsForm::PROPERTY_PUBLISH]);
                 
                 $success = $this->getEntityRelationService()->updateEntityRelation(
-                    $entityRelation,
-                    $this->getCurrentPublication()->getId(),
-                    $entityRelation->getEntityType(),
-                    $entityRelation->getEntityId(),
+                    $entityRelation, 
+                    $this->getCurrentPublication()->getId(), 
+                    $entityRelation->getEntityType(), 
+                    $entityRelation->getEntityId(), 
                     $right);
-
+                
                 $translation = $success ? 'RightsUpdated' : 'RightsNotUpdated';
-                $message = Translation :: get($translation);
+                $message = Translation::get($translation);
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
             }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -87,7 +88,7 @@ class UpdaterComponent extends TabComponent
         {
             $this->entityRelationService = new EntityRelationService(new EntityRelationRepository());
         }
-
+        
         return $this->entityRelationService;
     }
 
@@ -107,6 +108,6 @@ class UpdaterComponent extends TabComponent
      */
     private function getCurrentEntityRelationIdentifier()
     {
-        return $this->getRequest()->query->get(self :: PARAM_ENTITY_RELATION_ID);
+        return $this->getRequest()->query->get(self::PARAM_ENTITY_RELATION_ID);
     }
 }

@@ -15,15 +15,15 @@ class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\A
     const PARAM_ANSWER = 'answer';
     const PARAM_PARAMETERS = 'parameters';
     const PARAM_RESULT = 'result';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETERS);
+        return array(self::PARAM_PARAMETERS);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -31,12 +31,12 @@ class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\A
     {
         $result = new JsonAjaxResult(200);
         
-        $parameters = $this->getPostDataValue(self :: PARAM_PARAMETERS);
+        $parameters = $this->getPostDataValue(self::PARAM_PARAMETERS);
         
-        $content_object_id = $parameters[Manager :: PARAM_CONTENT_OBJECT_ID];
-        $step = $parameters[Manager :: PARAM_STEP];
+        $content_object_id = $parameters[Manager::PARAM_CONTENT_OBJECT_ID];
+        $step = $parameters[Manager::PARAM_STEP];
         
-        $content_object = DataManager :: retrieve_by_id(Survey :: class_name(), $content_object_id);
+        $content_object = DataManager::retrieve_by_id(Survey::class_name(), $content_object_id);
         
         $path = $content_object->get_complex_content_object_path();
         
@@ -58,21 +58,21 @@ class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\A
             }
         }
         
-        $complex_question_id = $parameters[self :: PARAM_COMPLEX_QUESTION_ID];
+        $complex_question_id = $parameters[self::PARAM_COMPLEX_QUESTION_ID];
         $answer = $question_answers[$step][$complex_question_id];
         
         $question_answer = array();
-        $question_answer[self :: PARAM_COMPLEX_QUESTION_ID] = $complex_question_id;
-        $question_answer[self :: PARAM_ANSWER] = $answer;
+        $question_answer[self::PARAM_COMPLEX_QUESTION_ID] = $complex_question_id;
+        $question_answer[self::PARAM_ANSWER] = $answer;
         
-        $result->set_property(self :: PARAM_RESULT, $question_answer);
+        $result->set_property(self::PARAM_RESULT, $question_answer);
         $result->display();
     }
 
     private function get_answer($complex_question_id)
     {
-        $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-               
+        $answers = Session::retrieve(self::TEMPORARY_STORAGE);
+        
         $answer = $answers[$complex_question_id];
         
         if ($answer)

@@ -31,42 +31,42 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function get_xml()
     {
-        return $this->get_default_property(self :: PROPERTY_XML);
+        return $this->get_default_property(self::PROPERTY_XML);
     }
 
     public function set_xml($xml)
     {
-        return $this->set_default_property(self :: PROPERTY_XML, $xml);
+        return $this->set_default_property(self::PROPERTY_XML, $xml);
     }
 
     public function get_metadata()
     {
-        return $this->get_default_property(self :: PROPERTY_METADATA);
+        return $this->get_default_property(self::PROPERTY_METADATA);
     }
 
     public function set_metadata($metadata)
     {
-        return $this->set_default_property(self :: PROPERTY_METADATA, $metadata);
+        return $this->set_default_property(self::PROPERTY_METADATA, $metadata);
     }
 
     public function get_attachments()
     {
-        return $this->get_default_property(self :: PROPERTY_ATTACHMENTS);
+        return $this->get_default_property(self::PROPERTY_ATTACHMENTS);
     }
 
     public function set_attachments($attachments)
     {
-        return $this->set_default_property(self :: PROPERTY_ATTACHMENTS, $attachments);
+        return $this->set_default_property(self::PROPERTY_ATTACHMENTS, $attachments);
     }
 
     public function get_series_id()
     {
-        return $this->get_default_property(self :: PROPERTY_SERIES_ID);
+        return $this->get_default_property(self::PROPERTY_SERIES_ID);
     }
 
     public function set_series_id($series_id)
     {
-        return $this->set_default_property(self :: PROPERTY_SERIES_ID, $series_id);
+        return $this->set_default_property(self::PROPERTY_SERIES_ID, $series_id);
     }
 
     public function get_series()
@@ -76,57 +76,57 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function get_contributors()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTRIBUTORS);
+        return $this->get_default_property(self::PROPERTY_CONTRIBUTORS);
     }
 
     public function set_contributors($contributors)
     {
-        return $this->set_default_property(self :: PROPERTY_CONTRIBUTORS, $contributors);
+        return $this->set_default_property(self::PROPERTY_CONTRIBUTORS, $contributors);
     }
 
     public function get_subjects()
     {
-        return $this->get_default_property(self :: PROPERTY_SUBJECTS);
+        return $this->get_default_property(self::PROPERTY_SUBJECTS);
     }
 
     public function set_subjects($subjects)
     {
-        return $this->set_default_property(self :: PROPERTY_SUBJECTS, $subjects);
+        return $this->set_default_property(self::PROPERTY_SUBJECTS, $subjects);
     }
 
     public function get_language()
     {
-        return $this->get_default_property(self :: PROPERTY_LANGUAGE);
+        return $this->get_default_property(self::PROPERTY_LANGUAGE);
     }
 
     public function set_language($language)
     {
-        return $this->set_default_property(self :: PROPERTY_LANGUAGE, $language);
+        return $this->set_default_property(self::PROPERTY_LANGUAGE, $language);
     }
 
     public function set_streaming($streaming)
     {
-        $this->set_default_property(self :: PROPERTY_STREAMING, $streaming);
+        $this->set_default_property(self::PROPERTY_STREAMING, $streaming);
     }
 
     public function get_streaming()
     {
-        return $this->get_default_property(self :: PROPERTY_STREAMING);
+        return $this->get_default_property(self::PROPERTY_STREAMING);
     }
 
     public function set_tracks($tracks)
     {
-        $this->set_default_property(self :: PROPERTY_TRACKS, $tracks);
+        $this->set_default_property(self::PROPERTY_TRACKS, $tracks);
     }
 
     public function get_tracks()
     {
-        return $this->get_default_property(self :: PROPERTY_TRACKS);
+        return $this->get_default_property(self::PROPERTY_TRACKS);
     }
 
     public function get_audio_tracks()
     {
-        $tracks = $this->get_default_property(self :: PROPERTY_TRACKS);
+        $tracks = $this->get_default_property(self::PROPERTY_TRACKS);
         $audio_tracks = array();
         foreach ($tracks as $track)
         {
@@ -140,7 +140,7 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function get_video_tracks()
     {
-        $tracks = $this->get_default_property(self :: PROPERTY_TRACKS);
+        $tracks = $this->get_default_property(self::PROPERTY_TRACKS);
         $video_tracks = array();
         foreach ($tracks as $track)
         {
@@ -154,90 +154,90 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function set_license($license)
     {
-        $this->set_default_property(self :: PROPERTY_LICENSE, $license);
+        $this->set_default_property(self::PROPERTY_LICENSE, $license);
     }
 
     public function get_license()
     {
-        return $this->get_default_property(self :: PROPERTY_LICENSE);
+        return $this->get_default_property(self::PROPERTY_LICENSE);
     }
 
     public function get_start_time()
     {
-        return $this->get_default_property(self :: PROPERTY_START_TIME);
+        return $this->get_default_property(self::PROPERTY_START_TIME);
     }
 
     public function set_start_time($start_time)
     {
-        $this->set_default_property(self :: PROPERTY_START_TIME, $start_time);
+        $this->set_default_property(self::PROPERTY_START_TIME, $start_time);
     }
 
     public function get_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ID);
+        return $this->get_default_property(self::PROPERTY_ID);
     }
 
     public function set_id($id)
     {
-        $this->set_default_property(self :: PROPERTY_ID, $id);
+        $this->set_default_property(self::PROPERTY_ID, $id);
     }
 
     public function get_duration()
     {
-        return $this->get_default_property(self :: PROPERTY_DURATION);
+        return $this->get_default_property(self::PROPERTY_DURATION);
     }
 
     public function set_duration($duration)
     {
-        $this->set_default_property(self :: PROPERTY_DURATION, $duration);
+        $this->set_default_property(self::PROPERTY_DURATION, $duration);
     }
 
     public function get_title()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     public function set_title($title)
     {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     public function get_creators()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATORS);
+        return $this->get_default_property(self::PROPERTY_CREATORS);
     }
 
     public function set_creators($creators)
     {
-        $this->set_default_property(self :: PROPERTY_CREATORS, $creators);
+        $this->set_default_property(self::PROPERTY_CREATORS, $creators);
     }
 
     public function get_catalogs()
     {
-        return $this->get_default_property(self :: PROPERTY_CATALOGS);
+        return $this->get_default_property(self::PROPERTY_CATALOGS);
     }
 
     public function set_catalogs($catalogs)
     {
-        $this->set_default_property(self :: PROPERTY_CATALOGS, $catalogs);
+        $this->set_default_property(self::PROPERTY_CATALOGS, $catalogs);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_SUBJECTS, 
-                self :: PROPERTY_LANGUAGE, 
-                self :: PROPERTY_CONTRIBUTORS, 
-                self :: PROPERTY_CONTRIBUTORS, 
-                self :: PROPERTY_TRACKS, 
-                self :: PROPERTY_LICENSE, 
-                self :: PROPERTY_STREAMING));
+                self::PROPERTY_SUBJECTS, 
+                self::PROPERTY_LANGUAGE, 
+                self::PROPERTY_CONTRIBUTORS, 
+                self::PROPERTY_CONTRIBUTORS, 
+                self::PROPERTY_TRACKS, 
+                self::PROPERTY_LICENSE, 
+                self::PROPERTY_STREAMING));
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function add_track($track)
@@ -273,7 +273,7 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function is_usable()
     {
-        return \Chamilo\Core\Repository\External\ExternalObject :: is_usable();
+        return \Chamilo\Core\Repository\External\ExternalObject::is_usable();
     }
 
     public function render_xml()

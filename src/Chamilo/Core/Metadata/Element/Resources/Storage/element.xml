@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="element">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="schema_id" type="integer" notnull="1" />
-		<property name="name" type="text" length="255" notnull="1" />
-		<property name="display_name" type="text" length="255" notnull="1" />
-		<property name="fixed" length="1" type="integer" notnull="1" />
-		<property name="display_order" type="integer" notnull="1" />
-	</properties>
-	<index name="unique_element_name" type="unique">
-		<indexproperty name="name" />
-		<indexproperty name="schema_id" />
-	</index>
-	<index name="schema_id">
-		<indexproperty name="schema_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="schema_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="name"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="display_name"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="fixed"
+            length="1"
+            type="integer"
+            notnull="1" />
+        <property
+            name="display_order"
+            type="integer"
+            notnull="1" />
+    </properties>
+    <index
+        name="unique_element_name"
+        type="unique">
+        <indexproperty name="name" />
+        <indexproperty name="schema_id" />
+    </index>
+    <index name="schema_id">
+        <indexproperty name="schema_id" />
+    </index>
 </object>

@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 
 /**
  *
@@ -50,14 +53,14 @@ class BreadcrumbTrail
      *
      * @return BreadcrumbTrail
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (self :: $instance == null)
+        if (self::$instance == null)
         {
-            self :: $instance = new BreadcrumbTrail(true, 'container-fluid');
+            self::$instance = new BreadcrumbTrail(true, 'container-fluid');
         }
 
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -72,12 +75,22 @@ class BreadcrumbTrail
 
         if ($include_main_index)
         {
+            $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+            $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
+
+            // TODO: Can this be fixed more elegantly?
+            if ($fileConfigurationLocator->isAvailable())
+            {
+                $siteName = $this->get_setting('site_name', 'Chamilo\Core\Admin');
+            }
+            else
+            {
+                $siteName = 'Chamilo';
+            }
+
             $this->add(
-                new Breadcrumb(
-                    Path :: getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin'),
-                    null,
-                    'home'));
+                new Breadcrumb($pathBuilder->getBasePath(true), $siteName, null, 'home'));
         }
     }
 
@@ -175,7 +188,7 @@ class BreadcrumbTrail
         {
             $this->add(
                 new Breadcrumb(
-                    Path :: getInstance()->getBasePath(true) . 'index.php',
+                    Path::getInstance()->getBasePath(true) . 'index.php',
                     $this->get_setting('site_name', 'Chamilo\Core\Admin')));
         }
     }
@@ -218,8 +231,8 @@ class BreadcrumbTrail
 
                 if ($breadcrumb->getImage())
                 {
-                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
-                         '">';
+                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' .
+                         htmlentities($breadcrumb->get_name()) . '">';
                 }
                 elseif ($breadcrumb->getGlyph())
                 {
@@ -227,7 +240,7 @@ class BreadcrumbTrail
                 }
                 else
                 {
-                    $breadCrumbHtml[] = StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true);
+                    $breadCrumbHtml[] = StringUtilities::getInstance()->truncate($breadcrumb->get_name(), 50, true);
                 }
 
                 $breadCrumbHtml[] = '</a>';
@@ -253,14 +266,14 @@ class BreadcrumbTrail
 
         if (is_array($help_item) && count($help_item) == 2)
         {
-            $item = \Chamilo\Core\Help\Manager :: get_tool_bar_help_item($help_item);
+            $item = \Chamilo\Core\Help\Manager::get_tool_bar_help_item($help_item);
 
             if ($item instanceof ToolbarItem)
             {
                 $html[] = '<div id="help_item">';
                 $toolbar = new Toolbar();
                 $toolbar->set_items(array($item));
-                $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
+                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
                 $html[] = $toolbar->as_html();
                 $html[] = '</div>';
             }
@@ -284,7 +297,7 @@ class BreadcrumbTrail
         if (is_array($extra_items) && count($extra_items) > 0)
         {
             $toolbar->add_items($extra_items);
-            $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
+            $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
         }
 
         $html[] = $toolbar->as_html();
@@ -334,7 +347,7 @@ class BreadcrumbTrail
      */
     public function get_setting($variable, $application)
     {
-        return PlatformSetting :: get($variable, $application);
+        return Configuration::getInstance()->get_setting(array($application, $variable));
     }
 
     /**

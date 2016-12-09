@@ -18,20 +18,20 @@ class DoublesTableColumnModel extends DataClassTableColumnModel implements Table
     {
         $this->add_column(
             new StaticTableColumn(
-                Theme :: getInstance()->getCommonImage(
-                    'Action/Category',
-                    'png',
-                    Translation :: get('Type'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON)));
+                Theme::getInstance()->getCommonImage(
+                    'Action/Category', 
+                    'png', 
+                    Translation::get('Type'), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON)));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
-
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
+        
         if (! $this->get_table()->is_detail())
         {
-            $this->add_column(new StaticTableColumn(self :: DUPLICATES));
+            $this->add_column(new StaticTableColumn(self::DUPLICATES));
         }
     }
 }

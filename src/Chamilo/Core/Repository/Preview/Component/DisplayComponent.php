@@ -13,16 +13,14 @@ class DisplayComponent extends Manager
      */
     public function run()
     {
-        if (!\Chamilo\Core\Repository\Display\Manager:: exists(
-            $this->get_content_object()->package() . '\Display\Preview'
-        )
-        )
+        if (! \Chamilo\Core\Repository\Display\Manager::exists(
+            $this->get_content_object()->package() . '\Display\Preview'))
         {
-            throw new NoObjectSelectedException(Translation:: get('ContentObject'));
+            throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
-
+        
         $factory = $this->getPreview();
-
+        
         return $factory->run();
     }
 

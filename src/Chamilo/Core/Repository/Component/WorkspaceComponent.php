@@ -22,9 +22,9 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
-        $context = \Chamilo\Core\Repository\Workspace\Manager :: context();
+        $context = \Chamilo\Core\Repository\Workspace\Manager::context();
         $applicationFactory = new ApplicationFactory(
-            $context,
+            $context, 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $applicationFactory->run();
     }
@@ -33,7 +33,7 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
     {
         $parameters = parent::get_additional_parameters();
         $parameters[] = FilterData::FILTER_CATEGORY;
-
+        
         return $parameters;
     }
 }

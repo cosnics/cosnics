@@ -25,21 +25,21 @@ class AssessmentInformationBlock extends AssessmentsBlock
         $reporting_data->set_categories($categories);
         
         $publication_id = $this->get_publication_id();
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $publication_id);
         
         $this->add_category_from_array(
-            Translation :: get('Details'), 
+            Translation::get('Details'), 
             $this->get_assessment_information($publication), 
             $reporting_data);
         
-        $reporting_data->set_rows(array(Translation :: get('Details')));
+        $reporting_data->set_rows(array(Translation::get('Details')));
         
         $assessment_reporting_info = $this->get_assessment_reporting_info($publication);
         foreach ($assessment_reporting_info as $translation => $value)
         {
-            $reporting_data->add_data_category_row($translation, Translation :: get('Details'), $value);
+            $reporting_data->add_data_category_row($translation, Translation::get('Details'), $value);
         }
         
         return $reporting_data;
@@ -52,6 +52,6 @@ class AssessmentInformationBlock extends AssessmentsBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

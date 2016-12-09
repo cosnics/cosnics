@@ -18,6 +18,6 @@ class AssignmentPlatformGroupInformationBlock extends AssignmentSubmitterInforma
      */
     protected function define_row_submitter_title()
     {
-        return Translation :: get('PlatformGroup');
+        return Translation::get('PlatformGroup');
     }
 }

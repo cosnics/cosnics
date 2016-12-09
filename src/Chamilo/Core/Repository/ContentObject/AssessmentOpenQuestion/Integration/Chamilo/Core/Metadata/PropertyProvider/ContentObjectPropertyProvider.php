@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataCla
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Integration\Chamilo\Core\Metadata\PropertyProvider
+ * @package
+ *          Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Integration\Chamilo\Core\Metadata\PropertyProvider
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -13,12 +14,13 @@ use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataCla
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return AssessmentOpenQuestion :: class_name();
+        return AssessmentOpenQuestion::class_name();
     }
 }

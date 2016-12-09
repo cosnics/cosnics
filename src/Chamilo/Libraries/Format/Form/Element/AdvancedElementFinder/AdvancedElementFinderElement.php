@@ -63,7 +63,7 @@ class AdvancedElementFinderElement
      */
     public function set_id($id)
     {
-        $this->set_property(self :: PROPERTY_ID, $id);
+        $this->set_property(self::PROPERTY_ID, $id);
     }
 
     /**
@@ -73,7 +73,7 @@ class AdvancedElementFinderElement
      */
     public function get_id()
     {
-        return $this->get_property(self :: PROPERTY_ID);
+        return $this->get_property(self::PROPERTY_ID);
     }
 
     /**
@@ -83,7 +83,7 @@ class AdvancedElementFinderElement
      */
     public function set_title($title)
     {
-        $this->set_property(self :: PROPERTY_TITLE, $title);
+        $this->set_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -93,7 +93,7 @@ class AdvancedElementFinderElement
      */
     public function set_description($description)
     {
-        $this->set_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -103,7 +103,7 @@ class AdvancedElementFinderElement
      */
     public function set_class($class)
     {
-        $this->set_property(self :: PROPERTY_CLASS, $class);
+        $this->set_property(self::PROPERTY_CLASS, $class);
     }
 
     /**
@@ -113,7 +113,7 @@ class AdvancedElementFinderElement
      */
     public function set_type($type)
     {
-        $this->set_property(self :: PROPERTY_TYPE, $type);
+        $this->set_property(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -123,7 +123,7 @@ class AdvancedElementFinderElement
      */
     public function set_children($children)
     {
-        $this->set_property(self :: PROPERTY_CHILDREN, $children);
+        $this->set_property(self::PROPERTY_CHILDREN, $children);
     }
 
     /**
@@ -133,7 +133,7 @@ class AdvancedElementFinderElement
      */
     public function get_children()
     {
-        return $this->get_property(self :: PROPERTY_CHILDREN);
+        return $this->get_property(self::PROPERTY_CHILDREN);
     }
 
     /**
@@ -158,13 +158,13 @@ class AdvancedElementFinderElement
     public function as_array()
     {
         $array = $this->properties;
-        $array[self :: PROPERTY_CHILDREN] = array();
+        $array[self::PROPERTY_CHILDREN] = array();
         
         $children = $this->get_children();
         
         foreach ($children as $child)
         {
-            $array[self :: PROPERTY_CHILDREN][] = $child->as_array();
+            $array[self::PROPERTY_CHILDREN][] = $child->as_array();
         }
         
         return $array;

@@ -11,8 +11,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 {
     // Available type filters
-    const FILTER_START_TIME = Assignment :: PROPERTY_START_TIME;
-    const FILTER_END_TIME = Assignment :: PROPERTY_END_TIME;
+    const FILTER_START_TIME = Assignment::PROPERTY_START_TIME;
+    const FILTER_END_TIME = Assignment::PROPERTY_END_TIME;
 
     /**
      * Determine whether one or more of the parameters were set
@@ -21,8 +21,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function is_set()
     {
-        return parent :: is_set() || $this->has_date(self :: FILTER_START_TIME) ||
-             $this->has_date(self :: FILTER_END_TIME);
+        return parent::is_set() || $this->has_date(self::FILTER_START_TIME) || $this->has_date(self::FILTER_END_TIME);
     }
 
     /**
@@ -32,10 +31,10 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_filter_properties($filter_properties = array())
     {
-        $filter_properties[] = self :: FILTER_START_TIME;
-        $filter_properties[] = self :: FILTER_END_TIME;
+        $filter_properties[] = self::FILTER_START_TIME;
+        $filter_properties[] = self::FILTER_END_TIME;
         
-        return parent :: get_filter_properties($filter_properties);
+        return parent::get_filter_properties($filter_properties);
     }
 
     /**
@@ -44,7 +43,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function has_start_time()
     {
-        return $this->has_date(self :: FILTER_START_TIME);
+        return $this->has_date(self::FILTER_START_TIME);
     }
 
     /**
@@ -53,7 +52,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function has_end_time()
     {
-        return $this->has_date(self :: FILTER_END_TIME);
+        return $this->has_date(self::FILTER_END_TIME);
     }
 
     /**
@@ -63,7 +62,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_start_time($type = self :: FILTER_FROM_DATE)
     {
-        return $this->get_date(self :: FILTER_START_TIME, $type);
+        return $this->get_date(self::FILTER_START_TIME, $type);
     }
 
     /**
@@ -73,6 +72,6 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_end_time($type = self :: FILTER_FROM_DATE)
     {
-        return $this->get_date(self :: FILTER_END_TIME, $type);
+        return $this->get_date(self::FILTER_END_TIME, $type);
     }
 }

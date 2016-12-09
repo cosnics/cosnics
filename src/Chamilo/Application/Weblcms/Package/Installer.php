@@ -24,7 +24,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Runs the install-script.
      */
@@ -37,31 +37,31 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $this->add_message(
-                self :: TYPE_NORMAL,
-                Translation :: get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation :: get('CoursesTree')),
-                    Utilities :: COMMON_LIBRARIES));
+                self::TYPE_NORMAL, 
+                Translation::get(
+                    'ObjectCreated', 
+                    array('OBJECT' => Translation::get('CoursesTree')), 
+                    Utilities::COMMON_LIBRARIES));
         }
         if (! $this->create_default_categories_in_weblcms())
         {
             return false;
         }
-
-        if (! CourseSettingsController :: install_course_settings($this))
+        
+        if (! CourseSettingsController::install_course_settings($this))
         {
             return false;
         }
-
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->create_request_root())
+        
+        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->create_request_root())
         {
             return false;
         }
         else
         {
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('QuotaLocationCreated'));
+            $this->add_message(self::TYPE_NORMAL, Translation::get('QuotaLocationCreated'));
         }
-
+        
         return true;
     }
 
@@ -70,41 +70,41 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * Helper Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Installs the root location of the courses subtree and sets the default rights for everyone on root location so
      * the rights are no issue when using no course type
-     *
+     * 
      * @return boolean
      */
     private function create_courses_subtree()
     {
-        $rights_utilities = CourseManagementRights :: get_instance();
-
-        $location = $rights_utilities->create_subtree_root_location(0, WeblcmsRights :: TREE_TYPE_COURSE, true);
-
+        $rights_utilities = CourseManagementRights::getInstance();
+        
+        $location = $rights_utilities->create_subtree_root_location(0, WeblcmsRights::TREE_TYPE_COURSE, true);
+        
         if (! $location)
         {
             return false;
         }
-
+        
         $specific_rights = $rights_utilities->get_specific_course_management_rights();
-
+        
         foreach ($specific_rights as $right_id)
         {
-
+            
             if (! $rights_utilities->invert_location_entity_right($right_id, 0, 0, $location->get_id()))
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
     /**
      * Installs example course categories
-     *
+     * 
      * @return boolean
      */
     private function create_default_categories_in_weblcms()
@@ -114,12 +114,12 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $cat->set_name('Language skills');
         $cat->set_parent('0');
         $cat->set_display_order(1);
-
+        
         if (! $cat->create())
         {
             return false;
         }
-
+        
         // creating PC Skills
         $cat = new CourseCategory();
         $cat->set_name('PC skills');
@@ -129,7 +129,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             return false;
         }
-
+        
         // creating Projects
         $cat = new CourseCategory();
         $cat->set_name('Projects');
@@ -139,7 +139,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             return false;
         }
-
+        
         return true;
     }
 }

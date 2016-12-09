@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Google Drive (Docs)</name>
-		<code>GoogleDocs</code>
-		<type>Chamilo\Core\Repository\Implementation</type>
-		<context>Chamilo\Core\Repository\Implementation\GoogleDocs</context>
-		<category>Document</category>
-		<authors>
-			<author>
-				<name>Hans De Bisschop</name>
-				<email>hans.de.bisschop@ehb.be</email>
-				<company>Erasmushogeschool Brussel</company>
-			</author>
-		</authors>
-		<version>5.0.0</version>
-		<description>Google Drive (formerly known as Google Docs) is a free, Web-based office suite and data storage service
-			offered by Google. It allows users to create and edit documents online while collaborating in real-time with other
-			users. Google Docs combines the features of Writely and Spreadsheets with a presentation program incorporating
-			technology designed by Tonic Systems. Data storage of files up to 1 GB total in size was introduced on January 13,
-			2010, but has since been increased to 10 GB, documents using Google Docs native formats do not count towards this
-			quota. The largely anticipated cloud storage feature by Google is said to be replacing most of Docs' features in
-			2012. This extension or replacement of Google Docs called Google Drive was opened to the public on April 24, 2012.
-		</description>
-		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Core\Repository</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
-		</pre-depends>
-	</package>
+    <package>
+        <name>Google Drive (Docs)</name>
+        <code>GoogleDocs</code>
+        <type>Chamilo\Core\Repository\Implementation</type>
+        <context>Chamilo\Core\Repository\Implementation\GoogleDocs</context>
+        <category>Document</category>
+        <authors>
+            <author>
+                <name>Hans De Bisschop</name>
+                <email>hans.de.bisschop@ehb.be</email>
+                <company>Erasmushogeschool Brussel</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description>Google Drive (formerly known as Google Docs) is a free, Web-based office suite and data storage service
+            offered by Google. It allows users to create and edit documents online while collaborating in real-time with other
+            users. Google Docs combines the features of Writely and Spreadsheets with a presentation program incorporating
+            technology designed by Tonic Systems. Data storage of files up to 1 GB total in size was introduced on January 13,
+            2010, but has since been increased to 10 GB, documents using Google Docs native formats do not count towards this
+            quota. The largely anticipated cloud storage feature by Google is said to be replacing most of Docs' features in
+            2012. This extension or replacement of Google Docs called Google Drive was opened to the public on April 24, 2012.
+        </description>
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+    </package>
 </packages>

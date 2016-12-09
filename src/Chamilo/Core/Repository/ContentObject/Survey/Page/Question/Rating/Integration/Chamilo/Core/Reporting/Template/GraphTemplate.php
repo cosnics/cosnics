@@ -12,8 +12,8 @@ class GraphTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
-        $this->set_parameter(self :: PARAM_QUESTION_ID, Request :: get(self :: PARAM_QUESTION_ID));
+        parent::__construct($parent);
+        $this->set_parameter(self::PARAM_QUESTION_ID, Request::get(self::PARAM_QUESTION_ID));
         $this->add_reporting_block(new PercentageGraphBlock($this));
         $this->add_reporting_block(new AbsoluteGraphBlock($this));
     }

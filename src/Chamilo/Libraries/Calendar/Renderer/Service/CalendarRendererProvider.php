@@ -14,7 +14,7 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class CalendarRendererProvider implements
+abstract class CalendarRendererProvider implements 
     \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
 {
     const SOURCE_TYPE_INTERNAL = 1;
@@ -114,7 +114,7 @@ abstract class CalendarRendererProvider implements
 
     /**
      * Get the internal events between $start_time and $end_time
-     *
+     * 
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
@@ -122,12 +122,12 @@ abstract class CalendarRendererProvider implements
      */
     public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
-        return $this->getEvents(self :: SOURCE_TYPE_INTERNAL, $startTime, $endTime, $calculateRecurrence);
+        return $this->getEvents(self::SOURCE_TYPE_INTERNAL, $startTime, $endTime, $calculateRecurrence);
     }
 
     /**
      * Get the external events between $start_time and $end_time
-     *
+     * 
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
@@ -135,12 +135,12 @@ abstract class CalendarRendererProvider implements
      */
     public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
-        return $this->getEvents(self :: SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
+        return $this->getEvents(self::SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
     }
 
     /**
      * Get the events between $start_time and $end_time
-     *
+     * 
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
@@ -148,37 +148,37 @@ abstract class CalendarRendererProvider implements
      */
     public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
-        return $this->getEvents(self :: SOURCE_TYPE_BOTH, $startTime, $endTime, $calculateRecurrence);
+        return $this->getEvents(self::SOURCE_TYPE_BOTH, $startTime, $endTime, $calculateRecurrence);
     }
 
     /**
      * Get the internal events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEvents()
     {
-        return $this->getEvents(self :: SOURCE_TYPE_INTERNAL);
+        return $this->getEvents(self::SOURCE_TYPE_INTERNAL);
     }
 
     /**
      * Get the external events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEvents()
     {
-        return $this->getEvents(self :: SOURCE_TYPE_EXTERNAL);
+        return $this->getEvents(self::SOURCE_TYPE_EXTERNAL);
     }
 
     /**
      * Get the events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEvents()
     {
-        return $this->getEvents(self :: SOURCE_TYPE_BOTH);
+        return $this->getEvents(self::SOURCE_TYPE_BOTH);
     }
 
     /**
@@ -192,26 +192,26 @@ abstract class CalendarRendererProvider implements
     private function getEvents($sourceType, $startTime = null, $endTime = null, $calculateRecurrence = false)
     {
         $cacheIdentifier = md5(serialize(array($sourceType, $startTime, $endTime, $calculateRecurrence)));
-
+        
         if (! isset($this->events[$cacheIdentifier]))
         {
             $events = $this->aggregateEvents($sourceType, $startTime, $endTime);
-
+            
             if ($startTime && $endTime && $calculateRecurrence)
             {
                 $recurringEvents = array();
-
+                
                 foreach ($events as $event)
                 {
                     $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
                     $parsedEvents = $recurrenceCalculator->getEvents();
-
+                    
                     foreach ($parsedEvents as $parsedEvent)
                     {
                         $recurringEvents[] = $parsedEvent;
                     }
                 }
-
+                
                 $this->events[$cacheIdentifier] = $recurringEvents;
             }
             else
@@ -219,7 +219,7 @@ abstract class CalendarRendererProvider implements
                 $this->events[$cacheIdentifier] = $events;
             }
         }
-
+        
         return $this->events[$cacheIdentifier];
     }
 
@@ -240,9 +240,9 @@ abstract class CalendarRendererProvider implements
     {
         if ($this instanceof VisibilitySupport)
         {
-            $ajaxVisibilityClassName = ClassnameUtilities :: getInstance()->getNamespaceParent(
+            $ajaxVisibilityClassName = ClassnameUtilities::getInstance()->getNamespaceParent(
                 $this->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
-
+            
             if (! class_exists($ajaxVisibilityClassName))
             {
                 throw new \Exception(
@@ -250,7 +250,7 @@ abstract class CalendarRendererProvider implements
                          $this->getVisibilityContext() .
                          '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');
             }
-
+            
             return true;
         }
         else
@@ -275,7 +275,7 @@ abstract class CalendarRendererProvider implements
      */
     public function isInternalSource($source)
     {
-        return $this->matchesRequestedSource(self :: SOURCE_TYPE_INTERNAL, $source);
+        return $this->matchesRequestedSource(self::SOURCE_TYPE_INTERNAL, $source);
     }
 
     /**
@@ -285,7 +285,7 @@ abstract class CalendarRendererProvider implements
      */
     public function isExternalSource($source)
     {
-        return $this->matchesRequestedSource(self :: SOURCE_TYPE_EXTERNAL, $source);
+        return $this->matchesRequestedSource(self::SOURCE_TYPE_EXTERNAL, $source);
     }
 
     /**

@@ -21,7 +21,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements 
     \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
 {
 
@@ -42,8 +42,8 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function __construct(BrowserComponent $renderer, User $dataUser, User $viewingUser, $displayParameters)
     {
         $this->renderer = $renderer;
-
-        parent :: __construct($dataUser, $viewingUser, $displayParameters);
+        
+        parent::__construct($dataUser, $viewingUser, $displayParameters);
     }
 
     /**
@@ -71,29 +71,29 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function getEventActions($event)
     {
         $actions = array();
-
-        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager :: package())
+        
+        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->getRenderer()->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
-                ToolbarItem :: DISPLAY_ICON);
-
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION, 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId())), 
+                ToolbarItem::DISPLAY_ICON);
+            
             $actions[] = new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->getRenderer()->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
-                ToolbarItem :: DISPLAY_ICON,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE, 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true);
         }
-
+        
         return $actions;
     }
 
@@ -108,34 +108,34 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $publications = $this->getRenderer()->get_publications();
         $events = array();
-
+        
         foreach ($publications as $publication)
         {
-
+            
             if (method_exists(
-                $this->getRenderer()->get_parent(),
+                $this->getRenderer()->get_parent(), 
                 'convert_content_object_publication_to_calendar_event'))
             {
                 $object = $this->getRenderer()->get_parent()->convert_content_object_publication_to_calendar_event(
-                    $publication,
-                    $startTime,
+                    $publication, 
+                    $startTime, 
                     $endTime);
             }
             else
             {
-                $class = $publication[ContentObject :: PROPERTY_TYPE];
+                $class = $publication[ContentObject::PROPERTY_TYPE];
                 $object = new $class($publication);
-                $object->set_id($publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
+                $object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
             }
-
+            
             $publicationObject = new ContentObjectPublication();
             $publicationObject->set_default_properties($publication);
             $publicationObject->set_content_object($object);
-
+            
             $eventParser = new EventParser($publicationObject, $startTime, $endTime);
             $events = array_merge($events, $eventParser->getEvents());
         }
-
+        
         return $events;
     }
 

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: unsubscribe.class.php 218 2009-11-13 14:21:26Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -27,13 +27,13 @@ class UnsubscribeComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
+        
         $course = $this->get_course();
-        $users = $this->getRequest()->get(self :: PARAM_OBJECTS);
+        $users = $this->getRequest()->get(self::PARAM_OBJECTS);
         if (! is_array($users))
         {
             $users = array($users);
@@ -43,20 +43,20 @@ class UnsubscribeComponent extends Manager
             if (isset($users))
             {
                 $failures = 0;
-
-                $course_management_rights = CourseManagementRights :: get_instance();
-
+                
+                $course_management_rights = CourseManagementRights::getInstance();
+                
                 foreach ($users as $user_id)
                 {
                     if (! is_null($user_id) && $user_id != $this->get_user_id())
                     {
                         if (! $this->get_user()->is_platform_admin() && (! $course_management_rights->is_allowed(
-                            CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT,
-                            $course->get_id(),
-                            CourseManagementRights :: TYPE_COURSE,
+                            CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, 
+                            $course->get_id(), 
+                            CourseManagementRights::TYPE_COURSE, 
                             $user_id) || ! $course->is_course_admin($this->get_user())))
                         {
-
+                            
                             $failures ++;
                             continue;
                         }
@@ -67,22 +67,19 @@ class UnsubscribeComponent extends Manager
                                 $failures ++;
                             }
                         }
-
-                        $parameters[UserStatusChange :: PROPERTY_USER_ID] = $this->get_user_id();
-                        $parameters[UserStatusChange :: PROPERTY_SUBJECT_ID] = $user_id;
-                        $parameters[UserStatusChange :: PROPERTY_NEW_STATUS] = 0;
-                        $parameters[UserStatusChange :: PROPERTY_COURSE_ID] = $course->get_id();
-                        $parameters[UserStatusChange :: PROPERTY_DATE] = time();
-                        Event :: trigger(
-                            'UserStatusChange',
-                            \Chamilo\Application\Weblcms\Manager :: context(),
-                            $parameters);
+                        
+                        $parameters[UserStatusChange::PROPERTY_USER_ID] = $this->get_user_id();
+                        $parameters[UserStatusChange::PROPERTY_SUBJECT_ID] = $user_id;
+                        $parameters[UserStatusChange::PROPERTY_NEW_STATUS] = 0;
+                        $parameters[UserStatusChange::PROPERTY_COURSE_ID] = $course->get_id();
+                        $parameters[UserStatusChange::PROPERTY_DATE] = time();
+                        Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
                     }
-
+                    
                     if ($failures == 0)
                     {
                         $success = true;
-
+                        
                         if (count($users) == 1)
                         {
                             $message = 'UserUnsubscribedFromCourse';
@@ -95,7 +92,7 @@ class UnsubscribeComponent extends Manager
                     elseif ($failures == count($users))
                     {
                         $success = false;
-
+                        
                         if (count($users) == 1)
                         {
                             $message = 'UserNotUnsubscribedFromCourse';
@@ -112,11 +109,11 @@ class UnsubscribeComponent extends Manager
                     }
                 }
                 $this->redirect(
-                    Translation :: get($message),
-                    ($success ? false : true),
+                    Translation::get($message), 
+                    ($success ? false : true), 
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                        self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
             }
         }
     }

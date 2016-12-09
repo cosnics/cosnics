@@ -13,6 +13,7 @@ class Folder
     private $children = array();
 
     /**
+     *
      * @return the $parent
      */
     public function getParent()
@@ -20,7 +21,8 @@ class Folder
         return $this->parent;
     }
 
- /**
+    /**
+     *
      * @param field_type $parent
      */
     public function setParent($parent)
@@ -28,7 +30,7 @@ class Folder
         $this->parent = $parent;
     }
 
- /**
+    /**
      *
      * @return the $id
      */

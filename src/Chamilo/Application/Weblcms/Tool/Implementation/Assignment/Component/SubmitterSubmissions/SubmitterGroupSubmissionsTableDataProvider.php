@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Description of submitter_group_submissions_browser_table_data_provider
- *
+ * 
  * @author Anthony Hurst (Hogeschool Gent)
  */
 class SubmitterGroupSubmissionsTableDataProvider extends DataClassTableDataProvider
@@ -20,7 +20,7 @@ class SubmitterGroupSubmissionsTableDataProvider extends DataClassTableDataProvi
      * WARNING: This function circumvents the tracking model. REASON: The table
      * construction model is based on result sets retrieved straight from the database whereas the tracking model is
      * based on arrays.
-     *
+     * 
      * @param $offset int the start point in the list
      * @param $count int the number of objects to be retrieved from the database.
      * @param $order_property ObjectTableOrder the way the contents of the table should be ordered.
@@ -31,16 +31,16 @@ class SubmitterGroupSubmissionsTableDataProvider extends DataClassTableDataProvi
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(),
-                    AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
+                    AssignmentSubmission::class_name(), 
+                    AssignmentSubmission::PROPERTY_DATE_SUBMITTED));
         }
         // From here on, the tracking model is circumvented.
-        return AssignmentSubmission :: get_data(
-            AssignmentSubmission :: class_name(),
-            null,
-            $condition,
-            $offset,
-            $count,
+        return AssignmentSubmission::get_data(
+            AssignmentSubmission::class_name(), 
+            null, 
+            $condition, 
+            $offset, 
+            $count, 
             $order_property);
     }
 

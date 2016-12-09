@@ -16,22 +16,22 @@ class MessageLogger
 
     public static function get_instance_by_name($instance_name)
     {
-        if (! isset(self :: $instances[$instance_name]))
+        if (! isset(self::$instances[$instance_name]))
         {
-            self :: $instances[$instance_name] = new MessageLogger();
+            self::$instances[$instance_name] = new MessageLogger();
         }
-
-        return self :: $instances[$instance_name];
+        
+        return self::$instances[$instance_name];
     }
 
-    public static function get_instance($object)
+    public static function getInstance($object)
     {
-        return self :: get_instance_by_name(ClassnameUtilities :: getInstance()->getClassnameFromObject($object, true));
+        return self::get_instance_by_name(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
     public static function get_instances()
     {
-        return self :: $instances;
+        return self::$instances;
     }
 
     public function __construct()
@@ -43,16 +43,16 @@ class MessageLogger
     {
         switch ($type)
         {
-            case self :: TYPE_NORMAL :
+            case self::TYPE_NORMAL :
                 $this->messages[] = $message;
                 break;
-            case self :: TYPE_CONFIRM :
+            case self::TYPE_CONFIRM :
                 $this->messages[] = '<span style="color: green; font-weight: bold;">' . $message . '</span>';
                 break;
-            case self :: TYPE_WARNING :
+            case self::TYPE_WARNING :
                 $this->messages[] = '<span style="color: orange; font-weight: bold;">' . $message . '</span>';
                 break;
-            case self :: TYPE_ERROR :
+            case self::TYPE_ERROR :
                 $this->messages[] = '<span style="color: red; font-weight: bold;">' . $message . '</span>';
                 break;
             default :

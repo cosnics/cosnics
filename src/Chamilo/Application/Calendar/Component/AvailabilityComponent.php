@@ -22,26 +22,26 @@ class AvailabilityComponent extends Manager
     {
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
         $form = $this->getForm($availabilityService);
-
+        
         if ($form->validate())
         {
             $values = $form->exportValues();
             $result = $availabilityService->setAvailabilities(
-                $this->get_user(),
-                $values[AvailabilityService :: PROPERTY_CALENDAR]);
-
+                $this->get_user(), 
+                $values[AvailabilityService::PROPERTY_CALENDAR]);
+            
             $nextAction = new Redirect(
-                array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
+                array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
             $nextAction->toUrl();
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

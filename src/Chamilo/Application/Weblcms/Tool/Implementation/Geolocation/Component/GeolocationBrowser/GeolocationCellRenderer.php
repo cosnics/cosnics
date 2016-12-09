@@ -17,19 +17,19 @@ class GeolocationCellRenderer extends ObjectPublicationTableCellRenderer
 
     public function __construct($browser)
     {
-        parent :: __construct($browser);
+        parent::__construct($browser);
     }
-    
+
     /*
      * Inherited
      */
     public function render_cell($column, $publication)
     {
-        if ($column === ObjectPublicationTableColumnModel :: get_action_column())
+        if ($column === ObjectPublicationTableColumnModel::get_action_column())
         {
             return $this->get_actions($publication, null, true, false)->as_html();
         }
         
-        return parent :: render_cell($column, $publication);
+        return parent::render_cell($column, $publication);
     }
 }

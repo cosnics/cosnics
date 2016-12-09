@@ -17,7 +17,7 @@ class ZipDefaultExportImplementation extends ZipExportImplementation
     function get_path_for_file_in_zip($content_object, $filename)
     {
         $workspace = $this->get_context()->get_parameters()->getWorkspace();
-
+        
         return $content_object->getVirtualPathInWorkspace($workspace) . $filename;
     }
 }

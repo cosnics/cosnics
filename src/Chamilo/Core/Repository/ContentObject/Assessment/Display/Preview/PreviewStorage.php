@@ -26,13 +26,13 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\assessment\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new PreviewStorage();
+            self::$instance = new PreviewStorage();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -91,7 +91,7 @@ class PreviewStorage
      */
     public function get_storage()
     {
-        return unserialize(Session :: retrieve(__NAMESPACE__));
+        return unserialize(Session::retrieve(__NAMESPACE__));
     }
 
     /**
@@ -101,7 +101,7 @@ class PreviewStorage
      */
     public function set_storage($data)
     {
-        Session :: register(__NAMESPACE__, serialize($data));
+        Session::register(__NAMESPACE__, serialize($data));
         return true;
     }
 
@@ -134,11 +134,11 @@ class PreviewStorage
      */
     public function get_assessment_attempts()
     {
-        $attempts = $this->get_property(self :: PROPERTY_ASSESSMENT_ATTEMPT);
+        $attempts = $this->get_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
         if (! isset($attempts))
         {
             $attempts = array();
-            $this->set_property(self :: PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
+            $this->set_property(self::PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
         }
         return $attempts;
     }
@@ -152,7 +152,7 @@ class PreviewStorage
     {
         $attempts = $this->get_assessment_attempts();
         $attempts[$attempt->get_content_object_id()] = $attempt;
-        return $this->set_property(self :: PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
     }
 
     /**
@@ -174,7 +174,7 @@ class PreviewStorage
     {
         $attempts = $this->get_assessment_attempts();
         unset($attempts[$attempt->get_content_object_id()]);
-        return $this->set_property(self :: PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
     }
 
     /**
@@ -193,11 +193,11 @@ class PreviewStorage
      */
     public function get_question_attempts()
     {
-        $attempts = $this->get_property(self :: PROPERTY_ASSESSMENT_QUESTION_ATTEMPT);
+        $attempts = $this->get_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT);
         if (! isset($attempts))
         {
             $attempts = array();
-            $this->set_property(self :: PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
+            $this->set_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
         }
         return $attempts;
     }
@@ -211,7 +211,7 @@ class PreviewStorage
     {
         $attempts = $this->get_question_attempts();
         $attempts[$question_attempt->get_attempt_id()][$question_attempt->get_question_complex_id()] = $question_attempt;
-        return $this->set_property(self :: PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
     }
 
     /**
@@ -233,7 +233,7 @@ class PreviewStorage
     {
         $attempts = $this->get_question_attempts();
         unset($attempts[$question_attempt->get_attempt_id()][$question_attempt->get_question_complex_id()]);
-        return $this->set_property(self :: PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
     }
 
     /**

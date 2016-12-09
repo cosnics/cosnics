@@ -16,7 +16,7 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
 
     /**
      * The ordering of the DataClass objects to be applied to the result set
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\OrderBy[]
      */
     private $orderBy;
@@ -35,7 +35,7 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
 
     /**
      * Get the ordering of the DataClass objects to be applied to the result set
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
      */
     public function getOrderBy()
@@ -45,7 +45,7 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
 
     /**
      * Set the ordering of the DataClass objects to be applied to the result set
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
      */
     public function setOrderBy($orderBy)
@@ -60,15 +60,15 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
     public function getHashParts()
     {
         $hashParts = parent::getHashParts();
-
+        
         $hashParts[] = $this->getOrderBy();
-
+        
         return $hashParts;
     }
 
     /**
      * Throw an exception if the DataClassPropertyParameters object is invalid
-     *
+     * 
      * @throws \Exception
      */
     public static function invalid()

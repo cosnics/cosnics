@@ -15,39 +15,39 @@ class GroupDeleterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
+        if (! $this->is_allowed(self::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
-        $group_id = Request :: get(self :: PARAM_GROUP);
-
+        
+        $group_id = Request::get(self::PARAM_GROUP);
+        
         $users = $this->get_group_users($group_id);
-
+        
         if ($this->group_has_scores($group_id))
         {
             $this->redirect(
-                Translation :: get('PeerAssessmentGroupAlreadyActive'),
-                true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS));
+                Translation::get('PeerAssessmentGroupAlreadyActive'), 
+                true, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
         }
-
+        
         if ($this->delete_group($group_id))
         {
             $this->redirect(
-                Translation :: get(
-                    'ObjectDeleted',
-                    array('OBJECT' => Translation :: get('PeerAssessmentGroup')),
-                    Utilities :: COMMON_LIBRARIES),
-                false,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS));
+                Translation::get(
+                    'ObjectDeleted', 
+                    array('OBJECT' => Translation::get('PeerAssessmentGroup')), 
+                    Utilities::COMMON_LIBRARIES), 
+                false, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
         }
         else
         {
             $this->redirect(
-                Translation :: get('Error'),
-                true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS));
+                Translation::get('Error'), 
+                true, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
         }
     }
 }

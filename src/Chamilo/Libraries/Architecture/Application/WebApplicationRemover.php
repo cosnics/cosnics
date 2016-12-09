@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Base class for specific removal extensions of web applications
- *
+ * 
  * @author Hans De Bisschop
  */
 class WebApplicationRemover extends \Chamilo\Configuration\Package\Action\Remover
@@ -23,25 +23,25 @@ class WebApplicationRemover extends \Chamilo\Configuration\Package\Action\Remove
     public function extra()
     {
         $context = $this->context();
-
-        if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive('Chamilo\Core\Menu'))
+        
+        if (! \Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive('Chamilo\Core\Menu'))
         {
             return true;
         }
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ApplicationItem :: class_name(), ApplicationItem :: PROPERTY_APPLICATION),
-            new StaticConditionVariable(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($context)));
-
-        $menu_item = \Chamilo\Core\Menu\Storage\DataManager :: retrieve(
-            ApplicationItem :: class_name(),
+            new PropertyConditionVariable(ApplicationItem::class_name(), ApplicationItem::PROPERTY_APPLICATION), 
+            new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context)));
+        
+        $menu_item = \Chamilo\Core\Menu\Storage\DataManager::retrieve(
+            ApplicationItem::class_name(), 
             new DataClassRetrieveParameters($condition));
-
+        
         if ($menu_item instanceof \Chamilo\Core\Menu\Storage\DataClass\Item)
         {
             return $menu_item->delete();
         }
-
+        
         return true;
     }
 }

@@ -3,9 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Preview;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
 {
-  /**
+
+    /**
      * Preview mode, so always return true.
-     *
+     * 
      * @param $right
      * @return boolean
      */
@@ -13,7 +14,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     {
         return true;
     }
-
+    
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
     public function is_allowed_to_edit_content_object()
     {

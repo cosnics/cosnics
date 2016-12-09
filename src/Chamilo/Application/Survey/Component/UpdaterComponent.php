@@ -24,34 +24,34 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        $publicationIdentifier = $this->getRequest()->query->get(self :: PARAM_PUBLICATION_ID);
+        $publicationIdentifier = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         
         if (! $publicationIdentifier)
         {
-            throw new NoObjectSelectedException(Translation :: get('Publication'));
+            throw new NoObjectSelectedException(Translation::get('Publication'));
         }
         
         $publicationService = new PublicationService(new PublicationRepository());
         $publication = $publicationService->getPublicationByIdentifier($publicationIdentifier);
         
-        $rightsService = RightsService :: getInstance();
+        $rightsService = RightsService::getInstance();
         
         if ($rightsService->hasPublicationCreatorRights($this->get_user(), $publication))
         {
             $form = new PublicationForm(
-                PublicationForm :: TYPE_EDIT, 
+                PublicationForm::TYPE_EDIT, 
                 $publication, 
                 $this->get_user(), 
-                $this->get_url(array(self :: PARAM_PUBLICATION_ID => $publication->getId())), 
+                $this->get_url(array(self::PARAM_PUBLICATION_ID => $publication->getId())), 
                 $publication);
             
             if ($form->validate())
             {
                 $success = $form->update_publication();
                 $this->redirect(
-                    $success ? Translation :: get('PublicationUpdated') : Translation :: get('PublicationNotUpdated'), 
+                    $success ? Translation::get('PublicationUpdated') : Translation::get('PublicationNotUpdated'), 
                     ! $success, 
-                    array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                    array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
             else
             {
@@ -71,6 +71,6 @@ class UpdaterComponent extends TabComponent
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_PUBLICATION_ID);
+        return array(self::PARAM_PUBLICATION_ID);
     }
 }

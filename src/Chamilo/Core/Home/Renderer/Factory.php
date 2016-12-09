@@ -80,12 +80,12 @@ class Factory
     public function getRenderer()
     {
         $class = __NAMESPACE__ . '\Type\\' . $this->getType();
-
+        
         if (! class_exists($class))
         {
-            throw new \Exception(Translation :: get('HomeRendererTypeDoesNotExist', array('type' => $this->getType())));
+            throw new \Exception(Translation::get('HomeRendererTypeDoesNotExist', array('type' => $this->getType())));
         }
-
+        
         return new $class($this->getApplication());
     }
 }

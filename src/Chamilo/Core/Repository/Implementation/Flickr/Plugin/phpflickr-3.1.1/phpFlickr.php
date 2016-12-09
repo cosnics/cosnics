@@ -59,7 +59,7 @@ if (! class_exists('phpFlickr'))
         var $php_version;
 
         var $custom_post = null, $custom_cache_get = null, $custom_cache_set = null;
-        
+
         /*
          * When your database cache table hits this many rows, a cleanup will occur to get rid of all of the old rows
          * and cleanup the garbage in the table. For most personal apps, 1000 rows should be more than enough. If your
@@ -229,10 +229,13 @@ if (! class_exists('phpFlickr'))
             {
                 // $this->cache_db->query("DELETE FROM $this->cache_table WHERE request = '$reqhash'");
                 $response = urlencode($response);
-                $sql = 'INSERT INTO ' . $this->cache_table . ' (request, response, expiration)
-						VALUES (\'' . $reqhash . '\', \'' . $response . '\', TIMESTAMPADD(SECOND,' . $this->cache_expire . ',CURRENT_TIMESTAMP))
+                $sql = 'INSERT INTO ' . $this->cache_table .
+                     ' (request, response, expiration)
+						VALUES (\'' .
+                     $reqhash . '\', \'' . $response . '\', TIMESTAMPADD(SECOND,' . $this->cache_expire . ',CURRENT_TIMESTAMP))
 						ON DUPLICATE KEY UPDATE response=\'' . $response . '\',
-						expiration=TIMESTAMPADD(SECOND,' . $this->cache_expire . ',CURRENT_TIMESTAMP) ';
+						expiration=TIMESTAMPADD(SECOND,' . $this->cache_expire .
+                     ',CURRENT_TIMESTAMP) ';
                 
                 $result = mysqli_query($this->cache_db, $sql);
                 if (! $result)
@@ -464,7 +467,7 @@ if (! class_exists('phpFlickr'))
             // return an error. This will return a false boolean.
             return $this->error_msg;
         }
-        
+
         /* These functions are front ends for the flickr calls */
         function buildPhotoURL($photo, $size = "Medium")
         {
@@ -836,14 +839,14 @@ if (! class_exists('phpFlickr'))
             $this->request($method, $arguments);
             return $this->parsed_response ? $this->parsed_response : false;
         }
-        
+
         /*
          * These functions are the direct implementations of flickr calls. For method documentation, including
          * arguments, visit the address included in a comment in the function.
          */
-
-		/* Activity methods */
-		function activity_userComments($per_page = NULL, $page = NULL)
+        
+        /* Activity methods */
+        function activity_userComments($per_page = NULL, $page = NULL)
         {
             /* https://www.flickr.com/services/api/flickr.activity.userComments.html */
             $this->request('flickr.activity.userComments', array("per_page" => $per_page, "page" => $page));
@@ -858,7 +861,7 @@ if (! class_exists('phpFlickr'))
                 array("timeframe" => $timeframe, "per_page" => $per_page, "page" => $page));
             return $this->parsed_response ? $this->parsed_response['items']['item'] : false;
         }
-        
+
         /* Authentication methods */
         function auth_checkToken()
         {
@@ -888,7 +891,7 @@ if (! class_exists('phpFlickr'))
             $_SESSION['phpFlickr_auth_token'] = $this->parsed_response['auth']['token'];
             return $this->parsed_response ? $this->parsed_response['auth'] : false;
         }
-        
+
         /* Blogs methods */
         function blogs_getList($service = NULL)
         {
@@ -916,7 +919,7 @@ if (! class_exists('phpFlickr'))
                     'blog_password' => $blog_password, 
                     'service' => $service));
         }
-        
+
         /* Collections Methods */
         function collections_getInfo($collection_id)
         {
@@ -931,14 +934,14 @@ if (! class_exists('phpFlickr'))
                 'flickr.collections.getTree', 
                 array('collection_id' => $collection_id, 'user_id' => $user_id));
         }
-        
+
         /* Commons Methods */
         function commons_getInstitutions()
         {
             /* https://www.flickr.com/services/api/flickr.commons.getInstitutions.html */
             return $this->call('flickr.commons.getInstitutions', array());
         }
-        
+
         /* Contacts Methods */
         function contacts_getList($filter = NULL, $page = NULL, $per_page = NULL)
         {
@@ -965,7 +968,7 @@ if (! class_exists('phpFlickr'))
                 'flickr.contacts.getListRecentlyUploaded', 
                 array('date_lastupload' => $date_lastupload, 'filter' => $filter));
         }
-        
+
         /* Favorites Methods */
         function favorites_add($photo_id)
         {
@@ -1012,7 +1015,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.favorites.remove", array('photo_id' => $photo_id, 'user_id' => $user_id), TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Galleries Methods */
         function galleries_addPhoto($gallery_id, $photo_id, $comment = NULL)
         {
@@ -1083,7 +1086,7 @@ if (! class_exists('phpFlickr'))
                 'flickr.galleries.getPhotos', 
                 array('gallery_id' => $gallery_id, 'extras' => $extras, 'per_page' => $per_page, 'page' => $page));
         }
-        
+
         /* Groups Methods */
         function groups_browse($cat_id = NULL)
         {
@@ -1104,7 +1107,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.groups.search", array("text" => $text, "per_page" => $per_page, "page" => $page));
             return $this->parsed_response ? $this->parsed_response['groups'] : false;
         }
-        
+
         /* Groups Members Methods */
         function groups_members_getList($group_id, $membertypes = NULL, $per_page = NULL, $page = NULL)
         {
@@ -1113,7 +1116,7 @@ if (! class_exists('phpFlickr'))
                 'flickr.groups.members.getList', 
                 array('group_id' => $group_id, 'membertypes' => $membertypes, 'per_page' => $per_page, 'page' => $page));
         }
-        
+
         /* Groups Pools Methods */
         function groups_pools_add($photo_id, $group_id)
         {
@@ -1167,7 +1170,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.groups.pools.remove", array("photo_id" => $photo_id, "group_id" => $group_id), TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Interestingness methods */
         function interestingness_getList($date = NULL, $use_panda = NULL, $extras = NULL, $per_page = NULL, $page = NULL)
         {
@@ -1186,7 +1189,7 @@ if (! class_exists('phpFlickr'))
                     'per_page' => $per_page, 
                     'page' => $page));
         }
-        
+
         /* Machine Tag methods */
         function machinetags_getNamespaces($predicate = NULL, $per_page = NULL, $page = NULL)
         {
@@ -1232,7 +1235,7 @@ if (! class_exists('phpFlickr'))
                     'page' => $page, 
                     'usage' => $usage));
         }
-        
+
         /* Panda methods */
         function panda_getList()
         {
@@ -1247,7 +1250,7 @@ if (! class_exists('phpFlickr'))
                 'flickr.panda.getPhotos', 
                 array('panda_name' => $panda_name, 'extras' => $extras, 'per_page' => $per_page, 'page' => $page));
         }
-        
+
         /* People methods */
         function people_findByEmail($find_email)
         {
@@ -1279,9 +1282,9 @@ if (! class_exists('phpFlickr'))
              * $f->photos_search(array("tags"=>"brown,cow", "tag_mode"=>"any")); This will return photos tagged with
              * either "brown" or "cow" or both. See the API documentation (link below) for a full list of arguments.
              */
-
-			 /* https://www.flickr.com/services/api/flickr.people.getPhotos.html */
-			return $this->call('flickr.people.getPhotos', array_merge(array('user_id' => $user_id), $args));
+            
+            /* https://www.flickr.com/services/api/flickr.people.getPhotos.html */
+            return $this->call('flickr.people.getPhotos', array_merge(array('user_id' => $user_id), $args));
         }
 
         function people_getPhotosOf($user_id, $extras = NULL, $per_page = NULL, $page = NULL)
@@ -1315,11 +1318,11 @@ if (! class_exists('phpFlickr'))
         function people_getUploadStatus()
         {
             /* https://www.flickr.com/services/api/flickr.people.getUploadStatus.html */
-			/* Requires Authentication */
-			$this->request("flickr.people.getUploadStatus");
+            /* Requires Authentication */
+            $this->request("flickr.people.getUploadStatus");
             return $this->parsed_response ? $this->parsed_response['user'] : false;
         }
-        
+
         /* Photos Methods */
         function photos_addTags($photo_id, $tags)
         {
@@ -1491,8 +1494,8 @@ if (! class_exists('phpFlickr'))
              * for this function. The only difference here is that this doesn't require any arguments. The
              * flickr.photos.search method requires at least one search parameter.
              */
-			/* https://www.flickr.com/services/api/flickr.photos.getWithGeoData.html */
-			$this->request("flickr.photos.getWithGeoData", $args);
+            /* https://www.flickr.com/services/api/flickr.photos.getWithGeoData.html */
+            $this->request("flickr.photos.getWithGeoData", $args);
             return $this->parsed_response ? $this->parsed_response['photos'] : false;
         }
 
@@ -1503,8 +1506,8 @@ if (! class_exists('phpFlickr'))
              * for this function. The only difference here is that this doesn't require any arguments. The
              * flickr.photos.search method requires at least one search parameter.
              */
-			/* https://www.flickr.com/services/api/flickr.photos.getWithoutGeoData.html */
-			$this->request("flickr.photos.getWithoutGeoData", $args);
+            /* https://www.flickr.com/services/api/flickr.photos.getWithoutGeoData.html */
+            $this->request("flickr.photos.getWithoutGeoData", $args);
             return $this->parsed_response ? $this->parsed_response['photos'] : false;
         }
 
@@ -1532,9 +1535,9 @@ if (! class_exists('phpFlickr'))
              * $f->photos_search(array("tags"=>"brown,cow", "tag_mode"=>"any")); This will return photos tagged with
              * either "brown" or "cow" or both. See the API documentation (link below) for a full list of arguments.
              */
-
-			/* https://www.flickr.com/services/api/flickr.photos.search.html */
-			$result = $this->request("flickr.photos.search");
+            
+            /* https://www.flickr.com/services/api/flickr.photos.search.html */
+            $result = $this->request("flickr.photos.search");
             
             return ($this->parsed_response) ? $this->parsed_response['photos'] : false;
         }
@@ -1601,7 +1604,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.photos.setTags", array("photo_id" => $photo_id, "tags" => $tags), TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Photos - Comments Methods */
         function photos_comments_addComment($photo_id, $comment_text)
         {
@@ -1658,7 +1661,7 @@ if (! class_exists('phpFlickr'))
                     'per_page' => $per_page, 
                     'page' => $page));
         }
-        
+
         /* Photos - Geo Methods */
         function photos_geo_batchCorrectLocation($lat, $lon, $accuracy, $place_id = NULL, $woe_id = NULL)
         {
@@ -1748,7 +1751,7 @@ if (! class_exists('phpFlickr'))
                     'is_family' => $is_family, 
                     'photo_id' => $photo_id));
         }
-        
+
         /* Photos - Licenses Methods */
         function photos_licenses_getInfo()
         {
@@ -1760,14 +1763,14 @@ if (! class_exists('phpFlickr'))
         function photos_licenses_setLicense($photo_id, $license_id)
         {
             /* https://www.flickr.com/services/api/flickr.photos.licenses.setLicense.html */
-			/* Requires Authentication */
-			$this->request(
+            /* Requires Authentication */
+            $this->request(
                 "flickr.photos.licenses.setLicense", 
                 array("photo_id" => $photo_id, "license_id" => $license_id), 
                 TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Photos - Notes Methods */
         function photos_notes_add($photo_id, $note_x, $note_y, $note_w, $note_h, $note_text)
         {
@@ -1807,7 +1810,7 @@ if (! class_exists('phpFlickr'))
                 TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Photos - Transform Methods */
         function photos_transform_rotate($photo_id, $degrees)
         {
@@ -1818,7 +1821,7 @@ if (! class_exists('phpFlickr'))
                 TRUE);
             return $this->parsed_response ? true : false;
         }
-        
+
         /* Photos - People Methods */
         function photos_people_add($photo_id, $user_id, $person_x = NULL, $person_y = NULL, $person_w = NULL, $person_h = NULL)
         {
@@ -1870,7 +1873,7 @@ if (! class_exists('phpFlickr'))
             /* https://www.flickr.com/services/api/flickr.photos.people.getList.html */
             return $this->call('flickr.photos.people.getList', array('photo_id' => $photo_id));
         }
-        
+
         /* Photos - Upload Methods */
         function photos_upload_checkTickets($tickets)
         {
@@ -1882,7 +1885,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.photos.upload.checkTickets", array("tickets" => $tickets), TRUE);
             return $this->parsed_response ? $this->parsed_response['uploader']['ticket'] : false;
         }
-        
+
         /* Photosets Methods */
         function photosets_addPhoto($photoset_id, $photo_id)
         {
@@ -2021,7 +2024,7 @@ if (! class_exists('phpFlickr'))
                 'flickr.photosets.setPrimaryPhoto', 
                 array('photoset_id' => $photoset_id, 'photo_id' => $photo_id));
         }
-        
+
         /* Photosets Comments Methods */
         function photosets_comments_addComment($photoset_id, $comment_text)
         {
@@ -2056,7 +2059,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.photosets.comments.getList", array("photoset_id" => $photoset_id));
             return $this->parsed_response ? $this->parsed_response['comments'] : false;
         }
-        
+
         /* Places Methods */
         function places_find($query)
         {
@@ -2211,7 +2214,7 @@ if (! class_exists('phpFlickr'))
                     'min_taken_date' => $min_taken_date, 
                     'max_taken_date' => $max_taken_date));
         }
-        
+
         /* Prefs Methods */
         function prefs_getContentType()
         {
@@ -2246,7 +2249,7 @@ if (! class_exists('phpFlickr'))
             $rsp = $this->call('flickr.prefs.getSafetyLevel', array());
             return $rsp ? $rsp['person'] : $rsp;
         }
-        
+
         /* Reflection Methods */
         function reflection_getMethodInfo($method_name)
         {
@@ -2261,7 +2264,7 @@ if (! class_exists('phpFlickr'))
             $this->request("flickr.reflection.getMethods");
             return $this->parsed_response ? $this->parsed_response['methods']['method'] : false;
         }
-        
+
         /* Stats Methods */
         function stats_getCollectionDomains($date, $collection_id = NULL, $per_page = NULL, $page = NULL)
         {
@@ -2387,7 +2390,7 @@ if (! class_exists('phpFlickr'))
             /* https://www.flickr.com/services/api/flickr.stats.getTotalViews.html */
             return $this->call('flickr.stats.getTotalViews', array('date' => $date));
         }
-        
+
         /* Tags Methods */
         function tags_getClusterPhotos($tag, $cluster_id)
         {

@@ -28,18 +28,18 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
      */
     public function get_actions($result)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Vocabulary', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Vocabulary'), 
+                Translation::get('Vocabulary', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Vocabulary'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId(), 
-                        Manager :: PARAM_USER_ID => $result[User :: PROPERTY_ID])), 
-                ToolbarItem :: DISPLAY_ICON));
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId(), 
+                        Manager::PARAM_USER_ID => $result[User::PROPERTY_ID])), 
+                ToolbarItem::DISPLAY_ICON));
         
         // if ($result->is_fixed())
         // {

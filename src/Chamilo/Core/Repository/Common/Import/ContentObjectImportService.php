@@ -119,16 +119,17 @@ class ContentObjectImportService
      */
     public function getForm()
     {
-        if (!isset($this->form))
+        if (! isset($this->form))
         {
             $importFormParameters = new ImportFormParameters(
-                $this->getType(), $this->getWorkspace(), $this->getApplication(),
-                $this->getApplication()->get_url(array(self :: PARAM_IMPORT_TYPE => $this->getType()))
-            );
-
+                $this->getType(), 
+                $this->getWorkspace(), 
+                $this->getApplication(), 
+                $this->getApplication()->get_url(array(self::PARAM_IMPORT_TYPE => $this->getType())));
+            
             $this->form = ContentObjectImportForm::factory($importFormParameters);
         }
-
+        
         return $this->form;
     }
 
@@ -145,20 +146,19 @@ class ContentObjectImportService
     {
         if ($this->getForm()->validate())
         {
-            $formProcessorFactory = FormProcessorFactory:: getInstance();
+            $formProcessorFactory = FormProcessorFactory::getInstance();
             $formProcessor = $formProcessorFactory->getFormProcessor(
-                $this->getType(),
-                $this->getApplication()->getUser()->getId(),
-                $this->getWorkspace(),
-                $this->getForm()->exportValues(),
-                $this->getApplication()->getRequest()
-            );
-
+                $this->getType(), 
+                $this->getApplication()->getUser()->getId(), 
+                $this->getWorkspace(), 
+                $this->getForm()->exportValues(), 
+                $this->getApplication()->getRequest());
+            
             $importParameters = $formProcessor->getImportParameters();
-
-            $controller = ContentObjectImportController:: factory($importParameters);
+            
+            $controller = ContentObjectImportController::factory($importParameters);
             $this->contentObjectIds = $controller->run();
-
+            
             return true;
         }
         else

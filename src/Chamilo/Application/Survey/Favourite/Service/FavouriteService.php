@@ -57,15 +57,15 @@ class FavouriteService
     public function createPublicationUserFavourite(User $user, $publicationIdentifier)
     {
         $publicationUserFavourite = new PublicationUserFavourite();
-
+        
         $publicationUserFavourite->set_user_id($user->getId());
         $publicationUserFavourite->set_publication_id($publicationIdentifier);
-
+        
         if (! $publicationUserFavourite->create())
         {
             return false;
         }
-
+        
         return $publicationUserFavourite;
     }
 
@@ -80,7 +80,7 @@ class FavouriteService
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -93,7 +93,7 @@ class FavouriteService
     public function getPublicationUserFavouriteByUserAndPublicationIdentifier(User $user, $publicationIdentifier)
     {
         return $this->getFavouriteRepository()->findPublicationUserFavouriteByUserAndPublicationIdentifier(
-            $user,
+            $user, 
             $publicationIdentifier);
     }
 
@@ -106,9 +106,9 @@ class FavouriteService
     public function deletePublicationByUserAndPublicationIdentifier(User $user, $publicationIdentifier)
     {
         $publicationUserFavourite = $this->getPublicationUserFavouriteByUserAndPublicationIdentifier(
-            $user,
+            $user, 
             $publicationIdentifier);
-
+        
         if (! $publicationUserFavourite instanceof PublicationUserFavourite)
         {
             return false;

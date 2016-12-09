@@ -19,11 +19,11 @@ class TermsConditionsForm extends FormValidator
      */
     public function __construct($user, $action, $type)
     {
-        parent :: __construct('user_settings', 'post', $action);
-
+        parent::__construct('user_settings', 'post', $action);
+        
         $this->user = $user;
-
-        if ($type == self :: TYPE_VIEW)
+        
+        if ($type == self::TYPE_VIEW)
         {
             $this->build_view_form();
         }
@@ -42,23 +42,23 @@ class TermsConditionsForm extends FormValidator
         $this->add_last_modified_date();
         $this->addElement('html', '</br>');
         $this->add_accepted_date();
-
-        $this->addElement('category', Translation :: get('NewTermsConditions'));
+        
+        $this->addElement('category', Translation::get('NewTermsConditions'));
         $this->addElement(
-            'textarea',
-            'conditions',
-            null,
+            'textarea', 
+            'conditions', 
+            null, 
             array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;'));
         $this->addElement('category');
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('TermsConditionsAccept'),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('TermsConditionsAccept'), 
+            null, 
+            null, 
             'user');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -66,8 +66,8 @@ class TermsConditionsForm extends FormValidator
     {
         // show date last updated
         $date_format = '%e-%m-%Y %H:%M';
-        $date = \Strftime($date_format, Manager :: get_date_terms_and_conditions_last_modified());
-        $this->addElement('html', Translation :: get('TermsConditionsDate') . $date);
+        $date = \Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified());
+        $this->addElement('html', Translation::get('TermsConditionsDate') . $date);
     }
 
     public function add_accepted_date()
@@ -77,30 +77,30 @@ class TermsConditionsForm extends FormValidator
         {
             $date_format = '%e-%m-%Y %H:%M';
             $date = \Strftime($date_format, $this->user->get_terms_date());
-            $this->addElement('html', Translation :: get('TermsConditionsAcceptedDate') . $date);
+            $this->addElement('html', Translation::get('TermsConditionsAcceptedDate') . $date);
         }
     }
 
     public function build_edit_form()
     {
         $this->add_last_modified_date();
-
-        $this->addElement('category', Translation :: get('TermsConditions'));
+        
+        $this->addElement('category', Translation::get('TermsConditions'));
         $this->addElement(
-            'textarea',
-            'conditions',
-            null,
+            'textarea', 
+            'conditions', 
+            null, 
             array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;'));
         $this->addElement('category');
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('TermsConditionsEdit'),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('TermsConditionsEdit'), 
+            null, 
+            null, 
             'user');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -117,17 +117,17 @@ class TermsConditionsForm extends FormValidator
     {
         $values = $this->exportValues();
         $text = $values['conditions'];
-        Manager :: set_terms_and_conditions($text);
+        Manager::set_terms_and_conditions($text);
     }
 
     /**
      * Sets default values.
-     *
+     * 
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())
     {
-        $defaults['conditions'] = Manager :: get_terms_and_conditions();
-        parent :: setDefaults($defaults);
+        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        parent::setDefaults($defaults);
     }
 }

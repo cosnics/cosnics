@@ -14,18 +14,18 @@ class UserAttemptClosedTogglerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
+        if (! $this->is_allowed(self::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
+        
         $success = $this->toggle_attempt_status_close(
-            Request :: get(self :: PARAM_USER),
-            Request :: get(self :: PARAM_ATTEMPT));
-
-        $message = $success ? Translation :: get('success') : Translation :: get('error');
+            Request::get(self::PARAM_USER), 
+            Request::get(self::PARAM_ATTEMPT));
+        
+        $message = $success ? Translation::get('success') : Translation::get('error');
         $error = $success ? false : true;
-
-        $this->redirect(null, $error, array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS));
+        
+        $this->redirect(null, $error, array(self::PARAM_ACTION => self::ACTION_OVERVIEW_STATUS));
     }
 }

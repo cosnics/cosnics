@@ -11,10 +11,10 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Column model for ephorus requests browser table.
- *
+ * 
  * @author Tom Goethals
  */
-class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implements
+class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implements 
     TableColumnModelActionsColumnSupport
 {
     const COLUMN_NAME_AUTHOR = 'author';
@@ -25,23 +25,23 @@ class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implem
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_NAME_AUTHOR));
-        $this->add_column(
-            new DataClassPropertyTableColumn(
-                AssignmentSubmission :: class_name(),
-                AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE));
-
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
+        $this->add_column(new StaticTableColumn(self::COLUMN_NAME_AUTHOR));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                AssignmentSubmission :: class_name(),
-                AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_REQUEST_TIME));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_PERCENTAGE));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_STATUS));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_TYPE));
+        
         $this->add_column(
-            new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_VISIBLE_IN_INDEX));
+            new DataClassPropertyTableColumn(
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_DATE_SUBMITTED));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_REQUEST_TIME));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_PERCENTAGE));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_STATUS));
+        $this->add_column(
+            new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_VISIBLE_IN_INDEX));
     }
 }

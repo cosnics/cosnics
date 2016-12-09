@@ -55,7 +55,7 @@ class CourseSettingsXmlFormParser extends SettingsXmlFormParser
                 CourseSettingsXmlFormParserSupport');
         }
         
-        parent :: __construct();
+        parent::__construct();
         
         $this->parent = $parent;
         $this->tool_id = $tool_id;
@@ -82,7 +82,7 @@ class CourseSettingsXmlFormParser extends SettingsXmlFormParser
             $this->frozen_elements[] = $element_name;
         }
         
-        parent :: parse_element_node($element_node);
+        parent::parse_element_node($element_node);
     }
 
     /**

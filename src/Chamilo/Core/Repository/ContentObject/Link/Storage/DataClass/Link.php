@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: link.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.link
  */
 class Link extends ContentObject implements Versionable, Includeable
@@ -18,39 +18,40 @@ class Link extends ContentObject implements Versionable, Includeable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_url()
     {
-        return $this->get_additional_property(self :: PROPERTY_URL);
+        return $this->get_additional_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        $url = self :: complete_url($url);
-        return $this->set_additional_property(self :: PROPERTY_URL, $url);
+        $url = self::complete_url($url);
+        return $this->set_additional_property(self::PROPERTY_URL, $url);
     }
 
     public function get_show_in_iframe()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_IN_IFRAME);
+        return $this->get_additional_property(self::PROPERTY_SHOW_IN_IFRAME);
     }
 
     public function set_show_in_iframe($status)
     {
-        return $this->set_additional_property(self :: PROPERTY_SHOW_IN_IFRAME, $status);
+        return $this->set_additional_property(self::PROPERTY_SHOW_IN_IFRAME, $status);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_URL, self :: PROPERTY_SHOW_IN_IFRAME);
+        return array(self::PROPERTY_URL, self::PROPERTY_SHOW_IN_IFRAME);
     }
 
     /**
      * Validates the url, URL beginning with / are internal URL's and considered complete, URLS that contain :// are
-     * considered complete as well. In any other case the URL is appended with 'http://' at the beginning.
-     *
+     * considered complete as well.
+     * In any other case the URL is appended with 'http://' at the beginning.
+     * 
      * @param String $url
      * @return String completed url
      */
@@ -68,6 +69,6 @@ class Link extends ContentObject implements Versionable, Includeable
 
     public static function get_searchable_property_names()
     {
-        return array(self :: PROPERTY_URL);
+        return array(self::PROPERTY_URL);
     }
 }

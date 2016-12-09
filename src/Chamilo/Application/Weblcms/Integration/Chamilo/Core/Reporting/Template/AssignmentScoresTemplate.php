@@ -29,34 +29,34 @@ class AssignmentScoresTemplate extends ReportingTemplate
     // const LEGEND_TYPE_GROUP = 'group';
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
         $this->init_parameters();
         
         $custom_breadcrumbs = array();
-        $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation :: get('AssignmentScores'));
+        $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation::get('AssignmentScores'));
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);
         
         // Calculate number of assignments
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_COURSE_ID), 
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_TOOL), 
-            new StaticConditionVariable(Assignment :: class_name()));
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
+            new StaticConditionVariable(Assignment::class_name()));
         $condition = new AndCondition($conditions);
         
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_MODIFIED_DATE));
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
         
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
+        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
             $condition, 
             $order_by);
         
@@ -76,12 +76,12 @@ class AssignmentScoresTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $this->course_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
+        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
         if ($this->course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE, $this->course_id);
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
         }
-        $sel = (Request :: post('sel')) ? Request :: post('sel') : Request :: get('sel');
+        $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
         if ($sel)
         {
             $this->set_parameter('sel', $sel);

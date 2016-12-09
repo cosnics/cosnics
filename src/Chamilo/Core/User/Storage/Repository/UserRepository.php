@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,16 +13,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * The repository wrapper for the user data manager
- *
+ * 
  * @package user
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UserRepository implements UserRepositoryInterface
 {
+
     /**
      * Finds a user by a given id
-     *
+     * 
      * @param int $id
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -35,7 +34,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * Finds a user by a list of parameters
-     *
+     * 
      * @param Condition $condition
      * @param int $count
      * @param int $offset
@@ -51,7 +50,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * Finds a user by a given email
-     *
+     * 
      * @param string $email
      *
      * @return User;
@@ -59,18 +58,17 @@ class UserRepository implements UserRepositoryInterface
     public function findUserByEmail($email)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
-            ComparisonCondition::EQUAL,
-            new StaticConditionVariable($email)
-        );
-
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
+            ComparisonCondition::EQUAL, 
+            new StaticConditionVariable($email));
+        
         $users = $this->findUsers($condition);
         return $users[0];
     }
 
     /**
      * Finds a user by a given username
-     *
+     * 
      * @param string $username
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -81,6 +79,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     *
      * @return User[]
      */
     public function findActiveStudents()
@@ -89,6 +88,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     *
      * @return User[]
      */
     public function findActiveTeachers()
@@ -97,6 +97,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     *
      * @param $status
      * @return User[]
      */
@@ -104,25 +105,22 @@ class UserRepository implements UserRepositoryInterface
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
-            ComparisonCondition::EQUAL,
-            new StaticConditionVariable($status)
-        );
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS), 
+            ComparisonCondition::EQUAL, 
+            new StaticConditionVariable($status));
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
-            ComparisonCondition::EQUAL,
-            new StaticConditionVariable(1)
-        );
-
-        $parameters = new DataClassRetrievesParameters(
-            new AndCondition($conditions)
-        );
-
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), 
+            ComparisonCondition::EQUAL, 
+            new StaticConditionVariable(1));
+        
+        $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
+        
         /**
+         *
          * @var User[] $users
          */
         $users = DataManager::retrieves(User::class_name(), $parameters)->as_array();
-
+        
         return $users;
     }
 }

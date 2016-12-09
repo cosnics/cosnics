@@ -45,58 +45,58 @@ class DetailsForm extends FormValidator
      */
     public function __construct(Score $score = null, Note $note = null, AssignmentDataProvider $assignmentDataProvider, $postUrl)
     {
-        parent :: __construct('details', 'post', $postUrl);
-
+        parent::__construct('details', 'post', $postUrl);
+        
         $this->score = $score;
         $this->note = $note;
         $this->assignmentDataProvider = $assignmentDataProvider;
-
+        
         $this->buildForm();
         $this->setDefaults();
     }
 
     protected function buildForm()
     {
-        $this->addElement('select', Score :: PROPERTY_SCORE, Translation :: get('Score'), $this->getScoreChoices());
-        $this->add_html_editor(Note :: PROPERTY_NOTE, Translation :: get('Note'), false);
-
+        $this->addElement('select', Score::PROPERTY_SCORE, Translation::get('Score'), $this->getScoreChoices());
+        $this->add_html_editor(Note::PROPERTY_NOTE, Translation::get('Note'), false);
+        
         $this->addElement(
-            'style_button',
-            null,
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_button', 
+            null, 
+            Translation::get('Save', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'floppy-save');
     }
 
     protected function getScoreChoices()
     {
         $choices = array();
-
-        $choices[- 1] = Translation :: get('NoScore');
-
+        
+        $choices[- 1] = Translation::get('NoScore');
+        
         for ($i = 0; $i <= 100; $i ++)
         {
             $choices[$i] = $i . '%';
         }
-
+        
         return $choices;
     }
 
     public function setDefaults()
     {
         $defaultValues = array();
-
+        
         if ($this->score instanceof Score)
         {
-            $defaultValues[Score :: PROPERTY_SCORE] = $this->score->getScore();
+            $defaultValues[Score::PROPERTY_SCORE] = $this->score->getScore();
         }
-
+        
         if ($this->note instanceof Note)
         {
-            $defaultValues[Note :: PROPERTY_NOTE] = $this->note->getNote();
+            $defaultValues[Note::PROPERTY_NOTE] = $this->note->getNote();
         }
-
-        return parent :: setDefaults($defaultValues);
+        
+        return parent::setDefaults($defaultValues);
     }
 }

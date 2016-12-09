@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Target Entities Form
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ElementTargetEntitiesForm extends TargetEntitiesForm
@@ -22,7 +22,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
 
     /**
      * The current element
-     *
+     * 
      * @var Element
      */
     protected $element;
@@ -30,7 +30,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
     /**
      * Constructor
      * TargetEntitiesForm constructor.
-     *
+     * 
      * @param Element $element
      * @param string $action
      * @param ElementRightsService $elementRightsService
@@ -39,7 +39,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
     {
         $this->element = $element;
         $this->elementRightsService = $elementRightsService;
-
+        
         parent::__construct(sprintf('home_block_%s_target_entities_form', $element->getId()), $action);
     }
 
@@ -49,24 +49,24 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
     protected function buildForm()
     {
         parent::buildForm();
-
+        
         $buttonGroup = $this->getElement('buttons');
         $buttons = $buttonGroup->getElements();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'cancel',
-            Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'btn-danger'),
-            null,
+            'style_submit_button', 
+            'cancel', 
+            Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES), 
+            array('class' => 'btn-danger'), 
+            null, 
             'remove');
-
+        
         $buttonGroup->setElements($buttons);
     }
 
     /**
      * Returns the selected entities
-     *
+     * 
      * @return HomeTargetEntity[]
      */
     protected function getSelectedEntities()

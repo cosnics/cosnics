@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
-        $this->parent = Request :: get(self :: PARAM_PARENT);
+        $this->parent = Request::get(self::PARAM_PARENT);
         
         $parameters = $this->get_parameters(true);
         
@@ -81,45 +81,43 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AddApplicationItem'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_APPLICATION), 
+                    Translation::get('AddApplicationItem'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_APPLICATION), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
-                            self :: PARAM_TYPE => ApplicationItem :: class_name())), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                            self::PARAM_ACTION => self::ACTION_CREATE, 
+                            self::PARAM_TYPE => ApplicationItem::class_name())), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AddCategoryItem'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_CATEGORY), 
+                    Translation::get('AddCategoryItem'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_CATEGORY), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
-                            self :: PARAM_TYPE => CategoryItem :: class_name())), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                            self::PARAM_ACTION => self::ACTION_CREATE, 
+                            self::PARAM_TYPE => CategoryItem::class_name())), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AddLinkItem'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_LINK), 
+                    Translation::get('AddLinkItem'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item::TYPE_LINK), 
                     $this->get_url(
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
-                            self :: PARAM_TYPE => LinkItem :: class_name())), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class_name())), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
-            $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+            $setting = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
             
             if ($setting == 1)
             {
                 $toolActions->addButton(
                     new Button(
                         
-                        Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Rights', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Rights'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
             $buttonToolbar->addButtonGroup($commonActions);
@@ -136,7 +134,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $condition = null;
         $parent = (isset($this->parent) ? $this->parent : 0);
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT), 
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
             new StaticConditionVariable($parent));
         return $condition;
     }
@@ -148,7 +146,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
 
     public function get_additional_parameters()
     {
-        return array(Manager :: PARAM_ITEM);
+        return array(Manager::PARAM_ITEM);
     }
 
     /*

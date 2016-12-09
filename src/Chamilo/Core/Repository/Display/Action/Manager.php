@@ -15,23 +15,23 @@ use Exception;
  */
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION;
+    const PARAM_ACTION = \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION;
     const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
     const CONTENT_OBJECT_UPDATER_COMPONENT = 'ContentObjectUpdater';
     const CREATOR_COMPONENT = 'Creator';
     const DELETER_COMPONENT = 'Deleter';
     const REPORTING_TEMPLATE_VIEWER_COMPONENT = 'ReportingTemplateViewer';
     const UPDATER_COMPONENT = 'Updater';
-    const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Manager :: DEFAULT_ACTION;
+    const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Manager::DEFAULT_ACTION;
 
     public static function factory($type, $application)
     {
-        $class = __NAMESPACE__ . '\Component\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Component\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Component';
         
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('ComponentTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ComponentTypeDoesNotExist', array('type' => $type)));
         }
         
         return new $class($application);

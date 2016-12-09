@@ -26,7 +26,7 @@ class Basic extends Csv
             
             foreach ($views as $key => $view)
             {
-                if ($view == static :: get_format())
+                if ($view == static::get_format())
                 {
                     $specific_views[] = $key;
                 }
@@ -38,17 +38,17 @@ class Basic extends Csv
                 if (count($specific_views) == 1)
                 {
                     $current_block = $this->get_template()->get_block($specific_views[0]);
-                    $file_name = Translation :: get(
-                        ClassnameUtilities :: getInstance()->getClassnameFromObject($current_block), 
+                    $file_name = Translation::get(
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($current_block), 
                         null, 
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($current_block)) .
-                         date('_Y-m-d_H-i-s') . '.csv';
+                        ClassnameUtilities::getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') .
+                         '.csv';
                     
-                    $data = BlockRenditionImplementation :: launch(
+                    $data = BlockRenditionImplementation::launch(
                         $this, 
                         $current_block, 
                         $this->get_format(), 
-                        CsvBlockRendition :: VIEW_BASIC);
+                        CsvBlockRendition::VIEW_BASIC);
                 }
                 else
                 {
@@ -57,25 +57,25 @@ class Basic extends Csv
                     foreach ($specific_views as $specific_view)
                     {
                         $block = $this->get_template()->get_block($specific_view);
-                        $rendered_block = BlockRenditionImplementation :: launch(
+                        $rendered_block = BlockRenditionImplementation::launch(
                             $this, 
                             $block, 
                             $this->get_format(), 
-                            CsvBlockRendition :: VIEW_BASIC);
+                            CsvBlockRendition::VIEW_BASIC);
                         $data[] = array(
-                            Translation :: get(
-                                ClassnameUtilities :: getInstance()->getClassnameFromObject($block), 
+                            Translation::get(
+                                ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
                                 null, 
-                                ClassnameUtilities :: getInstance()->getNamespaceFromObject($block)));
+                                ClassnameUtilities::getInstance()->getNamespaceFromObject($block)));
                         $data[] = array();
                         $data = array_merge($data, $rendered_block);
                         $data[] = array();
                     }
                     
-                    $file_name = Translation :: get(
-                        ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()), 
+                    $file_name = Translation::get(
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template()), 
                         null, 
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_template())) .
+                        ClassnameUtilities::getInstance()->getNamespaceFromObject($this->get_template())) .
                          date('_Y-m-d_H-i-s') . '.csv';
                 }
             }
@@ -86,25 +86,25 @@ class Basic extends Csv
                 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {
-                    $rendered_block = BlockRenditionImplementation :: launch(
+                    $rendered_block = BlockRenditionImplementation::launch(
                         $this, 
                         $block, 
                         $this->get_format(), 
-                        CsvBlockRendition :: VIEW_BASIC);
+                        CsvBlockRendition::VIEW_BASIC);
                     $data[] = array(
-                        Translation :: get(
-                            ClassnameUtilities :: getInstance()->getClassnameFromObject($block), 
+                        Translation::get(
+                            ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
                             null, 
-                            ClassnameUtilities :: getInstance()->getNamespaceFromObject($block)));
+                            ClassnameUtilities::getInstance()->getNamespaceFromObject($block)));
                     $data[] = array();
                     $data = array_merge($data, $rendered_block);
                     $data[] = array();
                 }
                 
-                $file_name = Translation :: get(
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()), 
+                $file_name = Translation::get(
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template()), 
                     null, 
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_template())) .
+                    ClassnameUtilities::getInstance()->getNamespaceFromObject($this->get_template())) .
                      date('_Y-m-d_H-i-s') . '.csv';
             }
         }
@@ -112,21 +112,20 @@ class Basic extends Csv
         {
             $current_block_id = $this->get_context()->get_current_block();
             $current_block = $this->get_template()->get_block($current_block_id);
-            $file_name = Translation :: get(
-                ClassnameUtilities :: getInstance()->getClassnameFromObject($current_block), 
+            $file_name = Translation::get(
+                ClassnameUtilities::getInstance()->getClassnameFromObject($current_block), 
                 null, 
-                ClassnameUtilities :: getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') .
-                 '.csv';
+                ClassnameUtilities::getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') . '.csv';
             
-            $data = BlockRenditionImplementation :: launch(
+            $data = BlockRenditionImplementation::launch(
                 $this, 
                 $current_block, 
                 $this->get_format(), 
-                CsvBlockRendition :: VIEW_BASIC);
+                CsvBlockRendition::VIEW_BASIC);
         }
         
-        $file = Path :: getInstance()->getArchivePath() . Filesystem :: create_unique_name(
-            Path :: getInstance()->getArchivePath(), 
+        $file = Path::getInstance()->getArchivePath() . Filesystem::create_unique_name(
+            Path::getInstance()->getArchivePath(), 
             $file_name);
         
         $handle = fopen($file, 'a+');

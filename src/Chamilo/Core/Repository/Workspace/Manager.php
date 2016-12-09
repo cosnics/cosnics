@@ -17,7 +17,7 @@ abstract class Manager extends Application
     const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
     const PARAM_BROWSER_SOURCE = 'browser_source';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
@@ -30,7 +30,7 @@ abstract class Manager extends Application
     const ACTION_BROWSE_PERSONAL = 'PersonalBrowser';
     const ACTION_BROWSE_SHARED = 'SharedBrowser';
     const ACTION_FAVOURITE = 'Favourite';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE_PERSONAL;
+    const DEFAULT_ACTION = self::ACTION_BROWSE_PERSONAL;
 }
