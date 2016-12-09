@@ -38,7 +38,7 @@ class ImpactViewComponent extends Manager
 
         $category_class_name = get_class($this->get_parent()->get_category());
         $has_impact = $this->has_impact();
-        $form = new ImpactViewForm($this->get_url(array(self::PARAM_CATEGORY_ID_TO_DELETE => $category_ids)));
+        $form = new ImpactViewForm($this->get_url(array(self::PARAM_CATEGORY_ID => $category_ids)));
 
         if ($form->validate() || ! $has_impact)
         {
@@ -80,9 +80,7 @@ class ImpactViewComponent extends Manager
             $this->redirect(
                 $result,
                 $failures > 0,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES, self :: PARAM_CATEGORY_ID =>
-                    $this->getRequest()->get(self::PARAM_CATEGORY_ID)
-                )
+                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES, self :: PARAM_CATEGORY_ID => null )
             );
         }
         else
@@ -135,9 +133,13 @@ class ImpactViewComponent extends Manager
      */
     protected function get_selected_category_ids()
     {
-        $category_ids = $this->getRequest()->get(self::PARAM_CATEGORY_ID_TO_DELETE);
+        $category_ids = $this->getRequest()->request->get(self :: PARAM_CATEGORY_ID);
 
-        if (! isset($category_ids))
+        if(empty($category_ids)) {
+            $category_ids = $this->getRequest()->query->get(self :: PARAM_CATEGORY_ID);
+        }
+
+        if (empty($category_ids))
         {
             throw new NoObjectSelectedException(Translation :: get('Category'));
         }
