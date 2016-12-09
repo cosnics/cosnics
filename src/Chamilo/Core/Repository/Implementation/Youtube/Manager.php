@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Youtube;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -36,8 +37,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function validate_settings($external_repository)
     {
-        $developer_key = Configuration::getInstance()->get_setting(
-            array($external_repository->get_id(), 'developer_key'));
+        $developer_key = Setting::get('developer_key', $external_repository->getId());
         
         if (! $developer_key)
         {

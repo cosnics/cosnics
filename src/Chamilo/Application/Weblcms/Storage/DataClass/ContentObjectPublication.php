@@ -698,7 +698,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $log .= " (unsuccessfull)\n";
         }
         
-        $logMails = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'log_mails'));
+        $logMails = Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails'));
         
         if ($logMails)
         {
