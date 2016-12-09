@@ -21,7 +21,7 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_COLUMN, self :: PARAM_BLOCK);
+        return array(self::PARAM_COLUMN, self::PARAM_BLOCK);
     }
 
     /*
@@ -29,33 +29,31 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
+        $user_id = DataManager::determine_user_id();
         
         if ($user_id === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
         
-        $block = DataManager :: retrieve_by_id(
-            Block :: class_name(), 
-            intval($this->getPostDataValue(self :: PARAM_BLOCK)));
+        $block = DataManager::retrieve_by_id(Block::class_name(), intval($this->getPostDataValue(self::PARAM_BLOCK)));
         
         if ($block->getUserId() == $user_id)
         {
-            $block->setParentId($this->getPostDataValue(self :: PARAM_COLUMN));
+            $block->setParentId($this->getPostDataValue(self::PARAM_COLUMN));
             
             if ($block->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('BlockNotMovedToTab'));
+                JsonAjaxResult::general_error(Translation::get('BlockNotMovedToTab'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

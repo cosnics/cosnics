@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Renderer
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -36,13 +38,15 @@ abstract class Renderer
      *
      * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param Renderer $parentRenderer
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $parentRenderer
      */
     public function __construct($menuRenderer, $item, Renderer $parentRenderer = null)
     {
         $this->item = $item;
         $this->menuRenderer = $menuRenderer;
         $this->parentRenderer = $parentRenderer;
+        
+        $this->initializeContainer();
     }
 
     /**
@@ -54,13 +58,13 @@ abstract class Renderer
      */
     public static function factory($menuRenderer, $item, $parentRenderer = null)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($item->get_type());
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
-
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($item->get_type());
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent($namespace, 2);
+        
         $class = $namespace . '\Renderer\Item\\' .
-             (string) StringUtilities :: getInstance()->createString($menuRenderer :: TYPE)->upperCamelize() . '\Item\\' .
-             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($item->get_type());
-
+             (string) StringUtilities::getInstance()->createString($menuRenderer::TYPE)->upperCamelize() . '\Item\\' .
+             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($item->get_type());
+        
         return new $class($menuRenderer, $item, $parentRenderer);
     }
 
@@ -73,12 +77,12 @@ abstract class Renderer
      */
     public static function toHtml($menuRenderer, $item, $parentRenderer = null)
     {
-        return self :: factory($menuRenderer, $item, $parentRenderer)->render();
+        return self::factory($menuRenderer, $item, $parentRenderer)->render();
     }
 
     /**
      * Renders the menu
-     *
+     * 
      * @return string
      */
     abstract public function render();

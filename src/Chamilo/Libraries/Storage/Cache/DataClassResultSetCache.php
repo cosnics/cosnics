@@ -11,6 +11,7 @@ use Exception;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use DataClassRepositoryCache now
  */
 class DataClassResultSetCache extends DataClassCache
 {
@@ -28,7 +29,7 @@ class DataClassResultSetCache extends DataClassCache
         {
             throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
-
+        
         if (! $result_set instanceof DataClassResultSet)
         {
             $type = is_object($result_set) ? get_class($result_set) : gettype($result_set);
@@ -36,12 +37,12 @@ class DataClassResultSetCache extends DataClassCache
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
-
-        if (! DataClassCache :: get($result_set->getCacheClassName(), $parameters))
+        
+        if (! DataClassCache::get($result_set->getCacheClassName(), $parameters))
         {
-            DataClassCache :: set_cache($result_set->getCacheClassName(), $parameters->hash(), $result_set);
+            DataClassCache::set_cache($result_set->getCacheClassName(), $parameters->hash(), $result_set);
         }
-
+        
         return true;
     }
 }

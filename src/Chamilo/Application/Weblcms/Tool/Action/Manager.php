@@ -10,20 +10,20 @@ use Exception;
 
 /**
  * $Id: tool_component.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool
  */
 
 /**
  * ============================================================================== This is the base class component for
  * all tool components used in applications.
- *
+ * 
  * @author Sven Vanpoucke
  * @author Hans De Bisschop ==============================================================================
  */
 abstract class Manager extends Application implements NoContextComponent
 {
-    const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION;
+    const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION;
     const ACTION_VIEW = 'Viewer';
     const ACTION_BROWSE = 'Browser';
     const ACTION_PUBLISH = 'Publisher';
@@ -39,24 +39,24 @@ abstract class Manager extends Application implements NoContextComponent
     const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexBuilder';
     const DISPLAY_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexDisplay';
     const RIGHTS_EDITOR_COMPONENT = 'RightsEditor';
-    const DEFAULT_ACTION = \Chamilo\Application\Weblcms\Tool\Manager :: DEFAULT_ACTION;
+    const DEFAULT_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::DEFAULT_ACTION;
 
     public static function factory($type, $tool_component)
     {
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Component';
-
+        
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('ToolComponentTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ToolComponentTypeDoesNotExist', array('type' => $type)));
         }
-
+        
         return new $class($tool_component);
     }
 
     /**
      * Check if the current user has a given right in this tool
-     *
+     * 
      * @param $right int
      * @param ContentObjectPublication $publication
      *
@@ -119,6 +119,7 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
+     *
      * @return Course
      */
     public function get_course()

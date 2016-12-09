@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 
 /**
  * This class provides a navigation menu to allow a user to browse through his reservations categories
- *
+ * 
  * @author Sven Vanpoucke
  */
 class Menu extends HtmlMenu
@@ -38,8 +38,8 @@ class Menu extends HtmlMenu
         $this->external_repository_manager = $external_repository_manager;
         $this->menu_items = $menu_items;
         // $menu = $this->get_menu();
-        parent :: __construct($menu_items);
-
+        parent::__construct($menu_items);
+        
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url());
     }
@@ -61,17 +61,17 @@ class Menu extends HtmlMenu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     *
+     * 
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)
         {
-            if ($crumb['title'] == Translation :: get('ExternalRepositorys'))
+            if ($crumb['title'] == Translation::get('ExternalRepositorys'))
                 continue;
             $trail->add(new Breadcrumb($crumb['url'], $crumb['title']));
         }
@@ -80,7 +80,7 @@ class Menu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     *
+     * 
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -92,6 +92,6 @@ class Menu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 }

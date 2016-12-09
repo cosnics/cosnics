@@ -28,20 +28,20 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
         $this->checkInstallationAllowed();
         
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         $html[] = '<form class="form">';
         $html[] = '<textarea class="form-control" cols="80" rows="30">' .
              implode("", file(realpath(__DIR__ . '/../../../../../LICENSE'))) . '</textarea>';
         $html[] = '</form>';
-
+        
         $html[] = '<br />';
-
+        
         $html[] = $this->getButtons();
-
+        
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -52,24 +52,24 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
     public function getButtons()
     {
         $buttonToolBar = new ButtonToolBar();
-
+        
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-                new BootstrapGlyph('chevron-left'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_REQUIREMENTS))));
-
+                Translation::get('Previous', null, Utilities::COMMON_LIBRARIES), 
+                new BootstrapGlyph('chevron-left'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS))));
+        
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('AgreeAndContinue'),
-                new BootstrapGlyph('chevron-right'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SETTINGS)),
-                Button :: DISPLAY_ICON_AND_LABEL,
-                false,
+                Translation::get('AgreeAndContinue'), 
+                new BootstrapGlyph('chevron-right'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS)), 
+                Button::DISPLAY_ICON_AND_LABEL, 
+                false, 
                 'btn-primary'));
-
+        
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
+        
         return $buttonToolbarRenderer->render();
     }
 }

@@ -14,9 +14,9 @@ class GeolocationBrowser extends ContentObjectPublicationBrowser
 
     public function __construct($parent, $types)
     {
-        parent :: __construct($parent, 'geolocation');
+        parent::__construct($parent, 'geolocation');
         
-        $this->set_publication_id(Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
+        $this->set_publication_id(Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         $renderer = new GeolocationDetailsRenderer($this);
         
         $this->set_publication_list_renderer($renderer);

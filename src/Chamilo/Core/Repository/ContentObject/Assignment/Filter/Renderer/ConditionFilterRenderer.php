@@ -16,13 +16,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer
 {
+
     /*
      * (non-PHPdoc) @see \core\repository\FilterRenderer::render()
      */
     public function render()
     {
         $filter_data = $this->get_filter_data();
-        $general_condition = parent :: render();
+        $general_condition = parent::render();
         
         $conditions = array();
         
@@ -32,66 +33,66 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         }
         
         // Start date
-        if ($filter_data->has_date(FilterData :: FILTER_START_TIME))
+        if ($filter_data->has_date(FilterData::FILTER_START_TIME))
         {
             $creation_date_conditions = array();
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_START_TIME), 
-                InequalityCondition :: GREATER_THAN_OR_EQUAL, 
-                new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData :: FILTER_FROM_DATE))));
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_START_TIME), 
+                InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData::FILTER_FROM_DATE))));
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_START_TIME), 
-                InequalityCondition :: LESS_THAN_OR_EQUAL, 
-                new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData :: FILTER_TO_DATE))));
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_START_TIME), 
+                InequalityCondition::LESS_THAN_OR_EQUAL, 
+                new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($creation_date_conditions);
         }
         else
         {
-            if ($filter_data->get_start_time(FilterData :: FILTER_FROM_DATE))
+            if ($filter_data->get_start_time(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_START_TIME), 
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL, 
-                    new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData :: FILTER_FROM_DATE))));
+                    new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_START_TIME), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                    new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData::FILTER_FROM_DATE))));
             }
-            elseif ($filter_data->get_start_time(FilterData :: FILTER_TO_DATE))
+            elseif ($filter_data->get_start_time(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_START_TIME), 
-                    InequalityCondition :: LESS_THAN_OR_EQUAL, 
-                    new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData :: FILTER_TO_DATE))));
+                    new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_START_TIME), 
+                    InequalityCondition::LESS_THAN_OR_EQUAL, 
+                    new StaticConditionVariable(strtotime($filter_data->get_start_time(FilterData::FILTER_TO_DATE))));
             }
         }
         
         // End date
-        if ($filter_data->has_date(FilterData :: FILTER_END_TIME))
+        if ($filter_data->has_date(FilterData::FILTER_END_TIME))
         {
             $modification_date_conditions = array();
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME), 
-                InequalityCondition :: GREATER_THAN_OR_EQUAL, 
-                new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData :: FILTER_FROM_DATE))));
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData::FILTER_FROM_DATE))));
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME), 
-                InequalityCondition :: LESS_THAN_OR_EQUAL, 
-                new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData :: FILTER_TO_DATE))));
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                InequalityCondition::LESS_THAN_OR_EQUAL, 
+                new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($modification_date_conditions);
         }
         else
         {
-            if ($filter_data->get_end_time(FilterData :: FILTER_FROM_DATE))
+            if ($filter_data->get_end_time(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME), 
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL, 
-                    new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData :: FILTER_FROM_DATE))));
+                    new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                    new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData::FILTER_FROM_DATE))));
             }
-            elseif ($filter_data->get_end_time(FilterData :: FILTER_TO_DATE))
+            elseif ($filter_data->get_end_time(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME), 
-                    InequalityCondition :: LESS_THAN_OR_EQUAL, 
-                    new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData :: FILTER_TO_DATE))));
+                    new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                    InequalityCondition::LESS_THAN_OR_EQUAL, 
+                    new StaticConditionVariable(strtotime($filter_data->get_end_time(FilterData::FILTER_TO_DATE))));
             }
         }
         

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\Manager implements 
     AssessmentDisplaySupport
 {
 
@@ -36,16 +36,16 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
     public function run()
     {
-        $this->attempt = PreviewStorage :: get_instance()->retrieve_assessment_attempt(
+        $this->attempt = PreviewStorage::getInstance()->retrieve_assessment_attempt(
             $this->get_root_content_object()->get_id());
-
+        
         if (! $this->attempt instanceof AbstractAttempt)
         {
             $this->attempt = $this->create_attempt();
         }
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -62,20 +62,20 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
         $attempt->set_user_id($this->get_user_id());
         $attempt->set_total_score(0);
         $attempt->set_start_time(time());
-
+        
         if ($attempt->create())
         {
             return $attempt;
         }
         else
         {
-            throw new \Exception(Translation :: get('DummyAttemptNotCreated'));
+            throw new \Exception(Translation::get('DummyAttemptNotCreated'));
         }
     }
 
     /**
      * ViewerComponent mode, so always return true.
-     *
+     * 
      * @param $right
      * @return boolean
      */
@@ -86,7 +86,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
     /**
      * ViewerComponent mode is launched in standalone mode, so there's nothing to go back to.
-     *
+     * 
      * @return void
      */
     public function get_assessment_back_url()
@@ -96,7 +96,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
     /**
      * ViewerComponent mode is launched in standalone mode, so there's nothing to continue to.
-     *
+     * 
      * @return void
      */
     public function get_assessment_continue_url()
@@ -118,7 +118,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         return array();
     }
-
+    
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
     public function is_allowed_to_edit_content_object()
     {
@@ -165,14 +165,14 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
             $question_attempt->set_score(0);
             $question_attempt->set_feedback('');
             $question_attempt->set_hint(0);
-
+            
             if ($question_attempt->create())
             {
                 $this->question_attempts[$question_complex_id] = $question_attempt;
             }
             else
             {
-                throw new \Exception(Translation :: get('DummyQuestionAttemptNotCreated'));
+                throw new \Exception(Translation::get('DummyQuestionAttemptNotCreated'));
             }
         }
     }
@@ -184,29 +184,29 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     public function get_registered_question_ids()
     {
         $question_ids = array();
-
+        
         $question_attempts = $this->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)
         {
             $question_ids[] = $question_attempt->get_question_complex_id();
         }
-
+        
         return $question_ids;
     }
 
     /**
      * Returns the assessment question attempts
-     *
+     * 
      * @return DummyQuestionAttempt[]
      */
     public function get_assessment_question_attempts()
     {
         if (is_null($this->question_attempts))
         {
-            $this->question_attempts = PreviewStorage :: get_instance()->retrieve_assessment_question_attempts(
+            $this->question_attempts = PreviewStorage::getInstance()->retrieve_assessment_question_attempts(
                 $this->attempt);
         }
-
+        
         return $this->question_attempts;
     }
 
@@ -217,11 +217,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
     {
         $question_attempt = $this->get_assessment_question_attempt($complex_question_id);
-
+        
         $question_attempt->set_answer($answer);
         $question_attempt->set_score($score);
         $question_attempt->set_hint($hint);
-
+        
         return $question_attempt->update();
     }
 
@@ -233,11 +233,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         $this->attempt->set_total_score($total_score);
         $this->attempt->set_end_time(time());
-        $this->attempt->set_status(AbstractAttempt :: STATUS_COMPLETED);
-
+        $this->attempt->set_status(AbstractAttempt::STATUS_COMPLETED);
+        
         $this->attempt->set_total_time(
             $this->attempt->get_total_time() + ($this->attempt->get_end_time() - $this->attempt->get_start_time()));
-
+        
         return $this->attempt->update();
     }
 
@@ -265,6 +265,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
      */
     public function reset()
     {
-        return PreviewStorage :: get_instance()->reset($this->get_root_content_object()->get_id());
+        return PreviewStorage::getInstance()->reset($this->get_root_content_object()->get_id());
     }
 }

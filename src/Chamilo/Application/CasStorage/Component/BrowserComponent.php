@@ -35,7 +35,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add_help('cas_user general');
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -63,13 +63,13 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         {
             $query_conditions = array();
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(AccountRequest :: class_name(), AccountRequest :: PROPERTY_FIRST_NAME), 
+                new PropertyConditionVariable(AccountRequest::class_name(), AccountRequest::PROPERTY_FIRST_NAME), 
                 '*' . $query . '*');
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(AccountRequest :: class_name(), AccountRequest :: PROPERTY_LAST_NAME), 
+                new PropertyConditionVariable(AccountRequest::class_name(), AccountRequest::PROPERTY_LAST_NAME), 
                 '*' . $query . '*');
             $query_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(AccountRequest :: class_name(), AccountRequest :: PROPERTY_EMAIL), 
+                new PropertyConditionVariable(AccountRequest::class_name(), AccountRequest::PROPERTY_EMAIL), 
                 '*' . $query . '*');
             $conditions[] = new OrCondition($query_conditions);
         }
@@ -77,7 +77,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         if (! $user->is_platform_admin())
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AccountRequest :: class_name(), AccountRequest :: PROPERTY_REQUESTER_ID), 
+                new PropertyConditionVariable(AccountRequest::class_name(), AccountRequest::PROPERTY_REQUESTER_ID), 
                 new StaticConditionVariable($user->get_id()));
         }
         
@@ -103,31 +103,31 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('RequestAccount'), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Request'), 
-                        $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_CREATE))));
+                        Translation::get('RequestAccount'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Request'), 
+                        $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_CREATE))));
                 
                 if ($this->get_user()->is_platform_admin())
                 {
                     $toolActions->addButton(
                         new Button(
-                            Translation :: get('ManageAccounts'), 
-                            Theme :: getInstance()->getImagePath(
+                            Translation::get('ManageAccounts'), 
+                            Theme::getInstance()->getImagePath(
                                 'Chamilo\Application\CasStorage', 
                                 'Action/ManageAccounts'), 
-                            $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_ACCOUNT))));
+                            $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_ACCOUNT))));
                     $toolActions->addButton(
                         new Button(
-                            Translation :: get('ManageServices'), 
-                            Theme :: getInstance()->getImagePath(
+                            Translation::get('ManageServices'), 
+                            Theme::getInstance()->getImagePath(
                                 'Chamilo\Application\CasStorage', 
                                 'Action/ManageServices'), 
-                            $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_SERVICE))));
+                            $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_SERVICE))));
                     $toolActions->addButton(
                         new Button(
-                            Translation :: get('ConfigureManagementRights'), 
-                            Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Rights'), 
-                            $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_RIGHTS))));
+                            Translation::get('ConfigureManagementRights'), 
+                            Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Rights'), 
+                            $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_RIGHTS))));
                 }
             }
             $buttonToolbar->addButtonGroup($commonActions);

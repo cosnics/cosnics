@@ -75,7 +75,7 @@ abstract class QuestionResultExportImplementation
      */
     public static function factory($complex_question, $controller, $question_result)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($complex_question);
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($complex_question);
         $class = $namespace . '\\QuestionResultExportImplementation';
         
         if (! class_exists($class, true))
@@ -95,7 +95,7 @@ abstract class QuestionResultExportImplementation
      */
     public static function launch($complex_question, $controller, $question_result)
     {
-        $instance = self :: factory($complex_question, $controller, $question_result);
+        $instance = self::factory($complex_question, $controller, $question_result);
         $instance->run();
     }
 
@@ -129,7 +129,7 @@ abstract class QuestionResultExportImplementation
         }
         
         $this->get_controller()->add_data_to_current_row(
-            AssessmentResultsExportController :: COLUMN_ATTEMPT_ANSWER, 
+            AssessmentResultsExportController::COLUMN_ATTEMPT_ANSWER, 
             $answer);
     }
 

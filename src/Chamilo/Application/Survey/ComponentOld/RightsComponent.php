@@ -18,13 +18,13 @@ class RightsComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Survey\Rights\Manager :: context(),
+            \Chamilo\Application\Survey\Rights\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_PUBLICATION_ID);
+        return array(self::PARAM_PUBLICATION_ID);
     }
 }

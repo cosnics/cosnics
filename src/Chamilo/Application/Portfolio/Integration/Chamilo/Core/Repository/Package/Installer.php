@@ -3,7 +3,7 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Pack
 
 /**
  * Package installer
- *
+ * 
  * @package application\portfolio\integration\repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

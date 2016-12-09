@@ -12,7 +12,7 @@ class TheCodeIsLoadableTest extends \PHPUnit_Framework_TestSuite
 
     public function __construct()
     {
-        parent :: __construct();
+        parent::__construct();
         $this->addTestForAllClassesInside(__DIR__ . '/../../php');
     }
 
@@ -23,7 +23,7 @@ class TheCodeIsLoadableTest extends \PHPUnit_Framework_TestSuite
         $regex = new \Chamilo\RegexIterator(
             $iterator, 
             '/^.+\.class\.php$/i', 
-            \Chamilo\RecursiveRegexIterator :: GET_MATCH);
+            \Chamilo\RecursiveRegexIterator::GET_MATCH);
         
         foreach ($regex as $matches)
         {

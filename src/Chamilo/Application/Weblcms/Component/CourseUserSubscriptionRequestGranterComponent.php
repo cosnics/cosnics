@@ -19,30 +19,27 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->getUser()->is_platform_admin())
-        {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
-        }
-
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        
         $requestIds = $this->getRequest()->get(Manager::PARAM_REQUEST);
-
+        
         if (empty($requestIds))
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('Request')),
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('Request')), 
                         Utilities::COMMON_LIBRARIES)));
         }
-
+        
         if (! is_array($requestIds))
         {
             $requestIds = array($requestIds);
         }
-
+        
         $failures = 0;
-
+        
         foreach ($requestIds as $requestId)
         {
             /**
@@ -58,14 +55,14 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
             {
                 $request->set_decision(CourseRequest::ALLOWED_DECISION);
                 $request->set_decision_date(time());
-
+                
                 if (! $request->update())
                 {
                     $failures ++;
                 }
             }
         }
-
+        
         if ($failures)
         {
             $message = 'ObjectsNotGranted';
@@ -76,10 +73,10 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
             $message = 'ObjectsGranted';
             $parameter = array('OBJECTS' => Translation::get('Requests'));
         }
-
+        
         $this->redirect(
-            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES),
-            ($failures ? true : false),
+            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES), 
+            ($failures ? true : false), 
             array(self::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER));
     }
 }

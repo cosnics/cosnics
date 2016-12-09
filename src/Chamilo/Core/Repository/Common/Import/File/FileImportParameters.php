@@ -35,10 +35,10 @@ class FileImportParameters extends ImportParameters
      */
     public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $workspace, $category);
-        $this->document_type = $values[FileContentObjectImportForm :: PARAM_DOCUMENT_TYPE];
+        parent::__construct($type, $user, $workspace, $category);
+        $this->document_type = $values[FileContentObjectImportForm::PARAM_DOCUMENT_TYPE];
         $this->file = $file;
-        $this->link = $values[FileContentObjectImportForm :: PROPERTY_LINK];
+        $this->link = $values[FileContentObjectImportForm::PROPERTY_LINK];
     }
 
     /**

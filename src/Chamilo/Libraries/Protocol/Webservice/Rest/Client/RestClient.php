@@ -239,7 +239,7 @@ abstract class RestClient
     public static function factory($base_url = '', $mode = self :: MODE_CURL)
     {
         $rest_client_class = __NAMESPACE__ . '\Client\\' .
-             (string) StringUtilities :: getInstance()->createString($mode)->upperCamelize();
+             (string) StringUtilities::getInstance()->createString($mode)->upperCamelize();
         return new $rest_client_class($base_url);
     }
 
@@ -291,7 +291,7 @@ abstract class RestClient
                 return 'Locked';
             case '424' :
                 return 'Method failure';
-
+            
             case '500' :
                 return 'Internal Server Error';
             case '501' :
@@ -308,7 +308,7 @@ abstract class RestClient
                 return 'Insufficient storage';
             case '509' :
                 return 'Bandwidth Limit Exceeded';
-
+            
             default :
                 return null;
         }
@@ -326,7 +326,7 @@ abstract class RestClient
         $this->set_method($method);
         $this->set_endpoint($endpoint);
         $this->set_query_parameters($query_parameters);
-
+        
         if ($data)
         {
             $this->set_data($data);

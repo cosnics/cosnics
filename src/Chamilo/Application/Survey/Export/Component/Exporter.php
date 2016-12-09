@@ -18,7 +18,7 @@ abstract class Exporter
 
     public static function factory($export_template, $publication_id)
     {
-        $class = __NAMESPACE__ . '\\' . Utilities :: underscores_to_camelcase($export_template->get_type());
+        $class = __NAMESPACE__ . '\\' . Utilities::underscores_to_camelcase($export_template->get_type());
         
         return new $class($export_template, $publication_id);
     }

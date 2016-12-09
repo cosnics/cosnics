@@ -48,22 +48,22 @@ class BrowserComponent extends Manager implements TableSupport
 
     function getTabs()
     {
-        $tabs = new DynamicVisualTabsRenderer(self :: class_name());
+        $tabs = new DynamicVisualTabsRenderer(self::class_name());
         
-        if (Rights :: get_instance()->publication_is_allowed())
+        if (Rights::getInstance()->publication_is_allowed())
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self :: TAB_MY_PUBLICATIONS, 
-                    Translation :: get('MyPublications'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'logo/16'), 
+                    self::TAB_MY_PUBLICATIONS, 
+                    Translation::get('MyPublications'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\Survey', 'logo/16'), 
                     $this->get_url()));
         }
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_PUBLICATIONS, 
-                Translation :: get('Publications'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Next'), 
+                self::TAB_PUBLICATIONS, 
+                Translation::get('Publications'), 
+                Theme::getInstance()->getCommonImagePath('Action/Next'), 
                 $this->get_url()));
         
         $table = new PublicationTable($this);
@@ -85,24 +85,24 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            if (Rights :: get_instance()->publication_is_allowed())
+            if (Rights::getInstance()->publication_is_allowed())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Publish'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISH)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Publish', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Publish'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_PUBLISH)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
             if ($this->get_user()->is_platform_admin())
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('RightsManager', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_APPLICATION_RIGHTS)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        Translation::get('RightsManager', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Rights'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_APPLICATION_RIGHTS)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport
         // $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
         // $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
         
-        // $publication_ids = Rights :: get_instance()->get_publication_ids_for_granted_right($right, $entities);
+        // $publication_ids = Rights :: getInstance()->get_publication_ids_for_granted_right($right, $entities);
         
         // $conditions[] = new InCondition(
         // new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
@@ -147,7 +147,7 @@ class BrowserComponent extends Manager implements TableSupport
         // else
         // {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID), 
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         // }
         
@@ -157,7 +157,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $search_conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_TITLE), 
+                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_TITLE), 
                 '*' . $query . '*');
         }
         

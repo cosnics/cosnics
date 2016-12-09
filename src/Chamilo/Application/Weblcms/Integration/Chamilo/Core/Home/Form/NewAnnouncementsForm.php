@@ -14,17 +14,17 @@ class NewAnnouncementsForm extends ConfigurationForm
      */
     public function addSettings()
     {
-        $this->addElement('checkbox', NewAnnouncements :: CONFIGURATION_SHOW_CONTENT, Translation :: get('ShowContent'));
+        $this->addElement('checkbox', NewAnnouncements::CONFIGURATION_SHOW_CONTENT, Translation::get('ShowContent'));
     }
 
     public function setDefaults()
     {
         $defaults = array();
-
-        $defaults[NewAnnouncements :: CONFIGURATION_SHOW_CONTENT] = $this->getBlock()->getSetting(
-            NewAnnouncements :: CONFIGURATION_SHOW_CONTENT,
+        
+        $defaults[NewAnnouncements::CONFIGURATION_SHOW_CONTENT] = $this->getBlock()->getSetting(
+            NewAnnouncements::CONFIGURATION_SHOW_CONTENT, 
             true);
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 }

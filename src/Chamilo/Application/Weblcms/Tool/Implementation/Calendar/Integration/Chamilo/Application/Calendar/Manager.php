@@ -13,7 +13,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo
  */
 class Manager extends InternalCalendar
 {
+
     /**
+     *
      * @var CalendarEventDataProvider
      */
     protected $calendarEventDataProvider;
@@ -28,13 +30,14 @@ class Manager extends InternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate
-    )
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, 
+        $requestedSourceType, $fromDate, $toDate)
     {
         return $this->calendarEventDataProvider->getEvents(
-            $calendarRendererProvider, $requestedSourceType, $fromDate, $toDate
-        );
+            $calendarRendererProvider, 
+            $requestedSourceType, 
+            $fromDate, 
+            $toDate);
     }
 
     /**

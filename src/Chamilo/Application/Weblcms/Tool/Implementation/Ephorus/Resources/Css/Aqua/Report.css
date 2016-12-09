@@ -1,4 +1,4 @@
-.reportoptions,.option {
+.reportoptions, .option {
 	color: Black;
 	font-family: Ubuntu, Arial;
 	font-size: 12px;
@@ -128,7 +128,7 @@
 	font-weight: bold;
 }
 
-.report_table_font_b,td {
+.report_table_font_b, td {
 	font-family: Ubuntu, Arial;
 	font-size: 12px;
 	color: black;

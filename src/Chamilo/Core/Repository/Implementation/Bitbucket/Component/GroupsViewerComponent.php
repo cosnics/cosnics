@@ -33,7 +33,7 @@ class GroupsViewerComponent extends Manager
         $html[] = $this->buttonToolbarRenderer->render();
         
         $groups = $this->get_external_repository_manager_connector()->retrieve_groups(
-            Setting :: get('username', $this->get_external_repository()->get_id()));
+            Setting::get('username', $this->get_external_repository()->get_id()));
         
         if ($groups)
         {
@@ -65,35 +65,35 @@ class GroupsViewerComponent extends Manager
                 $actions = array();
                 
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('Delete'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                    Translation::get('Delete'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                     $this->get_external_repository_group_deleting_url($group->get_id()), 
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem::DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('AddUser'), 
-                    Theme :: getInstance()->getImagePath(
+                    Translation::get('AddUser'), 
+                    Theme::getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket', 
                         'Action/AddUser'), 
                     $this->get_external_repository_adding_user_url($group->get_id()), 
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem::DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('DeleteUser'), 
-                    Theme :: getInstance()->getImagePath(
+                    Translation::get('DeleteUser'), 
+                    Theme::getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket', 
                         'Action/DeleteUser'), 
                     $this->get_external_repository_deleting_user_url($group->get_id()), 
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem::DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
                 $group_row[] = implode(' ', $actions);
                 $list_groups[] = $group_row;
             }
             
             $headers = array();
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Name'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Permission'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Members'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Name'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Permission'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Members'));
             $headers[] = new SortableStaticTableColumn('');
             
             $table = new SortableTableFromArray($list_groups, $headers);
@@ -102,7 +102,7 @@ class GroupsViewerComponent extends Manager
         }
         else
         {
-            $html[] = $this->display_warning_message(Translation :: get('NoGroups'));
+            $html[] = $this->display_warning_message(Translation::get('NoGroups'));
         }
         
         $html[] = $this->render_footer();
@@ -119,12 +119,12 @@ class GroupsViewerComponent extends Manager
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('CreateGroup'), 
-                    Theme :: getInstance()->getImagePath(
+                    Translation::get('CreateGroup'), 
+                    Theme::getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket', 
                         'Action/Create'), 
                     $this->get_external_repository_group_creating_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);

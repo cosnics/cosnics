@@ -2,8 +2,8 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\PictureForm;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -28,14 +28,10 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
      */
     public function run()
     {
-        // not allowed for anonymous user
-        if ($this->get_user()->is_anonymous_user())
-        {
-            throw new NotAllowedException();
-        }
-
+        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+        
         $this->form = new PictureForm($this->get_user(), $this->get_url());
-
+        
         if ($this->form->validate())
         {
             $success = $this->form->update();
@@ -55,11 +51,11 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
                 $neg_message = 'UserProfileNotUpdated';
                 $pos_message = 'UserProfileUpdated';
             }
-
+            
             $this->redirect(
-                Translation :: get($success ? $pos_message : $neg_message),
-                ($success ? false : true),
-                array(Application :: PARAM_ACTION => self :: ACTION_CHANGE_PICTURE));
+                Translation::get($success ? $pos_message : $neg_message), 
+                ($success ? false : true), 
+                array(Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE));
         }
         else
         {

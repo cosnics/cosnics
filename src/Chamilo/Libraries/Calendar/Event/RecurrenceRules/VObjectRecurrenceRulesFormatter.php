@@ -17,20 +17,20 @@ class VObjectRecurrenceRulesFormatter extends IcalRecurrenceRulesFormatter
      */
     public function format(RecurrenceRules $recurrenceRules)
     {
-        $iCalRules = parent :: format($recurrenceRules);
-
+        $iCalRules = parent::format($recurrenceRules);
+        
         if (isset($iCalRules['BYDAY']))
         {
             $byDays = array();
-
+            
             foreach ($iCalRules['BYDAY'] as $byDay)
             {
                 $byDays[] = implode('', $byDay);
             }
-
+            
             $iCalRules['BYDAY'] = implode(',', $byDays);
         }
-
+        
         return $iCalRules;
     }
 }

@@ -34,12 +34,12 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_CONFIGURATION);
+        return array(self::PROPERTY_CONFIGURATION);
     }
 
     function getConfiguration()
@@ -47,15 +47,15 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    Configuration :: class_name(), 
-                    Configuration :: PROPERTY_DISPLAY_ORDER, 
+                    Configuration::class_name(), 
+                    Configuration::PROPERTY_DISPLAY_ORDER, 
                     SORT_ASC)));
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID), 
+            new PropertyConditionVariable(Configuration::class_name(), Configuration::PROPERTY_PAGE_ID), 
             new StaticConditionVariable($this->get_id()));
-        $configurations = DataManager :: retrieves(
-            Configuration :: class_name(), 
+        $configurations = DataManager::retrieves(
+            Configuration::class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
         
         return $configurations;
@@ -63,17 +63,17 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
 
     function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Survey', 
-            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
+            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
         
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT], 
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 
                 6);
-            $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $classname = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
         
@@ -85,17 +85,17 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER, 
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER, 
                     SORT_ASC)));
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
-        $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
+        $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
         
         if ($complex_items)
@@ -115,7 +115,7 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
 
     function get_table()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 }
 ?>

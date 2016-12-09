@@ -25,7 +25,7 @@ class AssessmentAttemptTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return WeblcmsTrackingDataManager :: retrieve_assessment_attempts_with_user(
+        return WeblcmsTrackingDataManager::retrieve_assessment_attempts_with_user(
             $condition, 
             $offset, 
             $count, 
@@ -41,6 +41,6 @@ class AssessmentAttemptTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return WeblcmsTrackingDataManager :: count_assessment_attempts_with_user($condition);
+        return WeblcmsTrackingDataManager::count_assessment_attempts_with_user($condition);
     }
 }

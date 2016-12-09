@@ -154,7 +154,7 @@ class EventParser
             $office365CalendarEvent->Body->Content, 
             $office365CalendarEvent->location->displayName, 
             $this->getSource($this->getAvailableCalendar()->getName()), 
-            \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
+            \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
         
         $event->setOffice365CalendarEvent($office365CalendarEvent);
         
@@ -210,10 +210,10 @@ class EventParser
      */
     private function getSource($calendarName)
     {
-        return Translation :: get(
+        return Translation::get(
             'SourceName', 
             array('CALENDAR' => $calendarName), 
-            \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
+            \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
     }
 
     /**
@@ -331,21 +331,21 @@ class EventParser
         switch ($frequencyType)
         {
             case 'Daily' :
-                return RecurrenceRules :: FREQUENCY_DAILY;
+                return RecurrenceRules::FREQUENCY_DAILY;
                 break;
             case 'Weekly' :
-                return RecurrenceRules :: FREQUENCY_WEEKLY;
+                return RecurrenceRules::FREQUENCY_WEEKLY;
                 break;
             case 'AbsoluteMonthly' :
             case 'RelativeMonthly' :
-                return RecurrenceRules :: FREQUENCY_MONTHLY;
+                return RecurrenceRules::FREQUENCY_MONTHLY;
                 break;
             case 'AbsoluteYearly' :
             case 'RelativeYearly' :
-                return RecurrenceRules :: FREQUENCY_YEARLY;
+                return RecurrenceRules::FREQUENCY_YEARLY;
                 break;
             default :
-                return RecurrenceRules :: FREQUENCY_NONE;
+                return RecurrenceRules::FREQUENCY_NONE;
         }
     }
 }

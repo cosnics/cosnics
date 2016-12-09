@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Abstract table cell renderer to browse submitters
- *
+ * 
  * @package application.weblcms.tool.assignment.php.component.submission_browser
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRenderer implements
+abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
@@ -32,10 +32,10 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Renders a cell for a given record
-     *
+     * 
      * @param $column \libraries\ObjectTableColumn
      *
      * @param mixed[string] $submitter
@@ -44,30 +44,30 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
      */
     public function render_cell($column, $submitter)
     {
-        $submitter_id = $submitter[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
-
+        $submitter_id = $submitter[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
+        
         switch ($column->get_name())
         {
-            case Manager :: PROPERTY_FIRST_SUBMISSION :
-                if (is_null($submitter[Manager :: PROPERTY_FIRST_SUBMISSION]))
+            case Manager::PROPERTY_FIRST_SUBMISSION :
+                if (is_null($submitter[Manager::PROPERTY_FIRST_SUBMISSION]))
                 {
                     return '-';
                 }
-                return $this->format_date($submitter[Manager :: PROPERTY_FIRST_SUBMISSION]);
-
-            case Manager :: PROPERTY_LAST_SUBMISSION :
-                if (is_null($submitter[Manager :: PROPERTY_LAST_SUBMISSION]))
+                return $this->format_date($submitter[Manager::PROPERTY_FIRST_SUBMISSION]);
+            
+            case Manager::PROPERTY_LAST_SUBMISSION :
+                if (is_null($submitter[Manager::PROPERTY_LAST_SUBMISSION]))
                 {
                     return '-';
                 }
-                return $this->format_date($submitter[Manager :: PROPERTY_LAST_SUBMISSION]);
-
-            case Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS :
-                return $submitter[Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS];
-
-            case Manager :: PROPERTY_NUMBER_OF_FEEDBACKS :
+                return $this->format_date($submitter[Manager::PROPERTY_LAST_SUBMISSION]);
+            
+            case Manager::PROPERTY_NUMBER_OF_SUBMISSIONS :
+                return $submitter[Manager::PROPERTY_NUMBER_OF_SUBMISSIONS];
+            
+            case Manager::PROPERTY_NUMBER_OF_FEEDBACKS :
                 $feedbacks = $this->get_component()->get_submitter_feedbacks($this->get_submitter_type(), $submitter_id);
-
+                
                 if ($feedbacks != null)
                 {
                     return $feedbacks['count'];
@@ -77,25 +77,25 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
                     return '0';
                 }
         }
-
-        return parent :: render_cell($column, $submitter);
+        
+        return parent::render_cell($column, $submitter);
     }
 
     /**
      * Renders the identifier of the table rows
-     *
+     * 
      * @param mixed[string] $row
      *
      * @return int
      */
     public function render_id_cell($row)
     {
-        return $row[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
+        return $row[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
     }
 
     /**
      * Creates a toolbar with the appropriate actions
-     *
+     * 
      * @param User $submitter
      *
      * @return string
@@ -103,27 +103,27 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
     public function get_actions($submitter)
     {
         $toolbar = new Toolbar();
-
-        $submitter_id = $submitter[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
+        
+        $submitter_id = $submitter[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
         $is_submitter = $this->is_submitter($submitter_id, $this->get_component()->get_user_id());
-
+        
         if ($is_submitter || $this->get_component()->get_assignment()->get_visibility_submissions() == 1 ||
-             $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+             $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $toolbar->add_item($this->get_view_submissions_action($submitter));
         }
-
-        if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT) &&
-             $submitter[Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS] > 0)
+        
+        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT) &&
+             $submitter[Manager::PROPERTY_NUMBER_OF_SUBMISSIONS] > 0)
         {
             $toolbar->add_item($this->get_download_all_submissions_action($submitter));
         }
-
+        
         if ($is_submitter)
         {
             $toolbar->add_item($this->get_submission_submit_action($submitter));
         }
-
+        
         return $toolbar->as_html();
     }
 
@@ -132,83 +132,83 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
      * Helper Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Builds a toolbar item for the submission submit action
-     *
+     * 
      * @param mixed[string] $submitter
      *
      * @return ToolbarItem
      */
     protected function get_submission_submit_action($submitter)
     {
-        $submitter_id = $submitter[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
-
+        $submitter_id = $submitter[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
+        
         return new ToolbarItem(
-            Translation :: get('SubmissionSubmit'),
-            Theme :: getInstance()->getCommonImagePath('Action/Add'),
+            Translation::get('SubmissionSubmit'), 
+            Theme::getInstance()->getCommonImagePath('Action/Add'), 
             $this->get_component()->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBMIT_SUBMISSION,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_component()->get_publication_id(),
-                    Manager :: PARAM_SUBMITTER_TYPE => $this->get_submitter_type(),
-                    Manager :: PARAM_TARGET_ID => $submitter_id)),
-            ToolbarItem :: DISPLAY_ICON);
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_SUBMIT_SUBMISSION, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_component()->get_publication_id(), 
+                    Manager::PARAM_SUBMITTER_TYPE => $this->get_submitter_type(), 
+                    Manager::PARAM_TARGET_ID => $submitter_id)), 
+            ToolbarItem::DISPLAY_ICON);
     }
 
     /**
      * Builds a toolbar item for the view submissions action
-     *
+     * 
      * @param mixed[string] $submitter
      *
      * @return ToolbarItem
      */
     protected function get_view_submissions_action($submitter)
     {
-        $submitter_id = $submitter[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
-
+        $submitter_id = $submitter[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
+        
         return new ToolbarItem(
-            Translation :: get('ViewSubmissions'),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            Translation::get('ViewSubmissions'), 
+            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
             $this->get_component()->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE_SUBMISSIONS,
-                    Manager :: PARAM_SUBMITTER_TYPE => $this->get_submitter_type(),
-                    Manager :: PARAM_TARGET_ID => $submitter_id)),
-            ToolbarItem :: DISPLAY_ICON);
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_BROWSE_SUBMISSIONS, 
+                    Manager::PARAM_SUBMITTER_TYPE => $this->get_submitter_type(), 
+                    Manager::PARAM_TARGET_ID => $submitter_id)), 
+            ToolbarItem::DISPLAY_ICON);
     }
 
     /**
      * Builds a toolbar item for the download all submitions action
-     *
+     * 
      * @param mixed[string] $submitter
      *
      * @return ToolbarItem
      */
     protected function get_download_all_submissions_action($submitter)
     {
-        $submitter_id = $submitter[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
-
+        $submitter_id = $submitter[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
+        
         return new ToolbarItem(
-            Translation :: get('DownloadAllSubmissions'),
-            Theme :: getInstance()->getCommonImagePath('Action/Download'),
+            Translation::get('DownloadAllSubmissions'), 
+            Theme::getInstance()->getCommonImagePath('Action/Download'), 
             $this->get_component()->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS,
-                    Manager :: PARAM_TARGET_ID => $submitter_id)),
-            ToolbarItem :: DISPLAY_ICON);
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_SUBMISSIONS, 
+                    Manager::PARAM_TARGET_ID => $submitter_id)), 
+            ToolbarItem::DISPLAY_ICON);
     }
 
     /**
      * Formats a date.
-     *
+     * 
      * @param int $date the date to be formatted.
      * @return string
      */
     protected function format_date($date)
     {
-        $formatted_date = DatetimeUtilities :: format_locale_date(
-            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
+        $formatted_date = DatetimeUtilities::format_locale_date(
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
             $date);
         if ($date > $this->get_component()->get_assignment()->get_end_time())
         {
@@ -223,10 +223,10 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
      * Abstract Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the submitter type
-     *
+     * 
      * @abstract
      *
      *
@@ -242,7 +242,7 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
 
     /**
      * Returns whether or not the current user is the submitter or part of the submitter entity
-     *
+     * 
      * @abstract
      *
      *

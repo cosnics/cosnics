@@ -11,9 +11,9 @@ class HelpItemTableColumnModel extends DataClassTableColumnModel implements Tabl
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem :: class_name(), HelpItem :: PROPERTY_CONTEXT));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem :: class_name(), HelpItem :: PROPERTY_IDENTIFIER));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem :: class_name(), HelpItem :: PROPERTY_LANGUAGE));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem :: class_name(), HelpItem :: PROPERTY_URL));
+        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class_name(), HelpItem::PROPERTY_CONTEXT));
+        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class_name(), HelpItem::PROPERTY_IDENTIFIER));
+        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class_name(), HelpItem::PROPERTY_LANGUAGE));
+        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class_name(), HelpItem::PROPERTY_URL));
     }
 }

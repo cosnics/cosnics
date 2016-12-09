@@ -25,7 +25,7 @@ abstract class TemplateRenditionImplementation extends AbstractTemplateRendition
     public static function launch($context, ReportingTemplate $template, $format = TemplateRendition::FORMAT_HTML, 
         $view = TemplateRendition::VIEW_BASIC)
     {
-        return self :: factory($context, $template, $format, $view)->render();
+        return self::factory($context, $template, $format, $view)->render();
     }
 
     /**
@@ -39,8 +39,8 @@ abstract class TemplateRenditionImplementation extends AbstractTemplateRendition
     public static function factory($context, ReportingTemplate $template, $format = TemplateRendition::FORMAT_HTML, 
         $view = TemplateRendition::VIEW_BASIC)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($template);
-        $class = $namespace . '\\' . StringUtilities :: getInstance()->createString($format)->upperCamelize() . StringUtilities :: getInstance()->createString(
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($template);
+        $class = $namespace . '\\' . StringUtilities::getInstance()->createString($format)->upperCamelize() . StringUtilities::getInstance()->createString(
             $view)->upperCamelize() . 'TemplateRenditionImplementation';
         
         if (! class_exists($class, true))
@@ -59,7 +59,7 @@ abstract class TemplateRenditionImplementation extends AbstractTemplateRendition
      */
     public function get_view()
     {
-        $class_name_parts = explode('_', ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true));
+        $class_name_parts = explode('_', ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
         return $class_name_parts[1];
     }
 
@@ -69,7 +69,7 @@ abstract class TemplateRenditionImplementation extends AbstractTemplateRendition
      */
     public function get_format()
     {
-        $class_name_parts = explode('_', ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true));
+        $class_name_parts = explode('_', ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
         return $class_name_parts[0];
     }
 }

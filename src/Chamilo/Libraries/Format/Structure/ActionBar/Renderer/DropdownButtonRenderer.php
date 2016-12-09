@@ -28,13 +28,13 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
     public function renderLinkOpeningTag()
     {
         $html = array();
-
+        
         $html[] = '<a';
         $html[] = $this->renderDropdownAttributes();
         $html[] = $this->renderClasses();
         $html[] = $this->renderTitle();
         $html[] = '>';
-
+        
         return implode(' ', $html);
     }
 
@@ -44,10 +44,10 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
      */
     public function determineClasses()
     {
-        $classes = parent :: determineClasses();
-
+        $classes = parent::determineClasses();
+        
         $classes[] = 'dropdown-toggle';
-
+        
         return $classes;
     }
 
@@ -58,10 +58,10 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
     public function renderLinkContent()
     {
         $html = array();
-
-        $html[] = parent :: renderLinkContent();
+        
+        $html[] = parent::renderLinkContent();
         $html[] = $this->renderCaret();
-
+        
         return implode('', $html);
     }
 }

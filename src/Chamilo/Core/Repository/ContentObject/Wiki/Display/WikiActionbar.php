@@ -25,17 +25,17 @@ class WikiActionbar extends ActionBarRenderer
 
     public function add_navigation_link($link)
     {
-        $this->links[self :: ACTION_BAR_NAVIGATION][] = $link;
+        $this->links[self::ACTION_BAR_NAVIGATION][] = $link;
     }
 
     public function set_navigation_links($links)
     {
-        $this->links[self :: ACTION_BAR_NAVIGATION] = $links;
+        $this->links[self::ACTION_BAR_NAVIGATION] = $links;
     }
 
     public function get_navigation_links()
     {
-        return $this->links[self :: ACTION_BAR_NAVIGATION];
+        return $this->links[self::ACTION_BAR_NAVIGATION];
     }
 
     public function as_html()
@@ -61,13 +61,13 @@ class WikiActionbar extends ActionBarRenderer
         if ($action_bar_has_links)
         {
             
-            $html[] = Translation :: get('Navigation');
+            $html[] = Translation::get('Navigation');
             $html[] = '<div class="clear"></div>';
             
             $toolbar = new Toolbar();
             $html[] = '<div style="border:1px solid #4271B5;padding:3px;background-color: #faf7f7;">';
             $toolbar->set_items($wiki_links);
-            $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
+            $toolbar->set_type(Toolbar::TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
             $html[] = '</div><br />';
         }
@@ -80,13 +80,13 @@ class WikiActionbar extends ActionBarRenderer
         if ($action_bar_has_common_actions)
         {
             
-            $html[] = Translation :: get('PageActions');
+            $html[] = Translation::get('PageActions');
             $html[] = '<div class="clear"></div>';
             
             $toolbar = new Toolbar();
             $html[] = '<div style="border:1px solid #4271B5;padding:3px;background-color: #faf7f7;">';
             $toolbar->set_items($common_actions);
-            $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
+            $toolbar->set_type(Toolbar::TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
             $html[] = '</div><br />';
         }
@@ -98,21 +98,21 @@ class WikiActionbar extends ActionBarRenderer
         
         if ($action_bar_has_tool_actions)
         {
-            $html[] = Translation :: get('Information');
+            $html[] = Translation::get('Information');
             $html[] = '<div class="clear"></div>';
             
             $toolbar = new Toolbar();
             $html[] = '<div style="border:1px solid #4271B5;padding:3px;background-color: #faf7f7;">';
             $toolbar->set_items($tool_actions);
-            $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
+            $toolbar->set_type(Toolbar::TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
             $html[] = '</div><br />';
         }
         
         $html[] = '</div>';
         
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarVertical.js');
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarVertical.js');
         
         return implode(PHP_EOL, $html);
     }

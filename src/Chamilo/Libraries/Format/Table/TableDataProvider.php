@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 /**
  * This class represents a data provider for a table
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableDataProvider extends TableComponent
@@ -18,10 +18,10 @@ abstract class TableDataProvider extends TableComponent
      * Abstract functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -33,7 +33,7 @@ abstract class TableDataProvider extends TableComponent
 
     /**
      * Counts the data
-     *
+     * 
      * @param Condition $condition
      *
      * @return int

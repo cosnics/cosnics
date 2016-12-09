@@ -20,28 +20,28 @@ class CasUserManagerAccepterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(Manager :: PARAM_REQUEST_ID);
+        $ids = Request::get(Manager::PARAM_REQUEST_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-                $account_request = DataManager :: retrieve_by_id(AccountRequest :: class_name(), (int) $id);
-
-                if (! \Chamilo\Application\CasStorage\Account\Storage\DataManager :: generate_account_from_request(
+                $account_request = DataManager::retrieve_by_id(AccountRequest::class_name(), (int) $id);
+                
+                if (! \Chamilo\Application\CasStorage\Account\Storage\DataManager::generate_account_from_request(
                     $account_request))
                 {
                     $failures ++;
                 }
                 else
                 {
-                    $account_request->set_status(AccountRequest :: STATUS_ACCEPTED);
+                    $account_request->set_status(AccountRequest::STATUS_ACCEPTED);
                     if (! $account_request->update())
                     {
                         // We shouldn't do this ... the account WAS created ?!
@@ -49,7 +49,7 @@ class CasUserManagerAccepterComponent extends Manager
                     }
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -72,16 +72,16 @@ class CasUserManagerAccepterComponent extends Manager
                     $message = 'SelectedAccountRequestsAccepted';
                 }
             }
-
+            
             $this->redirect(
-                Translation :: get($message, null, Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE));
+                Translation::get($message, null, Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
+                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation :: get('NoAccountRequestSelected', null, Utilities :: COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoAccountRequestSelected', null, Utilities::COMMON_LIBRARIES)));
         }
     }
 }

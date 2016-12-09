@@ -77,7 +77,7 @@ abstract class Renderer
 
     public function getCurrentTabIdentifier()
     {
-        return Request :: get(self :: PARAM_TAB_ID);
+        return Request::get(self::PARAM_TAB_ID);
     }
 
     public function get_url($parameters = array (), $filter = array(), $encode_entities = false)
@@ -88,7 +88,7 @@ abstract class Renderer
 
     /**
      * Gets a link to the personal calendar application
-     *
+     * 
      * @param array $parameters
      * @param boolean $encode
      */
@@ -100,12 +100,12 @@ abstract class Renderer
 
     public function get_home_tab_viewing_url($home_tab)
     {
-        return $this->get_url(array(self :: PARAM_TAB_ID => $home_tab->get_id()));
+        return $this->get_url(array(self::PARAM_TAB_ID => $home_tab->get_id()));
     }
 
     /**
      * Returns the current URL parameters.
-     *
+     * 
      * @return array The parameters.
      */
     public function get_parameters()
@@ -115,7 +115,7 @@ abstract class Renderer
 
     /**
      * Returns the value of the given URL parameter.
-     *
+     * 
      * @param string $name The parameter name.
      * @return string The parameter value.
      */
@@ -127,7 +127,7 @@ abstract class Renderer
 
     /**
      * Sets the value of a URL parameter.
-     *
+     * 
      * @param string $name The parameter name.
      * @param string $value The parameter value.
      */

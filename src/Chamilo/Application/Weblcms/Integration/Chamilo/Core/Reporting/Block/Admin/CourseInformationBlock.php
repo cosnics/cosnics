@@ -14,18 +14,18 @@ class CourseInformationBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         
-        $course = CourseDataManager :: retrieve_by_id(Course :: class_name(), $this->get_course_id());
+        $course = CourseDataManager::retrieve_by_id(Course::class_name(), $this->get_course_id());
         
-        $reporting_data->set_categories(array(Translation :: get('Name'), Translation :: get('Titular')));
-        $reporting_data->set_rows(array(Translation :: get('count')));
+        $reporting_data->set_categories(array(Translation::get('Name'), Translation::get('Titular')));
+        $reporting_data->set_rows(array(Translation::get('count')));
         
         $reporting_data->add_data_category_row(
-            Translation :: get('Name'), 
-            Translation :: get('count'), 
+            Translation::get('Name'), 
+            Translation::get('count'), 
             $course->get_title());
         $reporting_data->add_data_category_row(
-            Translation :: get('Titular'), 
-            Translation :: get('count'), 
+            Translation::get('Titular'), 
+            Translation::get('count'), 
             $course->get_titular_string());
         
         return $reporting_data;
@@ -38,6 +38,6 @@ class CourseInformationBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

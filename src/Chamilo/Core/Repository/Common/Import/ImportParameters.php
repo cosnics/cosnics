@@ -100,17 +100,17 @@ abstract class ImportParameters
         $this->user = $user;
     }
 
-    public static function factory($type, $user, WorkspaceInterface $workspace, $category = 0, $file = null,
+    public static function factory($type, $user, WorkspaceInterface $workspace, $category = 0, $file = null, 
         $form_values = array())
     {
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() . '\\' .
-             (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ImportParameters';
-
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
+             (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'ImportParameters';
+        
         if (! class_exists($class))
         {
-            throw new \Exception(Translation :: get('UnknownImportParametersType', array('TYPE' => $type)));
+            throw new \Exception(Translation::get('UnknownImportParametersType', array('TYPE' => $type)));
         }
-
+        
         return new $class($type, $user, $workspace, $category, $file, $form_values);
     }
 }

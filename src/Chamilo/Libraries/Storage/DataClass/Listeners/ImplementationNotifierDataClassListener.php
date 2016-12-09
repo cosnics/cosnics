@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Dataclass listener which manipulates the crud methods to notify the implementation packages
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ImplementationNotifierDataClassListener extends DataClassListener
@@ -21,17 +21,17 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      * Properties *
      * *************************************************************************************************************
      */
-
+    
     /**
      * The DataClass (must implement the necessary interface)
-     *
+     * 
      * @var DataClass
      */
     private $data_class;
 
     /**
      * The context for which the implementation packages must be searched
-     *
+     * 
      * @var
      *
      *
@@ -47,21 +47,21 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     /**
      * The mapping between the methods of the data class listener and the methods of the datamanager, at least one
      * method mapping is required
-     *
+     * 
      * @var array
      */
     private $method_mapping;
 
     /**
      * Cache for the implementation packages
-     *
+     * 
      * @var array
      */
     private $implementation_packages;
 
     /**
      * Constructs this dataclass listener and checks if the dataclass implements the necessary functions
-     *
+     * 
      * @param DataClass $data_class
      * @param $context
      * @param array $method_mapping
@@ -77,7 +77,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Sets the context
-     *
+     * 
      * @param mixed $context
      *
      * @throws \InvalidArgumentException
@@ -93,7 +93,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Sets the data class
-     *
+     * 
      * @param \libraries\storage\DataClass $data_class
      *
      * @throws \InvalidArgumentException
@@ -109,7 +109,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Sets the method mapping
-     *
+     * 
      * @param array $method_mapping
      *
      * @throws \Exception
@@ -120,7 +120,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         {
             throw new \InvalidArgumentException('The method mapping should at least contain 1 method');
         }
-
+        
         foreach ($method_mapping as $method => $data_manager_method)
         {
             if (! method_exists($this, $method))
@@ -129,13 +129,13 @@ class ImplementationNotifierDataClassListener extends DataClassListener
                     'The method ' . $method . ' does not exist in the data class listener');
             }
         }
-
+        
         $this->method_mapping = $method_mapping;
     }
 
     /**
      * Notifies the implementation packages for the given data class listener method
-     *
+     * 
      * @param string $data_class_listener_method
      * @param array $parameters
      *
@@ -147,34 +147,34 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         {
             return true;
         }
-
+        
         array_unshift($parameters, $this->data_class);
-
+        
         $method = $this->method_mapping[$data_class_listener_method];
-
+        
         $packages = $this->get_implementation_packages();
-
+        
         foreach ($packages as $package)
         {
             $class_name = $package . '\DataManager';
-
+            
             if (! method_exists($class_name, $method))
             {
                 continue;
             }
-
+            
             if (! call_user_func_array(array($class_name, $method), $parameters))
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
     /**
      * Determines the implementation packages based on the given context
-     *
+     * 
      * @return array
      */
     protected function get_implementation_packages()
@@ -182,30 +182,30 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         if (! isset($this->implementation_packages))
         {
             $pattern = '*\\\Integration\\' . $this->context;
-
+            
             $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
+                new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT), 
                 $pattern);
-
+            
             $packages = array();
-
-            $package_registrations = DataManager :: retrieves(
-                Registration :: class_name(),
+            
+            $package_registrations = DataManager::retrieves(
+                Registration::class_name(), 
                 new DataClassRetrievesParameters($condition));
             while ($package_registration = $package_registrations->next_result())
             {
                 $packages[] = $package_registration->get_context();
             }
-
+            
             $this->implementation_packages = $packages;
         }
-
+        
         return $this->implementation_packages;
     }
 
     /**
      * Calls this function before the creation of a dataclass in the database
-     *
+     * 
      * @return bool
      */
     public function on_before_create()
@@ -215,7 +215,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function after the creation of a dataclass in the database
-     *
+     * 
      * @param bool $success
      *
      * @return bool
@@ -235,7 +235,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function after the update of a dataclass in the database
-     *
+     * 
      * @param bool $success
      *
      * @return bool
@@ -247,7 +247,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function before the deletion of a dataclass in the database
-     *
+     * 
      * @return bool
      */
     public function on_before_delete()
@@ -257,7 +257,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function after the deletion of a dataclass in the database
-     *
+     * 
      * @param bool $success
      *
      * @return bool
@@ -269,7 +269,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function before a property is set
-     *
+     * 
      * @param string $name
      * @param string $value
      *
@@ -282,7 +282,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function after a property is set
-     *
+     * 
      * @param string $name
      * @param string $value
      *
@@ -295,7 +295,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * Calls this function to return the dependencies of this class
-     *
+     * 
      * @param array $dependencies
      *
      * @return bool

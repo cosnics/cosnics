@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Component;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class LanguageComponent extends Manager
 {
@@ -14,14 +13,11 @@ class LanguageComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
-
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Admin\Language\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            \Chamilo\Core\Admin\Language\Manager::context(), 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

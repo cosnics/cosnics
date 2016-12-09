@@ -28,17 +28,17 @@ class ComplexAssessment extends ComplexContentObjectItem
     public function get_allowed_types()
     {
         $allowed_types = array();
-        $allowed_types[] = AssessmentRatingQuestion :: class_name();
-        $allowed_types[] = AssessmentOpenQuestion :: class_name();
-        $allowed_types[] = HotspotQuestion :: class_name();
-        $allowed_types[] = FillInBlanksQuestion :: class_name();
-        $allowed_types[] = AssessmentMultipleChoiceQuestion :: class_name();
-        $allowed_types[] = AssessmentMatchingQuestion :: class_name();
-        $allowed_types[] = AssessmentSelectQuestion :: class_name();
-        $allowed_types[] = AssessmentMatrixQuestion :: class_name();
-        $allowed_types[] = AssessmentMatchNumericQuestion :: class_name();
-        $allowed_types[] = AssessmentMatchTextQuestion :: class_name();
-        $allowed_types[] = OrderingQuestion :: class_name();
+        $allowed_types[] = AssessmentRatingQuestion::class_name();
+        $allowed_types[] = AssessmentOpenQuestion::class_name();
+        $allowed_types[] = HotspotQuestion::class_name();
+        $allowed_types[] = FillInBlanksQuestion::class_name();
+        $allowed_types[] = AssessmentMultipleChoiceQuestion::class_name();
+        $allowed_types[] = AssessmentMatchingQuestion::class_name();
+        $allowed_types[] = AssessmentSelectQuestion::class_name();
+        $allowed_types[] = AssessmentMatrixQuestion::class_name();
+        $allowed_types[] = AssessmentMatchNumericQuestion::class_name();
+        $allowed_types[] = AssessmentMatchTextQuestion::class_name();
+        $allowed_types[] = OrderingQuestion::class_name();
         return $allowed_types;
     }
 }

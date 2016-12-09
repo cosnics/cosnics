@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Scribd;
 
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'scribd/scribd.php';
+require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'scribd/scribd.php';
 /**
  * API key : 5gc6g4z4e7wokpvjcbe31 API secret : sec-4tohbh6q34uplg867z4n0qsaxr
  */
@@ -27,13 +27,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
-
-        $this->api_key = Setting :: get('api_key', $this->get_external_repository_instance_id());
-        $this->api_secret = Setting :: get('api_secret', $this->get_external_repository_instance_id());
-        $username = Setting :: get('username', $this->get_external_repository_instance_id());
-        $password = Setting :: get('password', $this->get_external_repository_instance_id());
-
+        parent::__construct($external_repository_instance);
+        
+        $this->api_key = Setting::get('api_key', $this->get_external_repository_instance_id());
+        $this->api_secret = Setting::get('api_secret', $this->get_external_repository_instance_id());
+        $username = Setting::get('username', $this->get_external_repository_instance_id());
+        $password = Setting::get('password', $this->get_external_repository_instance_id());
+        
         $this->scribd = new Scribd($this->api_key, $this->api_secret);
         $result = $this->scribd->login($username, $password);
     }
@@ -43,7 +43,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      * @param $instance_id int
      * @return DataConnector:
      */
-    // static function get_instance($instance_id)
+    // static function getInstance($instance_id)
     // {
     // if (! isset(self :: $instance[$instance_id]))
     // {
@@ -51,7 +51,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     // }
     // return self :: $instance[$instance_id];
     // }
-
+    
     /**
      *
      * @param $condition mixed
@@ -65,7 +65,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // $offset = (($offset - ($offset % $count)) / $count) + 1;
         $response = $this->scribd->search($condition, $count, $offset, "all");
         $objects = array();
-
+        
         foreach ($response->result_set->result as $result)
         {
             $scribd_object = new ExternalObject();
@@ -88,12 +88,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $scribd_object->set_rights($this->determine_rights());
             $objects[] = $scribd_object;
             $id = (string) $scribd_object->get_id();
-            $cache_path = Path :: getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] .
+            $cache_path = Path::getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] .
                  '/' . $id[1] . '/';
             $cache_file = $cache_path . $id;
             if (! file_exists($cache_file) && filemtime($cache_file) < strtotime("-1 week"))
             {
-                Filesystem :: write_to_file($cache_file, serialize($scribd_object));
+                Filesystem::write_to_file($cache_file, serialize($scribd_object));
             }
         }
         return new ArrayResultSet($objects);
@@ -130,14 +130,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (count($order_properties) > 0)
         {
             $order_property = $order_properties[0]->get_property();
-            if ($order_property == self :: SORT_RELEVANCE)
+            if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
             }
             else
             {
                 $sorting_direction = $order_properties[0]->get_direction();
-
+                
                 if ($sorting_direction == SORT_ASC)
                 {
                     return $order_property . '-asc';
@@ -148,7 +148,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 }
             }
         }
-
+        
         return null;
     }
 
@@ -183,10 +183,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_object($id)
     {
         $id = (string) $id;
-        $cache_path = Path :: getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] . '/' .
+        $cache_path = Path::getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] . '/' .
              $id[1] . '/';
         $cache_file = $cache_path . $id;
-
+        
         if (file_exists($cache_file))
         {
             return unserialize(file_get_contents($cache_file));
@@ -205,8 +205,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function export_external_repository_object($content_object)
     {
         return $this->scribd->sync_upload(
-            $content_object->get_full_path(),
-            $content_object->get_title(),
+            $content_object->get_full_path(), 
+            $content_object->get_title(), 
             $content_object->get_description());
     }
 
@@ -219,11 +219,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights()
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DELETE] = false;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
-
+        $rights[ExternalObject::RIGHT_USE] = true;
+        $rights[ExternalObject::RIGHT_EDIT] = false;
+        $rights[ExternalObject::RIGHT_DELETE] = false;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = true;
+        
         return $rights;
     }
 
@@ -253,10 +253,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function update_external_repository_object($values)
     {
         $this->scribd->changeSettings(
-            $values[ExternalObject :: PROPERTY_ID],
-            $values[ExternalObject :: PROPERTY_TITLE],
-            $values[ExternalObject :: PROPERTY_DESCRIPTION],
-            $values[ExternalObject :: PROPERTY_TAGS]);
+            $values[ExternalObject::PROPERTY_ID], 
+            $values[ExternalObject::PROPERTY_TITLE], 
+            $values[ExternalObject::PROPERTY_DESCRIPTION], 
+            $values[ExternalObject::PROPERTY_TAGS]);
         return true;
     }
 
@@ -269,13 +269,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function create_external_repository_object($values, $document_path)
     {
         $response = $this->scribd->upload($document_path);
-
+        
         $doc_id = (int) $response->doc_id;
-        $values[ExternalObject :: PROPERTY_ID] = $doc_id;
+        $values[ExternalObject::PROPERTY_ID] = $doc_id;
         if ($this->update_external_repository_object($values))
         {
             $result = $this->scribd->getSettings($doc_id);
-
+            
             $scribd_object = new ExternalObject();
             $scribd_object->set_external_repository_id($this->get_external_repository_instance_id());
             $scribd_object->set_id((int) $result->doc_id);
@@ -295,16 +295,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $scribd_object->set_type('scribd');
             $scribd_object->set_rights($this->determine_rights());
             $objects[] = $scribd_object;
-
+            
             $id = (string) $scribd_object->get_id();
-            $cache_path = Path :: getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] .
+            $cache_path = Path::getInstance()->namespaceToFullPath(__NAMESPACE__) . 'files/cache/document/' . $id[0] .
                  '/' . $id[1] . '/';
             $cache_file = $cache_path . $id;
             if (! file_exists($cache_file) && filemtime($cache_file) < strtotime("-1 week"))
             {
-                Filesystem :: write_to_file($cache_file, serialize($scribd_object));
+                Filesystem::write_to_file($cache_file, serialize($scribd_object));
             }
-
+            
             return $doc_id;
         }
         else

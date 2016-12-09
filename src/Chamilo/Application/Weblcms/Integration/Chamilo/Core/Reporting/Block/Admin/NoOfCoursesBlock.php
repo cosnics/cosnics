@@ -13,12 +13,12 @@ class NoOfCoursesBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $count = CourseDataManager :: count(Course :: class_name());
+        $count = CourseDataManager::count(Course::class_name());
         
-        $reporting_data->set_categories(array(Translation :: get('CourseCount')));
-        $reporting_data->set_rows(array(Translation :: get('count')));
+        $reporting_data->set_categories(array(Translation::get('CourseCount')));
+        $reporting_data->set_rows(array(Translation::get('count')));
         
-        $reporting_data->add_data_category_row(Translation :: get('CourseCount'), Translation :: get('count'), $count);
+        $reporting_data->add_data_category_row(Translation::get('CourseCount'), Translation::get('count'), $count);
         
         return $reporting_data;
     }
@@ -30,6 +30,6 @@ class NoOfCoursesBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

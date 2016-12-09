@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Bookmark :: class_name();
+        return Bookmark::class_name();
     }
 }

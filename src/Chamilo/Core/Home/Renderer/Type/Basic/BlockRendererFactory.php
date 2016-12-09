@@ -37,7 +37,7 @@ class BlockRendererFactory
 
     /**
      * The source from which this block renderer is called
-     *
+     * 
      * @var int
      */
     protected $source;
@@ -49,9 +49,8 @@ class BlockRendererFactory
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      * @param int $source
      */
-    public function __construct(
-        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT
-    )
+    public function __construct(Application $application, HomeService $homeService, Block $block, 
+        $source = self::SOURCE_DEFAULT)
     {
         $this->application = $application;
         $this->homeService = $homeService;
@@ -114,6 +113,7 @@ class BlockRendererFactory
     }
 
     /**
+     *
      * @return int
      */
     public function getSource()
@@ -129,7 +129,7 @@ class BlockRendererFactory
     {
         $block = $this->getBlock();
         $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
-
+        
         return new $class($this->getApplication(), $this->getHomeService(), $block, $this->source);
     }
 }

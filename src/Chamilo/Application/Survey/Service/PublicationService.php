@@ -89,7 +89,7 @@ class PublicationService
             {
                 throw new \InvalidArgumentException();
             }
-
+            
             return $this->getPublicationByIdentifier($identifier);
         }
         else
@@ -116,11 +116,11 @@ class PublicationService
     public function getPublicationsForUser(User $user, $right = RightsService :: VIEW_RIGHT, $limit, $offset, $orderProperty = null)
     {
         return $this->getPublicationRepository()->findPublicationsForUser(
-            $user,
-            $this->getEntitiesForUser($user),
-            $right,
-            $limit,
-            $offset,
+            $user, 
+            $this->getEntitiesForUser($user), 
+            $right, 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -131,7 +131,10 @@ class PublicationService
      */
     public function countPublicationsForUser(User $user, $right = RightsService :: VIEW_RIGHT)
     {
-        return $this->getPublicationRepository()->countPublicationsForUser($user, $this->getEntitiesForUser($user), $right);
+        return $this->getPublicationRepository()->countPublicationsForUser(
+            $user, 
+            $this->getEntitiesForUser($user), 
+            $right);
     }
 
     /**
@@ -170,9 +173,9 @@ class PublicationService
     public function getSharedPublicationsForUser(User $user, $limit, $offset, $orderProperty = null)
     {
         return $this->getPublicationRepository()->findSharedPublicationsForEntities(
-            $this->getEntitiesForUser($user),
-            $limit,
-            $offset,
+            $this->getEntitiesForUser($user), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -194,17 +197,17 @@ class PublicationService
     public function getEntitiesForUser(User $user)
     {
         $entities = array();
-
-        $entities[UserEntity :: ENTITY_TYPE] = array($user->get_id());
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = array();
-
+        
+        $entities[UserEntity::ENTITY_TYPE] = array($user->get_id());
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = array();
+        
         $userGroupIdentifiers = $user->get_groups(true);
-
+        
         foreach ($userGroupIdentifiers as $userGroupIdentifier)
         {
-            $entities[PlatformGroupEntity :: ENTITY_TYPE][] = $userGroupIdentifier;
+            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $userGroupIdentifier;
         }
-
+        
         return $entities;
     }
 
@@ -217,12 +220,12 @@ class PublicationService
     {
         $publication = new Publication();
         $this->setPublicationProperties($publication, $publicationProperties);
-
+        
         if (! $publication->create())
         {
             return false;
         }
-
+        
         return $publication;
     }
 
@@ -235,12 +238,12 @@ class PublicationService
     public function updatePublication(Publication $publication, $publicationProperties)
     {
         $this->setPublicationProperties($publication, $publicationProperties);
-
+        
         if (! $publication->update())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -255,7 +258,7 @@ class PublicationService
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -266,10 +269,10 @@ class PublicationService
      */
     private function setPublicationProperties(Publication $publication, $publicationProperties)
     {
-        $publication->setName($publicationProperties[Publication :: PROPERTY_TITLE]);
-        $publication->setDescription($publicationProperties[Publication :: PROPERTY_DESCRIPTION]);
-        $publication->setCreationDate($publicationProperties[Publication :: PROPERTY_PUBLISHED]);
-        $publication->setCreatorId($publicationProperties[Publication :: PROPERTY_PUBLISHER_ID]);
+        $publication->setName($publicationProperties[Publication::PROPERTY_TITLE]);
+        $publication->setDescription($publicationProperties[Publication::PROPERTY_DESCRIPTION]);
+        $publication->setCreationDate($publicationProperties[Publication::PROPERTY_PUBLISHED]);
+        $publication->setCreatorId($publicationProperties[Publication::PROPERTY_PUBLISHER_ID]);
     }
 
     /**
@@ -278,22 +281,22 @@ class PublicationService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getPublicationFavouritesByUser(EntityService $entityService, User $user, $limit, $offset,
+    public function getPublicationFavouritesByUser(EntityService $entityService, User $user, $limit, $offset, 
         $orderProperty = null)
     {
         if (is_null($orderProperty))
         {
             $orderProperty = array(
                 new OrderBy(
-                    new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_TITLE),
+                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_TITLE), 
                     SORT_ASC));
         }
-
+        
         return $this->getPublicationRepository()->findPublicationFavouritesByUser(
-            $user,
-            $entityService->getEntitiesForUser($user),
-            $limit,
-            $offset,
+            $user, 
+            $entityService->getEntitiesForUser($user), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -306,7 +309,7 @@ class PublicationService
     public function countPublicationFavouritesByUser(EntityService $entityService, User $user)
     {
         return $this->getPublicationRepository()->countPublicationFavouritesByUser(
-            $user,
+            $user, 
             $entityService->getEntitiesForUser($user));
     }
 
@@ -318,9 +321,9 @@ class PublicationService
      */
     public function getPublicationByTypeAndTypeIdentifier($type, $typeIdentifier)
     {
-        if ($type == self :: TYPE_PERSONAL)
+        if ($type == self::TYPE_PERSONAL)
         {
-            $user = DataManager :: retrieve_by_id(User :: class_name(), $typeIdentifier);
+            $user = DataManager::retrieve_by_id(User::class_name(), $typeIdentifier);
             return $this->getPersonalPublicationForUser($user);
         }
         else

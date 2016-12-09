@@ -15,10 +15,10 @@ class MemoryComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        $variable = Request :: post('variable');
-        $value = Request :: post('value');
-        $action = Request :: post('action');
-
+        $variable = Request::post('variable');
+        $value = Request::post('value');
+        $action = Request::post('action');
+        
         switch ($action)
         {
             case 'set' :

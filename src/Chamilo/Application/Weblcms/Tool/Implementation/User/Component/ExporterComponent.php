@@ -21,13 +21,13 @@ class ExporterComponent extends Manager
 
     public function run()
     {
-        $user_records = CourseDataManager :: retrieve_all_course_users($this->get_course_id());
+        $user_records = CourseDataManager::retrieve_all_course_users($this->get_course_id());
         
         $users = array();
         
         while ($user_record = $user_records->next_result())
         {
-            $users[] = DataClass :: factory(User :: class_name(), $user_record);
+            $users[] = DataClass::factory(User::class_name(), $user_record);
         }
         
         $exporter = new UserExporter(
@@ -38,12 +38,12 @@ class ExporterComponent extends Manager
         
         $file_path = $exporter->export($users);
         
-        Filesystem :: file_send_for_download(
+        Filesystem::file_send_for_download(
             $file_path, 
             true, 
             'export_users_' . $this->get_course_id() . '.xlsx', 
             'application/vnd.openxmlformats');
         
-        Filesystem :: remove($file_path);
+        Filesystem::remove($file_path);
     }
 }

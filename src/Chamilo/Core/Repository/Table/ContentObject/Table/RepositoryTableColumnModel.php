@@ -15,7 +15,6 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
 {
     const PROPERTY_TYPE = 'type';
     const PROPERTY_VERSION = 'version';
-
     const DEFAULT_ORDER_COLUMN_INDEX = 3;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
 
@@ -23,33 +22,26 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: PROPERTY_TYPE,
-                Theme:: getInstance()->getCommonImage(
-                    'Action/Category',
-                    'png',
-                    Translation:: get('Type'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            )
-        );
+                self::PROPERTY_TYPE, 
+                Theme::getInstance()->getCommonImage(
+                    'Action/Category', 
+                    'png', 
+                    Translation::get('Type'), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON)));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TITLE)
-        );
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_DESCRIPTION)
-        );
-
-        if (!$this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
+        
+        if (! $this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_OWNER_ID)
-            );
+                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID));
         }
-
+        
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_MODIFICATION_DATE)
-        );
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_VERSION, ContentObject:: get_version_header()));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_VERSION, ContentObject::get_version_header()));
     }
 }

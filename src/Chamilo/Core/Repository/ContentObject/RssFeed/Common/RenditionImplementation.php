@@ -9,6 +9,6 @@ class RenditionImplementation extends ContentObjectRenditionImplementation
 
     public static function parse_file($url)
     {
-        return RssReader :: factory()->parse_url($url);
+        return RssReader::factory()->parse_url($url);
     }
 }

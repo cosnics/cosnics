@@ -16,15 +16,15 @@ class ChangeCourseModuleVisibilityComponent extends \Chamilo\Application\Weblcms
 
     public function run()
     {
-        $module_id = Request :: post('tool');
-        $visible = Request :: post('visible');
-        $course = Request :: post('course');
-
-        \Chamilo\Application\Weblcms\Course\Storage\DataManager :: set_tool_visibility_by_tool_id(
-            $course,
-            $module_id,
+        $module_id = Request::post('tool');
+        $visible = Request::post('visible');
+        $course = Request::post('course');
+        
+        \Chamilo\Application\Weblcms\Course\Storage\DataManager::set_tool_visibility_by_tool_id(
+            $course, 
+            $module_id, 
             $visible);
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

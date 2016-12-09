@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * This class represents a selection condition that requires a value to be present in a list of values.
  * An example of an
  * instance would be a condition that requires that the id of a DataClass object be contained in the list {4,10,12}.
- *
+ * 
  * @author Bart Mollet
  * @author Hans De Bisschop
  * @package common.libraries
@@ -17,28 +17,28 @@ class InCondition extends Condition
 
     /**
      * Gets the DataClass property
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $name;
 
     /**
      * The list of values that defines the selection
-     *
+     * 
      * @var string
      */
     private $values;
 
     /**
      * Gets the storage unit of the DataClass
-     *
+     * 
      * @var string
      */
     private $storage_unit;
 
     /**
      * Is the storage unit name already an alias?
-     *
+     * 
      * @var boolean
      */
     private $is_alias;
@@ -60,7 +60,7 @@ class InCondition extends Condition
 
     /**
      * Gets the DataClass property
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_name()
@@ -70,7 +70,7 @@ class InCondition extends Condition
 
     /**
      * Gets the list of values that defines the selection
-     *
+     * 
      * @return string
      */
     public function get_values()
@@ -80,7 +80,7 @@ class InCondition extends Condition
 
     /**
      * Gets the storage unit of the DataClass
-     *
+     * 
      * @return string
      */
     public function get_storage_unit()
@@ -90,7 +90,7 @@ class InCondition extends Condition
 
     /**
      * Is the storage unit already an alias?
-     *
+     * 
      * @return boolean
      */
     public function is_alias()
@@ -104,17 +104,17 @@ class InCondition extends Condition
      */
     public function getHashParts()
     {
-        $hashParts = parent :: getHashParts();
-
+        $hashParts = parent::getHashParts();
+        
         $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-
+        
         $values = $this->get_values();
         ksort($values);
         $hashParts[] = $values;
-
+        
         $hashParts[] = $this->get_storage_unit();
         $hashParts[] = $this->is_alias();
-
+        
         return $hashParts;
     }
 }

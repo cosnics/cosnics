@@ -8,11 +8,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 class RequestTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_REQUEST_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         return $actions;
     }
 }

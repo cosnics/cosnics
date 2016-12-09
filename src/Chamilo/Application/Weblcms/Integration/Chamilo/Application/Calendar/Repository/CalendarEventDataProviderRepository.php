@@ -13,19 +13,21 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to retrieve calendar events for the assignment tool based on the due date of assignments
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class CalendarEventDataProviderRepository
 {
+
     /**
+     *
      * @var PublicationRepository
      */
     protected $publicationRepository;
 
     /**
      * CalendarEventDataProviderRepository constructor.
-     *
+     * 
      * @param PublicationRepository $publicationRepository
      */
     public function __construct(PublicationRepository $publicationRepository)
@@ -35,7 +37,7 @@ abstract class CalendarEventDataProviderRepository
 
     /**
      * Retrieves the valid publications for the user
-     *
+     * 
      * @param Course[]   $courses
      * @param int $fromDate
      * @param int $toDate
@@ -44,18 +46,17 @@ abstract class CalendarEventDataProviderRepository
      */
     function getPublications($fromDate, $toDate, $courses = array())
     {
-        $parameters = new RecordRetrievesParameters(
-            null, $this->getPublicationsCondition($fromDate, $toDate, $courses)
-        );
-
+        $parameters = new RecordRetrievesParameters(null, $this->getPublicationsCondition($fromDate, $toDate, $courses));
+        
         return $this->publicationRepository->getPublicationsWithContentObjects(
-            $parameters, ContentObjectPublication::class_name(), $this->getContentObjectClassName()
-        );
+            $parameters, 
+            ContentObjectPublication::class_name(), 
+            $this->getContentObjectClassName());
     }
 
     /**
      * Retrieves the conditions to retrieve the publications
-     *
+     * 
      * @param Course[]   $courses
      * @param int $fromDate
      * @param int $toDate
@@ -69,41 +70,40 @@ abstract class CalendarEventDataProviderRepository
         {
             $courseIds[] = $course->getId();
         }
-
+        
         $conditions = array();
-
+        
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_COURSE_ID
-            ),
-            $courseIds
-        );
-
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
+            $courseIds);
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_TOOL
-            ),
-            new StaticConditionVariable($this->getToolName())
-        );
-
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
+            new StaticConditionVariable($this->getToolName()));
+        
         $conditions[] = $this->getSpecificContentObjectConditions($fromDate, $toDate);
-
+        
         return new AndCondition($conditions);
     }
 
     /**
+     *
      * @return string
      */
     abstract protected function getToolName();
 
     /**
+     *
      * @return string
      */
     abstract protected function getContentObjectClassName();
 
     /**
+     *
      * @param int $fromDate
      * @param int $toDate
      *

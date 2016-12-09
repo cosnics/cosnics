@@ -42,8 +42,8 @@ class MultipleChoiceForm extends ContentObjectForm
     const BUTTON_REMOVE_OPTION = 'remove';
 
     private static $html_editor_options = array(
-        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75', 
-        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+        FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '75', 
+        FormValidatorHtmlEditorOptions::OPTION_COLLAPSE_TOOLBAR => true);
 
     /**
      * Prepare all the different tabs
@@ -52,29 +52,29 @@ class MultipleChoiceForm extends ContentObjectForm
     {
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice', 
                     true) . 'Form.js'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_QUESTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_QUESTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_QUESTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice', 
-                    'Tab/' . self :: TAB_QUESTION), 
+                    'Tab/' . self::TAB_QUESTION), 
                 'build_question_form'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_OPTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_OPTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_OPTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice', 
-                    'Tab/' . self :: TAB_OPTION), 
+                    'Tab/' . self::TAB_OPTION), 
                 'build_option_form'));
         
         $this->addDefaultTab();
@@ -89,37 +89,37 @@ class MultipleChoiceForm extends ContentObjectForm
     function build_question_form()
     {
         $this->add_textfield(
-            MultipleChoice :: PROPERTY_QUESTION, 
-            Translation :: get('Question'), 
+            MultipleChoice::PROPERTY_QUESTION, 
+            Translation::get('Question'), 
             true, 
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
         
         $this->add_html_editor(
-            MultipleChoice :: PROPERTY_INSTRUCTION, 
-            Translation :: get('Instruction'), 
+            MultipleChoice::PROPERTY_INSTRUCTION, 
+            Translation::get('Instruction'), 
             false, 
-            self :: $html_editor_options);
+            self::$html_editor_options);
         
         try
         {
             $configuration = $this->get_content_object_template_configuration();
             
             $allowed_to_edit_question = $configuration->get_configuration(
-                MultipleChoice :: PROPERTY_QUESTION, 
-                TemplateConfiguration :: ACTION_EDIT);
+                MultipleChoice::PROPERTY_QUESTION, 
+                TemplateConfiguration::ACTION_EDIT);
             
             if (! $allowed_to_edit_question)
             {
-                $this->getElement(MultipleChoice :: PROPERTY_QUESTION)->freeze();
+                $this->getElement(MultipleChoice::PROPERTY_QUESTION)->freeze();
             }
             
             $allowed_to_edit_instruction = $configuration->get_configuration(
-                MultipleChoice :: PROPERTY_INSTRUCTION, 
-                TemplateConfiguration :: ACTION_EDIT);
+                MultipleChoice::PROPERTY_INSTRUCTION, 
+                TemplateConfiguration::ACTION_EDIT);
             
             if (! $allowed_to_edit_instruction)
             {
-                $this->getElement(MultipleChoice :: PROPERTY_INSTRUCTION)->freeze();
+                $this->getElement(MultipleChoice::PROPERTY_INSTRUCTION)->freeze();
             }
         }
         catch (NoTemplateException $exception)
@@ -138,63 +138,63 @@ class MultipleChoiceForm extends ContentObjectForm
         
         $this->addElement(
             'hidden', 
-            MultipleChoice :: PROPERTY_ANSWER_TYPE, 
+            MultipleChoice::PROPERTY_ANSWER_TYPE, 
             null, 
-            array('id' => MultipleChoice :: PROPERTY_ANSWER_TYPE));
+            array('id' => MultipleChoice::PROPERTY_ANSWER_TYPE));
         $this->addElement(
             'hidden', 
-            MultipleChoice :: PROPERTY_DISPLAY_TYPE, 
+            MultipleChoice::PROPERTY_DISPLAY_TYPE, 
             null, 
-            array('id' => MultipleChoice :: PROPERTY_DISPLAY_TYPE));
+            array('id' => MultipleChoice::PROPERTY_DISPLAY_TYPE));
         
         $this->addElement(
             'hidden', 
-            self :: PROPERTY_NUMBER_OF_OPTIONS, 
+            self::PROPERTY_NUMBER_OF_OPTIONS, 
             null, 
-            array('id' => self :: PROPERTY_NUMBER_OF_OPTIONS));
+            array('id' => self::PROPERTY_NUMBER_OF_OPTIONS));
         $this->addElement(
             'hidden', 
-            self :: PROPERTY_SKIPPED_OPTIONS, 
+            self::PROPERTY_SKIPPED_OPTIONS, 
             null, 
-            array('id' => self :: PROPERTY_SKIPPED_OPTIONS));
+            array('id' => self::PROPERTY_SKIPPED_OPTIONS));
         
         $buttons = array();
         
-        $answer_type_label = $content_object->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX ? 'SwitchToRadioButtons' : 'SwitchToCheckboxes';
-        $display_type_label = $content_object->get_display_type() == MultipleChoice :: DISPLAY_TYPE_SELECT ? 'SwitchToTable' : 'SwitchToSelect';
+        $answer_type_label = $content_object->get_answer_type() == MultipleChoice::ANSWER_TYPE_CHECKBOX ? 'SwitchToRadioButtons' : 'SwitchToCheckboxes';
+        $display_type_label = $content_object->get_display_type() == MultipleChoice::DISPLAY_TYPE_SELECT ? 'SwitchToTable' : 'SwitchToSelect';
         
         $buttons[] = $this->createElement(
             'style_button', 
-            self :: BUTTON_CHANGE_ANSWER_TYPE . '[]', 
-            Translation :: get($answer_type_label), 
-            array('class' => self :: BUTTON_CHANGE_ANSWER_TYPE), 
+            self::BUTTON_CHANGE_ANSWER_TYPE . '[]', 
+            Translation::get($answer_type_label), 
+            array('class' => self::BUTTON_CHANGE_ANSWER_TYPE), 
             null, 
             'retweet');
         
         $buttons[] = $this->createElement(
             'style_button', 
-            self :: BUTTON_CHANGE_DISPLAY_TYPE . '[]', 
-            Translation :: get($display_type_label), 
-            array('class' => self :: BUTTON_CHANGE_DISPLAY_TYPE), 
+            self::BUTTON_CHANGE_DISPLAY_TYPE . '[]', 
+            Translation::get($display_type_label), 
+            array('class' => self::BUTTON_CHANGE_DISPLAY_TYPE), 
             null, 
             'retweet');
         
         $buttons[] = $this->createElement(
             'style_button', 
-            self :: BUTTON_ADD_OPTION . '[]', 
-            Translation :: get('AddMultipleChoiceOption'), 
-            array('class' => self :: BUTTON_ADD_OPTION), 
+            self::BUTTON_ADD_OPTION . '[]', 
+            Translation::get('AddMultipleChoiceOption'), 
+            array('class' => self::BUTTON_ADD_OPTION), 
             null, 
             'plus');
         
-        $this->addGroup($buttons, self :: PROPERTY_OPTION_BUTTONS, null, '', false);
+        $this->addGroup($buttons, self::PROPERTY_OPTION_BUTTONS, null, '', false);
         
         $table_header = array();
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('Options') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Options') . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -212,31 +212,29 @@ class MultipleChoiceForm extends ContentObjectForm
                 
                 $display_order = $this->createElement(
                     'text', 
-                    self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                         MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER . ']');
+                    self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
+                         MultipleChoiceOption::PROPERTY_DISPLAY_ORDER . ']');
                 $display_order->freeze();
                 
                 $group[] = $display_order;
                 
                 $group[] = $this->createElement(
                     'hidden', 
-                    self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' . MultipleChoiceOption :: PROPERTY_ID .
-                         ']');
+                    self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' . MultipleChoiceOption::PROPERTY_ID . ']');
                 
                 $group[] = $this->create_textfield(
-                    self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' . MultipleChoiceOption :: PROPERTY_VALUE .
-                         ']', 
-                        Translation :: get('Answer'), 
-                        array('size' => '100', 'style' => 'width: 95%'));
+                    self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' . MultipleChoiceOption::PROPERTY_VALUE . ']', 
+                    Translation::get('Answer'), 
+                    array('size' => '100', 'style' => 'width: 95%'));
                 
                 if ($number_of_options > 2)
                 {
                     $group[] = & $this->createElement(
                         'style_button', 
-                        self :: BUTTON_REMOVE_OPTION . '[' . $option_number . ']', 
-                        Translation :: get('RemoveOption'), 
+                        self::BUTTON_REMOVE_OPTION . '[' . $option_number . ']', 
+                        Translation::get('RemoveOption'), 
                         array(
-                            'class' => 'remove_option mini btn-danger ' . self :: BUTTON_REMOVE_OPTION, 
+                            'class' => 'remove_option mini btn-danger ' . self::BUTTON_REMOVE_OPTION, 
                             'id' => 'remove_' . $option_number), 
                         null, 
                         'remove');
@@ -245,22 +243,22 @@ class MultipleChoiceForm extends ContentObjectForm
                 {
                     $group[] = & $this->createElement(
                         'style_button', 
-                        self :: BUTTON_REMOVE_OPTION . '[' . $option_number . ']', 
-                        Translation :: get('RemoveOption'), 
-                        array('class' => 'remove_option mini btn-danger ' . self :: BUTTON_REMOVE_OPTION), 
+                        self::BUTTON_REMOVE_OPTION . '[' . $option_number . ']', 
+                        Translation::get('RemoveOption'), 
+                        array('class' => 'remove_option mini btn-danger ' . self::BUTTON_REMOVE_OPTION), 
                         null, 
                         'remove');
                 }
                 
-                $this->addGroup($group, self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']', null, '', false);
+                $this->addGroup($group, self::PROPERTY_OPTION_GROUP . '[' . $option_number . ']', null, '', false);
                 
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
                          '">{element}</tr>', 
-                        self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']');
+                        self::PROPERTY_OPTION_GROUP . '[' . $option_number . ']');
                 $renderer->setGroupElementTemplate(
                     '<td>{element}</td>', 
-                    self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']');
+                    self::PROPERTY_OPTION_GROUP . '[' . $option_number . ']');
             }
         }
         
@@ -268,54 +266,54 @@ class MultipleChoiceForm extends ContentObjectForm
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
         
-        $this->addGroup($buttons, self :: PROPERTY_OPTION_BUTTONS, null, '', false);
+        $this->addGroup($buttons, self::PROPERTY_OPTION_BUTTONS, null, '', false);
         
         $renderer->setElementTemplate(
             '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
-            self :: PROPERTY_OPTION_BUTTONS);
+            self::PROPERTY_OPTION_BUTTONS);
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
-            self :: PROPERTY_OPTION_BUTTONS);
+            self::PROPERTY_OPTION_BUTTONS);
         
         try
         {
             $configuration = $this->get_content_object_template_configuration();
             
             $allowed_to_edit_answer_type = $configuration->get_configuration(
-                MultipleChoice :: PROPERTY_ANSWER_TYPE, 
-                TemplateConfiguration :: ACTION_EDIT);
+                MultipleChoice::PROPERTY_ANSWER_TYPE, 
+                TemplateConfiguration::ACTION_EDIT);
             
             if (! $allowed_to_edit_answer_type)
             {
-                $this->get_group_element(self :: PROPERTY_OPTION_BUTTONS, self :: BUTTON_CHANGE_ANSWER_TYPE . '[]')->freeze();
+                $this->get_group_element(self::PROPERTY_OPTION_BUTTONS, self::BUTTON_CHANGE_ANSWER_TYPE . '[]')->freeze();
             }
             
             $allowed_to_edit_display_type = $configuration->get_configuration(
-                MultipleChoice :: PROPERTY_DISPLAY_TYPE, 
-                TemplateConfiguration :: ACTION_EDIT);
+                MultipleChoice::PROPERTY_DISPLAY_TYPE, 
+                TemplateConfiguration::ACTION_EDIT);
             
             if (! $allowed_to_edit_display_type)
             {
-                $this->get_group_element(self :: PROPERTY_OPTION_BUTTONS, self :: BUTTON_CHANGE_DISPLAY_TYPE . '[]')->freeze();
+                $this->get_group_element(self::PROPERTY_OPTION_BUTTONS, self::BUTTON_CHANGE_DISPLAY_TYPE . '[]')->freeze();
             }
             
             $allowed_to_edit_options = $configuration->get_configuration(
-                MultipleChoice :: PROPERTY_OPTIONS, 
-                TemplateConfiguration :: ACTION_EDIT);
+                MultipleChoice::PROPERTY_OPTIONS, 
+                TemplateConfiguration::ACTION_EDIT);
             
             if (! $allowed_to_edit_options)
             {
-                $this->get_group_element(self :: PROPERTY_OPTION_BUTTONS, self :: BUTTON_ADD_OPTION . '[]')->freeze();
+                $this->get_group_element(self::PROPERTY_OPTION_BUTTONS, self::BUTTON_ADD_OPTION . '[]')->freeze();
                 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
                     $this->get_group_element(
-                        self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']', 
-                        self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                             MultipleChoiceOption :: PROPERTY_VALUE . ']')->freeze();
+                        self::PROPERTY_OPTION_GROUP . '[' . $option_number . ']', 
+                        self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' . MultipleChoiceOption::PROPERTY_VALUE .
+                             ']')->freeze();
                     $this->get_group_element(
-                        self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']', 
-                        self :: BUTTON_REMOVE_OPTION . '[' . $option_number . ']')->freeze();
+                        self::PROPERTY_OPTION_GROUP . '[' . $option_number . ']', 
+                        self::BUTTON_REMOVE_OPTION . '[' . $option_number . ']')->freeze();
                 }
             }
         }
@@ -334,8 +332,8 @@ class MultipleChoiceForm extends ContentObjectForm
         {
             $object = $this->get_content_object();
             
-            $defaults[MultipleChoice :: PROPERTY_QUESTION] = $object->get_question();
-            $defaults[MultipleChoice :: PROPERTY_INSTRUCTION] = $object->get_instruction();
+            $defaults[MultipleChoice::PROPERTY_QUESTION] = $object->get_question();
+            $defaults[MultipleChoice::PROPERTY_INSTRUCTION] = $object->get_instruction();
             
             if ($object->get_number_of_options())
             {
@@ -344,13 +342,13 @@ class MultipleChoiceForm extends ContentObjectForm
                 
                 foreach ($options as $key => $option)
                 {
-                    $defaults[self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                         MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER . ']'] = $option->get_display_order();
+                    $defaults[self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
+                         MultipleChoiceOption::PROPERTY_DISPLAY_ORDER . ']'] = $option->get_display_order();
                     
-                    $defaults[self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                         MultipleChoiceOption :: PROPERTY_ID . ']'] = $option->get_id();
-                    $defaults[self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                         MultipleChoiceOption :: PROPERTY_VALUE . ']'] = $option->get_value();
+                    $defaults[self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
+                         MultipleChoiceOption::PROPERTY_ID . ']'] = $option->get_id();
+                    $defaults[self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
+                         MultipleChoiceOption::PROPERTY_VALUE . ']'] = $option->get_value();
                     $option_number ++;
                 }
             }
@@ -358,7 +356,7 @@ class MultipleChoiceForm extends ContentObjectForm
         else
         {
             $values = $this->exportValues();
-            $options = $values[self :: PROPERTY_OPTION];
+            $options = $values[self::PROPERTY_OPTION];
             
             $display_order = 1;
             
@@ -369,21 +367,21 @@ class MultipleChoiceForm extends ContentObjectForm
             {
                 if (! in_array($option_number, $skipped_options))
                 {
-                    $defaults[self :: PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
-                         MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER . ']'] = $display_order;
+                    $defaults[self::PROPERTY_OPTION . '[' . $option_number . ']' . '[' .
+                         MultipleChoiceOption::PROPERTY_DISPLAY_ORDER . ']'] = $display_order;
                     unset(
-                        $this->_submitValues[self :: PROPERTY_OPTION][$option_number][MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER]);
+                        $this->_submitValues[self::PROPERTY_OPTION][$option_number][MultipleChoiceOption::PROPERTY_DISPLAY_ORDER]);
                     $display_order ++;
                 }
             }
         }
         
-        $defaults[self :: PROPERTY_NUMBER_OF_OPTIONS] = $this->determine_number_of_options();
-        $defaults[self :: PROPERTY_SKIPPED_OPTIONS] = $this->determine_skipped_options(true);
-        $defaults[MultipleChoice :: PROPERTY_ANSWER_TYPE] = $this->determine_answer_type();
-        $defaults[MultipleChoice :: PROPERTY_DISPLAY_TYPE] = $this->determine_display_type();
+        $defaults[self::PROPERTY_NUMBER_OF_OPTIONS] = $this->determine_number_of_options();
+        $defaults[self::PROPERTY_SKIPPED_OPTIONS] = $this->determine_skipped_options(true);
+        $defaults[MultipleChoice::PROPERTY_ANSWER_TYPE] = $this->determine_answer_type();
+        $defaults[MultipleChoice::PROPERTY_DISPLAY_TYPE] = $this->determine_display_type();
         
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     /**
@@ -399,17 +397,17 @@ class MultipleChoiceForm extends ContentObjectForm
         $new_options = array();
         $posted_options = array();
         
-        foreach ($values[self :: PROPERTY_OPTION] as $key => $option_properties)
+        foreach ($values[self::PROPERTY_OPTION] as $key => $option_properties)
         {
             $posted_option = new MultipleChoiceOption();
             
-            if ($option_properties[MultipleChoiceOption :: PROPERTY_ID])
+            if ($option_properties[MultipleChoiceOption::PROPERTY_ID])
             {
-                $posted_option->set_id($option_properties[MultipleChoiceOption :: PROPERTY_ID]);
+                $posted_option->set_id($option_properties[MultipleChoiceOption::PROPERTY_ID]);
             }
             
-            $posted_option->set_value($option_properties[MultipleChoiceOption :: PROPERTY_VALUE]);
-            $posted_option->set_display_order($option_properties[MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER]);
+            $posted_option->set_value($option_properties[MultipleChoiceOption::PROPERTY_VALUE]);
+            $posted_option->set_display_order($option_properties[MultipleChoiceOption::PROPERTY_DISPLAY_ORDER]);
             $posted_option->set_question_id($content_object->get_id());
             
             if ($posted_option->get_id())
@@ -466,7 +464,7 @@ class MultipleChoiceForm extends ContentObjectForm
     {
         $object = $this->fill_content_object(new MultipleChoice());
         $this->set_content_object($object);
-        $object = parent :: create_content_object();
+        $object = parent::create_content_object();
         
         $this->process_options();
         
@@ -481,7 +479,7 @@ class MultipleChoiceForm extends ContentObjectForm
         $object = $this->fill_content_object($this->get_content_object());
         $this->process_options();
         
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 
     /**
@@ -493,10 +491,10 @@ class MultipleChoiceForm extends ContentObjectForm
     {
         $values = $this->exportValues();
         
-        $object->set_answer_type($values[MultipleChoice :: PROPERTY_ANSWER_TYPE]);
-        $object->set_display_type($values[MultipleChoice :: PROPERTY_DISPLAY_TYPE]);
-        $object->set_question($values[MultipleChoice :: PROPERTY_QUESTION]);
-        $object->set_instruction($values[MultipleChoice :: PROPERTY_INSTRUCTION]);
+        $object->set_answer_type($values[MultipleChoice::PROPERTY_ANSWER_TYPE]);
+        $object->set_display_type($values[MultipleChoice::PROPERTY_DISPLAY_TYPE]);
+        $object->set_question($values[MultipleChoice::PROPERTY_QUESTION]);
+        $object->set_instruction($values[MultipleChoice::PROPERTY_INSTRUCTION]);
         
         return $object;
     }
@@ -509,13 +507,13 @@ class MultipleChoiceForm extends ContentObjectForm
     {
         if (! $this->get_content_object()->get_number_of_options())
         {
-            $number_of_options = $this->isSubmitted() ? (int) $this->exportValue(self :: PROPERTY_NUMBER_OF_OPTIONS) : 3;
+            $number_of_options = $this->isSubmitted() ? (int) $this->exportValue(self::PROPERTY_NUMBER_OF_OPTIONS) : 3;
         }
         else
         {
             if ($this->isSubmitted())
             {
-                $number_of_options = (int) $this->exportValue(self :: PROPERTY_NUMBER_OF_OPTIONS);
+                $number_of_options = (int) $this->exportValue(self::PROPERTY_NUMBER_OF_OPTIONS);
             }
             else
             {
@@ -523,10 +521,10 @@ class MultipleChoiceForm extends ContentObjectForm
             }
         }
         
-        if (Request :: post(self :: BUTTON_ADD_OPTION))
+        if (Request::post(self::BUTTON_ADD_OPTION))
         {
             $number_of_options ++;
-            unset($this->_submitValues[self :: PROPERTY_NUMBER_OF_OPTIONS]);
+            unset($this->_submitValues[self::PROPERTY_NUMBER_OF_OPTIONS]);
         }
         
         return $number_of_options;
@@ -539,12 +537,12 @@ class MultipleChoiceForm extends ContentObjectForm
      */
     function determine_skipped_options($serialize = false)
     {
-        $skipped_options = $this->exportValue(self :: PROPERTY_SKIPPED_OPTIONS);
+        $skipped_options = $this->exportValue(self::PROPERTY_SKIPPED_OPTIONS);
         $skipped_options = $skipped_options ? unserialize($skipped_options) : array();
         
-        if (Request :: post(self :: BUTTON_REMOVE_OPTION))
+        if (Request::post(self::BUTTON_REMOVE_OPTION))
         {
-            $options_to_skip = Request :: post(self :: BUTTON_REMOVE_OPTION);
+            $options_to_skip = Request::post(self::BUTTON_REMOVE_OPTION);
             
             foreach (array_keys($options_to_skip) as $skipped_id)
             {
@@ -554,7 +552,7 @@ class MultipleChoiceForm extends ContentObjectForm
                 }
             }
             
-            unset($this->_submitValues[self :: PROPERTY_SKIPPED_OPTIONS]);
+            unset($this->_submitValues[self::PROPERTY_SKIPPED_OPTIONS]);
         }
         
         return $serialize ? serialize($skipped_options) : $skipped_options;
@@ -572,13 +570,13 @@ class MultipleChoiceForm extends ContentObjectForm
         }
         else
         {
-            $answer_type = MultipleChoice :: ANSWER_TYPE_CHECKBOX;
+            $answer_type = MultipleChoice::ANSWER_TYPE_CHECKBOX;
         }
         
-        if (Request :: post(self :: BUTTON_CHANGE_ANSWER_TYPE))
+        if (Request::post(self::BUTTON_CHANGE_ANSWER_TYPE))
         {
-            unset($this->_submitValues[MultipleChoice :: PROPERTY_ANSWER_TYPE]);
-            $answer_type = ($answer_type == MultipleChoice :: ANSWER_TYPE_RADIO ? MultipleChoice :: ANSWER_TYPE_CHECKBOX : MultipleChoice :: ANSWER_TYPE_RADIO);
+            unset($this->_submitValues[MultipleChoice::PROPERTY_ANSWER_TYPE]);
+            $answer_type = ($answer_type == MultipleChoice::ANSWER_TYPE_RADIO ? MultipleChoice::ANSWER_TYPE_CHECKBOX : MultipleChoice::ANSWER_TYPE_RADIO);
         }
         
         return $answer_type;
@@ -596,13 +594,13 @@ class MultipleChoiceForm extends ContentObjectForm
         }
         else
         {
-            $display_type = MultipleChoice :: DISPLAY_TYPE_SELECT;
+            $display_type = MultipleChoice::DISPLAY_TYPE_SELECT;
         }
         
-        if (Request :: post(self :: BUTTON_CHANGE_DISPLAY_TYPE))
+        if (Request::post(self::BUTTON_CHANGE_DISPLAY_TYPE))
         {
-            unset($this->_submitValues[MultipleChoice :: PROPERTY_DISPLAY_TYPE]);
-            $display_type = ($display_type == MultipleChoice :: DISPLAY_TYPE_SELECT ? MultipleChoice :: DISPLAY_TYPE_TABLE : MultipleChoice :: DISPLAY_TYPE_SELECT);
+            unset($this->_submitValues[MultipleChoice::PROPERTY_DISPLAY_TYPE]);
+            $display_type = ($display_type == MultipleChoice::DISPLAY_TYPE_SELECT ? MultipleChoice::DISPLAY_TYPE_TABLE : MultipleChoice::DISPLAY_TYPE_SELECT);
         }
         
         return $display_type;
@@ -613,12 +611,12 @@ class MultipleChoiceForm extends ContentObjectForm
      */
     public function validate()
     {
-        if (Request :: post(self :: BUTTON_CHANGE_ANSWER_TYPE) || Request :: post(self :: BUTTON_CHANGE_DISPLAY_TYPE) ||
-             Request :: post(self :: BUTTON_ADD_OPTION) || Request :: post(self :: BUTTON_REMOVE_OPTION))
+        if (Request::post(self::BUTTON_CHANGE_ANSWER_TYPE) || Request::post(self::BUTTON_CHANGE_DISPLAY_TYPE) ||
+             Request::post(self::BUTTON_ADD_OPTION) || Request::post(self::BUTTON_REMOVE_OPTION))
         {
             return false;
         }
         
-        return parent :: validate();
+        return parent::validate();
     }
 }

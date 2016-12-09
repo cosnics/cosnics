@@ -26,19 +26,19 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-
+    
     // Properties
     const PROPERTY_PARENT = 'parent';
     const PROPERTY_SORT = 'sort';
     const PROPERTY_HIDDEN = 'hidden';
     const PROPERTY_DISPLAY = 'display';
-
+    
     // Types
     const TYPE_APPLICATION = 1;
     const TYPE_LINK = 2;
     const TYPE_CATEGORY = 3;
     const TYPE_LINK_APPLICATION = 4;
-
+    
     // Display options
     const DISPLAY_ICON = 1;
     const DISPLAY_TEXT = 2;
@@ -48,24 +48,24 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
     /**
      * Get the default properties of all items.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_PARENT,
-                self :: PROPERTY_TYPE,
-                self :: PROPERTY_SORT,
-                self :: PROPERTY_HIDDEN,
-                self :: PROPERTY_DISPLAY));
+                self::PROPERTY_PARENT, 
+                self::PROPERTY_TYPE, 
+                self::PROPERTY_SORT, 
+                self::PROPERTY_HIDDEN, 
+                self::PROPERTY_DISPLAY));
     }
 
     /**
@@ -73,17 +73,17 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     public function get_parent()
     {
-        return $this->get_default_property(self :: PROPERTY_PARENT);
+        return $this->get_default_property(self::PROPERTY_PARENT);
     }
 
     public function get_parent_object()
     {
-        return DataManager :: retrieve_by_id(Item :: class_name(), $this->get_parent());
+        return DataManager::retrieve_by_id(Item::class_name(), $this->get_parent());
     }
 
     public function hasParent()
@@ -93,27 +93,27 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
     public function set_parent($parent)
     {
-        $this->set_default_property(self :: PROPERTY_PARENT, $parent);
+        $this->set_default_property(self::PROPERTY_PARENT, $parent);
     }
 
     public function get_sort()
     {
-        return $this->get_default_property(self :: PROPERTY_SORT);
+        return $this->get_default_property(self::PROPERTY_SORT);
     }
 
     public function set_sort($sort)
     {
-        $this->set_default_property(self :: PROPERTY_SORT, $sort);
+        $this->set_default_property(self::PROPERTY_SORT, $sort);
     }
 
     public function get_hidden()
     {
-        return $this->get_default_property(self :: PROPERTY_HIDDEN);
+        return $this->get_default_property(self::PROPERTY_HIDDEN);
     }
 
     public function set_hidden($hidden = 0)
     {
-        $this->set_default_property(self :: PROPERTY_HIDDEN, $hidden);
+        $this->set_default_property(self::PROPERTY_HIDDEN, $hidden);
     }
 
     /**
@@ -127,38 +127,38 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
     public function get_display()
     {
-        return $this->get_default_property(self :: PROPERTY_DISPLAY);
+        return $this->get_default_property(self::PROPERTY_DISPLAY);
     }
 
     public function set_display($display = self :: DISPLAY_ICON)
     {
-        $this->set_default_property(self :: PROPERTY_DISPLAY, $display);
+        $this->set_default_property(self::PROPERTY_DISPLAY, $display);
     }
 
     public function show_title()
     {
-        return $this->get_display() == self :: DISPLAY_TEXT || $this->get_display() == self :: DISPLAY_BOTH;
+        return $this->get_display() == self::DISPLAY_TEXT || $this->get_display() == self::DISPLAY_BOTH;
     }
 
     public function show_icon()
     {
-        return $this->get_display() == self :: DISPLAY_BOTH || $this->get_display() == self :: DISPLAY_ICON;
+        return $this->get_display() == self::DISPLAY_BOTH || $this->get_display() == self::DISPLAY_ICON;
     }
 
     public function create()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), self :: PROPERTY_PARENT),
+            new PropertyConditionVariable(Item::class_name(), self::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_parent()));
-        $sort = DataManager :: retrieve_next_value(Item :: class_name(), self :: PROPERTY_SORT, $condition);
+        $sort = DataManager::retrieve_next_value(Item::class_name(), self::PROPERTY_SORT, $condition);
         $this->set_sort($sort);
-
-        $success = parent :: create($this);
+        
+        $success = parent::create($this);
         if (! $success)
         {
             return false;
         }
-
+        
         foreach ($this->get_titles()->get_titles() as $title)
         {
             $title->set_item_id($this->get_id());
@@ -167,54 +167,54 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                 return false;
             }
         }
-
+        
         // Add a rights location for the item
         $parent = $this->get_parent();
-
+        
         if (! $parent)
         {
-            $parent_id = Rights :: get_instance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
+            $parent_id = Rights::getInstance()->get_root_id(\Chamilo\Core\Menu\Manager::context());
         }
         else
         {
-            $parent_id = Rights :: get_instance()->get_location_id_by_identifier(
-                \Chamilo\Core\Menu\Manager :: context(),
-                Rights :: TYPE_ITEM,
+            $parent_id = Rights::getInstance()->get_location_id_by_identifier(
+                \Chamilo\Core\Menu\Manager::context(), 
+                Rights::TYPE_ITEM, 
                 $this->get_parent());
         }
-
-        $new_location = Rights :: get_instance()->create_menu_location($this->get_id(), $parent_id);
-
+        
+        $new_location = Rights::getInstance()->create_menu_location($this->get_id(), $parent_id);
+        
         if (! $new_location)
         {
             return false;
         }
-
-        return Rights :: get_instance()->set_location_entity_right(Rights :: VIEW_RIGHT, 0, 0, $new_location->get_id());
+        
+        return Rights::getInstance()->set_location_entity_right(Rights::VIEW_RIGHT, 0, 0, $new_location->get_id());
     }
 
     public function update()
     {
-        $success = parent :: update($this);
+        $success = parent::update($this);
         if (! $success)
         {
             return false;
         }
-
+        
         $parent = $this->get_parent();
-
+        
         if ($parent == 0)
         {
-            $parent_id = Rights :: get_instance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
+            $parent_id = Rights::getInstance()->get_root_id(\Chamilo\Core\Menu\Manager::context());
         }
         else
         {
-            $parent_id = Rights :: get_instance()->get_location_id_by_identifier(
-                \Chamilo\Core\Menu\Manager :: context(),
-                Rights :: TYPE_ITEM,
+            $parent_id = Rights::getInstance()->get_location_id_by_identifier(
+                \Chamilo\Core\Menu\Manager::context(), 
+                Rights::TYPE_ITEM, 
                 $parent);
         }
-
+        
         foreach ($this->get_titles()->get_titles() as $title)
         {
             if ($title->get_id())
@@ -232,12 +232,12 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                 }
             }
         }
-
-        $location = Rights :: get_instance()->get_location_by_identifier(
-            \Chamilo\Core\Menu\Manager :: context(),
-            Rights :: TYPE_ITEM,
+        
+        $location = Rights::getInstance()->get_location_by_identifier(
+            \Chamilo\Core\Menu\Manager::context(), 
+            Rights::TYPE_ITEM, 
             $this->get_id());
-
+        
         if ($location)
         {
             return $location->move($parent_id);
@@ -246,17 +246,17 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         {
             return false;
         }
-
+        
         return true;
     }
 
     public function delete()
     {
-        $location = Rights :: get_instance()->get_location_by_identifier(
-            \Chamilo\Core\Menu\Manager :: context(),
-            Rights :: TYPE_ITEM,
+        $location = Rights::getInstance()->get_location_by_identifier(
+            \Chamilo\Core\Menu\Manager::context(), 
+            Rights::TYPE_ITEM, 
             $this->get_id());
-
+        
         if ($location)
         {
             if (! $location->delete())
@@ -264,12 +264,12 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                 return false;
             }
         }
-        $success = parent :: delete($this);
+        $success = parent::delete($this);
         if (! $success)
         {
             return false;
         }
-
+        
         foreach ($this->get_titles()->get_titles() as $title)
         {
             if (! $title->delete())
@@ -286,7 +286,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_type_string()
     {
-        return self :: type_string($this->get_type());
+        return self::type_string($this->get_type());
     }
 
     /**
@@ -297,16 +297,16 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
     {
         switch ($type)
         {
-            case ApplicationItem :: class_name() :
+            case ApplicationItem::class_name() :
                 return 'Application';
                 break;
-            case LinkItem :: class_name() :
+            case LinkItem::class_name() :
                 return 'Link';
                 break;
-            case CategoryItem :: class_name() :
+            case CategoryItem::class_name() :
                 return 'Category';
                 break;
-            case LinkApplicationItem :: class_name() :
+            case LinkApplicationItem::class_name() :
                 return 'LinkApplication';
                 break;
         }
@@ -318,7 +318,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_type_integer()
     {
-        return self :: type_integer($this->get_type());
+        return self::type_integer($this->get_type());
     }
 
     /**
@@ -329,17 +329,17 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
     {
         switch ($type)
         {
-            case ApplicationItem :: class_name() :
-                return self :: TYPE_APPLICATION;
+            case ApplicationItem::class_name() :
+                return self::TYPE_APPLICATION;
                 break;
-            case LinkItem :: class_name() :
-                return self :: TYPE_LINK;
+            case LinkItem::class_name() :
+                return self::TYPE_LINK;
                 break;
-            case CategoryItem :: class_name() :
-                return self :: TYPE_CATEGORY;
+            case CategoryItem::class_name() :
+                return self::TYPE_CATEGORY;
                 break;
-            case LinkApplicationItem :: class_name() :
-                return self :: TYPE_LINK_APPLICATION;
+            case LinkApplicationItem::class_name() :
+                return self::TYPE_LINK_APPLICATION;
                 break;
         }
     }
@@ -349,18 +349,18 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         if (! isset($this->titles))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_ITEM_ID),
+                new PropertyConditionVariable(ItemTitle::class_name(), ItemTitle::PROPERTY_ITEM_ID), 
                 new StaticConditionVariable($this->get_id()));
             $parameters = new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                array(new OrderBy(new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_SORT))));
-            $titles = DataManager :: retrieves(ItemTitle :: class_name(), $parameters);
-
+                $condition, 
+                null, 
+                null, 
+                array(new OrderBy(new PropertyConditionVariable(ItemTitle::class_name(), ItemTitle::PROPERTY_SORT))));
+            $titles = DataManager::retrieves(ItemTitle::class_name(), $parameters);
+            
             $this->titles = new ItemTitles($titles);
         }
-
+        
         return $this->titles;
     }
 
@@ -374,7 +374,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(Item :: class_name(), self :: PROPERTY_SORT);
+        return new PropertyConditionVariable(Item::class_name(), self::PROPERTY_SORT);
     }
 
     /*
@@ -382,6 +382,6 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(Item :: class_name(), self :: PROPERTY_PARENT));
+        return array(new PropertyConditionVariable(Item::class_name(), self::PROPERTY_PARENT));
     }
 }

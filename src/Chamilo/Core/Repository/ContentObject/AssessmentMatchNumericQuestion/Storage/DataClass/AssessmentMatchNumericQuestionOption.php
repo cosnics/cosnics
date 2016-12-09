@@ -69,19 +69,19 @@ class AssessmentMatchNumericQuestionOption
         $answer = floatval(str_replace(',', '.', $answer));
         $value = floatval(str_replace(',', '.', $this->get_value()));
         $tolerance = floatval(str_replace(',', '.', $this->get_tolerance()));
-
+        
         switch ($tolerance_type)
         {
             case AssessmentMatchNumericQuestion::TOLERANCE_TYPE_ABSOLUTE :
                 $min = $value - abs($tolerance);
                 $max = $value + abs($tolerance);
                 return $min <= $answer && $answer <= $max;
-
+            
             case AssessmentMatchNumericQuestion::TOLERANCE_TYPE_RELATIVE :
                 $min = $value - abs($value * $tolerance / 100);
                 $max = $value + abs($value * $tolerance / 100);
                 return $min <= $answer && $answer <= $max;
-
+            
             default :
                 throw new \Exception('Unknown tolerance type');
         }

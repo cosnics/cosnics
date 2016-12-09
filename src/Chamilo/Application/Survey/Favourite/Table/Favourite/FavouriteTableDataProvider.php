@@ -35,10 +35,10 @@ class FavouriteTableDataProvider extends PublicationTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getPublicationService()->getPublicationFavouritesByUser(
-            $this->getEntityService(),
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->getEntityService(), 
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -49,7 +49,7 @@ class FavouriteTableDataProvider extends PublicationTableDataProvider
     public function count_data($condition)
     {
         return $this->getPublicationService()->countPublicationFavouritesByUser(
-            $this->getEntityService(),
+            $this->getEntityService(), 
             $this->get_component()->get_user());
     }
 
@@ -63,7 +63,7 @@ class FavouriteTableDataProvider extends PublicationTableDataProvider
         {
             $this->entityService = new EntityService();
         }
-
+        
         return $this->entityService;
     }
 
@@ -77,7 +77,7 @@ class FavouriteTableDataProvider extends PublicationTableDataProvider
         {
             $this->publicationService = new PublicationService(new PublicationRepository());
         }
-
+        
         return $this->publicationService;
     }
 }

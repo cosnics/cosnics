@@ -1,35 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query\Condition;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 
 /**
  * Parent class for all abstract conditions used to retrieve objects from the storage layer
- *
+ * 
+ * @package Chamilo\Libraries\Storage\Query\Condition
  * @author Tim De Pauw
- * @author Hans De Bisschop
- * @package common.libraries
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Condition implements Hashable
+abstract class Condition extends ConditionPart
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getHashParts()
-    {
-        return array(static :: class_name());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return static :: context();
-    }
 }

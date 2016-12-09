@@ -41,20 +41,22 @@ class QuotaViewerComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
         
-        $selected_user_id = Request :: get(self :: PARAM_USER_USER_ID);
+        $selected_user_id = Request::get(self::PARAM_USER_USER_ID);
         if (! $selected_user_id)
         {
             $this->selected_user = $this->get_user();
         }
         else
         {
-            $this->selected_user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                User :: class_name(), 
+            $this->selected_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                User::class_name(), 
                 (int) $selected_user_id);
         }
         $this->calculator = new Calculator($this->selected_user);
@@ -64,10 +66,10 @@ class QuotaViewerComponent extends Manager
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer();
         
-        $html[] = '<h3>' . htmlentities(Translation :: get('UsedDiskSpace')) . '</h3>';
-        $html[] = Calculator :: getBar(
+        $html[] = '<h3>' . htmlentities(Translation::get('UsedDiskSpace')) . '</h3>';
+        $html[] = Calculator::getBar(
             $this->calculator->getUserDiskQuotaPercentage(), 
-            Filesystem :: format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' . Filesystem :: format_file_size(
+            Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' . Filesystem::format_file_size(
                 $this->calculator->getMaximumUserDiskQuota()));
         $html[] = '<div style="clear: both;">&nbsp;</div>';
         
@@ -83,13 +85,13 @@ class QuotaViewerComponent extends Manager
         
         $commonActions->addButton(
             new Button(
-                Translation :: get('EditUser'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                Translation::get('EditUser'), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_url(
                     array(
-                        Application :: PARAM_ACTION => self :: ACTION_UPDATE_USER, 
-                        self :: PARAM_USER_USER_ID => $this->selected_user->get_id())), 
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        Application::PARAM_ACTION => self::ACTION_UPDATE_USER, 
+                        self::PARAM_USER_USER_ID => $this->selected_user->get_id())), 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL));
         
         $buttonToolbar->addButtonGroup($commonActions);
         

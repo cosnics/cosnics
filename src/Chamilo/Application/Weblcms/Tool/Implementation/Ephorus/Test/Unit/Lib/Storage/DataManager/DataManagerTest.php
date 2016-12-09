@@ -49,8 +49,8 @@ class DataManagerTest extends Test
     {
         $mocked_object = $this->getMock('\application\weblcms\tool\ephorus\DataManager', array('retrieve'));
         
-        $mocked_object :: staticExpects($retrieve_expect)->method('retrieve');
+        $mocked_object::staticExpects($retrieve_expect)->method('retrieve');
         
-        $mocked_object :: retrieve_request_by_guid($guid);
+        $mocked_object::retrieve_request_by_guid($guid);
     }
 }

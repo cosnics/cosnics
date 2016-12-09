@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Table data provider for the schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -20,7 +20,7 @@ class SchemaTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
@@ -30,18 +30,18 @@ class SchemaTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-
-        return DataManager :: retrieves(Schema :: class_name(), $parameters);
+        
+        return DataManager::retrieves(Schema::class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return integer
      */
     public function count_data($condition)
     {
-        return DataManager :: count(Schema :: class_name(), $condition);
+        return DataManager::count(Schema::class_name(), $condition);
     }
 }

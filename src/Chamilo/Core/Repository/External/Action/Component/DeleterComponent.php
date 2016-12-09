@@ -9,7 +9,7 @@ class DeleterComponent extends Manager
 
     public function run()
     {
-        $id = Request :: get(\Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID);
+        $id = Request::get(\Chamilo\Core\Repository\External\Manager::PARAM_EXTERNAL_REPOSITORY_ID);
         $object = $this->delete_external_repository_object($id);
     }
 }

@@ -20,7 +20,7 @@ class InstanceTableColumnModel extends DataClassTableColumnModel implements Tabl
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(Instance :: class_name(), Instance :: PROPERTY_IMPLEMENTATION));
-        $this->add_column(new DataClassPropertyTableColumn(Instance :: class_name(), Instance :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION));
+        $this->add_column(new DataClassPropertyTableColumn(Instance::class_name(), Instance::PROPERTY_TITLE));
     }
 }

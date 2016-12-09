@@ -14,8 +14,8 @@ class UserFeedbackReportingBlock extends ReportingBlock
 
     public function __construct($parent, $user, $attempt)
     {
-        parent :: __construct($parent);
-
+        parent::__construct($parent);
+        
         $this->user = $user;
         $this->attempt = $attempt;
     }
@@ -28,7 +28,7 @@ class UserFeedbackReportingBlock extends ReportingBlock
     public function get_title()
     {
         $peer_assessment = $this->get_parent()->get_peer_assessment();
-        return Translation :: get('Feedback') . ' ' . $peer_assessment->get_title() . ' ' . $this->user->get_lastname() .
+        return Translation::get('Feedback') . ' ' . $peer_assessment->get_title() . ' ' . $this->user->get_lastname() .
              ' ' . $this->user->get_firstname() . ' ' . $this->attempt->get_title();
     }
 
@@ -41,12 +41,12 @@ class UserFeedbackReportingBlock extends ReportingBlock
     {
         return array(
 
-        \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 
     public function get_data_manager()
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
+        return \Chamilo\Core\Repository\Storage\DataManager::getInstance();
     }
 
     public function get_application()
@@ -57,14 +57,14 @@ class UserFeedbackReportingBlock extends ReportingBlock
     public function compose_data()
     {
         $reporting_data = new ReportingData();
-
-        $rows = array(Translation :: get('Feedback'));
+        
+        $rows = array(Translation::get('Feedback'));
         $reporting_data->set_rows($rows);
-
+        
         $feedback = $this->get_parent()->get_parent()->get_user_feedback_received(
-            $this->user->get_id(),
+            $this->user->get_id(), 
             $this->attempt->get_id());
-
+        
         foreach ($feedback as $user_id => $feedback_row)
         {
             if ($user_id == $this->user->get_id())
@@ -73,17 +73,17 @@ class UserFeedbackReportingBlock extends ReportingBlock
             }
             else
             {
-                $giver = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                $giver = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                     (int) $user_id);
             }
-
+            
             $user_title = $giver->get_firstname() . ' ' . $giver->get_lastname();
-
+            
             $reporting_data->add_category($user_title);
-            $reporting_data->add_data_category_row($user_title, Translation :: get('Feedback'), $feedback_row);
+            $reporting_data->add_data_category_row($user_title, Translation::get('Feedback'), $feedback_row);
         }
-
+        
         $reporting_data->hide_categories();
         return $reporting_data;
     }

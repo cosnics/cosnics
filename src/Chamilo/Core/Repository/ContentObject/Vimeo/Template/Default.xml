@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Vimeo">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Vimeo</translation>
-			<translation language="nl">Vimeo</translation>
-			<translation language="fr">Vimeo</translation>
-			<translation language="de">Vimeo</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Vimeo</translation>
+            <translation language="nl">Vimeo</translation>
+            <translation language="fr">Vimeo</translation>
+            <translation language="de">Vimeo</translation>
+        </variable>
+    </translations>
 </template>

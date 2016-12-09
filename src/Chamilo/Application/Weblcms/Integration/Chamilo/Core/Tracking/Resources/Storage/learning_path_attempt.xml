@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="learning_path_attempt">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" unsigned="1" notnull="1" />
-		<property name="course_id" type="integer" unsigned="1" notnull="1" />
-		<property name="learning_path_id" type="integer" unsigned="1" notnull="1" />
-		<property name="progress" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="learning_path_id">
-		<indexproperty name="learning_path_id" />
-	</index>
-	<index name="user_id">
-		<indexproperty name="user_id" />
-	</index>
-	<index name="course_id">
-		<indexproperty name="course_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="course_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="learning_path_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="progress"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="learning_path_id">
+        <indexproperty name="learning_path_id" />
+    </index>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="course_id">
+        <indexproperty name="course_id" />
+    </index>
 </object>

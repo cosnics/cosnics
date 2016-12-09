@@ -54,7 +54,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        
         return $this->get_url($parameters);
     }
 
@@ -66,47 +66,47 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-
+            
             $menu_items = array();
-
+            
             $line = array();
             $line['title'] = '';
             $line['class'] = 'divider';
-
+            
             // Basic list of all documents
             $all_items = array();
             $all_items['title'] = Translation::get('AllItems');
             $all_items['url'] = $this->get_url(array(self::PARAM_FOLDER => null));
             $all_items['class'] = 'home';
             $menu_items[] = $all_items;
-
+            
             // Special lists of documents
             $owned = array();
-
+            
             $shared = array();
             $shared['title'] = Translation::get('SharedWithMe');
             $shared['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_SHARED));
             $shared['class'] = 'external_repository';
             $menu_items[] = $shared;
-
+            
             $recent = array();
             $recent['title'] = Translation::get('Recent');
             $recent['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_RECENT));
             $recent['class'] = 'recent';
             $menu_items[] = $recent;
-
+            
             $followed = array();
             $followed['title'] = Translation::get('Followed');
             $followed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_FOLLOWED));
             $followed['class'] = 'followed';
             $menu_items[] = $followed;
-
+            
             $trashed = array();
             $trashed['title'] = Translation::get('Trash');
             $trashed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_TRASH));
             $trashed['class'] = 'trash';
             $menu_items[] = $trashed;
-
+            
             return $menu_items;
         }
         else
@@ -120,7 +120,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         if (! isset($this->categoryTreeMenu))
         {
             $this->categoryTreeMenu = new CategoryTreeMenu(
-                $this->get_external_repository_manager_connector(),
+                $this->get_external_repository_manager_connector(), 
                 $this->get_menu_items());
         }
         return $this->categoryTreeMenu;
@@ -137,7 +137,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             $actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
         }
-
+        
         if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $actions[] = self::ACTION_LOGIN;
@@ -156,18 +156,18 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $document_conditions = array();
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
-            '*.doc',
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+            '*.doc', 
             File::get_type_name());
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
-            '*.xls',
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+            '*.xls', 
             File::get_type_name());
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
-            '*.ppt',
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+            '*.ppt', 
             File::get_type_name());
-
+        
         return new OrCondition($document_conditions);
     }
 
@@ -183,9 +183,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             unset($actions[Manager::ACTION_IMPORT_EXTERNAL_REPOSITORY]);
             $export_types = $object->get_export_types();
-
+            
             $mimeTypeExtensionParser = new MimeTypeExtensionParser();
-
+            
             foreach ($export_types as $export_type)
             {
                 $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_type);
@@ -193,24 +193,24 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 {
                     continue;
                 }
-
+                
                 $camelizedExportTypeExtension = StringUtilities::getInstance()->createString($exportTypeExtension)->upperCamelize();
-
+                
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
-                        'ImportAs',
-                        array('TYPE' => $exportTypeExtension),
-                        self::context()),
-                    Theme::getInstance()->getFileExtension($camelizedExportTypeExtension),
+                        'ImportAs', 
+                        array('TYPE' => $exportTypeExtension), 
+                        self::context()), 
+                    Theme::getInstance()->getFileExtension($camelizedExportTypeExtension), 
                     $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,
-                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),
-                            self::PARAM_EXPORT_FORMAT => $export_type)),
+                            self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY, 
+                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(), 
+                            self::PARAM_EXPORT_FORMAT => $export_type)), 
                     ToolbarItem::DISPLAY_ICON);
             }
         }
-
+        
         return $actions;
     }
 

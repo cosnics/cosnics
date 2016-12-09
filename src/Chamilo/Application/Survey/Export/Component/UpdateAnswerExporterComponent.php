@@ -23,42 +23,42 @@ class UpdateAnswerExporterComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-
+        $publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
+        
         $this->update_tracker_data($publication_id);
     }
 
     public function update_tracker_data($publication_id)
     {
-        $condition = new EqualityCondition(Answer :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $condition = new EqualityCondition(Answer::PROPERTY_PUBLICATION_ID, $publication_id);
         // $trackers = Tracker :: get_data(Answer :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
-
+        
         $question_types = array();
         $answer_count = 0;
         $count = 0;
-
+        
         // while ($tracker = $trackers->next_result())
         // {
-
+        
         // $count ++;
         // if ($count > 10000)
         // {
         // break;
         // }
-
+        
         // $complex_question_id = $tracker->get_question_cid();
         // $object = $this->get_question($complex_question_id);
-
+        
         // $type = $object->get_type();
-
+        
         // switch ($type)
         // {
         // case SurveyMultipleChoiceQuestion :: get_type_name() :
         // $id = $object->get_id();
         // $options = $this->get_options($complex_question_id);
-
+        
         // // dump($options);
-
+        
         // $answer = $tracker->get_answer();
         // // dump("multioldanswer ".$id);
         // // dump($answer);
@@ -79,26 +79,26 @@ class UpdateAnswerExporterComponent extends Manager
         // }
         // // dump("new answer");
         // // dump($new_answer);
-
+        
         // // $tracker->set_answer($new_answer);
         // // $tracker->update();
         // break;
-
+        
         // case SurveyMatrixQuestion :: get_type_name() :
-
+        
         // $id = $object->get_id();
         // $options = $this->get_options($complex_question_id);
-
+        
         // $matches = $this->get_matches($complex_question_id);
-
+        
         // $answer = $tracker->get_answer();
-
+        
         // foreach ($answer as $key => $option)
         // {
         // foreach ($option as $match_key => $match)
         // {
         // $n_answer = array();
-
+        
         // if ($object->get_matrix_type() == SurveyMatrixQuestion :: MATRIX_TYPE_CHECKBOX)
         // {
         // $option_id = $options[$key];
@@ -113,11 +113,11 @@ class UpdateAnswerExporterComponent extends Manager
         // $new_answer[] = $n_answer;
         // }
         // }
-
+        
         // // $tracker->set_answer($new_answer);
         // // $tracker->update();
         // break;
-
+        
         // case SurveySelectQuestion :: get_type_name() :
         // $id = $object->get_id();
         // $options = $this->get_options($complex_question_id);
@@ -137,20 +137,20 @@ class UpdateAnswerExporterComponent extends Manager
         // }
         // $new_answer[] = $option_id;
         // }
-
+        
         // // dump("new answer");
         // // dump($new_answer);
-
+        
         // // $tracker->set_answer($new_answer);
         // // $tracker->update();
         // break;
-
+        
         // case SurveyMatchingQuestion :: get_type_name() :
         // // to implement
         // $id = $object->get_id();
         // $question_types[4][$id] = $answer_count ++;
         // break;
-
+        
         // case SurveyOpenQuestion :: get_type_name() :
         // $id = $object->get_id();
         // $answer = $tracker->get_answer();
@@ -163,9 +163,9 @@ class UpdateAnswerExporterComponent extends Manager
         // $text = strip_tags($answer[$complex_question_id . '_' . '0']);
         // }
         // break;
-
+        
         // case SurveyRatingQuestion :: get_type_name() :
-
+        
         // // to implement
         // $id = $object->get_id();
         // $question_types[6][$id] = $answer_count ++;
@@ -178,8 +178,8 @@ class UpdateAnswerExporterComponent extends Manager
     {
         if (! isset($this->questions_cache) || ! isset($this->questions_cache[$complex_id]))
         {
-            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ComplexContentObjectItem :: class_name(),
+            $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class_name(), 
                 $complex_id);
             $this->questions_cache[$complex_id] = $complex_question->get_ref_object();
         }
@@ -196,12 +196,12 @@ class UpdateAnswerExporterComponent extends Manager
             while ($option = $options->next_result())
             {
                 $opts[$option->get_display_order()] = $option->get_id();
-
+                
                 // $opts[$option->get_id()] = $option->get_id();
             }
             $this->options_cache[$complex_id] = $opts;
         }
-
+        
         return $this->options_cache[$complex_id];
     }
 
@@ -215,12 +215,12 @@ class UpdateAnswerExporterComponent extends Manager
             while ($match = $matches->next_result())
             {
                 $mats[$match->get_display_order()] = $match->get_id();
-
+                
                 // $mats[$match->get_id()] = $match->get_id();
             }
             $this->matches_cache[$complex_id] = $mats;
         }
-
+        
         return $this->matches_cache[$complex_id];
     }
 }

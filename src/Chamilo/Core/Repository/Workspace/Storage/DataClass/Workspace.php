@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Workspace extends DataClass implements WorkspaceInterface
 {
     const WORKSPACE_TYPE = 2;
-
+    
     // Properties
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
@@ -39,12 +39,12 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_NAME,
-                self :: PROPERTY_DESCRIPTION,
-                self :: PROPERTY_CREATOR_ID,
-                self :: PROPERTY_CREATION_DATE));
+                self::PROPERTY_NAME, 
+                self::PROPERTY_DESCRIPTION, 
+                self::PROPERTY_CREATOR_ID, 
+                self::PROPERTY_CREATION_DATE));
     }
 
     /**
@@ -53,7 +53,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getName()
     {
-        return $this->get_default_property(self :: PROPERTY_NAME);
+        return $this->get_default_property(self::PROPERTY_NAME);
     }
 
     /**
@@ -62,7 +62,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setName($name)
     {
-        $this->set_default_property(self :: PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -71,7 +71,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getDescription()
     {
-        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -80,7 +80,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setDescription($description)
     {
-        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -89,7 +89,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getCreatorId()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATOR_ID);
+        return $this->get_default_property(self::PROPERTY_CREATOR_ID);
     }
 
     /**
@@ -100,9 +100,9 @@ class Workspace extends DataClass implements WorkspaceInterface
     {
         if (! isset($this->creator))
         {
-            $this->creator = DataManager :: retrieve_by_id(User :: class_name(), $this->getCreatorId());
+            $this->creator = DataManager::retrieve_by_id(User::class_name(), $this->getCreatorId());
         }
-
+        
         return $this->creator;
     }
 
@@ -112,7 +112,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setCreatorId($creatorId)
     {
-        $this->set_default_property(self :: PROPERTY_CREATOR_ID, $creatorId);
+        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creatorId);
     }
 
     /**
@@ -121,7 +121,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getCreationDate()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATION_DATE);
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -130,7 +130,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setCreationDate($creationDate)
     {
-        $this->set_default_property(self :: PROPERTY_CREATION_DATE, $creationDate);
+        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 
     /**
@@ -140,25 +140,25 @@ class Workspace extends DataClass implements WorkspaceInterface
     public function get_dependencies()
     {
         return array(
-            WorkspaceEntityRelation :: class_name() => new EqualityCondition(
+            WorkspaceEntityRelation::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation :: class_name(),
-                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
-                new StaticConditionVariable($this->getId())),
-            WorkspaceContentObjectRelation :: class_name() => new EqualityCondition(
+                    WorkspaceEntityRelation::class_name(), 
+                    WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID), 
+                new StaticConditionVariable($this->getId())), 
+            WorkspaceContentObjectRelation::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceContentObjectRelation :: class_name(),
-                    WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
-                new StaticConditionVariable($this->getId())),
-            WorkspaceCategoryRelation :: class_name() => new EqualityCondition(
+                    WorkspaceContentObjectRelation::class_name(), 
+                    WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
+                new StaticConditionVariable($this->getId())), 
+            WorkspaceCategoryRelation::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceCategoryRelation :: class_name(),
-                    WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID),
-                new StaticConditionVariable($this->getId())),
-            WorkspaceUserFavourite :: class_name() => new EqualityCondition(
+                    WorkspaceCategoryRelation::class_name(), 
+                    WorkspaceCategoryRelation::PROPERTY_WORKSPACE_ID), 
+                new StaticConditionVariable($this->getId())), 
+            WorkspaceUserFavourite::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceUserFavourite :: class_name(),
-                    WorkspaceUserFavourite :: PROPERTY_WORKSPACE_ID),
+                    WorkspaceUserFavourite::class_name(), 
+                    WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())));
     }
 
@@ -167,7 +167,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getWorkspaceType()
     {
-        return self :: WORKSPACE_TYPE;
+        return self::WORKSPACE_TYPE;
     }
 
     /*

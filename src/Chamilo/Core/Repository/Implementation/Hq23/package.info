@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>23</name>
-		<code>Hq23</code>
-		<type>Chamilo\Core\Repository\Implementation</type>
-		<context>Chamilo\Core\Repository\Implementation\Hq23</context>
-		<category>Image</category>
-		<authors>
-			<author>
-				<name>Magali Gillard</name>
-				<email>magali.gillard@ehb.be</email>
-				<company>Erasmushogeschool Brussel</company>
-			</author>
-		</authors>
-		<version>5.0.0</version>
-		<description>The mission of 23 Photo Sharing is simple: to give every individual in the world a tool to share,
-			annotate and archive their life experiences through photos - and to allow them connect and stay in touch with their
-			friends, relatives and contacts. 23 allows everyone to easily share, archive and organize their photos for free.
-		</description>
-		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Core\Repository</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
-		</pre-depends>
-	</package>
+    <package>
+        <name>23</name>
+        <code>Hq23</code>
+        <type>Chamilo\Core\Repository\Implementation</type>
+        <context>Chamilo\Core\Repository\Implementation\Hq23</context>
+        <category>Image</category>
+        <authors>
+            <author>
+                <name>Magali Gillard</name>
+                <email>magali.gillard@ehb.be</email>
+                <company>Erasmushogeschool Brussel</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description>The mission of 23 Photo Sharing is simple: to give every individual in the world a tool to share,
+            annotate and archive their life experiences through photos - and to allow them connect and stay in touch with their
+            friends, relatives and contacts. 23 allows everyone to easily share, archive and organize their photos for free.
+        </description>
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+    </package>
 </packages>

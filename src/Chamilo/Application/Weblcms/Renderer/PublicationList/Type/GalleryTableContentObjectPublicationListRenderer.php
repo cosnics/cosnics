@@ -10,11 +10,11 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Renderer to display a sortable table with learning object publications.
- *
+ * 
  * @author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements
+class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements 
     TableSupport
 {
 
@@ -26,7 +26,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
 
     /**
      * Returns the HTML output of this renderer.
-     *
+     * 
      * @return string The HTML output
      */
     public function as_html()
@@ -39,7 +39,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
         {
             $table = new ObjectPublicationGalleryTable($this);
         }
-
+        
         return $table->as_html();
     }
 
@@ -52,7 +52,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
 
     /**
      * Returns the parameters that the table needs for the url building
-     *
+     * 
      * @return string[]
      */
     public function get_parameters()
@@ -62,7 +62,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition

@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="calendar_event">
-	<properties>
-		<property name="location" type="text" length="250" />
-		<property name="id" type="integer" unsigned="1" notnull="1" />
-		<property name="start_date" type="integer" unsigned="1" notnull="1" />
-		<property name="end_date" type="integer" unsigned="1" notnull="1" />
-		<property name="until" type="integer" unsigned="1" />
-		<property name="frequency" type="integer" length="1" unsigned="1" notnull="1" />
-		<property name="frequency_count" type="integer" unsigned="1" />
-		<property name="frequency_interval" type="integer" unsigned="1" />
-		<property name="byday" type="text" length="50" />
-		<property name="bymonthday" type="text" unsigned="1" length="100" />
-		<property name="bymonth" type="text" unsigned="1" length="50" />
-	</properties>
-	<index name="id" type="primary">
-		<indexproperty name="id" />
-	</index>
+    <properties>
+        <property
+            name="location"
+            type="text"
+            length="250" />
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="start_date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="end_date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="until"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="frequency"
+            type="integer"
+            length="1"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="frequency_count"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="frequency_interval"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="byday"
+            type="text"
+            length="50" />
+        <property
+            name="bymonthday"
+            type="text"
+            unsigned="1"
+            length="100" />
+        <property
+            name="bymonth"
+            type="text"
+            unsigned="1"
+            length="50" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
 </object>

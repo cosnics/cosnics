@@ -1,91 +1,92 @@
 <!DOCTYPE html>
 <html debug="true">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>HTML5 MediaElement</title>	
-	
-	<script src="firebug-lite/build/firebug-lite.js"></script>
-	
-	<script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>HTML5 MediaElement</title>
+
+<script src="firebug-lite/build/firebug-lite.js"></script>
+
+<script>
 	if (typeof window.console == 'undefined') {
 		window.console = {log:function() {}};
 	}	
 	</script>
-	
-	<script src="../build/jquery.js"></script>
-	
-	<script src="../src/js/me-namespace.js" type="text/javascript"></script>
-	<script src="../src/js/me-utility.js" type="text/javascript"></script>
-	<script src="../src/js/me-i18n.js" type="text/javascript"></script>
-	<script src="../src/js/me-plugindetector.js" type="text/javascript"></script>
-	<script src="../src/js/me-featuredetection.js" type="text/javascript"></script>
-	<script src="../src/js/me-mediaelements.js" type="text/javascript"></script>
-	<script src="../src/js/me-shim.js" type="text/javascript"></script>
-	
-	<script src="../src/js/mep-library.js" type="text/javascript"></script>
-	<script src="../src/js/mep-player.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-playpause.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-progress.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-time.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-speed.js" type="text/javascript"></script>	
-	<script src="../src/js/mep-feature-tracks.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-volume.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-stop.js" type="text/javascript"></script>
-	<script src="../src/js/mep-feature-fullscreen.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="../src/css/mediaelementplayer.css" />
-	<link rel="stylesheet" href="../src/css/mejs-skins.css" />	
-		
-	<style>
-	#container{
-		width: 700px;
-		margin: 20px auto;
-	}
-	
-	#video-container {
-		-sdisplay: none;
-		
-	}
-	</style>
+
+<script src="../build/jquery.js"></script>
+
+<script src="../src/js/me-namespace.js" type="text/javascript"></script>
+<script src="../src/js/me-utility.js" type="text/javascript"></script>
+<script src="../src/js/me-i18n.js" type="text/javascript"></script>
+<script src="../src/js/me-plugindetector.js" type="text/javascript"></script>
+<script src="../src/js/me-featuredetection.js" type="text/javascript"></script>
+<script src="../src/js/me-mediaelements.js" type="text/javascript"></script>
+<script src="../src/js/me-shim.js" type="text/javascript"></script>
+
+<script src="../src/js/mep-library.js" type="text/javascript"></script>
+<script src="../src/js/mep-player.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-playpause.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-progress.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-time.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-speed.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-tracks.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-volume.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-stop.js" type="text/javascript"></script>
+<script src="../src/js/mep-feature-fullscreen.js" type="text/javascript"></script>
+<link rel="stylesheet" href="../src/css/mediaelementplayer.css" />
+<link rel="stylesheet" href="../src/css/mejs-skins.css" />
+
+<style>
+#container {
+	width: 700px;
+	margin: 20px auto;
+}
+
+#video-container {
+	-sdisplay: none;
+}
+</style>
 </head>
 <body>
 
-<div id="container">
+    <div id="container">
 
-<h1>MediaElementPlayer.js</h1>
+        <h1>MediaElementPlayer.js</h1>
 
-<p>Recommended Setup</p>
+        <p>Recommended Setup</p>
 
-<form>
-
-
-<h2>MP3 audio (as src)</h2>
-
-<audio id="player2" src="../media/test.mp3" preload="none" type="audio/mp3" controls="controls">
-	<p>Your browser leaves much to be desired.</p>			
-</audio>
-
-<span id="audio-mode"></span>
-
-<h2>MP4/WebM</h2>
+        <form>
 
 
+            <h2>MP3 audio (as src)</h2>
 
-<div id="video-container">
+            <audio id="player2" src="../media/test.mp3" preload="none" type="audio/mp3" controls="controls">
+                <p>Your browser leaves much to be desired.</p>
+            </audio>
 
-	<video width="640" height="360" id="player1" controls="controls" preload="none" poster="../media/echo-hereweare.jpg">
-	
-		<source src="../media/echo-hereweare.mp4"  type="video/mp4" /> 	
-			
-		<track kind="subtitles" src="../media/mediaelement.srt" srclang="en"  ></track>
-		
-	</video>
+            <span id="audio-mode"></span>
 
-</div>
+            <h2>MP4/WebM</h2>
 
-<input id="showit" type="button" value="show it"  /><br>
 
-<script>
+
+            <div id="video-container">
+
+                <video width="640" height="360" id="player1" controls="controls" preload="none"
+                    poster="../media/echo-hereweare.jpg">
+
+                    <source src="../media/echo-hereweare.mp4" type="video/mp4" />
+
+                    <track kind="subtitles" src="../media/mediaelement.srt" srclang="en"></track>
+
+                </video>
+
+            </div>
+
+            <input id="showit" type="button" value="show it" />
+            <br>
+
+            <script>
 $('#showit').on('click', function() {
 	if ($('#video-container').is(':visible')) {
 		$('#video-container').hide();
@@ -98,38 +99,40 @@ $('#showit').on('click', function() {
 </script>
 
 
-<span id="video-mode"></span>
-<div style="min-height: 400px">
-<div id="video-events"></div>
-<div id="video-props"></div>
-</div>
+            <span id="video-mode"></span>
+            <div style="min-height: 400px">
+                <div id="video-events"></div>
+                <div id="video-props"></div>
+            </div>
 
-<video width="640" height="360" id="player2" controls="controls"  preload="none" poster="../media/big_buck_bunny.jpg">
-	<!--
+            <video width="640" height="360" id="player2" controls="controls" preload="none"
+                poster="../media/big_buck_bunny.jpg">
+                <!--
 	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
 	-->
-	
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-</video>
+
+                <source src="../media/big_buck_bunny.mp4" type="video/mp4" />
+            </video>
 
 
-<br>
+            <br>
 
-<video width="640" height="360" id="player3" controls="controls" preload="none" poster="../media/big_buck_bunny.jpg">
-	<!--
+            <video width="640" height="360" id="player3" controls="controls" preload="none"
+                poster="../media/big_buck_bunny.jpg">
+                <!--
 	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
 	-->
-	
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-</video>
+
+                <source src="../media/big_buck_bunny.mp4" type="video/mp4" />
+            </video>
 
 
-</form>
+        </form>
 
-</div>
+    </div>
 
 
-<script>
+    <script>
 function appendMediaEvents($node, media) {
 	var 
 		mediaEventNames = 'loadstart progress suspend abort error emptied stalled play pause loadedmetadata loadeddata waiting playing canplay canplaythrough seeking seeked timeupdate ended ratechange durationchange volumechange'.split(' ');
@@ -222,7 +225,7 @@ function appendMediaProperties($node, media) {
 </script>
 
 
-<script  type="text/javascript">
+    <script type="text/javascript">
 $('audio, video').bind('error', function(e) {
 
 	//console.log('error',this, e, this.src, this.error.code);

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents the datamanager for this tool
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
@@ -18,7 +18,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Retrieves a request by a given guid
-     *
+     * 
      * @param string $guid
      *
      * @throws \InvalidArgumentException
@@ -31,17 +31,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             throw new \InvalidArgumentException('A valid guid is required to retrieve a request by guid');
         }
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID),
+            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_GUID), 
             new StaticConditionVariable($guid));
-
-        return static :: retrieve(Request :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return static::retrieve(Request::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieves a request by a given id
-     *
+     * 
      * @param string $id
      *
      * @throws \InvalidArgumentException
@@ -54,11 +54,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             throw new \InvalidArgumentException('A valid id is required to retrieve a request by id');
         }
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_ID),
+            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_ID), 
             new StaticConditionVariable($id));
-
-        return static :: retrieve(Request :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return static::retrieve(Request::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

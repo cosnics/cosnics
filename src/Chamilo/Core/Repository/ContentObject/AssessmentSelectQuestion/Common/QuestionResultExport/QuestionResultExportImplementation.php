@@ -25,7 +25,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         $new_answer = array();
         switch ($question->get_answer_type())
         {
-            case AssessmentSelectQuestion :: ANSWER_TYPE_CHECKBOX :
+            case AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX :
                 if (! is_null($answer))
                 {
                     foreach ($answer[0] as $answer_part)
@@ -38,7 +38,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
                     $new_answer[] = '';
                 }
                 break;
-            case AssessmentSelectQuestion :: ANSWER_TYPE_RADIO :
+            case AssessmentSelectQuestion::ANSWER_TYPE_RADIO :
                 if (! is_null($options[$answer[0]]))
                 {
                     $new_answer[] = $options[$answer[0]]->get_value();

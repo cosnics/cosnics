@@ -29,13 +29,13 @@ class Page
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\Header
+     * @var \Chamilo\Libraries\Format\Structure\HeaderInterface
      */
     private $header;
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\Footer
+     * @var \Chamilo\Libraries\Format\Structure\FooterInterface
      */
     private $footer;
 
@@ -58,27 +58,29 @@ class Page
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
             $header = new Header(
-                self :: VIEW_MODE_FULL,
+                self::VIEW_MODE_FULL,
                 'container-fluid',
-                Translation :: getInstance()->getLanguageIsocode(),
+                Translation::getInstance()->getLanguageIsocode(),
                 'ltr');
-            $footer = new Footer(self :: VIEW_MODE_FULL);
+            $footer = new Footer(self::VIEW_MODE_FULL);
 
-            self :: $instance = new static(self :: VIEW_MODE_FULL, 'container-fluid', $header, $footer);
+            self::$instance = new static(self::VIEW_MODE_FULL, 'container-fluid', $header, $footer);
         }
 
-        return static :: $instance;
+        return static::$instance;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $viewMode
+     * @param string $viewMode
+     * @param string $containerMode
+     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
+     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
      */
-    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', Header $header, Footer $footer)
+    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', HeaderInterface $header, FooterInterface $footer)
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
@@ -134,7 +136,7 @@ class Page
      */
     public function isHeaderless()
     {
-        return $this->getViewMode() == self :: VIEW_MODE_HEADERLESS;
+        return $this->getViewMode() == self::VIEW_MODE_HEADERLESS;
     }
 
     /**
@@ -143,7 +145,7 @@ class Page
      */
     public function isFullPage()
     {
-        return $this->getViewMode() == self :: VIEW_MODE_FULL;
+        return $this->getViewMode() == self::VIEW_MODE_FULL;
     }
 
     /**
@@ -169,7 +171,16 @@ class Page
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\Header
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->getHeader()->setTitle($title);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\HeaderInterface
      */
     public function getHeader()
     {
@@ -178,7 +189,7 @@ class Page
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\Header $header
+     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
      */
     public function setHeader($header)
     {
@@ -187,7 +198,7 @@ class Page
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\Footer
+     * @return \Chamilo\Libraries\Format\Structure\FooterInterface
      */
     public function getFooter()
     {
@@ -196,7 +207,7 @@ class Page
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\Footer $footer
+     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
      */
     public function setFooter($footer)
     {

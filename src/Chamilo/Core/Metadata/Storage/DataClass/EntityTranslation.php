@@ -37,12 +37,12 @@ class EntityTranslation extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self :: PROPERTY_ENTITY_ID;
-        $extended_property_names[] = self :: PROPERTY_ISOCODE;
-        $extended_property_names[] = self :: PROPERTY_VALUE;
+        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
+        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
+        $extended_property_names[] = self::PROPERTY_ISOCODE;
+        $extended_property_names[] = self::PROPERTY_VALUE;
         
-        return parent :: get_default_property_names($extended_property_names);
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -57,7 +57,7 @@ class EntityTranslation extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -66,7 +66,7 @@ class EntityTranslation extends DataClass
      */
     public function set_entity_type($entityType)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -75,7 +75,7 @@ class EntityTranslation extends DataClass
      */
     public function get_entity_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -84,7 +84,7 @@ class EntityTranslation extends DataClass
      */
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entity_id);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
     /**
@@ -94,7 +94,7 @@ class EntityTranslation extends DataClass
      */
     public function get_isocode()
     {
-        return $this->get_default_property(self :: PROPERTY_ISOCODE);
+        return $this->get_default_property(self::PROPERTY_ISOCODE);
     }
 
     /**
@@ -104,7 +104,7 @@ class EntityTranslation extends DataClass
      */
     public function set_isocode($isocode)
     {
-        $this->set_default_property(self :: PROPERTY_ISOCODE, $isocode);
+        $this->set_default_property(self::PROPERTY_ISOCODE, $isocode);
     }
 
     /**
@@ -113,7 +113,7 @@ class EntityTranslation extends DataClass
      */
     public function get_value()
     {
-        return $this->get_default_property(self :: PROPERTY_VALUE);
+        return $this->get_default_property(self::PROPERTY_VALUE);
     }
 
     /**
@@ -122,6 +122,6 @@ class EntityTranslation extends DataClass
      */
     public function set_value($value)
     {
-        $this->set_default_property(self :: PROPERTY_VALUE, $value);
+        $this->set_default_property(self::PROPERTY_VALUE, $value);
     }
 }

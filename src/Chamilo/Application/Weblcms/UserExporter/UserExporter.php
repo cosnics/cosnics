@@ -89,26 +89,26 @@ class UserExporter
     {
         $user_export_headers = array();
         
-        $user_export_headers[User :: PROPERTY_OFFICIAL_CODE] = Translation :: get(
+        $user_export_headers[User::PROPERTY_OFFICIAL_CODE] = Translation::get(
             'OfficialCode', 
             null, 
-            \Chamilo\Core\User\Manager :: context());
-        $user_export_headers[User :: PROPERTY_USERNAME] = Translation :: get(
+            \Chamilo\Core\User\Manager::context());
+        $user_export_headers[User::PROPERTY_USERNAME] = Translation::get(
             'Username', 
             null, 
-            \Chamilo\Core\User\Manager :: context());
-        $user_export_headers[User :: PROPERTY_LASTNAME] = Translation :: get(
+            \Chamilo\Core\User\Manager::context());
+        $user_export_headers[User::PROPERTY_LASTNAME] = Translation::get(
             'Lastname', 
             null, 
-            \Chamilo\Core\User\Manager :: context());
-        $user_export_headers[User :: PROPERTY_FIRSTNAME] = Translation :: get(
+            \Chamilo\Core\User\Manager::context());
+        $user_export_headers[User::PROPERTY_FIRSTNAME] = Translation::get(
             'Firstname', 
             null, 
-            \Chamilo\Core\User\Manager :: context());
-        $user_export_headers[User :: PROPERTY_EMAIL] = Translation :: get(
+            \Chamilo\Core\User\Manager::context());
+        $user_export_headers[User::PROPERTY_EMAIL] = Translation::get(
             'Email', 
             null, 
-            \Chamilo\Core\User\Manager :: context());
+            \Chamilo\Core\User\Manager::context());
         
         $this->add_additional_headers($user_export_headers);
         
@@ -123,11 +123,11 @@ class UserExporter
             
             $user_export_data = array();
             
-            $user_export_data[User :: PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
-            $user_export_data[User :: PROPERTY_USERNAME] = $user->get_username();
-            $user_export_data[User :: PROPERTY_LASTNAME] = $user->get_lastname();
-            $user_export_data[User :: PROPERTY_FIRSTNAME] = $user->get_firstname();
-            $user_export_data[User :: PROPERTY_EMAIL] = $user->get_email();
+            $user_export_data[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
+            $user_export_data[User::PROPERTY_USERNAME] = $user->get_username();
+            $user_export_data[User::PROPERTY_LASTNAME] = $user->get_lastname();
+            $user_export_data[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
+            $user_export_data[User::PROPERTY_EMAIL] = $user->get_email();
             
             $this->add_additional_user_data($user_export_data, $user);
             

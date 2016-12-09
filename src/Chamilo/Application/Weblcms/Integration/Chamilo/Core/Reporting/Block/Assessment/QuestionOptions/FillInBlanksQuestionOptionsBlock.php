@@ -25,11 +25,11 @@ class FillInBlanksQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
         
         $reporting_data->set_rows(
             array(
-                Translation :: get('Sequence'), 
-                Translation :: get('Answer'), 
-                Translation :: get('Correct'), 
-                Translation :: get('TimesChosen'), 
-                Translation :: get('DifficultyIndex')));
+                Translation::get('Sequence'), 
+                Translation::get('Answer'), 
+                Translation::get('Correct'), 
+                Translation::get('TimesChosen'), 
+                Translation::get('DifficultyIndex')));
         
         $question = $this->get_question();
         $options = $question->get_answers();
@@ -49,7 +49,7 @@ class FillInBlanksQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
                 $answers_count[$option_index][$option->get_value()], 
                 $total_attempts);
             
-            $reporting_data->add_data_category_row($row_count, Translation :: get('Sequence'), $option_index + 1);
+            $reporting_data->add_data_category_row($row_count, Translation::get('Sequence'), $option_index + 1);
             
             $row_count ++;
         }

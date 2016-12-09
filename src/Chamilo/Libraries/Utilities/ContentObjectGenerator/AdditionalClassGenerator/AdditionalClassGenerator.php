@@ -71,7 +71,7 @@ class AdditionalClassGenerator
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -84,10 +84,10 @@ class AdditionalClassGenerator
         {
             $template->set_filenames(array('data_class_display' => 'data_class_display.template'));
             
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             
             $description = 'This class can be used to display ' .
-                 (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
+                 (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
             
             $template->assign_vars(
                 array(
@@ -97,8 +97,7 @@ class AdditionalClassGenerator
                     'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('data_class_display') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('data_class_display') . "?>";
             fwrite($file, $string);
             fclose($file);
         }
@@ -115,7 +114,7 @@ namespace libraries\utilities;\n" .
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -128,9 +127,9 @@ namespace libraries\utilities;\n" .
         {
             $template->set_filenames(array('data_class_difference' => 'data_class_difference.template'));
             
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             $description = 'This class can be used to get the difference between ' .
-                 (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
+                 (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
             
             $template->assign_vars(
                 array(
@@ -140,8 +139,7 @@ namespace libraries\utilities;\n" .
                     'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('data_class_difference') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('data_class_difference') . "?>";
             fwrite($file, $string);
             fclose($file);
         }
@@ -158,7 +156,7 @@ namespace libraries\utilities;\n" .
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -171,9 +169,9 @@ namespace libraries\utilities;\n" .
         {
             $template->set_filenames(array('data_class_difference_display' => 'data_class_difference_display.template'));
             
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             $description = 'This class can be used to display the difference between ' .
-                 (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
+                 (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->humanize() . 's';
             
             $template->assign_vars(
                 array(
@@ -183,8 +181,7 @@ namespace libraries\utilities;\n" .
                     'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('data_class_difference_display') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('data_class_difference_display') . "?>";
             fwrite($file, $string);
             fclose($file);
         }
@@ -201,7 +198,7 @@ namespace libraries\utilities;\n" .
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -213,13 +210,12 @@ namespace libraries\utilities;\n" .
         if ($file)
         {
             $template->set_filenames(array('complex_data_class' => 'complex_data_class.template'));
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             $template->assign_vars(
                 array('TYPE' => $this->xml_definition['name'], 'AUTHOR' => $this->author, 'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('complex_data_class') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('complex_data_class') . "?>";
             fwrite($file, $string);
             fclose($file);
         }
@@ -236,7 +232,7 @@ namespace libraries\utilities;\n" .
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -248,13 +244,12 @@ namespace libraries\utilities;\n" .
         if ($file)
         {
             $template->set_filenames(array('complex_data_class_form' => 'complex_data_class_form.template'));
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             $template->assign_vars(
                 array('TYPE' => $this->xml_definition['name'], 'AUTHOR' => $this->author, 'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('complex_data_class_form') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('complex_data_class_form') . "?>";
             fwrite($file, $string);
             fclose($file);
         }
@@ -267,7 +262,7 @@ namespace libraries\utilities;\n" .
         $template = new MyTemplate();
         $template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'] . '/install';
+        $location = Path::get_repository_path() . 'lib/content_object/' . $this->xml_definition['name'] . '/install';
         
         if (! is_dir($location))
         {
@@ -279,9 +274,9 @@ namespace libraries\utilities;\n" .
         if ($file)
         {
             $template->set_filenames(array('data_class_installer' => 'data_class_installer.template'));
-            $classname = (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->upperCamelize();
             $description = 'This class is used to install the ' .
-                 (string) StringUtilities :: getInstance()->createString($this->xml_definition['name'])->humanize() .
+                 (string) StringUtilities::getInstance()->createString($this->xml_definition['name'])->humanize() .
                  ' content object';
             
             $template->assign_vars(
@@ -292,8 +287,7 @@ namespace libraries\utilities;\n" .
                     'OBJECT_CLASS' => $classname));
             
             $string = "<?php
-namespace libraries\utilities;\n" .
-                 $template->pparse_return('data_class_installer') . "?>";
+namespace libraries\utilities;\n" . $template->pparse_return('data_class_installer') . "?>";
             fwrite($file, $string);
             fclose($file);
         }

@@ -24,7 +24,7 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
  * $Id: content_object_publication_category_tree.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.browser
  */
 /**
@@ -48,7 +48,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
     /**
      * Create a new category tree
-     *
+     * 
      * @param $browser PublicationBrowser The browser to associate this category tree with.
      * @param $tree_id string An id for the tree
      */
@@ -58,7 +58,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         $this->tree_id = $tree_id;
         $this->url_params = $url_params;
         $menu = $this->get_menu_items();
-        parent :: __construct($menu);
+        parent::__construct($menu);
         $this->forceCurrentUrl($this->get_category_url($tree_id));
     }
 
@@ -71,25 +71,25 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 
     /**
      * Gets the current selected category id.
-     *
+     * 
      * @return int The current category id
      */
     public function get_current_category_id()
     {
-        return intval(Request :: get(Manager :: PARAM_CATEGORY));
+        return intval(Request::get(Manager::PARAM_CATEGORY));
     }
 
     private function get_menu_items($extra_items = null)
     {
         $menu = array();
         $menu_item = array();
-        $menu_item['title'] = Translation :: get(
-            (string) StringUtilities :: getInstance()->createString($this->browser->get_tool_id()) . 'Title')->upperCamelize() . $this->get_category_count(
+        $menu_item['title'] = Translation::get(
+            (string) StringUtilities::getInstance()->createString($this->browser->get_tool_id()) . 'Title')->upperCamelize() . $this->get_category_count(
             0);
         $menu_item['url'] = $this->get_category_url(0);
         $sub_menu_items = $this->get_sub_menu_items(0);
@@ -98,13 +98,13 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
         $menu_item['class'] = 'type_category';
-        $menu_item[OptionsMenuRenderer :: KEY_ID] = 0;
+        $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
         $menu[0] = $menu_item;
         if (count($extra_items))
         {
             $menu = array_merge($menu, $extra_items);
         }
-
+        
         return $menu;
     }
 
@@ -112,25 +112,25 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT),
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_PARENT), 
             new StaticConditionVariable($parent));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_COURSE),
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_COURSE), 
             new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_TOOL),
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_TOOL), 
             new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
         $condition = new AndCondition($conditions);
-
-        $objects = DataManager :: retrieves(
-            ContentObjectPublicationCategory :: class_name(),
+        
+        $objects = DataManager::retrieves(
+            ContentObjectPublicationCategory::class_name(), 
             new DataClassRetrievesParameters($condition));
-
+        
         $categories = array();
         while ($category = $objects->next_result())
         {
@@ -143,7 +143,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
             $menu_item['class'] = 'type_category';
-            $menu_item[OptionsMenuRenderer :: KEY_ID] = $category->get_id();
+            $menu_item[OptionsMenuRenderer::KEY_ID] = $category->get_id();
             $categories[$category->get_id()] = $menu_item;
         }
         return $categories;
@@ -160,36 +160,36 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
         $conditions[] = $this->get_condition($category);
-
+        
         $course_groups = $this->browser->get_course_groups();
-
+        
         $course_group_ids = array();
-
+        
         foreach ($course_groups as $course_group)
         {
             $course_group_ids[] = $course_group->get_id();
         }
-
+        
         $subselect_condition = new InCondition(new StaticConditionVariable('type'), $this->browser->get_allowed_types());
-
+        
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            ContentObject :: get_table_name(),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+            ContentObject::get_table_name(), 
             $subselect_condition);
-
+        
         $condition = new AndCondition($conditions);
-
-        return DataManager :: count_content_object_publications_with_view_right_granted_in_category_location(
-            $this->browser->get_location(),
-            $this->browser->get_entities(),
-            $condition,
+        
+        return DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
+            $this->browser->get_location(), 
+            $this->browser->get_entities(), 
+            $condition, 
             $this->browser->get_user_id());
     }
 
@@ -201,26 +201,26 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         }
         $tool_cond = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
         $category_cond = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_CATEGORY_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_CATEGORY_ID), 
             new StaticConditionVariable($category));
         return new AndCondition($tool_cond, $category_cond);
     }
 
     /**
      * Gets the URL of a category
-     *
+     * 
      * @param $category_id int The id of the category of which the URL is requested
      * @return string The URL
      */
     private function get_category_url($category_id)
     {
-        $this->url_params[Manager :: PARAM_CATEGORY] = $category_id;
+        $this->url_params[Manager::PARAM_CATEGORY] = $category_id;
         return $this->browser->get_url($this->url_params);
     }
 

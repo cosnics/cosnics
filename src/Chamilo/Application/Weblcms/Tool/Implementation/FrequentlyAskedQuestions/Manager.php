@@ -7,14 +7,15 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
  * $Id: forum_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.forum
  */
 
 /**
  * This tool allows a user to publish forums in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+    IntroductionTextSupportInterface
 {
     const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
     const PARAM_SUBSCRIBE_ID = 'subscribe';
@@ -22,6 +23,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(FrequentlyAskedQuestions :: class_name());
+        return array(FrequentlyAskedQuestions::class_name());
     }
 }

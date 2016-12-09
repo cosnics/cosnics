@@ -22,7 +22,7 @@ class DummyFeedback extends Feedback
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_CONTENT_OBJECT_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_CONTENT_OBJECT_ID));
     }
 
     /**
@@ -31,7 +31,7 @@ class DummyFeedback extends Feedback
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -40,7 +40,7 @@ class DummyFeedback extends Feedback
      */
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     /**
@@ -49,7 +49,7 @@ class DummyFeedback extends Feedback
      */
     public function update()
     {
-        return PreviewStorage :: get_instance()->update_feedback($this);
+        return PreviewStorage::getInstance()->update_feedback($this);
     }
 
     /**
@@ -58,8 +58,8 @@ class DummyFeedback extends Feedback
      */
     public function create()
     {
-        $this->set_id(UUID :: v4());
-        return PreviewStorage :: get_instance()->create_feedback($this);
+        $this->set_id(UUID::v4());
+        return PreviewStorage::getInstance()->create_feedback($this);
     }
 
     /**
@@ -68,6 +68,6 @@ class DummyFeedback extends Feedback
      */
     public function delete()
     {
-        return PreviewStorage :: get_instance()->delete_feedback($this);
+        return PreviewStorage::getInstance()->delete_feedback($this);
     }
 }

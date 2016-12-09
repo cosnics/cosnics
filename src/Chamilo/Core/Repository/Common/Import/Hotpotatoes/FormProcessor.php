@@ -18,11 +18,11 @@ class FormProcessor extends \Chamilo\Core\Repository\Common\Import\FormProcessor
     public function getImportParameters()
     {
         return new HotpotatoesImportParameters(
-            'hotpotatoes',
-            $this->getUserIdentifier(),
-            $this->getWorkspace(),
-            $this->determineCategoryIdentifier(),
-            $this->getFile(),
+            'hotpotatoes', 
+            $this->getUserIdentifier(), 
+            $this->getWorkspace(), 
+            $this->determineCategoryIdentifier(), 
+            $this->getFile(), 
             $this->getFormValues());
     }
 }

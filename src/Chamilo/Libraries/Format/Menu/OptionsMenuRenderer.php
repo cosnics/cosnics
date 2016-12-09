@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
  * $Id: options_menu_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.html.menu
  */
 /**
@@ -19,7 +19,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 
     /**
      * Create a new OptionsMenuRenderer
-     *
+     * 
      * @param array $exclude Which items should be excluded (based on the $key
      *        value in the menu items). The whole submenu of which the elements of the
      *        exclude array are the root elements will be excluded.
@@ -36,7 +36,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     public function renderEntry($node, $level, $type)
     {
         // If this node is in the exclude list, add all its child-nodes to the exclude list
-        if (in_array($node[self :: KEY_ID], $this->exclude))
+        if (in_array($node[self::KEY_ID], $this->exclude))
         {
             foreach ($node['sub'] as $child_id => $child)
             {
@@ -61,7 +61,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
      */
     public function toArray()
     {
-        $array = parent :: toArray();
+        $array = parent::toArray();
         $choices = array();
         foreach ($array as $index => $item)
         {
@@ -70,7 +70,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
             {
                 $prefix = str_repeat('&nbsp;&nbsp;&nbsp;', $item['level'] - 1) . '&mdash; ';
             }
-            $choices[$item[self :: KEY_ID]] = $prefix . $item['title'];
+            $choices[$item[self::KEY_ID]] = $prefix . $item['title'];
         }
         return $choices;
     }

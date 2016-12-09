@@ -16,10 +16,7 @@ class ComplexDateTimeForm extends ComplexContentObjectItemForm
 
     public function get_elements()
     {
-        $elements[] = $this->createElement(
-            'checkbox', 
-            ComplexDateTime :: PROPERTY_VISIBLE, 
-            Translation :: get('Visible'));
+        $elements[] = $this->createElement('checkbox', ComplexDateTime::PROPERTY_VISIBLE, Translation::get('Visible'));
         return $elements;
     }
 
@@ -29,7 +26,7 @@ class ComplexDateTimeForm extends ComplexContentObjectItemForm
         
         if (isset($cloi))
         {
-            $defaults[ComplexDateTime :: PROPERTY_VISIBLE] = $cloi->get_visible();
+            $defaults[ComplexDateTime::PROPERTY_VISIBLE] = $cloi->get_visible();
         }
         
         return $defaults;
@@ -38,8 +35,8 @@ class ComplexDateTimeForm extends ComplexContentObjectItemForm
     function update_from_values($values)
     {
         $cloi = $this->get_complex_content_object_item();
-        $cloi->set_visible($values[ComplexDateTime :: PROPERTY_VISIBLE]);
-        return parent :: update();
+        $cloi->set_visible($values[ComplexDateTime::PROPERTY_VISIBLE]);
+        return parent::update();
     }
 }
 

@@ -63,7 +63,7 @@ abstract class PeerAssessmentResultprocessor
     {
         return array_reduce(
             $this->scores, 
-            function ($result, $item) use($key)
+            function ($result, $item) use ($key)
             {
                 return $result + $item[$key];
             });

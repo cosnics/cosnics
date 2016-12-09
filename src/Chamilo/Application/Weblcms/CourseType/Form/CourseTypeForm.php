@@ -29,12 +29,12 @@ class CourseTypeForm extends CommonCourseForm implements FormLockedSettingsSuppo
      */
     public function build_general_tab_form_elements()
     {
-        $this->add_textfield(CourseType :: PROPERTY_TITLE, Translation :: get('CourseTypeTitle'));
-        $this->add_html_editor(CourseType :: PROPERTY_DESCRIPTION, Translation :: get('CourseTypeDescription'), false);
+        $this->add_textfield(CourseType::PROPERTY_TITLE, Translation::get('CourseTypeTitle'));
+        $this->add_html_editor(CourseType::PROPERTY_DESCRIPTION, Translation::get('CourseTypeDescription'), false);
         $this->addElement(
             'checkbox', 
-            CourseType :: PROPERTY_ACTIVE, 
-            Translation :: get('CourseTypeActive'), 
+            CourseType::PROPERTY_ACTIVE, 
+            Translation::get('CourseTypeActive'), 
             '', 
             null, 
             '1', 
@@ -59,9 +59,9 @@ class CourseTypeForm extends CommonCourseForm implements FormLockedSettingsSuppo
     {
         $default_values = array();
         
-        $default_values[CourseType :: PROPERTY_TITLE] = $base_object->get_title();
-        $default_values[CourseType :: PROPERTY_DESCRIPTION] = $base_object->get_description();
-        $default_values[CourseType :: PROPERTY_ACTIVE] = $base_object->is_active();
+        $default_values[CourseType::PROPERTY_TITLE] = $base_object->get_title();
+        $default_values[CourseType::PROPERTY_DESCRIPTION] = $base_object->get_description();
+        $default_values[CourseType::PROPERTY_ACTIVE] = $base_object->is_active();
         
         return $default_values;
     }

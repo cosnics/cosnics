@@ -18,7 +18,7 @@ use DOMDocument;
  * ==============================================================================
  * This is the text library for Chamilo.
  * Include/require it in your code to use its functionality.
- *
+ * 
  * @package common.html
  *          ==============================================================================
  */
@@ -28,7 +28,7 @@ class Text
     /**
      * Get the ordinal suffix of an int (e.g.
      * th, rd, st, etc.)
-     *
+     * 
      * @param int $n
      * @return string + $n's ordinal suffix
      */
@@ -55,7 +55,7 @@ class Text
     /**
      * Apply parsing to content to parse tex commandos that are seperated by [tex]
      * [/tex] to make it readable for techexplorer plugin.
-     *
+     * 
      * @param string $text The text to parse
      * @return string The text after parsing.
      * @author Patrick Cool <patrick.cool@UGent.be>
@@ -66,19 +66,19 @@ class Text
         if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         {
             $textext = str_replace(
-                array("[tex]", "[/tex]"),
+                array("[tex]", "[/tex]"), 
                 array(
-                    "<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"",
-                    "\" /></object>"),
+                    "<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", 
+                    "\" /></object>"), 
                 $textext);
         }
         else
         {
             $textext = str_replace(
-                array("[tex]", "[/tex]"),
+                array("[tex]", "[/tex]"), 
                 array(
-                    "<embed type=\"application/x-techexplorer\" texdata=\"",
-                    "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"),
+                    "<embed type=\"application/x-techexplorer\" texdata=\"", 
+                    "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), 
                 $textext);
         }
         return $textext;
@@ -103,23 +103,23 @@ class Text
     {
         $queries = array();
         $variables = explode('&', $query);
-
+        
         foreach ($variables as $variable)
         {
             list($key, $value) = explode('=', $variable, 2);
             $queries[$key] = $value;
         }
-
+        
         return $queries;
     }
-
+    
     // TODO: There have to be a better alternatives for this ...
     public static function strip_text($text)
     {
         $i = - 1;
         $n = '';
         $ok = 1;
-
+        
         while (isset($text{++ $i}))
         {
             if ($ok && $text{$i} != '<')
@@ -136,25 +136,25 @@ class Text
             {
                 $ok = 0;
             }
-
+            
             if (! $ok)
             {
                 $n .= $text{$i};
             }
         }
-
+        
         return $n;
     }
-
+    
     // TODO: There have to be a better alternatives for this ...
     public static function fetch_tag_into_array($source, $tag = "<img>")
     {
-        $data = self :: strip_text($source);
+        $data = self::strip_text($source);
         $data = ">" . $data;
         $striped_data = strip_tags($data, $tag);
-
+        
         $my_array = explode("><", $striped_data);
-
+        
         foreach ($my_array as $main_key => $main_value)
         {
             $my_space_array[$main_key] = explode(" ", $main_value);
@@ -165,13 +165,13 @@ class Text
                 if (($my_pre_fetched_tag_array[1] != '""') && ($my_pre_fetched_tag_array[1] != NULL))
                 {
                     $my_tag_array[$main_key][$my_pre_fetched_tag_array[0]] = substr(
-                        $my_pre_fetched_tag_array[1],
-                        1,
+                        $my_pre_fetched_tag_array[1], 
+                        1, 
                         - 1);
                 }
             }
         }
-
+        
         return $my_tag_array;
     }
 
@@ -188,19 +188,19 @@ class Text
         {
             return $haystack;
         }
-
+        
         $matches = array();
         $matches_done = array();
-
+        
         preg_match_all("/$needle+/i", $haystack, $matches);
-
+        
         if (is_array($matches[0]) && count($matches[0]) >= 1)
         {
             foreach ($matches[0] as $match)
             {
                 if (in_array($match, $matches_done))
                     continue;
-
+                
                 $matches_done[] = $match;
                 $haystack = str_replace($match, '<mark>' . $match . '</mark>', $haystack);
             }
@@ -217,41 +217,41 @@ class Text
     {
         $string = htmlentities($string, ENT_COMPAT, $from);
         $string = iconv($from, $to . '//TRANSLIT', $string);
-
+        
         return $string;
     }
 
     public function create_link($url, $text, $new_page = false, $class = null, $styles = array())
     {
         $link = '<a href="' . $url . '" ';
-
+        
         if ($new_page)
             $link .= 'target="about:blank" ';
-
+        
         if ($class)
             $link .= 'class="' . $class . '" ';
-
+        
         if (count($styles) > 0)
         {
             $link .= 'style="';
-
+            
             foreach ($styles as $name => $value)
             {
                 $link .= $name . ': ' . $value . ';';
             }
-
+            
             $link .= '" ';
         }
-
+        
         $link .= '>' . $text . '</a>';
-
+        
         return $link;
     }
 
     /**
      * Function to recreate the charAt function from javascript
      * Found at http://be.php.net/manual/en/function.substr.php#81491
-     *
+     * 
      * @param String $str
      * @param Position $pos
      * @return Char or -1
@@ -265,24 +265,24 @@ class Text
     {
         $string = str_replace(' ', '', $string);
         $string = preg_replace('/[^a-zA-Z0-9\s]/', '', $string);
-        return (string) StringUtilities :: getInstance()->createString($string)->underscored()->__toString();
+        return (string) StringUtilities::getInstance()->createString($string)->underscored()->__toString();
     }
 
     /**
      * Checks if a given directory is valid
      * Use this method before deleting a path!
-     *
+     * 
      * @param String $path
      * @return boolean
      */
     public static function is_valid_path($path)
     {
-        $filtered_path = Text :: remove_non_alphanumerical($path);
+        $filtered_path = Text::remove_non_alphanumerical($path);
         if (! $path || ! $filtered_path)
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -290,7 +290,7 @@ class Text
      * Validates the url, URL beginning with / are internal URL's and considered complete,
      * URLS that contain :// are considered complete as well.
      * In any other case the URL is appended with 'http://' at the beginning.
-     *
+     * 
      * @param String $url
      *
      * @return String completed url

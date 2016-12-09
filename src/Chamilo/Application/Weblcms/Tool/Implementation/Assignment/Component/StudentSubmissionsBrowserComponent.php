@@ -61,20 +61,20 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         $this->define_class_variables();
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
-        if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $publication) ||
-             ! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT) || $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) ||
+             ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT) || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $this->redirect(
-                Translation :: get("NotAllowed", null, Utilities :: COMMON_LIBRARIES), 
+                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES), 
                 true, 
                 array(), 
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         }
         $this->modify_last_breadcrumb();
         return $this->display_page();
@@ -85,13 +85,13 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function modify_last_breadcrumb()
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail::getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_STUDENT_BROWSE_SUBMISSIONS, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id())), 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_STUDENT_BROWSE_SUBMISSIONS, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id())), 
             $this->assignment->get_title());
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
     }
@@ -117,7 +117,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         $html = array();
         
-        $html[] = parent :: render_header();
+        $html[] = parent::render_header();
         
         if ($this->buttonToolbarRenderer)
         {
@@ -134,7 +134,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         $html = array();
         $html[] = '<div class="announcements level_1" style="background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath('ContentObject/Introduction') . ')">';
+             Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ')">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_as_html();
         $html[] = '</div>';
@@ -152,34 +152,34 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 'tab_my_submissions', 
                 $this->define_own_tab_title(), 
                 null, 
-                $this->define_tab_url(self :: SELECTED_TAB_OWN), 
-                $this->is_selected_tab(self :: SELECTED_TAB_OWN)));
+                $this->define_tab_url(self::SELECTED_TAB_OWN), 
+                $this->is_selected_tab(self::SELECTED_TAB_OWN)));
         if (! $this->assignment->get_allow_group_submissions())
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'tab_other_users', 
-                    Translation :: get('OtherUsers'), 
+                    Translation::get('OtherUsers'), 
                     null, 
-                    $this->define_tab_url(self :: SELECTED_TAB_OTHER_USERS), 
-                    $this->is_selected_tab(self :: SELECTED_TAB_OTHER_USERS)));
+                    $this->define_tab_url(self::SELECTED_TAB_OTHER_USERS), 
+                    $this->is_selected_tab(self::SELECTED_TAB_OTHER_USERS)));
         }
         else
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'tab_other_course_groups', 
-                    Translation :: get('OtherCourseGroups'), 
+                    Translation::get('OtherCourseGroups'), 
                     null, 
-                    $this->define_tab_url(self :: SELECTED_TAB_OTHER_COURSE_GROUPS), 
-                    $this->is_selected_tab(self :: SELECTED_TAB_OTHER_COURSE_GROUPS)));
+                    $this->define_tab_url(self::SELECTED_TAB_OTHER_COURSE_GROUPS), 
+                    $this->is_selected_tab(self::SELECTED_TAB_OTHER_COURSE_GROUPS)));
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'tab_other_platform_groups', 
-                    Translation :: get('OtherPlatformGroups'), 
+                    Translation::get('OtherPlatformGroups'), 
                     null, 
-                    $this->define_tab_url(self :: SELECTED_TAB_OTHER_PLATFORM_GROUPS), 
-                    $this->is_selected_tab(self :: SELECTED_TAB_OTHER_PLATFORM_GROUPS)));
+                    $this->define_tab_url(self::SELECTED_TAB_OTHER_PLATFORM_GROUPS), 
+                    $this->is_selected_tab(self::SELECTED_TAB_OTHER_PLATFORM_GROUPS)));
         }
         return $tabs->render();
     }
@@ -193,9 +193,9 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         if (! $this->assignment->get_allow_group_submissions())
         {
-            return Translation :: get('MySubmissions');
+            return Translation::get('MySubmissions');
         }
-        return Translation :: get('OurSubmissions');
+        return Translation::get('OurSubmissions');
     }
 
     /**
@@ -207,24 +207,24 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         switch ($this->get_selected_tab())
         {
-            case self :: SELECTED_TAB_OWN :
+            case self::SELECTED_TAB_OWN :
                 $table = $this->define_own_tab_content();
                 break;
-            case self :: SELECTED_TAB_OTHER_COURSE_GROUPS :
+            case self::SELECTED_TAB_OTHER_COURSE_GROUPS :
                 $table = new SubmissionCourseGroupsBrowserTable($this);
                 break;
-            case self :: SELECTED_TAB_OTHER_PLATFORM_GROUPS :
+            case self::SELECTED_TAB_OTHER_PLATFORM_GROUPS :
                 // ******************************************************************************************//
                 // DMTODO Problem with caching. Once caching problems fixed,
                 // remove the following line of code. //
                 // ******************************************************************************************//
-                DataClassCache :: truncate(Group :: class_name());
+                DataClassCache::truncate(Group::class_name());
                 // ******************************************************************************************//
                 // DMTODO End remove code. //
                 // ******************************************************************************************//
                 $table = new SubmissionGroupsBrowserTable($this);
                 break;
-            case self :: SELECTED_TAB_OTHER_USERS :
+            case self::SELECTED_TAB_OTHER_USERS :
                 $table = new SubmissionUsersBrowserTable($this);
                 break;
         }
@@ -255,8 +255,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         return $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id(), 
-                self :: PARAM_SELECTED_TAB => $selected_tab));
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id(), 
+                self::PARAM_SELECTED_TAB => $selected_tab));
     }
 
     /**
@@ -271,9 +271,9 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $title = array();
         if ($this->is_feedback_visible($this->assignment, $this->has_submissions()))
         {
-            $title[] = Translation :: get('AutomaticFeedback');
+            $title[] = Translation::get('AutomaticFeedback');
         }
-        $title[] = Translation :: get('Reporting');
+        $title[] = Translation::get('Reporting');
         
         $html = array();
         
@@ -294,11 +294,11 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $html[] = '<div style="font-weight:bold;float:left;">';
         if ($this->assignment->get_allow_group_submissions())
         {
-            $html[] = Translation :: get('GroupAverageScore') . ':&nbsp;<br />';
+            $html[] = Translation::get('GroupAverageScore') . ':&nbsp;<br />';
         }
         else
         {
-            $html[] = Translation :: get('MyAverageScore') . ':&nbsp;<br />';
+            $html[] = Translation::get('MyAverageScore') . ':&nbsp;<br />';
         }
         $html[] = '</div>';
         
@@ -316,8 +316,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function has_submissions()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: count_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::count_data(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
             null, 
             $this->get_own_table_conditions()) > 0;
     }
@@ -332,8 +332,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $count = 0;
         $total_score = 0;
         
-        $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
+        $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::get_data(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
             null, 
             $this->get_own_table_conditions(), 
             null, 
@@ -375,23 +375,23 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         {
             $search_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id(), 
-                    self :: PARAM_SELECTED_TAB => $this->get_selected_tab()));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id(), 
+                    self::PARAM_SELECTED_TAB => $this->get_selected_tab()));
             
             $buttonToolbar = new ButtonToolBar($search_url);
             $commonActions = new ButtonGroup();
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('SubmissionSubmit'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
-                    $this->get_url($this->generate_add_submission_url(), ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
+                    Translation::get('SubmissionSubmit'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                    $this->get_url($this->generate_add_submission_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL)));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $search_url, 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, 
                     false));
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -413,16 +413,16 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         if ($this->assignment->get_allow_group_submissions())
         {
             return array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id());
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id());
         }
         else
         {
             return array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id(), 
-                self :: PARAM_TARGET_ID => $this->get_user_id(), 
-                self :: PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER);
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_publication_id(), 
+                self::PARAM_TARGET_ID => $this->get_user_id(), 
+                self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER);
         }
     }
 
@@ -437,23 +437,23 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         {
             switch ($this->get_selected_tab())
             {
-                case self :: SELECTED_TAB_OWN :
+                case self::SELECTED_TAB_OWN :
                     return $this->define_own_search_conditions();
-                case self :: SELECTED_TAB_OTHER_COURSE_GROUPS :
+                case self::SELECTED_TAB_OTHER_COURSE_GROUPS :
                     return new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), 
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
-                case self :: SELECTED_TAB_OTHER_PLATFORM_GROUPS :
+                case self::SELECTED_TAB_OTHER_PLATFORM_GROUPS :
                     return new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), Group :: PROPERTY_NAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), Group::PROPERTY_NAME), 
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
-                case self :: SELECTED_TAB_OTHER_USERS :
+                case self::SELECTED_TAB_OTHER_USERS :
                     $or_conditions = array();
                     $or_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), User::PROPERTY_FIRSTNAME), 
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                     $or_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), User :: PROPERTY_LASTNAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), User::PROPERTY_LASTNAME), 
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                     return new OrCondition($or_conditions);
             }
@@ -463,7 +463,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, self :: PARAM_SELECTED_TAB);
+        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, self::PARAM_SELECTED_TAB);
     }
 
     /**
@@ -486,23 +486,23 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->get_publication_id()));
         
         if (! $this->assignment->get_allow_group_submissions())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID), 
                 new StaticConditionVariable($this->get_user_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
                 new StaticConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER));
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER));
         }
         else
         {
@@ -510,29 +510,29 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
             $course_group_conditions = array();
             $course_group_conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID), 
                 $this->get_user_course_group_ids($this->get_user_id()));
             $course_group_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
                 new StaticConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP));
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP));
             $group_conditions[] = new AndCondition($course_group_conditions);
             
             $platform_group_conditions = array();
             $platform_group_conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID), 
                 $this->get_user_platform_group_ids($this->get_user_id()));
             $platform_group_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
                 new StaticConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP));
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP));
             $group_conditions[] = new AndCondition($platform_group_conditions);
             
             $conditions[] = new OrCondition($group_conditions);
@@ -548,7 +548,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function get_user_course_group_ids($user_id)
     {
-        $course_groups = CourseGroupDataManager :: retrieve_course_groups_from_user($user_id)->as_array();
+        $course_groups = CourseGroupDataManager::retrieve_course_groups_from_user($user_id)->as_array();
         $course_group_ids = array();
         foreach ($course_groups as $course_group)
         {
@@ -570,7 +570,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function get_user_platform_group_ids($user_id)
     {
-        $platform_groups = \Chamilo\Core\Group\Storage\DataManager :: retrieve_user_groups($user_id)->as_array();
+        $platform_groups = \Chamilo\Core\Group\Storage\DataManager::retrieve_user_groups($user_id)->as_array();
         $platform_group_ids = array();
         foreach ($platform_groups as $platform_group)
         {
@@ -591,11 +591,11 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function get_selected_tab()
     {
-        if (! Request :: get(self :: PARAM_SELECTED_TAB))
+        if (! Request::get(self::PARAM_SELECTED_TAB))
         {
-            return self :: SELECTED_TAB_OWN;
+            return self::SELECTED_TAB_OWN;
         }
-        return Request :: get(self :: PARAM_SELECTED_TAB);
+        return Request::get(self::PARAM_SELECTED_TAB);
     }
 
     /**
@@ -614,8 +614,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     protected function define_class_variables()
     {
-        $this->assignment = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $this->assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id())->get_content_object();
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -642,7 +642,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         switch ($table_class_name)
         {
-            case SubmitterUserSubmissionsTable :: class_name() :
+            case SubmitterUserSubmissionsTable::class_name() :
                 $conditions = array();
                 
                 if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() != '')
@@ -653,7 +653,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 $conditions[] = $this->get_own_table_conditions();
                 
                 return new AndCondition($conditions);
-            case StudentSubmissionsOwnGroupsTable :: class_name() :
+            case StudentSubmissionsOwnGroupsTable::class_name() :
                 $conditions = array();
                 
                 if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() != '')

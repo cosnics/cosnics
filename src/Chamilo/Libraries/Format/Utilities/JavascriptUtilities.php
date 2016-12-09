@@ -15,14 +15,16 @@ class JavascriptUtilities extends ResourceUtilities
 
     public function run()
     {
-        $javascriptCacheService = new JavascriptCacheService($this->getPathUtilities());
+        $javascriptCacheService = new JavascriptCacheService(
+            $this->getPathBuilder(),
+            $this->getConfigurablePathBuilder());
 
         $response = new Response();
 
         $response->headers->set('Content-Type', 'text/javascript');
 
         $response->setPublic();
-        $response->setMaxAge(3600 * 24); //24 hours cache
+        $response->setMaxAge(3600 * 24); // 24 hours cache
         $response->setContent($javascriptCacheService->get());
         $response->send();
 

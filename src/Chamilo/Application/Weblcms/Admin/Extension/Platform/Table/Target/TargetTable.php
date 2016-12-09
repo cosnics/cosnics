@@ -6,12 +6,12 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity\EntityTabl
 
 /**
  * Table for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TargetTable extends EntityTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_ADMIN_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_ADMIN_ID;
 
     public function get_helper_class_name()
     {

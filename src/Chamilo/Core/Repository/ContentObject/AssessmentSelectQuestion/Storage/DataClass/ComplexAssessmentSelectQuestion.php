@@ -24,7 +24,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_WEIGHT, self :: PROPERTY_RANDOM, self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return array(self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -33,7 +33,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function get_weight()
     {
-        return $this->get_additional_property(self :: PROPERTY_WEIGHT);
+        return $this->get_additional_property(self::PROPERTY_WEIGHT);
     }
 
     /**
@@ -42,7 +42,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function set_weight($value)
     {
-        $this->set_additional_property(self :: PROPERTY_WEIGHT, $value);
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 
     /**
@@ -51,7 +51,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function get_random()
     {
-        return $this->get_additional_property(self :: PROPERTY_RANDOM);
+        return $this->get_additional_property(self::PROPERTY_RANDOM);
     }
 
     /**
@@ -60,7 +60,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function set_random($value)
     {
-        $this->set_additional_property(self :: PROPERTY_RANDOM, $value);
+        $this->set_additional_property(self::PROPERTY_RANDOM, $value);
     }
 
     /**
@@ -69,7 +69,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -78,7 +78,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function set_show_answer_feedback($value)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
     }
     
     // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
@@ -89,7 +89,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
      */
     public function get_default_question_weight()
     {
-        $reference = parent :: get_ref_object();
+        $reference = parent::get_ref_object();
         if ($reference)
         {
             return $reference->get_default_weight();
@@ -105,7 +105,7 @@ class ComplexAssessmentSelectQuestion extends ComplexContentObjectItem implement
         // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to
         // EACH
         // complex question object.
-        parent :: set_parent($parent);
+        parent::set_parent($parent);
         $this->set_weight($this->get_default_question_weight());
     }
 }

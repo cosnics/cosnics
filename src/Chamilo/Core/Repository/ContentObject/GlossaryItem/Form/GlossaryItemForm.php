@@ -20,7 +20,7 @@ class GlossaryItemForm extends ContentObjectForm
     {
         $object = new GlossaryItem();
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 
 /**

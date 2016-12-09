@@ -15,68 +15,68 @@ class Manager implements ActionsSupportInterface
     public static function get_actions()
     {
         $links = array();
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_CONFIGURE_PLATFORM));
-
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_CONFIGURE_PLATFORM));
+        
         $links[] = new DynamicAction(
-            Translation :: get('Settings'),
-            Translation :: get('SettingsDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Settings'),
+            Translation::get('Settings'), 
+            Translation::get('SettingsDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Settings'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_IMPORTER));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_IMPORTER));
         $links[] = new DynamicAction(
-            Translation :: get('Importer'),
-            Translation :: get('ImporterDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Translation::get('Importer'), 
+            Translation::get('ImporterDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS));
         $links[] = new DynamicAction(
-            Translation :: get('SystemAnnouncements'),
-            Translation :: get('SystemAnnouncementsDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Translation::get('SystemAnnouncements'), 
+            Translation::get('SystemAnnouncementsDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_LANGUAGE));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_LANGUAGE));
         $links[] = new DynamicAction(
-            Translation :: get('TranslationsImport'),
-            Translation :: get('TranslationsImportDescription'),
-            Theme :: getInstance()->getImagePath(\Chamilo\Core\Admin\Language\Manager :: context(), 'Logo/32'),
+            Translation::get('TranslationsImport'), 
+            Translation::get('TranslationsImportDescription'), 
+            Theme::getInstance()->getImagePath(\Chamilo\Core\Admin\Language\Manager::context(), 'Logo/32'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_DIAGNOSE));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_DIAGNOSE));
         $links[] = new DynamicAction(
-            Translation :: get('Diagnose'),
-            Translation :: get('DiagnoseDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
+            Translation::get('Diagnose'), 
+            Translation::get('DiagnoseDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'), 
             $redirect->getUrl());
-
+        
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_VIEW_LOGS));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_VIEW_LOGS));
         $links[] = new DynamicAction(
-            Translation :: get('LogsViewer'),
-            Translation :: get('LogsViewerDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
+            Translation::get('LogsViewer'), 
+            Translation::get('LogsViewerDescription'), 
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'), 
             $redirect->getUrl());
-
-        return new Actions(\Chamilo\Core\Admin\Manager :: context(), $links);
+        
+        return new Actions(\Chamilo\Core\Admin\Manager::context(), $links);
     }
 }

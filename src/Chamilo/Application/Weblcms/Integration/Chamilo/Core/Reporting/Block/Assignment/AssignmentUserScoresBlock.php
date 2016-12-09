@@ -36,257 +36,211 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
 
     public function count_data()
     {
-        if (!isset($this->reporting_data))
+        if (! isset($this->reporting_data))
         {
             $this->reporting_data = new ReportingData();
-
+            
             $course_id = $this->get_course_id();
-
+            
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication:: class_name(),
-                    ContentObjectPublication :: PROPERTY_COURSE_ID
-                ),
-                new StaticConditionVariable($course_id)
-            );
+                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::PROPERTY_COURSE_ID), 
+                new StaticConditionVariable($course_id));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication:: class_name(),
-                    ContentObjectPublication :: PROPERTY_TOOL
-                ),
+                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::PROPERTY_TOOL), 
                 new StaticConditionVariable(
-                    ClassnameUtilities:: getInstance()->getClassNameFromNamespace(Assignment:: class_name())
-                )
-            );
+                    ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name())));
             $condition = new AndCondition($conditions);
             $order_by = new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication:: class_name(),
-                    ContentObjectPublication :: PROPERTY_MODIFIED_DATE
-                )
-            );
-            $publication_resultset =
-                \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_content_object_publications(
-                    $condition,
-                    $order_by
-                );
-
+                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::PROPERTY_MODIFIED_DATE));
+            $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                $condition, 
+                $order_by);
+            
             $publications = array();
             // fill publications with individual assignments
             while ($publication = $publication_resultset->next_result())
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                    ContentObject:: class_name(),
-                    $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]
-                );
-
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+                
                 $method = 'get_allow_group_submissions';
-                if (method_exists($content_object, $method) && !$content_object->$method())
+                if (method_exists($content_object, $method) && ! $content_object->$method())
                 {
                     $publications[] = $publication;
                 }
             }
-
+            
             // set the table headers
             $headings = array();
-            $headings[] = Translation:: get('Name');
-
+            $headings[] = Translation::get('Name');
+            
             foreach ($publications as $publication)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                    ContentObject:: class_name(),
-                    $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]
-                );
-
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+                
                 if (count($publications) > 5)
                 {
-                    $headings[] = '<div id="' . $publication[ContentObjectPublication :: PROPERTY_ID] . '">' .
-                        substr($content_object->get_title(), 0, 14) . '</div>';
+                    $headings[] = '<div id="' . $publication[ContentObjectPublication::PROPERTY_ID] . '">' .
+                         substr($content_object->get_title(), 0, 14) . '</div>';
                 }
                 else
                 {
-                    $headings[] = '<div id="' . $publication[ContentObjectPublication :: PROPERTY_ID] . '">' .
-                        $content_object->get_title() . '</div>';
+                    $headings[] = '<div id="' . $publication[ContentObjectPublication::PROPERTY_ID] . '">' .
+                         $content_object->get_title() . '</div>';
                 }
             }
             $this->reporting_data->set_rows($headings);
-
-            $users = CourseDataManager:: retrieve_all_course_users($course_id)->as_array();
+            
+            $users = CourseDataManager::retrieve_all_course_users($course_id)->as_array();
             // traverse users
             foreach ($users as $key => $user)
             {
                 $this->reporting_data->add_category($key);
                 $this->reporting_data->add_data_category_row(
-                    $key,
-                    Translation:: get('Name'),
-                    \Chamilo\Core\User\Storage\DataClass\User:: fullname(
-                        $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_FIRSTNAME],
-                        $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_LASTNAME]
-                    )
-                );
-
+                    $key, 
+                    Translation::get('Name'), 
+                    \Chamilo\Core\User\Storage\DataClass\User::fullname(
+                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME], 
+                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]));
+                
                 foreach ($publications as $publication)
                 {
-                    $content_object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                        ContentObject:: class_name(),
-                        $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]
-                    );
-
+                    $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                        ContentObject::class_name(), 
+                        $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+                    
                     if (count($publications) > 5)
                     {
-                        $title = '<div id="' . $publication[ContentObjectPublication :: PROPERTY_ID] . '">' .
-                            substr($content_object->get_title(), 0, 14) . '</div>';
+                        $title = '<div id="' . $publication[ContentObjectPublication::PROPERTY_ID] . '">' .
+                             substr($content_object->get_title(), 0, 14) . '</div>';
                     }
                     else
                     {
-                        $title = '<div id="' . $publication[ContentObjectPublication :: PROPERTY_ID] . '">' .
-                            $content_object->get_title() . '</div>';
+                        $title = '<div id="' . $publication[ContentObjectPublication::PROPERTY_ID] . '">' .
+                             $content_object->get_title() . '</div>';
                     }
-
-                    $submission_tracker =
-                        new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission(
-                        );
+                    
+                    $submission_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
                     $conditions = array();
-
+                    
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission:: class_name(
-                            ),
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID
-                        ),
-                        new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID])
-                    );
-
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
+                        new StaticConditionVariable($publication[ContentObjectPublication::PROPERTY_ID]));
+                    
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission:: class_name(
-                            ),
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE
-                        ),
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
                         new StaticConditionVariable(
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER
-                        )
-                    );
-
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER));
+                    
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission:: class_name(
-                            ),
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID
-                        ),
-                        new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID])
-                    );
-
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID), 
+                        new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID]));
+                    
                     $condition = new AndCondition($conditions);
-
-                    $submissions_by_user = DataManager:: retrieves(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission:: class_name(
-                        ),
-                        new DataClassRetrievesParameters($condition)
-                    )->as_array();
-
+                    
+                    $submissions_by_user = DataManager::retrieves(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                        new DataClassRetrievesParameters($condition))->as_array();
+                    
                     $submission_ids = array();
                     foreach ($submissions_by_user as $submission)
                     {
                         $submission_ids[] = $submission->get_id();
                     }
-
+                    
                     if (count($submission_ids) == 0)
                     {
-                        if (\Chamilo\Application\Weblcms\Storage\DataManager:: is_publication_target_user(
-                            $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID],
-                            $publication[ContentObjectPublication :: PROPERTY_ID],
-                            $course_id
-                        )
-                        )
+                        if (\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
+                            $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID], 
+                            $publication[ContentObjectPublication::PROPERTY_ID], 
+                            $course_id))
                         {
                             $this->reporting_data->add_data_category_row($key, $title, null);
                             continue;
                         }
-
+                        
                         $this->reporting_data->add_data_category_row($key, $title, 'X');
                         continue;
                     }
-
-                    $score_tracker =
-                        new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore(
-                        );
+                    
+                    $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
                     $condition = new InCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore:: class_name(
-                            ),
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID
-                        ),
-                        $submission_ids
-                    );
-
-                    $score_trackers = DataManager:: retrieves(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore:: class_name(
-                        ),
-                        new DataClassRetrievesParameters($condition)
-                    )->as_array();
-
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore::class_name(), 
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore::PROPERTY_SUBMISSION_ID), 
+                        $submission_ids);
+                    
+                    $score_trackers = DataManager::retrieves(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore::class_name(), 
+                        new DataClassRetrievesParameters($condition))->as_array();
+                    
                     if (count($score_trackers) > 0)
                     {
                         $score = $this->format_score_html($this->get_score($score_trackers));
-
+                        
                         $this->reporting_data->add_data_category_row($key, $title, $score);
                     }
                     else
                     {
                         $params = array();
-                        $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager:: context();
-                        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
-                        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] =
-                            \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
-                        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] =
-                            ClassnameUtilities:: getInstance()->getClassNameFromNamespace(
-                                Assignment:: class_name(),
-                                true
-                            );
-                        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] =
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMISSIONS;
-                        $params[\Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE] =
-                            ContentObjectRenderer :: TYPE_TABLE;
-                        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] =
-                            $publication[ContentObjectPublication :: PROPERTY_ID];
-                        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_TARGET_ID] =
-                            $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID];
-                        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_SUBMITTER_TYPE] =
-                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER;
-
+                        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+                        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
+                        $params[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+                        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = ClassnameUtilities::getInstance()->getClassNameFromNamespace(
+                            Assignment::class_name(), 
+                            true);
+                        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMISSIONS;
+                        $params[\Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE] = ContentObjectRenderer::TYPE_TABLE;
+                        $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
+                        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_TARGET_ID] = $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID];
+                        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMITTER_TYPE] = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER;
+                        
                         $redirect = new Redirect($params);
                         $link = $redirect->getUrl();
-
+                        
                         $this->reporting_data->add_data_category_row(
-                            $key,
-                            $title,
-                            '<span style="text-decoration: blink;"><b><a href="' . $link . '">?</a></b></span>'
-                        );
+                            $key, 
+                            $title, 
+                            '<span style="text-decoration: blink;"><b><a href="' . $link . '">?</a></b></span>');
                     }
                 }
             }
-
+            
             $this->reporting_data->hide_categories();
         }
-
+        
         return $this->reporting_data;
     }
 
     /**
-     * Returns the score from the given score trackers. The type of score is determined by the request. If no score type
+     * Returns the score from the given score trackers.
+     * The type of score is determined by the request. If no score type
      * is found, it will return the average score.
-     *
+     * 
      * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *            used to determine the score
-     *
+     *        used to determine the score
      * @return int The score
      */
     private function get_score($score_trackers)
     {
-        $score_type = (Request:: post('sel')) ? Request:: post('sel') : Request:: get('sel');
-
+        $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
+        
         return $this->get_score_by_type($score_trackers, $score_type);
     }
 
@@ -297,6 +251,6 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Component;
 
 use Chamilo\Core\Home\Rights\Manager;
@@ -10,11 +9,12 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Browses the target entities for the block types
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSupport
 {
+
     /**
      * Executes this component and renders it's output
      */
@@ -24,7 +24,7 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
         {
             throw new NotAllowedException();
         }
-
+        
         $html = array();
         
         $tableContent = $this->renderTable();
@@ -38,7 +38,7 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
 
     /**
      * Renders the table
-     *
+     * 
      * @return string
      */
     protected function renderTable()
@@ -49,13 +49,12 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return Condition
      */
     public function get_table_condition($table_class_name)
     {
-
     }
 }

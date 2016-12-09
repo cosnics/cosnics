@@ -19,11 +19,11 @@ class SubButtonRenderer extends AbstractButtonRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<li>';
-        $html[] = parent :: render();
+        $html[] = parent::render();
         $html[] = '</li>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -34,14 +34,14 @@ class SubButtonRenderer extends AbstractButtonRenderer
     public function determineClasses()
     {
         $classes = array();
-
+        
         $classes[] = $this->getButton()->getClasses();
-
+        
         if (! $this->getButton()->getAction())
         {
             $classes[] = 'disabled';
         }
-
+        
         return $classes;
     }
 }

@@ -30,7 +30,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('HomeCreated'));
+            $this->add_message(self::TYPE_NORMAL, Translation::get('HomeCreated'));
         }
         
         return true;
@@ -39,7 +39,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function create_basic_home()
     {
         $tab = new Tab();
-        $tab->setTitle(Translation :: get('Home'));
+        $tab->setTitle(Translation::get('Home'));
         $tab->setUserId(0);
         
         if (! $tab->create())
@@ -49,7 +49,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         
         $columnNews = new Column();
         $columnNews->setParentId($tab->get_id());
-        $columnNews->setTitle(Translation :: get('News'));
+        $columnNews->setTitle(Translation::get('News'));
         $columnNews->setWidth(66);
         $columnNews->setUserId(0);
         
@@ -60,7 +60,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         
         $columnVarious = new Column();
         $columnVarious->setParentId($tab->get_id());
-        $columnVarious->setTitle(Translation :: get('Various'));
+        $columnVarious->setTitle(Translation::get('Various'));
         $columnVarious->setWidth(33);
         $columnVarious->setUserId(0);
         

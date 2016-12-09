@@ -28,39 +28,39 @@ class SearchCompleteComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function run()
     {
         $response = array();
-
-        $query = Request :: get('term');
-
+        
+        $query = Request::get('term');
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session :: get_user_id()));
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new StaticConditionVariable(Session::get_user_id()));
         $or_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE),
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE), 
             '*' . $query . '*');
         $or_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION),
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION), 
             '*' . $query . '*');
         $conditions[] = new OrCondition($or_conditions);
         $condition = new AndCondition($conditions);
-
+        
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            null,
-            null,
+            $condition, 
+            null, 
+            null, 
             array(
                 new OrderBy(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE))));
-        $objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
-
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE))));
+        $objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        
         while ($object = $objects->next_result())
         {
             $response[] = array(
-                'id' => $object->get_id(),
-                'label' => StringUtilities :: getInstance()->truncate($object->get_title(), 23),
+                'id' => $object->get_id(), 
+                'label' => StringUtilities::getInstance()->truncate($object->get_title(), 23), 
                 'value' => $object->get_title());
         }
-
+        
         echo json_encode($response);
     }
 }

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\Glossary;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Glossary :: class_name();
+        return Glossary::class_name();
     }
 }

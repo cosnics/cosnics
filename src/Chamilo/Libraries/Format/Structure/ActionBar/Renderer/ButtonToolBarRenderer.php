@@ -65,32 +65,32 @@ class ButtonToolBarRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<div class="' . $this->getClasses() . '">';
-
+        
         foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
         {
             $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities :: getInstance()->getClassnameFromObject($buttonGroup) . 'Renderer';
+                 ClassnameUtilities::getInstance()->getClassnameFromObject($buttonGroup) . 'Renderer';
             $renderer = new $rendererClassName($buttonGroup);
             $html[] = $renderer->render($buttonGroup);
         }
-
+        
         if ($this->getButtonToolBar()->getSearchUrl())
         {
             $searchForm = $this->getSearchForm();
-
+            
             if ($searchForm->validate() && $searchForm->clearFormSubmitted())
             {
                 $redirectResponse = new RedirectResponse($searchForm->getActionURL());
                 $redirectResponse->send();
             }
-
+            
             $html[] = $searchForm->render();
         }
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -102,7 +102,7 @@ class ButtonToolBarRenderer
     {
         $classes = array('btn-toolbar', 'btn-action-toolbar');
         $classes = array_merge($classes, $this->getButtonToolBar()->getClasses());
-
+        
         return implode(' ', $classes);
     }
 
@@ -116,13 +116,13 @@ class ButtonToolBarRenderer
         {
             $this->searchForm = new ButtonSearchForm($this->getButtonToolBar()->getSearchUrl());
         }
-
+        
         return $this->searchForm;
     }
 
     /**
      * Returns the search query conditions
-     *
+     * 
      * @param array $properties
      * @return Condition
      * @uses Utilities :: query_to_condition() (deprecated)
@@ -134,15 +134,15 @@ class ButtonToolBarRenderer
         {
             $properties = array($properties);
         }
-
+        
         // get query
         $query = $this->getSearchForm()->getQuery();
-
+        
         // only process if we have a search query and properties
         if (isset($query) && count($properties))
         {
-            $search_conditions = Utilities :: query_to_condition($query, $properties);
-
+            $search_conditions = Utilities::query_to_condition($query, $properties);
+            
             $condition = $search_conditions;
         }
         return $condition;

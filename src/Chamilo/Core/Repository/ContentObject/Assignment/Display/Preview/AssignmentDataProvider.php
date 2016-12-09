@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AssignmentDataProvider implements
+class AssignmentDataProvider implements 
     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
 {
 
@@ -58,7 +58,7 @@ class AssignmentDataProvider implements
      */
     public function getEntityNameByType($entityType)
     {
-        return Translation :: get('User');
+        return Translation::get('User');
     }
 
     /**
@@ -164,7 +164,7 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntryTableForEntityTypeAndId()
      */
-    public function getEntryTableForEntityTypeAndId(\Chamilo\Libraries\Architecture\Application\Application $application,
+    public function getEntryTableForEntityTypeAndId(\Chamilo\Libraries\Architecture\Application\Application $application, 
         $entityType, $entityId)
     {
         // TODO Auto-generated method stub
@@ -193,7 +193,7 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createNote()
      */
-    public function createNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
+    public function createNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry, 
         \Chamilo\Core\User\Storage\DataClass\User $user, $submittedNote)
     {
         // TODO Auto-generated method stub
@@ -203,7 +203,7 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createScore()
      */
-    public function createScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
+    public function createScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry, 
         \Chamilo\Core\User\Storage\DataClass\User $user, $submittedScore)
     {
         // TODO Auto-generated method stub

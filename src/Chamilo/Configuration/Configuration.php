@@ -1,169 +1,115 @@
 <?php
 namespace Chamilo\Configuration;
 
-use Chamilo\Configuration\Service\ConfigurationCacheService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 
 /**
  * This class represents the current configuration
- * 
+ *
  * @package Chamilo\Configuration
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @deprecated Use a ConfigurationConsulter service now
  */
 class Configuration
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    // Constants
     const REGISTRATION_CONTEXT = 1;
     const REGISTRATION_TYPE = 2;
     const REGISTRATION_INTEGRATION = 3;
 
     /**
      * Instance of this class for the singleton pattern.
-     * 
-     * @var Configuration
+     *
+     * @var \Chamilo\Configuration\Configuration
      */
     private static $instance;
 
-    /**
-     *
-     * @var string[]
-     */
-    private $settings;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Storage\DataClass\Registration[]
-     */
-    public $registrations;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $languages;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $isAvailable;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationCacheService
-     */
-    private $configurationCacheService;
-
-    /**
-     * Constructor.
-     */
-    private function __construct(ConfigurationCacheService $configurationCacheService)
+    public function __construct()
     {
-        $this->configurationCacheService = $configurationCacheService;
-        $this->initialize();
+        $this->initializeContainer();
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationCacheService
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    public function getConfigurationCacheService()
+    public function getConfigurationConsulter()
     {
-        return $this->configurationCacheService;
+        return $this->getService('chamilo.configuration.service.configuration_consulter');
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationCacheService $configurationCacheService
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
-    public function setConfigurationCacheService($configurationCacheService)
+    public function getRegistrationConsulter()
     {
-        $this->configurationCacheService = $configurationCacheService;
+        return $this->getService('chamilo.configuration.service.registration_consulter');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     */
+    public function getLanguageConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.language_consulter');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
+     */
+    public function getFileConfigurationLocator()
+    {
+        return $this->getService('chamilo.configuration.service.file_configuration_locator');
     }
 
     /**
      * Returns the instance of this class.
-     * 
+     *
      * @return \Chamilo\Configuration\Configuration The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new static(new ConfigurationCacheService());
-            
-            if (self :: $instance->is_available() && self :: $instance->is_connectable())
-            {
-                self :: $instance->loadFromStorage();
-            }
-            else
-            {
-                self :: $instance->loadDefault();
-            }
+            self::$instance = new static();
         }
-        return self :: $instance;
-    }
-
-    /**
-     * Gets a parameter from the configuration.
-     * 
-     * @param string[] $keys
-     * @throws \Exception
-     * @return mixed
-     */
-    public function get_setting($keys)
-    {
-        $variables = $keys;
-        $values = $this->settings;
-        
-        while (count($variables) > 0)
-        {
-            $key = array_shift($variables);
-            
-            if (! isset($values[$key]))
-            {
-                if ($this->is_available())
-                {
-                    return null;
-                }
-                else
-                {
-                    echo 'The requested variable is not available in an unconfigured environment (' .
-                         implode(' > ', $keys) . ')';
-                    exit();
-                    // throw new \Exception(
-                    // 'The requested variable is not available in an unconfigured environment (' .
-                    // implode(' > ', $keys) . ')');
-                }
-            }
-            else
-            {
-                $values = $values[$key];
-            }
-        }
-        
-        return $values;
+        return self::$instance;
     }
 
     /**
      *
      * @param string[] $keys
-     * @param mixed $value
+     * @return string
+     */
+    public function get_setting($keys)
+    {
+        return $this->getConfigurationConsulter()->getSetting($keys);
+    }
+
+    /**
+     *
+     * @param string[] $keys
+     * @param mixed $value TODO: Reimplement this in the new services ?
      */
     public function set($keys, $value)
     {
         $variables = $keys;
         $values = &$this->settings;
-        
+
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-            
+
             if (! isset($values[$key]))
             {
                 $values[$key] = null;
@@ -174,77 +120,50 @@ class Configuration
                 $values = &$values[$key];
             }
         }
-        
+
         $values = $value;
     }
 
     /**
      *
-     * @return mixed
-     * @deprecated Use \Chamilo\Configuration\Configuration :: get_instance()->get_setting(array($keys)) now
+     * @return string
      */
     public static function get()
     {
-        return self :: get_instance()->get_setting(func_get_args());
-    }
-
-    private function initialize()
-    {
-        if ($this->is_available())
-        {
-            $this->loadFile();
-        }
-        else
-        {
-            $this->loadDefault();
-        }
+        return self::getInstance()->get_setting(func_get_args());
     }
 
     /**
      *
-     * @throws \Exception
      * @return boolean
      */
     public function is_available()
     {
-        if (! isset($this->isAvailable))
-        {
-            $file = $this->getConfigurationCacheService()->getConfigurationFilePath();
-            
-            if (is_file($file) && is_readable($file))
-            {
-                $this->isAvailable = true;
-            }
-            else
-            {
-                $this->isAvailable = false;
-            }
-        }
-        
-        return $this->isAvailable;
+        return $this->getFileConfigurationLocator()->isAvailable();
     }
 
     public function is_connectable()
     {
         $configuration = new \Doctrine\DBAL\Configuration();
-        
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine', 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'driver')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'username')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'host')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'name')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'password')));
-        
+
+        $data_source_name = DataSourceName::factory(
+            'Doctrine',
+            array(
+                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'),
+                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'),
+                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'),
+                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'),
+                'password' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'password')));
+
         $connection_parameters = array(
-            'user' => $data_source_name->get_username(), 
-            'password' => $data_source_name->get_password(), 
-            'host' => $data_source_name->get_host(), 
+            'user' => $data_source_name->get_username(),
+            'password' => $data_source_name->get_password(),
+            'host' => $data_source_name->get_host(),
             'driverClass' => $data_source_name->get_driver(true));
-        
+
         try
         {
-            DriverManager :: getConnection($connection_parameters, $configuration)->connect();
+            DriverManager::getConnection($connection_parameters, $configuration)->connect();
             return true;
         }
         catch (\Exception $exception)
@@ -259,111 +178,74 @@ class Configuration
      */
     public static function available()
     {
-        return self :: get_instance()->is_available();
-    }
-
-    /**
-     * Load the default base configuration file
-     */
-    private function loadFile()
-    {
-        $this->settings = $this->getConfigurationCacheService()->getConfigurationFileSettings();
-    }
-
-    /**
-     * Load the persistently stored configuration elements
-     */
-    private function loadFromStorage()
-    {
-        $this->registrations = $this->getConfigurationCacheService()->getRegistrationsCache();
-        $this->languages = $this->getConfigurationCacheService()->getLanguagesCache();
-        
-        $storedSettings = $this->getConfigurationCacheService()->getSettingsCache();
-        
-        if ($this->is_available())
-        {
-            $this->settings = $storedSettings;
-        }
-        else
-        {
-            foreach ($storedSettings as $context => $contextSettings)
-            {
-                foreach ($contextSettings as $variable => $value)
-                {
-                    $this->settings[$context][$variable] = $value;
-                }
-            }
-        }
+        return self::getInstance()->is_available();
     }
 
     /**
      *
      * @param string $context
-     * @return Registration
+     * @return string[]
      */
     public function get_registration($context)
     {
-        return $this->registrations[self :: REGISTRATION_CONTEXT][$context];
+        return $this->getRegistrationConsulter()->getRegistrationForContext($context);
     }
 
     /**
      *
      * @param string $context
-     * @return \configuration\Registration
+     * @return string[]
      */
     public static function registration($context)
     {
-        return self :: get_instance()->get_registration($context);
+        return self::getInstance()->get_registration($context);
     }
 
     /**
      *
-     * @return Registration[]
+     * @return string[]
      */
     public function get_registrations()
     {
-        return $this->registrations;
+        return $this->getRegistrationConsulter()->getRegistrations();
     }
 
     /**
-     * Returns the registration contexts
      *
-     * @return array
+     * @return string[]
      */
     public function get_registration_contexts()
     {
-        $registrations = $this->get_registrations();
-        return array_keys($registrations[Configuration::REGISTRATION_CONTEXT]);
+        return $this->getRegistrationConsulter()->getRegistrationContexts();
     }
 
     /**
      *
      * @param string $type
-     * @return \configuration\Registration[]
+     * @return string[]
      */
     public function get_registrations_by_type($type)
     {
-        $registrations = $this->registrations;
-        return $registrations[self :: REGISTRATION_TYPE][$type];
+        return $this->getRegistrationConsulter()->getRegistrationsByType($type);
     }
 
     /**
      *
      * @param string $type
-     * @return \configuration\Registration[]
+     * @return string[]
      */
     public static function registrations_by_type($type)
     {
-        return self :: get_instance()->get_registrations_by_type($type);
+        return self::getInstance()->get_registrations_by_type($type);
     }
 
     /**
      *
-     * @return \configuration\Registration[]
+     * @return string[]
      */
     public static function registrations()
     {
-        return self :: get_instance()->get_registrations();
+        return self::getInstance()->get_registrations();
     }
 
     /**
@@ -373,7 +255,7 @@ class Configuration
      */
     public static function is_registered($context)
     {
-        return self :: get_instance()->isRegistered($context);
+        return self::getInstance()->isRegistered($context);
     }
 
     /**
@@ -383,8 +265,7 @@ class Configuration
      */
     public function isRegistered($context)
     {
-        $registration = $this->get_registration($context);
-        return ! empty($registration);
+        return $this->getRegistrationConsulter()->isContextRegistered($context);
     }
 
     /**
@@ -394,145 +275,50 @@ class Configuration
      */
     public function isRegisteredAndActive($context)
     {
-        $registration = $this->get_registration($context);
-        return $this->isRegistered($context) &&
-             $registration[Registration :: PROPERTY_STATUS] == Registration :: STATUS_ACTIVE;
+        return $this->getRegistrationConsulter()->isContextRegisteredAndActive($context);
     }
 
     /**
      *
      * @param string $integration
      * @param string $root
-     * @return \Chamilo\Configuration\Storage\DataClass\Registration[]
+     * @return string[]
      */
     public function getIntegrationRegistrations($integration, $root = null)
     {
-        $integrationRegistrations = $this->registrations[self :: REGISTRATION_INTEGRATION][$integration];
-
-        if ($root)
-        {
-            $rootIntegrationRegistrations = array();
-            
-            foreach ($integrationRegistrations as $rootContext => $registration)
-            {
-                $rootContextStringUtilities = StringUtilities :: getInstance()->createString($rootContext);
-                if ($rootContextStringUtilities->startsWith($root))
-                {
-                    $rootIntegrationRegistrations[$rootContext] = $registration;
-                }
-            }
-            
-            return $rootIntegrationRegistrations;
-        }
-        else
-        {
-            return $integrationRegistrations;
-        }
-    }
-
-    public function getLanguages()
-    {
-        return $this->languages;
-    }
-
-    public function getLanguageNameFromIsocode($isocode)
-    {
-        $languages = $this->getLanguages();
-        return $languages[$isocode];
+        return $this->getRegistrationConsulter()->getIntegrationRegistrations($integration, $root);
     }
 
     /**
-     * Load a default configuration which should enable the installer to function properly without a completely
-     * configured environment
+     *
+     * @return string[]
      */
-    private function loadDefault()
+    public function getLanguages()
     {
-        $settings = array();
-        
-        $this->set(array('Chamilo\Core\Admin', 'show_administrator_data'), false);
-        $this->set(array('Chamilo\Core\Admin', 'whoisonlineaccess'), 2);
-        $this->set(array('Chamilo\Core\Admin', 'site_name'), 'Chamilo');
-        $this->set(array('Chamilo\Core\Admin', 'institution'), 'Chamilo');
-        $this->set(array('Chamilo\Core\Admin', 'institution_url'), 'http://www.chamilo.org');
-        $this->set(array('Chamilo\Core\Admin', 'platform_timezone'), 'Europe/Brussels');
-        $this->set(array('Chamilo\Core\Admin', 'theme'), 'Aqua');
-        $this->set(array('Chamilo\Core\Admin', 'html_editor'), 'Ckeditor');
-        $this->set(array('Chamilo\Core\Admin', 'allow_portal_functionality'), false);
-        $this->set(array('Chamilo\Core\Admin', 'enable_external_authentication'), false);
-        $this->set(array('Chamilo\Core\Admin', 'server_type'), 'production');
-        $this->set(array('Chamilo\Core\Admin', 'installation_blocked'), false);
-        $this->set(array('Chamilo\Core\Admin', 'platform_language'), 'en');
-        $this->set(array('Chamilo\Core\Admin', 'show_variable_in_translation'), false);
-        $this->set(array('Chamilo\Core\Admin', 'write_new_variables_to_translation_file'), false);
-        $this->set(array('Chamilo\Core\Admin', 'show_version_data'), false);
-        $this->set(array('Chamilo\Core\Admin', 'hide_dcda_markup'), true);
-        $this->set(array('Chamilo\Core\Admin', 'version'), '5.0');
-        $this->set(array('Chamilo\Core\Admin', 'maintenance_mode'), false);
+        return $this->getLanguageConsulter()->getLanguages();
+    }
 
-        $this->set(array('Chamilo\Core\Admin', 'administrator_email'), '');
-        $this->set(array('Chamilo\Core\Admin', 'administrator_website'), '');
-        $this->set(array('Chamilo\Core\Admin', 'administrator_surname'), '');
-        $this->set(array('Chamilo\Core\Admin', 'administrator_firstname'), '');
-        
-        $this->set(array('Chamilo\Core\Menu', 'show_sitemap'), false);
-        $this->set(array('Chamilo\Core\Menu', 'menu_renderer'), 'Bar');
-        $this->set(array('Chamilo\Core\Menu', 'brand_image'), '');
-        
-        $this->set(array('Chamilo\Core\Help', 'hide_empty_pages'), true);
-        
-        $this->set(array('Chamilo\Core\User', 'allow_user_change_platform_language'), false);
-        $this->set(array('Chamilo\Core\User', 'allow_user_quick_change_platform_language'), false);
-        
-        $url_append = str_replace('/src/Core/Install/index.php', '', $_SERVER['PHP_SELF']);
-        
-        $this->set(
-            array('Chamilo\Configuration', 'general', 'root_web'), 
-            'http://' . $_SERVER['HTTP_HOST'] . $url_append . '/');
-        $this->set(array('Chamilo\Configuration', 'general', 'url_append'), $url_append);
-        
-        $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
-        $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
-        $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_cache'), true);
-        $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'), false);
-        $this->set(array('Chamilo\Configuration', 'session', 'session_handler'), 'chamilo');
-
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'archive'), 
-            Path :: getInstance()->getStoragePath('archive'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'cache_path'), 
-            Path :: getInstance()->getStoragePath('cache'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'garbage'), 
-            Path :: getInstance()->getStoragePath('garbage_path'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'), 
-            Path :: getInstance()->getStoragePath('hotpotatoes'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'logs_path'), 
-            Path :: getInstance()->getStoragePath('logs'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'repository_path'), 
-            Path :: getInstance()->getStoragePath('repository'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'scorm_path'), 
-            Path :: getInstance()->getStoragePath('scorm'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'temp_path'), 
-            Path :: getInstance()->getStoragePath('temp'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'userpictures'), 
-            Path :: getInstance()->getStoragePath('userpictures_path'));
+    /**
+     *
+     * @param string $isocode
+     * @return string
+     */
+    public function getLanguageNameFromIsocode($isocode)
+    {
+        return $this->getLanguageConsulter()->getLanguageNameFromIsocode($isocode);
     }
 
     /**
      * Trigger a reset of the entire configuration to force a reload from storage
+     * TODO: Reimplement this in the new services
      */
     public static function reset()
     {
-        RecordResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
-        self :: get_instance()->getConfigurationCacheService()->clear();
-        self :: get_instance()->loadFromStorage();
+        RecordResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        DataClassResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        self::getInstance()->getConfigurationConsulter()->clearData();
+        self::getInstance()->getRegistrationConsulter()->clearData();
+        self::getInstance()->getLanguageConsulter()->clearData();
     }
 
     /**
@@ -542,6 +328,6 @@ class Configuration
      */
     public function has_settings($context)
     {
-        return isset($this->settings[$context]);
+        return $this->getConfigurationConsulter()->hasSettingsForContext($context);
     }
 }

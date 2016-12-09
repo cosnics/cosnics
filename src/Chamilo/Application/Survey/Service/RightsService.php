@@ -5,7 +5,6 @@ use Chamilo\Application\Survey\Repository\EntityRelationRepository;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Core\User\Storage\DataClass\User;
 
-
 /**
  *
  * @package Chamilo\Application\Survey\Service
@@ -15,22 +14,21 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class RightsService
 {
-    //Rights on publications
+    // Rights on publications
     const RIGHT_VIEW = 1;
     const RIGHT_TAKE = 2;
     const RIGHT_MAIL = 4;
     const RIGHT_REPORT = 8;
     const RIGHT_MANAGE = 16;
-   
-    //Rights on application
+    
+    // Rights on application
     const RIGHT_PUBLISH = 32;
-//     const RIGHT_USE = 16;
-//     const RIGHT_COPY = 32;
-//     
-
+    // const RIGHT_USE = 16;
+    // const RIGHT_COPY = 32;
+    //
     const APPLICATION_RIGHTS = 1;
     const PUBLICATION_RIGHTS = 2;
-    
+
     /**
      *
      * @var \Chamilo\Application\Survey\Service\RightsService
@@ -107,17 +105,18 @@ class RightsService
      */
     private function hasRightForPublication($right, User $user, Publication $Publication)
     {
-        if($right != self :: RIGHT_TAKE){
-
+        if ($right != self::RIGHT_TAKE)
+        {
+            
             if ($this->hasPublicationCreatorRights($user, $Publication))
             {
                 return true;
             }
         }
-
+        
         return $this->getEntityRelationService()->hasRight(
-            $this->getEntityService()->getEntitiesForUser($user),
-            $right,
+            $this->getEntityService()->getEntitiesForUser($user), 
+            $right, 
             $Publication);
     }
 
@@ -145,15 +144,15 @@ class RightsService
         {
             return true;
         }
-
+        
         if ($this->isPublicationCreator($user, $Publication))
         {
             return true;
         }
-
+        
         return $this->getEntityRelationService()->hasRight(
-            $this->getEntityService()->getEntitiesForUser($user),
-            self :: RIGHT_MANAGE,
+            $this->getEntityService()->getEntitiesForUser($user), 
+            self::RIGHT_MANAGE, 
             $Publication);
     }
 
@@ -166,7 +165,7 @@ class RightsService
      */
     public function canTakeSurvey(User $user, Publication $Publication)
     {
-        return $this->hasRightForPublication(self :: RIGHT_TAKE, $user, $Publication);
+        return $this->hasRightForPublication(self::RIGHT_TAKE, $user, $Publication);
     }
 
     /**
@@ -178,7 +177,7 @@ class RightsService
      */
     public function canViewAndExportResults(User $user, Publication $Publication)
     {
-        return $this->hasRightForPublication(self :: RIGHT_REPORT, $user, $Publication);
+        return $this->hasRightForPublication(self::RIGHT_REPORT, $user, $Publication);
     }
 
     /**
@@ -190,9 +189,9 @@ class RightsService
      */
     public function canManagePublication(User $user, Publication $Publication)
     {
-        return $this->hasRightForPublication(self :: RIGHT_MANAGE, $user, $Publication);
+        return $this->hasRightForPublication(self::RIGHT_MANAGE, $user, $Publication);
     }
-    
+
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -202,7 +201,7 @@ class RightsService
      */
     public function canMail(User $user, Publication $Publication)
     {
-        return $this->hasRightForPublication(self :: RIGHT_MAIL, $user, $Publication);
+        return $this->hasRightForPublication(self::RIGHT_MAIL, $user, $Publication);
     }
 
     /**
@@ -214,7 +213,7 @@ class RightsService
      */
     public function canPublish(User $user, Publication $Publication)
     {
-        return $this->hasRightForPublication(self :: RIGHT_PUBLISH, $user, $Publication);
+        return $this->hasRightForPublication(self::RIGHT_PUBLISH, $user, $Publication);
     }
 
     /**
@@ -226,8 +225,8 @@ class RightsService
      */
     public function getAggregatedRight($takeRight, $mailRight, $reportRight, $manageRight, $publishRight)
     {
-        $right = self :: RIGHT_VIEW;
-
+        $right = self::RIGHT_VIEW;
+        
         if ($takeRight)
         {
             $right = $right | $takeRight;
@@ -237,12 +236,12 @@ class RightsService
         {
             $right = $right | $mailRight;
         }
-
+        
         if ($reportRight)
         {
             $right = $right | $reportRight;
         }
-
+        
         if ($manageRight)
         {
             $right = $right | $manageRight;
@@ -252,7 +251,7 @@ class RightsService
         {
             $right = $publishRight;
         }
-
+        
         return $right;
     }
 
@@ -262,15 +261,14 @@ class RightsService
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
             $entityService = new EntityService();
-
-            self :: $instance = new static($entityRelationService, $entityService);
+            
+            self::$instance = new static($entityRelationService, $entityService);
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
-  
 }

@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Office365Video\Common\Rendition\HtmlRe
 
 class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
 {
+
     public function render()
     {
         $object = $this->get_content_object();

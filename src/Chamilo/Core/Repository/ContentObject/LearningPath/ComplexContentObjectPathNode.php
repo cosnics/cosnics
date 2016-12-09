@@ -37,12 +37,12 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
      */
     public function get_data()
     {
-        return $this->get_property(self :: PROPERTY_DATA);
+        return $this->get_property(self::PROPERTY_DATA);
     }
 
     public function set_data($data)
     {
-        $this->set_property(self :: PROPERTY_DATA, $data);
+        $this->set_property(self::PROPERTY_DATA, $data);
     }
 
     /**
@@ -53,8 +53,8 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
     {
         foreach ($this->get_data() as $attempt)
         {
-            if ($attempt->get_status() != AbstractItemAttempt :: STATUS_COMPLETED &&
-                 $attempt->get_status() != AbstractItemAttempt :: STATUS_PASSED)
+            if ($attempt->get_status() != AbstractItemAttempt::STATUS_COMPLETED &&
+                 $attempt->get_status() != AbstractItemAttempt::STATUS_PASSED)
             {
                 return $attempt;
             }
@@ -83,13 +83,13 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
         if (! isset($this->is_completed))
         {
             $this->is_completed = false;
-
-            if($this->get_content_object() instanceof LearningPath)
+            
+            if ($this->get_content_object() instanceof LearningPath)
             {
                 $descendants = $this->get_descendants();
-                foreach($descendants as $descendant)
+                foreach ($descendants as $descendant)
                 {
-                    if(!$descendant->is_completed())
+                    if (! $descendant->is_completed())
                     {
                         return false;
                     }
@@ -98,8 +98,8 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
             
             foreach ($this->get_data() as $attempt)
             {
-                if ($attempt->get_status() == AbstractItemAttempt :: STATUS_COMPLETED ||
-                     $attempt->get_status() == AbstractItemAttempt :: STATUS_PASSED)
+                if ($attempt->get_status() == AbstractItemAttempt::STATUS_COMPLETED ||
+                     $attempt->get_status() == AbstractItemAttempt::STATUS_PASSED)
                 {
                     $this->is_completed = true;
                     break;

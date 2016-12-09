@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * This component previews the complex content object
- *
+ * 
  * @author Sven Vanpoucke
  */
 class PreviewComponent extends Manager implements DelegateComponent
@@ -17,7 +17,7 @@ class PreviewComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
+            \Chamilo\Core\Repository\Builder\Action\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

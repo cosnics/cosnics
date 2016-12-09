@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * Description
- *
+ * 
  * @author Renaat De Muynck
  */
 class ComplexBuilderComponent extends Manager implements DelegateComponent
@@ -21,6 +21,6 @@ class ComplexBuilderComponent extends Manager implements DelegateComponent
 
     function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
     }
 }

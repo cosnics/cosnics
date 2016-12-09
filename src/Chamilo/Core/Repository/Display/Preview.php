@@ -15,16 +15,16 @@ abstract class Preview extends Application
 {
     const PARAM_ACTION = 'preview_action';
     const ACTION_VIEW = 'Viewer';
-    const DEFAULT_ACTION = self :: ACTION_VIEW;
+    const DEFAULT_ACTION = self::ACTION_VIEW;
 
     public static function get_default_action()
     {
-        return self :: DEFAULT_ACTION;
+        return self::DEFAULT_ACTION;
     }
 
     /**
      * Method always has to be implemented for a class implementing the Display
-     *
+     * 
      * @return \core\repository\ContentObject
      */
     public function get_root_content_object()
@@ -34,17 +34,17 @@ abstract class Preview extends Application
 
     /**
      * Inform the user that the requested functionality is not available in preview mode
-     *
+     * 
      * @param string $message
      */
     public function not_available($message)
     {
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = Display :: normal_message($message);
+        $html[] = Display::normal_message($message);
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 

@@ -40,7 +40,7 @@ class BrowserComponent extends Manager implements TableSupport
         
         if (! $this->getSchemaId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Schema', null, 'Chamilo\Core\Metadata\Schema'));
+            throw new NoObjectSelectedException(Translation::get('Schema', null, 'Chamilo\Core\Metadata\Schema'));
         }
         
         $html = array();
@@ -82,12 +82,12 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
-                            \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $this->getSchemaId()))));
+                            self::PARAM_ACTION => self::ACTION_CREATE, 
+                            \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $this->getSchemaId()))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -109,7 +109,7 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
         
         $searchCondition = $this->getButtonToolbarRenderer()->get_conditions(
-            array(new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_NAME)));
+            array(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_NAME)));
         
         if ($searchCondition)
         {
@@ -117,8 +117,8 @@ class BrowserComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_SCHEMA_ID), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSchemaId()));
         
         return new AndCondition($conditions);

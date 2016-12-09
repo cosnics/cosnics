@@ -195,7 +195,7 @@ class Configuration
      */
     public function show_answer_feedback()
     {
-        return $this->get_show_answer_feedback() != self :: ANSWER_FEEDBACK_TYPE_NONE;
+        return $this->get_show_answer_feedback() != self::ANSWER_FEEDBACK_TYPE_NONE;
     }
 
     /**
@@ -214,11 +214,11 @@ class Configuration
     {
         switch ($this->get_feedback_location())
         {
-            case self :: FEEDBACK_LOCATION_TYPE_BOTH :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_PAGE;
+            case self::FEEDBACK_LOCATION_TYPE_BOTH :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_PAGE;
                 break;
-            case self :: FEEDBACK_LOCATION_TYPE_SUMMARY :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_NONE;
+            case self::FEEDBACK_LOCATION_TYPE_SUMMARY :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_NONE;
                 break;
         }
     }
@@ -230,11 +230,11 @@ class Configuration
     {
         switch ($this->get_feedback_location())
         {
-            case self :: FEEDBACK_LOCATION_TYPE_NONE :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_SUMMARY;
+            case self::FEEDBACK_LOCATION_TYPE_NONE :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_SUMMARY;
                 break;
-            case self :: FEEDBACK_LOCATION_TYPE_PAGE :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_BOTH;
+            case self::FEEDBACK_LOCATION_TYPE_PAGE :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_BOTH;
                 break;
         }
     }
@@ -246,11 +246,11 @@ class Configuration
     {
         switch ($this->get_feedback_location())
         {
-            case self :: FEEDBACK_LOCATION_TYPE_BOTH :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_SUMMARY;
+            case self::FEEDBACK_LOCATION_TYPE_BOTH :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_SUMMARY;
                 break;
-            case self :: FEEDBACK_LOCATION_TYPE_PAGE :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_NONE;
+            case self::FEEDBACK_LOCATION_TYPE_PAGE :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_NONE;
                 break;
         }
     }
@@ -262,11 +262,11 @@ class Configuration
     {
         switch ($this->get_feedback_location())
         {
-            case self :: FEEDBACK_LOCATION_TYPE_NONE :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_PAGE;
+            case self::FEEDBACK_LOCATION_TYPE_NONE :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_PAGE;
                 break;
-            case self :: FEEDBACK_LOCATION_TYPE_SUMMARY :
-                $this->feedback_location = self :: FEEDBACK_LOCATION_TYPE_BOTH;
+            case self::FEEDBACK_LOCATION_TYPE_SUMMARY :
+                $this->feedback_location = self::FEEDBACK_LOCATION_TYPE_BOTH;
                 break;
         }
     }
@@ -288,8 +288,8 @@ class Configuration
      */
     public function show_feedback_after_every_page()
     {
-        return $this->get_feedback_location() == self :: FEEDBACK_LOCATION_TYPE_PAGE ||
-             $this->get_feedback_location() == self :: FEEDBACK_LOCATION_TYPE_BOTH;
+        return $this->get_feedback_location() == self::FEEDBACK_LOCATION_TYPE_PAGE ||
+             $this->get_feedback_location() == self::FEEDBACK_LOCATION_TYPE_BOTH;
     }
 
     /**
@@ -299,8 +299,8 @@ class Configuration
      */
     public function show_feedback_summary()
     {
-        return $this->get_feedback_location() == self :: FEEDBACK_LOCATION_TYPE_SUMMARY ||
-             $this->get_feedback_location() == self :: FEEDBACK_LOCATION_TYPE_BOTH;
+        return $this->get_feedback_location() == self::FEEDBACK_LOCATION_TYPE_SUMMARY ||
+             $this->get_feedback_location() == self::FEEDBACK_LOCATION_TYPE_BOTH;
     }
 
     /**
@@ -309,7 +309,7 @@ class Configuration
      */
     public function get_answer_feedback_string()
     {
-        return self :: answer_feedback_string($this->get_show_answer_feedback());
+        return self::answer_feedback_string($this->get_show_answer_feedback());
     }
 
     /**
@@ -322,36 +322,36 @@ class Configuration
     {
         switch ($answer_feedback_type)
         {
-            case Configuration :: ANSWER_FEEDBACK_TYPE_QUESTION :
+            case Configuration::ANSWER_FEEDBACK_TYPE_QUESTION :
                 $variable = 'AnswerFeedbackQuestion';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN :
+            case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN :
                 $variable = 'AnswerFeedbackOnGivenAnswers';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT :
+            case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT :
                 $variable = 'AnswerFeedbackOnGivenAnswersWhenCorrect';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG :
+            case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG :
                 $variable = 'AnswerFeedbackOnGivenAnswersWhenWrong';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT :
+            case Configuration::ANSWER_FEEDBACK_TYPE_CORRECT :
                 $variable = 'AnswerFeedbackOnCorrectAnswers';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_WRONG :
+            case Configuration::ANSWER_FEEDBACK_TYPE_WRONG :
                 $variable = 'AnswerFeedbackOnWrongAnswers';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_ALL :
+            case Configuration::ANSWER_FEEDBACK_TYPE_ALL :
                 $variable = 'AnswerFeedbackOnAllAnswers';
                 break;
-            case Configuration :: ANSWER_FEEDBACK_TYPE_NONE :
+            case Configuration::ANSWER_FEEDBACK_TYPE_NONE :
                 $variable = 'AnswerFeedbackNone';
                 break;
             default :
-                throw new \Exception(Translation :: get('NoSuchAnswerFeedbackType'));
+                throw new \Exception(Translation::get('NoSuchAnswerFeedbackType'));
                 break;
         }
         
-        return Translation :: get($variable);
+        return Translation::get($variable);
     }
 
     /**
@@ -361,13 +361,13 @@ class Configuration
     static public function get_answer_feedback_types()
     {
         return array(
-            self :: ANSWER_FEEDBACK_TYPE_NONE, 
-            self :: ANSWER_FEEDBACK_TYPE_QUESTION, 
-            self :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-            self :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-            self :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-            self :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-            self :: ANSWER_FEEDBACK_TYPE_WRONG, 
-            self :: ANSWER_FEEDBACK_TYPE_ALL);
+            self::ANSWER_FEEDBACK_TYPE_NONE, 
+            self::ANSWER_FEEDBACK_TYPE_QUESTION, 
+            self::ANSWER_FEEDBACK_TYPE_GIVEN, 
+            self::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
+            self::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
+            self::ANSWER_FEEDBACK_TYPE_CORRECT, 
+            self::ANSWER_FEEDBACK_TYPE_WRONG, 
+            self::ANSWER_FEEDBACK_TYPE_ALL);
     }
 }

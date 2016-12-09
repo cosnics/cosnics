@@ -15,19 +15,19 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_display_properties()
     {
         $object = $this->get_object();
-        $properties = parent :: get_display_properties();
-        $properties[Translation :: get('Branches')] = implode(', ', $object->get_branches());
+        $properties = parent::get_display_properties();
+        $properties[Translation::get('Branches')] = implode(', ', $object->get_branches());
         if ($object->get_download_link())
         {
             $toolbar_item = new ToolbarItem(
-                Translation :: get('Download'),
-                Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\Implementation\Bitbucket',
-                    'Action/Download'),
-                $object->get_download_link(),
-                ToolbarItem :: DISPLAY_ICON);
-
-            $properties[Translation :: get('Download')] = $toolbar_item->as_html();
+                Translation::get('Download'), 
+                Theme::getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Bitbucket', 
+                    'Action/Download'), 
+                $object->get_download_link(), 
+                ToolbarItem::DISPLAY_ICON);
+            
+            $properties[Translation::get('Download')] = $toolbar_item->as_html();
         }
         return $properties;
     }
@@ -44,17 +44,17 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         }
         else
         {
-            return parent :: get_preview($is_thumbnail);
+            return parent::get_preview($is_thumbnail);
         }
     }
 
     public function as_html()
     {
         $html = array();
-        $html[] = parent :: as_html();
-
+        $html[] = parent::as_html();
+        
         $object = $this->get_object();
-
+        
         // tags
         $tags = $object->get_tags();
         if ($tags)
@@ -65,33 +65,33 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $row = array();
                 $row[] = $tag->get_name();
                 $row[] = $tag->get_author();
-                $row[] = DatetimeUtilities :: format_locale_date(null, $tag->get_time());
+                $row[] = DatetimeUtilities::format_locale_date(null, $tag->get_time());
                 $row[] = $tag->get_branch();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('Download'),
-                    Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'Action/Download'),
-                    $tag->get_download_link(),
-                    ToolbarItem :: DISPLAY_ICON);
+                    Translation::get('Download'), 
+                    Theme::getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\Implementation\Bitbucket', 
+                        'Action/Download'), 
+                    $tag->get_download_link(), 
+                    ToolbarItem::DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
                 $data[] = $row;
             }
-
+            
             $headers = array();
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Name'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Author'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Time'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Branch'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Download'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Name'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Author'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Time'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Branch'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Download'));
             $headers[] = new StaticTableColumn('');
-
+            
             $table = new SortableTableFromArray($data, $headers);
-
-            $html[] = '<h3>' . Translation :: get('Tags') . '</h3>';
+            
+            $html[] = '<h3>' . Translation::get('Tags') . '</h3>';
             $html[] = $table->toHtml();
         }
-
+        
         // changesets
         $changesets = $object->get_changesets();
         if ($changesets)
@@ -101,37 +101,37 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             {
                 $row = array();
                 $row[] = $changeset->get_revision();
-
+                
                 $row[] = $changeset->get_author();
                 $row[] = $changeset->get_message();
-                $row[] = DatetimeUtilities :: format_locale_date(null, $changeset->get_time());
+                $row[] = DatetimeUtilities::format_locale_date(null, $changeset->get_time());
                 $row[] = $changeset->get_branch();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('Download'),
-                    Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'Action/Download'),
-                    $changeset->get_download_link(),
-                    ToolbarItem :: DISPLAY_ICON);
+                    Translation::get('Download'), 
+                    Theme::getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\Implementation\Bitbucket', 
+                        'Action/Download'), 
+                    $changeset->get_download_link(), 
+                    ToolbarItem::DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
                 $data[] = $row;
             }
-
+            
             $headers = array();
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Revision'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Author'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Message'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Time'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Branch'));
-            $headers[] = new SortableStaticTableColumn(Translation :: get('Download'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Revision'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Author'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Message'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Time'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Branch'));
+            $headers[] = new SortableStaticTableColumn(Translation::get('Download'));
             $headers[] = new StaticTableColumn('');
-
+            
             $table = new SortableTableFromArray($data, $headers);
-
-            $html[] = '<h3>' . Translation :: get('Changesets') . '</h3>';
+            
+            $html[] = '<h3>' . Translation::get('Changesets') . '</h3>';
             $html[] = $table->toHtml();
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 }

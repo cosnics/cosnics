@@ -20,6 +20,6 @@ class AttemptQuestion extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name());
     }
 }

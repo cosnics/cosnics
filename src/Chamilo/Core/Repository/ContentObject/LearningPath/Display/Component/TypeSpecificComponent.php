@@ -21,16 +21,19 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
     public function build()
     {
         $this->validateAndFixCurrentStep();
-
-        $object_namespace = $this->get_current_node()->get_content_object()->package();
-        $integration_namespace = $object_namespace . '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         
-        $factory = new ApplicationFactory($integration_namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $integration_namespace = $object_namespace .
+             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
+        
+        $factory = new ApplicationFactory(
+            $integration_namespace, 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

@@ -19,7 +19,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_ENTRY_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_ENTRY_ID));
     }
 
     /**
@@ -28,7 +28,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public function getEntryId()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTRY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTRY_ID);
     }
 
     /**
@@ -37,6 +37,6 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public function setEntryId($entryId)
     {
-        $this->set_default_property(self :: PROPERTY_ENTRY_ID, $entryId);
+        $this->set_default_property(self::PROPERTY_ENTRY_ID, $entryId);
     }
 }

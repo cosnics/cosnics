@@ -12,7 +12,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implement
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -22,7 +22,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implement
      */
     public function get_wiki_page_statistics_reporting_template_name()
     {
-        throw new \Exception(Translation :: get('ImpossibleInPreviewMode'));
+        throw new \Exception(Translation::get('ImpossibleInPreviewMode'));
     }
 
     /**
@@ -30,6 +30,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implement
      */
     public function get_wiki_statistics_reporting_template_name()
     {
-        throw new \Exception(Translation :: get('ImpossibleInPreviewMode'));
+        throw new \Exception(Translation::get('ImpossibleInPreviewMode'));
     }
 }

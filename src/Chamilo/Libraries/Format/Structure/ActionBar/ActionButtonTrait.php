@@ -35,9 +35,8 @@ trait ActionButtonTrait
     /**
      * Initialize method as replacement for constructor due to PHP issue
      * https://bugs.php.net/bug.php?id=65576
-     *
      * TODO: fix this once everyone moves to PHP 5.6
-     *
+     * 
      * @param string $action
      * @param string $confirmation
      * @param string $target
@@ -84,7 +83,7 @@ trait ActionButtonTrait
     {
         if ($confirmation === true)
         {
-            $this->confirmation = Translation :: get('ConfirmChosenAction', null, Utilities :: COMMON_LIBRARIES);
+            $this->confirmation = Translation::get('ConfirmChosenAction', null, Utilities::COMMON_LIBRARIES);
         }
         else
         {

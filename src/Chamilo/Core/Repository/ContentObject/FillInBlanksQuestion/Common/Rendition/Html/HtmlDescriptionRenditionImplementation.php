@@ -12,7 +12,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -23,7 +23,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $answer_text = $object->get_answer_text();
         
         // get the regular text
-        $clear_text = preg_split(FillInBlanksQuestionAnswer :: CLOZE_REGEX, $answer_text);
+        $clear_text = preg_split(FillInBlanksQuestionAnswer::CLOZE_REGEX, $answer_text);
         
         // get the answers
         $answers = $object->get_answers();
@@ -42,14 +42,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html = array();
         
         // default scores
-        $html[] = '<br/><b>' . Translation :: get('DefaultScores') . ':</b><br/>';
+        $html[] = '<br/><b>' . Translation::get('DefaultScores') . ':</b><br/>';
         $html[] = $object->get_default_positive_score();
         $html[] = ' / ';
         $html[] = $object->get_default_negative_score();
         $html[] = '<br/><br/>';
         
         // answer text
-        $html[] = '<b>' . Translation :: get('Excercise') . ':</b><br/>';
+        $html[] = '<b>' . Translation::get('Excercise') . ':</b><br/>';
         
         for ($i = 0; $i < $questions; $i ++)
         {
@@ -57,7 +57,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = $clear_text[$i];
             
             // answer $i
-            if ($object->get_question_type() == FillInBlanksQuestion :: TYPE_SELECT)
+            if ($object->get_question_type() == FillInBlanksQuestion::TYPE_SELECT)
             {
                 // combobox
                 $answer_select = array();
@@ -76,8 +76,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 // uniform inputfield
                 $size = $object->get_input_field_size($i);
                 $best = $object->get_best_answer_for_question($i);
-                $html[] = '<input class="' . FillInBlanksQuestion :: TEXT_INPUT_FIELD_CSS_CLASS . '" size="' . $size .
-                     '" title="' . Translation :: get('BestAnswer') . '" value="' . $best->get_value() . '" />';
+                $html[] = '<input class="' . FillInBlanksQuestion::TEXT_INPUT_FIELD_CSS_CLASS . '" size="' . $size .
+                     '" title="' . Translation::get('BestAnswer') . '" value="' . $best->get_value() . '" />';
             }
         }
         

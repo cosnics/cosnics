@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Service;
 
 use Chamilo\Core\Home\Rights\Storage\DataClass\ElementTargetEntity;
@@ -9,26 +8,28 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Service to manage the rights for the given element types
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ElementRightsService
 {
+
     /**
+     *
      * @var RightsRepository
      */
     protected $rightsRepository;
 
     /**
      * Caching of the valid element ids per specific user
-     *
+     * 
      * @var int[]
      */
     protected $elementIdsPerUser;
 
     /**
      * BlockTypeRightsService constructor.
-     *
+     * 
      * @param RightsRepository $rightsRepository
      */
     public function __construct(RightsRepository $rightsRepository)
@@ -38,17 +39,17 @@ class ElementRightsService
 
     /**
      * Sets the target entities for a given element
-     *
+     * 
      * @param Element $element
      * @param array $targetEntities
      */
     public function setTargetEntitiesForElement(Element $element, $targetEntities = array())
     {
-        if (!$this->rightsRepository->clearTargetEntitiesForElement($element))
+        if (! $this->rightsRepository->clearTargetEntitiesForElement($element))
         {
             throw new \RuntimeException('Failed to delete the target entities for element ' . $element->getId());
         }
-
+        
         foreach ($targetEntities as $targetEntityType => $targetEntityIdentifiers)
         {
             foreach ($targetEntityIdentifiers as $targetEntityIdentifier)
@@ -57,15 +58,15 @@ class ElementRightsService
                 $elementTargetEntity->set_element_id($element->getId());
                 $elementTargetEntity->set_entity_type($targetEntityType);
                 $elementTargetEntity->set_entity_id($targetEntityIdentifier);
-
-                if (!$elementTargetEntity->create())
+                
+                if (! $elementTargetEntity->create())
                 {
                     throw new \RuntimeException(
                         sprintf(
-                            'Could not create a new element target entity for element %s, entity type %s and entity id %s',
-                            $element->getId(), $targetEntityType, $targetEntityIdentifier
-                        )
-                    );
+                            'Could not create a new element target entity for element %s, entity type %s and entity id %s', 
+                            $element->getId(), 
+                            $targetEntityType, 
+                            $targetEntityIdentifier));
                 }
             }
         }
@@ -73,7 +74,7 @@ class ElementRightsService
 
     /**
      * Returns the target entities for a given element
-     *
+     * 
      * @param Element $element
      *
      * @return ElementTargetEntity[]
@@ -85,7 +86,7 @@ class ElementRightsService
 
     /**
      * Checks whether or not a user can view the given element
-     *
+     * 
      * @param User $user
      * @param Element $element
      *
@@ -98,7 +99,7 @@ class ElementRightsService
 
     /**
      * Returns the element id's that have been limited to
-     *
+     * 
      * @param User $user
      *
      * @return int[]
@@ -106,16 +107,15 @@ class ElementRightsService
     protected function getElementIdsForUser(User $user)
     {
         $userId = $user->getId();
-
-        if(!isset($this->elementIdsPerUser[$userId]))
+        
+        if (! isset($this->elementIdsPerUser[$userId]))
         {
             $elementIdsForAllUsers = $this->rightsRepository->findElementIdsWithNoTargetEntities();
             $elementIdsForUser = $this->rightsRepository->findElementIdsTargetedForUser($user);
-
+            
             $this->elementIdsPerUser[$userId] = array_merge($elementIdsForAllUsers, $elementIdsForUser);
         }
-
+        
         return $this->elementIdsPerUser[$userId];
     }
-
 }

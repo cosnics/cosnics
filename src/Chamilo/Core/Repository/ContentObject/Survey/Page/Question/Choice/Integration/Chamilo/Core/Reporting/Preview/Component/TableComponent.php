@@ -27,7 +27,7 @@ class TableComponent extends Manager implements TemplateSupport
             '\Chamilo\Core\Reporting\Viewer', 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
-        $viewer->set_template_by_name(TableTemplate :: class_name());
+        $viewer->set_template_by_name(TableTemplate::class_name());
         
         return $viewer->run();
     }

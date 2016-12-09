@@ -30,14 +30,13 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $packageListBuilder = new PackageBundles(PackageList :: ROOT, $identifier);
-
+        $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier);
         $packageList = $packageListBuilder->getPackageList();
         $packageList->get_all_packages();
         $packageList->get_all_packages(true);
         $packageList->get_list();
         $packageList->get_list(true);
-
+        
         return $this->getCacheProvider()->save($identifier, $packageList);
     }
 
@@ -47,7 +46,7 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function getIdentifiers()
     {
-        return array(PackageList :: MODE_ALL, PackageList :: MODE_INSTALLED, PackageList :: MODE_AVAILABLE);
+        return array(PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE);
     }
 
     /**
@@ -56,7 +55,7 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function getAllPackages()
     {
-        return $this->getForIdentifier(PackageList :: MODE_ALL);
+        return $this->getForIdentifier(PackageList::MODE_ALL);
     }
 
     /**
@@ -65,7 +64,7 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function getInstalledPackages()
     {
-        return $this->getForIdentifier(PackageList :: MODE_INSTALLED);
+        return $this->getForIdentifier(PackageList::MODE_INSTALLED);
     }
 
     /**
@@ -74,6 +73,6 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function getAvailablePackages()
     {
-        return $this->getForIdentifier(PackageList :: MODE_AVAILABLE);
+        return $this->getForIdentifier(PackageList::MODE_AVAILABLE);
     }
 }

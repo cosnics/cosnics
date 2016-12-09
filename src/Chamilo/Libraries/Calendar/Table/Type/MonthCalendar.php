@@ -2,13 +2,13 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  * A tabular representation of a month calendar
- *
+ * 
  * @package libraries\calendar\table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -20,7 +20,7 @@ class MonthCalendar extends Calendar
 
     /**
      * Keep mapping of dates and their corresponding table cells
-     *
+     * 
      * @var integer[]
      */
     private $cellMapping;
@@ -33,16 +33,16 @@ class MonthCalendar extends Calendar
 
     /**
      * Creates a new month calendar
-     *
+     * 
      * @param integer $displayTime A time in the month to be displayed
      */
     public function __construct($displayTime, $dayUrlTemplate = null, $classes = array())
     {
         parent::__construct($displayTime, $classes);
-
+        
         $this->cellMapping = array();
         $this->dayUrlTemplate = $dayUrlTemplate;
-
+        
         $this->buildTable();
     }
 
@@ -50,19 +50,19 @@ class MonthCalendar extends Calendar
      * Gets the first date which will be displayed by this calendar.
      * This is always a monday. If the current month
      * doesn't start on a monday, the last monday of previous month is returned.
-     *
+     * 
      * @return integer
      */
     public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
-
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        
         if ($setting == 'sunday')
         {
             return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
         }
-
+        
         return strtotime('Next Monday', strtotime('-1 Week', $firstDay));
     }
 
@@ -70,25 +70,25 @@ class MonthCalendar extends Calendar
      * Gets the end date which will be displayed by this calendar.
      * This is always a sunday. Of the current month doesn't
      * end on a sunday, the first sunday of next month is returned.
-     *
+     * 
      * @return int
      */
     public function getEndTime()
     {
         $endTime = $this->getStartTime();
-
+        
         while (date('Ym', $endTime) <= date('Ym', $this->getDisplayTime()))
         {
             $endTime = strtotime('+1 Week', $endTime);
         }
-
+        
         return $endTime;
     }
 
     protected function getFirstTableDate($firstDay)
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
-
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        
         if ($setting == 'sunday')
         {
             return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
@@ -102,34 +102,34 @@ class MonthCalendar extends Calendar
     protected function setHeader()
     {
         $header = $this->getHeader();
-
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
-
+        
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        
         if ($setting == 'sunday')
         {
             $header->addRow(
                 array(
-                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES), 
                     Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES)));
         }
         else
         {
             $header->addRow(
                 array(
-                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES), 
                     Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES)));
         }
-
+        
         $header->setRowType(0, 'th');
     }
 
@@ -141,25 +141,25 @@ class MonthCalendar extends Calendar
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
         $tableDate = $this->getFirstTableDate($firstDay);
         $cell = 0;
-
+        
         while (date('Ym', $tableDate) <= date('Ym', $this->getDisplayTime()))
         {
             do
             {
                 $row = intval($cell / 7);
                 $column = $cell % 7;
-
+                
                 $this->cellMapping[date('Ymd', $tableDate)] = array($row, $column);
-
+                
                 $classes = $this->determineCellClasses($tableDate);
-
+                
                 if (count($classes) > 0)
                 {
                     $this->updateCellAttributes($row, $column, 'class="' . implode(' ', $classes) . '"');
                 }
-
+                
                 $this->setCellContents($row, $column, $this->determineCellContent($tableDate));
-
+                
                 $cell ++;
                 $tableDate = strtotime('+1 Day', $tableDate);
             }
@@ -177,25 +177,25 @@ class MonthCalendar extends Calendar
     protected function determineCellClasses($tableDate)
     {
         $classes = array();
-
+        
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))
         {
             $classes[] = 'table-calendar-highlight';
         }
-
+        
         // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
         if (date('w', $tableDate) % 6 == 0)
         {
             $classes[] = 'table-calendar-weekend';
         }
-
+        
         // Is current table date in this month or another one?
         if (date('Ym', $tableDate) != date('Ym', $this->getDisplayTime()))
         {
             $classes[] = 'table-calendar-disabled';
         }
-
+        
         return $classes;
     }
 
@@ -208,7 +208,7 @@ class MonthCalendar extends Calendar
     {
         $dayLabel = date('j', $tableDate);
         $dayUrlTemplate = $this->getDayUrlTemplate();
-
+        
         if (is_null($dayUrlTemplate))
         {
             return $dayLabel;
@@ -225,19 +225,19 @@ class MonthCalendar extends Calendar
     public function addEvents()
     {
         $events = $this->getEventsToShow();
-
+        
         foreach ($events as $time => $items)
         {
             $cellMappingKey = date('Ymd', $time);
-
+            
             $row = $this->cellMapping[$cellMappingKey][0];
             $column = $this->cellMapping[$cellMappingKey][1];
-
-            if(is_null($row) || is_null($column))
+            
+            if (is_null($row) || is_null($column))
             {
                 continue;
             }
-
+            
             foreach ($items as $index => $item)
             {
                 try

@@ -31,77 +31,77 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $admin_ids = Request :: get(self :: PARAM_ADMIN_ID);
-
+        
+        $admin_ids = Request::get(self::PARAM_ADMIN_ID);
+        
         try
         {
             if (empty($admin_ids))
             {
                 $selected_entity_type = $this->get_selected_entity_type();
                 $selected_entity_id = $this->get_selected_entity_id();
-
+                
                 if (empty($selected_entity_type) || empty($selected_entity_id))
                 {
-                    throw new NoObjectSelectedException(Translation :: get('Target'));
+                    throw new NoObjectSelectedException(Translation::get('Target'));
                 }
                 else
                 {
-
+                    
                     if (! is_array($selected_entity_id))
                     {
                         $selected_entity_id = array($selected_entity_id);
                     }
-
+                    
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ORIGIN),
-                        new StaticConditionVariable(Admin :: ORIGIN_INTERNAL));
+                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ORIGIN), 
+                        new StaticConditionVariable(Admin::ORIGIN_INTERNAL));
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                         new StaticConditionVariable($selected_entity_type));
                     $conditions[] = new InCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
                         $selected_entity_id);
                     $condition = new AndCondition($conditions);
-
-                    if (! DataManager :: deletes(Admin :: class_name(), $condition))
+                    
+                    if (! DataManager::deletes(Admin::class_name(), $condition))
                     {
                         $success = false;
-                        $message = Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('Target')),
-                            Utilities :: COMMON_LIBRARIES);
+                        $message = Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('Target')), 
+                            Utilities::COMMON_LIBRARIES);
                     }
                     else
                     {
                         // Let's determine where we want to redirect
                         // 1. Admin-instances with the same entity type
                         $condition = new EqualityCondition(
-                            new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                             new StaticConditionVariable($selected_entity_type));
-
+                        
                         $condition = new AndCondition($condition);
-
-                        $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+                        
+                        $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                        
                         if ($count > 0)
                         {
                             $parameters = array(
-                                self :: PARAM_ACTION => self :: ACTION_ENTITY,
-                                self :: PARAM_ENTITY_TYPE => $selected_entity_type);
+                                self::PARAM_ACTION => self::ACTION_ENTITY, 
+                                self::PARAM_ENTITY_TYPE => $selected_entity_type);
                         }
                         else
                         {
-                            $count = DataManager :: count(Admin :: class_name());
-
+                            $count = DataManager::count(Admin::class_name());
+                            
                             if ($count > 0)
                             {
-                                $parameters = array(self :: PARAM_ACTION => self :: ACTION_ENTITY);
+                                $parameters = array(self::PARAM_ACTION => self::ACTION_ENTITY);
                             }
                             else
                             {
-                                $parameters = array(self :: PARAM_ACTION => self :: ACTION_CREATE);
+                                $parameters = array(self::PARAM_ACTION => self::ACTION_CREATE);
                             }
                         }
                     }
@@ -109,93 +109,93 @@ class DeleterComponent extends Manager
             }
             else
             {
-
+                
                 if (! is_array($admin_ids))
                 {
                     $admin_ids = array($admin_ids);
                 }
-
+                
                 foreach ($admin_ids as $admin_id)
                 {
-                    $admin = DataManager :: retrieve_by_id(Admin :: class_name(), $admin_id);
-
-                    if ($admin->get_origin() == Admin :: ORIGIN_EXTERNAL || ! $admin->delete())
+                    $admin = DataManager::retrieve_by_id(Admin::class_name(), $admin_id);
+                    
+                    if ($admin->get_origin() == Admin::ORIGIN_EXTERNAL || ! $admin->delete())
                     {
                         $success = false;
-                        $message = Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('Target')),
-                            Utilities :: COMMON_LIBRARIES);
+                        $message = Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('Target')), 
+                            Utilities::COMMON_LIBRARIES);
                         break;
                     }
                 }
-
+                
                 // Let's try and determine where we want to redirect
                 // 1. Admin-instances with the same entity id, entity type and target type
                 $conditions = array();
-
+                
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($admin->get_entity_id()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_TYPE),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE), 
                     new StaticConditionVariable($admin->get_target_type()));
-
+                
                 $condition = new AndCondition($conditions);
-
-                $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+                
+                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                
                 if ($count > 0)
                 {
                     $parameters = array(
-                        self :: PARAM_ACTION => self :: ACTION_TARGET,
-                        self :: PARAM_ENTITY_TYPE => $admin->get_entity_type(),
-                        self :: PARAM_ENTITY_ID => $admin->get_entity_id(),
-                        self :: PARAM_TARGET_TYPE => $admin->get_target_type());
+                        self::PARAM_ACTION => self::ACTION_TARGET, 
+                        self::PARAM_ENTITY_TYPE => $admin->get_entity_type(), 
+                        self::PARAM_ENTITY_ID => $admin->get_entity_id(), 
+                        self::PARAM_TARGET_TYPE => $admin->get_target_type());
                 }
-
+                
                 // 2. Admin-instance for the same entity type and entity id
                 $conditions = array();
-
+                
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($admin->get_entity_id()));
-
+                
                 $condition = new AndCondition($conditions);
-
-                $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+                
+                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                
                 if ($count > 0)
                 {
                     $parameters = array(
-                        self :: PARAM_ACTION => self :: ACTION_TARGET,
-                        self :: PARAM_ENTITY_TYPE => $admin->get_entity_type(),
-                        self :: PARAM_ENTITY_ID => $admin->get_entity_id());
+                        self::PARAM_ACTION => self::ACTION_TARGET, 
+                        self::PARAM_ENTITY_TYPE => $admin->get_entity_type(), 
+                        self::PARAM_ENTITY_ID => $admin->get_entity_id());
                 }
-
+                
                 // 3. Admin-instances for the same entity type
-
+                
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
-
-                $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+                
+                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                
                 if ($count > 0)
                 {
                     $parameters = array(
-                        self :: PARAM_ACTION => self :: ACTION_ENTITY,
-                        self :: PARAM_ENTITY_TYPE => $admin->get_entity_type());
+                        self::PARAM_ACTION => self::ACTION_ENTITY, 
+                        self::PARAM_ENTITY_TYPE => $admin->get_entity_type());
                 }
                 else
                 {
-                    $parameters = array(self :: PARAM_ACTION => self :: ACTION_CREATE);
+                    $parameters = array(self::PARAM_ACTION => self::ACTION_CREATE);
                 }
             }
         }
@@ -204,13 +204,13 @@ class DeleterComponent extends Manager
             $success = false;
             $message = $ex->getMessage();
         }
-
+        
         $success = true;
-        $message = Translation :: get(
-            'ObjectDeleted',
-            array('OBJECT' => Translation :: get('Target')),
-            Utilities :: COMMON_LIBRARIES);
-
+        $message = Translation::get(
+            'ObjectDeleted', 
+            array('OBJECT' => Translation::get('Target')), 
+            Utilities::COMMON_LIBRARIES);
+        
         $this->redirect($message, ! $success, $parameters);
     }
 }

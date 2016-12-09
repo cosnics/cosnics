@@ -28,43 +28,40 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $application = $this->get_repository_browser();
         $workspace = $application->getWorkspace();
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-
-        $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_INDEX, 0);
-        $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_AUTOPLAY, 0);
-
-        $filterData = FilterData:: get_instance($workspace);
-
+        
+        $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer::PARAM_INDEX, 0);
+        $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer::PARAM_AUTOPLAY, 0);
+        
+        $filterData = FilterData::getInstance($workspace);
+        
         $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $workspace,
-            ConditionFilterRenderer:: factory($filterData, $workspace),
-            1,
-            $slideshowIndex, array()
-        )->next_result();
-
+            $filterData->getTypeDataClass(), 
+            $workspace, 
+            ConditionFilterRenderer::factory($filterData, $workspace), 
+            1, 
+            $slideshowIndex, 
+            array())->next_result();
+        
         $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $workspace,
-            ConditionFilterRenderer:: factory($filterData, $workspace)
-        );
-
-        $contentObjectRenditionImplementation = ContentObjectRenditionImplementation:: factory(
-            $contentObject,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_PREVIEW,
-            $this->get_repository_browser()
-        );
-
+            $filterData->getTypeDataClass(), 
+            $workspace, 
+            ConditionFilterRenderer::factory($filterData, $workspace));
+        
+        $contentObjectRenditionImplementation = ContentObjectRenditionImplementation::factory(
+            $contentObject, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_PREVIEW, 
+            $this->get_repository_browser());
+        
         $slideshowRender = new SlideshowRenderer(
-            $contentObject,
-            $contentObjectCount,
-            $contentObjectRenditionImplementation,
-            $this->get_content_object_actions($contentObject),
-            $this->get_parameters(),
-            $slideshowIndex,
-            $slideshowAutoPlay
-        );
-
+            $contentObject, 
+            $contentObjectCount, 
+            $contentObjectRenditionImplementation, 
+            $this->get_content_object_actions($contentObject), 
+            $this->get_parameters(), 
+            $slideshowIndex, 
+            $slideshowAutoPlay);
+        
         return $slideshowRender->render();
     }
 }

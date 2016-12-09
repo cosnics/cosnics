@@ -1,12 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test;
 
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassFile;
+use Chamilo\Libraries\Architecture\Traits\ClassSubClass;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 trait TestApplication
 {
-    use Chamilo\DirectoryScanner, Chamilo\ClassFile, Chamilo\ClassSubClass {
-        ClassFile::get_classname_from_php_file insteadof ClassSubClass;
+    use \Chamilo\Libraries\Architecture\Traits\DirectoryScanner, \Chamilo\Libraries\Architecture\Traits\ClassFile, \Chamilo\Libraries\Architecture\Traits\ClassSubClass
+    {
+        ClassFile::getClassNameFromPHPFile insteadof ClassSubClass;
     }
 
     /**
@@ -16,44 +20,41 @@ trait TestApplication
      */
     abstract protected function get_source_path();
 
-    /**
-     * Determines the package namespace depending on the namespace of the test class
-     *
-     * @return string
-     */
-    abstract protected function determine_package_namespace();
-
-    /**
-     * Asserts that a condition is true.
-     *
-     * @param boolean $condition
-     * @param string $message
-     * @throws PHPUnit_Framework_AssertionFailedError
-     */
-    abstract public static function assertTrue($condition, $message = '');
-
-    /**
-     * Asserts that a condition is false.
-     *
-     * @param boolean $condition
-     * @param string $message
-     * @throws PHPUnit_Framework_AssertionFailedError
-     */
-    abstract public static function assertFalse($condition, $message = '');
-
-    /**
-     * Asserts that two variables are equal.
-     *
-     * @param mixed $expected
-     * @param mixed $actual
-     * @param string $message
-     * @param float $delta
-     * @param integer $maxDepth
-     * @param boolean $canonicalize
-     * @param boolean $ignoreCase
-     */
-    abstract public static function assertEquals($expected, $actual, $message = '', $delta = 0, $maxDepth = 10,
-        $canonicalize = false, $ignoreCase = false);
+//    /**
+//     * Asserts that a condition is true.
+//     *
+//     * @param boolean $condition
+//     * @param string $message
+//     *
+//     * @throws \PHPUnit_Framework_AssertionFailedError
+//     */
+//    abstract public static function assertTrue($condition, $message = '');
+//
+//    /**
+//     * Asserts that a condition is false.
+//     *
+//     * @param boolean $condition
+//     * @param string $message
+//     *
+//     * @throws \PHPUnit_Framework_AssertionFailedError
+//     */
+//    abstract public static function assertFalse($condition, $message = '');
+//
+//    /**
+//     * Asserts that two variables are equal.
+//     *
+//     * @param mixed $expected
+//     * @param mixed $actual
+//     * @param string $message
+//     * @param float $delta
+//     * @param integer $maxDepth
+//     * @param boolean $canonicalize
+//     * @param boolean $ignoreCase
+//     */
+//    abstract public static function assertEquals(
+//        $expected, $actual, $message = '', $delta = 0, $maxDepth = 10,
+//        $canonicalize = false, $ignoreCase = false
+//    );
 
     /**
      * This test checks if the manager.class.php file can be found
@@ -62,8 +63,7 @@ trait TestApplication
     {
         $source_folder = $this->get_source_path();
 
-        $manager_file = $source_folder . 'lib' . DIRECTORY_SEPARATOR . 'manager' . DIRECTORY_SEPARATOR .
-             'manager.class.php';
+        $manager_file = $source_folder . DIRECTORY_SEPARATOR . 'Manager.php';
 
         $this->assertTrue(file_exists($manager_file));
     }
@@ -74,11 +74,9 @@ trait TestApplication
     public function test_package_uses_manager()
     {
         $namespace = $this->determine_package_namespace();
-        $package_name = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace, true);
+        $class_name = $namespace . '\\' . 'Manager';
 
-        $class_name = $namespace . '\\' . $package_name . 'Manager';
-
-        $this->assertFalse(class_exists($class_name));
+        $this->assertTrue(class_exists($class_name));
     }
 
     /**
@@ -103,10 +101,12 @@ trait TestApplication
             return;
         }
 
-        $base_component_name = (string) StringUtilities :: getInstance()->createString(basename($component_file, '.php'))->upperCamelize();
+        $base_component_name =
+            (string) StringUtilities::getInstance()->createString(basename($component_file, '.php'))->upperCamelize();
+
         $expected_component_name = $base_component_name . 'Component';
 
-        $this->assertEquals($expected_component_name, $this->get_classname_from_php_file($component_file));
+        $this->assertEquals($expected_component_name, $this->getClassNameFromPHPFile($component_file));
     }
 
     /**
@@ -116,7 +116,7 @@ trait TestApplication
      */
     protected function get_component_folder_path()
     {
-        return $this->get_source_path() . 'lib' . DIRECTORY_SEPARATOR . 'manager' . DIRECTORY_SEPARATOR . 'component';
+        return $this->get_source_path() . DIRECTORY_SEPARATOR . 'Component';
     }
 
     /**
@@ -145,7 +145,7 @@ trait TestApplication
             return;
         }
 
-        $correct_path = '/php/lib/storage/data_manager/data_manager.class.php';
+        $correct_path = 'Storage' . DIRECTORY_SEPARATOR . 'DataManager.php';
         $this->assertTrue(strpos($file, $correct_path) !== false);
     }
 
@@ -160,9 +160,9 @@ trait TestApplication
             return;
         }
 
-        $class_name = $this->get_classname_from_php_file($file);
+        $class_name = $this->getClassNameFromPHPFile($file);
 
-        $this->assertEquals($class_name, 'DataManager');
+        $this->assertEquals($class_name, $this->determine_package_namespace() . '\Storage\DataManager');
     }
 
     /**
@@ -177,7 +177,10 @@ trait TestApplication
         }
 
         $this->assertTrue(
-            $this->check_if_class_in_file_is_subclass_of($file, array('\libraries\storage\data_manager\DataManager')));
+            $this->check_if_class_in_file_is_subclass_of(
+                $file, array('Chamilo\Libraries\Storage\DataManager\DataManager')
+            )
+        );
     }
 
     /**
@@ -187,6 +190,6 @@ trait TestApplication
      */
     public function data_manager_files_data_provider()
     {
-        return $this->scan_files_in_directory($this->get_source_path(), '/^.+data_manager\.class\.php$/i');
+        return $this->scan_files_in_directory($this->get_source_path(), '/^.+DataManager\.php$/i');
     }
 }

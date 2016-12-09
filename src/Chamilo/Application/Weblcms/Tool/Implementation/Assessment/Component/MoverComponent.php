@@ -10,10 +10,11 @@ class MoverComponent extends Manager
 
     public function get_move_direction()
     {
-        return Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION);
+        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION);
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

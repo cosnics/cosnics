@@ -30,7 +30,7 @@ class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
     {
         $category_name = $this->getPostDataValue(self::PARAM_NAME);
         $parent_id = $this->getPostDataValue(self::PARAM_PARENT_ID);
-
+        
         if ($this->getPostDataValue(self::PARAM_WORKSPACE_TYPE) == PersonalWorkspace::WORKSPACE_TYPE)
         {
             $workspace = new PersonalWorkspace($this->get_user());
@@ -38,10 +38,9 @@ class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
         else
         {
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $workspace = $workspaceService->getWorkspaceByIdentifier(
-                $this->getPostDataValue(self::PARAM_WORKSPACE_ID));
+            $workspace = $workspaceService->getWorkspaceByIdentifier($this->getPostDataValue(self::PARAM_WORKSPACE_ID));
         }
-
+        
         if (! DataManager::check_category_name($workspace, $parent_id, $category_name))
         {
             JsonAjaxResult::success();

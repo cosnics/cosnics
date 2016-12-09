@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Visibility extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SOURCE = 'source';
@@ -25,12 +25,12 @@ abstract class Visibility extends DataClass
 
     /**
      * Get the default properties of a Visibility DataClass
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_USER_ID, self :: PROPERTY_SOURCE));
+        return parent::get_default_property_names(array(self::PROPERTY_USER_ID, self::PROPERTY_SOURCE));
     }
 
     public function get_data_manager()
@@ -43,7 +43,7 @@ abstract class Visibility extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class Visibility extends DataClass
      */
     public function getSource()
     {
-        return $this->get_default_property(self :: PROPERTY_SOURCE);
+        return $this->get_default_property(self::PROPERTY_SOURCE);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class Visibility extends DataClass
      */
     public function setUserId($id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $id);
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class Visibility extends DataClass
      */
     public function setSource($source)
     {
-        $this->set_default_property(self :: PROPERTY_SOURCE, $source);
+        $this->set_default_property(self::PROPERTY_SOURCE, $source);
     }
 
     /**
@@ -81,11 +81,11 @@ abstract class Visibility extends DataClass
     {
         if (isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                 (int) $this->getUserId());
         }
-
+        
         return $this->user;
     }
 }

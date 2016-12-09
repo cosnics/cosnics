@@ -81,6 +81,6 @@ class AssessmentSelectQuestionOption
 
     public function has_feedback()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_feedback(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_feedback(), true);
     }
 }

@@ -18,13 +18,13 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: context(),
+            \Chamilo\Core\Repository\Workspace\Favourite\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_WORKSPACE_ID);
+        return array(self::PARAM_WORKSPACE_ID);
     }
 }

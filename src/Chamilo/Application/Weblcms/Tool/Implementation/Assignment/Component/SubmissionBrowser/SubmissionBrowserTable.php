@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Abstract table to browse a list of submitters.
- *
+ * 
  * @package application.weblcms.tool.assignment.php.component.submission_browser
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
@@ -23,31 +23,31 @@ abstract class SubmissionBrowserTable extends RecordTable implements TableFormAc
     /**
      * The identifier for the table (used for table actions)
      */
-    const TABLE_IDENTIFIER = Manager :: PARAM_TARGET_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_TARGET_ID;
 
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the available table actions
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
-
-        if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        
+        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(
-                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS)),
-                    Translation :: get('DownloadSubmissionsSelected'),
+                        array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_SUBMISSIONS)), 
+                    Translation::get('DownloadSubmissionsSelected'), 
                     false));
         }
-
+        
         return $actions;
     }
 }

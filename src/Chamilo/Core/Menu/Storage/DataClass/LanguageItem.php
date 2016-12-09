@@ -16,28 +16,28 @@ class LanguageItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function get_language()
     {
-        return $this->get_additional_property(self :: PROPERTY_LANGUAGE);
+        return $this->get_additional_property(self::PROPERTY_LANGUAGE);
     }
 
     public function set_language($language)
     {
-        return $this->set_additional_property(self :: PROPERTY_LANGUAGE, $language);
+        return $this->set_additional_property(self::PROPERTY_LANGUAGE, $language);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_LANGUAGE);
+        return array(self::PROPERTY_LANGUAGE);
     }
 
     public function getCurrentUrl()

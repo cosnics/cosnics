@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 /**
  * This class describes a single property for a data class with the name and the value This class can be used in query
  * structures
- *
+ * 
  * @package Chamilo\Libraries\Storage\DataClass\Property
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class DataClassProperty implements Hashable
 {
-
+    
     use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**

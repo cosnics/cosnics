@@ -57,42 +57,42 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $properties->add(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $date_submitted_variable = new PropertyConditionVariable(
-            AssignmentSubmission :: class_name(), 
-            AssignmentSubmission :: PROPERTY_DATE_SUBMITTED);
+            AssignmentSubmission::class_name(), 
+            AssignmentSubmission::PROPERTY_DATE_SUBMITTED);
         
         $properties->add(
-            new FunctionConditionVariable(FunctionConditionVariable :: MIN, $date_submitted_variable, 'first_date'));
+            new FunctionConditionVariable(FunctionConditionVariable::MIN, $date_submitted_variable, 'first_date'));
         
         $properties->add(
-            new FunctionConditionVariable(FunctionConditionVariable :: MAX, $date_submitted_variable, 'last_date'));
+            new FunctionConditionVariable(FunctionConditionVariable::MAX, $date_submitted_variable, 'last_date'));
         
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable :: COUNT, 
-                new PropertyConditionVariable(AssignmentSubmission :: class_name(), AssignmentSubmission :: PROPERTY_ID), 
+                FunctionConditionVariable::COUNT, 
+                new PropertyConditionVariable(AssignmentSubmission::class_name(), AssignmentSubmission::PROPERTY_ID), 
                 'count'));
         
         $properties->add(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_TYPE));
         
         $conditions = array();
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publication_id));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
             new StaticConditionVariable($submitter_type));
         
         $condition = new AndCondition($conditions);
@@ -100,13 +100,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), null, $group_by);
         
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: records(
-            AssignmentSubmission :: class_name(), 
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::records(
+            AssignmentSubmission::class_name(), 
             $parameters);
     }
 
@@ -123,27 +123,27 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $properties->add(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable :: COUNT, 
-                new PropertyConditionVariable(AssignmentSubmission :: class_name(), AssignmentSubmission :: PROPERTY_ID), 
+                FunctionConditionVariable::COUNT, 
+                new PropertyConditionVariable(AssignmentSubmission::class_name(), AssignmentSubmission::PROPERTY_ID), 
                 'count'));
         
         $conditions = array();
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publication_id));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
             new StaticConditionVariable($submitter_type));
         
         $condition = new AndCondition($conditions);
@@ -151,25 +151,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $joins = new Joins();
         $joins->add(
             new Join(
-                SubmissionFeedback :: class_name(), 
+                SubmissionFeedback::class_name(), 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssignmentSubmission :: class_name(), 
-                        AssignmentSubmission :: PROPERTY_ID), 
+                        AssignmentSubmission::class_name(), 
+                        AssignmentSubmission::PROPERTY_ID), 
                     new PropertyConditionVariable(
-                        SubmissionFeedback :: class_name(), 
-                        SubmissionFeedback :: PROPERTY_SUBMISSION_ID))));
+                        SubmissionFeedback::class_name(), 
+                        SubmissionFeedback::PROPERTY_SUBMISSION_ID))));
         
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins, $group_by);
         
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: records(
-            AssignmentSubmission :: class_name(), 
+        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::records(
+            AssignmentSubmission::class_name(), 
             $parameters);
     }
 
@@ -195,7 +195,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_assignment_publication_target_users($publication_id, $course_id, $offset = null, 
         $count = null, $order_by = null, $condition = null)
     {
-        $users = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_users(
+        $users = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
             $publication_id, 
             $course_id, 
             null, 
@@ -219,15 +219,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         ! is_null($condition) ? $conditions[] = $condition : $condition;
         
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
-            $user_ids);
+        $conditions[] = new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids);
         
         $condition = new AndCondition($conditions);
         
-        return self :: retrieve_assignment_publication_targets(
+        return self::retrieve_assignment_publication_targets(
             $publication_id, 
-            AssignmentSubmission :: SUBMITTER_TYPE_USER, 
+            AssignmentSubmission::SUBMITTER_TYPE_USER, 
             $condition, 
             $offset, 
             $count, 
@@ -249,7 +247,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_assignment_publication_target_course_groups($publication_id, $course_id, 
         $offset = null, $count = null, $order_by = null, $condition = null)
     {
-        $course_groups = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_course_groups(
+        $course_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_course_groups(
             $publication_id, 
             $course_id, 
             null, 
@@ -274,14 +272,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         ! is_null($condition) ? $conditions[] = $condition : $condition;
         
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_ID), 
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID), 
             $course_group_ids);
         
         $condition = new AndCondition($conditions);
         
-        return self :: retrieve_assignment_publication_targets(
+        return self::retrieve_assignment_publication_targets(
             $publication_id, 
-            AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP, 
+            AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP, 
             $condition, 
             $offset, 
             $count, 
@@ -303,7 +301,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_assignment_publication_target_platform_groups($publication_id, $course_id, 
         $offset = null, $count = null, $order_by = null, $condition = null)
     {
-        $platform_groups = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_platform_groups(
+        $platform_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_platform_groups(
             $publication_id, 
             $course_id, 
             null, 
@@ -328,14 +326,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         ! is_null($condition) ? $conditions[] = $condition : $condition;
         
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
             $platform_group_ids);
         
         $condition = new AndCondition($conditions);
         
-        return self :: retrieve_assignment_publication_targets(
+        return self::retrieve_assignment_publication_targets(
             $publication_id, 
-            AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP, 
+            AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP, 
             $condition, 
             $offset, 
             $count, 
@@ -361,63 +359,63 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         switch ($submitter_type)
         {
-            case AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
-                $base_class = CourseGroup :: class_name();
+            case AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
+                $base_class = CourseGroup::class_name();
                 
                 $properties->add(
-                    new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME));
+                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
                 
-                $data_manager = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager :: class_name();
-                
-                break;
-            case AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
-                $base_class = Group :: class_name();
-                
-                $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME));
-                
-                $data_manager = \Chamilo\Core\Group\Storage\DataManager :: class_name();
+                $data_manager = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::class_name();
                 
                 break;
-            case AssignmentSubmission :: SUBMITTER_TYPE_USER :
-                $base_class = User :: class_name();
+            case AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
+                $base_class = Group::class_name();
                 
-                $properties->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME));
-                $properties->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME));
+                $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
                 
-                $data_manager = \Chamilo\Core\User\Storage\DataManager :: class_name();
+                $data_manager = \Chamilo\Core\Group\Storage\DataManager::class_name();
+                
+                break;
+            case AssignmentSubmission::SUBMITTER_TYPE_USER :
+                $base_class = User::class_name();
+                
+                $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+                $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+                
+                $data_manager = \Chamilo\Core\User\Storage\DataManager::class_name();
                 
                 break;
         }
         
-        $base_variable = new PropertyConditionVariable($base_class, $base_class :: PROPERTY_ID);
+        $base_variable = new PropertyConditionVariable($base_class, $base_class::PROPERTY_ID);
         
         $properties->add(
             new FixedPropertyConditionVariable(
                 $base_class, 
-                $base_class :: PROPERTY_ID, 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                $base_class::PROPERTY_ID, 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $date_submitted_variable = new PropertyConditionVariable(
-            AssignmentSubmission :: class_name(), 
-            AssignmentSubmission :: PROPERTY_DATE_SUBMITTED);
+            AssignmentSubmission::class_name(), 
+            AssignmentSubmission::PROPERTY_DATE_SUBMITTED);
         
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable :: MIN, 
+                FunctionConditionVariable::MIN, 
                 $date_submitted_variable, 
-                Manager :: PROPERTY_FIRST_SUBMISSION));
+                Manager::PROPERTY_FIRST_SUBMISSION));
         
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable :: MAX, 
+                FunctionConditionVariable::MAX, 
                 $date_submitted_variable, 
-                Manager :: PROPERTY_LAST_SUBMISSION));
+                Manager::PROPERTY_LAST_SUBMISSION));
         
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable :: COUNT, 
+                FunctionConditionVariable::COUNT, 
                 $date_submitted_variable, 
-                Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS));
+                Manager::PROPERTY_NUMBER_OF_SUBMISSIONS));
         
         $joins = new Joins();
         
@@ -426,24 +424,24 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $join_conditions[] = new EqualityCondition(
             $base_variable, 
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_ID));
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_ID));
         
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publication_id));
         
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                AssignmentSubmission :: class_name(), 
-                AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                AssignmentSubmission::class_name(), 
+                AssignmentSubmission::PROPERTY_SUBMITTER_TYPE), 
             new StaticConditionVariable($submitter_type));
         
         $join_condition = new AndCondition($join_conditions);
         
-        $joins->add(new Join(AssignmentSubmission :: class_name(), $join_condition, Join :: TYPE_LEFT));
+        $joins->add(new Join(AssignmentSubmission::class_name(), $join_condition, Join::TYPE_LEFT));
         
         $group_by = new GroupBy();
         $group_by->add($base_variable);
@@ -457,6 +455,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $joins, 
             $group_by);
         
-        return $data_manager :: records($base_class, $parameters);
+        return $data_manager::records($base_class, $parameters);
     }
 }

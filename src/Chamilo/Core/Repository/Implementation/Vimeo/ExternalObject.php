@@ -11,27 +11,27 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_URLS, self :: PROPERTY_TAGS));
+        return parent::get_default_property_names(array(self::PROPERTY_URLS, self::PROPERTY_TAGS));
     }
 
     public function get_urls()
     {
-        return $this->get_default_property(self :: PROPERTY_URLS);
+        return $this->get_default_property(self::PROPERTY_URLS);
     }
 
     public function set_urls($urls)
     {
-        return $this->set_default_property(self :: PROPERTY_URLS, $urls);
+        return $this->set_default_property(self::PROPERTY_URLS, $urls);
     }
 
     public function get_tags()
     {
-        return $this->get_default_property(self :: PROPERTY_TAGS);
+        return $this->get_default_property(self::PROPERTY_TAGS);
     }
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
+        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
     }
 
     public function get_tags_string()
@@ -41,11 +41,11 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function is_usable()
     {
-        return $this->get_right(self :: RIGHT_USE);
+        return $this->get_right(self::RIGHT_USE);
     }
 }

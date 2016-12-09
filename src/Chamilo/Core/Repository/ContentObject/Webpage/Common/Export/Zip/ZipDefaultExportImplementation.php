@@ -8,7 +8,7 @@ class ZipDefaultExportImplementation extends ZipExportImplementation
 
     /**
      * Returns the path
-     *
+     * 
      * @param ContentObject $content_object
      * @param string $filename
      *

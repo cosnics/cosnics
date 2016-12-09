@@ -15,19 +15,19 @@ class CreatorComponent extends Manager
         if ($group_form->validate())
         {
             $success = $group_form->create_repository();
-            $message = $success ? Translation :: get('Created') : Translation :: get('NotCreated');
-            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-
+            $message = $success ? Translation::get('Created') : Translation::get('NotCreated');
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+            
             $this->redirect($message, ! $success, $parameters);
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $group_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

@@ -17,9 +17,9 @@ class AssessmentResultsTableColumnModel extends DataClassTableColumnModel implem
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(Translation :: get('User')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Date')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Score')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Time')));
+        $this->add_column(new StaticTableColumn(Translation::get('User')));
+        $this->add_column(new StaticTableColumn(Translation::get('Date')));
+        $this->add_column(new StaticTableColumn(Translation::get('Score')));
+        $this->add_column(new StaticTableColumn(Translation::get('Time')));
     }
 }

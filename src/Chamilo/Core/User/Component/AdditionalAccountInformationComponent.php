@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,6 +19,8 @@ class AdditionalAccountInformationComponent extends ProfileComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+        
         return $this->renderPage();
     }
 
@@ -28,9 +31,9 @@ class AdditionalAccountInformationComponent extends ProfileComponent
     public function getContent()
     {
         $form_executer = new \Chamilo\Configuration\Form\Executer(
-            $this,
-            'account_fields',
-            Translation :: get('AdditionalUserInformation'));
+            $this, 
+            'account_fields', 
+            Translation::get('AdditionalUserInformation'));
         return $form_executer->run();
     }
 }

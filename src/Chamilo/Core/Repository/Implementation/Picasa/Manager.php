@@ -30,8 +30,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        parent :: __construct($external_repository, $application);
-        $this->set_parameter(self :: PARAM_FOLDER, Request :: get(self :: PARAM_FOLDER));
+        parent::__construct($external_repository, $application);
+        $this->set_parameter(self::PARAM_FOLDER, Request::get(self::PARAM_FOLDER));
     }
 
     /*
@@ -58,9 +58,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
@@ -70,23 +70,23 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         $my_photos = array();
-        $my_photos['title'] = Translation :: get('MyPhotos');
+        $my_photos['title'] = Translation::get('MyPhotos');
         $my_photos['url'] = $this->get_url(
-            array(self :: PARAM_FOLDER => DataConnector :: PHOTOS_MINE),
-            array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
+            array(self::PARAM_FOLDER => DataConnector::PHOTOS_MINE), 
+            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
         $my_photos['class'] = 'user';
         $menu_items[] = $my_photos;
-
+        
         $general = array();
-        $general['title'] = Translation :: get('Public');
+        $general['title'] = Translation::get('Public');
         $general['url'] = $this->get_url(
-            array(self :: PARAM_FOLDER => DataConnector :: PHOTOS_PUBLIC),
-            array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
+            array(self::PARAM_FOLDER => DataConnector::PHOTOS_PUBLIC), 
+            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
         $general['class'] = 'home';
         $menu_items[] = $general;
-
+        
         return $menu_items;
     }
 
@@ -95,18 +95,18 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_actions()
     {
-        $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY, self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY);
+        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY, self::ACTION_UPLOAD_EXTERNAL_REPOSITORY);
         // $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY, self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY, self
         // :: ACTION_EXPORT_EXTERNAL_REPOSITORY);
-
+        
         $is_platform = $this->get_user()->is_platform_admin() && (count(
-            Setting :: get_all($this->get_external_repository()->get_id())) > 0);
-
+            Setting::get_all($this->get_external_repository()->get_id())) > 0);
+        
         if ($is_platform)
         {
-            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+            $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
-
+        
         return $actions;
     }
 
@@ -115,7 +115,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_available_renderers()
     {
-        return array(Renderer :: TYPE_GALLERY, Renderer :: TYPE_SLIDESHOW, Renderer :: TYPE_TABLE);
+        return array(Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE);
     }
 
     /*
@@ -123,16 +123,16 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_content_object_type_conditions()
     {
-        $image_types = File :: get_image_types();
+        $image_types = File::get_image_types();
         $image_conditions = array();
         foreach ($image_types as $image_type)
         {
             $image_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME),
-                '*.' . $image_type,
-                File :: get_type_name());
+                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+                '*.' . $image_type, 
+                File::get_type_name());
         }
-
+        
         return new OrCondition($image_conditions);
     }
 
@@ -142,6 +142,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 }

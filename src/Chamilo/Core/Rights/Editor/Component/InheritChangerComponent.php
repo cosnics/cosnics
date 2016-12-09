@@ -19,41 +19,41 @@ class InheritChangerComponent extends Manager
     {
         $locations = $this->get_locations();
         $failures = 0;
-
+        
         if (! empty($locations))
         {
-
+            
             foreach ($locations as $location)
             {
                 $location->switch_inherit();
-
+                
                 if (! $location->update())
                 {
                     $failures ++;
                 }
             }
-
+            
             $message = $this->get_result(
-                $failures,
-                count($locations),
-                'SelectedLocationNotInheriting',
-                'SelectedLocationsNotInheriting',
-                'SelectedLocationInheriting',
+                $failures, 
+                count($locations), 
+                'SelectedLocationNotInheriting', 
+                'SelectedLocationsNotInheriting', 
+                'SelectedLocationInheriting', 
                 'SelectedLocationsInheriting');
-
+            
             $this->redirect(
-                $message,
-                ($failures ? true : false),
-                array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS));
+                $message, 
+                ($failures ? true : false), 
+                array(self::PARAM_ACTION => self::ACTION_EDIT_ADVANCED_RIGHTS));
         }
         else
         {
-            return $this->display_error_page(htmlentities(Translation :: get('NoLocationSelected')));
+            return $this->display_error_page(htmlentities(Translation::get('NoLocationSelected')));
         }
     }
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_ENTITY_TYPE);
+        return array(self::PARAM_ENTITY_TYPE);
     }
 }

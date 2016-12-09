@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Data provider for ephorus requests browser table.
- *
+ * 
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -24,7 +24,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
      * Gets the objects to display in the table.
      * For now, objects are composed in the code itself from several source
      * objects.
-     *
+     * 
      * @param $offset
      * @param $count
      * @param null $order_property
@@ -36,7 +36,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         if ($order_property == null)
         {
             $order_property = new OrderBy(
-                new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_REQUEST_TIME));
+                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_REQUEST_TIME));
         }
         return $this->getExtension()->retrieve_results_content_objects_by_params(
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
@@ -44,7 +44,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the count of the objects
-     *
+     * 
      * @return int
      */
     public function count_data($condition)
@@ -56,9 +56,9 @@ class RequestTableDataProvider extends DataClassTableDataProvider
     {
         if (! isset($this->extension))
         {
-            $this->extension = new DoctrineExtension(DataManager :: get_instance());
+            $this->extension = new DoctrineExtension(DataManager::getInstance());
         }
-
+        
         return $this->extension;
     }
 }

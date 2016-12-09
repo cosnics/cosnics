@@ -27,8 +27,8 @@ class AssignmentCourseGroupsBlock extends AssignmentSubmittersBlock
     {
         $order_by = array();
         $order_by[] = new OrderBy(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME));
-        return \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_course_groups(
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_course_groups(
             $this->get_publication_id(), 
             $this->get_course_id(), 
             null, 
@@ -43,15 +43,15 @@ class AssignmentCourseGroupsBlock extends AssignmentSubmittersBlock
     public function get_submitters_data()
     {
         // Course groups
-        $submissions_resultset = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager :: retrieve_submissions_by_submitter_type(
+        $submissions_resultset = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager::retrieve_submissions_by_submitter_type(
             $this->get_publication_id(), 
-            AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP);
+            AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP);
         
         $this->get_array_from_resultset($submissions_resultset, $this->submissions);
         
-        $feedbacks_resultset = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager :: retrieve_submitter_feedbacks(
+        $feedbacks_resultset = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager::retrieve_submitter_feedbacks(
             $this->get_publication_id(), 
-            AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP);
+            AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP);
         $this->get_array_from_resultset($feedbacks_resultset, $this->feedbacks);
     }
 

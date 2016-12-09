@@ -2,8 +2,10 @@
 namespace Chamilo\Libraries\File\ImageManipulation\Gd;
 
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
+
 /**
  * $Id: gd_image_manipulation.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * 
  * @package common.image_manipulation.gd
  */
 /**
@@ -11,11 +13,12 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
  */
 class GdImageManipulation extends ImageManipulation
 {
+
     private $gd_image = null;
 
     public function __construct($source_file)
     {
-        parent :: __construct($source_file);
+        parent::__construct($source_file);
         $this->load_gd_image();
     }
 
@@ -25,11 +28,11 @@ class GdImageManipulation extends ImageManipulation
         {
             return FALSE;
         }
-        if ($offset_x == ImageManipulation :: CROP_CENTER)
+        if ($offset_x == ImageManipulation::CROP_CENTER)
         {
             $offset_x = ($this->width - $width) / 2;
         }
-        if ($offset_y == ImageManipulation :: CROP_CENTER)
+        if ($offset_y == ImageManipulation::CROP_CENTER)
         {
             $offset_y = ($this->height - $height) / 2;
         }

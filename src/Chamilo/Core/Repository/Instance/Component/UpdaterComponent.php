@@ -21,44 +21,44 @@ class UpdaterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $instance_id = Request :: get(self :: PARAM_INSTANCE_ID);
-
+        
+        $instance_id = Request::get(self::PARAM_INSTANCE_ID);
+        
         if (isset($instance_id))
         {
-            $this->external_instance = DataManager :: retrieve_by_id(Instance :: class_name(), $instance_id);
-
+            $this->external_instance = DataManager::retrieve_by_id(Instance::class_name(), $instance_id);
+            
             $form = new InstanceForm($this, $this->external_instance);
-
+            
             if ($form->validate())
             {
                 $success = $form->update_external_instance();
                 $this->redirect(
-                    Translation :: get(
-                        $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                        array('OBJECT' => Translation :: get('ExternalInstance')),
-                        Utilities :: COMMON_LIBRARIES),
-                    ($success ? false : true),
-                    array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                    Translation::get(
+                        $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
+                        array('OBJECT' => Translation::get('ExternalInstance')), 
+                        Utilities::COMMON_LIBRARIES), 
+                    ($success ? false : true), 
+                    array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
         else
         {
             return $this->display_error_page(
-                Translation :: get(
-                    'NoObjectSelected',
-                    array('OBJECT' => Translation :: get('ExternalInstance')),
-                    Utilities :: COMMON_LIBRARIES));
+                Translation::get(
+                    'NoObjectSelected', 
+                    array('OBJECT' => Translation::get('ExternalInstance')), 
+                    Utilities::COMMON_LIBRARIES));
         }
     }
 

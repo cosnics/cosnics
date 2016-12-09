@@ -20,6 +20,6 @@ class CourseSectionsTableColumnModel extends DataClassTableColumnModel implement
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseSection :: class_name(), CourseSection :: PROPERTY_NAME));
+            new DataClassPropertyTableColumn(CourseSection::class_name(), CourseSection::PROPERTY_NAME));
     }
 }

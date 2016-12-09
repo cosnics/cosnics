@@ -15,15 +15,15 @@ class TopicPreviewerComponent extends TopicViewerComponent implements DelegateCo
 
     public function run()
     {
-        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
-
+        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->renderPosts();
         $html[] = $this->renderPager();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -34,8 +34,8 @@ class TopicPreviewerComponent extends TopicViewerComponent implements DelegateCo
     public function getVisibleForumTopicPosts()
     {
         return array_slice(
-            array_reverse($this->getForumTopicPosts()),
-            $this->getPager()->getCurrentRangeOffset(),
+            array_reverse($this->getForumTopicPosts()), 
+            $this->getPager()->getCurrentRangeOffset(), 
             $this->getItemsPerPage());
     }
 }

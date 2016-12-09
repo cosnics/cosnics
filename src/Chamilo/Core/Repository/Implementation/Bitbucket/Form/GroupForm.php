@@ -24,12 +24,12 @@ class GroupForm extends FormValidator
 
     public function __construct($action, $bitbucket)
     {
-        parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
+        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
         $this->renderer = clone $this->defaultRenderer();
-
+        
         $this->bitbucket = $bitbucket;
         $this->build();
-
+        
         $this->accept($this->renderer);
     }
 
@@ -37,20 +37,20 @@ class GroupForm extends FormValidator
     {
         $this->renderer->setElementTemplate(
             '<div style="vertical-align: middle; float: left; margin-right: 5px;">{element}</div>');
-        $this->addElement('text', 'group_name', Translation :: get('GroupName'));
-        $this->addElement('select', self :: PERMISSION, Translation :: get('Permission'), $this->get_privileges_types());
+        $this->addElement('text', 'group_name', Translation::get('GroupName'));
+        $this->addElement('select', self::PERMISSION, Translation::get('Permission'), $this->get_privileges_types());
         $this->addElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
-
+        
         $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
                      'PrivilegeGrantingForm.js'));
     }
 
@@ -70,17 +70,17 @@ class GroupForm extends FormValidator
     {
         $values = $this->exportValues();
         return $this->bitbucket->get_external_repository_manager_connector()->create_group(
-            $values['group_name'],
+            $values['group_name'], 
             $values['permission']);
     }
 
     public static function get_privileges_types()
     {
         $privileges_types = array();
-        $privileges_types[self :: TYPE_READ] = Translation :: get('Read');
-        $privileges_types[self :: TYPE_WRITE] = Translation :: get('Write');
-        $privileges_types[self :: TYPE_ADMIN] = Translation :: get('Admin');
-
+        $privileges_types[self::TYPE_READ] = Translation::get('Read');
+        $privileges_types[self::TYPE_WRITE] = Translation::get('Write');
+        $privileges_types[self::TYPE_ADMIN] = Translation::get('Admin');
+        
         return $privileges_types;
     }
 }

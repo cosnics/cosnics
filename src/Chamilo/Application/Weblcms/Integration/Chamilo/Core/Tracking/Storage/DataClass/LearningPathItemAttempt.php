@@ -17,23 +17,23 @@ class LearningPathItemAttempt extends AbstractItemAttempt
      */
     public function delete()
     {
-        $succes = parent :: delete();
-
+        $succes = parent::delete();
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt :: class_name(),
-                LearningPathQuestionAttempt :: PROPERTY_ITEM_ATTEMPT_ID),
+                LearningPathQuestionAttempt::class_name(), 
+                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
             new StaticConditionVariable($this->get_id()));
-
-        $trackers = DataManager :: retrieves(
-            LearningPathQuestionAttempt :: class_name(),
+        
+        $trackers = DataManager::retrieves(
+            LearningPathQuestionAttempt::class_name(), 
             new DataClassRetrievesParameters($condition));
-
+        
         while ($tracker = $trackers->next_result())
         {
             $succes &= $tracker->delete();
         }
-
+        
         return $succes;
     }
 }

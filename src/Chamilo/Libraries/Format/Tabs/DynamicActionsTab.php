@@ -13,7 +13,7 @@ class DynamicActionsTab extends DynamicTab
      */
     public function __construct($id, $name, $image, $actions = array())
     {
-        parent :: __construct($id, $name, $image);
+        parent::__construct($id, $name, $image);
         $this->actions = $actions;
     }
 
@@ -52,10 +52,10 @@ class DynamicActionsTab extends DynamicTab
     public function body_header()
     {
         $html = array();
-
+        
         $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
         $html[] = '<div class="list-group">';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -67,16 +67,16 @@ class DynamicActionsTab extends DynamicTab
     public function body($isOnlyTab = false)
     {
         $html = array();
-
+        
         $html[] = $this->body_header();
-
+        
         foreach ($this->actions as $key => $action)
         {
             $html[] = $action->render($key == 0);
         }
-
+        
         $html[] = $this->body_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

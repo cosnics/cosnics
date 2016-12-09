@@ -11,16 +11,16 @@ class HotpotatoesContentObjectImportForm extends ContentObjectImportForm
 
     public function build_basic_form()
     {
-        parent :: build_basic_form();
+        parent::build_basic_form();
         
         $this->addElement(
             'file', 
-            self :: IMPORT_FILE_NAME, 
-            Translation :: get('FileName', null, Utilities :: COMMON_LIBRARIES));
+            self::IMPORT_FILE_NAME, 
+            Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
     }
 
     public function setDefaults($defaults = array ())
     {
-        parent :: setDefaults(array(self :: PROPERTY_TYPE => ContentObjectImport :: FORMAT_HOTPOTATOES));
+        parent::setDefaults(array(self::PROPERTY_TYPE => ContentObjectImport::FORMAT_HOTPOTATOES));
     }
 }

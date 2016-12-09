@@ -19,7 +19,7 @@ class BlockDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK);
+        return array(self::PARAM_BLOCK);
     }
 
     /*
@@ -27,31 +27,31 @@ class BlockDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $blockId = $this->getPostDataValue(self :: PARAM_BLOCK);
-
-        $block = DataManager :: retrieve_by_id(Block :: class_name(), $blockId);
-
+        
+        $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
+        
+        $block = DataManager::retrieve_by_id(Block::class_name(), $blockId);
+        
         if ($block->getUserId() == $userId)
         {
             if ($block->delete())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: error(409, Translation :: get('BlockNotDeleted'));
+                JsonAjaxResult::error(409, Translation::get('BlockNotDeleted'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

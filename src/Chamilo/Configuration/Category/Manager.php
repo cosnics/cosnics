@@ -23,7 +23,7 @@ abstract class Manager extends Application
     const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';
     const ACTION_AJAX_DELETE_CATEGORIES = 'AjaxCategoryDeleter';
     const ACTION_IMPACT_VIEW = 'ImpactView';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE_CATEGORIES;
+    const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
     public function category_visibility_supported()
@@ -34,55 +34,53 @@ abstract class Manager extends Application
     public function get_browse_categories_url($category_id = 0)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES, self :: PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function get_create_category_url($category_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_CREATE_CATEGORY, self :: PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_CREATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function get_update_category_url($category_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_UPDATE_CATEGORY, self :: PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_UPDATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function get_delete_category_url($category_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_DELETE_CATEGORY, self :: PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_DELETE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function get_move_category_url($category_id, $direction = 1)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE_CATEGORY,
-                self :: PARAM_CATEGORY_ID => $category_id,
-                self :: PARAM_DIRECTION => $direction));
+                self::PARAM_ACTION => self::ACTION_MOVE_CATEGORY, 
+                self::PARAM_CATEGORY_ID => $category_id, 
+                self::PARAM_DIRECTION => $direction));
     }
 
     public function get_change_category_parent_url($category_id)
     {
         return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_CHANGE_CATEGORY_PARENT,
-                self :: PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function get_toggle_visibility_category_url($category_id)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_TOGGLE_CATEGORY_VISIBILITY,
-                self :: PARAM_CATEGORY_ID => $category_id));
+                self::PARAM_ACTION => self::ACTION_TOGGLE_CATEGORY_VISIBILITY, 
+                self::PARAM_CATEGORY_ID => $category_id));
     }
 
     /**
      * Returns the url to the impact view component
-     *
+     * 
      * @param int | int[] $category_id
      * @return string
      */
@@ -110,11 +108,11 @@ abstract class Manager extends Application
     public function get_additional_parameters()
     {
         $parameters = array();
-        if (! is_null(Request :: get(\Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID)))
+        if (! is_null(Request::get(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID)))
         {
-            $parameters[] = \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID;
+            $parameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
         }
-
+        
         return array_merge($parameters, $this->get_application()->get_category_parameters());
     }
 
@@ -124,6 +122,6 @@ abstract class Manager extends Application
      */
     public function get_parent()
     {
-        return parent :: get_parent();
+        return parent::get_parent();
     }
 }

@@ -28,11 +28,11 @@ trait EntityTranslationTrait
     {
         if (! isset($this->translations))
         {
-            $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($this);
+            $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this);
             $entityTranslationService = new EntityTranslationService($entity);
             $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode();
         }
-
+        
         return $this->translations;
     }
 
@@ -44,8 +44,8 @@ trait EntityTranslationTrait
     public function getTranslationByIsocode($isocode)
     {
         $translations = $this->getTranslations();
-        $bestMatchIsoCode = \Locale :: lookup(array_keys($translations), $isocode, true);
-
+        $bestMatchIsoCode = \Locale::lookup(array_keys($translations), $isocode, true);
+        
         if ($bestMatchIsoCode)
         {
             return $translations[$bestMatchIsoCode]->get_value();

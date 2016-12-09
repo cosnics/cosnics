@@ -6,5 +6,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 
 class UserAttemptStatusViewerTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_ATTEMPT;
+    const TABLE_IDENTIFIER = Manager::PARAM_ATTEMPT;
 }

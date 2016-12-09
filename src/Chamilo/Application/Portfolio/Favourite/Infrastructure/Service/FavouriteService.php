@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * The favourite service
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FavouriteService
@@ -33,7 +33,7 @@ class FavouriteService
 
     /**
      * FavouriteService constructor.
-     *
+     * 
      * @param FavouriteRepository $favouriteRepository
      * @param Translation $translator
      */
@@ -45,7 +45,7 @@ class FavouriteService
 
     /**
      * Creates user favourites by the given source user and favourite user ids
-     *
+     * 
      * @param User $sourceUser
      * @param int[] $favouriteUserIds
      */
@@ -55,19 +55,19 @@ class FavouriteService
         {
             $favouriteUserIds = array($favouriteUserIds);
         }
-
+        
         foreach ($favouriteUserIds as $favouriteUserId)
         {
             /** @var User $favouriteUser */
             $favouriteUser = $this->favouriteRepository->findUserById($favouriteUserId);
-
+            
             $this->createUserFavourite($sourceUser, $favouriteUser);
         }
     }
 
     /**
      * Creates a user favourite
-     *
+     * 
      * @param User $sourceUser
      * @param User $favouriteUser
      *
@@ -82,34 +82,34 @@ class FavouriteService
             throw new \InvalidArgumentException(
                 $this->translator->getTranslation('InvalidSourceUser', null, Manager::context()));
         }
-
+        
         if (! $favouriteUser instanceof User)
         {
             throw new \InvalidArgumentException(
                 $this->translator->getTranslation('InvalidFavouriteUser', null, Manager::context()));
         }
-
+        
         $userFavourite = new UserFavourite();
         $userFavourite->setSourceUserId($sourceUser->getId());
         $userFavourite->setFavouriteUserId($favouriteUser->getId());
-
+        
         if (! $userFavourite->create())
         {
             $objectTranslation = $this->getObjectTranslation();
-
+            
             throw new \RuntimeException(
                 $this->translator->getTranslation(
-                    'ObjectNotCreated',
-                    array('OBJECT' => $objectTranslation),
+                    'ObjectNotCreated', 
+                    array('OBJECT' => $objectTranslation), 
                     Utilities::COMMON_LIBRARIES));
         }
-
+        
         return $userFavourite;
     }
 
     /**
      * Deletes user favourites by the given identifiers
-     *
+     * 
      * @param int[] $userFavouriteIds
      *
      * @throws ObjectNotExistException
@@ -120,7 +120,7 @@ class FavouriteService
         {
             $userFavouriteIds = array($userFavouriteIds);
         }
-
+        
         foreach ($userFavouriteIds as $userFavouriteId)
         {
             $this->deleteUserFavouriteById($userFavouriteId);
@@ -129,7 +129,7 @@ class FavouriteService
 
     /**
      * Deletes a user favourite by a given id
-     *
+     * 
      * @param int $userFavouriteId
      *
      * @throws ObjectNotExistException
@@ -137,26 +137,26 @@ class FavouriteService
     public function deleteUserFavouriteById($userFavouriteId)
     {
         $objectTranslation = $this->getObjectTranslation();
-
+        
         $userFavourite = $this->favouriteRepository->findUserFavouriteById($userFavouriteId);
         if (! $userFavourite)
         {
             throw new ObjectNotExistException($objectTranslation, $userFavouriteId);
         }
-
+        
         if (! $userFavourite->delete())
         {
             throw new \RuntimeException(
                 $this->translator->getTranslation(
-                    'ObjectNotCreated',
-                    array('OBJECT' => $objectTranslation),
+                    'ObjectNotCreated', 
+                    array('OBJECT' => $objectTranslation), 
                     Utilities::COMMON_LIBRARIES));
         }
     }
 
     /**
      * Finds a user favourite object by a given source and favourite user
-     *
+     * 
      * @param User $sourceUser
      * @param User $possibleFavouriteUser
      *
@@ -165,13 +165,13 @@ class FavouriteService
     public function findUserFavouriteBySourceAndFavouriteUser($sourceUser, $possibleFavouriteUser)
     {
         return $this->favouriteRepository->findUserFavouriteBySourceAndFavouriteUserId(
-            $sourceUser->getId(),
+            $sourceUser->getId(), 
             $possibleFavouriteUser->getId());
     }
 
     /**
      * Returns whether or not the given possible user is a favourite user of the given user
-     *
+     * 
      * @param User $sourceUser
      * @param User $possibleFavouriteUser
      *
@@ -184,7 +184,7 @@ class FavouriteService
 
     /**
      * Counts the favourite users for a given user
-     *
+     * 
      * @param User $sourceUser
      * @param Condition $condition
      *
@@ -197,7 +197,7 @@ class FavouriteService
 
     /**
      * Finds the favourite users for a given user
-     *
+     * 
      * @param User $sourceUser
      * @param Condition $condition
      * @param int $offset
@@ -213,7 +213,7 @@ class FavouriteService
 
     /**
      * Returns the object translation for the user favourite data class
-     *
+     * 
      * @return string
      */
     protected function getObjectTranslation()

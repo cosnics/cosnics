@@ -11,6 +11,7 @@ use Exception;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use DataClassRepositoryCache now
  */
 class RecordResultCache extends RecordCache
 {
@@ -30,19 +31,19 @@ class RecordResultCache extends RecordCache
                 'The RecordResultCache only allows for caching of records. Currently trying to add: ' . gettype($record) .
                      '.');
         }
-
+        
         if ($parameters instanceof RecordRetrieveParameters)
         {
             self::set_cache($className, $parameters->hash(), $record);
         }
-
+        
         return true;
     }
 
     /**
      * Process a DataClassNoResultException for the DataClassCache, preventing continued access to the storage layer for
      * empty results
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
      * @return boolean
      */

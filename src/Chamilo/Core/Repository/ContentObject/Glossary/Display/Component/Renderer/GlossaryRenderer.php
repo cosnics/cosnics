@@ -76,8 +76,8 @@ abstract class GlossaryRenderer
             $order_property, 
             $this->get_joins());
         
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 
@@ -90,8 +90,8 @@ abstract class GlossaryRenderer
     {
         $parameters = new DataClassCountParameters($this->get_condition(), $this->get_joins());
         
-        return \Chamilo\Core\Repository\Storage\DataManager :: count_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
+        return \Chamilo\Core\Repository\Storage\DataManager::count_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 
@@ -106,12 +106,12 @@ abstract class GlossaryRenderer
         
         $joins->add(
             new Join(
-                ContentObject :: class_name(), 
+                ContentObject::class_name(), 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(), 
-                        ComplexContentObjectItem :: PROPERTY_REF), 
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID))));
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_REF), 
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID))));
         
         return $joins;
     }
@@ -128,11 +128,11 @@ abstract class GlossaryRenderer
         if (isset($query) && $query != '')
         {
             $search_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE), 
                 '*' . $query . '*');
             
             $search_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             
             $conditions[] = new OrCondition($search_conditions);
@@ -151,8 +151,8 @@ abstract class GlossaryRenderer
         {
             $co_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_PARENT), 
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($object->get_id()));
         }
         

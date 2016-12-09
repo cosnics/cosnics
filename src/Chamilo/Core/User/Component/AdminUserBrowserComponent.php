@@ -43,13 +43,15 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
         
-        $this->firstletter = Request :: get(self :: PARAM_FIRSTLETTER);
+        $this->firstletter = Request::get(self::PARAM_FIRSTLETTER);
         
         $html = array();
         
@@ -75,10 +77,10 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
 
     public function get_parameters()
     {
-        $parameters = parent :: get_parameters();
+        $parameters = parent::get_parameters();
         if (isset($this->buttonToolbarRenderer))
         {
-            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+            $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         }
         return $parameters;
     }
@@ -90,11 +92,11 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
     {
         // construct search properties
         $search_properties = array();
-        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
-        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
-        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME);
-        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE);
-        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
         
         // get conditions
         return $this->buttonToolbarRenderer->getConditions($search_properties);
@@ -105,32 +107,32 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         if (! isset($this->buttonToolbarRenderer))
         {
             
-            $buttonToolbar = new ButtonToolBar($this->get_url(parent :: get_parameters()));
+            $buttonToolbar = new ButtonToolBar($this->get_url(parent::get_parameters()));
             $commonActions = new ButtonGroup();
             
             if ($this->get_user()->is_platform_admin())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Add'), 
-                        $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_CREATE_USER)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                        $this->get_url(array(Application::PARAM_ACTION => self::ACTION_CREATE_USER)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Report'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Reporting'), 
+                        Translation::get('Report'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Reporting'), 
                         $this->get_reporting_url(), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('Show', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             

@@ -20,65 +20,65 @@ class MailTestForm extends FormValidator
 
     function __construct($parent, $user, $actions)
     {
-        parent :: __construct('mail_tester', 'post', $actions);
-
+        parent::__construct('mail_tester', 'post', $actions);
+        
         $this->addElement(
-            'text',
-            self :: FROM_ADDRESS_NAME,
-            Translation :: get('SurveyFromEmailAddressName'),
+            'text', 
+            self::FROM_ADDRESS_NAME, 
+            Translation::get('SurveyFromEmailAddressName'), 
             array('size' => 80, 'value' => $user->get_firstname() . ' ' . $user->get_lastname()));
-        $this->addRule(self :: FROM_ADDRESS_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addRule(self::FROM_ADDRESS_NAME, Translation::get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text',
-            self :: FROM_ADDRESS,
-            Translation :: get('SurveyFromEmailAddress'),
+            'text', 
+            self::FROM_ADDRESS, 
+            Translation::get('SurveyFromEmailAddress'), 
             array('size' => 80, 'value' => $user->get_email()));
-        $this->addRule(self :: FROM_ADDRESS, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addRule(self::FROM_ADDRESS, Translation::get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text',
-            self :: REPLY_ADDRESS_NAME,
-            Translation :: get('SurveyReplyEmailAddressName'),
+            'text', 
+            self::REPLY_ADDRESS_NAME, 
+            Translation::get('SurveyReplyEmailAddressName'), 
             array('size' => 80, 'value' => $user->get_firstname() . ' ' . $user->get_lastname()));
-        $this->addRule(self :: REPLY_ADDRESS_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addRule(self::REPLY_ADDRESS_NAME, Translation::get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text',
-            self :: REPLY_ADDRESS,
-            Translation :: get('SurveyReplyEmailAddress'),
+            'text', 
+            self::REPLY_ADDRESS, 
+            Translation::get('SurveyReplyEmailAddress'), 
             array('size' => 80, 'value' => $user->get_email()));
-        $this->addRule(self :: REPLY_ADDRESS, Translation :: get('ThisFieldIsRequired'), 'required');
-        $this->addElement('text', self :: EMAIL_HEADER, Translation :: get('SurveyEmailTitle'), array('size' => 80));
-        $this->addRule(self :: EMAIL_HEADER, Translation :: get('ThisFieldIsRequired'), 'required');
-        $this->add_html_editor(self :: EMAIL_CONTENT, Translation :: get('SurveyEmailContent'), true);
-
+        $this->addRule(self::REPLY_ADDRESS, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->addElement('text', self::EMAIL_HEADER, Translation::get('SurveyEmailTitle'), array('size' => 80));
+        $this->addRule(self::EMAIL_HEADER, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->add_html_editor(self::EMAIL_CONTENT, Translation::get('SurveyEmailContent'), true);
+        
         $this->addElement(
-            'text',
-            self :: TO_ADDRESS_NAME,
-            Translation :: get('SurveyToEmailAddressName'),
+            'text', 
+            self::TO_ADDRESS_NAME, 
+            Translation::get('SurveyToEmailAddressName'), 
             array('size' => 80, 'value' => $user->get_firstname() . ' ' . $user->get_lastname()));
-        $this->addRule(self :: TO_ADDRESS_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addRule(self::TO_ADDRESS_NAME, Translation::get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text',
-            self :: TO_ADDRESS,
-            Translation :: get('SurveyToEmailAddress'),
+            'text', 
+            self::TO_ADDRESS, 
+            Translation::get('SurveyToEmailAddress'), 
             array('size' => 80, 'value' => $user->get_email()));
-        $this->addRule(self :: TO_ADDRESS, Translation :: get('ThisFieldIsRequired'), 'required');
-
-        $this->addElement('text', self :: EMAILCOUNT, Translation :: get('MailCount'), array('size' => 5));
-
+        $this->addRule(self::TO_ADDRESS, Translation::get('ThisFieldIsRequired'), 'required');
+        
+        $this->addElement('text', self::EMAILCOUNT, Translation::get('MailCount'), array('size' => 5));
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('SendMail', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('SendMail', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         // InvitationManager :: get_elements($this, false);
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 }

@@ -44,7 +44,7 @@ abstract class HomeRenderer
      * @param boolean $introductionAllowed
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $introduction
      */
-    public function __construct(Manager $homeTool, $courseTools, $introductionAllowed,
+    public function __construct(Manager $homeTool, $courseTools, $introductionAllowed, 
         ContentObjectPublication $introduction = null)
     {
         $this->homeTool = $homeTool;

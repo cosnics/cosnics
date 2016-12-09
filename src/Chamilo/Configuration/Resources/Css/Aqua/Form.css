@@ -9,7 +9,7 @@ div.column {
 	margin-bottom: 15px;
 }
 
-.form-category:not(:first-of-type) {
+.form-category:not (:first-of-type ) {
 	margin-top: 35px;
 }
 

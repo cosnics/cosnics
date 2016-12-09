@@ -19,28 +19,22 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @param string $value
      * @param string $glyph
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null,
-        $glyph = 'ok')
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = 'ok')
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
         if (! isset($glyph))
         {
             $glyph = 'ok';
         }
-
-        HTML_QuickForm_stylebutton :: __construct(
-            $elementName,
-            $elementLabel,
-            $attributes,
-            $value,
-            $glyph);
-
+        
+        HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
+        
         $this->setType('submit');
-
+        
         $defaultAttributes = array();
         $defaultAttributes[] = $this->getAttribute('class');
         $defaultAttributes[] = 'btn-success';
-
+        
         $this->setAttribute('class', implode(' ', $defaultAttributes));
     }
 

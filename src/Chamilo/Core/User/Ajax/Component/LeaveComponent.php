@@ -19,20 +19,17 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
 
     public function run()
     {
-
-        $tracker = Request:: post('tracker');
-        $user_id = \Chamilo\Libraries\Platform\Session\Session:: get_user_id();
-
-        Event:: trigger(
-            'Leave',
-            Manager:: context(),
+        $tracker = Request::post('tracker');
+        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+        
+        Event::trigger(
+            'Leave', 
+            Manager::context(), 
             array(
-                Visit :: PROPERTY_ID => $tracker,
-                Visit :: PROPERTY_LOCATION => null,
-                Visit :: PROPERTY_USER_ID => $user_id
-            )
-        );
-
-        JsonAjaxResult:: success();
+                Visit::PROPERTY_ID => $tracker, 
+                Visit::PROPERTY_LOCATION => null, 
+                Visit::PROPERTY_USER_ID => $user_id));
+        
+        JsonAjaxResult::success();
     }
 }

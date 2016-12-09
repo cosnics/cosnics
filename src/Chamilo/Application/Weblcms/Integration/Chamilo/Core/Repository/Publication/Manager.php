@@ -62,15 +62,15 @@ class Manager implements PublicationInterface
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
      */
-    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, 
         $offset = null, $order_properties = null)
     {
         return DataManager::get_content_object_publication_attributes(
-            $object_id,
-            $type,
-            $condition,
-            $count,
-            $offset,
+            $object_id, 
+            $type, 
+            $condition, 
+            $count, 
+            $offset, 
             $order_properties);
     }
 
@@ -108,7 +108,7 @@ class Manager implements PublicationInterface
         {
             return false;
         }
-
+        
         return $publication->delete();
     }
 
@@ -119,23 +119,23 @@ class Manager implements PublicationInterface
     {
         $locations = new Locations(__NAMESPACE__);
         $type = $content_object->get_type();
-
+        
         $excludedCourseTypes = explode(
-            ',',
-            (string) Configuration::get_instance()->get_setting(
+            ',', 
+            (string) Configuration::getInstance()->get_setting(
                 array('Chamilo\Application\Weblcms', 'excluded_course_types')));
-
+        
         $condition = new NotCondition(
             new InCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID),
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID), 
                 $excludedCourseTypes));
-
+        
         $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user(
-            $user,
+            $user, 
             $condition);
-
+        
         $possible_courses = array();
-
+        
         while ($course = $courses->next_result())
         {
             if ($course->is_course_admin($user))
@@ -143,32 +143,32 @@ class Manager implements PublicationInterface
                 $possible_courses[] = $course;
             }
         }
-
-        $course_settings_controller = CourseSettingsController::get_instance();
-        $course_management_rights = CourseManagementRights::get_instance();
-
+        
+        $course_settings_controller = CourseSettingsController::getInstance();
+        $course_management_rights = CourseManagementRights::getInstance();
+        
         $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters());
-
+        
         $tool_names = array();
-
+        
         while ($tool = $tools->next_result())
         {
             $tool_name = $tool->get_name();
-
+            
             $class = $tool->getContext() . '\Manager';
-
+            
             if (class_exists($class))
             {
                 $allowed_types = $class::get_allowed_types();
-
+                
                 if (count($allowed_types) > 0)
                 {
                     $types[$tool->get_id()] = $allowed_types;
                     $tool_names[$tool->get_id()] = $tool->get_name();
                 }
-
+                
                 if (is_subclass_of(
-                    $class,
+                    $class, 
                     'Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface'))
                 {
                     $types[$tool->get_id()][] = Introduction::class_name();
@@ -176,7 +176,7 @@ class Manager implements PublicationInterface
                 }
             }
         }
-
+        
         foreach ($types as $tool_id => $allowed_types)
         {
             if (in_array($type, $allowed_types))
@@ -184,45 +184,45 @@ class Manager implements PublicationInterface
                 foreach ($possible_courses as $course)
                 {
                     if ($type == Introduction::class_name() && (! $course_settings_controller->get_course_setting(
-                        $course,
+                        $course, 
                         CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT) || ! empty(
                         \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
-                            $course->getId(),
+                            $course->getId(), 
                             $tool_names[$tool_id]))))
                     {
                         continue;
                     }
-
+                    
                     if ($course_settings_controller->get_course_setting(
-                        $course,
-                        CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+                        $course, 
+                        CourseSetting::COURSE_SETTING_TOOL_ACTIVE, 
                         $tool_id) && $course_management_rights->is_allowed(
-                        CourseManagementRights::PUBLISH_FROM_REPOSITORY_RIGHT,
+                        CourseManagementRights::PUBLISH_FROM_REPOSITORY_RIGHT, 
                         $course->get_id()))
                     {
                         $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace(
                             $tool_names[$tool_id]);
                         $tool_name = Translation::get('TypeName', null, $tool_namespace);
-
+                        
                         $locations->add_location(
                             new Location(
-                                $course->get_id(),
-                                $tool_names[$tool_id],
-                                $course->get_title(),
-                                $course->get_visual_code(),
+                                $course->get_id(), 
+                                $tool_names[$tool_id], 
+                                $course->get_title(), 
+                                $course->get_visual_code(), 
                                 $tool_name));
                     }
                 }
             }
         }
-
+        
         return $locations;
     }
 
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
-    public static function publish_content_object(ContentObject $content_object, LocationSupport $location,
+    public static function publish_content_object(ContentObject $content_object, LocationSupport $location, 
         $options = array())
     {
         $publication = new ContentObjectPublication();
@@ -232,52 +232,52 @@ class Manager implements PublicationInterface
         $publication->set_publisher_id(Session::get_user_id());
         $publication->set_publication_date(time());
         $publication->set_modified_date(time());
-
+        
         $isHidden = $options[ContentObjectPublication::PROPERTY_HIDDEN] ? 1 : 0;
         $publication->set_hidden($isHidden);
-
+        
         $allowCollaboration = $options[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] ? 1 : 0;
         $publication->set_allow_collaboration($allowCollaboration);
-
+        
         if ($options['forever'] == 0)
         {
             $publication->set_from_date(DatetimeUtilities::time_from_datepicker($options['from_date']));
             $publication->set_to_date(DatetimeUtilities::time_from_datepicker($options['to_date']));
         }
-
+        
         if (! $publication->create())
         {
             return false;
         }
-
+        
         $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $location->get_tool_id() .
              '\Storage\DataClass\Publication';
         if (class_exists($possible_publication_class))
         {
             $publication_extension = new $possible_publication_class();
             $publication_extension->set_publication_id($publication->get_id());
-
+            
             if (! $publication_extension->create())
             {
                 return false;
             }
         }
-
+        
         if ($options[ContentObjectPublication::PROPERTY_EMAIL_SENT])
         {
-            $mailerFactory = new MailerFactory(Configuration::get_instance());
-
+            $mailerFactory = new MailerFactory(Configuration::getInstance());
+            
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
-                $mailerFactory->getActiveMailer(),
-                Translation::getInstance(),
-                new CourseRepository(),
-                new PublicationRepository(),
-                new ContentObjectRepository(),
+                $mailerFactory->getActiveMailer(), 
+                Translation::getInstance(), 
+                new CourseRepository(), 
+                new PublicationRepository(), 
+                new ContentObjectRepository(), 
                 new UserRepository());
-
+            
             $contentObjectPublicationMailer->mailPublication($publication);
         }
-
+        
         return $publication;
     }
 
@@ -288,41 +288,41 @@ class Manager implements PublicationInterface
     {
         $registration = Configuration::registration(
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__));
-
+        
         $splitterHtml = array();
-
+        
         $splitterHtml[] = '<div class="form_splitter" >';
         $splitterHtml[] = '<span class="category">' .
              Translation::get('PublicationDetails', null, \Chamilo\Application\Weblcms\Manager::context()) . '</span>';
         $splitterHtml[] = '<div style="clear: both;"></div>';
         $splitterHtml[] = '</div>';
-
+        
         $form->addElement('html', implode(PHP_EOL, $splitterHtml));
-
+        
         $form->addElement(
-            'checkbox',
+            'checkbox', 
             \Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION . '[' . $registration[Registration::PROPERTY_ID] .
-                 '][' . ContentObjectPublication::PROPERTY_HIDDEN . ']',
+                 '][' . ContentObjectPublication::PROPERTY_HIDDEN . ']', 
                 Translation::get('Hidden', null, \Chamilo\Application\Weblcms\Manager::context()));
         $form->add_forever_or_timewindow(
-            'PublicationPeriod',
+            'PublicationPeriod', 
             \Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION . '[' . $registration[Registration::PROPERTY_ID] .
-                 ']',
+                 ']', 
                 true);
         $form->addElement(
-            'checkbox',
+            'checkbox', 
             \Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION . '[' . $registration[Registration::PROPERTY_ID] .
-                 '][' . ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION . ']',
+                 '][' . ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION . ']', 
                 Translation::get('CourseAdminCollaborate', null, \Chamilo\Application\Weblcms\Manager::context()));
-
+        
         $form->addElement(
-            'checkbox',
+            'checkbox', 
             \Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION . '[' . $registration[Registration::PROPERTY_ID] .
-                 '][' . ContentObjectPublication::PROPERTY_EMAIL_SENT . ']',
+                 '][' . ContentObjectPublication::PROPERTY_EMAIL_SENT . ']', 
                 Translation::get('SendByEMail', null, \Chamilo\Application\Weblcms\Manager::context()));
-
+        
         $defaults[\Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION][$registration[Registration::PROPERTY_ID]]['forever'] = 1;
-
+        
         $form->setDefaults($defaults);
     }
 

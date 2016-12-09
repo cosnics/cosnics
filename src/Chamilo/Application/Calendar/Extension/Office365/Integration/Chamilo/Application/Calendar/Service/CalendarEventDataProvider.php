@@ -24,24 +24,24 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, 
         $requestedSourceType, $fromDate, $toDate)
     {
-        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository::getInstance());
         $events = array();
-
+        
         if ($calendarService->isAuthenticated())
         {
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
-
+            
             foreach ($calendarIdentifiers as $calendarIdentifier)
             {
                 $events = array_merge(
-                    $events,
+                    $events, 
                     $this->getCalendarEvents($calendarService, $calendarIdentifier, $fromDate, $toDate));
             }
         }
-
+        
         return $events;
     }
 
@@ -54,18 +54,18 @@ class CalendarEventDataProvider extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
-
+        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+        
         $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getDataUser(), 
             $package);
-
+        
         $calendarIdentifiers = array();
-
+        
         if ($availabilities->size() == 0)
         {
             $availableCalendars = $this->getCalendars();
-
+            
             foreach ($availableCalendars as $availableCalendar)
             {
                 $calendarIdentifiers[] = $availableCalendar->getIdentifier();
@@ -81,7 +81,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                 }
             }
         }
-
+        
         return $calendarIdentifiers;
     }
 
@@ -97,19 +97,19 @@ class CalendarEventDataProvider extends ExternalCalendar
     private function getCalendarEvents($calendarService, $calendarId, $fromDate, $toDate)
     {
         $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
-            $calendarId,
-            $fromDate,
+            $calendarId, 
+            $fromDate, 
             $toDate);
-
+        
         $availableCalendar = $calendarService->getCalendarByIdentifier($calendarId);
         $events = array();
-
+        
         while ($office365CalenderEvent = $eventResultSet->next_result())
         {
             $eventParser = new EventParser($availableCalendar, $office365CalenderEvent, $fromDate, $toDate);
             $events = array_merge($events, $eventParser->getEvents());
         }
-
+        
         return $events;
     }
 
@@ -119,14 +119,14 @@ class CalendarEventDataProvider extends ExternalCalendar
      */
     public function getCalendars()
     {
-        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository::getInstance());
         $calendars = array();
-
+        
         if ($calendarService->isAuthenticated())
         {
             $calendars = $calendarService->getOwnedCalendars();
         }
-
+        
         return $calendars;
     }
 }

@@ -2,7 +2,13 @@
 namespace Chamilo\Libraries\Cache\Doctrine;
 
 use Chamilo\Libraries\Cache\IdentifiableCacheService;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -32,7 +38,13 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
      */
     protected function getCachePath()
     {
-        return Path :: getInstance()->getCachePath($this->getCachePathNamespace());
+        $configurationConsulter = new ConfigurationConsulter(
+            new FileConfigurationLoader(
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+        
+        return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
     }
 
     /**
@@ -45,7 +57,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
         {
             $this->cacheProvider = $this->setupCacheProvider();
         }
-
+        
         return $this->cacheProvider;
     }
 
@@ -97,7 +109,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
                 throw new \Exception('CacheError');
             }
         }
-
+        
         return $this->getCacheProvider()->fetch((string) $identifier);
     }
 }

@@ -94,7 +94,7 @@ class Mdb2DatabaseTest extends \PHPUnit_Framework_TestCase
         $indexes[] = array('type' => 'unique', 'fields' => array('texta' => array()));
         $this->db->create_storage_unit('mockdata', $props, $indexes);
     }
-    
+
     /*
      * Get any number of guaranteed-to-be-distinct values which conform to the constraints on this table. All values are
      * incremental so sorting on either of them (except id or bool) will return records in the same order as this

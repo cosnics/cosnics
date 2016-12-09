@@ -58,7 +58,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         $component = $this->component;
         $context = $component->package();
 
-        if (! $component instanceof NoContextComponent && !$component->get_application() instanceof Application)
+        if (! $component instanceof NoContextComponent && ! $component->get_application() instanceof Application)
         {
             $this->generate_package_breadcrumb();
         }
@@ -69,7 +69,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         {
             $this->breadcrumb_trail->add_help(
                 $context,
-                ClassnameUtilities :: getInstance()->getClassnameFromObject($component, true));
+                ClassnameUtilities::getInstance()->getClassnameFromObject($component, true));
 
             $this->generate_component_breadcrumb();
         }
@@ -84,10 +84,10 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         $context = $component->package();
 
         $filter_parameters = $component->get_additional_parameters();
-        $filter_parameters[] = $component :: PARAM_ACTION;
+        $filter_parameters[] = $component::PARAM_ACTION;
 
         $this->breadcrumb_trail->add(
-            new Breadcrumb($component->get_url(array(), $filter_parameters), Translation :: get('TypeName', null, $context)));
+            new Breadcrumb($component->get_url(array(), $filter_parameters), Translation::get('TypeName', null, $context)));
     }
 
     /**
@@ -95,10 +95,10 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      */
     protected function generate_component_breadcrumb()
     {
-        $variable = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_class($this->component));
+        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->component));
 
         $this->breadcrumb_trail->add(
-            new Breadcrumb($this->component->get_url(), Translation :: get($variable, null, $this->component->package())));
+            new Breadcrumb($this->component->get_url(), Translation::get($variable, null, $this->component->package())));
     }
 
     /**

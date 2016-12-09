@@ -1,26 +1,26 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 
 /**
  * Interface for classes that build exception loggers
- *
+ * 
  * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  */
 interface ExceptionLoggerBuilderInterface
 {
+
     /**
      * ExceptionLoggerBuilderInterface constructor.
-     *
-     * @param Configuration $configuration
+     * 
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function __construct(Configuration $configuration);
+    public function __construct(ConfigurationConsulter $configurationConsulter);
 
     /**
      * Creates the exception logger
-     *
+     * 
      * @return ExceptionLoggerInterface
      */
     public function createExceptionLogger();

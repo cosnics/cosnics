@@ -22,39 +22,39 @@ class ContentObjectUpdaterComponent extends Manager
     {
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
         {
-            $pid = Request :: get('pid') ? Request :: get('pid') : $_POST['pid'];
+            $pid = Request::get('pid') ? Request::get('pid') : $_POST['pid'];
             
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $pid);
             
-            $content_object->set_default_property(ContentObject :: PROPERTY_OWNER_ID, $this->get_user_id());
+            $content_object->set_default_property(ContentObject::PROPERTY_OWNER_ID, $this->get_user_id());
             
-            $form = ContentObjectForm :: factory(
-                ContentObjectForm :: TYPE_EDIT, 
+            $form = ContentObjectForm::factory(
+                ContentObjectForm::TYPE_EDIT, 
                 new PersonalWorkspace($this->get_user()), 
                 $content_object, 
                 'edit', 
                 'post', 
                 $this->get_url(
                     array(
-                        \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager :: ACTION_UPDATE_CONTENT_OBJECT, 
+                        \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager::ACTION_UPDATE_CONTENT_OBJECT, 
                         'pid' => $pid)));
             
-            if ($form->validate() || Request :: get('validated'))
+            if ($form->validate() || Request::get('validated'))
             {
                 $succes = $form->update_content_object();
                 
                 $message = htmlentities(
-                    Translation :: get(
+                    Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
-                        array('OBJECT' => Translation :: get('ContentObject')), 
-                        Utilities :: COMMON_LIBRARIES));
+                        array('OBJECT' => Translation::get('ContentObject')), 
+                        Utilities::COMMON_LIBRARIES));
                 
                 $params = array();
-                $params['pid'] = Request :: get('pid');
-                $params['tool_action'] = Request :: get('tool_action');
-                $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_VIEW_CLO;
+                $params['pid'] = Request::get('pid');
+                $params['tool_action'] = Request::get('tool_action');
+                $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Display\Action\Manager::ACTION_VIEW_CLO;
                 
                 $this->redirect($message, (! $succes), $params);
             }

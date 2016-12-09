@@ -15,25 +15,25 @@ abstract class StreamingMediaExternalObject extends ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_URL;
-        $extended_property_names[] = self :: PROPERTY_DURATION;
-        $extended_property_names[] = self :: PROPERTY_THUMBNAIL;
-        $extended_property_names[] = self :: PROPERTY_STATUS;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_URL;
+        $extended_property_names[] = self::PROPERTY_DURATION;
+        $extended_property_names[] = self::PROPERTY_THUMBNAIL;
+        $extended_property_names[] = self::PROPERTY_STATUS;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     public function get_status_text()
     {
         switch ($this->get_status())
         {
-            case self :: STATUS_AVAILABLE :
-                return Translation :: get('Available');
+            case self::STATUS_AVAILABLE :
+                return Translation::get('Available');
                 break;
-            case self :: STATUS_UNAVAILABLE :
-                return Translation :: get('Unavailable');
+            case self::STATUS_UNAVAILABLE :
+                return Translation::get('Unavailable');
                 break;
             default :
-                return Translation :: get('Unknown');
+                return Translation::get('Unknown');
         }
     }
 
@@ -43,7 +43,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_thumbnail()
     {
-        return $this->get_default_property(self :: PROPERTY_THUMBNAIL);
+        return $this->get_default_property(self::PROPERTY_THUMBNAIL);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_thumbnail($thumbnail)
     {
-        $this->set_default_property(self :: PROPERTY_THUMBNAIL, $thumbnail);
+        $this->set_default_property(self::PROPERTY_THUMBNAIL, $thumbnail);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_url()
     {
-        return $this->get_default_property(self :: PROPERTY_URL);
+        return $this->get_default_property(self::PROPERTY_URL);
     }
 
     /**
@@ -70,12 +70,12 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_duration()
     {
-        return $this->get_default_property(self :: PROPERTY_DURATION);
+        return $this->get_default_property(self::PROPERTY_DURATION);
     }
 
     public function get_status()
     {
-        return $this->get_default_property(self :: PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_STATUS);
     }
 
     /**
@@ -84,12 +84,12 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_url($url)
     {
-        $this->set_default_property(self :: PROPERTY_URL, $url);
+        $this->set_default_property(self::PROPERTY_URL, $url);
     }
 
     public function set_status($status)
     {
-        $this->set_default_property(self :: PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 
     /**
@@ -98,6 +98,6 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_duration($duration)
     {
-        $this->set_default_property(self :: PROPERTY_DURATION, $duration);
+        $this->set_default_property(self::PROPERTY_DURATION, $duration);
     }
 }

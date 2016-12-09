@@ -20,7 +20,7 @@ class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK, self :: PARAM_VISIBILITY);
+        return array(self::PARAM_BLOCK, self::PARAM_VISIBILITY);
     }
 
     /*
@@ -28,33 +28,33 @@ class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $blockId = $this->getPostDataValue(self :: PARAM_BLOCK);
-
-        $block = DataManager :: retrieve_by_id(Block :: class_name(), $blockId);
-
+        
+        $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
+        
+        $block = DataManager::retrieve_by_id(Block::class_name(), $blockId);
+        
         if ($block->getUserId() == $userId)
         {
-            $block->setVisibility(($this->getPostDataValue(self :: PARAM_VISIBILITY) == 'false' ? false : true));
-
+            $block->setVisibility(($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false' ? false : true));
+            
             if ($block->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: error(409, Translation :: get('BlockNotUpdated'));
+                JsonAjaxResult::error(409, Translation::get('BlockNotUpdated'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

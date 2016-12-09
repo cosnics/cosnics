@@ -21,33 +21,33 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $cas_account = DataManager :: retrieve_by_id(
-            Account :: class_name(),
-            (int) Request :: get(Manager :: PARAM_ACCOUNT_ID));
-
+        $cas_account = DataManager::retrieve_by_id(
+            Account::class_name(), 
+            (int) Request::get(Manager::PARAM_ACCOUNT_ID));
+        
         $form = new AccountForm(
-            AccountForm :: TYPE_EDIT,
-            $cas_account,
-            $this->get_url(array(self :: PARAM_ACCOUNT_ID => $cas_account->get_id())),
+            AccountForm::TYPE_EDIT, 
+            $cas_account, 
+            $this->get_url(array(self::PARAM_ACCOUNT_ID => $cas_account->get_id())), 
             $this->get_user());
-
+        
         if ($form->validate())
         {
             $success = $form->update_cas_account();
             $this->redirect(
-                $success ? Translation :: get('CasAccountUpdated', null, Utilities :: COMMON_LIBRARIES) : Translation :: get(
-                    'CasAccountNotUpdated'),
-                ! $success,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                $success ? Translation::get('CasAccountUpdated', null, Utilities::COMMON_LIBRARIES) : Translation::get(
+                    'CasAccountNotUpdated'), 
+                ! $success, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

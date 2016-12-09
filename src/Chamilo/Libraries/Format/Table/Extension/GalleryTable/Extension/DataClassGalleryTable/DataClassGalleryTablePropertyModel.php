@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyMo
 
 /**
  * This class represents a property model for a DataClass gallery table
- *
+ * 
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop>
  */

@@ -29,27 +29,27 @@ class ViewerComponent extends Manager implements NoContextComponent
      */
     public function run()
     {
-        $id = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
-        $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
+        $id = Request::get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
         
-        if (! Rights :: get_instance()->is_allowed_in_publciation($id, $this->get_user()->get_id()))
+        if (! Rights::getInstance()->is_allowed_in_publciation($id, $this->get_user()->get_id()))
         {
             throw new NotAllowedException();
         }
         
         if ($id)
         {
-            $publication = DataManager :: retrieve_by_id(Publication :: class_name(), (int) $id);
+            $publication = DataManager::retrieve_by_id(Publication::class_name(), (int) $id);
             $object = $publication->get_content_object();
             
             $html = array();
             
             $html[] = $this->render_header();
             $html[] = $this->getButtonToolbarRenderer($publication)->render();
-            $html[] = ContentObjectRenditionImplementation :: launch(
+            $html[] = ContentObjectRenditionImplementation::launch(
                 $object, 
-                ContentObjectRendition :: FORMAT_HTML, 
-                ContentObjectRendition :: VIEW_FULL, 
+                ContentObjectRendition::FORMAT_HTML, 
+                ContentObjectRendition::VIEW_FULL, 
                 $this);
             $html[] = $this->render_footer();
             
@@ -59,10 +59,10 @@ class ViewerComponent extends Manager implements NoContextComponent
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
+                    Translation::get(
                         'NoObjectSelected', 
-                        array('OBJECT' => Translation :: get('SystemAnnouncement')), 
-                        Utilities :: COMMON_LIBRARIES)));
+                        array('OBJECT' => Translation::get('SystemAnnouncement')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -77,23 +77,23 @@ class ViewerComponent extends Manager implements NoContextComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_EDIT, 
-                                self :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_ACTION => self::ACTION_EDIT, 
+                                self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_DELETE, 
-                                self :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_ACTION => self::ACTION_DELETE, 
+                                self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 if ($publication->is_hidden())
                 {
@@ -110,13 +110,13 @@ class ViewerComponent extends Manager implements NoContextComponent
                 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath($visibility_img), 
+                        Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath($visibility_img), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_HIDE, 
-                                self :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self::PARAM_ACTION => self::ACTION_HIDE, 
+                                self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id())), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
             $buttonToolbar->addButtonGroup($commonActions);

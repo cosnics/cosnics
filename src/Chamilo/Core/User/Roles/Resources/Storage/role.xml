@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="role">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="role"
+            type="text"
+            length="255"
+            notnull="1"
+            default="" />
+    </properties>
+    <index
+        name="role"
+        type="unique">
+        <indexproperty name="role" />
+    </index>
+</object>

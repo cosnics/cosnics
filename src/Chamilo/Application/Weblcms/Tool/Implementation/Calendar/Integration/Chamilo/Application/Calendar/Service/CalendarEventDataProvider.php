@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Calendar Event Data Provider for the assignment tool
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider
@@ -16,7 +16,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
 
     /**
      * Retrieves the valid publications for the user
-     *
+     * 
      * @param User $user
      * @param int $fromDate
      * @param int $toDate
@@ -26,7 +26,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
     function getPublications(User $user, $fromDate, $toDate)
     {
         $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user)->as_array();
-
+        
         return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
     }
 
@@ -41,7 +41,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
 
     /**
      * Returns the context for the calendar
-     *
+     * 
      * @return string
      */
     function getCalendarContext()
@@ -51,14 +51,14 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
 
     /**
      * Returns the name for the calendar
-     *
+     * 
      * @return string
      */
     function getCalendarName()
     {
         return Translation::getInstance()->getTranslation(
-            'CoursesCalendarCalendar',
-            null,
+            'CoursesCalendarCalendar', 
+            null, 
             'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar');
     }
 }

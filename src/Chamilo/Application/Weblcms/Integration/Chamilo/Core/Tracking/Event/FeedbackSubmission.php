@@ -20,6 +20,6 @@ class FeedbackSubmission extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback::class_name());
     }
 }

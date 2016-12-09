@@ -19,6 +19,6 @@ class Update extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: class_name());
+        return array(\Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::class_name());
     }
 }

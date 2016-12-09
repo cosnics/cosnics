@@ -20,17 +20,17 @@ class OrderingQuestionForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        parent :: build_creation_form();
-        $this->addElement('category', Translation :: get('Items'));
+        parent::build_creation_form();
+        $this->addElement('category', Translation::get('Items'));
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
                      'OrderingQuestion.js'));
         $this->add_options();
         $this->addElement('category');
         
-        $this->addElement('category', Translation :: get('Hint'));
+        $this->addElement('category', Translation::get('Hint'));
         
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
@@ -41,11 +41,11 @@ class OrderingQuestionForm extends ContentObjectForm
         
         $renderer = $this->defaultRenderer();
         $this->add_html_editor(
-            OrderingQuestion :: PROPERTY_HINT, 
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
+            OrderingQuestion::PROPERTY_HINT, 
+            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 
             false, 
             $html_editor_options);
-        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion :: PROPERTY_HINT);
+        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion::PROPERTY_HINT);
         $this->addElement('category');
         
         $this->add_example_box();
@@ -53,17 +53,17 @@ class OrderingQuestionForm extends ContentObjectForm
 
     protected function build_editing_form()
     {
-        parent :: build_editing_form();
-        $this->addElement('category', Translation :: get('Items'));
+        parent::build_editing_form();
+        $this->addElement('category', Translation::get('Items'));
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
                      'OrderingQuestion.js'));
         $this->add_options();
         $this->addElement('category');
         
-        $this->addElement('category', Translation :: get('Hint'));
+        $this->addElement('category', Translation::get('Hint'));
         
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
@@ -74,11 +74,11 @@ class OrderingQuestionForm extends ContentObjectForm
         
         $renderer = $this->defaultRenderer();
         $this->add_html_editor(
-            OrderingQuestion :: PROPERTY_HINT, 
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
+            OrderingQuestion::PROPERTY_HINT, 
+            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 
             false, 
             $html_editor_options);
-        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion :: PROPERTY_HINT);
+        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion::PROPERTY_HINT);
         $this->addElement('category');
         
         $this->add_example_box();
@@ -89,17 +89,17 @@ class OrderingQuestionForm extends ContentObjectForm
         if (! $this->isSubmitted())
         {
             $object = $this->get_content_object();
-            $defaults[OrderingQuestion :: PROPERTY_HINT] = $object->get_hint();
+            $defaults[OrderingQuestion::PROPERTY_HINT] = $object->get_hint();
             
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
                 foreach ($options as $index => $option)
                 {
-                    $defaults[OrderingQuestionOption :: PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[OrderingQuestionOption :: PROPERTY_SCORE][$index] = $option->get_score();
-                    $defaults[OrderingQuestionOption :: PROPERTY_FEEDBACK][$index] = $option->get_feedback();
-                    $defaults[OrderingQuestionOption :: PROPERTY_ORDER][$index] = $option->get_order();
+                    $defaults[OrderingQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
+                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$index] = $option->get_score();
+                    $defaults[OrderingQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
+                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$index] = $option->get_order();
                 }
             }
             else
@@ -108,28 +108,28 @@ class OrderingQuestionForm extends ContentObjectForm
                 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
-                    $defaults[OrderingQuestionOption :: PROPERTY_SCORE][$option_number] = 1;
-                    $defaults[OrderingQuestionOption :: PROPERTY_ORDER][$option_number] = $option_number + 1;
+                    $defaults[OrderingQuestionOption::PROPERTY_SCORE][$option_number] = 1;
+                    $defaults[OrderingQuestionOption::PROPERTY_ORDER][$option_number] = $option_number + 1;
                 }
             }
         }
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     public function create_content_object()
     {
         $object = new OrderingQuestion();
-        $object->set_hint($this->exportValue(OrderingQuestion :: PROPERTY_HINT));
+        $object->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
         $this->set_content_object($object);
         $this->add_options_to_object();
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 
     public function update_content_object()
     {
-        $this->get_content_object()->set_hint($this->exportValue(OrderingQuestion :: PROPERTY_HINT));
+        $this->get_content_object()->set_hint($this->exportValue(OrderingQuestion::PROPERTY_HINT));
         $this->add_options_to_object();
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 
     private function add_options_to_object()
@@ -137,11 +137,11 @@ class OrderingQuestionForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
         $options = array();
-        foreach ($values[OrderingQuestionOption :: PROPERTY_VALUE] as $option_id => $value)
+        foreach ($values[OrderingQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
-            $order = $values[OrderingQuestionOption :: PROPERTY_ORDER][$option_id];
-            $score = $values[OrderingQuestionOption :: PROPERTY_SCORE][$option_id];
-            $feedback = $values[OrderingQuestionOption :: PROPERTY_FEEDBACK][$option_id];
+            $order = $values[OrderingQuestionOption::PROPERTY_ORDER][$option_id];
+            $score = $values[OrderingQuestionOption::PROPERTY_SCORE][$option_id];
+            $feedback = $values[OrderingQuestionOption::PROPERTY_FEEDBACK][$option_id];
             
             $options[] = new OrderingQuestionOption($value, $order, $score, $feedback);
         }
@@ -154,7 +154,7 @@ class OrderingQuestionForm extends ContentObjectForm
         {
             return false;
         }
-        return parent :: validate();
+        return parent::validate();
     }
 
     /**
@@ -205,7 +205,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $buttons[] = $this->createElement(
             'style_button', 
             'add[]', 
-            Translation :: get('AddItem'), 
+            Translation::get('AddItem'), 
             array('id' => 'add_option'), 
             null, 
             'plus');
@@ -221,10 +221,10 @@ class OrderingQuestionForm extends ContentObjectForm
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th>' . Translation :: get('Item') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation :: get('Order') . '</th>';
-        $table_header[] = '<th>' . Translation :: get('Feedback') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation :: get('Score') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Item') . '</th>';
+        $table_header[] = '<th class="numeric">' . Translation::get('Order') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Feedback') . '</th>';
+        $table_header[] = '<th class="numeric">' . Translation::get('Score') . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -244,22 +244,22 @@ class OrderingQuestionForm extends ContentObjectForm
                 $group = array();
                 
                 $group[] = $this->create_html_editor(
-                    OrderingQuestionOption :: PROPERTY_VALUE . '[' . $option_number . ']', 
-                    Translation :: get('Item'), 
+                    OrderingQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']', 
+                    Translation::get('Item'), 
                     $html_editor_options);
                 $group[] = & $this->createElement(
                     'select', 
-                    OrderingQuestionOption :: PROPERTY_ORDER . '[' . $option_number . ']', 
-                    Translation :: get('Rank'), 
+                    OrderingQuestionOption::PROPERTY_ORDER . '[' . $option_number . ']', 
+                    Translation::get('Rank'), 
                     $select_options);
                 $group[] = $this->create_html_editor(
-                    OrderingQuestionOption :: PROPERTY_FEEDBACK . '[' . $option_number . ']', 
-                    Translation :: get('Feedback'), 
+                    OrderingQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']', 
+                    Translation::get('Feedback'), 
                     $html_editor_options);
                 $group[] = & $this->createElement(
                     'text', 
-                    OrderingQuestionOption :: PROPERTY_SCORE . '[' . $option_number . ']', 
-                    Translation :: get('Score'), 
+                    OrderingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']', 
+                    Translation::get('Score'), 
                     'size="2"  class="input_numeric"');
                 
                 if ($number_of_options - count($_SESSION['ordering_skip_options']) > 2)
@@ -267,7 +267,7 @@ class OrderingQuestionForm extends ContentObjectForm
                     $group[] = & $this->createElement(
                         'image', 
                         'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
@@ -276,32 +276,27 @@ class OrderingQuestionForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') .
+                        '<img src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
                              '" class="remove_option" />');
                 }
                 
-                $this->addGroup(
-                    $group, 
-                    OrderingQuestionOption :: PROPERTY_VALUE . '_' . $option_number, 
-                    null, 
-                    '', 
-                    false);
+                $this->addGroup($group, OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number, null, '', false);
                 
-                $error = '<tr><td colspan="5" class="error">' . Translation :: get('ScoreBigger') . '</td></tr>';
+                $error = '<tr><td colspan="5" class="error">' . Translation::get('ScoreBigger') . '</td></tr>';
                 
                 $this->addGroupRule(
-                    OrderingQuestionOption :: PROPERTY_VALUE . '_' . $option_number, 
+                    OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number, 
                     array(
-                        OrderingQuestionOption :: PROPERTY_SCORE . '[' . $option_number . ']' => array(
+                        OrderingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
                             array($error, 'number_compare', '>', 0))));
                 
                 $renderer->setElementTemplate(
                     '<!-- BEGIN error -->{error}<!-- END error --><tr id="option_' . $option_number . '" class="' .
                          ($option_number % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
-                        OrderingQuestionOption :: PROPERTY_VALUE . '_' . $option_number);
+                        OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number);
                 $renderer->setGroupElementTemplate(
                     '<td>{element}</td>', 
-                    OrderingQuestionOption :: PROPERTY_VALUE . '_' . $option_number);
+                    OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number);
             }
         }
         

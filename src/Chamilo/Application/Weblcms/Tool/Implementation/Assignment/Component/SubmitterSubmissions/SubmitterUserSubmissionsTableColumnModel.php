@@ -20,15 +20,15 @@ class SubmitterUserSubmissionsTableColumnModel extends DataClassTableColumnModel
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_PUBLICATION_TITLE));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_CONTENT_OBJECT_DESCRIPTION));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_PUBLICATION_TITLE));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_CONTENT_OBJECT_DESCRIPTION));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_DATE_SUBMITTED));
         $this->add_column(
             new StaticTableColumn(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SCORE));
-        $this->add_column(new StaticTableColumn(Manager :: PROPERTY_NUMBER_OF_FEEDBACKS));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore::PROPERTY_SCORE));
+        $this->add_column(new StaticTableColumn(Manager::PROPERTY_NUMBER_OF_FEEDBACKS));
     }
 }

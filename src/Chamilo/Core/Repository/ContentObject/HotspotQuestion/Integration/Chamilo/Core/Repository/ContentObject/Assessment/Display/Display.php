@@ -53,20 +53,20 @@ class Display extends QuestionDisplay
         
         $formvalidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                      'Plugin/jquery.draw.js'));
         $formvalidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                      'HotspotQuestionDisplay.js'));
         
         $image_html = array();
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
         
-        $scaledDimensions = Utilities :: scaleDimensions(
+        $scaledDimensions = Utilities::scaleDimensions(
             600, 
             450, 
             array('width' => $dimensions[0], 'height' => $dimensions[1]));
@@ -76,12 +76,12 @@ class Display extends QuestionDisplay
              '" class="hotspot_container"><div id="hotspot_image_' . $question_id .
              '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
              $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
-             $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+             $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager::get_document_downloader_url(
                 $image_object->get_id(), 
                 $image_object->calculate_security_code()) . ')"></div></div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '<div id="hotspot_marking_' . $question_id . '" class="hotspot_marking">';
-        $image_html[] = '<div class="colour_box_label">' . Translation :: get('CurrentlyMarking') . '</div>';
+        $image_html[] = '<div class="colour_box_label">' . Translation::get('CurrentlyMarking') . '</div>';
         $image_html[] = '<div class="colour_box"></div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '</div>';
@@ -123,7 +123,7 @@ class Display extends QuestionDisplay
                 null, 
                 null, 
                 '<img id="reset_' . $answer_name . '" class="reset_option" type="image" src="' .
-                     Theme :: getInstance()->getCommonImagePath('Action/Reset') . '" />');
+                     Theme::getInstance()->getCommonImagePath('Action/Reset') . '" />');
             $group[] = $formvalidator->createElement('hidden', $answer_name, '', 'class="hotspot_coordinates"');
             
             // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);
@@ -154,6 +154,6 @@ class Display extends QuestionDisplay
 
     public function get_instruction()
     {
-        return Translation :: get('MarkHotspots');
+        return Translation::get('MarkHotspots');
     }
 }

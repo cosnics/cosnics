@@ -10,8 +10,8 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         $object = $this->get_object();
         
-        $properties = parent :: get_display_properties();
-        $properties[Translation :: get('AvailableSizes')] = $object->get_available_sizes_string();
+        $properties = parent::get_display_properties();
+        $properties[Translation::get('AvailableSizes')] = $object->get_available_sizes_string();
         
         return $properties;
     }
@@ -19,7 +19,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_preview($is_thumbnail = false)
     {
         $object = $this->get_object();
-        $size = ($is_thumbnail ? ExternalObject :: SIZE_THUMBNAIL : ExternalObject :: SIZE_MEDIUM);
+        $size = ($is_thumbnail ? ExternalObject::SIZE_THUMBNAIL : ExternalObject::SIZE_MEDIUM);
         $class = ($is_thumbnail ? 'thumbnail' : 'with_border');
         
         $html = array();

@@ -24,7 +24,7 @@ abstract class EventTableRenderer extends EventRenderer
     {
         $eventClasses = $this->getEventClasses($this->getEvent()->getStartDate());
         $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses(
-            $this->getEvent()->getSource(),
+            $this->getEvent()->getSource(), 
             $this->isFadedEvent());
         return implode(' ', array($eventClasses, $sourceClasses));
     }
@@ -36,13 +36,13 @@ abstract class EventTableRenderer extends EventRenderer
     public function renderLink()
     {
         $html = array();
-
+        
         $fullTitle = $this->renderFullTitle();
-
+        
         $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) . '">';
         $html[] = $fullTitle;
         $html[] = '</a>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -53,21 +53,21 @@ abstract class EventTableRenderer extends EventRenderer
     public function renderFullTitle()
     {
         $fullTitle = '';
-
+        
         $prefix = $this->renderPrefix();
         if ($prefix)
         {
             $fullTitle .= $prefix . ' ';
         }
-
+        
         $fullTitle .= htmlentities($this->getEvent()->getTitle());
-
+        
         $postfix = $this->renderPostfix();
         if ($postfix)
         {
             $fullTitle .= ' ' . $postfix;
         }
-
+        
         return $fullTitle;
     }
 
@@ -84,11 +84,11 @@ abstract class EventTableRenderer extends EventRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = $this->renderHeader();
         $html[] = $this->renderLink();
         $html[] = $this->renderFooter();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -99,11 +99,11 @@ abstract class EventTableRenderer extends EventRenderer
     public function renderHeader()
     {
         $html = array();
-
+        
         $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
              $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
         $html[] = '<div class="event-data">';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -114,10 +114,10 @@ abstract class EventTableRenderer extends EventRenderer
     public function renderFooter()
     {
         $html = array();
-
+        
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

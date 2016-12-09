@@ -27,43 +27,43 @@ abstract class TabComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->tabsRenderer = new DynamicVisualTabsRenderer('learning_path');
-
+        
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self :: ACTION_CREATE,
-                Translation :: get(self :: ACTION_CREATE . 'Component'),
-                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_CREATE),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
-                $this->get_action() == self :: ACTION_CREATE,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
+                self::ACTION_CREATE, 
+                Translation::get(self::ACTION_CREATE . 'Component'), 
+                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_CREATE), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), 
+                $this->get_action() == self::ACTION_CREATE, 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
-                self :: ACTION_BROWSE,
-                Translation :: get(self :: ACTION_BROWSE . 'Component'),
-                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
-                $this->get_action() == self :: ACTION_BROWSE,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
-        if ($this->get_action() == self :: ACTION_UPDATE)
+                self::ACTION_BROWSE, 
+                Translation::get(self::ACTION_BROWSE . 'Component'), 
+                Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_BROWSE), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), 
+                $this->get_action() == self::ACTION_BROWSE, 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
+        if ($this->get_action() == self::ACTION_UPDATE)
         {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
-                    self :: ACTION_UPDATE,
-                    Translation :: get(self :: ACTION_UPDATE . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_UPDATE),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPDATE)),
-                    $this->get_action() == self :: ACTION_UPDATE,
-                    false,
-                    DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    self::ACTION_UPDATE, 
+                    Translation::get(self::ACTION_UPDATE . 'Component'), 
+                    Theme::getInstance()->getImagePath(Manager::package(), 'Tab/' . self::ACTION_UPDATE), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE)), 
+                    $this->get_action() == self::ACTION_UPDATE, 
+                    false, 
+                    DynamicVisualTab::POSITION_LEFT, 
+                    DynamicVisualTab::DISPLAY_BOTH_SELECTED));
         }
-
+        
         return $this->build();
     }
 
@@ -76,10 +76,10 @@ abstract class TabComponent extends Manager implements DelegateComponent
     public function render_header()
     {
         $html = array();
-
-        $html[] = parent :: render_header();
+        
+        $html[] = parent::render_header();
         $html[] = $this->getTabsRenderer()->renderHeader();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -90,16 +90,16 @@ abstract class TabComponent extends Manager implements DelegateComponent
     public function render_footer()
     {
         $html = array();
-
+        
         $html[] = $this->getTabsRenderer()->renderFooter();
-        $html[] = parent :: render_footer();
-
+        $html[] = parent::render_footer();
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Get the TabsRenderer
-     *
+     * 
      * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
      */
     public function getTabsRenderer()

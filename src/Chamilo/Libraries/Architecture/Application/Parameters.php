@@ -118,12 +118,12 @@ class Parameters
      *
      * @return Parameters
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 }

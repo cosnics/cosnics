@@ -6,7 +6,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * This class provides some functions which can be used when importing data from external files into Chamilo $Id:
  * import.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.import
  * @todo Create an abstract import class and add an implementation for CSV, XML,... Like the export classes
  */
@@ -19,7 +19,7 @@ class Import
      * FirstName;LastName;Email John;Doe;john.doe@mail.com Adam;Adams;adam@mail.com returns $result [0]['FirstName'] =
      * 'John'; $result [0]['LastName'] = 'Doe'; $result [0]['Email'] = 'john.doe@mail. com'; $result [1]['FirstName'] =
      * 'Adam'; ...
-     *
+     * 
      * @param string $filename Path to the CSV-file which should be imported
      * @return array An array with all data from the CSV-file
      */
@@ -28,15 +28,15 @@ class Import
         $result = array();
         $handle = fopen($filename, "r");
         $keys = fgetcsv($handle, 1000, ";");
-
+        
         for ($i = 0; $i < count($keys); $i ++)
         {
-            $keys[$i] = (string) StringUtilities :: getInstance()->createString($keys[$i])->underscored();
+            $keys[$i] = (string) StringUtilities::getInstance()->createString($keys[$i])->underscored();
         }
-
+        
         while (($row_tmp = fgetcsv($handle, 1000, ";")) !== FALSE)
         {
-
+            
             $row = array();
             foreach ($row_tmp as $index => $value)
             {

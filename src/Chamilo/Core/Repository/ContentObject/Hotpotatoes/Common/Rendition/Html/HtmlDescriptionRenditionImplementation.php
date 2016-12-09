@@ -9,14 +9,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
     {
         $object = $this->get_content_object();
         $path = $object->get_full_url();
-       
+        
         return '<iframe src="' . $path . '" width="100%" height="600">
   				 <p>Your browser does not support iframes.</p>
 				 </iframe>';

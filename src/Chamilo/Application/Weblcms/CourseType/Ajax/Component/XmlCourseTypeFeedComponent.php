@@ -19,78 +19,78 @@ class XmlCourseTypeFeedComponent extends \Chamilo\Application\Weblcms\CourseType
 
     public function run()
     {
-        $query = Request :: get('query');
-        $exclude = Request :: get('exclude');
-
+        $query = Request::get('query');
+        $exclude = Request::get('exclude');
+        
         $course_type_conditions = array();
-
+        
         if ($query)
         {
             $condition_properties = array();
             $condition_properties[] = new PropertyConditionVariable(
-                CourseType :: class_name(),
-                CourseType :: PROPERTY_TITLE);
-
-            $course_type_conditions[] = Utilities :: query_to_condition($query, $condition_properties);
+                CourseType::class_name(), 
+                CourseType::PROPERTY_TITLE);
+            
+            $course_type_conditions[] = Utilities::query_to_condition($query, $condition_properties);
         }
-
+        
         if ($exclude)
         {
             if (! is_array($exclude))
             {
                 $exclude = array($exclude);
             }
-
+            
             $exclude_conditions = array();
             $exclude_conditions['coursetype'] = array();
-
+            
             foreach ($exclude as $id)
             {
                 $id = explode('_', $id);
-
+                
                 if ($id[0] == 'coursetype')
                 {
                     $condition = new NotCondition(
                         new EqualityCondition(
-                            new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_ID),
+                            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID), 
                             new StaticConditionVariable($id[1])));
                 }
-
+                
                 $exclude_conditions[$id[0]][] = $condition;
             }
-
+            
             if (count($exclude_conditions['coursetype']) > 0)
             {
                 $course_type_conditions[] = new AndCondition($exclude_conditions['coursetype']);
             }
         }
         $course_type_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_ACTIVE),
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
             new StaticConditionVariable(1));
         $course_type_condition = new AndCondition($course_type_conditions);
-
+        
         $course_types = array();
-
+        
         $parameters = new DataClassRetrievesParameters(
-            $course_type_condition,
-            null,
-            null,
-            array(new OrderBy(new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_TITLE))));
-
-        $course_types_result_set = DataManager :: retrieves(CourseType :: class_name(), $parameters);
-
+            $course_type_condition, 
+            null, 
+            null, 
+            array(new OrderBy(new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE))));
+        
+        $course_types_result_set = DataManager::retrieves(CourseType::class_name(), $parameters);
+        
         while ($course_type = $course_types_result_set->next_result())
         {
             $course_types[$course_type->get_id()] = $course_type->get_title();
         }
-
-        $course_types[0] = Translation :: get('NoCourseType', null, __NAMESPACE__);
-
+        
+        $course_types[0] = Translation::get('NoCourseType', null, __NAMESPACE__);
+        
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="iso-8859-1"?>', "\n", '<tree>', "\n";
-
+        
         $this->dump_tree($course_types);
-
+        
         echo '</tree>';
     }
 

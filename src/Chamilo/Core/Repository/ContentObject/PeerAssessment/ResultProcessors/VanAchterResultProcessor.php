@@ -16,7 +16,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
 
     protected function set_scores($scores)
     {
-        parent :: set_scores($scores);
+        parent::set_scores($scores);
     }
 
     public function is_valid($value)
@@ -77,7 +77,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
                     foreach ($recipient_score as $indicator_id => $indicator_score)
                     {
                         // 1. individual score * factor
-                        $scores_given[$giver][$recipient][$indicator_id] = $indicator_score * self :: FACTOR;
+                        $scores_given[$giver][$recipient][$indicator_id] = $indicator_score * self::FACTOR;
                     }
                 }
                 
@@ -91,7 +91,8 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
                         {
                             $sum = array_reduce(
                                 $scores_given[$giver], 
-                                function ($result, $item) use($indicator_id) {
+                                function ($result, $item) use ($indicator_id)
+                                {
                                     return $result + $item[$indicator_id];
                                 });
                             
@@ -118,7 +119,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
 
     public function allow_empty_scores()
     {
-        return self :: ALLOW_EMPTY_SCORES;
+        return self::ALLOW_EMPTY_SCORES;
     }
 
     /**
@@ -127,7 +128,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
      */
     public function get_graph_offset()
     {
-        return self :: GRAPH_OFFSET;
+        return self::GRAPH_OFFSET;
     }
 
     /**
@@ -136,17 +137,17 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
      */
     public function get_graph_range()
     {
-        return self :: GRAPH_RANGE;
+        return self::GRAPH_RANGE;
     }
 
     public function get_intro_title()
     {
-        return Translation :: get('VanAchterIntroTitle');
+        return Translation::get('VanAchterIntroTitle');
     }
 
     public function get_intro_description()
     {
-        return Translation :: get('VanAchterIntroDescription');
+        return Translation::get('VanAchterIntroDescription');
     }
 
     public function render_table($indicators, $users)
@@ -160,14 +161,14 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
             $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
             $html[] = '<thead>';
             $html[] = '<tr>';
-            $html[] = '<th>' . Translation :: get('User') . '</th>';
+            $html[] = '<th>' . Translation::get('User') . '</th>';
             
             foreach ($indicators as $i)
             {
                 $html[] = '<th>' . $i->get_title() . '</th>';
             }
             
-            $html[] = '<th>' . Translation :: get('Total') . '</th>';
+            $html[] = '<th>' . Translation::get('Total') . '</th>';
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tfoot>';

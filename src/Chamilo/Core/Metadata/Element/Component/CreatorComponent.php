@@ -25,55 +25,55 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        $this->set_parameter(\Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID, $this->getSchemaId());
-
+        $this->set_parameter(\Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID, $this->getSchemaId());
+        
         $element = new Element();
         $element->set_schema_id($this->getSchemaId());
-        $element->set_value_type(Element :: VALUE_TYPE_PREDEFINED);
-
+        $element->set_value_type(Element::VALUE_TYPE_PREDEFINED);
+        
         $form = new ElementForm($this->get_url(), $element);
-
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
-                $element->set_name($values[Element :: PROPERTY_NAME]);
-                $element->set_display_name($values[Element :: PROPERTY_DISPLAY_NAME]);
-                $element->set_value_type($values[Element :: PROPERTY_VALUE_TYPE]);
+                
+                $element->set_name($values[Element::PROPERTY_NAME]);
+                $element->set_display_name($values[Element::PROPERTY_DISPLAY_NAME]);
+                $element->set_value_type($values[Element::PROPERTY_VALUE_TYPE]);
                 $success = $element->create();
-
+                
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-                $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Element')),
-                    Utilities :: COMMON_LIBRARIES);
+                
+                $message = Translation::get(
+                    $translation, 
+                    array('OBJECT' => Translation::get('Element')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
             }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
 
     /**
      * Adds additional breadcrumbs
-     *
+     * 
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -81,7 +81,7 @@ class CreatorComponent extends Manager
     {
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE)), 
+                Translation::get('BrowserComponent')));
     }
 }

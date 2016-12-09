@@ -27,22 +27,22 @@ class EntityComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
-        $this->set_parameter(self :: PARAM_ENTITY_TYPE, $this->get_selected_entity_type());
-
+        
+        $this->set_parameter(self::PARAM_ENTITY_TYPE, $this->get_selected_entity_type());
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self :: ACTION_ENTITY, $this->get_entity_tabs())->render();
+        $html[] = $this->get_tabs(self::ACTION_ENTITY, $this->get_entity_tabs())->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($table_class_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->get_selected_entity_type()));
         return $condition;
     }
@@ -51,34 +51,34 @@ class EntityComponent extends Manager implements TableSupport
     {
         $table = new EntityTable($this);
         $content = $table->as_html();
-
+        
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__CLASS__, true),
+            ClassnameUtilities::getInstance()->getClassnameFromNamespace(__CLASS__, true), 
             $table->as_html());
-
+        
         foreach ($this->get_entity_types() as $entity_type)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
-                new StaticConditionVariable($entity_type :: ENTITY_TYPE));
-            $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                new StaticConditionVariable($entity_type::ENTITY_TYPE));
+            $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+            
             if ($count > 0)
             {
                 $tabs->add_tab(
                     new DynamicVisualTab(
-                        $entity_type :: ENTITY_TYPE,
-                        Translation :: get(
-                            StringUtilities :: getInstance()->createString($entity_type :: ENTITY_NAME)->upperCamelize()->__toString()),
-                        Theme :: getInstance()->getImagePath(self :: package(), 'Entity/' . $entity_type :: ENTITY_TYPE),
+                        $entity_type::ENTITY_TYPE, 
+                        Translation::get(
+                            StringUtilities::getInstance()->createString($entity_type::ENTITY_NAME)->upperCamelize()->__toString()), 
+                        Theme::getInstance()->getImagePath(self::package(), 'Entity/' . $entity_type::ENTITY_TYPE), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_ENTITY,
-                                self :: PARAM_ENTITY_TYPE => $entity_type :: ENTITY_TYPE)),
-                        ($this->get_selected_entity_type() == $entity_type :: ENTITY_TYPE ? true : false)));
+                                self::PARAM_ACTION => self::ACTION_ENTITY, 
+                                self::PARAM_ENTITY_TYPE => $entity_type::ENTITY_TYPE)), 
+                        ($this->get_selected_entity_type() == $entity_type::ENTITY_TYPE ? true : false)));
             }
         }
-
+        
         return $tabs->render();
     }
 }

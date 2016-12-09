@@ -30,13 +30,13 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         
         switch ($question->get_answer_type())
         {
-            case AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX :
+            case AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX :
                 foreach ($answer as $answer_part_id => $answer_part)
                 {
                     $new_answer[] = $options[$answer_part_id - 1];
                 }
                 break;
-            case AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO :
+            case AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO :
                 foreach ($answer as $answer_part)
                 {
                     $new_answer[] = $options[$answer_part];

@@ -62,7 +62,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function get_user_html()
     {
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $table = new UserViewTable($this);
         return $table->as_html();
@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function get_table_condition($table_class_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserView :: class_name(), UserView :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
@@ -83,10 +83,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(UserView :: class_name(), UserView :: PROPERTY_NAME), 
+                new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_NAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(UserView :: class_name(), UserView :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             $or_condition = new OrCondition($or_conditions);
             
@@ -112,16 +112,16 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);

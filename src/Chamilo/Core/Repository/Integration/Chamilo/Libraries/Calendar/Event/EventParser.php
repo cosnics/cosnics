@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Abstract base-class for the parsing of content object to renderable calendar events
- *
+ * 
  * @package libraries\calendar\event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -68,19 +68,19 @@ abstract class EventParser
     {
         $type = $contentObject->package();
         $class = $type . '\Integration\Chamilo\Libraries\Calendar\Event\EventParser';
-
+        
         if (! class_exists($class))
         {
             $message = array();
-            $message[] = Translation :: get('ComponentFailedToLoad') . '<br /><br />';
-            $message[] = '<b>' . Translation :: get('File') . ':</b><br />';
+            $message[] = Translation::get('ComponentFailedToLoad') . '<br /><br />';
+            $message[] = '<b>' . Translation::get('File') . ':</b><br />';
             $message[] = $class . '<br /><br />';
-            $message[] = '<b>' . Translation :: get('Stacktrace') . ':</b>';
+            $message[] = '<b>' . Translation::get('Stacktrace') . ':</b>';
             $message[] = '<ul>';
-            $message[] = '<li>' . Translation :: get('EventParser') . '</li>';
-            $message[] = '<li>' . Translation :: get('TypeName', null, $type) . '</li>';
+            $message[] = '<li>' . Translation::get('EventParser') . '</li>';
+            $message[] = '<li>' . Translation::get('TypeName', null, $type) . '</li>';
             $message[] = '</ul>';
-
+            
             throw new ClassNotExistException($class);
         }
         return new $class($contentObject, $startDate, $endDate, $eventClassName);
@@ -165,17 +165,17 @@ abstract class EventParser
     public function getEventInstance()
     {
         $eventClassName = $this->getEventClassName();
-
+        
         if (! $eventClassName)
         {
             throw new \Exception(
                 'Please implement a local extension of the Event class in your context (' .
-                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname($eventClassName) . ')');
+                     ClassnameUtilities::getInstance()->getNamespaceFromClassname($eventClassName) . ')');
         }
         else
         {
             $event = new $eventClassName();
-
+            
             if (! $event instanceof ContentObjectSupport)
             {
                 throw new \Exception(

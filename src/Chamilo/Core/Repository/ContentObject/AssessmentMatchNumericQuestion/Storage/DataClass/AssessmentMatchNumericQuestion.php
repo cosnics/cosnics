@@ -20,38 +20,38 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public function __construct($defaultProperties = array (), $additionalProperties = null)
     {
-        parent :: __construct($defaultProperties, $additionalProperties);
-        if (! isset($additionalProperties[self :: PROPERTY_TOLERANCE_TYPE]))
+        parent::__construct($defaultProperties, $additionalProperties);
+        if (! isset($additionalProperties[self::PROPERTY_TOLERANCE_TYPE]))
         {
-            $this->set_tolerance_type(self :: TOLERANCE_TYPE_ABSOLUTE);
+            $this->set_tolerance_type(self::TOLERANCE_TYPE_ABSOLUTE);
         }
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_TOLERANCE_TYPE, self :: PROPERTY_OPTIONS, self :: PROPERTY_HINT);
+        return array(self::PROPERTY_TOLERANCE_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
 
     public function add_option($option)
     {
         $options = $this->get_options();
         $options[] = $option;
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self :: PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -71,7 +71,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -82,27 +82,27 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public function set_tolerance_type($type)
     {
-        return $this->set_additional_property(self :: PROPERTY_TOLERANCE_TYPE, $type);
+        return $this->set_additional_property(self::PROPERTY_TOLERANCE_TYPE, $type);
     }
 
     public function get_tolerance_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_TOLERANCE_TYPE);
+        return $this->get_additional_property(self::PROPERTY_TOLERANCE_TYPE);
     }
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self :: PROPERTY_HINT, $hint);
+        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
     }
 
     public function get_hint()
     {
-        return $this->get_additional_property(self :: PROPERTY_HINT);
+        return $this->get_additional_property(self::PROPERTY_HINT);
     }
 
     public function has_hint()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_hint(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
     }
 
     /**
@@ -118,7 +118,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         }
         return $max;
     }
-
+    
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -127,19 +127,19 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     *
+     * 
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())
     {
-        return parent :: get_html_editors(array(self :: PROPERTY_HINT));
+        return parent::get_html_editors(array(self::PROPERTY_HINT));
     }
 
     public function get_best_option()
     {
         $best_score = 0;
         $best_option = null;
-
+        
         foreach ($this->get_options() as $key => $option)
         {
             if ($option->get_score() >= $best_score)
@@ -148,7 +148,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 $best_option = $option;
             }
         }
-
+        
         return $best_option;
     }
 
@@ -161,7 +161,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 return $option;
             }
         }
-
+        
         return null;
     }
 }

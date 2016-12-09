@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return OrderingQuestion :: class_name();
+        return OrderingQuestion::class_name();
     }
 }

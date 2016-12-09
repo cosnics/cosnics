@@ -27,7 +27,7 @@ class PrivilegesViewerComponent extends Manager
 
     public function run()
     {
-        $id = Request :: get(Manager :: PARAM_EXTERNAL_REPOSITORY_ID);
+        $id = Request::get(Manager::PARAM_EXTERNAL_REPOSITORY_ID);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
         if ($id)
@@ -35,13 +35,13 @@ class PrivilegesViewerComponent extends Manager
             $this->repository = $this->retrieve_external_repository_object($id);
             
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+            $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
             $privilege_form = new PriviligeForm($this->get_url($parameters), $this);
             
             if ($privilege_form->validate())
             {
                 $success = $privilege_form->grant_privilege();
-                $message = $success ? Translation :: get('GrantPrivilegeCreated') : Translation :: get(
+                $message = $success ? Translation::get('GrantPrivilegeCreated') : Translation::get(
                     'GrantPrivilegeNotCreated');
                 
                 $this->redirect($message, ! $success, $parameters);
@@ -66,10 +66,10 @@ class PrivilegesViewerComponent extends Manager
                     foreach ($privileges as $privilege)
                     {
                         $toolbar_item = new ToolbarItem(
-                            Translation :: get('Delete'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                            Translation::get('Delete'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                             $this->get_external_repository_privilege_revoking_url($id, $privilege->get_username()), 
-                            ToolbarItem :: DISPLAY_ICON);
+                            ToolbarItem::DISPLAY_ICON);
                         
                         $row = array();
                         
@@ -83,10 +83,10 @@ class PrivilegesViewerComponent extends Manager
                     }
                     
                     $headers = array();
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('Username'));
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('Privilege'));
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('FirstName'));
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('LastName'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('Username'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('Privilege'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('FirstName'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('LastName'));
                     $headers[] = new SortableStaticTableColumn('');
                     
                     $table = new SortableTableFromArray($data, $headers);
@@ -101,12 +101,12 @@ class PrivilegesViewerComponent extends Manager
                     foreach ($privileges_groups as $privilege)
                     {
                         $toolbar_item = new ToolbarItem(
-                            Translation :: get('Delete'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                            Translation::get('Delete'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                             $this->get_external_repository_group_privilege_revoking_url(
                                 $id, 
                                 $privilege->get_owner_username() . '/' . $privilege->get_group()), 
-                            ToolbarItem :: DISPLAY_ICON);
+                            ToolbarItem::DISPLAY_ICON);
                         
                         $row = array();
                         
@@ -118,8 +118,8 @@ class PrivilegesViewerComponent extends Manager
                     }
                     
                     $headers = array();
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('Group'));
-                    $headers[] = new SortableStaticTableColumn(Translation :: get('Privilege'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('Group'));
+                    $headers[] = new SortableStaticTableColumn(Translation::get('Privilege'));
                     $headers[] = new SortableStaticTableColumn('');
                     
                     $table = new SortableTableFromArray($data, $headers);
@@ -129,7 +129,7 @@ class PrivilegesViewerComponent extends Manager
             }
             else
             {
-                $html[] = $this->display_warning_message(Translation :: get('NoPrivileges'));
+                $html[] = $this->display_warning_message(Translation::get('NoPrivileges'));
             }
             $html[] = $this->render_footer();
             
@@ -150,12 +150,12 @@ class PrivilegesViewerComponent extends Manager
             $commonActions = new ButtonGroup();
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('RevokeAll'), 
-                    Theme :: getInstance()->getImagePath(
+                    Translation::get('RevokeAll'), 
+                    Theme::getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket', 
                         'Action/Revoke'), 
                     $this->get_external_repository_privilege_revoking_url($id), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);

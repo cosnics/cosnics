@@ -29,9 +29,9 @@ abstract class Manager extends Application
     const TYPE_BUILDER = 0;
     const TYPE_VIEWER = 1;
     const TYPE_EXECUTER = 2;
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BUILD_DYNAMIC_FORM;
+    const DEFAULT_ACTION = self::ACTION_BUILD_DYNAMIC_FORM;
 
     private $form;
 
@@ -64,37 +64,37 @@ abstract class Manager extends Application
 
     public function get_add_element_url()
     {
-        return $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADD_FORM_ELEMENT));
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADD_FORM_ELEMENT));
     }
 
     public function get_update_element_url($element)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_UPDATE_FORM_ELEMENT,
-                self :: PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()));
+                self::PARAM_ACTION => self::ACTION_UPDATE_FORM_ELEMENT, 
+                self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()));
     }
 
     public function get_delete_element_url($element)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_FORM_ELEMENT,
-                self :: PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()));
+                self::PARAM_ACTION => self::ACTION_DELETE_FORM_ELEMENT, 
+                self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()));
     }
 
     private function retrieve_form($application, $name)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_APPLICATION),
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
             new StaticConditionVariable($application));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_NAME),
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
             new StaticConditionVariable($name));
         $condition = new AndCondition($conditions);
-        $form = DataManager :: retrieve_dynamic_forms($condition)->next_result();
-
+        $form = DataManager::retrieve_dynamic_forms($condition)->next_result();
+        
         if (! $form)
         {
             $form = new Instance();
@@ -102,7 +102,7 @@ abstract class Manager extends Application
             $form->set_name($name);
             $form->create();
         }
-
+        
         return $form;
     }
 

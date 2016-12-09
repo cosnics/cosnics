@@ -21,10 +21,10 @@ class ItemTableColumnModel extends DataClassTableColumnModel implements TableCol
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_CREATION_DATE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_CREATION_DATE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_MODIFICATION_DATE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
     }
 }

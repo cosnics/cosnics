@@ -29,20 +29,20 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
 
     public function __construct($default_properties = array(), $optional_properties = array())
     {
-        parent :: __construct($default_properties = $optional_properties);
+        parent::__construct($default_properties = $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_TYPE,
-                self :: PROPERTY_PARENT_ID,
-                self :: PROPERTY_TITLE,
-                self :: PROPERTY_SORT,
-                self :: PROPERTY_USER_ID,
-                self :: PROPERTY_CONFIGURATION));
+                self::PROPERTY_TYPE, 
+                self::PROPERTY_PARENT_ID, 
+                self::PROPERTY_TITLE, 
+                self::PROPERTY_SORT, 
+                self::PROPERTY_USER_ID, 
+                self::PROPERTY_CONFIGURATION));
     }
 
     /**
@@ -61,7 +61,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getType()
     {
-        return $this->get_default_property(self :: PROPERTY_TYPE);
+        return $this->get_default_property(self::PROPERTY_TYPE);
     }
 
     /**
@@ -70,7 +70,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setType($type)
     {
-        $this->set_default_property(self :: PROPERTY_TYPE, $type);
+        $this->set_default_property(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -79,7 +79,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getParentId()
     {
-        return $this->get_default_property(self :: PROPERTY_PARENT_ID);
+        return $this->get_default_property(self::PROPERTY_PARENT_ID);
     }
 
     /**
@@ -88,7 +88,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setParentId($parentId)
     {
-        $this->set_default_property(self :: PROPERTY_PARENT_ID, $parentId);
+        $this->set_default_property(self::PROPERTY_PARENT_ID, $parentId);
     }
 
     public function isOnTopLevel()
@@ -102,7 +102,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getTitle()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     /**
@@ -111,7 +111,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setTitle($title)
     {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -120,7 +120,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getSort()
     {
-        return $this->get_default_property(self :: PROPERTY_SORT);
+        return $this->get_default_property(self::PROPERTY_SORT);
     }
 
     /**
@@ -129,7 +129,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setSort($sort)
     {
-        $this->set_default_property(self :: PROPERTY_SORT, $sort);
+        $this->set_default_property(self::PROPERTY_SORT, $sort);
     }
 
     /**
@@ -138,7 +138,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getUserId()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -147,7 +147,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $userId);
+        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
     }
 
     /**
@@ -156,7 +156,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function getConfiguration()
     {
-        return unserialize($this->get_default_property(self :: PROPERTY_CONFIGURATION));
+        return unserialize($this->get_default_property(self::PROPERTY_CONFIGURATION));
     }
 
     /**
@@ -165,16 +165,16 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
      */
     public function setConfiguration($configuration)
     {
-        $this->set_default_property(self :: PROPERTY_CONFIGURATION, serialize($configuration));
+        $this->set_default_property(self::PROPERTY_CONFIGURATION, serialize($configuration));
     }
 
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element :: class_name(), static :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element::class_name(), static::PROPERTY_PARENT_ID), 
             new StaticConditionVariable($this->get_id()));
-        $childElements = DataManager :: retrieves(Block :: class_name(), new DataClassRetrievesParameters($condition));
-
+        $childElements = DataManager::retrieves(Block::class_name(), new DataClassRetrievesParameters($condition));
+        
         while ($childElement = $childElements->next_result())
         {
             if (! $childElement->delete())
@@ -182,29 +182,29 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
                 return false;
             }
         }
-
-        return parent :: delete();
+        
+        return parent::delete();
     }
 
     public function hasChildren()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID), 
             new StaticConditionVariable($this->get_id()));
-
-        $childCount = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
-
+        
+        $childCount = DataManager::count(Block::class_name(), new DataClassCountParameters($condition));
+        
         return ($childCount == 0);
     }
 
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_SORT);
+        return new PropertyConditionVariable(Element::class_name(), self::PROPERTY_SORT);
     }
 
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID));
+        return array(new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID));
     }
 
     /**
@@ -227,18 +227,19 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         $configuration = $this->getConfiguration();
         $configuration[$variable] = $value;
-
+        
         $this->setConfiguration($configuration);
     }
 
     /**
+     *
      * @param string $variable
      */
     public function removeSetting($variable)
     {
         $configuration = $this->getConfiguration();
         unset($configuration[$variable]);
-
+        
         $this->setConfiguration($configuration);
     }
 }

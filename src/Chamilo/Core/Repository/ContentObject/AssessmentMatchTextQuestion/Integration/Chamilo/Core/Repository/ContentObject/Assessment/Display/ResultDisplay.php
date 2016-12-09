@@ -36,11 +36,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th style="width: 50%;">' . Translation :: get('YourAnswer') . '</th>';
+        $html[] = '<th style="width: 50%;">' . Translation::get('YourAnswer') . '</th>';
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -59,21 +59,21 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $this->get_question()->get_use_wildcards()))
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                         Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" style="" />';
+                         Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                         Translation::get('Correct') . '" title="' . Translation::get('Correct') . '" style="" />';
                 }
                 elseif ($valid_answer)
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWarning') . '" alt="' .
-                         Translation :: get('CorrectButNotBest') . '" title="' . Translation :: get('CorrectButNotBest') .
+                         Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWarning') . '" alt="' .
+                         Translation::get('CorrectButNotBest') . '" title="' . Translation::get('CorrectButNotBest') .
                          '" style="" />';
                 }
                 else
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                         Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                         Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                         Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
                 }
             }
             else
@@ -89,18 +89,18 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                     Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
             }
             else
             {
                 $result = '';
             }
             
-            $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
+            $html[] = '<td>' . Translation::get('NoAnswer') . $result . '</td>';
         }
         
-        if (AnswerFeedbackDisplay :: allowed(
+        if (AnswerFeedbackDisplay::allowed(
             $configuration, 
             $this->get_complex_content_object_question(), 
             true, 
@@ -134,18 +134,17 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
                 $html[] = '<thead>';
                 $html[] = '<tr>';
-                $html[] = '<th style="width: 50%;">' . Translation :: get('BestPossibleAnswer') . '</th>';
-
-                $answer_feedback_display = AnswerFeedbackDisplay :: allowed(
+                $html[] = '<th style="width: 50%;">' . Translation::get('BestPossibleAnswer') . '</th>';
+                
+                $answer_feedback_display = AnswerFeedbackDisplay::allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
-                    !empty($user_answer[0]),
-                    false
-                );
+                    ! empty($user_answer[0]), 
+                    false);
                 
                 if ($answer_feedback_display)
                 {
-                    $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+                    $html[] = '<th>' . Translation::get('Feedback') . '</th>';
                 }
                 
                 $html[] = '</tr>';

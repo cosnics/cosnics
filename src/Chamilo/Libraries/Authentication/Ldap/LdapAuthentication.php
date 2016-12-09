@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Authentication\Ldap;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -32,64 +32,64 @@ class LdapAuthentication extends CredentialsAuthentication
     {
         if (! $this->isConfigured())
         {
-            throw new \Exception(Translation :: get('CheckLDAPConfiguration'));
+            throw new \Exception(Translation::get('CheckLDAPConfiguration'));
         }
         else
         {
             $settings = $this->getConfiguration();
-
+            
             $ldapConnect = ldap_connect($settings['host'], $settings['port']);
-
+            
             if ($ldapConnect)
             {
                 ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
                 $filter = '(uid=' . $this->getUserName() . ')';
-
+                
                 $result = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
                 $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
                 $info = ldap_get_entries($ldapConnect, $search_result);
-
+                
                 $dn = ($info[0]["dn"]);
-
+                
                 ldap_close($ldapConnect);
             }
             else
             {
-                throw new AuthenticationException(Translation :: get('CouldNotConnectToLDAPServer'));
+                throw new AuthenticationException(Translation::get('CouldNotConnectToLDAPServer'));
             }
-
+            
             if (! $dn)
             {
-                throw new AuthenticationException(Translation :: get('UserNotFoundInLDAP'));
+                throw new AuthenticationException(Translation::get('UserNotFoundInLDAP'));
             }
-
+            
             if (! $password)
             {
-                throw new AuthenticationException(Translation :: get('UsernameOrPasswordIncorrect'));
+                throw new AuthenticationException(Translation::get('UsernameOrPasswordIncorrect'));
             }
-
+            
             /*
              * disabled/locked account specific error messages This is for MS Active Directory, but if this field is not
              * present then this code will not do anything (conditions are false)
              */
             if ($info[0]['useraccountcontrol'][0] & 2) // account is disabled
             {
-                throw new AuthenticationException(Translation :: get('AccountDisabled'));
+                throw new AuthenticationException(Translation::get('AccountDisabled'));
             }
-
+            
             if ($info[0]['useraccountcontrol'][0] & 16) // account is locked out
             {
-                throw new AuthenticationException(Translation :: get('AccountLocked'));
+                throw new AuthenticationException(Translation::get('AccountLocked'));
             }
-
+            
             $ldapConnect = ldap_connect($settings['host'], $settings['port']);
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
-
+            
             if (! (@ldap_bind($ldapConnect, $dn, $password)) == true)
             {
                 ldap_close($ldapConnect);
-
-                throw new AuthenticationException(Translation :: get('UsernameOrPasswordIncorrect'));
+                
+                throw new AuthenticationException(Translation::get('UsernameOrPasswordIncorrect'));
             }
             else
             {
@@ -101,15 +101,15 @@ class LdapAuthentication extends CredentialsAuthentication
 
     /**
      * Unused for now class should implement UserRegistrationSupport to support this
-     *
+     * 
      * @see \Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport::registerUser()
      */
     public function registerUser()
     {
         $settings = $this->getConfiguration();
-
+        
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
-
+        
         if ($ldapConnect)
         {
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -117,18 +117,18 @@ class LdapAuthentication extends CredentialsAuthentication
             $filter = '(uid=' . $this->getUserName() . ')';
             $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
             $info = ldap_get_entries($ldapConnect, $search_result);
-
+            
             $parser = new LdapParser();
             return $parser->parse($info, $this->getUserName());
         }
-
+        
         ldap_close($ldapConnect);
     }
 
     public function isConfigured()
     {
         $settings = $this->getConfiguration();
-
+        
         foreach ($settings as $setting => $value)
         {
             if (empty($value) || ! isset($value))
@@ -136,7 +136,7 @@ class LdapAuthentication extends CredentialsAuthentication
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -149,15 +149,16 @@ class LdapAuthentication extends CredentialsAuthentication
         if (! isset($this->ldapSettings))
         {
             $ldap = array();
-            $ldap['host'] = PlatformSetting :: get('ldap_host');
-            $ldap['port'] = PlatformSetting :: get('ldap_port');
-            $ldap['rdn'] = PlatformSetting :: get('ldap_remote_dn');
-            $ldap['password'] = PlatformSetting :: get('ldap_password');
-            $ldap['search_dn'] = PlatformSetting :: get('ldap_search_dn');
-
+            $ldap['host'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'ldap_host'));
+            $ldap['port'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'ldap_port'));
+            $ldap['rdn'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'ldap_remote_dn'));
+            $ldap['password'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'ldap_password'));
+            $ldap['search_dn'] = Configuration::getInstance()->get_setting(
+                array('Chamilo\Core\Admin', 'ldap_search_dn'));
+            
             $this->ldapSettings = $ldap;
         }
-
+        
         return $this->ldapSettings;
     }
 }

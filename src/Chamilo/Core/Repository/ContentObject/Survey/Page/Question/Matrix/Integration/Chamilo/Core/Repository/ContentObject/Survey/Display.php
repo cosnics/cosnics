@@ -14,12 +14,12 @@ class Display extends QuestionDisplay
     function process(ComplexContentObjectPathNode $complexContentObjectPathNode, AnswerServiceInterface $answerService)
     {
         $formValidator = $this->get_formvalidator();
-             
-        $formRendition = ContentObjectRenditionImplementation :: factory(
-            $complexContentObjectPathNode->get_content_object(),
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_FORM,
-            Matrix :: package());
+        
+        $formRendition = ContentObjectRenditionImplementation::factory(
+            $complexContentObjectPathNode->get_content_object(), 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_FORM, 
+            Matrix::package());
         
         $formRendition->setFormValidator($formValidator);
         $formRendition->setComplexContentObjectPathNode($complexContentObjectPathNode);
@@ -27,6 +27,5 @@ class Display extends QuestionDisplay
         $formValidator = $formRendition->initialize();
         $formValidator->setDefaults($answerService->getAnswer($complexContentObjectPathNode->get_id()));
     }
-  
 }
 ?>

@@ -12,7 +12,7 @@ try
     
     echo '[MAIL JOB STARTED] ' . date('c', time()) . "\n";
     
-    MailJobManager :: launch_job();
+    MailJobManager::launch_job();
     
     echo '  [MAIL JOB ENDED] ' . date('c', time()) . "\n";
 }

@@ -22,22 +22,22 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $condition_variable = $this->get_condition_variable();
-
+        
         if ($condition_variable->get_condition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
-            $strings[] = ConditionTranslator :: render($condition_variable->get_condition());
+            $strings[] = ConditionTranslator::render($condition_variable->get_condition());
             $strings[] = ' THEN ';
         }
         else
         {
             $strings[] = ' ELSE ';
         }
-
+        
         $strings[] = $condition_variable->get_statement();
-
+        
         return implode('', $strings);
     }
 }

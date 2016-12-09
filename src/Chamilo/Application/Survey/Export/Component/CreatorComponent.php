@@ -20,10 +20,10 @@ class CreatorComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $id = Request :: get(self :: PARAM_EXPORT_REGISTRATION_ID);
+        $publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
+        $id = Request::get(self::PARAM_EXPORT_REGISTRATION_ID);
         
-        if (RightsService :: getInstance())
+        if (RightsService::getInstance())
         {
             
             $export_template = new ExportTemplate();
@@ -31,7 +31,7 @@ class CreatorComponent extends Manager
             $export_template->set_export_registration_id($id);
             $export_template->set_owner_id($this->get_user_id());
             
-            $form = new ExportTemplateForm(ExportTemplateForm :: TYPE_CREATE, $this->get_url(), $export_template);
+            $form = new ExportTemplateForm(ExportTemplateForm::TYPE_CREATE, $this->get_url(), $export_template);
             
             if ($form->validate())
             {
@@ -40,21 +40,21 @@ class CreatorComponent extends Manager
                 if ($success)
                 {
                     $message = 'SelectedExportRegistrationActivated';
-                    $tab = BrowserComponent :: TAB_EXPORT_TEMPLATES;
+                    $tab = BrowserComponent::TAB_EXPORT_TEMPLATES;
                 }
                 else
                 {
                     $message = 'SelectedExportRegistrationNotActivated';
-                    $tab = BrowserComponent :: TAB_EXPORT_REGISTRATIONS;
+                    $tab = BrowserComponent::TAB_EXPORT_REGISTRATIONS;
                 }
                 
                 $this->redirect(
-                    Translation :: get($message), 
+                    Translation::get($message), 
                     ! $success, 
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        Manager :: PARAM_PUBLICATION_ID => $publication_id, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => $tab));
+                        self::PARAM_ACTION => self::ACTION_BROWSE, 
+                        Manager::PARAM_PUBLICATION_ID => $publication_id, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => $tab));
             }
             else
             {
@@ -66,7 +66,6 @@ class CreatorComponent extends Manager
                 $html[] = $this->render_footer();
                 
                 return implode(PHP_EOL, $html);
-              
             }
         }
         else
@@ -81,23 +80,23 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_REPORT)), 
-                Translation :: get('BrowserComponent')));
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_REPORT)), 
+                Translation::get('BrowserComponent')));
         
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID), 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT_REGISTRATIONS)), 
-                Translation :: get('BrowserComponent')));
+                        self::PARAM_ACTION => self::ACTION_BROWSE, 
+                        Manager::PARAM_PUBLICATION_ID => Request::get(Manager::PARAM_PUBLICATION_ID), 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT_REGISTRATIONS)), 
+                Translation::get('BrowserComponent')));
     }
 
     function get_parameters()
     {
-        return array(Manager :: PARAM_PUBLICATION_ID, self :: PARAM_EXPORT_REGISTRATION_ID);
+        return array(Manager::PARAM_PUBLICATION_ID, self::PARAM_EXPORT_REGISTRATION_ID);
     }
 }
 ?>

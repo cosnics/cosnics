@@ -35,10 +35,10 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getWorkspaceService()->getWorkspaceFavouritesByUser(
-            $this->getEntityService(),
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->getEntityService(), 
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -49,7 +49,7 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
     public function count_data($condition)
     {
         return $this->getWorkspaceService()->countWorkspaceFavouritesByUser(
-            $this->getEntityService(),
+            $this->getEntityService(), 
             $this->get_component()->get_user());
     }
 
@@ -63,7 +63,7 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
         {
             $this->entityService = new EntityService();
         }
-
+        
         return $this->entityService;
     }
 
@@ -77,7 +77,7 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
-
+        
         return $this->workspaceService;
     }
 }

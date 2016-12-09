@@ -24,8 +24,8 @@ class SubButtonHeader extends AbstractButtonToolBarItem implements SubButtonInte
      */
     public function __construct($label, $classes = null)
     {
-        parent :: __construct($classes);
-
+        parent::__construct($classes);
+        
         $this->label = $label;
     }
 

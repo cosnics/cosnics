@@ -17,15 +17,17 @@ class TableComponent extends Manager implements TemplateSupport
     public function run()
     {
         $question = $this->get_parent()->get_content_object();
-
+        
         if ((! $this->get_user()->is_platform_admin()) || ($this->get_user_id() != $question->get_owner_id()))
         {
             throw new NotAllowedException();
         }
         
-        $factory = new ApplicationFactory('\Chamilo\Core\Reporting\Viewer', new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            '\Chamilo\Core\Reporting\Viewer', 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
-        $viewer->set_template_by_name(TableTemplate :: class_name());
+        $viewer->set_template_by_name(TableTemplate::class_name());
         
         return $viewer->run();
     }

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Survey :: class_name();
+        return Survey::class_name();
     }
 }

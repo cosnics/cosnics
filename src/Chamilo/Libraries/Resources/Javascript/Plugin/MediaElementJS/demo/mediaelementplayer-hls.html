@@ -1,51 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>HTML5 MediaElement - HLS</title>	
-	
-	<script src="../build/jquery.js"></script>	
-	<script src="../build/mediaelement-and-player.min.js"></script>
-	<script src="testforfiles.js"></script>	
-	<link rel="stylesheet" href="../build/mediaelementplayer.min.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HTML5 MediaElement - HLS</title>
+
+<script src="../build/jquery.js"></script>
+<script src="../build/mediaelement-and-player.min.js"></script>
+<script src="testforfiles.js"></script>
+<link rel="stylesheet" href="../build/mediaelementplayer.min.css" />
 </head>
 <body>
 
-<h1>MediaElementPlayer.js</h1>
+    <h1>MediaElementPlayer.js</h1>
 
-<h2>HLS Wrapper</h2>
+    <h2>HLS Wrapper</h2>
 
-<code><pre>
+    <code>
+        <pre>
 &lt;video width="640" height="360" id="player1" preload="none"&gt;
 
 	&lt;!-- Pseudo HTML5 --&gt;
 	&lt;source type="application/x-mpegURL" src="http://www.streambox.fr/playlists/test_001/stream.m3u8" /&gt;
 
 &lt;/video&gt;
-</pre></code>
+</pre>
+    </code>
 
-<video width="640" height="360" id="player1">
-    
-    <!-- Pseudo HTML5 -->
-    <source type="application/x-mpegURL" src="http://www.streambox.fr/playlists/test_001/stream.m3u8" />
+    <video width="640" height="360" id="player1">
 
-</video>
-	
-<span id="player1-mode"></span>
+        <!-- Pseudo HTML5 -->
+        <source type="application/x-mpegURL" src="http://www.streambox.fr/playlists/test_001/stream.m3u8" />
 
-<h3> Test Videos </h3>
-<div> The following videos should stream correctly. Each time an
-issue is reported with a sample playlist, it will be added in the list
-and verified after bugfixing </div>
-<ul id="streamlist">
-</ul>
+    </video>
 
-Check with your own Playlist ! <a href="http://kb2.adobe.com/cps/142/tn_14213.html">beware of Cross Domain Policy</a><br>
-<input id="userInput" value="http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8" size="80"> <button onclick="userSubmit()">Load and Play</button><br>
-<p>
+    <span id="player1-mode"></span>
 
-<script type="text/javascript" src="hls_streams.js"></script>
-<script type="text/javascript">
+    <h3>Test Videos</h3>
+    <div>The following videos should stream correctly. Each time an issue is reported with a sample playlist, it
+        will be added in the list and verified after bugfixing</div>
+    <ul id="streamlist">
+    </ul>
+
+    Check with your own Playlist !
+    <a href="http://kb2.adobe.com/cps/142/tn_14213.html">beware of Cross Domain Policy</a>
+    <br>
+    <input id="userInput" value="http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8" size="80">
+    <button onclick="userSubmit()">Load and Play</button>
+    <br>
+    <p>
+
+        <script type="text/javascript" src="hls_streams.js"></script>
+        <script type="text/javascript">
 
 function listStreams(list, container) {
 for(var i=0; i<list.length; i++) { var entry = document.createElement("li");
@@ -66,7 +71,7 @@ $('video')[0].player.play();
 </script>
 
 
-<script>
+        <script>
 
 $('video').mediaelementplayer({
 	success: function(media, node, player) {
@@ -75,6 +80,5 @@ $('video').mediaelementplayer({
 });
 
 </script>
-
 </body>
 </html>

@@ -31,50 +31,50 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
     function run()
     {
         $conditions = array();
-
-        $query_condition = Utilities :: query_to_condition(
-            Request :: get('query'),
-            array(new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE)));
+        
+        $query_condition = Utilities::query_to_condition(
+            Request::get('query'), 
+            array(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)));
         if (isset($query_condition))
         {
             $conditions[] = $query_condition;
         }
-
+        
         $owner_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session :: get_user_id()));
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new StaticConditionVariable(Session::get_user_id()));
         $conditions[] = $owner_condition;
-
+        
         $recycle_condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject :: STATE_RECYCLED)));
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE), 
+                new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
         $conditions[] = $recycle_condition;
-
-        if (is_array(Request :: get('exclude')))
+        
+        if (is_array(Request::get('exclude')))
         {
             $c = array();
-            foreach (Request :: get('exclude') as $id)
+            foreach (Request::get('exclude') as $id)
             {
                 $c[] = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
                     new StaticConditionVariable($id));
             }
             $conditions[] = new NotCondition(new OrCondition($c));
         }
-
+        
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-            DataManager :: get_registered_types());
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), 
+            DataManager::get_registered_types());
         $condition = new AndCondition($conditions);
-
+        
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_property);
-        $objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
-
+        $objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        
         $objects_by_cat = array();
-
+        
         while ($lo = $objects->next_result())
         {
             $cid = $lo->get_parent_id();
@@ -87,18 +87,18 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 $objects_by_cat[$cid] = array($lo);
             }
         }
-
+        
         $categories = array();
         $root = new RepositoryCategory();
         $root->set_id(0);
-        $root->set_name(Translation :: get('MyRepository', null, Utilities :: COMMON_LIBRARIES));
+        $root->set_name(Translation::get('MyRepository', null, Utilities::COMMON_LIBRARIES));
         $root->set_parent(- 1);
         $categories[- 1] = array($root);
-
-        $cats = DataManager :: retrieve_categories(
+        
+        $cats = DataManager::retrieve_categories(
             new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
-                new StaticConditionVariable(Session :: get_user_id())));
+                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID), 
+                new StaticConditionVariable(Session::get_user_id())));
         while ($cat = $cats->next_result())
         {
             $parent = $cat->get_parent();
@@ -111,17 +111,17 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 $categories[$parent] = array($cat);
             }
         }
-
+        
         $tree = $this->get_tree(- 1, $categories);
-
+        
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="utf-8"?>', "\n", '<tree>', "\n";
-
+        
         if (isset($tree))
         {
             $this->dump_tree($tree, $objects_by_cat);
         }
-
+        
         echo '</tree>';
     }
 
@@ -156,19 +156,19 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
             {
                 $title = $node['obj']->get_title();
             }
-
+            
             echo '<node id="category_' . $id . '" classes="category unlinked" title="' . htmlspecialchars($title) . '">' .
                  "\n";
             $this->dump_tree($node['sub'], $objects);
-
+            
             foreach ($objects[$id] as $lo)
             {
                 $id = $lo->get_id();
-                $value = Utilities :: content_object_for_element_finder($lo);
+                $value = Utilities::content_object_for_element_finder($lo);
                 echo '<leaf id="lo_' . $id . '" classes="' . $value['classes'] . '" title="' . htmlspecialchars(
                     $value['title']) . '" description="' . htmlspecialchars($value['description']) . '"/>', "\n";
             }
-
+            
             echo '</node>', "\n";
         }
     }

@@ -1,63 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="chamilo-dev" default="static">
+<project
+    name="chamilo-dev"
+    default="static">
 
-    <resolvepath propertyName="chamilo-directory" file="."/>
-    
+    <resolvepath
+        propertyName="chamilo-directory"
+        file="." />
+
     <property file="${chamilo-directory}/build/config/build.properties" />
-    
-    <!-- ============================================  -->
-    <!-- Build tasks                                   -->
-    <!-- ============================================  -->
 
-    <target name="static" depends="clean, prepare, phploc, pdepend, phpcpd, phpdoc, phpcb" />
-    <target name="testing" depends="clean-testing, prepare-testing, behat-core, behat-application" />
+    <!-- ============================================ -->
+    <!-- Build tasks -->
+    <!-- ============================================ -->
 
-    <!-- ============================================  -->
-    <!-- Maintenance tasks                             -->
-    <!-- ============================================  -->
+    <target
+        name="static"
+        depends="clean, prepare, phploc, pdepend, phpcpd, phpdoc, phpcb" />
+    <target
+        name="testing"
+        depends="clean-testing, prepare-testing, behat-core, behat-application" />
 
-    <target name="clean" description="Cleaning build directories">
+    <!-- ============================================ -->
+    <!-- Maintenance tasks -->
+    <!-- ============================================ -->
+
+    <target
+        name="clean"
+        description="Cleaning build directories">
         <delete dir="${build-api-directory}" />
         <delete dir="${build-chart-directory}" />
         <delete dir="${build-code-browser-directory}" />
         <delete dir="${build-log-directory}" />
     </target>
 
-    <target name="clean-testing" description="Cleaning testing logs">
+    <target
+        name="clean-testing"
+        description="Cleaning testing logs">
         <delete file="${build-log-junit}" />
         <delete dir="${build-log-behat-directory}" />
     </target>
-    
-    <target name="prepare" description="Preparing build directories" depends="clean">
+
+    <target
+        name="prepare"
+        description="Preparing build directories"
+        depends="clean">
         <mkdir dir="${build-api-directory}" />
         <mkdir dir="${build-chart-directory}" />
         <mkdir dir="${build-code-browser-directory}" />
         <mkdir dir="${build-log-directory}" />
     </target>
 
-    <target name="prepare-testing" description="Preparing testing log directories" depends="clean-testing">
+    <target
+        name="prepare-testing"
+        description="Preparing testing log directories"
+        depends="clean-testing">
         <mkdir dir="${build-log-behat-directory}" />
     </target>
 
-    <!-- ============================================  -->
-    <!-- Install tasks                                 -->
-    <!-- ============================================  -->
+    <!-- ============================================ -->
+    <!-- Install tasks -->
+    <!-- ============================================ -->
 
-    <target name="install-chamilo" description="Installing chamilo">
-        <exec executable="php" passthru="true">
+    <target
+        name="install-chamilo"
+        description="Installing chamilo">
+        <exec
+            executable="php"
+            passthru="true">
             <arg path="script/chamilo.php" />
             <arg value="install" />
             <arg value="-c" />
             <arg path="install/php/command_line_configuration.php" />
         </exec>
     </target>
-    
-    <!-- ============================================  -->
-    <!-- Executable tasks                              -->
-    <!-- ============================================  -->
-    
-    <target name="phploc" description="Measure project size using PHPLOC">
-        <exec executable="phploc" passthru="true">
+
+    <!-- ============================================ -->
+    <!-- Executable tasks -->
+    <!-- ============================================ -->
+
+    <target
+        name="phploc"
+        description="Measure project size using PHPLOC">
+        <exec
+            executable="phploc"
+            passthru="true">
             <arg value="--log-csv" />
             <arg value="${build-log-phploc}" />
             <arg value="--exclude" />
@@ -65,9 +91,13 @@
             <arg path="${chamilo-directory}" />
         </exec>
     </target>
-    
-    <target name="pdepend" description="Calculate software metrics using PHP_Depend">
-        <exec executable="pdepend" passthru="true">
+
+    <target
+        name="pdepend"
+        description="Calculate software metrics using PHP_Depend">
+        <exec
+            executable="pdepend"
+            passthru="true">
             <arg value="--jdepend-xml=${build-log-pdepend}" />
             <arg value="--jdepend-chart=${build-chart-pdepend-dependencies}" />
             <arg value="--overview-pyramid=${build-chart-pdepend-pyramid}" />
@@ -75,9 +105,13 @@
             <arg path="${chamilo-directory}" />
         </exec>
     </target>
-    
-    <target name="phpcpd" description="Find duplicate code using PHPCPD">
-        <exec executable="phpcpd" passthru="true">
+
+    <target
+        name="phpcpd"
+        description="Find duplicate code using PHPCPD">
+        <exec
+            executable="phpcpd"
+            passthru="true">
             <arg value="--log-pmd" />
             <arg value="${build-log-pmd-cpd}" />
             <arg value="--exclude" />
@@ -85,27 +119,39 @@
             <arg path="${chamilo-directory}" />
         </exec>
     </target>
-    
-    <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
-        <exec executable="phpdoc" passthru="false">
+
+    <target
+        name="phpdoc"
+        description="Generate API documentation using PHPDocumentor">
+        <exec
+            executable="phpdoc"
+            passthru="false">
             <arg value="--directory" />
             <arg path="${chamilo-directory}" />
             <arg value="--target" />
             <arg path="${build-api-directory}" />
         </exec>
     </target>
-    
-    <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="phpunit" passthru="true">
+
+    <target
+        name="phpunit"
+        description="Run unit tests with PHPUnit">
+        <exec
+            executable="phpunit"
+            passthru="true">
             <arg value="--configuration" />
             <arg path="${chamilo-directory}/build/config/phpunit.xml" />
             <arg value="--log-junit" />
             <arg path="${build-log-junit}" />
         </exec>
     </target>
-    
-    <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-        <exec executable="phpcb" passthru="true">
+
+    <target
+        name="phpcb"
+        description="Aggregate tool output with PHP_CodeBrowser">
+        <exec
+            executable="phpcb"
+            passthru="true">
             <arg value="--log" />
             <arg path="${build-log-directory}" />
             <arg value="--source" />
@@ -115,8 +161,12 @@
         </exec>
     </target>
 
-    <target name="behat-application" description="Running behat tests">
-        <exec executable="${bin-directory}/behat" passthru="true">
+    <target
+        name="behat-application"
+        description="Running behat tests">
+        <exec
+            executable="${bin-directory}/behat"
+            passthru="true">
             <arg value="-f" />
             <arg value="junit" />
             <arg value="--out=${build-log-behat-directory}" />
@@ -124,8 +174,12 @@
         </exec>
     </target>
 
-    <target name="behat-core" description="Running behat tests">
-        <exec executable="${bin-directory}/behat" passthru="true">
+    <target
+        name="behat-core"
+        description="Running behat tests">
+        <exec
+            executable="${bin-directory}/behat"
+            passthru="true">
             <arg value="-f" />
             <arg value="junit" />
             <arg value="--out=${build-log-behat-directory}" />

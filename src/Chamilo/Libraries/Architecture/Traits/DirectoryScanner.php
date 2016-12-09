@@ -19,7 +19,7 @@ trait DirectoryScanner
         $iterator = new \RecursiveIteratorIterator($directory);
         $iterator->setMaxDepth($depth);
         
-        $regex = new \RegexIterator($iterator, $pattern, \RegexIterator :: GET_MATCH);
+        $regex = new \RegexIterator($iterator, $pattern, \RegexIterator::GET_MATCH);
         
         $files = array();
         

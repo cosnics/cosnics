@@ -37,8 +37,8 @@ class MatchingForm extends ContentObjectForm
     const TAB_MATCH = 'match';
 
     private static $html_editor_options = array(
-        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75', 
-        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+        FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '75', 
+        FormValidatorHtmlEditorOptions::OPTION_COLLAPSE_TOOLBAR => true);
 
     /**
      * Prepare all the different tabs
@@ -47,39 +47,39 @@ class MatchingForm extends ContentObjectForm
     {
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching', 
                     true) . 'Form.js'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_QUESTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_QUESTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_QUESTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching', 
-                    'Tab/' . self :: TAB_QUESTION), 
+                    'Tab/' . self::TAB_QUESTION), 
                 'build_question_form'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_OPTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_OPTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_OPTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching', 
-                    'Tab/' . self :: TAB_OPTION), 
+                    'Tab/' . self::TAB_OPTION), 
                 'build_option_form'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_MATCH, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_MATCH)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_MATCH, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_MATCH)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching', 
-                    'Tab/' . self :: TAB_MATCH), 
+                    'Tab/' . self::TAB_MATCH), 
                 'build_match_form'));
         
         $this->addDefaultTab();
@@ -91,28 +91,28 @@ class MatchingForm extends ContentObjectForm
      */
     function build_general_form()
     {
-        if ($this->get_form_type() == self :: TYPE_CREATE)
+        if ($this->get_form_type() == self::TYPE_CREATE)
         {
-            parent :: build_creation_form(self :: $html_editor_options, true);
+            parent::build_creation_form(self::$html_editor_options, true);
         }
-        elseif ($this->get_form_type() == self :: TYPE_EDIT)
+        elseif ($this->get_form_type() == self::TYPE_EDIT)
         {
-            parent :: build_editing_form(self :: $html_editor_options, true);
+            parent::build_editing_form(self::$html_editor_options, true);
         }
     }
 
     function build_question_form()
     {
         $this->add_textfield(
-            Matching :: PROPERTY_QUESTION, 
-            Translation :: get('Question'), 
+            Matching::PROPERTY_QUESTION, 
+            Translation::get('Question'), 
             true, 
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
         $this->add_html_editor(
-            Matching :: PROPERTY_INSTRUCTION, 
-            Translation :: get('Instruction'), 
+            Matching::PROPERTY_INSTRUCTION, 
+            Translation::get('Instruction'), 
             false, 
-            self :: $html_editor_options);
+            self::$html_editor_options);
     }
 
     /**
@@ -136,8 +136,8 @@ class MatchingForm extends ContentObjectForm
     function setDefaults($defaults = array ())
     {
         $object = $this->get_content_object();
-        $defaults[Matching :: PROPERTY_QUESTION] = $defaults[Matching :: PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Matching :: PROPERTY_QUESTION];
-        $defaults[Matching :: PROPERTY_INSTRUCTION] = $object->get_instruction();
+        $defaults[Matching::PROPERTY_QUESTION] = $defaults[Matching::PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Matching::PROPERTY_QUESTION];
+        $defaults[Matching::PROPERTY_INSTRUCTION] = $object->get_instruction();
         
         if ($object->get_number_of_options() != 0)
             
@@ -147,14 +147,14 @@ class MatchingForm extends ContentObjectForm
                 
                 while ($option = $options->next_result())
                 {
-                    $defaults[MatchingOption :: PROPERTY_VALUE . '[' . ($option->get_display_order() - 1) . ']'] = $option->get_value();
+                    $defaults[MatchingOption::PROPERTY_VALUE . '[' . ($option->get_display_order() - 1) . ']'] = $option->get_value();
                 }
                 
                 $matches = $object->get_matches();
                 
                 while ($match = $matches->next_result())
                 {
-                    $defaults[MatchingMatch :: PROPERTY_VALUE . '[' . ($match->get_display_order() - 1) . ']'] = $match->get_value();
+                    $defaults[MatchingMatch::PROPERTY_VALUE . '[' . ($match->get_display_order() - 1) . ']'] = $match->get_value();
                 }
             }
             else
@@ -162,7 +162,7 @@ class MatchingForm extends ContentObjectForm
                 $number_of_options = intval($_SESSION['mq_number_of_options']);
             }
         
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     function create_content_object()
@@ -170,10 +170,10 @@ class MatchingForm extends ContentObjectForm
         $values = $this->exportValues();
         
         $object = new Matching();
-        $object->set_question($values[Matching :: PROPERTY_QUESTION]);
-        $object->set_instruction($values[Matching :: PROPERTY_INSTRUCTION]);
+        $object->set_question($values[Matching::PROPERTY_QUESTION]);
+        $object->set_instruction($values[Matching::PROPERTY_INSTRUCTION]);
         $this->set_content_object($object);
-        $object = parent :: create_content_object();
+        $object = parent::create_content_object();
         $this->add_answers();
         return $object;
     }
@@ -182,10 +182,10 @@ class MatchingForm extends ContentObjectForm
     {
         $values = $this->exportValues();
         $object = $this->get_content_object();
-        $object->set_question($values[Matching :: PROPERTY_QUESTION]);
-        $object->set_instruction($values[Matching :: PROPERTY_INSTRUCTION]);
+        $object->set_question($values[Matching::PROPERTY_QUESTION]);
+        $object->set_instruction($values[Matching::PROPERTY_INSTRUCTION]);
         $this->add_answers();
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 
     /**
@@ -198,20 +198,18 @@ class MatchingForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
         
-        foreach ($values[MatchingOption :: PROPERTY_VALUE] as $display_order => $value)
+        foreach ($values[MatchingOption::PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatchingOption::class_name(), MatchingOption::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatchingOption::class_name(), MatchingOption::PROPERTY_DISPLAY_ORDER), 
                 new StaticConditionVariable($display_order + 1));
             $condition = new AndCondition($conditions);
             
-            $option = DataManager :: retrieve(
-                MatchingOption :: class_name(), 
-                new DataClassRetrieveParameters($condition));
+            $option = DataManager::retrieve(MatchingOption::class_name(), new DataClassRetrieveParameters($condition));
             
             if ($option instanceof MatchingOption)
             {
@@ -241,15 +239,15 @@ class MatchingForm extends ContentObjectForm
             
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatchingOption::class_name(), MatchingOption::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatchingOption::class_name(), MatchingOption::PROPERTY_DISPLAY_ORDER), 
                 $orders);
             $condition = new AndCondition($conditions);
             
-            $options = DataManager :: retrieves(
-                MatchingOption :: class_name(), 
+            $options = DataManager::retrieves(
+                MatchingOption::class_name(), 
                 new DataClassRetrievesParameters($condition));
             
             while ($option = $options->next_result())
@@ -258,18 +256,18 @@ class MatchingForm extends ContentObjectForm
             }
         }
         
-        foreach ($values[MatchingMatch :: PROPERTY_VALUE] as $display_order => $value)
+        foreach ($values[MatchingMatch::PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatchingMatch::class_name(), MatchingMatch::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatchingMatch::class_name(), MatchingMatch::PROPERTY_DISPLAY_ORDER), 
                 new StaticConditionVariable($display_order + 1));
             $condition = new AndCondition($conditions);
             
-            $match = DataManager :: retrieve(MatchingMatch :: class_name(), new DataClassRetrieveParameters($condition));
+            $match = DataManager::retrieve(MatchingMatch::class_name(), new DataClassRetrieveParameters($condition));
             
             if ($match instanceof MatchingMatch)
             {
@@ -299,16 +297,14 @@ class MatchingForm extends ContentObjectForm
             
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatchingMatch::class_name(), MatchingMatch::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatchingMatch::class_name(), MatchingMatch::PROPERTY_DISPLAY_ORDER), 
                 $orders);
             $condition = new AndCondition($conditions);
             
-            $matches = DataManager :: retrieves(
-                MatchingMatch :: class_name(), 
-                new DataClassRetrievesParameters($condition));
+            $matches = DataManager::retrieves(MatchingMatch::class_name(), new DataClassRetrievesParameters($condition));
             
             while ($match = $matches->next_result())
             {
@@ -326,7 +322,7 @@ class MatchingForm extends ContentObjectForm
         {
             return false;
         }
-        return parent :: validate();
+        return parent::validate();
     }
 
     /**
@@ -414,13 +410,13 @@ class MatchingForm extends ContentObjectForm
     {
         $number_of_options = intval($_SESSION['mq_number_of_options']);
         
-        $this->addElement('category', Translation :: get('Options'));
+        $this->addElement('category', Translation::get('Options'));
         
         $buttons = array();
         $buttons[] = $this->createElement(
             'style_button', 
             'add_option[]', 
-            Translation :: get('AddMatchingOption'), 
+            Translation::get('AddMatchingOption'), 
             array('id' => 'add_option'), 
             null, 
             'plus');
@@ -433,7 +429,7 @@ class MatchingForm extends ContentObjectForm
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('Options') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Options') . '</th>';
         // $table_header[] = '<th class="code">' . Translation :: get('Matches') . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';
@@ -458,7 +454,7 @@ class MatchingForm extends ContentObjectForm
                 $visual_number ++;
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = $this->create_html_editor(
-                    MatchingOption :: PROPERTY_VALUE . '[' . $option_number . ']', 
+                    MatchingOption::PROPERTY_VALUE . '[' . $option_number . ']', 
                     '', 
                     $html_editor_options);
                 
@@ -467,7 +463,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_option[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                         array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number));
                 }
                 else
@@ -477,18 +473,18 @@ class MatchingForm extends ContentObjectForm
                         null, 
                         null, 
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
+                             Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
                 
-                $this->addGroup($group, MatchingOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);
+                $this->addGroup($group, MatchingOption::PROPERTY_VALUE . '_' . $option_number, null, '', false);
                 
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') .
                          '">{element}</tr>', 
-                        MatchingOption :: PROPERTY_VALUE . '_' . $option_number);
+                        MatchingOption::PROPERTY_VALUE . '_' . $option_number);
                 $renderer->setGroupElementTemplate(
                     '<td>{element}</td>', 
-                    MatchingOption :: PROPERTY_VALUE . '_' . $option_number);
+                    MatchingOption::PROPERTY_VALUE . '_' . $option_number);
             }
         }
         $table_footer[] = '</tbody>';
@@ -513,13 +509,13 @@ class MatchingForm extends ContentObjectForm
     function add_matches()
     {
         $number_of_matches = intval($_SESSION['mq_number_of_matches']);
-        $this->addElement('category', Translation :: get('Matches'));
+        $this->addElement('category', Translation::get('Matches'));
         
         $buttons = array();
         $buttons[] = $this->createElement(
             'style_button', 
             'add_match[]', 
-            Translation :: get('AddMatch'), 
+            Translation::get('AddMatch'), 
             array('id' => 'add_match'), 
             null, 
             'plus');
@@ -532,7 +528,7 @@ class MatchingForm extends ContentObjectForm
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('Matches') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Matches') . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -557,13 +553,13 @@ class MatchingForm extends ContentObjectForm
                 $element = $this->createElement(
                     'text', 
                     'match_label[' . $match_number . ']', 
-                    Translation :: get('Match'), 
+                    Translation::get('Match'), 
                     'style="width: 90%;" ');
                 $element->freeze();
                 $group[] = $element;
                 $group[] = $this->create_html_editor(
-                    MatchingMatch :: PROPERTY_VALUE . '[' . $match_number . ']', 
-                    Translation :: get('Match'), 
+                    MatchingMatch::PROPERTY_VALUE . '[' . $match_number . ']', 
+                    Translation::get('Match'), 
                     $html_editor_options);
                 
                 if ($number_of_matches - count($_SESSION['mq_skip_matches']) > 2)
@@ -571,7 +567,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_match[' . $match_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                         array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number));
                 }
                 else
@@ -580,26 +576,26 @@ class MatchingForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img class="remove_match" src="' . Theme :: getInstance()->getCommonImagePath(
-                            'Action/DeleteNa') . '" />');
+                        '<img class="remove_match" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
+                             '" />');
                 }
                 
-                $this->addGroup($group, MatchingMatch :: PROPERTY_VALUE . '_' . $match_number, null, '', false);
+                $this->addGroup($group, MatchingMatch::PROPERTY_VALUE . '_' . $match_number, null, '', false);
                 
                 $renderer->setElementTemplate(
                     '<tr id="match_' . $match_number . '" class="' .
                          ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>', 
-                        MatchingMatch :: PROPERTY_VALUE . '_' . $match_number);
+                        MatchingMatch::PROPERTY_VALUE . '_' . $match_number);
                 $renderer->setGroupElementTemplate(
                     '<td>{element}</td>', 
-                    MatchingMatch :: PROPERTY_VALUE . '_' . $match_number);
+                    MatchingMatch::PROPERTY_VALUE . '_' . $match_number);
                 
                 $this->addGroupRule(
-                    MatchingMatch :: PROPERTY_VALUE . '_' . $match_number, 
+                    MatchingMatch::PROPERTY_VALUE . '_' . $match_number, 
                     array(
-                        MatchingMatch :: PROPERTY_VALUE . '[' . $match_number . ']' => array(
+                        MatchingMatch::PROPERTY_VALUE . '[' . $match_number . ']' => array(
                             array(
-                                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
                                 'required'))));
             }
             

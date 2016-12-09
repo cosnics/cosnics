@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
 {
     const DATA_NODE_ID = 'data-node_id';
-    
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_QUESTION_NR = 'question_nr';
     const PROPERTY_IS_QUESTION = 'is_question';
@@ -20,47 +19,47 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
 
     function set_next_page_step($step)
     {
-        return $this->set_property(self :: PROPERTY_NEXT_PAGE_STEP, $step);
+        return $this->set_property(self::PROPERTY_NEXT_PAGE_STEP, $step);
     }
 
     function set_question($question)
     {
-        return $this->set_property(self :: PROPERTY_QUESTION, $question);
+        return $this->set_property(self::PROPERTY_QUESTION, $question);
     }
 
     function get_question()
     {
-        return $this->get_property(self :: PROPERTY_QUESTION);
+        return $this->get_property(self::PROPERTY_QUESTION);
     }
 
     function set_question_nr($question_nr)
     {
-        return $this->set_property(self :: PROPERTY_QUESTION_NR, $question_nr);
+        return $this->set_property(self::PROPERTY_QUESTION_NR, $question_nr);
     }
 
     function get_question_nr()
     {
-        return $this->get_property(self :: PROPERTY_QUESTION_NR);
+        return $this->get_property(self::PROPERTY_QUESTION_NR);
     }
 
     function setIsQuestion($question)
     {
-        return $this->set_property(self :: PROPERTY_IS_QUESTION, $question);
+        return $this->set_property(self::PROPERTY_IS_QUESTION, $question);
     }
 
     function isQuestion()
     {
-        return $this->get_property(self :: PROPERTY_IS_QUESTION);
+        return $this->get_property(self::PROPERTY_IS_QUESTION);
     }
 
     function set_question_max_answer_count($max_answer_count)
     {
-        return $this->set_property(self :: PROPERTY_QUESTION_MAX_ANSWER_COUNT, $max_answer_count);
+        return $this->set_property(self::PROPERTY_QUESTION_MAX_ANSWER_COUNT, $max_answer_count);
     }
 
     function get_question_max_answer_count()
     {
-        return $this->get_property(self :: PROPERTY_QUESTION_MAX_ANSWER_COUNT);
+        return $this->get_property(self::PROPERTY_QUESTION_MAX_ANSWER_COUNT);
     }
 
     /**
@@ -268,15 +267,16 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
         
         return $nodeAnswers;
     }
-    
-    function getDataAttributes(){
+
+    function getDataAttributes()
+    {
         $attributes = array();
-        $attributes[self ::DATA_NODE_ID] = $this->get_id();
+        $attributes[self::DATA_NODE_ID] = $this->get_id();
         $complexAttributes = $this->get_complex_content_object_item()->getDataAttributes();
-        if($complexAttributes){
+        if ($complexAttributes)
+        {
             $attributes = array_merge($attributes, $complexAttributes);
         }
         return $attributes;
     }
-    
 }

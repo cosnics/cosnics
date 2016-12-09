@@ -44,7 +44,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
      */
     public function run()
     {
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $html = array();
             
@@ -79,11 +79,11 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
              'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable')
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
-                array(ContentObject :: PROPERTY_TITLE, ContentObject :: PROPERTY_DESCRIPTION));
+                array(ContentObject::PROPERTY_TITLE, ContentObject::PROPERTY_DESCRIPTION));
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
-                    AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                    AssignmentSubmission::class_name(), 
+                    AssignmentSubmission::PROPERTY_PUBLICATION_ID), 
                 new StaticConditionVariable($this->get_publication_id()));
             if ($search_conditions != null)
             {
@@ -96,8 +96,8 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
 
     public function get_publication_id()
     {
-        return \Chamilo\Libraries\Platform\Session\Request :: get(
-            \Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
+        return \Chamilo\Libraries\Platform\Session\Request::get(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
     }
 
     /**
@@ -109,9 +109,9 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
      */
     public function get_ephorus_request_url($object_id)
     {
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_EPHORUS_REQUEST;
-        $parameters[self :: PARAM_CONTENT_OBJECT_IDS] = $object_id;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: ACTION_VIEW_RESULT;
+        $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
+        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
         
         return $this->get_url($parameters);
     }
@@ -134,16 +134,16 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html[] = $this->buttonToolbarRenderer->render();
         
-        $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
         $assignment = $pub->get_content_object();
         
-        $html[] = '<h3>' . Translation :: get(
+        $html[] = '<h3>' . Translation::get(
             'EphorusSubmissionsForAssignment', 
             array(), 
-            ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())) . ': ' .
+            ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())) . ': ' .
              $assignment->get_title() . '</h3>';
         $table = new AssignmentRequestTable($this);
         $html[] = $table->as_html();
@@ -169,6 +169,6 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
+        return array(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
     }
 }

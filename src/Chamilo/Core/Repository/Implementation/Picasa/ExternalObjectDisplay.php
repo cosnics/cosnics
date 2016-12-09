@@ -10,13 +10,13 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         $object = $this->get_object();
         
-        $properties = parent :: get_display_properties();
-        $properties[Translation :: get('AvailableSizes')] = $object->get_available_sizes_string();
-        $properties[Translation :: get('Tags')] = $object->get_tags_string();
-        $properties[Translation :: get('License')] = $object->get_license_icon();
+        $properties = parent::get_display_properties();
+        $properties[Translation::get('AvailableSizes')] = $object->get_available_sizes_string();
+        $properties[Translation::get('Tags')] = $object->get_tags_string();
+        $properties[Translation::get('License')] = $object->get_license_icon();
         
         // Overwrite the original owner value, since Picasa gives us a bit more info
-        $properties[Translation :: get('Owner')] = $object->get_owner_string();
+        $properties[Translation::get('Owner')] = $object->get_owner_string();
         
         return $properties;
     }
@@ -24,7 +24,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_preview($is_thumbnail = false)
     {
         $object = $this->get_object();
-        $size = ($is_thumbnail ? ExternalObject :: SIZE_THUMBNAIL : ExternalObject :: SIZE_MEDIUM);
+        $size = ($is_thumbnail ? ExternalObject::SIZE_THUMBNAIL : ExternalObject::SIZE_MEDIUM);
         $class = ($is_thumbnail ? 'thumbnail' : 'with_border');
         
         $html = array();

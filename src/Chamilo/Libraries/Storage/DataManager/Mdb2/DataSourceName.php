@@ -19,22 +19,22 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
     {
         switch ($this->get_driver())
         {
-            case self :: DRIVER_OCI8 :
-                return self :: DRIVER_OCI8;
+            case self::DRIVER_OCI8 :
+                return self::DRIVER_OCI8;
                 break;
-            case self :: DRIVER_PGSQL :
-                return self :: DRIVER_PGSQL;
+            case self::DRIVER_PGSQL :
+                return self::DRIVER_PGSQL;
                 break;
-            case self :: DRIVER_SQLITE :
-                return self :: DRIVER_SQLITE;
+            case self::DRIVER_SQLITE :
+                return self::DRIVER_SQLITE;
                 break;
-            case self :: DRIVER_MYSQL :
+            case self::DRIVER_MYSQL :
                 return 'mysqli';
                 break;
-            case self :: DRIVER_MSSQL :
+            case self::DRIVER_MSSQL :
                 return 'mssql';
                 break;
-            case self :: DRIVER_INTERBASE :
+            case self::DRIVER_INTERBASE :
                 return 'ibase';
                 break;
             // Deprecated option for backwards compatibility with older configuration files

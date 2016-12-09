@@ -12,7 +12,7 @@ class CpoDefaultExportImplementation extends \Chamilo\Core\Repository\ContentObj
 
     public function render()
     {
-        ContentObjectExport :: launch($this);
+        ContentObjectExport::launch($this);
         // @TODO: Add all posts to the export cpo file.
     }
 }

@@ -12,35 +12,34 @@ class AdderUserGroupComponent extends Manager
     public function run()
     {
         $parameters = $this->get_parameters();
-        $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP] = Request :: get(
-            Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP);
-
+        $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_GROUP] = Request::get(Manager::PARAM_EXTERNAL_REPOSITORY_GROUP);
+        
         $group_form = new GroupUserAdditionForm($this->get_url($parameters), $this);
-
+        
         if ($group_form->validate())
         {
             $success = $group_form->add_user_to_group();
-            $message = $success ? Translation :: get('UserAddedToGroup') : Translation :: get('UserNotAddedToGroup');
+            $message = $success ? Translation::get('UserAddedToGroup') : Translation::get('UserNotAddedToGroup');
             $parameters = $this->get_parameters();
             if ($success)
             {
-                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_GROUPS_VIEWER;
+                $parameters[Manager::PARAM_ACTION] = Manager::ACTION_GROUPS_VIEWER;
             }
             else
             {
-                $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP] = Request :: get(
-                    Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP);
+                $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_GROUP] = Request::get(
+                    Manager::PARAM_EXTERNAL_REPOSITORY_GROUP);
             }
             $this->redirect($message, ! $success, $parameters);
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $group_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

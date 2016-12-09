@@ -28,24 +28,24 @@ class PublicationForm extends FormValidator
 
     function __construct($form_type, $content_object, $user, $action, $publication, $title)
     {
-        parent :: __construct('survey_publication_settings', 'post', $action);
-
+        parent::__construct('survey_publication_settings', 'post', $action);
+        
         $this->content_object = $content_object;
         $this->user = $user;
         $this->publication = $publication;
         $this->form_type = $form_type;
         $this->title = $title;
-
+        
         switch ($this->form_type)
         {
-            case self :: TYPE_EDIT :
+            case self::TYPE_EDIT :
                 $this->build_edit_form();
                 break;
-            case self :: TYPE_CREATE :
+            case self::TYPE_CREATE :
                 $this->build_create_form();
                 break;
         }
-
+        
         $this->add_footer($this->form_type);
         $this->setDefaults();
     }
@@ -53,59 +53,59 @@ class PublicationForm extends FormValidator
     function build_edit_form()
     {
         $this->addElement(
-            'text',
-            Publication :: PROPERTY_TITLE,
-            Translation :: get('PublicationTitle'),
+            'text', 
+            Publication::PROPERTY_TITLE, 
+            Translation::get('PublicationTitle'), 
             array('size' => 100, 'value' => $this->publication->getTitle()));
-        $this->addRule(Publication :: PROPERTY_TITLE, Translation :: get('ThisFieldIsRequired'), 'required');
-        $this->add_forever_or_timewindow(Translation :: get('PublicationPeriod'));
+        $this->addRule(Publication::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->add_forever_or_timewindow(Translation::get('PublicationPeriod'));
     }
 
     function build_create_form()
     {
         $this->addElement(
-            'text',
-            Publication :: PROPERTY_TITLE,
-            Translation :: get('PublicationTitle'),
+            'text', 
+            Publication::PROPERTY_TITLE, 
+            Translation::get('PublicationTitle'), 
             array('size' => 100, 'value' => $this->title));
-        $this->addRule(Publication :: PROPERTY_TITLE, Translation :: get('ThisFieldIsRequired'), 'required');
-        $this->add_forever_or_timewindow(Translation :: get('PublicationPeriod'));
+        $this->addRule(Publication::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->add_forever_or_timewindow(Translation::get('PublicationPeriod'));
         $this->addElement('hidden', 'ids', serialize($this->content_object));
     }
 
     function add_footer($form_type)
     {
-        $submit = ($form_type == self :: TYPE_CREATE) ? Translation :: get(
-            'Publish',
-            null,
-            Utilities :: COMMON_LIBRARIES) : Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES);
+        $submit = ($form_type == self::TYPE_CREATE) ? Translation::get('Publish', null, Utilities::COMMON_LIBRARIES) : Translation::get(
+            'Update', 
+            null, 
+            Utilities::COMMON_LIBRARIES);
         $buttons[] = $this->createElement('style_submit_button', 'submit', $submit);
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     function update_publication()
     {
         $values = $this->exportValues();
-
-        if ($values[self :: PARAM_FOREVER] != 0)
+        
+        if ($values[self::PARAM_FOREVER] != 0)
         {
             $from = $to = 0;
         }
         else
         {
-            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities::time_from_datepicker($values[self::PARAM_FROM_DATE]);
+            $to = DatetimeUtilities::time_from_datepicker($values[self::PARAM_TO_DATE]);
         }
-
+        
         $publication = $this->publication;
         $publication->setFromDate($from);
-        $publication->setTitle($values[Publication :: PROPERTY_TITLE]);
+        $publication->setTitle($values[Publication::PROPERTY_TITLE]);
         $publication->setToDate($to);
-
+        
         if ($publication->update())
         {
             return true;
@@ -119,31 +119,31 @@ class PublicationForm extends FormValidator
     function create_publications()
     {
         $values = $this->exportValues();
-
-        if ($values[self :: PARAM_FOREVER] != 0)
+        
+        if ($values[self::PARAM_FOREVER] != 0)
         {
             $from = $to = 0;
         }
         else
         {
-            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities::time_from_datepicker($values[self::PARAM_FROM_DATE]);
+            $to = DatetimeUtilities::time_from_datepicker($values[self::PARAM_TO_DATE]);
         }
-
+        
         $ids = unserialize($values['ids']);
-
+        
         $succes = false;
-
+        
         foreach ($ids as $id)
         {
             $publication = new Publication();
             $publication->setContentObjectId($id);
             $publication->setPublisherId($this->user->get_id());
-            $publication->setTitle($values[Publication :: PROPERTY_TITLE]);
+            $publication->setTitle($values[Publication::PROPERTY_TITLE]);
             $publication->setPublished(time());
             $publication->setFromDate($from);
             $publication->setToDate($to);
-
+            
             if (! $publication->create())
             {
                 $succes = false;
@@ -166,23 +166,23 @@ class PublicationForm extends FormValidator
         $defaults = array();
         if (! $this->publication)
         {
-            $defaults[self :: PARAM_FOREVER] = 1;
+            $defaults[self::PARAM_FOREVER] = 1;
         }
         else
         {
-
+            
             if ($this->publication->getFromDate() == 0)
             {
-                $defaults[self :: PARAM_FOREVER] = 1;
+                $defaults[self::PARAM_FOREVER] = 1;
             }
             else
             {
-                $defaults[self :: PARAM_FOREVER] = 0;
-                $defaults[self :: PARAM_FROM_DATE] = $this->publication->getFromDate();
-                $defaults[self :: PARAM_TO_DATE] = $this->publication->getToDate();
+                $defaults[self::PARAM_FOREVER] = 0;
+                $defaults[self::PARAM_FROM_DATE] = $this->publication->getFromDate();
+                $defaults[self::PARAM_TO_DATE] = $this->publication->getToDate();
             }
         }
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 }
 ?>

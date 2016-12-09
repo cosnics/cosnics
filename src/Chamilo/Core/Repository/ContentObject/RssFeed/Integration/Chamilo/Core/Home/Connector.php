@@ -17,20 +17,20 @@ class Connector
         $options = array();
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
-            new StaticConditionVariable(Session :: get_user_id()));
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new StaticConditionVariable(Session::get_user_id()));
         
-        $objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-            RssFeed :: class_name(), 
+        $objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            RssFeed::class_name(), 
             $condition);
         
         if ($objects->size() == 0)
         {
-            $options[0] = Translation :: get('CreateRssFeedFirst');
+            $options[0] = Translation::get('CreateRssFeedFirst');
         }
         else
         {
-            $options[0] = Translation :: get('SelectRssFeed');
+            $options[0] = Translation::get('SelectRssFeed');
             while ($object = $objects->next_result())
             {
                 $options[$object->get_id()] = $object->get_title();

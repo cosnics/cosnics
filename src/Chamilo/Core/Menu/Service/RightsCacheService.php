@@ -61,25 +61,25 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
     {
         $itemRights = array();
         $items = $this->getItemService()->getRootItems();
-
+        
         $entities = array();
         $entities[] = new UserEntity();
         $entities[] = new PlatformGroupEntity();
-
+        
         foreach ($items as $item)
         {
-            if (Rights :: get_instance()->is_allowed(
-                Rights :: VIEW_RIGHT,
-                Manager :: context(),
-                null,
-                $entities,
-                $item->get_id(),
-                Rights :: TYPE_ITEM))
+            if (Rights::getInstance()->is_allowed(
+                Rights::VIEW_RIGHT, 
+                Manager::context(), 
+                null, 
+                $entities, 
+                $item->get_id(), 
+                Rights::TYPE_ITEM))
             {
                 $itemRights[$item->get_id()] = true;
             }
         }
-
+        
         return $this->getCacheProvider()->save($identifier, $itemRights);
     }
 
@@ -98,9 +98,9 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
      */
     public function getIdentifiers()
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager :: distinct(
-            User :: class_name(),
-            new DataClassDistinctParameters(null, User :: PROPERTY_ID));
+        return \Chamilo\Libraries\Storage\DataManager\DataManager::distinct(
+            User::class_name(), 
+            new DataClassDistinctParameters(null, User::PROPERTY_ID));
     }
 
     /**

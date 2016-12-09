@@ -16,7 +16,7 @@ abstract class AjaxManager extends Application
 
     /**
      * An array of parameters as passed by the POST-request
-     *
+     * 
      * @var array
      */
     private $postDataValues = array();
@@ -58,11 +58,11 @@ abstract class AjaxManager extends Application
     public function getRequestedPostDataValue($parameter)
     {
         $getValue = $this->getRequest()->query->get($parameter);
-
+        
         if (! isset($getValue))
         {
             $postValue = $this->getRequest()->request->get($parameter);
-
+            
             if (! isset($postValue))
             {
                 return null;
@@ -80,7 +80,7 @@ abstract class AjaxManager extends Application
 
     /**
      * Get the postDataValues
-     *
+     * 
      * @return array
      */
     public function getPostDataValues()
@@ -90,7 +90,7 @@ abstract class AjaxManager extends Application
 
     /**
      * Set the postDataValues
-     *
+     * 
      * @param array $postDataValues
      */
     public function setPostDataValues($postDataValues)
@@ -100,7 +100,7 @@ abstract class AjaxManager extends Application
 
     /**
      * Returns the value of the given parameter.
-     *
+     * 
      * @param string $name The parameter name.
      * @return string The parameter value.
      */
@@ -114,7 +114,7 @@ abstract class AjaxManager extends Application
 
     /**
      * Sets the value of a parameter.
-     *
+     * 
      * @param string $name The parameter name.
      * @param string $value The parameter value.
      */
@@ -125,7 +125,7 @@ abstract class AjaxManager extends Application
 
     /**
      * Get an array of parameters which should be set for this call to work
-     *
+     * 
      * @return array
      */
     public function getRequiredPostParameters()

@@ -27,7 +27,7 @@ class SimpleXmlMediaPackageParser extends MediaPackageParser
         $object->set_modified(strtotime((string) $result->modified));
         $object->set_license((string) $result->mediapackage->license);
         $object->set_type(
-            (string) StringUtilities :: getInstance()->createString((string) $result->mediaType)->underscored());
+            (string) StringUtilities::getInstance()->createString((string) $result->mediaType)->underscored());
         $object->set_subjects((string) $result->mediapackage->subjects->subject);
         $object->set_start_time((string) $result->dcCreated);
         $object->set_owner_id((string) $result->mediapackage->creators->creator[0]);

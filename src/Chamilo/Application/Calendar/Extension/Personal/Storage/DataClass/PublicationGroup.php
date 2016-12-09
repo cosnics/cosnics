@@ -17,12 +17,12 @@ class PublicationGroup extends DataClass
 
     /**
      * Get the default properties
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_PUBLICATION, self :: PROPERTY_GROUP_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_PUBLICATION, self::PROPERTY_GROUP_ID));
     }
 
     /**
@@ -40,7 +40,7 @@ class PublicationGroup extends DataClass
      */
     public function get_publication()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION);
     }
 
     /**
@@ -49,7 +49,7 @@ class PublicationGroup extends DataClass
      */
     public function set_publication($publication)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION, $publication);
+        $this->set_default_property(self::PROPERTY_PUBLICATION, $publication);
     }
 
     /**
@@ -58,7 +58,7 @@ class PublicationGroup extends DataClass
      */
     public function get_group_id()
     {
-        return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        return $this->get_default_property(self::PROPERTY_GROUP_ID);
     }
 
     /**
@@ -67,7 +67,7 @@ class PublicationGroup extends DataClass
      */
     public function set_group_id($group_id)
     {
-        $this->set_default_property(self :: PROPERTY_GROUP_ID, $group_id);
+        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
     }
 
     /**
@@ -76,6 +76,6 @@ class PublicationGroup extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 }

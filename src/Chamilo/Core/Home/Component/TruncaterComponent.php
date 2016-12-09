@@ -16,19 +16,19 @@ class TruncaterComponent extends Manager
 
     public function run()
     {
-        $success = DataManager :: truncateHome($this->get_user_id());
-
+        $success = DataManager::truncateHome($this->get_user_id());
+        
         $redirect = new Redirect();
         $redirect->toUrl();
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

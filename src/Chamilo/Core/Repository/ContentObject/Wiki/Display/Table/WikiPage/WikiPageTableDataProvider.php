@@ -15,8 +15,8 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager :: retrieve_complex_wiki_pages(
-            ComplexContentObjectItem :: class_name(),
+        return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager::retrieve_complex_wiki_pages(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 
@@ -26,8 +26,8 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager :: count_complex_wiki_pages(
-            ComplexContentObjectItem :: class_name(),
+        return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager::count_complex_wiki_pages(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 }

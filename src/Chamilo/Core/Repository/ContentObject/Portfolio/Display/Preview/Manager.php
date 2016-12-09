@@ -6,28 +6,28 @@ use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
- *
+ * 
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
 {
-
     const TEMPORARY_STORAGE = 'preview_portfolio_feedbacks';
-    
+
     /**
      *
      * @see \core\repository\display\Preview::get_root_content_object()
      */
     function get_root_content_object()
     {
-        $this->set_parameter(\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_PORTFOLIO_ITEM_ID, Request :: get(\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_PORTFOLIO_ITEM_ID));
         $this->set_parameter(
-            \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
-        return parent :: get_root_content_object();
+            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_PORTFOLIO_ITEM_ID, 
+            Request::get(\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_PORTFOLIO_ITEM_ID));
+        $this->set_parameter(
+            \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID, 
+            Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+        return parent::get_root_content_object();
     }
-
 
     /*
      * (non-PHPdoc) @see \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed()
@@ -36,7 +36,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     {
         return true;
     }
-
 
     /*
      * (non-PHPdoc) @see
@@ -88,5 +87,4 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     {
         return true;
     }
-
 }

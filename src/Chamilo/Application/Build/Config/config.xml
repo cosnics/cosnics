@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-    <actions/>
+    <actions />
     <description>TypeName&#xd;
         &#xd;
         &lt;p&gt;Dependencies&#xd;
-        &lt;img src=&quot;http://10.2.201.104/html/jenkins/dev/application/build/chart/dependencies.svg&quot; /&gt;&#xd;
+        &lt;img
+        src=&quot;http://10.2.201.104/html/jenkins/dev/application/build/chart/dependencies.svg&quot; /&gt;&#xd;
         Pyramid&#xd;
-        &lt;img src=&quot;http://10.2.201.104/html/jenkins/dev/application/build/chart/overview-pyramid.svg&quot; /&gt;&#xd;
+        &lt;img
+        src=&quot;http://10.2.201.104/html/jenkins/dev/application/build/chart/overview-pyramid.svg&quot; /&gt;&#xd;
         &lt;/p&gt;</description>
     <logRotator>
         <daysToKeep>-1</daysToKeep>
@@ -15,14 +17,14 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
     </logRotator>
     <keepDependencies>false</keepDependencies>
-    <properties/>
-    <scm class="hudson.scm.NullSCM"/>
+    <properties />
+    <scm class="hudson.scm.NullSCM" />
     <canRoam>true</canRoam>
     <disabled>false</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
     <authToken>502ca597634db</authToken>
-    <triggers class="vector"/>
+    <triggers class="vector" />
     <concurrentBuild>false</concurrentBuild>
     <customWorkspace>/var/www/html/jenkins/dev/application/</customWorkspace>
     <builders>
@@ -33,7 +35,8 @@
     </builders>
     <publishers>
         <hudson.tasks.BuildTrigger>
-            <childProjects>application_atlantis, application_calendar, application_cas_user, application_discovery, application_ehb_apple, application_ehb_helpdesk, application_ehb_sync, application_portfolio, application_weblcms</childProjects>
+            <childProjects>application_atlantis, application_calendar, application_cas_user, application_discovery, application_ehb_apple,
+                application_ehb_helpdesk, application_ehb_sync, application_portfolio, application_weblcms</childProjects>
             <threshold>
                 <name>FAILURE</name>
                 <ordinal>2</ordinal>
@@ -41,5 +44,5 @@
             </threshold>
         </hudson.tasks.BuildTrigger>
     </publishers>
-    <buildWrappers/>
+    <buildWrappers />
 </project>

@@ -9,7 +9,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
     public function render()
     {
-        ContentObjectExport :: launch($this);
+        ContentObjectExport::launch($this);
         $this->get_context()->add_files(
             dirname($this->get_content_object()->get_full_path()), 
             'hotpotatoes/' . basename(rtrim(dirname($this->get_content_object()->get_full_path()), '/')));

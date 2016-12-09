@@ -23,46 +23,46 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        if (Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID))
+        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
-            $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+            $publication_ids = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
         else
         {
-            $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID];
+            $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID];
         }
-
+        
         if (! is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
-
+        
         $failures = 0;
-
+        
         foreach ($publication_ids as $pid)
         {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(),
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                ContentObjectPublication::class_name(), 
                 $pid);
-
+            
             $content_object = $publication->get_content_object();
-
-            if ($content_object->get_type() == Introduction :: class_name())
+            
+            if ($content_object->get_type() == Introduction::class_name())
             {
                 $publication->ignore_display_order();
             }
-
-            if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT, $publication))
+            
+            if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
             {
                 if ($publication->delete())
                 {
                     $parameters = new DataClassRetrieveParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                Publication :: class_name(),
-                                Publication :: PROPERTY_PUBLICATION_ID),
+                                Publication::class_name(), 
+                                Publication::PROPERTY_PUBLICATION_ID), 
                             new StaticConditionVariable($publication->get_id())));
-                    $assessment_publication = DataManager :: retrieve(Publication :: class_name(), $parameters);
+                    $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
                     if (! $assessment_publication->delete())
                     {
                         $failures ++;
@@ -78,30 +78,31 @@ class DeleterComponent extends Manager
                 $failures ++;
             }
         }
-
+        
         if ($failures == 0)
         {
             if (count($publication_ids) > 1)
             {
-                $message = htmlentities(Translation :: get('ContentObjectPublicationsDeleted'));
+                $message = htmlentities(Translation::get('ContentObjectPublicationsDeleted'));
             }
             else
             {
-                $message = htmlentities(Translation :: get('ContentObjectPublicationDeleted'));
+                $message = htmlentities(Translation::get('ContentObjectPublicationDeleted'));
             }
         }
         else
         {
-            $message = htmlentities(Translation :: get('ContentObjectPublicationsNotDeleted'));
+            $message = htmlentities(Translation::get('ContentObjectPublicationsNotDeleted'));
         }
-
+        
         $this->redirect(
-            $message,
-            $failures !== 0,
-            array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => null, 'tool_action' => null));
+            $message, 
+            $failures !== 0, 
+            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null));
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

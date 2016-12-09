@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Component that toggles the visibility of categories.
- *
+ * 
  * @author Tom Goethals
  */
 class VisibilityTogglerComponent extends Manager
@@ -29,33 +29,33 @@ class VisibilityTogglerComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
-
+        $ids = $this->getRequest()->get(self::PARAM_CATEGORY_ID);
+        
         if (! $this->get_user())
         {
             throw new NotAllowedException();
         }
-
+        
         if ($ids)
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             $bool = true;
-
+            
             foreach ($ids as $id)
             {
-                if(!$this->get_parent()->allowed_to_change_category_visibility($id))
+                if (! $this->get_parent()->allowed_to_change_category_visibility($id))
                 {
                     $bool = false;
                     continue;
                 }
-
+                
                 $bool &= $this->toggle_category_visibility($id);
             }
-
+            
             if (count($ids) == 1)
             {
                 $message = $bool ? 'CategoryVisibilityToggled' : 'CategoryVisibilityNotToggled';
@@ -64,48 +64,48 @@ class VisibilityTogglerComponent extends Manager
             {
                 $message = $bool ? 'CategoriesVisibilityToggled' : 'CategoriesVisibilityNotToggled';
             }
-
+            
             $this->redirect(
-                Translation :: get($message),
-                ($bool ? false : true),
+                Translation::get($message), 
+                ($bool ? false : true), 
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES,
-                    self :: PARAM_CATEGORY_ID => $this->redirect_to_parent));
+                    self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, 
+                    self::PARAM_CATEGORY_ID => $this->redirect_to_parent));
         }
         else
         {
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail::getInstance();
             $trail->add_help('category_manager_visibility_toggler');
             $trail->add(
                 new Breadcrumb(
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES)),
-                    Translation :: get('BrowserComponent')));
-            $this->set_parameter(self :: PARAM_CATEGORY_ID, Request :: get(self :: PARAM_CATEGORY_ID));
-            $trail->add(new Breadcrumb($this->get_url(), Translation :: get('VisibilityTogglerComponent')));
-
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES)), 
+                    Translation::get('BrowserComponent')));
+            $this->set_parameter(self::PARAM_CATEGORY_ID, Request::get(self::PARAM_CATEGORY_ID));
+            $trail->add(new Breadcrumb($this->get_url(), Translation::get('VisibilityTogglerComponent')));
+            
             $html = array();
-
+            
             $html[] = $this->render_header();
-            $html[] = Translation :: get("NoObjectSelected");
+            $html[] = Translation::get("NoObjectSelected");
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
 
     /**
      * Toggles the visibility on a category, if the category supports visibility toggling.
-     *
+     * 
      * @param id The id of the category
      * @return True if the visibility has been succesfully changed, false otherwise.
      */
     public function toggle_category_visibility($id)
     {
         $category_class_name = get_class($this->get_parent()->get_category());
-
+        
         $categories = $this->get_parent()->retrieve_categories(
             new EqualityCondition(
-                new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
+                new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID), 
                 new StaticConditionVariable($id)));
         $category = $categories->next_result();
         if ($category instanceof CategoryVisibilitySupported)

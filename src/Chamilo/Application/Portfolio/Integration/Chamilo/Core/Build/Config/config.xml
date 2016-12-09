@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-	<actions />
-	<description>TypeName&#xd;
-		&#xd;
-		&lt;p&gt;Dependencies&#xd;
-		&lt;img
-		src=&quot;http://10.2.201.104/html/jenkins/dev/application/portfolio/integration/core/build/chart/dependencies.svg&quot;
-		/&gt;&#xd;
-		Pyramid&#xd;
-		&lt;img
-		src=&quot;http://10.2.201.104/html/jenkins/dev/application/portfolio/integration/core/build/chart/overview-pyramid.svg&quot;
-		/&gt;&#xd;
-		&lt;/p&gt;</description>
-	<logRotator>
-		<daysToKeep>-1</daysToKeep>
-		<numToKeep>15</numToKeep>
-		<artifactDaysToKeep>-1</artifactDaysToKeep>
-		<artifactNumToKeep>-1</artifactNumToKeep>
-	</logRotator>
-	<keepDependencies>false</keepDependencies>
-	<properties />
-	<scm class="hudson.scm.NullSCM" />
-	<canRoam>true</canRoam>
-	<disabled>false</disabled>
-	<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-	<authToken>502ca597634db</authToken>
-	<triggers class="vector" />
-	<concurrentBuild>false</concurrentBuild>
-	<customWorkspace>/var/www/html/jenkins/dev/application/portfolio/integration/core/</customWorkspace>
-	<builders>
-		<hudson.plugins.phing.PhingBuilder>
-			<buildFile>build/config/build.xml</buildFile>
-			<useModuleRoot>true</useModuleRoot>
-		</hudson.plugins.phing.PhingBuilder>
-	</builders>
-	<publishers>
-		<hudson.tasks.BuildTrigger>
-			<childProjects>application_portfolio_integration_core_home, application_portfolio_integration_core_menu,
-				application_portfolio_integration_core_repository</childProjects>
-			<threshold>
-				<name>FAILURE</name>
-				<ordinal>2</ordinal>
-				<color>RED</color>
-			</threshold>
-		</hudson.tasks.BuildTrigger>
-	</publishers>
-	<buildWrappers />
+    <actions />
+    <description>TypeName&#xd;
+        &#xd;
+        &lt;p&gt;Dependencies&#xd;
+        &lt;img
+        src=&quot;http://10.2.201.104/html/jenkins/dev/application/portfolio/integration/core/build/chart/dependencies.svg&quot;
+        /&gt;&#xd;
+        Pyramid&#xd;
+        &lt;img
+        src=&quot;http://10.2.201.104/html/jenkins/dev/application/portfolio/integration/core/build/chart/overview-pyramid.svg&quot;
+        /&gt;&#xd;
+        &lt;/p&gt;</description>
+    <logRotator>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>15</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+    </logRotator>
+    <keepDependencies>false</keepDependencies>
+    <properties />
+    <scm class="hudson.scm.NullSCM" />
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <authToken>502ca597634db</authToken>
+    <triggers class="vector" />
+    <concurrentBuild>false</concurrentBuild>
+    <customWorkspace>/var/www/html/jenkins/dev/application/portfolio/integration/core/</customWorkspace>
+    <builders>
+        <hudson.plugins.phing.PhingBuilder>
+            <buildFile>build/config/build.xml</buildFile>
+            <useModuleRoot>true</useModuleRoot>
+        </hudson.plugins.phing.PhingBuilder>
+    </builders>
+    <publishers>
+        <hudson.tasks.BuildTrigger>
+            <childProjects>application_portfolio_integration_core_home, application_portfolio_integration_core_menu,
+                application_portfolio_integration_core_repository</childProjects>
+            <threshold>
+                <name>FAILURE</name>
+                <ordinal>2</ordinal>
+                <color>RED</color>
+            </threshold>
+        </hudson.tasks.BuildTrigger>
+    </publishers>
+    <buildWrappers />
 </project>

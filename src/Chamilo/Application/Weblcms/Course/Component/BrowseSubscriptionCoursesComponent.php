@@ -22,18 +22,18 @@ abstract class BrowseSubscriptionCoursesComponent extends BrowseComponent
      * 
      * @return boolean
      */
-    protected function can_view_component()
+    protected function checkComponentAuthorization()
     {
-        return true;
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManagePersonalCourses');
     }
-
-//    /**
-//     * Creates and returns the action bar
-//     *
-//     * @return ButtonToolBarRenderer
-//     */
-//    protected function getButtonToolbarRenderer()
-//    {
-//        return $this->getButtonToolbarRenderer();
-//    }
+    
+    // /**
+    // * Creates and returns the action bar
+    // *
+    // * @return ButtonToolBarRenderer
+    // */
+    // protected function getButtonToolbarRenderer()
+    // {
+    // return $this->getButtonToolbarRenderer();
+    // }
 }

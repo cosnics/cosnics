@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
@@ -15,23 +16,21 @@ abstract class Manager extends Application
     const PARAM_FAVOURITE_ID = 'favourite_id';
     const PARAM_FAVOURITE_USER_ID = 'favourite_user_id';
     const PARAM_ACTION = 'favourite_action';
-
     const PARAM_SOURCE = 'source';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
-
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
     const SOURCE_USER_BROWSER = 'user_browser';
     const SOURCE_FAVOURITES_BROWSER = 'favourites_browser';
 
     /**
      * The favourite service
-     *
+     * 
      * @var FavouriteService
      */
     protected $favouriteService;
@@ -43,11 +42,11 @@ abstract class Manager extends Application
      */
     public function getFavouriteService()
     {
-        if(!isset($this->favouriteService))
+        if (! isset($this->favouriteService))
         {
             $this->favouriteService = new FavouriteService(new FavouriteRepository(), Translation::getInstance());
         }
-
+        
         return $this->favouriteService;
     }
 }

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: user_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.user.component
  */
 
@@ -46,7 +46,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER = 'StatusChangerPlatformgroupTeacher';
     const ACTION_VIEW_AS = 'ViewAs';
     const ACTION_EXPORT = 'Exporter';
-    const DEFAULT_ACTION = self :: ACTION_UNSUBSCRIBE_BROWSER;
+    const DEFAULT_ACTION = self::ACTION_UNSUBSCRIBE_BROWSER;
     const PARAM_REFERER = 'referer';
     const PARAM_OBJECTS = 'objects';
     const PARAM_STATUS = 'status';
@@ -64,16 +64,16 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             case 1 :
                 $url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_CHANGE_USER_STATUS_TEACHER,
-                        self :: PARAM_OBJECTS => $user,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                        self::PARAM_ACTION => self::ACTION_CHANGE_USER_STATUS_TEACHER, 
+                        self::PARAM_OBJECTS => $user, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
                 break;
             case 5 :
                 $url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_CHANGE_USER_STATUS_STUDENT,
-                        self :: PARAM_OBJECTS => $user,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                        self::PARAM_ACTION => self::ACTION_CHANGE_USER_STATUS_STUDENT, 
+                        self::PARAM_OBJECTS => $user, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
                 break;
         }
         return $url;
@@ -90,16 +90,16 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             case 1 :
                 $url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER,
-                        self :: PARAM_OBJECTS => $group,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                        self::PARAM_ACTION => self::ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER, 
+                        self::PARAM_OBJECTS => $group, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
                 break;
             case 5 :
                 $url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT,
-                        self :: PARAM_OBJECTS => $group,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                        self::PARAM_ACTION => self::ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT, 
+                        self::PARAM_OBJECTS => $group, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
                 break;
         }
         return $url;
@@ -109,19 +109,17 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation :: class_name(),
-                CourseEntityRelation :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation :: class_name(),
-                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
-
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
-            CourseEntityRelation :: class_name(),
-            new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation :: PROPERTY_ENTITY_ID));
+                CourseEntityRelation::class_name(), 
+                CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
+            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
+        
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
+            CourseEntityRelation::class_name(), 
+            new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation::PROPERTY_ENTITY_ID));
     }
 
     /**
@@ -150,16 +148,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     /**
      * Adds a breadcrumb to the browser component
-     *
+     * 
      * @param BreadcrumbTrail $breadcrumbTrail
      */
     protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
-                Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', array(), $this->context())
-            )
-        );
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)), 
+                Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', array(), $this->context())));
     }
 }

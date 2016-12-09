@@ -14,11 +14,11 @@ class AccountTableColumnModel extends DataClassTableColumnModel implements Table
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_FIRST_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_LAST_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_EMAIL));
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_AFFILIATION));
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_GROUP));
-        $this->add_column(new DataClassPropertyTableColumn(Account :: class_name(), Account :: PROPERTY_STATUS));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_FIRST_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_LAST_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_EMAIL));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_AFFILIATION));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_GROUP));
+        $this->add_column(new DataClassPropertyTableColumn(Account::class_name(), Account::PROPERTY_STATUS));
     }
 }

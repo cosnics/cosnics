@@ -27,15 +27,12 @@
 	line-height: normal;
 }
 
-
 div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
 	width: 72px;
 	height: 72px;
 	border: 1px solid #8f0000;
 	z-index: 10;
 }
-
-
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	border-top: 1px dotted #8b0504;

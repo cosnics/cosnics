@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * The admin allows the platform admin to configure certain aspects of his platform
- *
+ * 
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
@@ -23,5 +23,5 @@ abstract class Manager extends Application
     const ACTION_VIEW_LOGS = 'LogViewer';
     const ACTION_IMPORTER = 'Importer';
     const ACTION_SYSTEM_ANNOUNCEMENTS = 'Announcer';
-    const DEFAULT_ACTION = self :: ACTION_ADMIN_BROWSER;
+    const DEFAULT_ACTION = self::ACTION_ADMIN_BROWSER;
 }

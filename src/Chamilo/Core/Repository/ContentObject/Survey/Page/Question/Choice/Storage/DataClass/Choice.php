@@ -27,27 +27,27 @@ class Choice extends ContentObject implements Versionable
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_question()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTION);
+        return $this->get_additional_property(self::PROPERTY_QUESTION);
     }
 
     public function set_question($question)
     {
-        return $this->set_additional_property(self :: PROPERTY_QUESTION, $question);
+        return $this->set_additional_property(self::PROPERTY_QUESTION, $question);
     }
 
     public function get_instruction()
     {
-        return $this->get_additional_property(self :: PROPERTY_INSTRUCTION);
+        return $this->get_additional_property(self::PROPERTY_INSTRUCTION);
     }
 
     public function set_instruction($instruction)
     {
-        return $this->set_additional_property(self :: PROPERTY_INSTRUCTION, $instruction);
+        return $this->set_additional_property(self::PROPERTY_INSTRUCTION, $instruction);
     }
 
     public function has_instruction()
@@ -58,37 +58,37 @@ class Choice extends ContentObject implements Versionable
 
     public function get_question_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTION_TYPE);
+        return $this->get_additional_property(self::PROPERTY_QUESTION_TYPE);
     }
 
     public function set_question_type($question_type)
     {
-        return $this->set_additional_property(self :: PROPERTY_QUESTION_TYPE, $question_type);
+        return $this->set_additional_property(self::PROPERTY_QUESTION_TYPE, $question_type);
     }
 
     public function get_first_choice()
     {
-        return $this->get_additional_property(self :: PROPERTY_FIRST_CHOICE);
+        return $this->get_additional_property(self::PROPERTY_FIRST_CHOICE);
     }
 
     public function set_first_choice($first_choice)
     {
-        return $this->set_additional_property(self :: PROPERTY_FIRST_CHOICE, $first_choice);
+        return $this->set_additional_property(self::PROPERTY_FIRST_CHOICE, $first_choice);
     }
 
     public function get_second_choice()
     {
-        return $this->get_additional_property(self :: PROPERTY_SECOND_CHOICE);
+        return $this->get_additional_property(self::PROPERTY_SECOND_CHOICE);
     }
 
     public function set_second_choice($second_choice)
     {
-        return $this->set_additional_property(self :: PROPERTY_SECOND_CHOICE, $second_choice);
+        return $this->set_additional_property(self::PROPERTY_SECOND_CHOICE, $second_choice);
     }
 
     public function choices()
     {
-        if (self :: PROPERTY_FIRST_CHOICE && self :: PROPERTY_SECOND_CHOICE)
+        if (self::PROPERTY_FIRST_CHOICE && self::PROPERTY_SECOND_CHOICE)
         {
             return true;
         }
@@ -101,29 +101,29 @@ class Choice extends ContentObject implements Versionable
     public function getOptions()
     {
         $options = array();
-
-        if ($this->get_question_type() == self :: TYPE_YES_NO)
+        
+        if ($this->get_question_type() == self::TYPE_YES_NO)
         {
-            $options[1] = Translation :: get('AnswerYes');
-            $options[2] = Translation :: get('AnswerNo');
+            $options[1] = Translation::get('AnswerYes');
+            $options[2] = Translation::get('AnswerNo');
         }
         else
         {
             $options[1] = $this->get_first_choice();
             $options[2] = $this->get_second_choice();
         }
-
+        
         return $options;
     }
 
     static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_QUESTION,
-            self :: PROPERTY_INSTRUCTION,
-            self :: PROPERTY_QUESTION_TYPE,
-            self :: PROPERTY_FIRST_CHOICE,
-            self :: PROPERTY_SECOND_CHOICE);
+            self::PROPERTY_QUESTION, 
+            self::PROPERTY_INSTRUCTION, 
+            self::PROPERTY_QUESTION_TYPE, 
+            self::PROPERTY_FIRST_CHOICE, 
+            self::PROPERTY_SECOND_CHOICE);
     }
 }
 

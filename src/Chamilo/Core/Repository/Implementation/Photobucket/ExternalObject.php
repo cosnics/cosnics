@@ -14,12 +14,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_tags()
     {
-        return $this->get_default_property(self :: PROPERTY_TAGS);
+        return $this->get_default_property(self::PROPERTY_TAGS);
     }
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
+        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
     }
 
     public function get_tags_string()
@@ -29,13 +29,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_TAGS, self :: PROPERTY_URL, self :: PROPERTY_THUMBNAIL));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_TAGS, self::PROPERTY_URL, self::PROPERTY_THUMBNAIL));
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     /**
@@ -44,7 +44,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
      */
     public function set_url($url)
     {
-        $this->set_default_property(self :: PROPERTY_URL, $url);
+        $this->set_default_property(self::PROPERTY_URL, $url);
     }
 
     /**
@@ -53,7 +53,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
      */
     public function get_url()
     {
-        return $this->get_default_property(self :: PROPERTY_URL);
+        return $this->get_default_property(self::PROPERTY_URL);
     }
 
     /**
@@ -62,7 +62,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
      */
     public function get_thumbnail()
     {
-        return $this->get_default_property(self :: PROPERTY_THUMBNAIL);
+        return $this->get_default_property(self::PROPERTY_THUMBNAIL);
     }
 
     /**
@@ -71,6 +71,6 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
      */
     public function set_thumbnail($thumbnail)
     {
-        $this->set_default_property(self :: PROPERTY_THUMBNAIL, $thumbnail);
+        $this->set_default_property(self::PROPERTY_THUMBNAIL, $thumbnail);
     }
 }

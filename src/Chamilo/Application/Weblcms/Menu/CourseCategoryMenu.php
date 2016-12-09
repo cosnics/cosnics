@@ -13,12 +13,12 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: course_category_menu.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.course
  */
 /**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
- *
+ * 
  * @author Bart Mollet
  */
 class CourseCategoryMenu extends HtmlMenu
@@ -37,7 +37,7 @@ class CourseCategoryMenu extends HtmlMenu
 
     /**
      * Creates a new category navigation menu.
-     *
+     * 
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
@@ -48,22 +48,22 @@ class CourseCategoryMenu extends HtmlMenu
     {
         $this->urlFmt = $url_format;
         $menu = $this->get_menu_items($extra_items);
-        parent :: __construct($menu);
+        parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
 
     /**
      * Returns the menu items.
-     *
+     * 
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
      */
     private function get_menu_items($extra_items)
     {
-        $usercategories = DataManager :: retrieve_course_categories_ordered_by_name();
-
+        $usercategories = DataManager::retrieve_course_categories_ordered_by_name();
+        
         $categories = array();
         while ($category = $usercategories->next_result())
         {
@@ -74,9 +74,9 @@ class CourseCategoryMenu extends HtmlMenu
         {
             $menu = array_merge($menu, $extra_items);
         }
-
+        
         $home = array();
-        $home['title'] = Translation :: get('AllCourses');
+        $home['title'] = Translation::get('AllCourses');
         $home['url'] = $this->get_home_url(0);
         $home['class'] = 'home';
         $home_item[] = $home;
@@ -86,7 +86,7 @@ class CourseCategoryMenu extends HtmlMenu
 
     /**
      * Returns the items of the sub menu.
-     *
+     * 
      * @param $categories array The categories to include in this menu.
      * @param $parent int The parent category ID.
      * @return array An array with all menu items. The structure of this array is the structure needed by
@@ -98,9 +98,9 @@ class CourseCategoryMenu extends HtmlMenu
         foreach ($categories[$parent] as $category)
         {
             $menu_item = array();
-
+            
             $menu_item['title'] = $category->get_name();
-            if (Request :: get(Application :: PARAM_ACTION) == Manager :: ACTION_COURSE_CATEGORY_MANAGER)
+            if (Request::get(Application::PARAM_ACTION) == Manager::ACTION_COURSE_CATEGORY_MANAGER)
             {
                 $menu_item['url'] = $this->get_category_url($category->get_id());
             }
@@ -122,7 +122,7 @@ class CourseCategoryMenu extends HtmlMenu
 
     /**
      * Gets the URL of a given category
-     *
+     * 
      * @param $category int The id of the category
      * @return string The requested URL
      */
@@ -140,7 +140,7 @@ class CourseCategoryMenu extends HtmlMenu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     *
+     * 
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -157,7 +157,7 @@ class CourseCategoryMenu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     *
+     * 
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -169,6 +169,6 @@ class CourseCategoryMenu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 }

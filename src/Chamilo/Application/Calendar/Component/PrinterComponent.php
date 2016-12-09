@@ -21,23 +21,23 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
      */
     public function run()
     {
-        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
-
-        $header = Page :: getInstance()->getHeader();
-        $header->addCssFile(Theme :: getInstance()->getCssPath(self :: package(), true) . 'Print.css', 'print');
-
-        $this->set_parameter(ViewRenderer :: PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(ViewRenderer :: PARAM_TIME, $this->getCurrentRendererTime());
-
+        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        
+        $header = Page::getInstance()->getHeader();
+        $header->addCssFile(Theme::getInstance()->getCssPath(self::package(), true) . 'Print.css', 'print');
+        
+        $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
+        $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->renderNormalCalendar();
         $html[] = '<script type="text/javascript">';
         $html[] = 'window.print();';
         $html[] = '</script>';
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

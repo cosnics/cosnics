@@ -17,13 +17,13 @@ class ParameterFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\P
         
         switch ($this->get_filter_property())
         {
-            case FilterData :: FILTER_FILESIZE :
-                $filter_data->set_filter_property(FilterData :: FILTER_COMPARE, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_FILESIZE, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_FORMAT, null);
+            case FilterData::FILTER_FILESIZE :
+                $filter_data->set_filter_property(FilterData::FILTER_COMPARE, null);
+                $filter_data->set_filter_property(FilterData::FILTER_FILESIZE, null);
+                $filter_data->set_filter_property(FilterData::FILTER_FORMAT, null);
                 break;
         }
         
-        parent :: render();
+        parent::render();
     }
 }

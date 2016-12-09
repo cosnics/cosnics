@@ -9,11 +9,11 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_display_properties()
     {
         $object = $this->get_object();
-
+        
         $properties = parent::get_display_properties();
         $properties[Translation::get('LastModifiedBy')] = $object->getModifierId();
         $properties[Translation::get('Url')] = $object->getUrl();
-
+        
         return $properties;
     }
 

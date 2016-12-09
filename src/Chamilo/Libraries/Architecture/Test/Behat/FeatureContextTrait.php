@@ -8,18 +8,21 @@ trait FeatureContextTrait
 
     private $featureContext;
 
-    /** @BeforeScenario */
+    /**
+     * @BeforeScenario
+     */
     public function loadFeatureContext(BeforeScenarioScope $scope)
     {
-        $this->featureContext = $scope->getEnvironment()->getContext('Chamilo\Libraries\Architecture\Test\Behat\FeatureContext');
+        $this->featureContext = $scope->getEnvironment()->getContext(
+            'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext');
     }
 
     /**
+     *
      * @return \FeatureContext
      */
     protected function getFeatureContext()
     {
         return $this->featureContext;
     }
-
 }

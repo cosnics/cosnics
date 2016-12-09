@@ -32,7 +32,7 @@ class DataClassGenerator
         $this->template = new MyTemplate();
         $this->template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -45,7 +45,7 @@ class DataClassGenerator
         {
             $this->template->set_filenames(array('data_class' => 'data_class.template'));
             
-            $classname = (string) StringUtilities :: getInstance()->createString($xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($xml_definition['name'])->upperCamelize();
             $description = 'This class describes a ' . $classname . ' data object';
             
             $this->template->assign_vars(
@@ -76,7 +76,8 @@ class DataClassGenerator
             $this->template->assign_vars(array('ADDITIONAL_PROPERTY_NAMES' => implode(', ', $property_names)));
             
             $string = "<?php
-namespace libraries\utilities;\n" . $this->template->pparse_return('data_class') . "?>";
+namespace libraries\utilities;\n" .
+                 $this->template->pparse_return('data_class') . "?>";
             fwrite($file, $string);
             fclose($file);
         }

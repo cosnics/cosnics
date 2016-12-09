@@ -25,7 +25,7 @@ class ActivityTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_activities(
+        return DataManager::retrieve_activities(
             $this->get_component()->get_current_content_object(), 
             $condition, 
             $offset, 
@@ -42,6 +42,6 @@ class ActivityTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_activities($this->get_component()->get_current_content_object(), $condition);
+        return DataManager::count_activities($this->get_component()->get_current_content_object(), $condition);
     }
 }

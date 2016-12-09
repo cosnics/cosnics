@@ -40,28 +40,28 @@ class EntityRelationRepository
     public function findEntitiesWithRight($entities, $right, Publication $publication)
     {
         $entityRelationConditions = array();
-
+        
         $entityRelationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(),
-                PublicationEntityRelation :: PROPERTY_PUBLICATION_ID),
+                PublicationEntityRelation::class_name(), 
+                PublicationEntityRelation::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publication->getId()));
-
+        
         $entityRelationConditions[] = new EqualityCondition(
             new OperationConditionVariable(
                 new PropertyConditionVariable(
-                    PublicationEntityRelation :: class_name(),
-                    PublicationEntityRelation :: PROPERTY_RIGHTS),
-                OperationConditionVariable :: BITWISE_AND,
-                new StaticConditionVariable($right)),
+                    PublicationEntityRelation::class_name(), 
+                    PublicationEntityRelation::PROPERTY_RIGHTS), 
+                OperationConditionVariable::BITWISE_AND, 
+                new StaticConditionVariable($right)), 
             new StaticConditionVariable($right));
-
+        
         $entityRelationConditions[] = $this->getEntitiesCondition($entities);
-
+        
         $entityRelationCondition = new AndCondition($entityRelationConditions);
-
-        return DataManager :: count(
-            PublicationEntityRelation :: class_name(),
+        
+        return DataManager::count(
+            PublicationEntityRelation::class_name(), 
             new DataClassCountParameters($entityRelationCondition)) > 0;
     }
 
@@ -73,37 +73,37 @@ class EntityRelationRepository
     private function getEntitiesCondition($entities)
     {
         $entitiesHash = md5(serialize($entities));
-
-        if (! isset(self :: $entitiesConditions[$entitiesHash]))
+        
+        if (! isset(self::$entitiesConditions[$entitiesHash]))
         {
             $entityTypeConditions = array();
-
+            
             foreach ($entities as $entityType => $entityIdentifiers)
             {
                 foreach ($entityIdentifiers as $entityIdentifier)
                 {
-
+                    
                     $entityConditions = array();
-
+                    
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            PublicationEntityRelation :: class_name(),
-                            PublicationEntityRelation :: PROPERTY_ENTITY_TYPE),
+                            PublicationEntityRelation::class_name(), 
+                            PublicationEntityRelation::PROPERTY_ENTITY_TYPE), 
                         new StaticConditionVariable($entityType));
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            PublicationEntityRelation :: class_name(),
-                            PublicationEntityRelation :: PROPERTY_ENTITY_ID),
+                            PublicationEntityRelation::class_name(), 
+                            PublicationEntityRelation::PROPERTY_ENTITY_ID), 
                         new StaticConditionVariable($entityIdentifier));
-
+                    
                     $entityTypeConditions[] = new AndCondition($entityConditions);
                 }
             }
-
-            self :: $entitiesConditions[$entitiesHash] = new OrCondition($entityTypeConditions);
+            
+            self::$entitiesConditions[$entitiesHash] = new OrCondition($entityTypeConditions);
         }
-
-        return self :: $entitiesConditions[$entitiesHash];
+        
+        return self::$entitiesConditions[$entitiesHash];
     }
 
     /**
@@ -113,32 +113,32 @@ class EntityRelationRepository
      * @param integer $entityIdentifier
      * @return \Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation
      */
-    public function findEntityRelationForPublicationEntityTypeAndIdentifier(Publication $publication, $entityType,
+    public function findEntityRelationForPublicationEntityTypeAndIdentifier(Publication $publication, $entityType, 
         $entityIdentifier)
     {
         $entityConditions = array();
-
+        
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(),
-                PublicationEntityRelation :: PROPERTY_PUBLICATION_ID),
+                PublicationEntityRelation::class_name(), 
+                PublicationEntityRelation::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publication->getId()));
-
+        
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(),
-                PublicationEntityRelation :: PROPERTY_ENTITY_TYPE),
+                PublicationEntityRelation::class_name(), 
+                PublicationEntityRelation::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($entityType));
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(),
-                PublicationEntityRelation :: PROPERTY_ENTITY_ID),
+                PublicationEntityRelation::class_name(), 
+                PublicationEntityRelation::PROPERTY_ENTITY_ID), 
             new StaticConditionVariable($entityIdentifier));
-
+        
         $entityCondition = new AndCondition($entityConditions);
-
-        return DataManager :: retrieve(
-            PublicationEntityRelation :: class_name(),
+        
+        return DataManager::retrieve(
+            PublicationEntityRelation::class_name(), 
             new DataClassRetrieveParameters($entityCondition));
     }
 
@@ -149,6 +149,6 @@ class EntityRelationRepository
      */
     public function findEntityRelationByIdentifier($identifier)
     {
-        return DataManager :: retrieve_by_id(PublicationEntityRelation :: class_name(), $identifier);
+        return DataManager::retrieve_by_id(PublicationEntityRelation::class_name(), $identifier);
     }
 }

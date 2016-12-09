@@ -43,19 +43,19 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
      */
     public function getSQL()
     {
-        if ($this->getType() != self :: DELETE)
+        if ($this->getType() != self::DELETE)
         {
             throw new \Exception();
         }
         
-        if ($this->sql !== null && $this->state === self :: STATE_CLEAN)
+        if ($this->sql !== null && $this->state === self::STATE_CLEAN)
         {
             return $this->sql;
         }
         
         $sql = $this->getSQLForDelete();
         
-        $this->state = self :: STATE_CLEAN;
+        $this->state = self::STATE_CLEAN;
         $this->sql = $sql;
         
         return $sql;

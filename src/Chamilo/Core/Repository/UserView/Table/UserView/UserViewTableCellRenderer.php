@@ -27,28 +27,28 @@ class UserViewTableCellRenderer extends DataClassTableCellRenderer implements Ta
     public function get_actions($user_view)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                        Manager :: PARAM_USER_VIEW_ID => $user_view->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
+                        Manager::PARAM_USER_VIEW_ID => $user_view->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_USER_VIEW_ID => $user_view->get_id())),
-                ToolbarItem :: DISPLAY_ICON,
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_USER_VIEW_ID => $user_view->get_id())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
-
+        
         return $toolbar->as_html();
     }
 }

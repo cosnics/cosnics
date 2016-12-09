@@ -19,7 +19,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         $questionId = $this->getQuestionId();
@@ -49,9 +49,9 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
     function add_html_editor($question, $formValidator)
     {
         $html_editor_options = array();
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_WIDTH] = '100%';
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'Assessment';
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR] = true;
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_WIDTH] = '100%';
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_TOOLBAR] = 'Assessment';
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_COLLAPSE_TOOLBAR] = true;
         
         $element_template = array();
         $element_template[] = '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';

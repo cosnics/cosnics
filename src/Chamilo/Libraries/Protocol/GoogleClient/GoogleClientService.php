@@ -1,48 +1,47 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\GoogleClient;
 
 use Chamilo\Libraries\File\Redirect;
 
 /**
  * Initializes and handles the login procedure for the Google Client
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GoogleClientService
 {
+
     /**
      * The google client
-     *
+     * 
      * @var \Google_Client
      */
     protected $googleClient;
 
     /**
      * The settings provider for the google client
-     *
+     * 
      * @var GoogleClientSettingsProviderInterface
      */
     protected $googleClientSettingsProvider;
 
     /**
      * Constructor
-     *
+     * 
      * @param GoogleClientSettingsProviderInterface $googleClientSettingsProvider
      * @param \Google_Client $googleClient
      */
-    public function __construct(
-        GoogleClientSettingsProviderInterface $googleClientSettingsProvider, \Google_Client $googleClient = null
-    )
+    public function __construct(GoogleClientSettingsProviderInterface $googleClientSettingsProvider, 
+        \Google_Client $googleClient = null)
     {
-        if(!$googleClient)
+        if (! $googleClient)
         {
             $googleClient = new \Google_Client();
         }
-
+        
         $this->googleClient = $googleClient;
         $this->googleClientSettingsProvider = $googleClientSettingsProvider;
-
+        
         $this->initializeGoogleClient();
     }
 
@@ -56,24 +55,23 @@ class GoogleClientService
         $this->googleClient->setClientSecret($this->googleClientSettingsProvider->getClientSecret());
         $this->googleClient->setScopes($this->googleClientSettingsProvider->getScopes());
         $this->googleClient->setAccessType('offline');
-
+        
         $accessToken = $this->googleClientSettingsProvider->getAccessToken();
-
-        if($accessToken)
+        
+        if ($accessToken)
         {
             try
             {
                 $this->googleClient->setAccessToken($accessToken);
-
-                if($this->googleClient->isAccessTokenExpired())
+                
+                if ($this->googleClient->isAccessTokenExpired())
                 {
                     $refreshToken = $this->googleClientSettingsProvider->getRefreshToken();
-
-                    if($refreshToken)
+                    
+                    if ($refreshToken)
                     {
                         $this->googleClient->refreshToken($refreshToken);
                         $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
-
                     }
                     else
                     {
@@ -81,7 +79,7 @@ class GoogleClientService
                     }
                 }
             }
-            catch(\Google_Auth_Exception $exception)
+            catch (\Google_Auth_Exception $exception)
             {
                 $this->removeUserTokens();
             }
@@ -95,14 +93,14 @@ class GoogleClientService
     {
         $this->googleClientSettingsProvider->removeAccessToken();
         $this->googleClientSettingsProvider->removeRefreshToken();
-
+        
         $redirect = new Redirect();
         $redirect->writeHeader($redirect->getCurrentUrl());
     }
 
     /**
      * Returns the google client
-     *
+     * 
      * @return \Google_Client
      */
     public function getGoogleClient()
@@ -112,7 +110,7 @@ class GoogleClientService
 
     /**
      * Authenticate in the google client
-     *
+     * 
      * @param string $redirectUri
      * @param string $loginCode
      *
@@ -121,8 +119,8 @@ class GoogleClientService
     public function login($redirectUri, $loginCode = null)
     {
         $this->googleClient->setRedirectUri($redirectUri);
-
-        if (!is_null($loginCode))
+        
+        if (! is_null($loginCode))
         {
             $this->googleClient->authenticate($loginCode);
             $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
@@ -132,11 +130,11 @@ class GoogleClientService
         {
             $this->googleClient->setApprovalPrompt('force');
             $url = $this->googleClient->createAuthUrl();
-
+            
             $redirect = new Redirect();
             $redirect->writeHeader($url);
-
-            exit;
+            
+            exit();
         }
     }
 }

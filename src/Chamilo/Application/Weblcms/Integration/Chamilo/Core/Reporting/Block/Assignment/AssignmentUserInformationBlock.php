@@ -18,6 +18,6 @@ class AssignmentUserInformationBlock extends AssignmentSubmitterInformationBlock
      */
     protected function define_row_submitter_title()
     {
-        return Translation :: get('User');
+        return Translation::get('User');
     }
 }

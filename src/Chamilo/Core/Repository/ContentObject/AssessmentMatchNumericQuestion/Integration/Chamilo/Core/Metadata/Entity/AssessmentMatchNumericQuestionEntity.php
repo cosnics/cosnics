@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity\ContentObje
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Metadata\Entity
+ * @package
+ *          Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Metadata\Entity
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

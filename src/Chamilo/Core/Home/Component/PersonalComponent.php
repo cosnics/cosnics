@@ -22,7 +22,7 @@ class PersonalComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            \Chamilo\Libraries\Platform\Session\Session :: unregister('Chamilo\Core\Home\General');
+            \Chamilo\Libraries\Platform\Session\Session::unregister('Chamilo\Core\Home\General');
         }
         
         $redirect = new Redirect();
@@ -36,6 +36,6 @@ class PersonalComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

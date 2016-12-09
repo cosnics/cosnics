@@ -11,10 +11,10 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 {
     // Available type filters
-    const FILTER_FILESIZE = File :: PROPERTY_FILESIZE;
+    const FILTER_FILESIZE = File::PROPERTY_FILESIZE;
     const FILTER_COMPARE = 'compare';
     const FILTER_FORMAT = 'format';
-    const FILTER_EXTENSION = File :: PROPERTY_EXTENSION;
+    const FILTER_EXTENSION = File::PROPERTY_EXTENSION;
     const FILTER_EXTENSION_TYPE = 'extension_type';
 
     /**
@@ -24,9 +24,9 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function is_set()
     {
-        return parent :: is_set() || $this->has_filter_property(self :: FILTER_FILESIZE) ||
-             $this->has_filter_property(self :: FILTER_EXTENSION_TYPE) ||
-             $this->has_filter_property(self :: FILTER_EXTENSION);
+        return parent::is_set() || $this->has_filter_property(self::FILTER_FILESIZE) ||
+             $this->has_filter_property(self::FILTER_EXTENSION_TYPE) ||
+             $this->has_filter_property(self::FILTER_EXTENSION);
     }
 
     /**
@@ -36,12 +36,12 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_filter_properties($filter_properties = array())
     {
-        $filter_properties[] = self :: FILTER_FILESIZE;
-        $filter_properties[] = self :: FILTER_COMPARE;
-        $filter_properties[] = self :: FILTER_FORMAT;
-        $filter_properties[] = self :: FILTER_EXTENSION_TYPE;
-        $filter_properties[] = self :: FILTER_EXTENSION;
+        $filter_properties[] = self::FILTER_FILESIZE;
+        $filter_properties[] = self::FILTER_COMPARE;
+        $filter_properties[] = self::FILTER_FORMAT;
+        $filter_properties[] = self::FILTER_EXTENSION_TYPE;
+        $filter_properties[] = self::FILTER_EXTENSION;
         
-        return parent :: get_filter_properties($filter_properties);
+        return parent::get_filter_properties($filter_properties);
     }
 }

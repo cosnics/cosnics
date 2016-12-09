@@ -26,7 +26,7 @@ abstract class LocationEntityTableColumnModel extends DataClassTableColumnModel
      */
     public static function is_rights_column($column)
     {
-        return in_array($column, self :: $rights_columns);
+        return in_array($column, self::$rights_columns);
     }
 
     /**
@@ -41,7 +41,7 @@ abstract class LocationEntityTableColumnModel extends DataClassTableColumnModel
             $column = new StaticTableColumn($right_name);
             $this->add_column($column);
             
-            self :: $rights_columns[] = $column;
+            self::$rights_columns[] = $column;
         }
     }
 }

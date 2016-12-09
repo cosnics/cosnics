@@ -53,7 +53,7 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
     public function __construct($id, $learningObject, $course, $tool, $parent_id, $repository_viewer, $publicationDate, 
         $modifiedDate, $hidden, $emailSent)
     {
-        parent :: __construct(
+        parent::__construct(
             $id, 
             $learningObject, 
             $course, 
@@ -73,69 +73,69 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
         $this->set_modified_date(time());
         $this->set_email_sent();
     }
-    
+
     /*
      * Sets a property of this learning object publication. See constructor for detailed information about the property.
      * @see ContentObjectPublicationFeedback()
      */
     public function set_category_id($category)
     {
-        parent :: set_category(0);
+        parent::set_category(0);
     }
 
     public function set_target_users($targetUsers)
     {
-        parent :: set_target_users(array());
+        parent::set_target_users(array());
     }
 
     public function set_target_course_groups($targetCourseGroups)
     {
-        parent :: set_target_course_groups(array());
+        parent::set_target_course_groups(array());
     }
 
     public function set_from_date($fromDate)
     {
-        parent :: set_from_date(0);
+        parent::set_from_date(0);
     }
 
     public function set_to_date($toDate)
     {
-        parent :: set_to_date(0);
+        parent::set_to_date(0);
     }
 
     public function set_hidden($hidden)
     {
-        parent :: set_hidden(0);
+        parent::set_hidden(0);
     }
 
     public function set_display_order_index($displayOrder)
     {
-        parent :: set_display_order_index(0);
+        parent::set_display_order_index(0);
     }
 
     public function set_email_sent($emailSent)
     {
-        parent :: set_email_sent(0);
+        parent::set_email_sent(0);
     }
 
     public function create()
     {
-        if (Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID))
+        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
             $this->update_parent_modified_date();
         }
-        return parent :: create();
+        return parent::create();
     }
 
     public function update()
     {
         $this->update_parent_modified_date();
-        return parent :: update();
+        return parent::update();
     }
 
     public function update_parent_modified_date()
     {
-        $parent_object = DataManager :: retrieve_by_id(ContentObjectPublication :: class_name(), $this->get_parent_id());
+        $parent_object = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $this->get_parent_id());
         $parent_object->set_modified_date(time());
         $parent_object->update();
     }

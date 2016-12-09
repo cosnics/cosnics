@@ -62,52 +62,52 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     public function run()
     {
-        $entryIdentifier = $this->getRequest()->query->get(self :: PARAM_ENTRY_ID);
+        $entryIdentifier = $this->getRequest()->query->get(self::PARAM_ENTRY_ID);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
+        
         if (! $entryIdentifier)
         {
-            throw new NoObjectSelectedException(Translation :: get('Entry'));
+            throw new NoObjectSelectedException(Translation::get('Entry'));
         }
         else
         {
-            $this->set_parameter(self :: PARAM_ENTRY_ID, $entryIdentifier);
+            $this->set_parameter(self::PARAM_ENTRY_ID, $entryIdentifier);
         }
-
+        
         $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
-
+        
         $this->processSubmittedData();
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->ButtonToolbarRenderer->render();
         $html[] = $this->renderTabs();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     protected function processSubmittedData()
     {
         $detailsForm = $this->getDetailsForm();
-
+        
         if ($detailsForm->validate())
         {
             $detailsProcessor = new DetailsProcessor(
-                $this->getDataProvider(),
-                $this->getUser(),
-                $this->getEntry(),
-                $this->getScore(),
-                $this->getNote(),
+                $this->getDataProvider(), 
+                $this->getUser(), 
+                $this->getEntry(), 
+                $this->getScore(), 
+                $this->getNote(), 
                 $detailsForm->exportValues());
-
+            
             if (! $detailsProcessor->run())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -121,7 +121,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         {
             $this->score = $this->getDataProvider()->findScoreByEntry($this->getEntry());
         }
-
+        
         return $this->score;
     }
 
@@ -135,7 +135,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         {
             $this->note = $this->getDataProvider()->findNoteByEntry($this->getEntry());
         }
-
+        
         return $this->note;
     }
 
@@ -146,21 +146,21 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function renderTabs()
     {
         $tabsRenderer = new DynamicTabsRenderer('entry');
-
+        
         $tabsRenderer->add_tab(
             new DynamicContentTab(
-                'details',
-                Translation :: get('Details'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Details'),
+                'details', 
+                Translation::get('Details'), 
+                Theme::getInstance()->getImagePath(self::package(), 'Tab/Details'), 
                 $this->renderDetails()));
-
+        
         $tabsRenderer->add_tab(
             new DynamicContentTab(
-                'entry',
-                Translation :: get('Entry'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Entry'),
+                'entry', 
+                Translation::get('Entry'), 
+                Theme::getInstance()->getImagePath(self::package(), 'Tab/Entry'), 
                 $this->renderContentObject()));
-
+        
         return $tabsRenderer->render();
     }
 
@@ -180,13 +180,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function renderContentObject()
     {
         $contentObject = $this->getEntry()->getContentObject();
-
-        $display = ContentObjectRenditionImplementation :: factory(
-            $contentObject,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_FULL,
+        
+        $display = ContentObjectRenditionImplementation::factory(
+            $contentObject, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_FULL, 
             $this);
-
+        
         return $display->render();
     }
 
@@ -196,28 +196,28 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function renderDetails()
     {
-        $dateFormat = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
-        $submittedDate = DatetimeUtilities :: format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
-
+        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
+        
         $html = array();
-
+        
         $properties = array();
-        $properties[Translation :: get('Submitted')] = $submittedDate;
-
+        $properties[Translation::get('Submitted')] = $submittedDate;
+        
         $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-            $this->getEntry()->getEntityType(),
+            $this->getEntry()->getEntityType(), 
             $this->getEntry()->getEntityId());
-
+        
         $properties = array_merge($properties, $entityRenderer->getProperties());
-
+        
         $html[] = $this->renderPropertiesRows($properties);
         $html[] = $this->getDetailsForm()->toHtml();
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager :: context(),
+            \Chamilo\Core\Repository\Feedback\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this));
         $html[] = $factory->run();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -229,12 +229,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function renderPropertiesRows($properties)
     {
         $html = array();
-
+        
         foreach ($properties as $label => $value)
         {
             $html[] = $this->renderRow($label, $value);
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -247,12 +247,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function renderRow($label, $value)
     {
         $html = array();
-
+        
         $html[] = '<div class="form-row">';
         $html[] = '<div class="form-label">' . $label . '</div>';
         $html[] = '<div class="formw">' . $value . '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -265,12 +265,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         if (! isset($this->detailsForm))
         {
             $this->detailsForm = new DetailsForm(
-                $this->getScore(),
-                $this->getNote(),
-                $this->getDataProvider(),
-                $this->get_url(array(self :: PARAM_ENTRY_ID => $this->getEntry()->getId())));
+                $this->getScore(), 
+                $this->getNote(), 
+                $this->getDataProvider(), 
+                $this->get_url(array(self::PARAM_ENTRY_ID => $this->getEntry()->getId())));
         }
-
+        
         return $this->detailsForm;
     }
 
@@ -361,25 +361,25 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 new ButtonGroup(
                     array(
                         new Button(
-                            Translation :: get('Download'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Download')),
+                            Translation::get('Download'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Download')), 
                         new Button(
-                            Translation :: get('SubmissionSubmit'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Add')))));
-
+                            Translation::get('SubmissionSubmit'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Add')))));
+            
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(
                     array(
                         new Button(
-                            Translation :: get('ScoreOverview'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')),
+                            Translation::get('ScoreOverview'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Statistics')), 
                         new Button(
-                            Translation :: get('ScoreOverview'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')))));
-
+                            Translation::get('ScoreOverview'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Statistics')))));
+            
             $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
         }
-
+        
         return $this->actionBar;
     }
 }

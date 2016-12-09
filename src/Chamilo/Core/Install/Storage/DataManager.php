@@ -2,11 +2,15 @@
 namespace Chamilo\Core\Install\Storage;
 
 use Chamilo\Core\Install\Configuration;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\DataManager\DataSourceName;
-use Doctrine\Common\ClassLoader;
-use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 
+/**
+ *
+ * @package Chamilo\Core\Install\Storage
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class DataManager
 {
 
@@ -14,101 +18,76 @@ class DataManager
      *
      * @var \Doctrine\DBAL\Connection
      */
-    private $connection = null;
+    private $connection;
 
     /**
      *
-     * @var boolean did the databse exist before install ?
+     * @var \Chamilo\Core\Install\Configuration
      */
-    private $database_exists = false;
+    private $configuration;
 
     /**
      *
-     * @var Configuration $installer_config
+     * @param \Chamilo\Core\Install\Configuration $configuration
      */
-    private $installer_config = null;
-
-    public function __construct(Configuration $installer_config)
+    public function __construct(Configuration $configuration)
     {
-        $this->installer_config = $installer_config;
+        $this->configuration = $configuration;
     }
 
-    public function set_installer_config(Configuration $installer_config)
+    protected function initializeConnection()
     {
-        $this->installer_config = $installer_config;
+        $settings = array(
+            'driver' => $this->configuration->get_db_driver(),
+            'username' => $this->configuration->get_db_username(),
+            'password' => $this->configuration->get_db_password(),
+            'host' => $this->configuration->get_db_host(),
+            'name' => null,
+            'charset' => 'utf8');
+
+        $connectionFactory = new ConnectionFactory(new DataSourceName($settings));
+        $this->connection = $connectionFactory->getConnection();
     }
 
-    public function set_connection($connection)
+    /**
+     *
+     * @param string $databaseName
+     * @return boolean
+     */
+    protected function storageStructureExists($databaseName)
     {
-        $this->connection = $connection;
+        return in_array($databaseName, array_map('strtolower', $this->connection->getSchemaManager()->listDatabases()));
     }
 
-    public function init_storage_access()
+    /**
+     *
+     * @return boolean
+     */
+    public function initializeStorage()
     {
-        $classLoader = new ClassLoader('Doctrine', Path :: getInstance()->getPluginPath());
-        $classLoader->register();
-        
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine',
-            $this->installer_config->get_db_driver(), 
-            $this->installer_config->get_db_username(), 
-            $this->installer_config->get_db_host(), 
-            $this->installer_config->get_db_name(), 
-            $this->installer_config->get_db_password());
-        
-        $configuration = new \Doctrine\DBAL\Configuration();
-        $connection_parameters = array(
-            'dbname' => $data_source_name->get_database(), 
-            'user' => $data_source_name->get_username(), 
-            'password' => $data_source_name->get_password(), 
-            'host' => $data_source_name->get_host(), 
-            'driverClass' => $data_source_name->get_driver(true));
-        
-        $connection = DriverManager :: getConnection($connection_parameters, $configuration);
-        
         try
         {
-            $connection->connect();
-            $this->database_exists = true;
+            $this->initializeConnection();
+
+            $storageStructureName = $this->configuration->get_db_name();
+            $overwriteStorageStructure = $this->configuration->get_db_overwrite();
+            $storageStructureExists = $this->storageStructureExists($storageStructureName);
+
+            if (! $storageStructureExists)
+            {
+                $this->connection->getSchemaManager()->createDatabase($storageStructureName);
+            }
+
+            elseif ($storageStructureExists && $overwriteStorageStructure)
+            {
+                $this->connection->getSchemaManager()->dropAndCreateDatabase($storageStructureName);
+            }
+
+            return true;
         }
         catch (\Exception $exception)
         {
-            $this->database_exists = false;
+            return false;
         }
-    }
-
-    public function init_storage_structure()
-    {
-        $name = $this->installer_config->get_db_name();
-        $overwrite = $this->installer_config->get_db_overwrite();
-        
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine',
-            $this->installer_config->get_db_driver(), 
-            $this->installer_config->get_db_username(), 
-            $this->installer_config->get_db_host(), 
-            null, 
-            $this->installer_config->get_db_password());
-        
-        $configuration = new \Doctrine\DBAL\Configuration();
-        $connection_parameters = array(
-            'dbname' => $data_source_name->get_database(), 
-            'user' => $data_source_name->get_username(), 
-            'password' => $data_source_name->get_password(), 
-            'host' => $data_source_name->get_host(), 
-            'driverClass' => $data_source_name->get_driver(true));
-        
-        $connection = DriverManager :: getConnection($connection_parameters, $configuration);
-        
-        if (! $this->database_exists)
-        {
-            $connection->getSchemaManager()->createDatabase($name);
-        }
-        
-        elseif ($this->database_exists && $overwrite)
-        {
-            $connection->getSchemaManager()->dropAndCreateDatabase($name);
-        }
-        $this->database_exists = true;
     }
 }

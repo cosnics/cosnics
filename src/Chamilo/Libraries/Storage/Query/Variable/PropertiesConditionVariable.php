@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 
 /**
  * A ConditionVariable that describes all the properties of a DataClass
- *
+ * 
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -15,14 +15,14 @@ class PropertiesConditionVariable extends ConditionVariable
 
     /**
      * The fully qualified class name of the DataClass object the property belongs to
-     *
+     * 
      * @var string
      */
     private $class;
 
     /**
      * Constructor
-     *
+     * 
      * @param string $class
      */
     public function __construct($class)
@@ -36,7 +36,7 @@ class PropertiesConditionVariable extends ConditionVariable
 
     /**
      * Get the fully qualified class name of the DataClass object the property belongs to
-     *
+     * 
      * @return string
      */
     public function get_class()
@@ -46,7 +46,7 @@ class PropertiesConditionVariable extends ConditionVariable
 
     /**
      * Set the fully qualified class name of the DataClass object the property belongs to
-     *
+     * 
      * @param string $class
      */
     public function set_class($class)
@@ -56,10 +56,10 @@ class PropertiesConditionVariable extends ConditionVariable
 
     public function getHashParts()
     {
-        $hashParts = ConditionVariable :: getHashParts();
-
+        $hashParts = ConditionVariable::getHashParts();
+        
         $hashParts[] = $this->get_class();
-
+        
         return $hashParts;
     }
 
@@ -68,15 +68,15 @@ class PropertiesConditionVariable extends ConditionVariable
      * Helper Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Determines the alias of the dataclass
-     *
+     * 
      * @return string
      */
     public function get_alias()
     {
         $class_name = $this->get_class();
-        return \Chamilo\Libraries\Storage\DataManager\DataManager :: get_alias($class_name :: get_table_name());
+        return \Chamilo\Libraries\Storage\DataManager\DataManager::get_alias($class_name::get_table_name());
     }
 }

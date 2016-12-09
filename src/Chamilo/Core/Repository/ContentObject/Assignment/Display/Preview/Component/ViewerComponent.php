@@ -20,13 +20,13 @@ class ViewerComponent extends Manager
     {
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
         $configuration->set(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager :: CONFIGURATION_DATA_PROVIDER,
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONFIGURATION_DATA_PROVIDER, 
             new AssignmentDataProvider());
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(), 
             $configuration);
-
+        
         return $factory->run();
     }
 }

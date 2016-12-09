@@ -55,7 +55,7 @@ class PercentageGraphBlock extends ReportingBlock
                 $options_answered[] = $context_id;
                 $totals = array();
                 $answer_count[$context_id][$match_id] ++;
-                $answer_count[$context_id][self :: TOTAL] ++;
+                $answer_count[$context_id][self::TOTAL] ++;
             }
         }
         
@@ -77,7 +77,7 @@ class PercentageGraphBlock extends ReportingBlock
             }
         }
         
-        $total_count = $totals[self :: TOTAL];
+        $total_count = $totals[self::TOTAL];
         
         $match_count = count($matches);
         $total_index = $match_count - 1;
@@ -88,9 +88,9 @@ class PercentageGraphBlock extends ReportingBlock
             
             foreach ($matches as $match_id => $match)
             {
-                if ($match_id != self :: TOTAL)
+                if ($match_id != self::TOTAL)
                 {
-                    $value = $answer_count[$option_id][$match_id] / $answer_count[$option_id][self :: TOTAL];
+                    $value = $answer_count[$option_id][$match_id] / $answer_count[$option_id][self::TOTAL];
                     $percentage = number_format($value * 100, 2);
                     $reporting_data->add_data_category_row($option, strip_tags($match), $percentage);
                 }
@@ -108,15 +108,15 @@ class PercentageGraphBlock extends ReportingBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_BAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_LINE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_PIE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_STACKED_AREA, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_STACKED_BAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_RADAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_3D_PIE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_RING, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_AREA, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_POLAR);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_BAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_LINE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_STACKED_AREA, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_STACKED_BAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_RADAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_3D_PIE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_RING, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_AREA, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_POLAR);
     }
 }

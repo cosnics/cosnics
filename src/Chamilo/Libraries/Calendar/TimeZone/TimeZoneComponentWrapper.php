@@ -21,7 +21,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
     public function __construct(VCalendar $vCalendar, Component $component)
     {
         $this->component = $component;
-        parent :: __construct($vCalendar);
+        parent::__construct($vCalendar);
     }
 
     /**
@@ -74,7 +74,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
     private function implodeDate($dateArray)
     {
         $date = array();
-
+        
         $date[] = str_pad($dateArray['year'], 4, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['month'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['day'], 2, '0', STR_PAD_LEFT);
@@ -82,7 +82,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
         $date[] = str_pad($dateArray['hour'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['minute'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['second'], 2, '0', STR_PAD_LEFT);
-
+        
         return implode('', $date);
     }
 

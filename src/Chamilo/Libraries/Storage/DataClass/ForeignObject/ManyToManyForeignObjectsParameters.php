@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents the parameters to retrieve (a) foreign object(s) in a many to many relation
- *
+ * 
  * @package common\libraries @authro Sven Vanpoucke - Hogeschool Gent
  */
 class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
@@ -19,17 +19,17 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
      * Properties
      * **************************************************************************************************************
      */
-
+    
     /**
      * The class name of the relation object
-     *
+     * 
      * @var string
      */
     private $relation_class;
 
     /**
      * The property that describes the base object in the relation class
-     *
+     * 
      * @var int
      */
     private $base_key;
@@ -39,10 +39,10 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
      * Main Functionality
      * **************************************************************************************************************
      */
-
+    
     /**
      * Constructor
-     *
+     * 
      * @param DataClass $base_object
      * @param string $foreign_class
      * @param string $relation_class
@@ -63,19 +63,19 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
      * Inherited Functionality
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the condition for the foreign objects retrieval
-     *
+     * 
      * @return Condition
      */
     public function get_condition()
     {
         $relation_class = $this->get_relation_class();
-
+        
         return new EqualityCondition(
-            new PropertyConditionVariable($relation_class, $this->get_base_key()),
-            new StaticConditionVariable($this->get_base_object()->get_default_property(DataClass :: PROPERTY_ID)));
+            new PropertyConditionVariable($relation_class, $this->get_base_key()), 
+            new StaticConditionVariable($this->get_base_object()->get_default_property(DataClass::PROPERTY_ID)));
     }
 
     /**
@@ -83,10 +83,10 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
      * Getters and Setters
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the class name of the foreign object
-     *
+     * 
      * @return string
      */
     public function get_relation_class()
@@ -96,7 +96,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
 
     /**
      * Returns the foreign key
-     *
+     * 
      * @return int
      */
     public function get_base_key()
@@ -106,7 +106,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
 
     /**
      * Sets the class name of the foreign object
-     *
+     * 
      * @param string $relation_class
      */
     public function set_relation_class($relation_class)
@@ -116,7 +116,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
 
     /**
      * Sets the foreign key If no foreign key is given, the foreign key is generated using the base class table name
-     *
+     * 
      * @param int $base_key
      */
     public function set_base_key($base_key)
@@ -125,7 +125,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
         {
             $base_key = $this->generate_key($this->get_base_object()->get_table_name());
         }
-
+        
         $this->base_key = $base_key;
     }
 }

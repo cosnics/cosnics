@@ -15,19 +15,19 @@ class WeblcmsBookmarkDisplayForm extends ConfigurationForm
     public function addSettings()
     {
         $this->addElement(
-            'checkbox',
-            WeblcmsBookmarkDisplay :: CONFIGURATION_SHOW_EMPTY,
-            Translation :: get('ShowWhenEmpty'));
+            'checkbox', 
+            WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY, 
+            Translation::get('ShowWhenEmpty'));
     }
 
     public function setDefaults()
     {
         $defaults = array();
-
-        $defaults[WeblcmsBookmarkDisplay :: CONFIGURATION_SHOW_EMPTY] = $this->getBlock()->getSetting(
-            WeblcmsBookmarkDisplay :: CONFIGURATION_SHOW_EMPTY,
+        
+        $defaults[WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY] = $this->getBlock()->getSetting(
+            WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY, 
             true);
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 }

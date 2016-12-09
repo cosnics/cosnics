@@ -17,8 +17,8 @@ class LinkItem extends SiteMap
     public function get_item_url()
     {
         $html = array();
-        $html[] = '<a href="' . $this->getItem()->get_url() . '"target="' . $this->getItem()->get_target_string() .
-             '">' . $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $html[] = '<a href="' . $this->getItem()->get_url() . '"target="' . $this->getItem()->get_target_string() . '">' .
+             $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());
         
         $html[] = '</a>';
         

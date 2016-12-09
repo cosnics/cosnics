@@ -32,7 +32,7 @@ class Sequencer
         {
             $package_contexts = array($package_contexts);
         }
-
+        
         $this->package_contexts = $package_contexts;
         $this->sequence = array();
         $this->unprocessed_package_contexts = array();
@@ -51,14 +51,14 @@ class Sequencer
         {
             try
             {
-                $this->packages[$package_context] = Package :: get($package_context);
+                $this->packages[$package_context] = Package::get($package_context);
             }
             catch (\Exception $exception)
             {
                 $this->packages[$package_context] = false;
             }
         }
-
+        
         return $this->packages[$package_context];
     }
 
@@ -66,9 +66,9 @@ class Sequencer
     {
         if (! isset($this->packages_exist[$package_context]))
         {
-            $this->packages_exist[$package_context] = Package :: exists($package_context);
+            $this->packages_exist[$package_context] = Package::exists($package_context);
         }
-
+        
         return $this->packages_exist[$package_context];
     }
 
@@ -78,30 +78,30 @@ class Sequencer
         {
             $this->check_additional_packages($package_context);
         }
-
+        
         foreach ($this->package_contexts as $package_context)
         {
             $this->check_dependencies($package_context);
         }
-
+        
         foreach ($this->package_contexts as $package_context)
         {
             $this->check_integrations($package_context);
         }
-
+        
         $this->unprocessed_package_contexts = $this->package_contexts;
     }
 
     /**
      * Check and process the package context for additional packages
-     *
+     * 
      * @param string $package_context
      */
     public function check_additional_packages($package_context)
     {
         $class = $package_context . '\Package\Installer';
-        $additional_packages = $class :: get_additional_packages();
-
+        $additional_packages = $class::get_additional_packages();
+        
         foreach ($additional_packages as $additional_package)
         {
             if (! in_array($additional_package, $this->package_contexts))
@@ -116,7 +116,7 @@ class Sequencer
 
     /**
      * Process the dependencies of the package context
-     *
+     * 
      * @param string $package_context
      */
     public function check_dependencies($package_context)
@@ -126,7 +126,7 @@ class Sequencer
 
     /**
      * Process the pre-depends property in the package.info
-     *
+     * 
      * @param Depencencies|Dependency $dependency
      */
     public function process_dependency($dependency)
@@ -152,7 +152,7 @@ class Sequencer
 
     /**
      * Process any and every kind of integration the target context might trigger in existing packages
-     *
+     * 
      * @param string $target_context
      */
     public function check_integrations($target_context)
@@ -161,7 +161,7 @@ class Sequencer
         {
             $integration_context = $source_context . '\Integration\\' . $target_context;
             $package = $this->is_package($integration_context);
-
+            
             if ($package)
             {
                 if (! in_array($integration_context, $this->package_contexts))
@@ -182,7 +182,7 @@ class Sequencer
     {
         while (($unprocessed_package_context = $this->get_next_unprocessed_package_context()) != null)
         {
-
+            
             if ($this->verify_dependency($this->get_package($unprocessed_package_context)->get_pre_depends()))
             {
                 $this->sequence[] = $unprocessed_package_context;
@@ -222,12 +222,12 @@ class Sequencer
         if ($dependency instanceof Dependencies)
         {
             $result = true;
-
+            
             foreach ($dependency->get_dependencies() as $sub_dependency)
             {
                 $result = $result && $this->verify_dependency($sub_dependency);
             }
-
+            
             return $result;
         }
         elseif ($dependency instanceof RegistrationDependency)

@@ -31,23 +31,23 @@ class ElementInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
-        $extendedPropertyNames[] = self :: PROPERTY_SCHEMA_INSTANCE_ID;
-        $extendedPropertyNames[] = self :: PROPERTY_ELEMENT_ID;
-        $extendedPropertyNames[] = self :: PROPERTY_VOCABULARY_ID;
-        $extendedPropertyNames[] = self :: PROPERTY_USER_ID;
-        $extendedPropertyNames[] = self :: PROPERTY_CREATION_DATE;
-
-        return parent :: get_default_property_names($extendedPropertyNames);
+        $extendedPropertyNames[] = self::PROPERTY_SCHEMA_INSTANCE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ELEMENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_VOCABULARY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
+        
+        return parent::get_default_property_names($extendedPropertyNames);
     }
 
     /**
@@ -55,14 +55,14 @@ class ElementInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return integer
      */
     public function get_schema_instance_id()
     {
-        return $this->get_default_property(self :: PROPERTY_SCHEMA_INSTANCE_ID);
+        return $this->get_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID);
     }
 
     /**
@@ -71,7 +71,7 @@ class ElementInstance extends DataClass
      */
     public function set_schema_instance_id($schemaInstanceId)
     {
-        $this->set_default_property(self :: PROPERTY_SCHEMA_INSTANCE_ID, $schemaInstanceId);
+        $this->set_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID, $schemaInstanceId);
     }
 
     /**
@@ -80,7 +80,7 @@ class ElementInstance extends DataClass
      */
     public function get_element_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ELEMENT_ID);
+        return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
     }
 
     /**
@@ -89,7 +89,7 @@ class ElementInstance extends DataClass
      */
     public function set_element_id($elementId)
     {
-        $this->set_default_property(self :: PROPERTY_ELEMENT_ID, $elementId);
+        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $elementId);
     }
 
     /**
@@ -98,7 +98,7 @@ class ElementInstance extends DataClass
      */
     public function get_vocabulary_id()
     {
-        return $this->get_default_property(self :: PROPERTY_VOCABULARY_ID);
+        return $this->get_default_property(self::PROPERTY_VOCABULARY_ID);
     }
 
     /**
@@ -107,12 +107,12 @@ class ElementInstance extends DataClass
      */
     public function set_vocabulary_id($vocabularyId)
     {
-        $this->set_default_property(self :: PROPERTY_VOCABULARY_ID, $vocabularyId);
+        $this->set_default_property(self::PROPERTY_VOCABULARY_ID, $vocabularyId);
     }
 
     public function getVocabulary()
     {
-        return DataManager :: retrieve_by_id(Vocabulary :: class_name(), $this->get_vocabulary_id());
+        return DataManager::retrieve_by_id(Vocabulary::class_name(), $this->get_vocabulary_id());
     }
 
     /**
@@ -121,7 +121,7 @@ class ElementInstance extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -130,12 +130,12 @@ class ElementInstance extends DataClass
      */
     public function set_user_id($userId)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $userId);
+        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
     }
 
     public function getUser()
     {
-        return DataManager :: retrieve_by_id(User :: class_name(), $this->get_user_id());
+        return DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
     }
 
     /**
@@ -144,7 +144,7 @@ class ElementInstance extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATION_DATE);
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -153,6 +153,6 @@ class ElementInstance extends DataClass
      */
     public function set_creation_date($creationDate)
     {
-        $this->set_default_property(self :: PROPERTY_CREATION_DATE, $creationDate);
+        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 }

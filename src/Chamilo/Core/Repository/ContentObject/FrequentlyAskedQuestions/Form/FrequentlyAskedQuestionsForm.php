@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 
 /**
  * Portfolio form
- *
+ * 
  * @package repository\content_object\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -21,6 +21,6 @@ class FrequentlyAskedQuestionsForm extends ContentObjectForm
     {
         $object = new FrequentlyAskedQuestions();
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 }

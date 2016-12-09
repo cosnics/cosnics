@@ -14,12 +14,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_URLS));
+        return parent::get_default_property_names(array(self::PROPERTY_URLS));
     }
 
     public static function get_default_sizes()
     {
-        return array(self :: SIZE_THUMBNAIL, self :: SIZE_MEDIUM, self :: SIZE_ORIGINAL);
+        return array(self::SIZE_THUMBNAIL, self::SIZE_MEDIUM, self::SIZE_ORIGINAL);
     }
 
     public function get_available_sizes()
@@ -34,8 +34,8 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         
         foreach ($available_sizes as $available_size)
         {
-            $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($available_size)->upperCamelize()) . ' (' .
+            $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation::get(
+                (string) StringUtilities::getInstance()->createString($available_size)->upperCamelize()) . ' (' .
                  $this->get_available_size_dimensions_string($available_size) . ')</a>';
         }
         
@@ -44,9 +44,9 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_available_size_dimensions($size = self :: SIZE_THUMBNAIL)
     {
-        if (! in_array($size, self :: get_default_sizes()))
+        if (! in_array($size, self::get_default_sizes()))
         {
-            $size = self :: SIZE_THUMBNAIL;
+            $size = self::SIZE_THUMBNAIL;
         }
         
         if (! in_array($size, $this->get_available_sizes()))
@@ -68,19 +68,19 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_urls()
     {
-        return $this->get_default_property(self :: PROPERTY_URLS);
+        return $this->get_default_property(self::PROPERTY_URLS);
     }
 
     public function set_urls($urls)
     {
-        return $this->set_default_property(self :: PROPERTY_URLS, $urls);
+        return $this->set_default_property(self::PROPERTY_URLS, $urls);
     }
 
     public function get_url($size = self :: SIZE_THUMBNAIL)
     {
-        if (! in_array($size, self :: get_default_sizes()))
+        if (! in_array($size, self::get_default_sizes()))
         {
-            $size = self :: SIZE_THUMBNAIL;
+            $size = self::SIZE_THUMBNAIL;
         }
         
         if (! in_array($size, $this->get_available_sizes()))
@@ -95,6 +95,6 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_possible_sizes()
     {
-        return array('t' => self :: SIZE_THUMBNAIL, 'm' => self :: SIZE_MEDIUM, 'o' => self :: SIZE_ORIGINAL);
+        return array('t' => self::SIZE_THUMBNAIL, 'm' => self::SIZE_MEDIUM, 'o' => self::SIZE_ORIGINAL);
     }
 }

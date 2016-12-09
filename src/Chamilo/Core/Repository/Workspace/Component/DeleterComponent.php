@@ -24,52 +24,52 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $workspaceIdentifiers = $this->getRequest()->query->get(self :: PARAM_WORKSPACE_ID);
-
+        $workspaceIdentifiers = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
+        
         try
         {
             if (empty($workspaceIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('Workspace'));
+                throw new NoObjectSelectedException(Translation::get('Workspace'));
             }
-
+            
             if (! is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
-
+            
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $rightsService = RightsService :: getInstance();
-
+            $rightsService = RightsService::getInstance();
+            
             foreach ($workspaceIdentifiers as $workspaceIdentifier)
             {
                 $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceIdentifier);
-
+                
                 if ($rightsService->hasWorkspaceImplementationCreatorRights($this->get_user(), $workspace))
                 {
                     if (! $workspaceService->deleteWorkspace($workspace))
                     {
                         throw new \Exception(
-                            Translation :: get(
-                                'ObjectNotDeleted',
-                                array('OBJECT' => Translation :: get('Workspace')),
-                                Utilities :: COMMON_LIBRARIES));
+                            Translation::get(
+                                'ObjectNotDeleted', 
+                                array('OBJECT' => Translation::get('Workspace')), 
+                                Utilities::COMMON_LIBRARIES));
                     }
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('Workspace')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('Workspace')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

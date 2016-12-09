@@ -26,20 +26,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
+        parent::__construct($external_repository_instance);
         
-        $this->consumer_key = Setting :: get('consumer_key', $this->get_external_repository_instance_id());
-        $this->consumer_secret = Setting :: get('consumer_secret', $this->get_external_repository_instance_id());        
+        $this->consumer_key = Setting::get('consumer_key', $this->get_external_repository_instance_id());
+        $this->consumer_secret = Setting::get('consumer_secret', $this->get_external_repository_instance_id());
         
         $this->slideshare = new \GuzzleHttp\Client(['base_url' => 'https://www.slideshare.net/api/2/']);
         $this->login();
     }
-    
+
     public function login()
     {
-        $login = Setting :: get('username', $this->get_external_repository_instance_id());
-        $password = Setting :: get('password', $this->get_external_repository_instance_id());
-       
+        $login = Setting::get('username', $this->get_external_repository_instance_id());
+        $password = Setting::get('password', $this->get_external_repository_instance_id());
+        
         $request = $this->slideshare->createRequest('POST', '');
         $postBody = $request->getBody();
         $postBody->setField('action', 'login');
@@ -47,11 +47,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $postBody->setField('lgpassword', $password);
         $postBody->setField('format', 'xml');
         $postBody->setField('redirects', true);
-            
+        
         $response = $this->slideshare->send($request);
     }
-    
-    
 
     /**
      *
@@ -158,7 +156,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (count($order_properties) > 0)
         {
             $order_property = $order_properties[0]->get_property();
-            if ($order_property == self :: SORT_RELEVANCE)
+            if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
             }
@@ -186,8 +184,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public static function get_sort_properties()
     {
-        $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm :: get_query();
+        $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
+        $query = ActionBarSearchForm::get_query();
         
         return array();
     }
@@ -257,7 +255,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['slideshow_srcfile'] = file_get_contents($slideshow['tmp_name']);
         $this->slideshare->add_header('Content-Type', 'multipart/form-data');
         $this->slideshare->add_header('enctype', 'multipart/form-data');
-        $slideshow1 = $this->slideshare->send_request(RestClient :: METHOD_POST, 'upload_slideshow', $params);
+        $slideshow1 = $this->slideshare->send_request(RestClient::METHOD_POST, 'upload_slideshow', $params);
         /*
          * $slideshow1 = $slideshow1->get_response_content();
          */
@@ -280,10 +278,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights()
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = true;
-        $rights[ExternalObject :: RIGHT_DELETE] = false;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
+        $rights[ExternalObject::RIGHT_USE] = true;
+        $rights[ExternalObject::RIGHT_EDIT] = true;
+        $rights[ExternalObject::RIGHT_DELETE] = false;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = false;
         return $rights;
     }
 

@@ -43,7 +43,7 @@ class WebpageProperties
      */
     public function get_title()
     {
-        return $this->get_property(self :: PROPERTY_TITLE);
+        return $this->get_property(self::PROPERTY_TITLE);
     }
 
     /**
@@ -52,7 +52,7 @@ class WebpageProperties
      */
     public function set_title($title)
     {
-        $this->set_property(self :: PROPERTY_TITLE, $title);
+        $this->set_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -61,7 +61,7 @@ class WebpageProperties
      */
     public function get_description()
     {
-        return $this->get_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -70,7 +70,7 @@ class WebpageProperties
      */
     public function set_description($description)
     {
-        $this->set_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -79,7 +79,7 @@ class WebpageProperties
      */
     public function get_content_type()
     {
-        return $this->get_property(self :: PROPERTY_CONTENT_TYPE);
+        return $this->get_property(self::PROPERTY_CONTENT_TYPE);
     }
 
     /**
@@ -88,7 +88,7 @@ class WebpageProperties
      */
     public function set_content_type($content_type)
     {
-        $this->set_property(self :: PROPERTY_CONTENT_TYPE, $content_type);
+        $this->set_property(self::PROPERTY_CONTENT_TYPE, $content_type);
     }
 
     /**
@@ -97,7 +97,7 @@ class WebpageProperties
      */
     public function get_encoding()
     {
-        return $this->get_property(self :: PROPERTY_ENCODING);
+        return $this->get_property(self::PROPERTY_ENCODING);
     }
 
     /**
@@ -106,7 +106,7 @@ class WebpageProperties
      */
     public function set_encoding($encoding)
     {
-        $this->set_property(self :: PROPERTY_ENCODING, $encoding);
+        $this->set_property(self::PROPERTY_ENCODING, $encoding);
     }
 
     /**
@@ -115,7 +115,7 @@ class WebpageProperties
      */
     public function get_file_properties()
     {
-        return $this->get_property(self :: PROPERTY_FILE_PROPERTIES);
+        return $this->get_property(self::PROPERTY_FILE_PROPERTIES);
     }
 
     /**
@@ -124,7 +124,7 @@ class WebpageProperties
      */
     public function set_file_properties($file_properties)
     {
-        $this->set_property(self :: PROPERTY_FILE_PROPERTIES, $file_properties);
+        $this->set_property(self::PROPERTY_FILE_PROPERTIES, $file_properties);
     }
 
     /**
@@ -134,7 +134,7 @@ class WebpageProperties
      */
     public static function from_upload($file)
     {
-        return self :: determine_properties(FileProperties :: from_upload($file));
+        return self::determine_properties(FileProperties::from_upload($file));
     }
 
     /**
@@ -144,7 +144,7 @@ class WebpageProperties
      */
     public static function from_path($path)
     {
-        return self :: determine_properties(FileProperties :: from_path($path));
+        return self::determine_properties(FileProperties::from_path($path));
     }
 
     /**
@@ -157,47 +157,47 @@ class WebpageProperties
         $dom_document = new \DOMDocument();
         $dom_document->loadHTMLFile($file_properties->get_path());
         $dom_xpath = new \DOMXPath($dom_document);
-
+        
         $properties = new self();
         $properties->set_file_properties($file_properties);
-
+        
         $title = $dom_xpath->query('/html/head/title')->item(0)->nodeValue;
-        if (StringUtilities :: getInstance()->hasValue(trim($title), true))
+        if (StringUtilities::getInstance()->hasValue(trim($title), true))
         {
             $properties->set_title(trim($title));
         }
-
+        
         $description = $dom_xpath->query('/html/head/meta[@name="description"]')->item(0);
         if ($description instanceof \DOMNode)
         {
-            if (StringUtilities :: getInstance()->hasValue(trim($description->getAttribute('content')), true))
+            if (StringUtilities::getInstance()->hasValue(trim($description->getAttribute('content')), true))
             {
                 $properties->set_description(trim($description->getAttribute('content')));
             }
         }
-
+        
         $content_type = $dom_xpath->query('/html/head/meta[@http-equiv="content-type"]')->item(0);
         if ($content_type instanceof \DOMNode)
         {
             $content_type_parts = explode(';', $content_type->getAttribute('content'));
             $properties->set_content_type(trim($content_type_parts[0]));
-
-            if (StringUtilities :: getInstance()->hasValue(trim($content_type_parts[1]), true))
+            
+            if (StringUtilities::getInstance()->hasValue(trim($content_type_parts[1]), true))
             {
                 $encoding_parts = explode('=', trim($content_type_parts[1]));
-                if (StringUtilities :: getInstance()->hasValue(trim($encoding_parts[1]), true))
+                if (StringUtilities::getInstance()->hasValue(trim($encoding_parts[1]), true))
                 {
                     $properties->set_encoding(trim($encoding_parts[1]));
                 }
             }
         }
-
+        
         $charset = $dom_xpath->query('/html/head/meta[@charset]')->item(0);
         if ($charset instanceof \DOMNode)
         {
             $properties->set_encoding($charset->getAttribute('charset'));
         }
-
+        
         return $properties;
     }
 }

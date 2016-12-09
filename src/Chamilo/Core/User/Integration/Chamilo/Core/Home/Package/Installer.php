@@ -23,45 +23,40 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Home\Storage\DataClass\Element:: class_name(),
-                \Chamilo\Core\Home\Storage\DataClass\Element :: PROPERTY_TITLE
-            ),
-            new StaticConditionVariable(Translation:: get('Various', null, 'Chamilo\Core\Home'))
-        );
-
+                \Chamilo\Core\Home\Storage\DataClass\Element::class_name(), 
+                \Chamilo\Core\Home\Storage\DataClass\Element::PROPERTY_TITLE), 
+            new StaticConditionVariable(Translation::get('Various', null, 'Chamilo\Core\Home')));
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Home\Storage\DataClass\Element:: class_name(),
-                \Chamilo\Core\Home\Storage\DataClass\Element :: PROPERTY_USER_ID
-            ),
-            new StaticConditionVariable(0)
-        );
-
+                \Chamilo\Core\Home\Storage\DataClass\Element::class_name(), 
+                \Chamilo\Core\Home\Storage\DataClass\Element::PROPERTY_USER_ID), 
+            new StaticConditionVariable(0));
+        
         $condition = new AndCondition($conditions);
-
+        
         $parameters = new DataClassRetrieveParameters($condition);
-        $column = \Chamilo\Core\Home\Storage\DataManager:: retrieve(
-            \Chamilo\Core\Home\Storage\DataClass\Element:: class_name(),
-            $parameters
-        );
-
+        $column = \Chamilo\Core\Home\Storage\DataManager::retrieve(
+            \Chamilo\Core\Home\Storage\DataClass\Element::class_name(), 
+            $parameters);
+        
         if ($column instanceof \Chamilo\Core\Home\Storage\DataClass\Column)
         {
-
+            
             $block = new \Chamilo\Core\Home\Storage\DataClass\Block();
-
+            
             $block->setParentId($column->getId());
-            $block->setContext(\Chamilo\Core\User\Manager:: context());
+            $block->setContext(\Chamilo\Core\User\Manager::context());
             $block->setBlockType('Login');
             $block->setVisibility(true);
-            $block->setTitle(Translation:: get('User', null, \Chamilo\Core\User\Manager:: context()));
+            $block->setTitle(Translation::get('User', null, \Chamilo\Core\User\Manager::context()));
             $block->setUserId(0);
-
-            if (!$block->create())
+            
+            if (! $block->create())
             {
                 return false;
             }
-
+            
             return true;
         }
         else

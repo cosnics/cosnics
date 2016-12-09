@@ -27,13 +27,13 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\portfolio\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new PreviewStorage();
+            self::$instance = new PreviewStorage();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -65,7 +65,7 @@ class PreviewStorage
      */
     public function get_storage()
     {
-        return unserialize(Session :: retrieve(__NAMESPACE__));
+        return unserialize(Session::retrieve(__NAMESPACE__));
     }
 
     /**
@@ -75,7 +75,7 @@ class PreviewStorage
      */
     public function set_storage($data)
     {
-        Session :: register(__NAMESPACE__, serialize($data));
+        Session::register(__NAMESPACE__, serialize($data));
         return true;
     }
 
@@ -108,12 +108,12 @@ class PreviewStorage
      */
     public function get_feedbacks()
     {
-        $feedbacks = $this->get_property(self :: PROPERTY_FEEDBACK);
+        $feedbacks = $this->get_property(self::PROPERTY_FEEDBACK);
         
         if (! isset($feedbacks))
         {
             $feedbacks = array();
-            $this->set_property(self :: PROPERTY_FEEDBACK, $feedbacks);
+            $this->set_property(self::PROPERTY_FEEDBACK, $feedbacks);
         }
         
         return $feedbacks;
@@ -128,7 +128,7 @@ class PreviewStorage
     {
         $feedbacks = $this->get_feedbacks();
         $feedbacks[$feedback->get_content_object_id()][$feedback->get_complex_content_object_id()][$feedback->get_id()] = $feedback;
-        return $this->set_property(self :: PROPERTY_FEEDBACK, $feedbacks);
+        return $this->set_property(self::PROPERTY_FEEDBACK, $feedbacks);
     }
 
     /**
@@ -151,7 +151,7 @@ class PreviewStorage
         $feedbacks = $this->get_feedbacks();
         unset(
             $feedbacks[$feedback->get_content_object_id()][$feedback->get_complex_content_object_id()][$feedback->get_id()]);
-        return $this->set_property(self :: PROPERTY_FEEDBACK, $feedbacks);
+        return $this->set_property(self::PROPERTY_FEEDBACK, $feedbacks);
     }
 
     /**
@@ -197,12 +197,12 @@ class PreviewStorage
      */
     public function get_notifications()
     {
-        $notifications = $this->get_property(self :: PROPERTY_NOTIFICATION);
+        $notifications = $this->get_property(self::PROPERTY_NOTIFICATION);
         
         if (! isset($notifications))
         {
             $notifications = array();
-            $this->set_property(self :: PROPERTY_NOTIFICATION, $notifications);
+            $this->set_property(self::PROPERTY_NOTIFICATION, $notifications);
         }
         
         return $notifications;
@@ -217,7 +217,7 @@ class PreviewStorage
     {
         $notifications = $this->get_notifications();
         $notifications[$notification->get_content_object_id()][$notification->get_complex_content_object_id()] = $notification;
-        return $this->set_property(self :: PROPERTY_NOTIFICATION, $notifications);
+        return $this->set_property(self::PROPERTY_NOTIFICATION, $notifications);
     }
 
     /**
@@ -239,7 +239,7 @@ class PreviewStorage
     {
         $notifications = $this->get_notifications();
         unset($notifications[$notification->get_content_object_id()][$notification->get_complex_content_object_id()]);
-        return $this->set_property(self :: PROPERTY_NOTIFICATION, $notifications);
+        return $this->set_property(self::PROPERTY_NOTIFICATION, $notifications);
     }
 
     /**
@@ -255,6 +255,7 @@ class PreviewStorage
     }
 
     /**
+     *
      * @param int $content_object_id
      * @param int $complex_content_object_item_id
      *

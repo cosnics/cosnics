@@ -9,6 +9,6 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
     public function render()
     {
-        ContentObjectExport :: launch($this);
+        ContentObjectExport::launch($this);
     }
 }

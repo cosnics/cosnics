@@ -25,7 +25,7 @@ class PublicationForm extends FormValidator
     const PROPERTY_FROM_DATE = 'from_date';
     const PROPERTY_TO_DATE = 'to_date';
     const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
-
+    
     // Rights
     const PROPERTY_INHERIT = 'inherit';
     const PROPERTY_RIGHT_OPTION = 'right_option';
@@ -38,7 +38,7 @@ class PublicationForm extends FormValidator
 
     /**
      * The type of the form (create or edit)
-     *
+     * 
      * @var int
      */
     private $form_type;
@@ -50,37 +50,37 @@ class PublicationForm extends FormValidator
 
     /**
      * Available entities for the view rights
-     *
+     * 
      * @var Array
      */
     private $entities;
 
     public function __construct($form_type, $publications, $action)
     {
-        parent :: __construct('publish', 'post', $action);
-
+        parent::__construct('publish', 'post', $action);
+        
         if (count($publications) <= 0)
         {
-            throw new NoObjectSelectedException(Translation :: get('Publication'));
+            throw new NoObjectSelectedException(Translation::get('Publication'));
         }
-
+        
         $this->publications = $publications;
         $this->form_type = $form_type;
-
+        
         $this->entities = array();
-        $this->entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
-        $this->entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
-
+        $this->entities[UserEntity::ENTITY_TYPE] = new UserEntity();
+        $this->entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
+        
         switch ($form_type)
         {
-            case self :: TYPE_CREATE :
+            case self::TYPE_CREATE :
                 $this->build_create_form();
                 break;
-            case self :: TYPE_UPDATE :
+            case self::TYPE_UPDATE :
                 $this->build_update_form();
                 break;
         }
-
+        
         $this->setDefaults();
     }
 
@@ -90,20 +90,20 @@ class PublicationForm extends FormValidator
     public function build_create_form()
     {
         $this->build_form();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            self :: PARAM_SUBMIT,
-            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            self::PARAM_SUBMIT, 
+            Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
-
+        
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            self::PARAM_RESET, 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -113,19 +113,19 @@ class PublicationForm extends FormValidator
     public function build_update_form()
     {
         $this->build_form();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            self :: PARAM_SUBMIT,
-            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            self::PARAM_SUBMIT, 
+            Translation::get('Update', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            self::PARAM_RESET, 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -135,12 +135,12 @@ class PublicationForm extends FormValidator
     public function build_form()
     {
         $this->build_rights_form();
-
+        
         $this->add_forever_or_timewindow();
         $this->addElement(
-            'checkbox',
-            Publication :: PROPERTY_HIDDEN,
-            Translation :: get('Hidden', null, Utilities :: COMMON_LIBRARIES));
+            'checkbox', 
+            Publication::PROPERTY_HIDDEN, 
+            Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
@@ -150,52 +150,52 @@ class PublicationForm extends FormValidator
     {
         // Add the rights options
         $group = array();
-
+        
         $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation :: get('Everyone'),
-            self :: RIGHT_OPTION_ALL,
+            'radio', 
+            null, 
+            null, 
+            Translation::get('Everyone'), 
+            self::RIGHT_OPTION_ALL, 
             array('class' => 'other_option_selected'));
         $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation :: get('OnlyForMe'),
-            self :: RIGHT_OPTION_ME,
+            'radio', 
+            null, 
+            null, 
+            Translation::get('OnlyForMe'), 
+            self::RIGHT_OPTION_ME, 
             array('class' => 'other_option_selected'));
         $group[] = & $this->createElement(
-            'radio',
-            null,
-            null,
-            Translation :: get('SelectSpecificEntities'),
-            self :: RIGHT_OPTION_SELECT,
+            'radio', 
+            null, 
+            null, 
+            Translation::get('SelectSpecificEntities'), 
+            self::RIGHT_OPTION_SELECT, 
             array('class' => 'entity_option_selected'));
-
+        
         $this->addGroup(
-            $group,
-            self :: PROPERTY_RIGHT_OPTION,
-            Translation :: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
+            $group, 
+            self::PROPERTY_RIGHT_OPTION, 
+            Translation::get('PublishFor', null, Utilities::COMMON_LIBRARIES), 
             '');
-
+        
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
-
+        
         foreach ($this->entities as $entity)
         {
             $types->add_element_type($entity->get_element_finder_type());
         }
-
+        
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
-        $this->addElement('advanced_element_finder', self :: PROPERTY_TARGETS, null, $types);
-
+        $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS, null, $types);
+        
         $this->addElement('html', '</div>');
-
+        
         $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin\Announcement', true) . 'RightsForm.js'));
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin\Announcement', true) . 'RightsForm.js'));
     }
 
     /**
@@ -206,55 +206,55 @@ class PublicationForm extends FormValidator
     public function setDefaults()
     {
         $defaults = array();
-
+        
         $publications = $this->publications;
-
-        $defaults[self :: PROPERTY_FOREVER] = 1;
-        $defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
-
+        
+        $defaults[self::PROPERTY_FOREVER] = 1;
+        $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
+        
         if (count($publications) == 1)
         {
             $first_publication = $publications[0];
-
+            
             if ($first_publication->get_id())
             {
                 if ($first_publication->get_from_date() != 0)
                 {
-                    $defaults[self :: PROPERTY_FOREVER] = 0;
-                    $defaults[Publication :: PROPERTY_FROM_DATE] = $first_publication->get_from_date();
-                    $defaults[Publication :: PROPERTY_TO_DATE] = $first_publication->get_to_date();
+                    $defaults[self::PROPERTY_FOREVER] = 0;
+                    $defaults[Publication::PROPERTY_FROM_DATE] = $first_publication->get_from_date();
+                    $defaults[Publication::PROPERTY_TO_DATE] = $first_publication->get_to_date();
                 }
-
-                $defaults[Publication :: PROPERTY_HIDDEN] = $first_publication->is_hidden();
+                
+                $defaults[Publication::PROPERTY_HIDDEN] = $first_publication->is_hidden();
             }
-
-            $defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
+            
+            $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
         }
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 
     /**
      * Handles the submit of the form for both create and edit
-     *
+     * 
      * @return boolean
      */
     public function handle_form_submit()
     {
         $publications = $this->publications;
         $succes = true;
-
+        
         foreach ($publications as $publication)
         {
             $this->set_publication_values($publication);
-
+            
             switch ($this->form_type)
             {
-                case self :: TYPE_CREATE :
+                case self::TYPE_CREATE :
                     $succes &= $publication->create();
                     $this->set_publication_rights($publication);
                     break;
-                case self :: TYPE_UPDATE :
+                case self::TYPE_UPDATE :
                     $succes &= $publication->update();
                     $this->set_publication_rights($publication);
                     break;
@@ -265,50 +265,50 @@ class PublicationForm extends FormValidator
 
     /**
      * Sets the values for the content object publication
-     *
+     * 
      * @param $publication ContentObjectPublication
      */
     public function set_publication_values(Publication $publication)
     {
         $values = $this->exportValues();
-
-        if ($values[self :: PROPERTY_FOREVER] != 0)
+        
+        if ($values[self::PROPERTY_FOREVER] != 0)
         {
             $from = $to = 0;
         }
         else
         {
-            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
-            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities::time_from_datepicker($values[self::PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities::time_from_datepicker($values[self::PROPERTY_TO_DATE]);
         }
-
+        
         $publication->set_from_date($from);
         $publication->set_to_date($to);
         $publication->set_publication_date(time());
         $publication->set_modification_date(time());
-        $publication->set_hidden($values[Publication :: PROPERTY_HIDDEN] ? 1 : 0);
+        $publication->set_hidden($values[Publication::PROPERTY_HIDDEN] ? 1 : 0);
     }
 
     /**
      * Sets the rights for the given content object publication
-     *
+     * 
      * @param $publication Publication
      * @param $category_changed boolean
      */
     public function set_publication_rights(Publication $publication)
     {
         $values = $this->exportValues();
-
-        $location = Rights :: get_instance()->get_location_by_identifier(
-            Manager :: context(),
-            Rights :: TYPE_PUBLICATION,
+        
+        $location = Rights::getInstance()->get_location_by_identifier(
+            Manager::context(), 
+            Rights::TYPE_PUBLICATION, 
             $publication->get_id());
-
-        if (! $location->clear_right(Rights :: VIEW_RIGHT))
+        
+        if (! $location->clear_right(Rights::VIEW_RIGHT))
         {
             return false;
         }
-
+        
         if ($location->inherits())
         {
             $location->disinherit();
@@ -317,46 +317,41 @@ class PublicationForm extends FormValidator
                 return false;
             }
         }
-
-        $option = $values[self :: PROPERTY_RIGHT_OPTION];
+        
+        $option = $values[self::PROPERTY_RIGHT_OPTION];
         $location_id = $location->get_id();
-
-        $rights = Rights :: get_instance();
-
+        
+        $rights = Rights::getInstance();
+        
         switch ($option)
         {
-            case self :: RIGHT_OPTION_ALL :
+            case self::RIGHT_OPTION_ALL :
+                if (! $rights->invert_location_entity_right(Manager::context(), Rights::VIEW_RIGHT, 0, 0, $location_id))
+                {
+                    return false;
+                }
+                break;
+            case self::RIGHT_OPTION_ME :
                 if (! $rights->invert_location_entity_right(
-                    Manager :: context(),
-                    Rights :: VIEW_RIGHT,
-                    0,
-                    0,
+                    Manager::context(), 
+                    Rights::VIEW_RIGHT, 
+                    Session::get_user_id(), 
+                    UserEntity::ENTITY_TYPE, 
                     $location_id))
                 {
                     return false;
                 }
                 break;
-            case self :: RIGHT_OPTION_ME :
-                if (! $rights->invert_location_entity_right(
-                    Manager :: context(),
-                    Rights :: VIEW_RIGHT,
-                    Session :: get_user_id(),
-                    UserEntity :: ENTITY_TYPE,
-                    $location_id))
-                {
-                    return false;
-                }
-                break;
-            case self :: RIGHT_OPTION_SELECT :
-                foreach ($values[self :: PROPERTY_TARGETS] as $entity_type => $target_ids)
+            case self::RIGHT_OPTION_SELECT :
+                foreach ($values[self::PROPERTY_TARGETS] as $entity_type => $target_ids)
                 {
                     foreach ($target_ids as $target_id)
                     {
                         if (! $rights->invert_location_entity_right(
-                            Manager :: context(),
-                            Rights :: VIEW_RIGHT,
-                            $target_id,
-                            $entity_type,
+                            Manager::context(), 
+                            Rights::VIEW_RIGHT, 
+                            $target_id, 
+                            $entity_type, 
                             $location_id))
                         {
                             return false;

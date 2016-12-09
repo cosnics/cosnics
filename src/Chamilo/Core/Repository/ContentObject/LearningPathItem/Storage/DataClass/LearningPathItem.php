@@ -39,7 +39,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
@@ -49,15 +49,15 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_REFERENCE,
-            self :: PROPERTY_MAX_ATTEMPTS,
-            self :: PROPERTY_MASTERY_SCORE,
-            self :: PROPERTY_ALLOW_HINTS,
-            self :: PROPERTY_SHOW_SCORE,
-            self :: PROPERTY_SHOW_CORRECTION,
-            self :: PROPERTY_SHOW_SOLUTION,
-            self :: PROPERTY_SHOW_ANSWER_FEEDBACK,
-            self :: PROPERTY_FEEDBACK_LOCATION);
+            self::PROPERTY_REFERENCE, 
+            self::PROPERTY_MAX_ATTEMPTS, 
+            self::PROPERTY_MASTERY_SCORE, 
+            self::PROPERTY_ALLOW_HINTS, 
+            self::PROPERTY_SHOW_SCORE, 
+            self::PROPERTY_SHOW_CORRECTION, 
+            self::PROPERTY_SHOW_SOLUTION, 
+            self::PROPERTY_SHOW_ANSWER_FEEDBACK, 
+            self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     /**
@@ -66,7 +66,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_reference()
     {
-        return $this->get_additional_property(self :: PROPERTY_REFERENCE);
+        return $this->get_additional_property(self::PROPERTY_REFERENCE);
     }
 
     /**
@@ -75,7 +75,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_reference($reference)
     {
-        $this->set_additional_property(self :: PROPERTY_REFERENCE, $reference);
+        $this->set_additional_property(self::PROPERTY_REFERENCE, $reference);
     }
 
     /**
@@ -86,8 +86,8 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     {
         if (! $this->reference_object instanceof LearningPath)
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $this->get_reference());
         }
         return $this->reference_object;
@@ -99,7 +99,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_max_attempts()
     {
-        return $this->get_additional_property(self :: PROPERTY_MAX_ATTEMPTS);
+        return $this->get_additional_property(self::PROPERTY_MAX_ATTEMPTS);
     }
 
     /**
@@ -108,7 +108,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_max_attempts($max_attempts)
     {
-        $this->set_additional_property(self :: PROPERTY_MAX_ATTEMPTS, $max_attempts);
+        $this->set_additional_property(self::PROPERTY_MAX_ATTEMPTS, $max_attempts);
     }
 
     /**
@@ -117,7 +117,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_mastery_score()
     {
-        return $this->get_additional_property(self :: PROPERTY_MASTERY_SCORE);
+        return $this->get_additional_property(self::PROPERTY_MASTERY_SCORE);
     }
 
     /**
@@ -126,7 +126,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_mastery_score($mastery_score)
     {
-        $this->set_additional_property(self :: PROPERTY_MASTERY_SCORE, $mastery_score);
+        $this->set_additional_property(self::PROPERTY_MASTERY_SCORE, $mastery_score);
     }
 
     /**
@@ -135,7 +135,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_allow_hints()
     {
-        return $this->get_additional_property(self :: PROPERTY_ALLOW_HINTS);
+        return $this->get_additional_property(self::PROPERTY_ALLOW_HINTS);
     }
 
     /**
@@ -144,7 +144,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_allow_hints($allow_hints)
     {
-        $this->set_additional_property(self :: PROPERTY_ALLOW_HINTS, $allow_hints);
+        $this->set_additional_property(self::PROPERTY_ALLOW_HINTS, $allow_hints);
     }
 
     /**
@@ -153,7 +153,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_show_score()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_SCORE);
+        return $this->get_additional_property(self::PROPERTY_SHOW_SCORE);
     }
 
     /**
@@ -162,7 +162,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_show_score($show_score)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_SCORE, $show_score);
+        $this->set_additional_property(self::PROPERTY_SHOW_SCORE, $show_score);
     }
 
     /**
@@ -171,7 +171,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_show_correction()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_CORRECTION);
+        return $this->get_additional_property(self::PROPERTY_SHOW_CORRECTION);
     }
 
     /**
@@ -180,7 +180,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_show_correction($show_correction)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_CORRECTION, $show_correction);
+        $this->set_additional_property(self::PROPERTY_SHOW_CORRECTION, $show_correction);
     }
 
     /**
@@ -189,7 +189,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_show_solution()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_SOLUTION);
+        return $this->get_additional_property(self::PROPERTY_SHOW_SOLUTION);
     }
 
     /**
@@ -198,7 +198,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_show_solution($show_solution)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_SOLUTION, $show_solution);
+        $this->set_additional_property(self::PROPERTY_SHOW_SOLUTION, $show_solution);
     }
 
     /**
@@ -207,7 +207,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -216,7 +216,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_show_answer_feedback($show_answer_feedback)
     {
-        $this->set_additional_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
     }
 
     /**
@@ -225,7 +225,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function get_feedback_location()
     {
-        return $this->get_additional_property(self :: PROPERTY_FEEDBACK_LOCATION);
+        return $this->get_additional_property(self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     /**
@@ -234,7 +234,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public function set_feedback_location($feedback_location)
     {
-        $this->set_additional_property(self :: PROPERTY_FEEDBACK_LOCATION, $feedback_location);
+        $this->set_additional_property(self::PROPERTY_FEEDBACK_LOCATION, $feedback_location);
     }
 
     /**
@@ -244,11 +244,11 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     public function get_configuration()
     {
         return new Configuration(
-            $this->get_allow_hints(),
-            $this->get_show_score(),
-            $this->get_show_correction(),
-            $this->get_show_solution(),
-            $this->get_show_answer_feedback(),
+            $this->get_allow_hints(), 
+            $this->get_show_score(), 
+            $this->get_show_correction(), 
+            $this->get_show_solution(), 
+            $this->get_show_answer_feedback(), 
             $this->get_feedback_location());
     }
 }

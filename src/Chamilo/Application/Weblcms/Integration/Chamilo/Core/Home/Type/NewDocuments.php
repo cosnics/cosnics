@@ -25,7 +25,7 @@ class NewDocuments extends NewBlock
      */
     public function getContentObjectTypes()
     {
-        return array(File :: class_name(), Webpage :: class_name());
+        return array(File::class_name(), Webpage::class_name());
     }
 
     /**
@@ -44,14 +44,14 @@ class NewDocuments extends NewBlock
     public function getCourseViewerLink(Course $course, $publication)
     {
         $parameters = array(
-            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id(),
-            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-            \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'document',
-            \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager :: ACTION_VIEW_DOCUMENTS,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]);
-
+            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id(), 
+            Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
+            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'document', 
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_VIEW_DOCUMENTS, 
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => ContentObjectRenderer::TYPE_TABLE, 
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]);
+        
         return $this->getLink($parameters);
     }
 }

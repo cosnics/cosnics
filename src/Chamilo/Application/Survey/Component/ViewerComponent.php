@@ -26,17 +26,17 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
     function run()
     {
-        $this->publicationId = $this->getRequest()->query->get(self :: PARAM_PUBLICATION_ID);
+        $this->publicationId = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         
         if (! $this->publicationId)
         {
-            throw new NoObjectSelectedException(Translation :: get('Publication'));
+            throw new NoObjectSelectedException(Translation::get('Publication'));
         }
         
         $publicationService = new PublicationService(new PublicationRepository());
         $this->publication = $publicationService->getPublicationByIdentifier($this->publicationId);
         
-        $rightsService = RightsService :: getInstance();
+        $rightsService = RightsService::getInstance();
         
         if ($rightsService->canTakeSurvey($this->get_user(), $this->publication))
         {
@@ -48,7 +48,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
                 $this, 
                 '\Chamilo\Application\Survey');
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(), 
+                \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager::context(), 
                 $surveyConfiguration);
             return $factory->run();
         }
@@ -60,11 +60,11 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
     function get_tree_menu_url()
     {
-        return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
-             \Chamilo\Application\Survey\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
-             \Chamilo\Application\Survey\Manager :: ACTION_VIEW . '&' .
-             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID . '=' . $this->publicationId . '&' .
-             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: PARAM_STEP . '=%s';
+        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
+             \Chamilo\Application\Survey\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+             \Chamilo\Application\Survey\Manager::ACTION_VIEW . '&' .
+             \Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID . '=' . $this->publicationId . '&' .
+             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager::PARAM_STEP . '=%s';
     }
 
     public function get_additional_tabs()
@@ -152,7 +152,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_PUBLICATION_ID);
+        return array(self::PARAM_PUBLICATION_ID);
     }
 }
 

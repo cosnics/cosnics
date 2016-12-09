@@ -32,13 +32,13 @@ abstract class AbstractAttempt extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_USER_ID;
-        $extended_property_names[] = self :: PROPERTY_TOTAL_SCORE;
-        $extended_property_names[] = self :: PROPERTY_STATUS;
-        $extended_property_names[] = self :: PROPERTY_START_TIME;
-        $extended_property_names[] = self :: PROPERTY_END_TIME;
-        $extended_property_names[] = self :: PROPERTY_TOTAL_TIME;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_USER_ID;
+        $extended_property_names[] = self::PROPERTY_TOTAL_SCORE;
+        $extended_property_names[] = self::PROPERTY_STATUS;
+        $extended_property_names[] = self::PROPERTY_START_TIME;
+        $extended_property_names[] = self::PROPERTY_END_TIME;
+        $extended_property_names[] = self::PROPERTY_TOTAL_TIME;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -56,7 +56,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -65,7 +65,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_total_score()
     {
-        return $this->get_default_property(self :: PROPERTY_TOTAL_SCORE);
+        return $this->get_default_property(self::PROPERTY_TOTAL_SCORE);
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_total_score($total_score)
     {
-        $this->set_default_property(self :: PROPERTY_TOTAL_SCORE, $total_score);
+        $this->set_default_property(self::PROPERTY_TOTAL_SCORE, $total_score);
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_status()
     {
-        return $this->get_default_property(self :: PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_STATUS);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_status($status)
     {
-        $this->set_default_property(self :: PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_start_time()
     {
-        return $this->get_default_property(self :: PROPERTY_START_TIME);
+        return $this->get_default_property(self::PROPERTY_START_TIME);
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_start_time($start_time)
     {
-        $this->set_default_property(self :: PROPERTY_START_TIME, $start_time);
+        $this->set_default_property(self::PROPERTY_START_TIME, $start_time);
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_end_time()
     {
-        return $this->get_default_property(self :: PROPERTY_END_TIME);
+        return $this->get_default_property(self::PROPERTY_END_TIME);
     }
 
     /**
@@ -128,7 +128,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_end_time($end_time)
     {
-        $this->set_default_property(self :: PROPERTY_END_TIME, $end_time);
+        $this->set_default_property(self::PROPERTY_END_TIME, $end_time);
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_total_time()
     {
-        return $this->get_default_property(self :: PROPERTY_TOTAL_TIME);
+        return $this->get_default_property(self::PROPERTY_TOTAL_TIME);
     }
 
     /**
@@ -146,7 +146,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function set_total_time($total_time)
     {
-        $this->set_default_property(self :: PROPERTY_TOTAL_TIME, $total_time);
+        $this->set_default_property(self::PROPERTY_TOTAL_TIME, $total_time);
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class AbstractAttempt extends DataClass
      */
     public function get_status_as_string()
     {
-        return $this->get_status() == self :: STATUS_COMPLETED ? Translation :: get('Completed') : Translation :: get(
+        return $this->get_status() == self::STATUS_COMPLETED ? Translation::get('Completed') : Translation::get(
             'NotCompleted');
     }
 }

@@ -82,9 +82,9 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Configure', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Config'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CONFIGURE))));
+                    Translation::get('Configure', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Config'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CONFIGURE))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -112,8 +112,8 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = $entityConditionService->getEntitiesCondition(
                 $entities, 
-                ProviderLink :: class_name(), 
-                ProviderLink :: PROPERTY_ENTITY_TYPE);
+                ProviderLink::class_name(), 
+                ProviderLink::PROPERTY_ENTITY_TYPE);
         }
         
         return new AndCondition($conditions);

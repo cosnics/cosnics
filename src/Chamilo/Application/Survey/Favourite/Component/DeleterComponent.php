@@ -24,51 +24,51 @@ class DeleterComponent extends Manager
     public function run()
     {
         $publicationIdentifiers = $this->getRequest()->query->get(
-            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
-
+            \Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
+        
         try
         {
             if (empty($publicationIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('Publication'));
+                throw new NoObjectSelectedException(Translation::get('Publication'));
             }
-
+            
             if (! is_array($publicationIdentifiers))
             {
                 $publicationIdentifiers = array($publicationIdentifiers);
             }
-
+            
             $favouriteService = new FavouriteService(new FavouriteRepository());
-
+            
             foreach ($publicationIdentifiers as $publicationIdentifier)
             {
                 
                 $success = $favouriteService->deletePublicationByUserAndPublicationIdentifier(
-                    $this->get_user(),
+                    $this->get_user(), 
                     $publicationIdentifier);
-
+                
                 if (! $success)
                 {
                     throw new \Exception(
-                        Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('PublicationUserFavourite')),
-                            Utilities :: COMMON_LIBRARIES));
+                        Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('PublicationUserFavourite')), 
+                            Utilities::COMMON_LIBRARIES));
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('PublicationUserFavourite')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('PublicationUserFavourite')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

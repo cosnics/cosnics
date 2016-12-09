@@ -102,17 +102,17 @@ class BrowseComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
                     $this->get_create_course_type_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -130,6 +130,6 @@ class BrowseComponent extends Manager implements TableSupport
     public function get_table_condition($object_table_class_name)
     {
         return $this->buttonToolbarRenderer->getConditions(
-            array(CourseType :: PROPERTY_TITLE, CourseType :: PROPERTY_DESCRIPTION));
+            array(CourseType::PROPERTY_TITLE, CourseType::PROPERTY_DESCRIPTION));
     }
 }

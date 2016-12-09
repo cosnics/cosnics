@@ -19,7 +19,7 @@ class JavascriptCacheService extends AsseticCacheService
      */
     protected function getCachePath()
     {
-        return $this->getPathUtilities()->getCachePath('Chamilo\Libraries\Resources\Javascript');
+        return $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Libraries\Resources\Javascript');
     }
 
     /**
@@ -30,39 +30,38 @@ class JavascriptCacheService extends AsseticCacheService
     {
         $assets = array();
 
-        $javascriptPath = $this->getPathUtilities()->getJavascriptPath('Chamilo\Libraries');
+        $javascriptPath = $this->getPathBuilder()->getJavascriptPath('Chamilo\Libraries');
         $pluginPath = $javascriptPath . 'Plugin/';
 
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.browser.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'BootstrapConflictFixes.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.ui.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tabula.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.dynamic.visual_tabs.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tablednd.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.ui.tabs.paging.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.treeview.async.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timeout.interval.idle.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.mousewheel.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.scrollable.pack.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.xml2json.pack.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.json.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jsuggest.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jeditable.mini.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.query.js');
-//        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tree_menu.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timepicker.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'AngularJS/angular.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'AngularJS/angular-sanitize.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Dropzone/dropzone.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'phpjs.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Utilities.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Help.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Visit.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.browser.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'BootstrapConflictFixes.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.ui.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tabula.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.dynamic.visual_tabs.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tablednd.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.ui.tabs.paging.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.treeview.async.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.timeout.interval.idle.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.mousewheel.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.scrollable.pack.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.xml2json.pack.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.json.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.jsuggest.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.jeditable.mini.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.query.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tree_menu.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.timepicker.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular-sanitize.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Dropzone/dropzone.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'phpjs.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Utilities.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Notifications.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Help.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Visit.js');
 
         return $assets;
     }

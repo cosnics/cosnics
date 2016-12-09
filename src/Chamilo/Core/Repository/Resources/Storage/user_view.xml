@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="user_view">
-	<properties>
-		<property name="id" type="integer" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" notnull="1" default="0" />
-		<property name="name" type="text" length="100" notnull="1" default="" />
-		<property name="description" type="text" />
-	</properties>
-	<index name="user_id">
-		<indexproperty name="user_id" />
-	</index>
-	<index name="name" type="unique">
-		<indexproperty name="user_id" />
-		<indexproperty name="name" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="name"
+            type="text"
+            length="100"
+            notnull="1"
+            default="" />
+        <property
+            name="description"
+            type="text" />
+    </properties>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index
+        name="name"
+        type="unique">
+        <indexproperty name="user_id" />
+        <indexproperty name="name" />
+    </index>
 </object>

@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Target Entities Form
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
@@ -22,7 +22,7 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
 
     /**
      * The current element
-     *
+     * 
      * @var string
      */
     protected $blockType;
@@ -30,7 +30,7 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
     /**
      * Constructor
      * TargetEntitiesForm constructor.
-     *
+     * 
      * @param string $action
      * @param string $blockType
      * @param BlockTypeRightsService $blockTypeRightsService
@@ -39,7 +39,7 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
     {
         $this->blockType = $blockType;
         $this->blockTypeRightsService = $blockTypeRightsService;
-
+        
         parent::__construct('block_type_target_entities_form', $action);
     }
 
@@ -49,17 +49,17 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
     protected function buildForm()
     {
         $this->addElement(
-            'static',
-            self::PROPERTY_BLOCK_TYPE,
-            Translation::getInstance()->getTranslation('BlockType', null, Manager::context()),
+            'static', 
+            self::PROPERTY_BLOCK_TYPE, 
+            Translation::getInstance()->getTranslation('BlockType', null, Manager::context()), 
             $this->blockType);
-
+        
         parent::buildForm();
     }
 
     /**
      * Returns the selected entities
-     *
+     * 
      * @return HomeTargetEntity[]
      */
     protected function getSelectedEntities()

@@ -1,5 +1,6 @@
 ul.tree-menu li div a.fill_in_blanks_question, ul.tree-menu li div a.type_fill_in_blanks_question,
-	.treeview .list-group .list-group-item .icon.node-icon.type_fill_in_blanks_question, .treeview .list-group .list-group-item .icon.node-icon.type_fill_in_blanks_question_default,
+	.treeview .list-group .list-group-item .icon.node-icon.type_fill_in_blanks_question,
+	.treeview .list-group .list-group-item .icon.node-icon.type_fill_in_blanks_question_default,
 	ul.tree-menu li div a.type_fill_in_blanks_question_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

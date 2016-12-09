@@ -77,9 +77,9 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
              'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request\RequestTable')
         {
             $search_conditions = $this->buttonToolbarRenderer->getConditions(
-                array(ContentObject :: PROPERTY_TITLE, ContentObject :: PROPERTY_DESCRIPTION));
+                array(ContentObject::PROPERTY_TITLE, ContentObject::PROPERTY_DESCRIPTION));
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_COURSE_ID), 
+                new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($this->get_course_id()));
             if ($search_conditions != null)
             {
@@ -99,9 +99,9 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      */
     public function get_ephorus_request_url($object_id)
     {
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_EPHORUS_REQUEST;
-        $parameters[self :: PARAM_CONTENT_OBJECT_IDS] = $object_id;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: ACTION_VIEW_RESULT;
+        $parameters[self::PARAM_ACTION] = self::ACTION_EPHORUS_REQUEST;
+        $parameters[self::PARAM_CONTENT_OBJECT_IDS] = $object_id;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_VIEW_RESULT;
         
         return $this->get_url($parameters);
     }
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
      */
     protected function as_html()
     {
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $html = array();
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -150,15 +150,15 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get(
+                    Translation::get(
                         'AddDocument', 
                         array(), 
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class_name())), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_PUBLISH_DOCUMENT)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             
@@ -169,10 +169,10 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }

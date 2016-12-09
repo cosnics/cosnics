@@ -18,6 +18,6 @@ class AssignmentSubmissionsUserBlock extends AssignmentSubmissionsBlock
      */
     protected function define_column_submitter_name_title()
     {
-        return Translation :: get('User');
+        return Translation::get('User');
     }
 }
