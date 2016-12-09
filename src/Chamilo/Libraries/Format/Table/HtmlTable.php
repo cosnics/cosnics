@@ -205,7 +205,7 @@ abstract class HtmlTable extends \HTML_Table
      *
      * @return string
      */
-    protected function getParameterName($parameter)
+    public function getParameterName($parameter)
     {
         return $this->getTableName() . '_' . $parameter;
     }
