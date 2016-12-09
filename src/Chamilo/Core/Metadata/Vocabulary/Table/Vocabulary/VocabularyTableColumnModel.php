@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table column model for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class VocabularyTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -27,23 +27,23 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Vocabulary :: class_name(),
-                Vocabulary :: PROPERTY_VALUE,
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(Vocabulary :: PROPERTY_VALUE)->upperCamelize(),
-                    null,
+                Vocabulary::class_name(), 
+                Vocabulary::PROPERTY_VALUE, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(Vocabulary::PROPERTY_VALUE)->upperCamelize(), 
+                    null, 
                     'Chamilo\Core\Metadata')));
-
+        
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_DEFAULT,
-                Theme :: getInstance()->getImage(
-                    'Action/Default',
-                    'png',
-                    Translation :: get('Default', null, $this->get_component()->package()),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
+                self::COLUMN_DEFAULT, 
+                Theme::getInstance()->getImage(
+                    'Action/Default', 
+                    'png', 
+                    Translation::get('Default', null, $this->get_component()->package()), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON, 
+                    false, 
                     $this->get_component()->package())));
     }
 }

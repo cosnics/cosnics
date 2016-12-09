@@ -20,8 +20,8 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_valid_parameters()
     {
-        $data_class_mock = $this->getMock(DataClass :: class_name());
-        $method_mapping = array(ImplementationNotifierDataClassListener :: BEFORE_DELETE => 'delete_method');
+        $data_class_mock = $this->getMock(DataClass::class_name());
+        $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, $method_mapping);
         
@@ -33,7 +33,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_invalid_dataclass()
     {
-        $method_mapping = array(ImplementationNotifierDataClassListener :: BEFORE_DELETE => 'delete_method');
+        $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         new ImplementationNotifierDataClassListener($this, __NAMESPACE__, $method_mapping);
         
@@ -45,8 +45,8 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_invalid_context()
     {
-        $data_class_mock = $this->getMock(DataClass :: class_name());
-        $method_mapping = array(ImplementationNotifierDataClassListener :: BEFORE_DELETE => 'delete_method');
+        $data_class_mock = $this->getMock(DataClass::class_name());
+        $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, null, $method_mapping);
         
@@ -58,7 +58,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_empty_method_mapping()
     {
-        $data_class_mock = $this->getMock(DataClass :: class_name());
+        $data_class_mock = $this->getMock(DataClass::class_name());
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, array());
         
@@ -70,7 +70,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_invalid_method_mapping()
     {
-        $data_class_mock = $this->getMock(DataClass :: class_name());
+        $data_class_mock = $this->getMock(DataClass::class_name());
         $method_mapping = array('test' => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, $method_mapping);
@@ -107,8 +107,8 @@ class ImplementationNotifierTest extends Test
      */
     public function test_event_notification_with_unmapped_method()
     {
-        $data_class_mock = $this->getMock(DataClass :: class_name());
-        $method_mapping = array(ImplementationNotifierDataClassListener :: BEFORE_DELETE => 'delete_method');
+        $data_class_mock = $this->getMock(DataClass::class_name());
+        $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         $implementation_notifier = new ImplementationNotifierDataClassListener(
             $data_class_mock, 
@@ -132,15 +132,15 @@ class ImplementationNotifierTest extends Test
     public function event_notification_methods_data_provider()
     {
         return array(
-            array(ImplementationNotifierDataClassListener :: BEFORE_DELETE), 
-            array(ImplementationNotifierDataClassListener :: BEFORE_CREATE), 
-            array(ImplementationNotifierDataClassListener :: BEFORE_SET_PROPERTY), 
-            array(ImplementationNotifierDataClassListener :: BEFORE_UPDATE), 
-            array(ImplementationNotifierDataClassListener :: AFTER_DELETE), 
-            array(ImplementationNotifierDataClassListener :: AFTER_CREATE), 
-            array(ImplementationNotifierDataClassListener :: AFTER_SET_PROPERTY), 
-            array(ImplementationNotifierDataClassListener :: AFTER_UPDATE), 
-            array(ImplementationNotifierDataClassListener :: GET_DEPENDENCIES));
+            array(ImplementationNotifierDataClassListener::BEFORE_DELETE), 
+            array(ImplementationNotifierDataClassListener::BEFORE_CREATE), 
+            array(ImplementationNotifierDataClassListener::BEFORE_SET_PROPERTY), 
+            array(ImplementationNotifierDataClassListener::BEFORE_UPDATE), 
+            array(ImplementationNotifierDataClassListener::AFTER_DELETE), 
+            array(ImplementationNotifierDataClassListener::AFTER_CREATE), 
+            array(ImplementationNotifierDataClassListener::AFTER_SET_PROPERTY), 
+            array(ImplementationNotifierDataClassListener::AFTER_UPDATE), 
+            array(ImplementationNotifierDataClassListener::GET_DEPENDENCIES));
     }
 
     /**
@@ -156,7 +156,7 @@ class ImplementationNotifierTest extends Test
             'libraries\storage\ImplementationNotifierDataClassListener', 
             array('get_implementation_packages'), 
             array(
-                $this->getMock(DataClass :: class_name()), 
+                $this->getMock(DataClass::class_name()), 
                 'libraries\test\implementation_notifier', 
                 array($event => $event_method)));
         

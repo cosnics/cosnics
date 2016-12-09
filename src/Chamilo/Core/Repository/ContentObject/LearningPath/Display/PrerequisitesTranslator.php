@@ -43,8 +43,7 @@ class PrerequisitesTranslator
         else
         {
             if ($this->node->get_complex_content_object_item() instanceof ComplexLearningPathItem &&
-                $this->node->get_complex_content_object_item()->has_prerequisites()
-            )
+                 $this->node->get_complex_content_object_item()->has_prerequisites())
             {
                 return $this->verify();
             }
@@ -62,23 +61,23 @@ class PrerequisitesTranslator
     public function verify()
     {
         $prerequisites = $this->node->get_complex_content_object_item()->get_prerequisites();
-
+        
         $matches = $item_ids = array();
         $search_pattern = '/[^\(\)\&\|~]*/';
         preg_match_all($search_pattern, $prerequisites, $matches);
         rsort($matches[0], SORT_NUMERIC);
-
+        
         foreach ($matches[0] as $match)
         {
             if ($match)
             {
-                if (!in_array($match, $item_ids))
+                if (! in_array($match, $item_ids))
                 {
                     $item_ids[] = $match;
                 }
             }
         }
-
+        
         foreach ($item_ids as $item_id)
         {
             // if an empty box was selected, the prerequisite is automatically completed
@@ -89,7 +88,7 @@ class PrerequisitesTranslator
             else
             {
                 $value = 0;
-
+                
                 foreach ($this->node->get_siblings() as $sibling)
                 {
                     if ($sibling->get_complex_content_object_item()->get_id() == $item_id)
@@ -98,25 +97,25 @@ class PrerequisitesTranslator
                         {
                             $value = 1;
                         }
-
+                        
                         break;
                     }
                 }
             }
-
+            
             $prerequisites = str_replace($item_id, $value, $prerequisites);
         }
-
+        
         $replacement_pattern = "/(\(\&)|(\(\|)/";
         $replacement = '(';
-
+        
         $prerequisites = preg_replace($replacement_pattern, $replacement, $prerequisites);
         $prerequisites = str_replace('&', '&&', $prerequisites);
         $prerequisites = str_replace('|', '||', $prerequisites);
         $prerequisites = str_replace('~', '!', $prerequisites);
         $prerequisites = '$value = ' . $prerequisites . ';';
         eval($prerequisites);
-
+        
         return $value;
     }
 }

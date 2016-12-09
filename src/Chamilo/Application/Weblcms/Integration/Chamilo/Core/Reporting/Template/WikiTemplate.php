@@ -16,7 +16,7 @@ class WikiTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         $this->set_template_parameters();
         $this->add_reporting_block(new WikiMostVisitedPageBlock($this));
         $this->add_reporting_block(new WikiMostEditedPageBlock($this));
@@ -24,7 +24,7 @@ class WikiTemplate extends ReportingTemplate
 
     public function set_template_parameters()
     {
-        $publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
-        $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION, $publication_id);
+        $publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $publication_id);
     }
 }

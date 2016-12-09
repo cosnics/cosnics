@@ -101,7 +101,7 @@ class Template
 
     public function translate($variable)
     {
-        $language = Translation :: getInstance()->getLanguageIsocode();
+        $language = Translation::getInstance()->getLanguageIsocode();
         return $this->get_translation()->translate($language, $variable);
     }
 
@@ -114,7 +114,7 @@ class Template
      */
     public static function get($content_object_type, $template_name)
     {
-        $template_path = Path :: getInstance()->namespaceToFullPath($content_object_type) . 'Template' .
+        $template_path = Path::getInstance()->namespaceToFullPath($content_object_type) . 'Template' .
              DIRECTORY_SEPARATOR . $template_name . '.xml';
         
         $template_class_name = $content_object_type . '\Template\Template';
@@ -133,7 +133,7 @@ class Template
             }
             else
             {
-                return $template_class_name :: parse($dom_xpath);
+                return $template_class_name::parse($dom_xpath);
             }
         }
         else

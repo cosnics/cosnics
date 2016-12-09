@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerI
 
 /**
  * Defines the necessary functionality for a publisher component that has a custom publication handler
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface PublisherCustomPublicationFormHandler
@@ -14,7 +14,7 @@ interface PublisherCustomPublicationFormHandler
 
     /**
      * Constructs the publication form
-     *
+     * 
      * @param ContentObjectPublicationForm $publicationForm
      *
      * @return PublicationHandlerInterface

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 
-abstract class DefaultExternalObjectGalleryTableCellRenderer extends DataClassGalleryTableCellRenderer implements
+abstract class DefaultExternalObjectGalleryTableCellRenderer extends DataClassGalleryTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 
 {

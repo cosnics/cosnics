@@ -50,18 +50,18 @@ class RecurrenceRulesParser
     public function getRules()
     {
         $calendarEvent = $this->getCalendarEvent();
-
+        
         $byDay = $calendarEvent->get_byday() ? explode(',', $calendarEvent->get_byday()) : array();
         $byMonthDay = $calendarEvent->get_bymonthday() ? explode(',', $calendarEvent->get_bymonthday()) : array();
         $byMonth = $calendarEvent->get_bymonth() ? explode(',', $calendarEvent->get_bymonth()) : array();
-
+        
         return new RecurrenceRules(
-            $calendarEvent->get_frequency(),
-            $calendarEvent->get_until(),
-            $calendarEvent->get_frequency_count(),
-            $calendarEvent->get_frequency_interval(),
-            $byDay,
-            $byMonthDay,
+            $calendarEvent->get_frequency(), 
+            $calendarEvent->get_until(), 
+            $calendarEvent->get_frequency_count(), 
+            $calendarEvent->get_frequency_interval(), 
+            $byDay, 
+            $byMonthDay, 
             $byMonth);
     }
 }

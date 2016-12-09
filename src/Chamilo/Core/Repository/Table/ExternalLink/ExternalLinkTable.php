@@ -6,5 +6,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 
 class ExternalLinkTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_EXTERNAL_INSTANCE;
+    const TABLE_IDENTIFIER = Manager::PARAM_EXTERNAL_INSTANCE;
 }

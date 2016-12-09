@@ -21,24 +21,24 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Retrieves a metadata schema by a given namespace
-     *
+     * 
      * @param string $namespace
      * @return \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema
      */
     public static function retrieveSchemaByNamespace($namespace)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Schema :: class_name(), Schema :: PROPERTY_NAMESPACE),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(Schema::class_name(), Schema::PROPERTY_NAMESPACE), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($namespace));
-
-        $schema = self :: retrieve(Schema :: class_name(), new DataClassRetrieveParameters($condition));
-
+        
+        $schema = self::retrieve(Schema::class_name(), new DataClassRetrieveParameters($condition));
+        
         if (! $schema)
         {
             throw new \InvalidArgumentException('The given namespace ' . $namespace . ' is invalid');
         }
-
+        
         return $schema;
     }
 }

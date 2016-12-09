@@ -43,7 +43,7 @@ class EventRendererFactory
     {
         $this->renderer = $renderer;
         $this->event = $event;
-        $this->configuration = $configuration ?  : new Configuration();
+        $this->configuration = $configuration ?: new Configuration();
     }
 
     /**
@@ -79,7 +79,7 @@ class EventRendererFactory
      */
     public function setConfiguration(Configuration $configuration = null)
     {
-        $this->configuration = $configuration ?  : new Configuration();
+        $this->configuration = $configuration ?: new Configuration();
     }
 
     /**
@@ -115,9 +115,9 @@ class EventRendererFactory
      */
     public function getEventRenderer()
     {
-        $eventRendererClassName = ClassnameUtilities :: getInstance()->getNamespaceParent($this->getEvent()->context()) .
+        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
              '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
-
+        
         return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
     }
 }

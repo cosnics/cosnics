@@ -9,7 +9,7 @@ class ClassNotExistException extends UserException
 
     public function __construct($class)
     {
-        parent :: __construct(
-            Translation :: get('ClassNotExist', array('CLASS' => $class), Utilities :: COMMON_LIBRARIES));
+        parent::__construct(
+            Translation::get('ClassNotExist', array('CLASS' => $class), Utilities::COMMON_LIBRARIES));
     }
 }

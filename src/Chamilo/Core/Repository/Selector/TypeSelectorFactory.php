@@ -89,7 +89,7 @@ class TypeSelectorFactory
     {
         $typeSelectorCacheService = new TypeSelectorCacheService($this);
         return $typeSelectorCacheService->getForContentObjectTypesAndUserIdentifier(
-            $this->getContentObjectTypes(),
+            $this->getContentObjectTypes(), 
             $this->getUserIdentifier());
     }
 
@@ -100,59 +100,59 @@ class TypeSelectorFactory
     public function buildTypeSelector()
     {
         $typeSelector = new TypeSelector();
-        $helperTypes = DataManager :: get_active_helper_types();
-
+        $helperTypes = DataManager::get_active_helper_types();
+        
         $contexts = array();
-
+        
         foreach ($this->getContentObjectTypes() as $contentObjectType)
         {
-            $classnameUtilities = ClassnameUtilities :: getInstance();
+            $classnameUtilities = ClassnameUtilities::getInstance();
             $namespace = $classnameUtilities->getNamespaceFromClassname($contentObjectType);
             $contexts[] = $classnameUtilities->getNamespaceParent($namespace, 2);
         }
-
-        $templateRegistrations = \Chamilo\Core\Repository\Configuration :: registrations_by_types(
-            $contexts,
+        
+        $templateRegistrations = \Chamilo\Core\Repository\Configuration::registrations_by_types(
+            $contexts, 
             $this->getUserIdentifier());
-
+        
         foreach ($templateRegistrations as $templateRegistration)
         {
-            $type = $templateRegistration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
+            $type = $templateRegistration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
                 $templateRegistration->get_content_object_type());
-
-            if (ContentObject :: is_available($type))
+            
+            if (ContentObject::is_available($type))
             {
                 if (in_array($type, $helperTypes))
                 {
                     continue;
                 }
-
-                $registration = \Chamilo\Configuration\Configuration :: registration(
+                
+                $registration = \Chamilo\Configuration\Configuration::registration(
                     $templateRegistration->get_content_object_type());
-
-                $categoryType = $registration[Registration :: PROPERTY_CATEGORY];
-
+                
+                $categoryType = $registration[Registration::PROPERTY_CATEGORY];
+                
                 if (! $typeSelector->category_type_exists($categoryType))
                 {
                     $typeSelectorCategory = new TypeSelectorCategory(
-                        $categoryType,
-                        Translation :: get(
-                            (string) StringUtilities :: getInstance()->createString($categoryType)->upperCamelize()));
-
+                        $categoryType, 
+                        Translation::get(
+                            (string) StringUtilities::getInstance()->createString($categoryType)->upperCamelize()));
+                    
                     $typeSelector->add_category($typeSelectorCategory);
                 }
-
+                
                 $typeSelectorCategory = $typeSelector->get_category_by_type($categoryType);
-
+                
                 $contentObjectName = $templateRegistration->get_template()->translate('TypeName');
-
+                
                 $typeSelectorCategory->add_option(
                     new ContentObjectTypeSelectorOption($contentObjectName, (int) $templateRegistration->get_id()));
             }
         }
-
+        
         $typeSelector->sort();
-
+        
         return $typeSelector;
     }
 }

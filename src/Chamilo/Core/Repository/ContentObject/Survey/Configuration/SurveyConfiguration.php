@@ -29,9 +29,9 @@ class SurveyConfiguration extends ApplicationConfiguration
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null, 
         $answerServiceContext = null)
     {
-        parent :: __construct($request, $user, $application);
+        parent::__construct($request, $user, $application);
         $this->answerServiceContext = $answerServiceContext;
-        $this->set(Manager :: ANSWER_SERVICE_KEY, $this->getAnswerService());
+        $this->set(Manager::ANSWER_SERVICE_KEY, $this->getAnswerService());
     }
 
     /**
@@ -48,7 +48,6 @@ class SurveyConfiguration extends ApplicationConfiguration
         else
         {
             $answerServiceFactory = new AnswerServiceFactory($this->getApplication()->package(), $parameters);
-            
         }
         return $answerServiceFactory->getAnswerService();
     }

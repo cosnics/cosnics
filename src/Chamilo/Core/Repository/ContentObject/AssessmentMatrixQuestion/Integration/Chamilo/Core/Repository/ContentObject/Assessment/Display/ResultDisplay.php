@@ -41,7 +41,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -58,7 +58,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             foreach ($matches as $j => $match)
             {
                 $html[] = '<td>';
-                if ($type == AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO)
+                if ($type == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO)
                 {
                     if ($answers[$i] == $j && ! is_null($answers[$i]))
                     {
@@ -69,14 +69,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                             if ($option->get_matches() == $j)
                             {
                                 $result = '<img src="' .
-                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" />';
+                                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation::get('Correct') . '" title="' . Translation::get('Correct') . '" />';
                             }
                             else
                             {
                                 $result = '<img src="' .
-                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                                     Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
                             }
                         }
                         else
@@ -123,15 +123,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                             if (in_array($j, $option->get_matches()))
                             {
                                 $result = '<img src="' .
-                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation::get('Correct') . '" title="' . Translation::get('Correct') .
                                      '" style="" />';
                             }
                             else
                             {
                                 $result = '<img src="' .
-                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                                     Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
                             }
                         }
                         else
@@ -148,8 +148,8 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                             if (in_array($j, $option->get_matches()))
                             {
                                 $result = '<img src="' .
-                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation::get('Correct') . '" title="' . Translation::get('Correct') .
                                      '" style="" />';
                             }
                             else
@@ -173,12 +173,12 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($configuration->show_answer_feedback())
             {
-                $valid_answer = ($type == AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO &&
+                $valid_answer = ($type == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO &&
                      $answers[$i] == $option->get_matches()) || ($type ==
-                     AssessmentMatrixQuestion :: MATRIX_TYPE_CHECKBOX &&
+                     AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX &&
                      count(array_diff(array_keys($answers[$i]), $option->get_matches())) == 0);
                 
-                if (AnswerFeedbackDisplay :: allowed(
+                if (AnswerFeedbackDisplay::allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
                     true, 

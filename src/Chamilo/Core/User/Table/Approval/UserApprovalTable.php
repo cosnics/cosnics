@@ -13,19 +13,19 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class UserApprovalTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_USER_USER_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_APPROVE_USER)),
-                Translation :: get('ApproveSelected')));
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_APPROVE_USER)), 
+                Translation::get('ApproveSelected')));
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DENY_USER)),
-                Translation :: get('DenySelected')));
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY_USER)), 
+                Translation::get('DenySelected')));
         return $actions;
     }
 }

@@ -22,24 +22,24 @@ class RightsComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Workspace\Rights\Manager :: context(),
+            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
     /**
      * Adds additional breadcrumbs
-     *
+     * 
      * @param BreadcrumbTrail $breadcrumb_trail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
         $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
-
+        
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(array(Manager :: PARAM_ACTION => $browserSource)),
-                Translation :: get($browserSource . 'Component')));
+                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)), 
+                Translation::get($browserSource . 'Component')));
     }
 
     public function get_additional_parameters()

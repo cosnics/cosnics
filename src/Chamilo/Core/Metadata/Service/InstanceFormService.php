@@ -78,18 +78,18 @@ class InstanceFormService
 
     public function addElements(EntityService $entityService, RelationService $relationService)
     {
-        $entityFactory = DataClassEntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory::getInstance();
         $entity = $entityFactory->getEntity($this->getEntity()->getDataClassName());
         $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $entity);
-
+        
         while ($availableSchema = $availableSchemas->next_result())
         {
             $this->formValidator->addElement(
-                'checkbox',
-                InstanceService :: PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']',
-                $availableSchema->get_name(),
-                null,
-                null,
+                'checkbox', 
+                InstanceService::PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']', 
+                $availableSchema->get_name(), 
+                null, 
+                null, 
                 $availableSchema->get_id());
         }
     }
@@ -97,7 +97,7 @@ class InstanceFormService
     public function setDefaults()
     {
         $defaults = array();
-
+        
         $this->formValidator->setDefaults($defaults);
     }
 }

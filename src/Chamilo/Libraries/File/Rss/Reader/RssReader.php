@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 /**
  * Class that reads and parses rss feed
- *
+ * 
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -15,14 +15,14 @@ abstract class RssReader
 
     /**
      * Keeps instances of the rss readers per type
-     *
+     * 
      * @var RssReader[string]
      */
     private static $instances;
 
     /**
      * Factory method to launch the correct RSS reader
-     *
+     * 
      * @param string $type
      *
      * @throws ClassNotExistException
@@ -31,23 +31,23 @@ abstract class RssReader
      */
     public static function factory($type = self :: TYPE_FASTFEED)
     {
-        if (! self :: $instances[$type])
+        if (! self::$instances[$type])
         {
             $class = __NAMESPACE__ . '\Implementation\\' . $type;
             if (! class_exists($class, true))
             {
                 throw new ClassNotExistException($type);
             }
-
-            self :: $instances[$type] = new $class();
+            
+            self::$instances[$type] = new $class();
         }
-
-        return self :: $instances[$type];
+        
+        return self::$instances[$type];
     }
 
     /**
      * Parses a url and returns the rss items
-     *
+     * 
      * @param string $url
      * @param int $number_of_items
      *

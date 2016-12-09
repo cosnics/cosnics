@@ -5,12 +5,13 @@ use Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Offic
 
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Office365Video :: class_name();
+        return Office365Video::class_name();
     }
 }

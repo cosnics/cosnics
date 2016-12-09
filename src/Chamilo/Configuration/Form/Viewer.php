@@ -38,8 +38,8 @@ class Viewer
         $this->context = $context;
         $this->name = $name;
         $this->user_id = $user_id;
-        $this->title = $title ? $title : Translation :: get(
-            (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
+        $this->title = $title ? $title : Translation::get(
+            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), 
             $context);
     }
 
@@ -60,9 +60,9 @@ class Viewer
             while ($value = $values->next_result())
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_ID), 
+                    new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
                     new StaticConditionVariable($value->get_dynamic_form_element_id()));
-                $element = DataManager :: retrieve_dynamic_form_elements($condition)->next_result();
+                $element = DataManager::retrieve_dynamic_form_elements($condition)->next_result();
                 
                 $table->setCellContents($counter, 0, $element->get_name());
                 $table->setCellAttributes($counter, 0, array('style' => 'width: 150px;'));
@@ -80,30 +80,30 @@ class Viewer
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
             new StaticConditionVariable($this->context));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_NAME), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
             new StaticConditionVariable($this->name));
         $condition = new AndCondition($conditions);
         
-        $form = DataManager :: retrieve(Instance :: class_name(), new DataClassRetrieveParameters($condition));
+        $form = DataManager::retrieve(Instance::class_name(), new DataClassRetrieveParameters($condition));
         
         $subcondition = new EqualityCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_DYNAMIC_FORM_ID), 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
             new StaticConditionVariable($form->get_id()));
         
         $conditions = array();
         $conditions[] = new SubselectCondition(
-            new PropertyConditionVariable(Value :: class_name(), Value :: PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_ID), 
+            new PropertyConditionVariable(Value::class_name(), Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
             null, 
             $subcondition);
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Value :: class_name(), Value :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Value::class_name(), Value::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->user_id));
         $condition = new AndCondition($conditions);
         
-        return DataManager :: retrieves(Value :: class_name(), new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(Value::class_name(), new DataClassRetrievesParameters($condition));
     }
 }

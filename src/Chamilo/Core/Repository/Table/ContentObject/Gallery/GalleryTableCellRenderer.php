@@ -7,21 +7,21 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 
-class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer implements
+class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
     public function renderContent($content_object)
     {
-        $display = ContentObjectRenditionImplementation :: factory(
-            $content_object,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_THUMBNAIL,
+        $display = ContentObjectRenditionImplementation::factory(
+            $content_object, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_THUMBNAIL, 
             $this->get_component());
-
+        
         $html[] = '<a href="' . htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
              '">' . $display->render() . '</a>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

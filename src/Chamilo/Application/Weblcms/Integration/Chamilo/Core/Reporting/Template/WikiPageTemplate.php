@@ -16,17 +16,17 @@ class WikiPageTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
-
-        $complex_content_object_item_id = Request :: get(
-            \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        parent::__construct($parent);
+        
+        $complex_content_object_item_id = Request::get(
+            \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)
         {
             $this->set_parameter(
-                \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, 
                 $complex_content_object_item_id);
         }
-
+        
         $this->add_reporting_block(new WikiPageMostActiveUsersBlock($this));
         $this->add_reporting_block(new WikiPageUsersContributionsBlock($this));
     }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="application\weblcms\tool\user">
-	<settings>
-		<category name="general">
-			<setting name="allow_subscribe_users_from_group" field="checkbox" default="1" />
-		</category>
-	</settings>
+    <settings>
+        <category name="general">
+            <setting
+                name="allow_subscribe_users_from_group"
+                field="checkbox"
+                default="1" />
+        </category>
+    </settings>
 </package>

@@ -18,7 +18,7 @@ class DataClassCountParameters extends DataClassParameters
 
     /**
      * The property of the DataClass object to be used as a parameter
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $property;
@@ -31,14 +31,14 @@ class DataClassCountParameters extends DataClassParameters
      */
     public function __construct($condition = null, Joins $joins = null, $property = array())
     {
-        parent :: __construct($condition, $joins);
-
+        parent::__construct($condition, $joins);
+        
         $this->property = $property;
     }
 
     /**
      * Get the property of the DataClass object to be used as a parameter
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_property()
@@ -48,7 +48,7 @@ class DataClassCountParameters extends DataClassParameters
 
     /**
      * Set the property of the DataClass object to be used as a parameter
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      */
     public function set_property($property)
@@ -62,17 +62,17 @@ class DataClassCountParameters extends DataClassParameters
      */
     public function getHashParts()
     {
-        $hashParts = parent :: getHashParts();
-
+        $hashParts = parent::getHashParts();
+        
         $hashParts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->getHashParts() : null);
         $hashParts[] = ($this->get_property() instanceof ConditionVariable ? $this->get_property()->getHashParts() : null);
-
+        
         return $hashParts;
     }
 
     /**
      * Generate an instance based on the input or throw an exception if no compatible input was found
-     *
+     * 
      * @param mixed $parameter
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters
      *
@@ -86,7 +86,7 @@ class DataClassCountParameters extends DataClassParameters
         {
             return $parameter;
         }
-
+        
         // If the parameter is a Condition, generate a new DataClassCountParameters instance using the Condition
         // provided by the context
         elseif (is_object($parameter) && $parameter instanceof Condition)

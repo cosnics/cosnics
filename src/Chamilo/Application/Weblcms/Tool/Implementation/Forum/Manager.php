@@ -11,14 +11,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: forum_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.forum
  */
 
 /**
  * This tool allows a user to publish forums in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+    IntroductionTextSupportInterface
 {
     const ACTION_BROWSE_FORUMS = 'Browser';
     const ACTION_VIEW_FORUM = 'Viewer';
@@ -32,28 +33,28 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Forum :: class_name());
+        return array(Forum::class_name());
     }
 
     public static function get_subforum_parents($subforum_id)
     {
-        $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(),
+        $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(), 
             $subforum_id);
-
+        
         while (! empty($parent))
         {
             $parents[] = $parent;
-            $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
+            $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_REF),
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_REF), 
                     new StaticConditionVariable($parent->get_parent())))->as_array();
             $parent = $parent[0];
         }
         $parents = array_reverse($parents);
-
+        
         return $parents;
     }
 }

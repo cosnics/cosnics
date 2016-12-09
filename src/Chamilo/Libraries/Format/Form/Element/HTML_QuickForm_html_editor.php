@@ -30,7 +30,7 @@ abstract class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         $this->_persistantFreeze = true;
         $this->set_type();
         
-        HTML_QuickForm_element :: __construct($elementName, $elementLabel, $attributes);
+        HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
     }
 
     public function get_options()
@@ -97,7 +97,7 @@ abstract class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
     public function render_textarea()
     {
-        $html = parent :: toHTML();
+        $html = parent::toHTML();
         
         $width = $this->options['width'];
         if (strpos($width, '%') === false)

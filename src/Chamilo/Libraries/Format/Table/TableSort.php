@@ -13,7 +13,7 @@ class TableSort
 
     /**
      * Sorts a 2-dimensional table.
-     *
+     * 
      * @param array $data The data to be sorted.
      * @param int $column The column on which the data should be sorted (default = 0)
      * @param string $direction The direction to sort (SORT_ASC (default) or SORT_DESC)
@@ -36,16 +36,16 @@ class TableSort
             // Probably an attack
             return $data;
         }
-
-        if (TableSort :: is_image_column($data, $column))
+        
+        if (TableSort::is_image_column($data, $column))
         {
             $type = SORT_IMAGE;
         }
-        elseif (TableSort :: is_date_column($data, $column))
+        elseif (TableSort::is_date_column($data, $column))
         {
             $type = SORT_DATE;
         }
-        elseif (TableSort :: is_numeric_column($data, $column))
+        elseif (TableSort::is_numeric_column($data, $column))
         {
             $type = SORT_NUMERIC;
         }
@@ -53,9 +53,9 @@ class TableSort
         {
             $type = SORT_STRING;
         }
-
+        
         $compare_operator = $direction == SORT_ASC ? '>' : '<=';
-
+        
         switch ($type)
         {
             case SORT_NUMERIC :
@@ -75,7 +75,7 @@ class TableSort
                      $compare_operator . ' 0;';
                 break;
         }
-
+        
         // Sort the content
         usort($data, create_function('$a, $b', $compare_function));
         return $data;
@@ -83,7 +83,7 @@ class TableSort
 
     /**
      * Checks whether a column of a 2D-array contains only numeric values
-     *
+     * 
      * @param array $data The data-array
      * @param int $column The index of the column to check
      * @return bool true if column contains only dates, false otherwise
@@ -106,7 +106,7 @@ class TableSort
 
     /**
      * Checks whether a column of a 2D-array contains only dates (GNU date syntax)
-     *
+     * 
      * @param array $data The data-array
      * @param int $column The index of the column to check
      * @return bool true if column contains only dates, false otherwise
@@ -138,7 +138,7 @@ class TableSort
 
     /**
      * Checks whether a column of a 2D-array contains only images (<img src=" path/file.ext" alt=".."/>)
-     *
+     * 
      * @param array $data The data-array
      * @param int $column The index of the column to check
      * @return bool true if column contains only images, false otherwise

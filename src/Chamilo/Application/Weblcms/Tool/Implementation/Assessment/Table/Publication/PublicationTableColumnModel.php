@@ -24,11 +24,11 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      */
     public function initialize_columns()
     {
-        parent :: initialize_columns(false);
+        parent::initialize_columns(false);
         
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE));
-
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TYPE));
+        
         $this->addActionsColumn();
     }
 }

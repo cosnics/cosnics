@@ -43,19 +43,19 @@ abstract class ContentObjectExportController
      */
     public static function factory(ExportParameters $parameters)
     {
-        $format = (string) StringUtilities :: getInstance()->createString($parameters->get_format())->upperCamelize();
+        $format = (string) StringUtilities::getInstance()->createString($parameters->get_format())->upperCamelize();
         $class = __NAMESPACE__ . '\\' . $format . '\\' . $format . 'ContentObjectExportController';
-
+        
         return new $class($parameters);
     }
 
     public function download()
     {
         $path = $this->run();
-
-        $file_properties = FileProperties :: from_path($path);
-        Filesystem :: file_send_for_download($path, true, $this->get_filename(), $file_properties->get_type());
-        Filesystem :: remove($path);
+        
+        $file_properties = FileProperties::from_path($path);
+        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->get_type());
+        Filesystem::remove($path);
     }
 
     /**

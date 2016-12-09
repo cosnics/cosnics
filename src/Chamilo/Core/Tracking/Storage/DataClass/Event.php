@@ -6,20 +6,20 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: event.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
- *
+ * 
  * @package tracking.lib
  */
 
 /**
  * This class presents a event
- *
+ * 
  * @author Sven Vanpoucke
  */
 class Event extends DataClass
 {
 
     private $trackers;
-
+    
     /**
      * Event properties
      */
@@ -29,13 +29,13 @@ class Event extends DataClass
 
     /**
      * Get the default properties
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_NAME, self :: PROPERTY_ACTIVE, self :: PROPERTY_CONTEXT));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_NAME, self::PROPERTY_ACTIVE, self::PROPERTY_CONTEXT));
     }
 
     /**
@@ -43,47 +43,47 @@ class Event extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     /**
      * Returns the name of this Event.
-     *
+     * 
      * @return the name.
      */
     public function get_name()
     {
-        return $this->get_default_property(self :: PROPERTY_NAME);
+        return $this->get_default_property(self::PROPERTY_NAME);
     }
 
     /**
      * Sets the name of this Event.
-     *
+     * 
      * @param name
      */
     public function set_name($name)
     {
-        $this->set_default_property(self :: PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     /**
      * Returns the active of this Event.
-     *
+     * 
      * @return the active.
      */
     public function get_active()
     {
-        return $this->get_default_property(self :: PROPERTY_ACTIVE);
+        return $this->get_default_property(self::PROPERTY_ACTIVE);
     }
 
     /**
      * Sets the active of this Event.
-     *
+     * 
      * @param active
      */
     public function set_active($active)
     {
-        $this->set_default_property(self :: PROPERTY_ACTIVE, $active);
+        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
     }
 
     /**
@@ -97,22 +97,22 @@ class Event extends DataClass
 
     /**
      * Returns the context of this Event.
-     *
+     * 
      * @return the context.
      */
     public function get_context()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTEXT);
+        return $this->get_default_property(self::PROPERTY_CONTEXT);
     }
 
     /**
      * Sets the context of this Event.
-     *
+     * 
      * @param context
      */
     public function set_context($context)
     {
-        $this->set_default_property(self :: PROPERTY_CONTEXT, $context);
+        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -124,7 +124,7 @@ class Event extends DataClass
     public static function eventFactory($name, $context)
     {
         $eventClass = $context . '\Event\\' . $name;
-
+        
         return new $eventClass();
     }
 
@@ -142,15 +142,15 @@ class Event extends DataClass
         if (! $this->trackers)
         {
             $trackers = array();
-
+            
             foreach ($this->getTrackerClasses() as $trackerClass)
             {
                 $trackers[] = new $trackerClass();
             }
-
+            
             $this->trackers = $trackers;
         }
-
+        
         return $this->trackers;
     }
 
@@ -162,14 +162,14 @@ class Event extends DataClass
     public static function trigger($name, $context, $parameters)
     {
         $context .= '\Integration\Chamilo\Core\Tracking';
-        return self :: eventFactory($name, $context)->run($parameters);
+        return self::eventFactory($name, $context)->run($parameters);
     }
 
     public function run($parameters)
     {
         $parameters['event'] = $this->get_name();
         $data = array();
-
+        
         $trackers = $this->get_trackers();
         foreach ($trackers as $tracker)
         {
@@ -178,12 +178,12 @@ class Event extends DataClass
             {
                 $tracker->set_event($this);
             }
-
+            
             $tracker->run($parameters);
-
+            
             $data[] = $tracker;
         }
-
+        
         return $data;
     }
 }

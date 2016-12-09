@@ -76,31 +76,31 @@ class EntityRelationService
             foreach ($entityIdentifiers as $entityIdentifier)
             {
                 $entityRelation = $this->getEntityRelationForWorkspaceEntityTypeAndIdentifier(
-                    $workspace,
-                    $entityType,
+                    $workspace, 
+                    $entityType, 
                     $entityIdentifier);
-
+                
                 if ($entityRelation instanceof WorkspaceEntityRelation)
                 {
                     $success = $this->updateEntityRelation(
-                        $entityRelation,
-                        $workspace->getId(),
-                        $entityType,
-                        $entityIdentifier,
+                        $entityRelation, 
+                        $workspace->getId(), 
+                        $entityType, 
+                        $entityIdentifier, 
                         $right);
                 }
                 else
                 {
                     $success = $this->createEntityRelation($workspace->getId(), $entityType, $entityIdentifier, $right);
                 }
-
+                
                 if (! $success)
                 {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -116,17 +116,17 @@ class EntityRelationService
     {
         $workspaceEntityRelation = new WorkspaceEntityRelation();
         $this->setEntityRelationProperties(
-            $workspaceEntityRelation,
-            $workspaceId,
-            $entityType,
-            $entityIdentifier,
+            $workspaceEntityRelation, 
+            $workspaceId, 
+            $entityType, 
+            $entityIdentifier, 
             $right);
-
+        
         if (! $workspaceEntityRelation->create())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -139,21 +139,21 @@ class EntityRelationService
      * @param integer $right
      * @return boolean
      */
-    public function updateEntityRelation(WorkspaceEntityRelation $workspaceEntityRelation, $workspaceId, $entityType,
+    public function updateEntityRelation(WorkspaceEntityRelation $workspaceEntityRelation, $workspaceId, $entityType, 
         $entityIdentifier, $right)
     {
         $this->setEntityRelationProperties(
-            $workspaceEntityRelation,
-            $workspaceId,
-            $entityType,
-            $entityIdentifier,
+            $workspaceEntityRelation, 
+            $workspaceId, 
+            $entityType, 
+            $entityIdentifier, 
             $right);
-
+        
         if (! $workspaceEntityRelation->update())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -165,7 +165,7 @@ class EntityRelationService
      * @param integer $entityIdentifier
      * @param integer $right
      */
-    private function setEntityRelationProperties(WorkspaceEntityRelation $workspaceEntityRelation, $workspaceId,
+    private function setEntityRelationProperties(WorkspaceEntityRelation $workspaceEntityRelation, $workspaceId, 
         $entityType, $entityIdentifier, $right)
     {
         $workspaceEntityRelation->set_workspace_id($workspaceId);
@@ -181,12 +181,12 @@ class EntityRelationService
      * @param integer $entityIdentifier
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
      */
-    public function getEntityRelationForWorkspaceEntityTypeAndIdentifier(Workspace $workspace, $entityType,
+    public function getEntityRelationForWorkspaceEntityTypeAndIdentifier(Workspace $workspace, $entityType, 
         $entityIdentifier)
     {
         return $this->getEntityRelationRepository()->findEntityRelationForWorkspaceEntityTypeAndIdentifier(
-            $workspace,
-            $entityType,
+            $workspace, 
+            $entityType, 
             $entityIdentifier);
     }
 
@@ -211,7 +211,7 @@ class EntityRelationService
         {
             return false;
         }
-
+        
         return true;
     }
 }

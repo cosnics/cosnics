@@ -22,10 +22,10 @@ class PublicationTableColumnModel extends DataClassTableColumnModel implements T
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Publication :: class_name(), Publication :: PROPERTY_TITLE));
+        $this->add_column(new DataClassPropertyTableColumn(Publication::class_name(), Publication::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID, null, false));
+            new DataClassPropertyTableColumn(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID, null, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(Publication :: class_name(), Publication :: PROPERTY_PUBLISHED));
+            new DataClassPropertyTableColumn(Publication::class_name(), Publication::PROPERTY_PUBLISHED));
     }
 }

@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\S
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 {
     // Available type filters
-    const FILTER_ICON = SystemAnnouncement :: PROPERTY_ICON;
+    const FILTER_ICON = SystemAnnouncement::PROPERTY_ICON;
 
     /**
      * Determine whether one or more of the parameters were set
@@ -20,7 +20,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function is_set()
     {
-        return parent :: is_set() || $this->has_filter_property(self :: FILTER_ICON);
+        return parent::is_set() || $this->has_filter_property(self::FILTER_ICON);
     }
 
     /**
@@ -30,8 +30,8 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_filter_properties($filter_properties = array())
     {
-        $filter_properties[] = self :: FILTER_ICON;
+        $filter_properties[] = self::FILTER_ICON;
         
-        return parent :: get_filter_properties($filter_properties);
+        return parent::get_filter_properties($filter_properties);
     }
 }

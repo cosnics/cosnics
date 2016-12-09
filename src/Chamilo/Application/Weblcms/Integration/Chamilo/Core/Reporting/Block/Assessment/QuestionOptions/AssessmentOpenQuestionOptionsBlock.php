@@ -22,7 +22,7 @@ class AssessmentOpenQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
     {
         $reporting_data = new ReportingData();
         
-        $reporting_data->set_rows(array(Translation :: get('User'), Translation :: get('Answer')));
+        $reporting_data->set_rows(array(Translation::get('User'), Translation::get('Answer')));
         
         $question_attempts = $this->get_attempts();
         
@@ -34,13 +34,13 @@ class AssessmentOpenQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
             
             $reporting_data->add_data_category_row(
                 $row_count, 
-                Translation :: get('User'), 
-                \Chamilo\Core\User\Storage\DataManager :: get_fullname_from_user(
-                    $question_attempt->get_optional_property(self :: PROPERTY_ASSESSMENT_ATTEMPT)->get_user_id()));
+                Translation::get('User'), 
+                \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+                    $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT)->get_user_id()));
             
             $answers = unserialize($question_attempt->get_answer());
             
-            $reporting_data->add_data_category_row($row_count, Translation :: get('Answer'), $answers[0]);
+            $reporting_data->add_data_category_row($row_count, Translation::get('Answer'), $answers[0]);
             
             $row_count ++;
         }

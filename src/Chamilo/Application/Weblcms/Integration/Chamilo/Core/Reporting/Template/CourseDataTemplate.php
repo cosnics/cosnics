@@ -21,7 +21,7 @@ class CourseDataTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         $this->add_reporting_block(new NoOfCoursesBlock($this));
         $this->add_reporting_block(new NoOfCoursesByLanguageBlock($this));
         $this->add_reporting_block(new MostActiveInactiveLastVisitBlock($this));

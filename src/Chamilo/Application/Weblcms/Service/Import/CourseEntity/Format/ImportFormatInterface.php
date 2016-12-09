@@ -12,7 +12,7 @@ interface ImportFormatInterface
 
     /**
      * Parses a file and returns ImportedCourseEntityRelation classes
-     *
+     * 
      * @param UploadedFile $file
      *
      * @return ImportedCourseEntityRelation[]
@@ -21,7 +21,7 @@ interface ImportFormatInterface
 
     /**
      * Returns the possible import mime types
-     *
+     * 
      * @return string
      */
     public function getImportMimeTypes();

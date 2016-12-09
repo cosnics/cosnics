@@ -56,12 +56,12 @@ class Locations
 
     public function get_package()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_context());
+        return ClassnameUtilities::getInstance()->getNamespaceParent($this->get_context());
     }
 
     public function get_application()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_context(), 5);
+        return ClassnameUtilities::getInstance()->getNamespaceParent($this->get_context(), 5);
     }
 
     /**

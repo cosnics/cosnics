@@ -7,7 +7,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
  * Notifies users about new feedback through mail
- *
+ * 
  * @package Chamilo\Core\Repository\Feedback\Infrastructure\Service
  */
 abstract class MailNotificationHandler implements NotificationHandlerInterface
@@ -21,7 +21,7 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
 
     /**
      * MailNotificationHandler constructor.
-     *
+     * 
      * @param MailerInterface $mailer
      */
     public function __construct(MailerInterface $mailer)
@@ -31,39 +31,39 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
 
     /**
      * Handles a single notification for a new feedback object
-     *
+     * 
      * @param Feedback $feedback
      * @param Notification[] $notifications
      */
     public function handleNotifications(Feedback $feedback, array $notifications = array())
     {
-        if(empty($notifications))
+        if (empty($notifications))
         {
             return;
         }
         
         $targetUsers = array();
-
+        
         foreach ($notifications as $notification)
         {
             $user = $notification->get_user();
             $targetUsers[] = $user->get_email();
         }
-
+        
         $targetUsers = array_unique($targetUsers);
-
-        if(empty($targetUsers))
+        
+        if (empty($targetUsers))
         {
             return;
         }
-
+        
         $mail = new Mail($this->getMailSubject($feedback), $this->getMailContent($feedback), $targetUsers);
         $this->mailer->sendMail($mail);
     }
 
     /**
      * Returns the subject for the mail
-     *
+     * 
      * @param Feedback $feedback
      *
      * @return string
@@ -72,7 +72,7 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
 
     /**
      * Returns the content for the mail
-     *
+     * 
      * @param Feedback $feedback
      *
      * @return string

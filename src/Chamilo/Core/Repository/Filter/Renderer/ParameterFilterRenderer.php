@@ -24,7 +24,7 @@ class ParameterFilterRenderer extends FilterRenderer
      */
     public function __construct(FilterData $filter_data, WorkspaceInterface $workspace, $filter_property)
     {
-        parent :: __construct($filter_data, $workspace);
+        parent::__construct($filter_data, $workspace);
         $this->filter_property = $filter_property;
     }
 
@@ -49,14 +49,14 @@ class ParameterFilterRenderer extends FilterRenderer
     public function render()
     {
         $filter_data = $this->get_filter_data();
-
+        
         switch ($this->get_filter_property())
         {
-            case FilterData :: FILTER_CATEGORY :
-                $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY_RECURSIVE, null);
+            case FilterData::FILTER_CATEGORY :
+                $filter_data->set_filter_property(FilterData::FILTER_CATEGORY, null);
+                $filter_data->set_filter_property(FilterData::FILTER_CATEGORY_RECURSIVE, null);
                 break;
-            case HtmlFilterRenderer :: CLEAR_ALL :
+            case HtmlFilterRenderer::CLEAR_ALL :
                 $filter_data->clear();
             default :
                 $filter_data->set_filter_property($this->get_filter_property(), null);

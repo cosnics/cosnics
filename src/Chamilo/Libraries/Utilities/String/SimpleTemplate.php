@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Utilities\String;
 /**
  * Class used to process simple text templates.
  * Mostly used to replace {$variables} in strings.
- * @TODO: remove that when we move to a templating system
- * @TODO: could be more efficient to do an include or eval
  * 
+ * @todo : remove that when we move to a templating system
+ * @todo : could be more efficient to do an include or eval
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
@@ -20,13 +20,13 @@ class SimpleTemplate
      *
      * @return SimpleTemplate
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (empty(self :: $instance))
+        if (empty(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -38,7 +38,7 @@ class SimpleTemplate
      */
     public static function ex($template, $vars)
     {
-        $instance = self :: get_instance();
+        $instance = self::getInstance();
         return $instance->process_one($template, $vars);
     }
 
@@ -53,7 +53,7 @@ class SimpleTemplate
      */
     public static function all($template, $vars, $glue = null)
     {
-        $instance = self :: get_instance();
+        $instance = self::getInstance();
         return $instance->process_all($template, $vars, $glue);
     }
 

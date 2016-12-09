@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment
  */
 
@@ -46,7 +46,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_FORUM_TOPIC_ID = 'topic_id';
     const PARAM_CURRENT_SESSION_PARENT_CLOI = 'parent_cloi';
     const PARAM_LAST_POST = 'last_post';
-    const DEFAULT_ACTION = self :: ACTION_VIEW_FORUM;
+    const DEFAULT_ACTION = self::ACTION_VIEW_FORUM;
 
     protected $forum;
 
@@ -61,11 +61,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         if ($applicationConfiguration->getApplication() instanceof ForumDisplaySupport)
         {
-            parent :: __construct($applicationConfiguration);
+            parent::__construct($applicationConfiguration);
         }
         else
         {
-            throw new \Exception(get_class($applicationConfiguration->getApplication()) . ' must implement ForumDisplaySupport ');
+            throw new \Exception(
+                get_class($applicationConfiguration->getApplication()) . ' must implement ForumDisplaySupport ');
         }
     }
 
@@ -81,7 +82,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * ask the parent of the usee is a forum manager
-     *
+     * 
      * @param type $user return boolean
      */
     public function is_forum_manager($user)
@@ -92,7 +93,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Gets an array of the first path found from a forum to his subforum
-     *
+     * 
      * @param type $children from the root (start) of the path
      * @param type $complex_content_item_id to which forum it must go
      * @param boolean $founded
@@ -105,52 +106,52 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $copy_children = array();
         $wrappers = array();
-
-        $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        
+        $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
-                new StaticConditionVariable($root_complex_content_ref),
-                ComplexContentObjectItem :: get_table_name()));
-
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
+                new StaticConditionVariable($root_complex_content_ref), 
+                ComplexContentObjectItem::get_table_name()));
+        
         while ($child = $children->next_result())
         {
             $copy_children[$child->get_id()] = $child->get_ref();
-
+            
             if ($child->get_id() == $complex_content_item_id)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
                     $child->get_ref());
-
+                
                 $wrappers[$child->get_id()] = $content_object;
-
+                
                 return $wrappers;
             }
         }
-
+        
         // if nothing is returned proceed method
-
+        
         foreach ($copy_children as $key => $value)
         {
             $wrap_child = array();
             $wrap_child = $this->retrieve_children_from_root_to_cloi($value, $complex_content_item_id);
-
+            
             if ($wrap_child)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
                     $value);
-
+                
                 $wrappers[$key] = $content_object;
-
+                
                 foreach ($wrap_child as $key_child => $value_child)
                 {
                     $wrappers[$key_child] = $value_child;
                 }
-
+                
                 return $wrappers;
             }
         }
@@ -171,21 +172,20 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getForum()
     {
-        if (!isset($this->forum))
+        if (! isset($this->forum))
         {
-            if (!$this->get_complex_content_object_item())
+            if (! $this->get_complex_content_object_item())
             {
                 $this->forum = $this->get_root_content_object();
             }
             else
             {
-                $this->forum = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                    ContentObject:: class_name(),
-                    $this->get_complex_content_object_item()->get_ref()
-                );
+                $this->forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
+                    $this->get_complex_content_object_item()->get_ref());
             }
         }
-
+        
         return $this->forum;
     }
 }

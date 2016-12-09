@@ -31,41 +31,41 @@ class LearningPathProgressUsersBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $course_id = $this->get_course_id();
-        $users = CourseDataManager :: retrieve_all_course_users($course_id)->as_array();
-
+        $users = CourseDataManager::retrieve_all_course_users($course_id)->as_array();
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable(
-                ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name(), true)));
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name(), true)));
         $condition = new AndCondition($conditions);
-
+        
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_MODIFIED_DATE));
-
-        $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
-            $condition,
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
+        
+        $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+            $condition, 
             $order_by);
-
+        
         $publications = array();
         $headings = array();
-        $headings[] = Translation :: get('Name');
+        $headings[] = Translation::get('Name');
         while ($publication = $publication_resultset->next_result())
         {
             $publications[] = $publication;
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
+                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+            
             if ($publication_resultset->size() > 5)
             {
                 $headings[] = substr($content_object->get_title(), 0, 14);
@@ -75,25 +75,25 @@ class LearningPathProgressUsersBlock extends ToolBlock
                 $headings[] = $content_object->get_title();
             }
         }
-
+        
         $reporting_data->set_rows($headings);
-
+        
         foreach ($users as $key => $user)
         {
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
-                $key,
-                Translation :: get('Name'),
-                \Chamilo\Core\User\Storage\DataClass\User :: fullname(
-                    $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_FIRSTNAME],
-                    $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_LASTNAME]));
-
+                $key, 
+                Translation::get('Name'), 
+                \Chamilo\Core\User\Storage\DataClass\User::fullname(
+                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME], 
+                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]));
+            
             foreach ($publications as $publication)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
-                    $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+                
                 if ($publication_resultset->size() > 5)
                 {
                     $title = substr($content_object->get_title(), 0, 14);
@@ -102,41 +102,41 @@ class LearningPathProgressUsersBlock extends ToolBlock
                 {
                     $title = $content_object->get_title();
                 }
-
+                
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        LearningPathAttempt :: class_name(),
-                        LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID),
-                    new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID]));
+                        LearningPathAttempt::class_name(), 
+                        LearningPathAttempt::PROPERTY_LEARNING_PATH_ID), 
+                    new StaticConditionVariable($publication[ContentObjectPublication::PROPERTY_ID]));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        LearningPathAttempt :: class_name(),
-                        LearningPathAttempt :: PROPERTY_USER_ID),
-                    new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID]));
+                        LearningPathAttempt::class_name(), 
+                        LearningPathAttempt::PROPERTY_USER_ID), 
+                    new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID]));
                 $condition = new AndCondition($conditions);
-
-                $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve(
-                    LearningPathAttempt :: class_name(),
+                
+                $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve(
+                    LearningPathAttempt::class_name(), 
                     new DataClassRetrieveParameters($condition));
-
+                
                 if (! $attempt instanceof LearningPathAttempt)
                 {
-                    if (\Chamilo\Application\Weblcms\Storage\DataManager :: is_publication_target_user(
-                        $user[\Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID],
-                        $publication[ContentObjectPublication :: PROPERTY_ID],
+                    if (\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
+                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID], 
+                        $publication[ContentObjectPublication::PROPERTY_ID], 
                         $course_id))
                     {
                         $reporting_data->add_data_category_row($key, $title, null);
                         continue;
                     }
-
+                    
                     $reporting_data->add_data_category_row($key, $title, 'X');
                     continue;
                 }
-
+                
                 $progress = $attempt->get_progress();
-
+                
                 switch ($progress)
                 {
                     case 0 :
@@ -149,7 +149,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
                         $progress = '<span style="color:orange">' . $progress . '%</span>';
                         break;
                 }
-
+                
                 $reporting_data->add_data_category_row($key, $title, $progress);
             }
         }
@@ -164,6 +164,6 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

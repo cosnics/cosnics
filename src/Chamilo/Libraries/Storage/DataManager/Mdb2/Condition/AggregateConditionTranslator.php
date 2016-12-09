@@ -25,7 +25,7 @@ class AggregateConditionTranslator extends ConditionTranslator
         foreach ($this->get_condition()->get_conditions() as $key => $condition)
         {
             $count ++;
-            $translation = ConditionTranslator :: render($condition);
+            $translation = ConditionTranslator::render($condition);
             
             if (! empty($translation))
             {

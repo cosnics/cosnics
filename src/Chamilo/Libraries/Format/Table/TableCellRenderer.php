@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * This class represents a cell renderer for a table Refactoring from ObjectTable to split between a table based on a
  * record and based on an object
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableCellRenderer extends TableComponent
@@ -20,23 +20,23 @@ abstract class TableCellRenderer extends TableComponent
      * Constructor *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Constructor
-     *
+     * 
      * @param Table $table
      *
      * @throws \Exception
      */
     public function __construct($table)
     {
-        parent :: __construct($table);
-
+        parent::__construct($table);
+        
         if ($table->get_column_model() instanceof TableColumnModelActionsColumnSupport)
         {
             if (! $this instanceof TableCellRendererActionsColumnSupport)
             {
-                throw new \Exception(Translation :: get('ActionsColumnSupportError'));
+                throw new \Exception(Translation::get('ActionsColumnSupportError'));
             }
         }
     }
@@ -46,10 +46,10 @@ abstract class TableCellRenderer extends TableComponent
      * Abstract Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Renders a single cell
-     *
+     * 
      * @param TableColumn $column
      * @param mixed $result
      * @return string
@@ -70,7 +70,7 @@ abstract class TableCellRenderer extends TableComponent
     /**
      * Define the unique identifier for the row needed for e.g.
      * checkboxes
-     *
+     * 
      * @param mixed $result
      * @return int
      */

@@ -30,38 +30,38 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         
-        $complex_content_object_item_id = Request :: get(
-            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        $parent_complex_content_object_item = Request :: get(
-            \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_content_object_item_id = Request::get(
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $parent_complex_content_object_item = Request::get(
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         
         $parameters = array(
-            \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item, 
-            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id);
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item, 
+            \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id);
         
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(), 
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(), 
             $complex_content_object_item_id);
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(), 
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), 
             $complex_content_object_item->get_ref());
         
-        if (! \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager :: is_content_object_editable(
+        if (! \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::is_content_object_editable(
             $content_object->get_id()))
         {
-            $parameters[\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
+            $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
             $this->redirect(
-                Translation :: get('UpdateNotAllowed'), 
+                Translation::get('UpdateNotAllowed'), 
                 false, 
                 array_merge(
                     $parameters, 
                     array(
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE)));
+                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE)));
         }
         
-        $complex_content_object_item_form = \Chamilo\Core\Repository\Form\ComplexContentObjectItemForm :: factory(
+        $complex_content_object_item_form = \Chamilo\Core\Repository\Form\ComplexContentObjectItemForm::factory(
             $content_object->context(), 
             $complex_content_object_item, 
             $this->get_url());
@@ -72,8 +72,8 @@ class UpdaterComponent extends Manager implements DelegateComponent
             $defaults = $complex_content_object_item_form->get_default_values();
         }
         
-        $content_object_form = ContentObjectForm :: factory(
-            ContentObjectForm :: TYPE_EDIT, 
+        $content_object_form = ContentObjectForm::factory(
+            ContentObjectForm::TYPE_EDIT, 
             new PersonalWorkspace($this->get_user()), 
             $content_object, 
             'edit', 
@@ -93,13 +93,13 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $new_id = $content_object->get_latest_version()->get_id();
                 $complex_content_object_item->set_ref($new_id);
                 
-                $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                    ComplexContentObjectItem :: class_name(), 
+                $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                    ComplexContentObjectItem::class_name(), 
                     new DataClassRetrievesParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem :: class_name(), 
-                                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                                ComplexContentObjectItem::class_name(), 
+                                ComplexContentObjectItem::PROPERTY_PARENT), 
                             new StaticConditionVariable($old_id))));
                 while ($child = $children->next_result())
                 {
@@ -117,45 +117,45 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $complex_content_object_item->update();
             }
             
-            $parameters[\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
+            $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
             
             $this->redirect(
-                Translation :: get(
+                Translation::get(
                     'ObjectUpdated', 
-                    array('OBJECT' => Translation :: get('ContentObject')), 
-                    Utilities :: COMMON_LIBRARIES), 
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES), 
                 false, 
                 array_merge(
                     $parameters, 
                     array(
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE)));
+                        \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE)));
         }
         else
         {
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail::getInstance();
             $trail->add_help('repository builder');
             
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     null, 
-                    Translation :: get(
+                    Translation::get(
                         'EditContentObject', 
                         array(
                             'CONTENT_OBJECT' => $content_object->get_title(), 
-                            'ICON' => Theme :: getInstance()->getImage(
+                            'ICON' => Theme::getInstance()->getImage(
                                 'Logo/16', 
                                 'png', 
-                                Translation :: get(
+                                Translation::get(
                                     'TypeName', 
                                     null, 
-                                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+                                    ClassnameUtilities::getInstance()->getNamespaceFromClassname(
                                         $content_object->get_type())), 
                                 null, 
-                                ToolbarItem :: DISPLAY_ICON, 
+                                ToolbarItem::DISPLAY_ICON, 
                                 false, 
-                                ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+                                ClassnameUtilities::getInstance()->getNamespaceFromClassname(
                                     $content_object->get_type()))), 
-                        \Chamilo\Core\Repository\Manager :: context())));
+                        \Chamilo\Core\Repository\Manager::context())));
             
             $html = array();
             

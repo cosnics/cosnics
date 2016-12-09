@@ -16,11 +16,11 @@ use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -32,12 +32,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Application
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
     /**
      *
      * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
      */
-    private $applicationConfiguration;
+    protected $applicationConfiguration;
 
     // Parameters
     const PARAM_ACTION = 'go';
@@ -70,6 +71,8 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
+
+        $this->initializeContainer();
     }
 
     /**
@@ -82,12 +85,32 @@ abstract class Application
     }
 
     /**
+     * Helper function to call the authorization checker with the current logged in user.
+     * Throws the
+     * NotAllowedException when not valid.
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @param string $context
+     * @param string $action
+     *
+     * @throws NotAllowedException
      */
-    public function getRequest()
+    public function checkAuthorization($context, $action = null)
     {
-        return $this->getApplicationConfiguration()->getRequest();
+        return $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
+    }
+
+    /**
+     * Helper function to call the authorization checker with the current logged in user, returns true or false
+     * and can be used in if statements
+     *
+     * @param string $context
+     * @param string $action
+     *
+     * @return bool
+     */
+    public function isAuthorized($context, $action = null)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($this->getUser(), $context, $action);
     }
 
     /**
@@ -166,15 +189,12 @@ abstract class Application
         if ($message != null)
         {
 
-            $message_type = (! $error_message) ?
-                \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage :: TYPE_INFO :
-                \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage :: TYPE_DANGER;
+            $message_type = (! $error_message) ? \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_INFO : \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_DANGER;
 
             $notificationMessageManager = new NotificationMessageManager();
 
             $notificationMessageManager->addMessage(
-                new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage($message, $message_type)
-            );
+                new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage($message, $message_type));
         }
 
         $this->simple_redirect($parameters, $filter, $encode_entities, $anchor);
@@ -187,7 +207,7 @@ abstract class Application
      */
     public function get_parameters()
     {
-        return Parameters :: get_instance()->get_parameters($this);
+        return Parameters::getInstance()->get_parameters($this);
     }
 
     /**
@@ -198,7 +218,7 @@ abstract class Application
      */
     public function get_parameter($name)
     {
-        return Parameters :: get_instance()->get_parameter($this, $name);
+        return Parameters::getInstance()->get_parameter($this, $name);
     }
 
     /**
@@ -209,7 +229,7 @@ abstract class Application
      */
     public function set_parameter($name, $value)
     {
-        Parameters :: get_instance()->set_parameter($this, $name, $value);
+        Parameters::getInstance()->set_parameter($this, $name, $value);
     }
 
     /**
@@ -221,7 +241,7 @@ abstract class Application
      */
     public function render_header($pageTitle = '')
     {
-        if(!$pageTitle)
+        if (! $pageTitle)
         {
             $pageTitle = $this->renderPageTitle();
         }
@@ -231,10 +251,11 @@ abstract class Application
             return $this->get_application()->render_header($pageTitle);
         }
 
-        $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+        $breadcrumbtrail = BreadcrumbTrail::getInstance();
 
-        $page = Page :: getInstance();
+        $page = Page::getInstance();
         $page->setApplication($this);
+        $page->setTitle($this->getPageTitle());
 
         $html = array();
 
@@ -257,23 +278,24 @@ abstract class Application
                 $html[] = '<div class="col-xs-12">';
             }
 
-
             $html[] = $pageTitle;
             $html[] = '<div class="clearfix"></div>';
         }
 
-        if (PlatformSetting :: get('maintenance_mode'))
+        $maintenanceMode = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_mode'));
+
+        if ($maintenanceMode)
         {
-            $html[] = Display :: error_message(Translation :: get('MaintenanceModeMessage'));
+            $html[] = Display::error_message(Translation::get('MaintenanceModeMessage'));
         }
 
         // Display messages
-        $messages = Session :: retrieve(self :: PARAM_MESSAGES);
+        $messages = Session::retrieve(self::PARAM_MESSAGES);
 
-        Session :: unregister(self :: PARAM_MESSAGES);
+        Session::unregister(self::PARAM_MESSAGES);
         if (is_array($messages))
         {
-            $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
+            $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
         }
 
         $notificationMessageManager = new NotificationMessageManager();
@@ -281,21 +303,21 @@ abstract class Application
 
         // DEPRECATED
         // Display messages
-        $message = Request :: get(self :: PARAM_MESSAGE);
-        $type = Request :: get(self :: PARAM_MESSAGE_TYPE);
+        $message = Request::get(self::PARAM_MESSAGE);
+        $type = Request::get(self::PARAM_MESSAGE_TYPE);
 
         if ($message)
         {
             $html[] = $this->display_message($message);
         }
 
-        $message = Request :: get(self :: PARAM_ERROR_MESSAGE);
+        $message = Request::get(self::PARAM_ERROR_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_error_message($message);
         }
 
-        $message = Request :: get(self :: PARAM_WARNING_MESSAGE);
+        $message = Request::get(self::PARAM_WARNING_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_warning_message($message);
@@ -305,17 +327,27 @@ abstract class Application
     }
 
     /**
+     *
+     * @return string
+     */
+    protected function getPageTitle()
+    {
+        return \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
+             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'site_name');
+    }
+
+    /**
      * Renders the page title
      *
      * @return string
      */
     protected function renderPageTitle()
     {
-        $breadcrumbTrail = BreadcrumbTrail::get_instance();
+        $breadcrumbTrail = BreadcrumbTrail::getInstance();
 
-        if($breadcrumbTrail->size() > 0)
+        if ($breadcrumbTrail->size() > 0)
         {
-            $pageTitle = BreadcrumbTrail::get_instance()->get_last()->get_name();
+            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
 
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }
@@ -333,7 +365,7 @@ abstract class Application
             return $this->get_application()->render_footer();
         }
 
-        $page = Page :: getInstance();
+        $page = Page::getInstance();
 
         $html = array();
 
@@ -367,6 +399,7 @@ abstract class Application
     }
 
     /**
+     *
      * @param array $messages
      * @param array $types
      *
@@ -396,7 +429,7 @@ abstract class Application
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessage = NotificationMessage::error($message);
-        
+
         return $notificationMessageRenderer->render($notificationMessage);
     }
 
@@ -506,11 +539,20 @@ abstract class Application
 
     /**
      *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->getApplicationConfiguration()->getRequest();
+    }
+
+    /**
+     *
      * @return string
      */
     public function get_action()
     {
-        return $this->get_parameter(static :: PARAM_ACTION);
+        return $this->get_parameter(static::PARAM_ACTION);
     }
 
     /**
@@ -520,12 +562,12 @@ abstract class Application
      */
     public function set_action($action)
     {
-        return $this->set_parameter(static :: PARAM_ACTION, $action);
+        return $this->set_parameter(static::PARAM_ACTION, $action);
     }
 
     public function get_application_name()
     {
-        return ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(static :: context());
+        return ClassnameUtilities::getInstance()->getPackageNameFromNamespace(static::context());
     }
 
     /**
@@ -598,7 +640,7 @@ abstract class Application
             }
         }
 
-        return Translation :: get($message);
+        return Translation::get($message);
     }
 
     /**
@@ -641,7 +683,7 @@ abstract class Application
             }
         }
 
-        return Translation :: get($message, $param);
+        return Translation::get($message, $param);
     }
 
     /**
@@ -651,7 +693,7 @@ abstract class Application
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**
@@ -678,9 +720,9 @@ abstract class Application
      */
     public static function is_active($context = null)
     {
-        if (self :: exists($context))
+        if (self::exists($context))
         {
-            if (\Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($context))
+            if (\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($context))
             {
                 return true;
             }
@@ -715,12 +757,12 @@ abstract class Application
      */
     public static function exists($application)
     {
-        if (! isset(self :: $application_path_cache[$application]))
+        if (! isset(self::$application_path_cache[$application]))
         {
-            $application_path = Path :: getInstance()->namespaceToFullPath($application);
-            self :: $application_path_cache[$application] = is_dir($application_path);
+            $application_path = Path::getInstance()->namespaceToFullPath($application);
+            self::$application_path_cache[$application] = is_dir($application_path);
         }
-        return self :: $application_path_cache[$application];
+        return self::$application_path_cache[$application];
     }
 
     /**
@@ -731,7 +773,7 @@ abstract class Application
      */
     public static function get_application_namespace($application_name)
     {
-        $path = Path :: getInstance()->namespaceToFullPath('Chamilo\Core') . $application_name . '/';
+        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core') . $application_name . '/';
 
         if (is_dir($path))
         {
@@ -739,7 +781,7 @@ abstract class Application
         }
         else
         {
-            $path = Path :: getInstance()->namespaceToFullPath('Chamilo\Application') . $application_name . '/';
+            $path = Path::getInstance()->namespaceToFullPath('Chamilo\Application') . $application_name . '/';
 
             if (is_dir($path))
             {
@@ -761,36 +803,36 @@ abstract class Application
     {
         $applications = array();
 
-        if (! $type || $type == Registration :: TYPE_CORE)
+        if (! $type || $type == Registration::TYPE_CORE)
         {
-            $directories = Filesystem :: get_directory_content(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Core'),
-                Filesystem :: LIST_DIRECTORIES,
+            $directories = Filesystem::get_directory_content(
+                Path::getInstance()->namespaceToFullPath('Chamilo\Core'),
+                Filesystem::LIST_DIRECTORIES,
                 false);
 
             foreach ($directories as $directory)
             {
-                $namespace = self :: get_application_namespace(basename($directory));
+                $namespace = self::get_application_namespace(basename($directory));
 
-                if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
+                if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
             }
         }
 
-        if (! $type || $type == Registration :: TYPE_APPLICATION)
+        if (! $type || $type == Registration::TYPE_APPLICATION)
         {
-            $directories = Filesystem :: get_directory_content(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Application'),
-                Filesystem :: LIST_DIRECTORIES,
+            $directories = Filesystem::get_directory_content(
+                Path::getInstance()->namespaceToFullPath('Chamilo\Application'),
+                Filesystem::LIST_DIRECTORIES,
                 false);
 
             foreach ($directories as $directory)
             {
-                $namespace = self :: get_application_namespace(basename($directory));
+                $namespace = self::get_application_namespace(basename($directory));
 
-                if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
+                if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
@@ -806,18 +848,18 @@ abstract class Application
      */
     public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
     {
-        $applications = \Chamilo\Configuration\Configuration :: registrations_by_type($type);
+        $applications = \Chamilo\Configuration\Configuration::registrations_by_type($type);
 
         $active_applications = array();
 
         foreach ($applications as $application)
         {
-            if (! $application[Registration :: PROPERTY_STATUS])
+            if (! $application[Registration::PROPERTY_STATUS])
             {
                 continue;
             }
 
-            $active_applications[] = $application[Registration :: PROPERTY_CONTEXT];
+            $active_applications[] = $application[Registration::PROPERTY_CONTEXT];
         }
         return $active_applications;
     }
@@ -825,7 +867,7 @@ abstract class Application
     public static function context_fallback($context, array $fallbackContexts)
     {
         // Check if the context exists
-        $context_path = Path :: getInstance()->namespaceToFullPath($context);
+        $context_path = Path::getInstance()->namespaceToFullPath($context);
 
         if (! is_dir($context_path))
         {
@@ -837,7 +879,7 @@ abstract class Application
 
             foreach ($convertedContextParts as $key => $convertedContextPart)
             {
-                $convertedContextParts[$key] = (string) StringUtilities :: getInstance()->createString(
+                $convertedContextParts[$key] = (string) StringUtilities::getInstance()->createString(
                     $convertedContextPart)->upperCamelize();
             }
 
@@ -846,39 +888,39 @@ abstract class Application
             foreach ($fallbackContexts as $fallbackContext)
             {
                 $possibleContext = $fallbackContext . $convertedContext;
-                if (is_dir(Path :: getInstance()->namespaceToFullPath($possibleContext)))
+                if (is_dir(Path::getInstance()->namespaceToFullPath($possibleContext)))
                 {
                     $context = $possibleContext;
                     break;
                 }
             }
 
-            $context_path = Path :: getInstance()->namespaceToFullPath($context);
+            $context_path = Path::getInstance()->namespaceToFullPath($context);
             if (! is_dir($context_path))
             {
-                throw new UserException(Translation :: get('NoContextFound', array('CONTEXT' => $context)));
+                throw new UserException(Translation::get('NoContextFound', array('CONTEXT' => $context)));
             }
             else
             {
                 $query = $_GET;
-                $query[self :: PARAM_CONTEXT] = $context;
+                $query[self::PARAM_CONTEXT] = $context;
 
-//                $notificationMessageManager = new NotificationMessageManager();
-//                $notificationMessageManager->addMessage(
-//                    new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
-//                        Translation :: get(
-//                            'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
-//                        ),
-//                        \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
-//                        'old_application_parameter'
-//                    ),
-//                    1
-//                );
-                
+                // $notificationMessageManager = new NotificationMessageManager();
+                // $notificationMessageManager->addMessage(
+                // new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
+                // Translation :: get(
+                // 'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
+                // ),
+                // \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
+                // 'old_application_parameter'
+                // ),
+                // 1
+                // );
+
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
 
-                $logger = new FileLogger(Path :: getInstance()->getLogPath() . '/application_parameters.log', true);
+                $logger = new FileLogger(Path::getInstance()->getLogPath() . '/application_parameters.log', true);
                 $logger->log_message($currentUrl);
 
                 $redirect = new Redirect($query);
@@ -913,15 +955,15 @@ abstract class Application
      */
     public static function package()
     {
-        $className = self :: class_name(false);
+        $className = self::class_name(false);
 
         if ($className == 'Manager')
         {
-            return static :: context();
+            return static::context();
         }
         else
         {
-            return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+            return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
         }
     }
 

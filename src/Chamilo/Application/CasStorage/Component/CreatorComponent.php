@@ -18,39 +18,39 @@ class CreatorComponent extends Manager
     {
         $account_request = new AccountRequest();
         $form = new AccountRequestForm(
-            AccountRequestForm :: TYPE_CREATE,
-            $account_request,
-            $this->get_url(),
+            AccountRequestForm::TYPE_CREATE, 
+            $account_request, 
+            $this->get_url(), 
             $this->get_user());
-
+        
         if ($form->validate())
         {
             $success = $form->create_account_request();
             if ($success)
             {
                 $this->redirect(
-                    Translation :: get('AccountRequestCreated', null, Utilities :: COMMON_LIBRARIES),
-                    false,
+                    Translation::get('AccountRequestCreated', null, Utilities::COMMON_LIBRARIES), 
+                    false, 
                     array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                        Manager :: PARAM_REQUEST_ID => $account_request->get_id()));
+                        Application::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        Manager::PARAM_REQUEST_ID => $account_request->get_id()));
             }
             else
             {
                 $this->redirect(
-                    Translation :: get('AccountRequestNotCreated', null, Utilities :: COMMON_LIBRARIES),
-                    true,
-                    array(Application :: PARAM_ACTION => Manager :: ACTION_BROWSE));
+                    Translation::get('AccountRequestNotCreated', null, Utilities::COMMON_LIBRARIES), 
+                    true, 
+                    array(Application::PARAM_ACTION => Manager::ACTION_BROWSE));
             }
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

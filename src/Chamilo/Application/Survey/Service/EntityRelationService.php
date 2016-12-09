@@ -75,31 +75,35 @@ class EntityRelationService
             foreach ($entityIdentifiers as $entityIdentifier)
             {
                 $entityRelation = $this->getEntityRelationForPublicationEntityTypeAndIdentifier(
-                    $publication,
-                    $entityType,
+                    $publication, 
+                    $entityType, 
                     $entityIdentifier);
-
+                
                 if ($entityRelation instanceof PublicationEntityRelation)
                 {
                     $success = $this->updateEntityRelation(
-                        $entityRelation,
-                        $publication->getId(),
-                        $entityType,
-                        $entityIdentifier,
+                        $entityRelation, 
+                        $publication->getId(), 
+                        $entityType, 
+                        $entityIdentifier, 
                         $right);
                 }
                 else
                 {
-                    $success = $this->createEntityRelation($publication->getId(), $entityType, $entityIdentifier, $right);
+                    $success = $this->createEntityRelation(
+                        $publication->getId(), 
+                        $entityType, 
+                        $entityIdentifier, 
+                        $right);
                 }
-
+                
                 if (! $success)
                 {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -115,17 +119,17 @@ class EntityRelationService
     {
         $publicationEntityRelation = new PublicationEntityRelation();
         $this->setEntityRelationProperties(
-            $publicationEntityRelation,
-            $publicationId,
-            $entityType,
-            $entityIdentifier,
+            $publicationEntityRelation, 
+            $publicationId, 
+            $entityType, 
+            $entityIdentifier, 
             $right);
-
+        
         if (! $publicationEntityRelation->create())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -138,21 +142,21 @@ class EntityRelationService
      * @param integer $right
      * @return boolean
      */
-    public function updateEntityRelation(PublicationEntityRelation $publicationEntityRelation, $publicationId, $entityType,
-        $entityIdentifier, $right)
+    public function updateEntityRelation(PublicationEntityRelation $publicationEntityRelation, $publicationId, 
+        $entityType, $entityIdentifier, $right)
     {
         $this->setEntityRelationProperties(
-            $publicationEntityRelation,
-            $publicationId,
-            $entityType,
-            $entityIdentifier,
+            $publicationEntityRelation, 
+            $publicationId, 
+            $entityType, 
+            $entityIdentifier, 
             $right);
-
+        
         if (! $publicationEntityRelation->update())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -164,7 +168,7 @@ class EntityRelationService
      * @param integer $entityIdentifier
      * @param integer $right
      */
-    private function setEntityRelationProperties(PublicationEntityRelation $publicationEntityRelation, $publicationId,
+    private function setEntityRelationProperties(PublicationEntityRelation $publicationEntityRelation, $publicationId, 
         $entityType, $entityIdentifier, $right)
     {
         $publicationEntityRelation->setPublicationId($publicationId);
@@ -180,12 +184,12 @@ class EntityRelationService
      * @param integer $entityIdentifier
      * @return \Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation
      */
-    public function getEntityRelationForPublicationEntityTypeAndIdentifier(Publication $publication, $entityType,
+    public function getEntityRelationForPublicationEntityTypeAndIdentifier(Publication $publication, $entityType, 
         $entityIdentifier)
     {
         return $this->getEntityRelationRepository()->findEntityRelationForPublicationEntityTypeAndIdentifier(
-            $publication,
-            $entityType,
+            $publication, 
+            $entityType, 
             $entityIdentifier);
     }
 
@@ -210,7 +214,7 @@ class EntityRelationService
         {
             return false;
         }
-
+        
         return true;
     }
 }

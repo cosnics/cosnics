@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataManager;
@@ -8,7 +9,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -58,35 +58,35 @@ class User extends DataClass
 
     /**
      * Get the default properties of all users.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_LASTNAME,
-                self :: PROPERTY_FIRSTNAME,
-                self :: PROPERTY_USERNAME,
-                self :: PROPERTY_PASSWORD,
-                self :: PROPERTY_AUTH_SOURCE,
-                self :: PROPERTY_EXTERNAL_UID,
-                self :: PROPERTY_EMAIL,
-                self :: PROPERTY_STATUS,
-                self :: PROPERTY_PLATFORMADMIN,
-                self :: PROPERTY_PHONE,
-                self :: PROPERTY_OFFICIAL_CODE,
-                self :: PROPERTY_PICTURE_URI,
-                self :: PROPERTY_CREATOR_ID,
-                self :: PROPERTY_DISK_QUOTA,
-                self :: PROPERTY_DATABASE_QUOTA,
-                self :: PROPERTY_ACTIVATION_DATE,
-                self :: PROPERTY_EXPIRATION_DATE,
-                self :: PROPERTY_REGISTRATION_DATE,
-                self :: PROPERTY_ACTIVE,
-                self :: PROPERTY_SECURITY_TOKEN,
-                self :: PROPERTY_APPROVED,
-                self :: PROPERTY_TERMS_DATE));
+                self::PROPERTY_LASTNAME, 
+                self::PROPERTY_FIRSTNAME, 
+                self::PROPERTY_USERNAME, 
+                self::PROPERTY_PASSWORD, 
+                self::PROPERTY_AUTH_SOURCE, 
+                self::PROPERTY_EXTERNAL_UID, 
+                self::PROPERTY_EMAIL, 
+                self::PROPERTY_STATUS, 
+                self::PROPERTY_PLATFORMADMIN, 
+                self::PROPERTY_PHONE, 
+                self::PROPERTY_OFFICIAL_CODE, 
+                self::PROPERTY_PICTURE_URI, 
+                self::PROPERTY_CREATOR_ID, 
+                self::PROPERTY_DISK_QUOTA, 
+                self::PROPERTY_DATABASE_QUOTA, 
+                self::PROPERTY_ACTIVATION_DATE, 
+                self::PROPERTY_EXPIRATION_DATE, 
+                self::PROPERTY_REGISTRATION_DATE, 
+                self::PROPERTY_ACTIVE, 
+                self::PROPERTY_SECURITY_TOKEN, 
+                self::PROPERTY_APPROVED, 
+                self::PROPERTY_TERMS_DATE));
     }
 
     /**
@@ -94,54 +94,54 @@ class User extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     /**
      * Returns the lastname of this user.
-     *
+     * 
      * @return String The lastname
      */
     public function get_lastname()
     {
-        return $this->get_default_property(self :: PROPERTY_LASTNAME);
+        return $this->get_default_property(self::PROPERTY_LASTNAME);
     }
 
     /**
      * Returns the firstname of this user.
-     *
+     * 
      * @return String The firstname
      */
     public function get_firstname()
     {
-        return $this->get_default_property(self :: PROPERTY_FIRSTNAME);
+        return $this->get_default_property(self::PROPERTY_FIRSTNAME);
     }
 
     /**
      * Returns the fullname of this user
-     *
+     * 
      * @return string The fullname
      */
     public function get_fullname()
     {
-        return self :: fullname($this->get_firstname(), $this->get_lastname());
+        return self::fullname($this->get_firstname(), $this->get_lastname());
     }
 
     /**
      * Returns the fullname of this user
-     *
+     * 
      * @return string The fullname
      */
     public static function fullname($first_name, $last_name)
     {
-        $format = PlatformSetting :: get('fullname_format', Manager :: context());
-
+        $format = Configuration::getInstance()->get_setting(array(Manager::context(), 'fullname_format'));
+        
         switch ($format)
         {
-            case self :: NAME_FORMAT_FIRST :
+            case self::NAME_FORMAT_FIRST :
                 return $first_name . ' ' . $last_name;
                 break;
-            case self :: NAME_FORMAT_LAST :
+            case self::NAME_FORMAT_LAST :
                 return $last_name . ' ' . $first_name;
                 break;
             default :
@@ -151,27 +151,27 @@ class User extends DataClass
 
     /**
      * Returns the username of this user.
-     *
+     * 
      * @return String The username
      */
     public function get_username()
     {
-        return $this->get_default_property(self :: PROPERTY_USERNAME);
+        return $this->get_default_property(self::PROPERTY_USERNAME);
     }
 
     /**
      * Returns the password of this user.
-     *
+     * 
      * @return String The password
      */
     public function get_password()
     {
-        return $this->get_default_property(self :: PROPERTY_PASSWORD);
+        return $this->get_default_property(self::PROPERTY_PASSWORD);
     }
 
     /**
      * Returns the auth_source for this user.
-     *
+     * 
      * @return String The auth_source
      * @deprecated Use getAuthenticationSource() now
      */
@@ -186,318 +186,318 @@ class User extends DataClass
      */
     public function getAuthenticationSource()
     {
-        return $this->get_default_property(self :: PROPERTY_AUTH_SOURCE);
+        return $this->get_default_property(self::PROPERTY_AUTH_SOURCE);
     }
 
     /**
      * Returns the external authentication system unique id for this user (useful for instance with : Shibboleth,
      * OpenID, LDAP, .
      * ..)
-     *
+     * 
      * @return String The external unique id
      */
     public function get_external_uid()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_UID);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_UID);
     }
 
     /**
      * Returns the email for this user.
-     *
+     * 
      * @return String The email address
      */
     public function get_email()
     {
-        return $this->get_default_property(self :: PROPERTY_EMAIL);
+        return $this->get_default_property(self::PROPERTY_EMAIL);
     }
 
     /**
      * Returns the status for this user.
-     *
+     * 
      * @return Int The status
      */
     public function get_status()
     {
-        return $this->get_default_property(self :: PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_STATUS);
     }
 
     /**
      * Returns if the user is platformadmin or not.
-     *
+     * 
      * @return Int platformadmin
      */
     public function get_platformadmin()
     {
-        return $this->get_default_property(self :: PROPERTY_PLATFORMADMIN);
+        return $this->get_default_property(self::PROPERTY_PLATFORMADMIN);
     }
 
     /**
      * Returns the official code for this user.
-     *
+     * 
      * @return String The official code
      */
     public function get_official_code()
     {
-        return $this->get_default_property(self :: PROPERTY_OFFICIAL_CODE);
+        return $this->get_default_property(self::PROPERTY_OFFICIAL_CODE);
     }
 
     /**
      * Returns the phone number for this user.
-     *
+     * 
      * @return String The phone number
      */
     public function get_phone()
     {
-        return $this->get_default_property(self :: PROPERTY_PHONE);
+        return $this->get_default_property(self::PROPERTY_PHONE);
     }
 
     /**
      * Returns the Picture URI for this user.
-     *
+     * 
      * @return String The URI
      */
     public function get_picture_uri()
     {
-        return $this->get_default_property(self :: PROPERTY_PICTURE_URI);
+        return $this->get_default_property(self::PROPERTY_PICTURE_URI);
     }
 
     /**
      * Returns the creator ID for this user.
-     *
+     * 
      * @return Int The ID
      */
     public function get_creator_id()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATOR_ID);
+        return $this->get_default_property(self::PROPERTY_CREATOR_ID);
     }
 
     /**
      * Returns the disk quota for this user.
-     *
+     * 
      * @return Int the disk quota
      */
     public function get_disk_quota()
     {
-        return $this->get_default_property(self :: PROPERTY_DISK_QUOTA);
+        return $this->get_default_property(self::PROPERTY_DISK_QUOTA);
     }
 
     /**
      * Returns the database quota for this user.
-     *
+     * 
      * @return Int the database quota
      */
     public function get_database_quota()
     {
-        return $this->get_default_property(self :: PROPERTY_DATABASE_QUOTA);
+        return $this->get_default_property(self::PROPERTY_DATABASE_QUOTA);
     }
 
     public function get_activation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_ACTIVATION_DATE);
+        return $this->get_default_property(self::PROPERTY_ACTIVATION_DATE);
     }
 
     /**
      * Returns the expiration date for this user.
-     *
+     * 
      * @return string the theme
      */
     public function get_expiration_date()
     {
-        return $this->get_default_property(self :: PROPERTY_EXPIRATION_DATE);
+        return $this->get_default_property(self::PROPERTY_EXPIRATION_DATE);
     }
 
     public function get_registration_date()
     {
-        return $this->get_default_property(self :: PROPERTY_REGISTRATION_DATE);
+        return $this->get_default_property(self::PROPERTY_REGISTRATION_DATE);
     }
 
     public function get_active()
     {
-        return $this->get_default_property(self :: PROPERTY_ACTIVE);
+        return $this->get_default_property(self::PROPERTY_ACTIVE);
     }
 
     public function get_security_token()
     {
-        return $this->get_default_property(self :: PROPERTY_SECURITY_TOKEN);
+        return $this->get_default_property(self::PROPERTY_SECURITY_TOKEN);
     }
 
     /**
      * Returns the date on wich the user has last accepted the terms and conditions
-     *
+     * 
      * @return <integer> terms_date
      */
     public function get_terms_date()
     {
-        return $this->get_default_property(self :: PROPERTY_TERMS_DATE);
+        return $this->get_default_property(self::PROPERTY_TERMS_DATE);
     }
 
     /**
      * Sets the lastname of this user.
-     *
+     * 
      * @param $lastname String the lastname.
      */
     public function set_lastname($lastname)
     {
-        $this->set_default_property(self :: PROPERTY_LASTNAME, $lastname);
+        $this->set_default_property(self::PROPERTY_LASTNAME, $lastname);
     }
 
     /**
      * Sets the firstname of this user.
-     *
+     * 
      * @param $firstname String the firstname.
      */
     public function set_firstname($firstname)
     {
-        $this->set_default_property(self :: PROPERTY_FIRSTNAME, $firstname);
+        $this->set_default_property(self::PROPERTY_FIRSTNAME, $firstname);
     }
 
     /**
      * Sets the username of this user.
-     *
+     * 
      * @param $username String the username.
      */
     public function set_username($username)
     {
-        $this->set_default_property(self :: PROPERTY_USERNAME, $username);
+        $this->set_default_property(self::PROPERTY_USERNAME, $username);
     }
 
     /**
      * Sets the password of this user.
      * If Chamilo configuration is set to encrypt the password, this function will also
      * take care of that.
-     *
+     * 
      * @param $password String the password.
      */
     public function set_password($password)
     {
-        $this->set_default_property(self :: PROPERTY_PASSWORD, $password);
+        $this->set_default_property(self::PROPERTY_PASSWORD, $password);
     }
 
     /**
      * Sets the Auth_source for this user.
-     *
+     * 
      * @param $auth_source String the auth source.
      */
     public function set_auth_source($auth_source)
     {
-        $this->set_default_property(self :: PROPERTY_AUTH_SOURCE, $auth_source);
+        $this->set_default_property(self::PROPERTY_AUTH_SOURCE, $auth_source);
     }
 
     /**
      * Sets the external authentication system unique id for this user (useful for instance with : Shibboleth, OpenID,
      * LDAP, .
      * ..)
-     *
+     * 
      * @param $external_uid String the external unique id
      */
     public function set_external_uid($external_uid)
     {
-        $this->set_default_property(self :: PROPERTY_EXTERNAL_UID, $external_uid);
+        $this->set_default_property(self::PROPERTY_EXTERNAL_UID, $external_uid);
     }
 
     /**
      * Sets the email for this user.
-     *
+     * 
      * @param $email String the email.
      */
     public function set_email($email)
     {
-        $this->set_default_property(self :: PROPERTY_EMAIL, $email);
+        $this->set_default_property(self::PROPERTY_EMAIL, $email);
     }
 
     /**
      * Sets the status for this user.
-     *
+     * 
      * @param $status Int the status.
      */
     public function set_status($status)
     {
-        $this->set_default_property(self :: PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 
     /**
      * Sets the platformadmin property for this user.
-     *
+     * 
      * @param $admin Int the platformadmin status.
      */
     public function set_platformadmin($admin)
     {
-        $this->set_default_property(self :: PROPERTY_PLATFORMADMIN, $admin);
+        $this->set_default_property(self::PROPERTY_PLATFORMADMIN, $admin);
     }
 
     /**
      * Sets the official code for this user.
-     *
+     * 
      * @param $official_code String the official code.
      */
     public function set_official_code($official_code)
     {
-        $this->set_default_property(self :: PROPERTY_OFFICIAL_CODE, $official_code);
+        $this->set_default_property(self::PROPERTY_OFFICIAL_CODE, $official_code);
     }
 
     /**
      * Sets the phone number for this user.
-     *
+     * 
      * @param $phone String the phone number
      */
     public function set_phone($phone)
     {
-        $this->set_default_property(self :: PROPERTY_PHONE, $phone);
+        $this->set_default_property(self::PROPERTY_PHONE, $phone);
     }
 
     /**
      * Sets the picture uri for this user object
-     *
+     * 
      * @param $picture_uri String the picture URI
      */
     public function set_picture_uri($picture_uri)
     {
-        $this->set_default_property(self :: PROPERTY_PICTURE_URI, $picture_uri);
+        $this->set_default_property(self::PROPERTY_PICTURE_URI, $picture_uri);
     }
 
     public function set_security_token($security_token)
     {
-        $this->set_default_property(self :: PROPERTY_SECURITY_TOKEN, $security_token);
+        $this->set_default_property(self::PROPERTY_SECURITY_TOKEN, $security_token);
     }
 
     /**
      * Determines if this user has uploaded a picture
-     *
+     * 
      * @return boolean
      */
     public function has_picture()
     {
         $uri = $this->get_picture_uri();
-        return ((strlen($uri) > 0) && (Path :: getInstance()->isWebUri($uri) || file_exists(
-            Path :: getInstance()->getProfilePicturePath() . $uri)));
+        return ((strlen($uri) > 0) && (Path::getInstance()->isWebUri($uri) || file_exists(
+            Path::getInstance()->getProfilePicturePath() . $uri)));
     }
 
     public function get_full_picture_path()
     {
         if ($this->has_picture())
         {
-            return Path :: getInstance()->getProfilePicturePath() . $this->get_picture_uri();
+            return Path::getInstance()->getProfilePicturePath() . $this->get_picture_uri();
         }
         else
         {
-            return Theme :: getInstance()->getImagePath(self :: package(), 'Unknown', 'png', false);
+            return Theme::getInstance()->getImagePath(self::package(), 'Unknown', 'png', false);
         }
     }
 
     /**
      * Sets the picture file
-     *
+     * 
      * @param array The information of the uploaded file (from the $_FILES- array)
      * @todo Make image resizing configurable
      */
     public function set_picture_file($file_info)
     {
         $this->delete_picture();
-        $path = Path :: getInstance()->getProfilePicturePath();
-        Filesystem :: create_dir($path);
-        $img_file = Filesystem :: create_unique_name($path, $this->get_id() . '-' . $file_info['name']);
+        $path = Path::getInstance()->getProfilePicturePath();
+        Filesystem::create_dir($path);
+        $img_file = Filesystem::create_unique_name($path, $this->get_id() . '-' . $file_info['name']);
         move_uploaded_file($file_info['tmp_name'], $path . $img_file);
-        $image_manipulation = ImageManipulation :: factory($path . $img_file);
+        $image_manipulation = ImageManipulation::factory($path . $img_file);
         // Scale image to fit in 400x400 box. Should be configurable somewhere
         $image_manipulation->scale(400, 400);
         $image_manipulation->write_to_file();
@@ -511,90 +511,90 @@ class User extends DataClass
     {
         if ($this->has_picture())
         {
-            $path = Path :: getInstance()->getProfilePicturePath() . $this->get_picture_uri();
-            Filesystem :: remove($path);
+            $path = Path::getInstance()->getProfilePicturePath() . $this->get_picture_uri();
+            Filesystem::remove($path);
             $this->set_picture_uri(null);
         }
     }
 
     /**
      * Sets the creator ID for this user.
-     *
+     * 
      * @param $creator_id String the creator ID.
      */
     public function set_creator_id($creator_id)
     {
-        $this->set_default_property(self :: PROPERTY_CREATOR_ID, $creator_id);
+        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creator_id);
     }
 
     /**
      * Sets the disk quota for this user.
-     *
+     * 
      * @param $disk_quota Int The disk quota.
      */
     public function set_disk_quota($disk_quota)
     {
-        $this->set_default_property(self :: PROPERTY_DISK_QUOTA, $disk_quota);
+        $this->set_default_property(self::PROPERTY_DISK_QUOTA, $disk_quota);
     }
 
     /**
      * Sets the database_quota for this user.
-     *
+     * 
      * @param $database_quota Int The database quota.
      */
     public function set_database_quota($database_quota)
     {
-        $this->set_default_property(self :: PROPERTY_DATABASE_QUOTA, $database_quota);
+        $this->set_default_property(self::PROPERTY_DATABASE_QUOTA, $database_quota);
     }
 
     public function set_activation_date($activation_date)
     {
-        $this->set_default_property(self :: PROPERTY_ACTIVATION_DATE, $activation_date);
+        $this->set_default_property(self::PROPERTY_ACTIVATION_DATE, $activation_date);
     }
 
     /**
      * Sets the default theme for this user.
-     *
+     * 
      * @param $theme string The theme.
      */
     public function set_expiration_date($expiration_date)
     {
-        $this->set_default_property(self :: PROPERTY_EXPIRATION_DATE, $expiration_date);
+        $this->set_default_property(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
     }
 
     public function set_registration_date($registration_date)
     {
-        $this->set_default_property(self :: PROPERTY_REGISTRATION_DATE, $registration_date);
+        $this->set_default_property(self::PROPERTY_REGISTRATION_DATE, $registration_date);
     }
 
     public function set_active($active)
     {
-        $this->set_default_property(self :: PROPERTY_ACTIVE, $active);
+        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
     }
 
     public function set_approved($approved)
     {
-        $this->set_default_property(self :: PROPERTY_APPROVED, $approved);
+        $this->set_default_property(self::PROPERTY_APPROVED, $approved);
     }
 
     /**
      * Sets the date the user has accepted the terms and conditons
-     *
+     * 
      * @param <integer> $date
      */
     public function set_term_date($terms_date)
     {
-        $this->set_default_property(self :: PROPERTY_TERMS_DATE, $terms_date);
+        $this->set_default_property(self::PROPERTY_TERMS_DATE, $terms_date);
     }
 
     public function get_approved()
     {
-        return $this->get_default_property(self :: PROPERTY_APPROVED);
+        return $this->get_default_property(self::PROPERTY_APPROVED);
     }
 
     /**
      * Checks if this user is a platform admin or not
-     *
+     * 
      * @return boolean true if the user is a platforma admin, false otherwise
      */
     public function is_platform_admin()
@@ -604,10 +604,10 @@ class User extends DataClass
 
     public static function admin()
     {
-        $user_id = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
+        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
         if ($user_id && $user_id != '')
         {
-            return DataManager :: retrieve_by_id(User :: class_name(), (int) $user_id)->is_platform_admin();
+            return DataManager::retrieve_by_id(User::class_name(), (int) $user_id)->is_platform_admin();
         }
         else
         {
@@ -619,17 +619,17 @@ class User extends DataClass
      */
     public function is_anonymous_user()
     {
-        return ($this->get_status() == self :: STATUS_ANONYMOUS ? true : false);
+        return ($this->get_status() == self::STATUS_ANONYMOUS ? true : false);
     }
 
     /**
      * Checks if this user is a teacher or not
-     *
+     * 
      * @return boolean true if the user is a teacher, false otherwise
      */
     public function is_teacher()
     {
-        return ($this->get_status() == self :: STATUS_TEACHER ? true : false);
+        return ($this->get_status() == self::STATUS_TEACHER ? true : false);
     }
 
     public function is_active()
@@ -649,34 +649,34 @@ class User extends DataClass
 
     /**
      * Instructs the Datamanager to create this user.
-     *
+     * 
      * @return boolean True if success, false otherwise
      */
     public function create()
     {
         $this->set_registration_date(time());
         $this->set_security_token(sha1(time() . uniqid()));
-
-        if (! parent :: create($this))
+        
+        if (! parent::create($this))
         {
             return false;
         }
-
+        
         return true;
     }
 
     public function delete()
     {
         $group_rel_user_condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_id()));
-        $success = \Chamilo\Core\Group\Storage\DataManager :: deletes(
-            GroupRelUser :: class_name(),
+        $success = \Chamilo\Core\Group\Storage\DataManager::deletes(
+            GroupRelUser::class_name(), 
             $group_rel_user_condition);
-
+        
         if ($success)
         {
-            return parent :: delete();
+            return parent::delete();
         }
         else
         {
@@ -688,8 +688,8 @@ class User extends DataClass
     {
         // if (! $only_retrieve_ids)
         // {
-        return \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
-            $this->getId(),
+        return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+            $this->getId(), 
             $only_retrieve_ids);
         // }
         // else
@@ -701,49 +701,49 @@ class User extends DataClass
 
     public function get_user_groups()
     {
-        return \Chamilo\Core\Group\Storage\DataManager :: retrieve_user_groups($this->get_id());
+        return \Chamilo\Core\Group\Storage\DataManager::retrieve_user_groups($this->get_id());
     }
 
     public function get_status_name()
     {
         if ($this->get_platformadmin() == '1')
         {
-            return Translation :: get('PlatformAdministrator');
+            return Translation::get('PlatformAdministrator');
         }
-
+        
         switch ($this->get_status())
         {
-            case self :: STATUS_ANONYMOUS :
-                return Translation :: get('Anonymous');
+            case self::STATUS_ANONYMOUS :
+                return Translation::get('Anonymous');
                 break;
-            case self :: STATUS_STUDENT :
-                return Translation :: get('Student');
+            case self::STATUS_STUDENT :
+                return Translation::get('Student');
                 break;
-            case self :: STATUS_TEACHER :
-                return Translation :: get('CourseAdmin');
+            case self::STATUS_TEACHER :
+                return Translation::get('CourseAdmin');
                 break;
             default :
-                return Translation :: get('Student');
+                return Translation::get('Student');
         }
     }
 
     public function get_fullname_format_options()
     {
         $options = array();
-        $options[self :: NAME_FORMAT_FIRST] = Translation :: get('FirstName') . ' ' . Translation :: get('LastName');
-        $options[self :: NAME_FORMAT_LAST] = Translation :: get('LastName') . ' ' . Translation :: get('FirstName');
+        $options[self::NAME_FORMAT_FIRST] = Translation::get('FirstName') . ' ' . Translation::get('LastName');
+        $options[self::NAME_FORMAT_LAST] = Translation::get('LastName') . ' ' . Translation::get('FirstName');
         return $options;
     }
 
     /**
      * Returns all (unique) properties by which a DataClass object can be cached
-     *
+     * 
      * @param $extended_property_names multitype:string
      * @return multitype:string
      */
     public static function get_cacheable_property_names($extended_property_names = array())
     {
-        return parent :: get_cacheable_property_names(array(self :: PROPERTY_USERNAME));
+        return parent::get_cacheable_property_names(array(self::PROPERTY_USERNAME));
     }
 
     /**
@@ -759,7 +759,7 @@ class User extends DataClass
         }
         else
         {
-            $system_date = Manager :: get_date_terms_and_conditions_last_modified();
+            $system_date = Manager::get_date_terms_and_conditions_last_modified();
             if ($user_date < $system_date)
             {
                 return false;

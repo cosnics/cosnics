@@ -51,9 +51,9 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
                     $nr = $this->question_nr . '.' . $this->invisible_question_nr;
                 }
                 
-                $properties[ComplexContentObjectPathNode :: PROPERTY_QUESTION_NR] = $nr;
-                $properties[ComplexContentObjectPathNode :: PROPERTY_NODE_IN_MENU] = false;
-                $properties[ComplexContentObjectPathNode :: PROPERTY_IS_QUESTION] = true;
+                $properties[ComplexContentObjectPathNode::PROPERTY_QUESTION_NR] = $nr;
+                $properties[ComplexContentObjectPathNode::PROPERTY_NODE_IN_MENU] = false;
+                $properties[ComplexContentObjectPathNode::PROPERTY_IS_QUESTION] = true;
                 $this->question_step_count ++;
             }
             else
@@ -61,11 +61,11 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
                 if (! ($complex_content_object_item instanceof ComplexDescription ||
                      $complex_content_object_item instanceof ComplexSurvey))
                 {
-                    $properties[ComplexContentObjectPathNode :: PROPERTY_NODE_IN_MENU] = true;
+                    $properties[ComplexContentObjectPathNode::PROPERTY_NODE_IN_MENU] = true;
                     
                     $this->previous_page_step = $this->step_count - $this->question_step_count - 1;
                     $this->question_step_count = 0;
-                    $properties[ComplexContentObjectPathNode :: PROPERTY_PREVIOUS_PAGE_STEP] = $this->previous_page_step;
+                    $properties[ComplexContentObjectPathNode::PROPERTY_PREVIOUS_PAGE_STEP] = $this->previous_page_step;
                     $this->get_node($this->previous_page_step)->set_next_page_step($this->step_count + 1);
                     
                     $this->page_step_count ++;
@@ -75,8 +75,8 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
                 else
                 {
                     $this->question_step_count ++;
-                    $properties[ComplexContentObjectPathNode :: PROPERTY_NODE_IN_MENU] = false;
-                    $properties[ComplexContentObjectPathNode :: PROPERTY_IS_QUESTION] = false;
+                    $properties[ComplexContentObjectPathNode::PROPERTY_NODE_IN_MENU] = false;
+                    $properties[ComplexContentObjectPathNode::PROPERTY_IS_QUESTION] = false;
                 }
             }
         }
@@ -92,7 +92,6 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
         $this->step_count = 0;
         $this->previous_page_step = 0;
         $this->page_step_count = 0;
-        parent :: reset();
+        parent::reset();
     }
-  
 }

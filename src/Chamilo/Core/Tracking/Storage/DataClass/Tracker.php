@@ -40,7 +40,7 @@ abstract class Tracker extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 
     /**
@@ -56,7 +56,7 @@ abstract class Tracker extends DataClass
 
     /**
      * Write the values of the properties from the tracker to the database
-     *
+     * 
      * @return boolean
      */
     public function run(array $parameters = array())
@@ -67,12 +67,12 @@ abstract class Tracker extends DataClass
 
     /**
      * Removes tracker items with a given condition
-     *
+     * 
      * @param $condition Condition
      */
     public function remove(Condition $condition = null)
     {
-        return DataManager :: deletes(static :: class_name(), $condition);
+        return DataManager::deletes(static::class_name(), $condition);
     }
 
     /**
@@ -81,13 +81,13 @@ abstract class Tracker extends DataClass
      * @param $application string
      * @return Tracker The tracker object
      */
-//    public static function factory($type, $context)
-//    {
-//        $class = $context . '\Storage\DataClass\\' .
-//             StringUtilities :: getInstance()->createString($type)->upperCamelize();
-//        return new $class();
-//    }
-
+    // public static function factory($type, $context)
+    // {
+    // $class = $context . '\Storage\DataClass\\' .
+    // StringUtilities :: getInstance()->createString($type)->upperCamelize();
+    // return new $class();
+    // }
+    
     /**
      *
      * @param $type string
@@ -98,11 +98,11 @@ abstract class Tracker extends DataClass
      * @param $order_by ObjectTableOrder
      * @return ObjectResultSet The tracker data resultset
      */
-    public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null,
+    public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null, 
         $order_by = array())
     {
-        return DataManager :: retrieves(
-            $class_name,
+        return DataManager::retrieves(
+            $class_name, 
             new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by));
     }
 
@@ -116,11 +116,11 @@ abstract class Tracker extends DataClass
      */
     public static function get_singular_data($class_name, $application, $condition, $order_by = array())
     {
-        return DataManager :: retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
+        return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
     }
 
     public static function count_data($class_name, $application, $condition)
     {
-        return DataManager :: count($class_name, new DataClassCountParameters($condition));
+        return DataManager::count($class_name, new DataClassCountParameters($condition));
     }
 }

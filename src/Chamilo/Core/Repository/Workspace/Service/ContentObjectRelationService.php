@@ -63,7 +63,7 @@ class ContentObjectRelationService
     public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectInWorkspace(
-            $contentObject,
+            $contentObject, 
             $workspaceImplementation);
     }
 
@@ -73,15 +73,16 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation
      */
-    public function getContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace,
+    public function getContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace, 
         ContentObject $contentObject)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
-            $workspace,
+            $workspace, 
             $contentObject);
     }
 
     /**
+     *
      * @param ContentObject $contentObject
      *
      * @return ResultSet
@@ -93,37 +94,35 @@ class ContentObjectRelationService
 
     /**
      * Updates the content object id of all WorkspaceContentObjectRelations based on an old content object id
-     *
+     * 
      * @param int $oldContentObjectId
      * @param int $newContentObjectId
      */
     public function updateContentObjectIdInAllWorkspaces($oldContentObjectId, $newContentObjectId)
     {
-        if(empty($oldContentObjectId))
+        if (empty($oldContentObjectId))
         {
             throw new \InvalidArgumentException('The given old content object id can not be empty');
         }
-
-        if(empty($newContentObjectId))
+        
+        if (empty($newContentObjectId))
         {
             throw new \InvalidArgumentException('The given new content object id can not be empty');
         }
-
+        
         $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
-            $oldContentObjectId
-        );
-
-        while($contentObjectRelation = $contentObjectRelations->next_result())
+            $oldContentObjectId);
+        
+        while ($contentObjectRelation = $contentObjectRelations->next_result())
         {
             /** @var WorkspaceContentObjectRelation $contentObjectRelation */
             $contentObjectRelation->setContentObjectId($newContentObjectId);
-            if(!$contentObjectRelation->update())
+            if (! $contentObjectRelation->update())
             {
                 throw new \RuntimeException(
                     sprintf(
-                        'Could not update the WorkspaceContentObjectRelation object with id %s',
-                        $contentObjectRelation->getId())
-                );
+                        'Could not update the WorkspaceContentObjectRelation object with id %s', 
+                        $contentObjectRelation->getId()));
             }
         }
     }
@@ -138,12 +137,12 @@ class ContentObjectRelationService
     {
         $contentObjectRelation = new WorkspaceContentObjectRelation();
         $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-
+        
         if (! $contentObjectRelation->create())
         {
             return false;
         }
-
+        
         return $contentObjectRelation;
     }
 
@@ -154,16 +153,16 @@ class ContentObjectRelationService
      * @param integer $contentObjectId
      * @param integer $categoryId
      */
-    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation, $workspaceId,
+    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation, $workspaceId, 
         $contentObjectId, $categoryId)
     {
         $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-
+        
         if (! $contentObjectRelation->update())
         {
             return false;
         }
-
+        
         return $contentObjectRelation;
     }
 
@@ -174,7 +173,7 @@ class ContentObjectRelationService
      * @param integer $contentObjectId
      * @param integer $categoryId
      */
-    private function setContentObjectRelationProperties(WorkspaceContentObjectRelation $contentObjectRelation,
+    private function setContentObjectRelationProperties(WorkspaceContentObjectRelation $contentObjectRelation, 
         $workspaceId, $contentObjectId, $categoryId)
     {
         $contentObjectRelation->setWorkspaceId($workspaceId);
@@ -188,16 +187,16 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @return boolean
      */
-    public function deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(Workspace $workspace,
+    public function deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(Workspace $workspace, 
         ContentObject $contentObject)
     {
         $contentObjectRelation = $this->getContentObjectRelationForWorkspaceAndContentObject($workspace, $contentObject);
-
+        
         if (! $contentObjectRelation->delete())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -214,6 +213,7 @@ class ContentObjectRelationService
     }
 
     /**
+     *
      * @param ContentObject $contentObject
      *
      * @return int
@@ -225,7 +225,7 @@ class ContentObjectRelationService
 
     /**
      * Returns the available workspaces in which a given user can add the given content object
-     *
+     * 
      * @param WorkspaceService $workspaceService
      * @param ContentObject[] $contentObjects
      * @param User $user
@@ -235,50 +235,52 @@ class ContentObjectRelationService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getAvailableWorkspacesForContentObjectsAndUser(
-        WorkspaceService $workspaceService, $contentObjects, User $user,
-        $limit = null, $offset = null, $orderBy = null
-    )
+    public function getAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
+        User $user, $limit = null, $offset = null, $orderBy = null)
     {
         $workspaceIdentifiers = array();
-
+        
         foreach ($contentObjects as $contentObject)
         {
-           $workspaceIdentifiers = array_merge(
-               $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
-           );
+            $workspaceIdentifiers = array_merge(
+                $workspaceIdentifiers, 
+                $this->getWorkspaceIdentifiersForContentObject($contentObject));
         }
-
+        
         return $workspaceService->getWorkspacesForUserWithExcludedWorkspaces(
-            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers, $limit, $offset, $orderBy
-        );
+            $user, 
+            RightsService::RIGHT_ADD, 
+            $workspaceIdentifiers, 
+            $limit, 
+            $offset, 
+            $orderBy);
     }
 
     /**
      * Returns the available workspaces in which a given user can add the given content object
-     *
+     * 
      * @param WorkspaceService $workspaceService
      * @param ContentObject[] $contentObjects
      * @param User $user
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function countAvailableWorkspacesForContentObjectsAndUser(
-        WorkspaceService $workspaceService, $contentObjects, User $user
-    )
+    public function countAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
+        User $user)
     {
         $workspaceIdentifiers = array();
-
+        
         foreach ($contentObjects as $contentObject)
         {
             $workspaceIdentifiers = array_merge(
-                $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
-            );
+                $workspaceIdentifiers, 
+                $this->getWorkspaceIdentifiersForContentObject($contentObject));
         }
-
+        
         return $workspaceService->countWorkspacesForUserWithExcludedWorkspaces(
-            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers
-        );
+            $user, 
+            RightsService::RIGHT_ADD, 
+            $workspaceIdentifiers);
     }
 
     /**

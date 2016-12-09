@@ -80,7 +80,7 @@ class ArchiveController
     protected function prepareFileSystem($temporaryPath)
     {
         $this->temporaryPath = $temporaryPath;
-
+        
         if (! is_dir($this->temporaryPath))
         {
             mkdir($this->temporaryPath, 0777, true);
@@ -94,15 +94,15 @@ class ArchiveController
      */
     public function addPath($sourcePath, $targetPath)
     {
-        return Filesystem :: recurse_copy($sourcePath, $this->temporaryPath . $targetPath, true);
+        return Filesystem::recurse_copy($sourcePath, $this->temporaryPath . $targetPath, true);
     }
 
     public function getArchivePath()
     {
-        $fileCompressor = Filecompression :: factory();
+        $fileCompressor = Filecompression::factory();
         $fileCompressor->set_filename($this->getFileName(), 'zip');
         $archivePath = $fileCompressor->create_archive($this->temporaryPath);
-        Filesystem :: remove($this->temporaryPath);
+        Filesystem::remove($this->temporaryPath);
         return $archivePath;
     }
 }

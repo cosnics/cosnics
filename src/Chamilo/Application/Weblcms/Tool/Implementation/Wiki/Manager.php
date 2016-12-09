@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 
 /**
  * $Id: wiki_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.wiki
  */
 
@@ -20,13 +20,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_available_browser_types()
     {
         $browser_types = array();
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_TABLE;
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_LIST;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
         return $browser_types;
     }
 
     public static function get_allowed_types()
     {
-        return array(Wiki :: class_name());
+        return array(Wiki::class_name());
     }
 }

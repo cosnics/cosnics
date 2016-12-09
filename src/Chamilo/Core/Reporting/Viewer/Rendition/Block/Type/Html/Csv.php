@@ -17,15 +17,15 @@ class Csv extends Html
 
     public function render()
     {
-        $file_path = TemplateRenditionImplementation :: launch(
+        $file_path = TemplateRenditionImplementation::launch(
             $this->get_context()->get_context(), 
             $this->get_context()->get_template(), 
-            TemplateRendition :: FORMAT_CSV, 
-            TemplateRendition :: VIEW_BASIC);
+            TemplateRendition::FORMAT_CSV, 
+            TemplateRendition::VIEW_BASIC);
         
-        $file_properties = FileProperties :: from_path($file_path);
+        $file_properties = FileProperties::from_path($file_path);
         
-        Filesystem :: file_send_for_download(
+        Filesystem::file_send_for_download(
             $file_path, 
             true, 
             $file_properties->get_name_extension(), 

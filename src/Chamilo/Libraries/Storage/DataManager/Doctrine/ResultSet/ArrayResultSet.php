@@ -8,6 +8,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use \ArrayIterator now
  */
 class ArrayResultSet extends \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
 {
@@ -21,11 +22,11 @@ class ArrayResultSet extends \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
     {
         $data = array();
         
-        while ($record = $handle->fetch(\PDO :: FETCH_ASSOC))
+        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $data[] = $this->process_record($record);
         }
         
-        parent :: __construct($data);
+        parent::__construct($data);
     }
 }

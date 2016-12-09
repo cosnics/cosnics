@@ -15,24 +15,23 @@ class AbsoluteTableBlock extends ReportingBlock
     {
         $question = $this->get_parent()->get_question();
         $answers = $this->get_parent()->get_answers($question->get_id());
-
+        
         $reporting_data = new ReportingData();
-
+        
         $options = array();
-
+        
         // matrix to store the answer count
         $answer_count = array();
-
+        
         // get options and matches
         $options = $question->getOptions();
-       
-
+        
         // create answer matrix for answer counting
         foreach ($options as $option_id => $option)
         {
             $answer_count[$option_id] = 0;
         }
-
+        
         // count answers
         foreach ($answers as $answer)
         {
@@ -41,33 +40,33 @@ class AbsoluteTableBlock extends ReportingBlock
                 $answer_count[$option_id] ++;
             }
         }
-
+        
         // totalcount
         $total_count = 0;
         foreach ($options as $option_id => $option)
         {
             $total_count = $total_count + $answer_count[$option_id];
         }
-
+        
         // creating actual reporing data
-        $reporting_data->add_row(strip_tags(Translation :: get(self :: COUNT)));
-
+        $reporting_data->add_row(strip_tags(Translation::get(self::COUNT)));
+        
         foreach ($options as $option_id => $option)
         {
             $reporting_data->add_category($option);
             $value = $answer_count[$option_id];
-            $reporting_data->add_data_category_row($option, strip_tags(Translation :: get(self :: COUNT)), $value);
+            $reporting_data->add_data_category_row($option, strip_tags(Translation::get(self::COUNT)), $value);
         }
-
+        
         if (count($options) > 1)
         {
-            $reporting_data->add_category(Translation :: get(self :: TOTAL));
+            $reporting_data->add_category(Translation::get(self::TOTAL));
             $reporting_data->add_data_category_row(
-                Translation :: get(self :: TOTAL),
-                strip_tags(Translation :: get(self :: COUNT)),
+                Translation::get(self::TOTAL), 
+                strip_tags(Translation::get(self::COUNT)), 
                 $total_count);
         }
-
+        
         return $reporting_data;
     }
 
@@ -79,9 +78,9 @@ class AbsoluteTableBlock extends ReportingBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_CSV,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XLSX,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XML);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_CSV, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_XLSX, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_XML);
     }
 }

@@ -93,7 +93,7 @@ class EphorusRequestTest extends Test
         // build request mock object
         $mock_request = $this->getMock('libraries\platform\Request', array('get'));
         
-        $mock_request :: staticExpects($this->any())->method('get')->will($this->returnValue($id));
+        $mock_request::staticExpects($this->any())->method('get')->will($this->returnValue($id));
         
         $this->get_method($mock_component, 'set_request_class')->invoke($mock_component, $mock_request);
         
@@ -113,7 +113,7 @@ class EphorusRequestTest extends Test
             'core\repository\DataManager', 
             array('get_instance', 'retrieve_content_object'));
         
-        $mock_datamanager :: staticExpects($this->any())->method('get_instance')->will(
+        $mock_datamanager::staticExpects($this->any())->method('get_instance')->will(
             $this->returnValue($mock_datamanager));
         
         $document = null;
@@ -123,7 +123,7 @@ class EphorusRequestTest extends Test
             $document->set_owner_id('2');
         }
         
-        $mock_datamanager :: staticExpects($this->once())->method('retrieve_content_object')->will(
+        $mock_datamanager::staticExpects($this->once())->method('retrieve_content_object')->will(
             $this->returnValue($document));
         
         // add further methods to the mock component

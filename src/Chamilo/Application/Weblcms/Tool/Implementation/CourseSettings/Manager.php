@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings;
 
 /**
  * $Id: course_settings_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_settings
  */
 
@@ -12,5 +12,5 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const DEFAULT_ACTION = self :: ACTION_UPDATE;
+    const DEFAULT_ACTION = self::ACTION_UPDATE;
 }

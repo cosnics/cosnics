@@ -20,7 +20,7 @@ class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_COLUMN);
+        return array(self::PARAM_COLUMN);
     }
 
     /*
@@ -28,31 +28,31 @@ class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $column = DataManager :: retrieve_by_id(
-            Column :: class_name(),
-            intval($this->getPostDataValue(self :: PARAM_COLUMN)));
-
+        
+        $column = DataManager::retrieve_by_id(
+            Column::class_name(), 
+            intval($this->getPostDataValue(self::PARAM_COLUMN)));
+        
         if ($column->getUserId() == $userId)
         {
             if ($column->delete())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('ColumnNotDeleted'));
+                JsonAjaxResult::general_error(Translation::get('ColumnNotDeleted'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

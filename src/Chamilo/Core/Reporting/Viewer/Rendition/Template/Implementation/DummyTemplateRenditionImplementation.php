@@ -33,7 +33,7 @@ class DummyTemplateRenditionImplementation extends AbstractTemplateRenditionImpl
      */
     public function __construct($context, ReportingTemplate $template, $format, $view)
     {
-        parent :: __construct($context, $template);
+        parent::__construct($context, $template);
         $this->format = $format;
         $this->view = $view;
     }
@@ -44,7 +44,7 @@ class DummyTemplateRenditionImplementation extends AbstractTemplateRenditionImpl
      */
     public function render()
     {
-        return TemplateRendition :: launch($this);
+        return TemplateRendition::launch($this);
     }
 
     /**

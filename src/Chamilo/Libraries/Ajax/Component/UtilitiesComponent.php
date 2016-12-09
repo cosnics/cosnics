@@ -28,7 +28,7 @@ class UtilitiesComponent extends \Chamilo\Libraries\Ajax\Manager
     const PARAM_ACTION = 'action';
     const PARAM_VARIABLE = 'variable';
     const PARAM_VALUE = 'value';
-
+    
     // Result properties
     const PROPERTY_RESULT = 'result';
 
@@ -38,15 +38,15 @@ class UtilitiesComponent extends \Chamilo\Libraries\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_TYPE);
+        return array(self::PARAM_TYPE);
     }
 
     public function run()
     {
-        $type = $this->getPostDataValue(self :: PARAM_TYPE);
-
+        $type = $this->getPostDataValue(self::PARAM_TYPE);
+        
         $properties = array();
-
+        
         switch ($type)
         {
             // Retrieve platform paths
@@ -57,57 +57,53 @@ class UtilitiesComponent extends \Chamilo\Libraries\Ajax\Manager
 
                 $properties[self :: PROPERTY_RESULT] = Path::getInstance()->getBasePath(true);
                 break;
-
+            
             // Retrieve the current theme
             case 'theme' :
-                $properties[self :: PROPERTY_RESULT] = Theme :: getInstance()->getTheme();
+                $properties[self::PROPERTY_RESULT] = Theme::getInstance()->getTheme();
                 break;
-
+            
             // Get a translation
             case 'translation' :
-                $context = Request :: post(self :: PARAM_CONTEXT);
-                $string = Request :: post(self :: PARAM_STRING);
-                $parameters = Request :: post(self :: PARAM_PARAMETERS);
-
-                $string = (string) StringUtilities :: getInstance()->createString($string)->upperCamelize();
-                $properties[self :: PROPERTY_RESULT] = Translation :: get($string, $parameters, $context);
+                $context = Request::post(self::PARAM_CONTEXT);
+                $string = Request::post(self::PARAM_STRING);
+                $parameters = Request::post(self::PARAM_PARAMETERS);
+                
+                $string = (string) StringUtilities::getInstance()->createString($string)->upperCamelize();
+                $properties[self::PROPERTY_RESULT] = Translation::get($string, $parameters, $context);
                 break;
-
+            
             // Get, set or clear a session variable
             case 'memory' :
-                $action = Request :: post(self :: PARAM_ACTION);
-
+                $action = Request::post(self::PARAM_ACTION);
+                
                 switch ($action)
                 {
                     case 'set' :
-                        Session :: register(
-                            Request :: post(self :: PARAM_VARIABLE),
-                            Request :: post(self :: PARAM_VALUE));
+                        Session::register(Request::post(self::PARAM_VARIABLE), Request::post(self::PARAM_VALUE));
                         break;
-
+                    
                     case 'get' :
-
-                        $properties[self :: PROPERTY_RESULT] = Session :: retrieve(
-                            Request :: post(self :: PARAM_VARIABLE));
+                        
+                        $properties[self::PROPERTY_RESULT] = Session::retrieve(Request::post(self::PARAM_VARIABLE));
                         break;
-
+                    
                     case 'clear' :
-                        Session :: unregister(Request :: post(self :: PARAM_VARIABLE));
+                        Session::unregister(Request::post(self::PARAM_VARIABLE));
                         break;
-
+                    
                     default :
-                        $properties[self :: PROPERTY_RESULT] = Session :: retrieve(
-                            Request :: post(self :: PARAM_VARIABLE));
+                        $properties[self::PROPERTY_RESULT] = Session::retrieve(Request::post(self::PARAM_VARIABLE));
                         break;
                 }
                 break;
             case 'platform_setting' :
-                $properties[self :: PROPERTY_RESULT] = Configuration :: get(
-                    Request :: post(self :: PARAM_CONTEXT),
-                    Request :: post(self :: PARAM_VARIABLE));
+                $properties[self::PROPERTY_RESULT] = Configuration::get(
+                    Request::post(self::PARAM_CONTEXT), 
+                    Request::post(self::PARAM_VARIABLE));
                 break;
         }
-
+        
         $result = new JsonAjaxResult(200);
         $result->set_properties($properties);
         $result->display();

@@ -28,20 +28,20 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK, self :: PARAM_COLUMN);
+        return array(self::PARAM_BLOCK, self::PARAM_COLUMN);
     }
 
     public function unserialize_jquery($jquery)
     {
         $block_data = explode('&', $jquery);
         $blocks = array();
-
+        
         foreach ($block_data as $block)
         {
             $block_split = explode('=', $block);
             $blocks[] = $block_split[1];
         }
-
+        
         return $blocks;
     }
 
@@ -50,53 +50,56 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager:: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult:: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
-        $block = $this->getPostDataValue(self :: PARAM_BLOCK);
-        $context = ClassnameUtilities:: getInstance()->getNamespaceParent($block, 6);
-        $translationContext = ClassnameUtilities:: getInstance()->getNamespaceParent($block, 2);
-        $blockType = ClassnameUtilities:: getInstance()->getClassnameFromNamespace($block);
-
+        
+        $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
+        $block = $this->getPostDataValue(self::PARAM_BLOCK);
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent($block, 6);
+        $translationContext = ClassnameUtilities::getInstance()->getNamespaceParent($block, 2);
+        $blockType = ClassnameUtilities::getInstance()->getClassnameFromNamespace($block);
+        
         $block = new Block();
         $block->setParentId($columnId);
-        $block->setTitle(Translation:: get($blockType, null, $translationContext));
+        $block->setTitle(Translation::get($blockType, null, $translationContext));
         $block->setContext($context);
         $block->setBlockType($blockType);
         $block->setVisibility(1);
         $block->setUserId($userId);
-
+        
         if ($block->create())
         {
             $block->setSort(1);
-
+            
             if ($block->update())
             {
                 // $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
                 // $renderer = $rendererFactory->getRenderer();
-
+                
                 $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
-                $blockRendererFactory =
-                    new BlockRendererFactory($this, $homeService, $block, BlockRendererFactory::SOURCE_AJAX);
+                $blockRendererFactory = new BlockRendererFactory(
+                    $this, 
+                    $homeService, 
+                    $block, 
+                    BlockRendererFactory::SOURCE_AJAX);
                 $blockRenderer = $blockRendererFactory->getRenderer();
-
+                
                 $result = new JsonAjaxResult(200);
-                $result->set_property(self :: PROPERTY_BLOCK, $blockRenderer->toHtml());
+                $result->set_property(self::PROPERTY_BLOCK, $blockRenderer->toHtml());
                 $result->display();
             }
             else
             {
-                JsonAjaxResult:: error(500);
+                JsonAjaxResult::error(500);
             }
         }
         else
         {
-            JsonAjaxResult:: error(500);
+            JsonAjaxResult::error(500);
         }
     }
 }

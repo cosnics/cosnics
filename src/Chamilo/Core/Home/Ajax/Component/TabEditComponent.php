@@ -21,7 +21,7 @@ class TabEditComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_TAB, self :: PARAM_TITLE);
+        return array(self::PARAM_TAB, self::PARAM_TITLE);
     }
 
     /*
@@ -29,34 +29,34 @@ class TabEditComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $tab = intval($this->getPostDataValue(self :: PARAM_TAB));
-        $title = $this->getPostDataValue(self :: PARAM_TITLE);
-
-        $tab = DataManager :: retrieve_by_id(Tab :: class_name(), $tab);
-
+        
+        $tab = intval($this->getPostDataValue(self::PARAM_TAB));
+        $title = $this->getPostDataValue(self::PARAM_TITLE);
+        
+        $tab = DataManager::retrieve_by_id(Tab::class_name(), $tab);
+        
         if ($tab->getUserId() == $userId)
         {
             $tab->setTitle($title);
-
+            
             if ($tab->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('TabNotUpdated'));
+                JsonAjaxResult::general_error(Translation::get('TabNotUpdated'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

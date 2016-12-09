@@ -20,7 +20,7 @@ class MiniDayRenderer extends DayRenderer
         $html = array();
         $html[] = $this->renderFullCalendar();
         $html[] = $this->getLegend()->render();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

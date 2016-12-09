@@ -19,7 +19,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         
@@ -32,7 +32,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th></th>';
-        $table_header[] = '<th class="info" >' . Translation :: get('SelectYourChoice') . '</th>';
+        $table_header[] = '<th class="info" >' . Translation::get('SelectYourChoice') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';

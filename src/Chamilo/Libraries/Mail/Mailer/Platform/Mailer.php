@@ -7,14 +7,15 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
  * Default platform mailer
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
 {
+
     /**
      * Sends a single mail
-     *
+     * 
      * @param Mail $mail
      *
      * @throws \RuntimeException
@@ -22,28 +23,28 @@ class Mailer extends AbstractMailer
     public function sendMail(Mail $mail)
     {
         $headers = array();
-
+        
         $cc = $mail->getCc();
-        if(!empty($cc))
+        if (! empty($cc))
         {
             $headers[] = 'Cc: ' . implode(', ', $cc);
         }
-
+        
         $bcc = $mail->getBcc();
-        if(!empty($bcc))
+        if (! empty($bcc))
         {
             $headers[] = 'Bcc: ' . implode(', ', $bcc);
         }
-
+        
         $headers[] = 'From: ' . $this->determineFromEmail($mail);
         $headers[] = 'Reply-To: ' . $this->determineReplyEmail($mail);
         $headers[] = 'Content-type: text/html; charset="utf8"';
-
+        
         $headers = implode(PHP_EOL, $headers);
-
-        if($mail->getSendIndividually())
+        
+        if ($mail->getSendIndividually())
         {
-            foreach($mail->getTo() as $recipient)
+            foreach ($mail->getTo() as $recipient)
             {
                 $this->send($mail, $recipient, $headers);
             }
@@ -56,20 +57,19 @@ class Mailer extends AbstractMailer
 
     /**
      * Sends the actual mail to the given recipients
-     *
+     * 
      * @param Mail $mail
      * @param string $recipients
      * @param array $headers
      */
     protected function send(Mail $mail, $recipients, $headers = array())
     {
-        if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
+        if (! mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
         {
             $this->logMail($mail, MailLog::STATE_FAILED);
             throw new \RuntimeException('Could not send e-mail');
         }
-
+        
         $this->logMail($mail);
     }
-
 }

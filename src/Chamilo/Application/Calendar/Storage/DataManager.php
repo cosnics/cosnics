@@ -24,11 +24,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $from_date, $to_date)
     {
         $events = array();
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(Manager :: package());
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::package());
         
         foreach ($registrations as $registration)
         {
-            $context = $registration[Registration :: PROPERTY_CONTEXT];
+            $context = $registration[Registration::PROPERTY_CONTEXT];
             $class_name = $context . '\Manager';
             
             if (class_exists($class_name))

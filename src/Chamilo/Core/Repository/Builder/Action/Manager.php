@@ -21,7 +21,7 @@ use Exception;
  */
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION;
+    const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION;
     const BROWSER_COMPONENT = 'Browser';
     const CREATOR_COMPONENT = 'Creator';
     const DELETER_COMPONENT = 'Deleter';
@@ -31,16 +31,16 @@ abstract class Manager extends Application
     const VIEWER_COMPONENT = 'Viewer';
     const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
     const ACTION_PREVIEW = 'Preview';
-    const DEFAULT_ACTION = self :: BROWSER_COMPONENT;
+    const DEFAULT_ACTION = self::BROWSER_COMPONENT;
 
     public static function factory($type, $application)
     {
-        $class = __NAMESPACE__ . '\Component\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Component\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Component';
         
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('ComponentTypeDoesNotExist', array('TYPE' => $type)));
+            throw new Exception(Translation::get('ComponentTypeDoesNotExist', array('TYPE' => $type)));
         }
         
         return new $class($application);
@@ -135,6 +135,6 @@ abstract class Manager extends Application
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
     }
 }

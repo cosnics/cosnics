@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Table\BlockTypeTargetEntity;
 
 use Chamilo\Core\Home\Rights\Manager;
@@ -12,11 +11,11 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Builds the table for the BlockTypeTargetEntity data class
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class BlockTypeTargetEntityTableColumnModel extends RecordTableColumnModel
-    implements TableColumnModelActionsColumnSupport
+class BlockTypeTargetEntityTableColumnModel extends RecordTableColumnModel implements 
+    TableColumnModelActionsColumnSupport
 {
 
     /**
@@ -26,15 +25,12 @@ class BlockTypeTargetEntityTableColumnModel extends RecordTableColumnModel
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                BlockTypeTargetEntity::class_name(), BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
-            )
-        );
-
+                BlockTypeTargetEntity::class_name(), 
+                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
+        
         $this->add_column(
             new StaticTableColumn(
-                'target_entities',
-                Translation::getInstance()->getTranslation('TargetEntities', null, Manager::context())
-            )
-        );
+                'target_entities', 
+                Translation::getInstance()->getTranslation('TargetEntities', null, Manager::context())));
     }
 }

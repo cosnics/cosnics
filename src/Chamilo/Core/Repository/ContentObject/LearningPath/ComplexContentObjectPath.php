@@ -26,7 +26,7 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
     public function __construct(ContentObject $content_object, $nodes_attempt_data = null)
     {
         $this->nodes_attempt_data = $nodes_attempt_data;
-        parent :: __construct($content_object);
+        parent::__construct($content_object);
     }
 
     /**
@@ -85,16 +85,16 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
             
             if ($attempt_data)
             {
-                $properties[ComplexContentObjectPathNode :: PROPERTY_DATA] = $attempt_data;
+                $properties[ComplexContentObjectPathNode::PROPERTY_DATA] = $attempt_data;
             }
             else
             {
-                $properties[ComplexContentObjectPathNode :: PROPERTY_DATA] = null;
+                $properties[ComplexContentObjectPathNode::PROPERTY_DATA] = null;
             }
         }
         else
         {
-            $properties[ComplexContentObjectPathNode :: PROPERTY_DATA] = null;
+            $properties[ComplexContentObjectPathNode::PROPERTY_DATA] = null;
         }
         
         return $properties;

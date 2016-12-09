@@ -20,7 +20,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
      */
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     /**

@@ -74,6 +74,6 @@ class HotspotQuestionAnswer
 
     public function has_comment()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_comment(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_comment(), true);
     }
 }

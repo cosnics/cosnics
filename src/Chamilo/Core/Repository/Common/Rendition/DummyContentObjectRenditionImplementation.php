@@ -17,14 +17,14 @@ class DummyContentObjectRenditionImplementation extends AbstractContentObjectRen
 
     public function __construct($context, ContentObject $content_object, $format, $view)
     {
-        parent :: __construct($context, $content_object);
+        parent::__construct($context, $content_object);
         $this->format = $format;
         $this->view = $view;
     }
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_view()

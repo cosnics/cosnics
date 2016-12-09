@@ -14,8 +14,8 @@ class SourceTableColumnModel extends DataClassTableColumnModel implements TableC
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Source :: class_name(), Source :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Source :: class_name(), Source :: PROPERTY_URI));
-        $this->add_column(new DataClassPropertyTableColumn(Source :: class_name(), Source :: PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Source::class_name(), Source::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Source::class_name(), Source::PROPERTY_URI));
+        $this->add_column(new DataClassPropertyTableColumn(Source::class_name(), Source::PROPERTY_DESCRIPTION));
     }
 }

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Forum :: class_name();
+        return Forum::class_name();
     }
 }

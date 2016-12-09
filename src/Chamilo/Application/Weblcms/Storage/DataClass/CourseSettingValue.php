@@ -31,9 +31,9 @@ abstract class CourseSettingValue extends DataClass
      */
     static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_VALUE;
+        $extended_property_names[] = self::PROPERTY_VALUE;
         
-        return parent :: get_default_property_names($extended_property_names);
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -49,7 +49,7 @@ abstract class CourseSettingValue extends DataClass
      */
     function get_value()
     {
-        return $this->get_default_property(self :: PROPERTY_VALUE);
+        return $this->get_default_property(self::PROPERTY_VALUE);
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class CourseSettingValue extends DataClass
      */
     function set_value($value)
     {
-        $this->set_default_property(self :: PROPERTY_VALUE, $value);
+        $this->set_default_property(self::PROPERTY_VALUE, $value);
     }
 }
 

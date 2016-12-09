@@ -288,6 +288,6 @@ class Event
      */
     public static function package()
     {
-        return static :: context();
+        return static::context();
     }
 }

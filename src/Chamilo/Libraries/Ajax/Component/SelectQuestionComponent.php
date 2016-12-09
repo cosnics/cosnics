@@ -16,15 +16,15 @@ class SelectQuestionComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        $value = Request :: post('value');
-        $action = Request :: post('action');
-
+        $value = Request::post('value');
+        $action = Request::post('action');
+        
         switch ($action)
         {
             case 'skip_option' :
                 $_SESSION['select_skip_options'][] = $value;
         }
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

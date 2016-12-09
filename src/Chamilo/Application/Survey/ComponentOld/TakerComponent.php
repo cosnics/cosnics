@@ -37,37 +37,37 @@ class TakerComponent extends Manager implements DelegateComponent
 
     function run()
     {
-        $this->publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
-
-        if (! Rights :: get_instance()->is_right_granted(Rights :: PARTICIPATE_RIGHT, $this->publication_id))
+        $this->publication_id = Request::get(self::PARAM_PUBLICATION_ID);
+        
+        if (! Rights::getInstance()->is_right_granted(Rights::PARTICIPATE_RIGHT, $this->publication_id))
         {
             throw new NotAllowedException(false);
         }
-
-        $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
-
+        
+        $this->publication = DataManager::retrieve_by_id(Publication::class_name(), $this->publication_id);
+        
         if (! $this->publication->is_publication_period())
         {
             $this->redirect(
-                Translation :: get('NotInPublicationPeriod'),
-                (false),
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                Translation::get('NotInPublicationPeriod'), 
+                (false), 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
-
+        
         $this->survey = $this->publication->getContentObject();
-
+        
         $this->started();
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
+        
         $component = $factory->getComponent();
-        $component->set_parameter(self :: PARAM_PUBLICATION_ID, $this->publication_id);
-
+        $component->set_parameter(self::PARAM_PUBLICATION_ID, $this->publication_id);
+        
         return $component->run();
     }
-
+    
     // try out for interface SurveyTaker
     function started()
     {
@@ -75,7 +75,7 @@ class TakerComponent extends Manager implements DelegateComponent
         $this->participant->set_survey_publication_id($this->publication_id);
         $this->participant->set_user_id($this->get_user_id());
         $this->participant->set_start_time(time());
-        $this->participant->set_status(Participant :: STATUS_STARTED);
+        $this->participant->set_status(Participant::STATUS_STARTED);
         $this->participant->set_context_template_id(0);
         $this->participant->set_total_time(time());
         $this->participant->set_context_id(0);
@@ -85,7 +85,7 @@ class TakerComponent extends Manager implements DelegateComponent
     function finished($progress)
     {
         $this->participant->set_progress($progress);
-        $this->participant->set_status(Participant :: STATUS_FINISHED);
+        $this->participant->set_status(Participant::STATUS_FINISHED);
         $this->participant->set_total_time(time());
         $this->participant_tracker->update();
     }
@@ -93,20 +93,20 @@ class TakerComponent extends Manager implements DelegateComponent
     function save_answer($complex_question_id, $answer, $context_path)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_COMPLEX_QUESTION_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_COMPLEX_QUESTION_ID), 
             new StaticConditionVariable($complex_question_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_CONTEXT_PATH),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_CONTEXT_PATH), 
             new StaticConditionVariable($context_path));
         $condition = new AndCondition($conditions);
-        $answer_object = DataManager :: retrieve(Answer :: class_name(), new DataClassRetrieveParameters($condition));
-
+        $answer_object = DataManager::retrieve(Answer::class_name(), new DataClassRetrieveParameters($condition));
+        
         if ($answer_object)
         {
             $answer_object->set_answer($answer);
@@ -129,20 +129,20 @@ class TakerComponent extends Manager implements DelegateComponent
     function get_answer($complex_question_id, $context_path)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_COMPLEX_QUESTION_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_COMPLEX_QUESTION_ID), 
             new StaticConditionVariable($complex_question_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_CONTEXT_PATH),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_CONTEXT_PATH), 
             new StaticConditionVariable($context_path));
         $condition = new AndCondition($conditions);
-        $answer_object = DataManager :: retrieve(Answer :: class_name(), new DataClassRetrieveParameters($condition));
-
+        $answer_object = DataManager::retrieve(Answer::class_name(), new DataClassRetrieveParameters($condition));
+        
         if ($answer_object)
         {
             return $answer_object->get_answer();

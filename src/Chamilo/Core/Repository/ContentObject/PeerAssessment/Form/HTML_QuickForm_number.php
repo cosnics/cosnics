@@ -15,7 +15,7 @@ class HTML_QuickForm_number extends HTML_QuickForm_input
      */
     public function __construct($elementName = null, $elementLabel = null, $min = null, $max = null, $step = null, array $attributes = null)
     {
-        parent :: __construct($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->setType('number');
         if (isset($min))

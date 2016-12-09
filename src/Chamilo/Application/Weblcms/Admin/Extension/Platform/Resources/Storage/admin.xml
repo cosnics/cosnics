@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="admin">
-	<properties>
-		<property name="id" type="integer" notnull="1" autoincrement="true" />
-		<property name="origin" type="integer" default="0" />
-		<property name="entity_type" type="integer" default="0" />
-		<property name="entity_id" type="integer" default="0" />
-		<property name="target_type" type="integer" default="0" />
-		<property name="target_id" type="integer" default="0" />
-		<property name="created" type="integer" unsigned="1" notnull="1" />
-		<property name="modified" type="integer" unsigned="1"
-			notnull="1" />
-	</properties>
-	<index name="entity_type">
-		<indexproperty name="entity_type" />
-	</index>
-	<index name="entity_id">
-		<indexproperty name="entity_id" />
-	</index>
-	<index name="entity_id" type="unique">
-		<indexproperty name="entity_type" />
-		<indexproperty name="entity_id" />
-		<indexproperty name="target_type" />
-		<indexproperty name="target_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="origin"
+            type="integer"
+            default="0" />
+        <property
+            name="entity_type"
+            type="integer"
+            default="0" />
+        <property
+            name="entity_id"
+            type="integer"
+            default="0" />
+        <property
+            name="target_type"
+            type="integer"
+            default="0" />
+        <property
+            name="target_id"
+            type="integer"
+            default="0" />
+        <property
+            name="created"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="modified"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="entity_type">
+        <indexproperty name="entity_type" />
+    </index>
+    <index name="entity_id">
+        <indexproperty name="entity_id" />
+    </index>
+    <index
+        name="entity_id"
+        type="unique">
+        <indexproperty name="entity_type" />
+        <indexproperty name="entity_id" />
+        <indexproperty name="target_type" />
+        <indexproperty name="target_id" />
+    </index>
 </object>

@@ -53,27 +53,27 @@ abstract class ExternalObject
 
     /**
      * Get the default properties of all data classes.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ID;
-        $extended_property_names[] = self :: PROPERTY_EXTERNAL_REPOSITORY_ID;
-        $extended_property_names[] = self :: PROPERTY_TITLE;
-        $extended_property_names[] = self :: PROPERTY_DESCRIPTION;
-        $extended_property_names[] = self :: PROPERTY_OWNER_ID;
-        $extended_property_names[] = self :: PROPERTY_OWNER_NAME;
-        $extended_property_names[] = self :: PROPERTY_CREATED;
-        $extended_property_names[] = self :: PROPERTY_MODIFIED;
-        $extended_property_names[] = self :: PROPERTY_TYPE;
-        $extended_property_names[] = self :: PROPERTY_RIGHTS;
+        $extended_property_names[] = self::PROPERTY_ID;
+        $extended_property_names[] = self::PROPERTY_EXTERNAL_REPOSITORY_ID;
+        $extended_property_names[] = self::PROPERTY_TITLE;
+        $extended_property_names[] = self::PROPERTY_DESCRIPTION;
+        $extended_property_names[] = self::PROPERTY_OWNER_ID;
+        $extended_property_names[] = self::PROPERTY_OWNER_NAME;
+        $extended_property_names[] = self::PROPERTY_CREATED;
+        $extended_property_names[] = self::PROPERTY_MODIFIED;
+        $extended_property_names[] = self::PROPERTY_TYPE;
+        $extended_property_names[] = self::PROPERTY_RIGHTS;
         return $extended_property_names;
     }
 
     /**
      * Gets a default property of this data class object by name.
-     *
+     * 
      * @param $name string The name of the property.
      * @param mixed
      */
@@ -93,7 +93,7 @@ abstract class ExternalObject
 
     /**
      * Sets a default property of this data class by name.
-     *
+     * 
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
@@ -113,7 +113,7 @@ abstract class ExternalObject
      */
     public function get_title()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     /**
@@ -122,7 +122,7 @@ abstract class ExternalObject
      */
     public function get_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ID);
+        return $this->get_default_property(self::PROPERTY_ID);
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class ExternalObject
      */
     public function get_external_repository_id()
     {
-        return $this->get_default_property(self :: PROPERTY_EXTERNAL_REPOSITORY_ID);
+        return $this->get_default_property(self::PROPERTY_EXTERNAL_REPOSITORY_ID);
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class ExternalObject
      */
     public function get_description()
     {
-        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -149,17 +149,17 @@ abstract class ExternalObject
      */
     public function get_owner_id()
     {
-        return $this->get_default_property(self :: PROPERTY_OWNER_ID);
+        return $this->get_default_property(self::PROPERTY_OWNER_ID);
     }
 
     public function get_owner_name()
     {
-        return $this->get_default_property(self :: PROPERTY_OWNER_NAME);
+        return $this->get_default_property(self::PROPERTY_OWNER_NAME);
     }
 
     public function set_owner_name($owner_name)
     {
-        return $this->set_default_property(self :: PROPERTY_OWNER_NAME, $owner_name);
+        return $this->set_default_property(self::PROPERTY_OWNER_NAME, $owner_name);
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class ExternalObject
      */
     public function get_created()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATED);
+        return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class ExternalObject
      */
     public function get_modified()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIED);
+        return $this->get_default_property(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class ExternalObject
      */
     public function get_type()
     {
-        return $this->get_default_property(self :: PROPERTY_TYPE);
+        return $this->get_default_property(self::PROPERTY_TYPE);
     }
 
     /**
@@ -195,7 +195,7 @@ abstract class ExternalObject
      */
     public function get_rights()
     {
-        return $this->get_default_property(self :: PROPERTY_RIGHTS);
+        return $this->get_default_property(self::PROPERTY_RIGHTS);
     }
 
     /**
@@ -218,7 +218,7 @@ abstract class ExternalObject
 
     public static function get_available_rights()
     {
-        return array(self :: RIGHT_DELETE, self :: RIGHT_DOWNLOAD, self :: RIGHT_EDIT, self :: RIGHT_USE);
+        return array(self::RIGHT_DELETE, self::RIGHT_DOWNLOAD, self::RIGHT_EDIT, self::RIGHT_USE);
     }
 
     /**
@@ -227,7 +227,7 @@ abstract class ExternalObject
      */
     public function set_title($title)
     {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -236,7 +236,7 @@ abstract class ExternalObject
      */
     public function set_id($id)
     {
-        $this->set_default_property(self :: PROPERTY_ID, $id);
+        $this->set_default_property(self::PROPERTY_ID, $id);
     }
 
     /**
@@ -245,7 +245,7 @@ abstract class ExternalObject
      */
     public function set_external_repository_id($external_repository_id)
     {
-        $this->set_default_property(self :: PROPERTY_EXTERNAL_REPOSITORY_ID, $external_repository_id);
+        $this->set_default_property(self::PROPERTY_EXTERNAL_REPOSITORY_ID, $external_repository_id);
     }
 
     /**
@@ -254,7 +254,7 @@ abstract class ExternalObject
      */
     public function set_description($description)
     {
-        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -263,7 +263,7 @@ abstract class ExternalObject
      */
     public function set_owner_id($owner_id)
     {
-        $this->set_default_property(self :: PROPERTY_OWNER_ID, $owner_id);
+        $this->set_default_property(self::PROPERTY_OWNER_ID, $owner_id);
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class ExternalObject
      */
     public function set_created($created)
     {
-        $this->set_default_property(self :: PROPERTY_CREATED, $created);
+        $this->set_default_property(self::PROPERTY_CREATED, $created);
     }
 
     /**
@@ -281,7 +281,7 @@ abstract class ExternalObject
      */
     public function set_modified($modified)
     {
-        $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
+        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
     }
 
     /**
@@ -290,7 +290,7 @@ abstract class ExternalObject
      */
     public function set_type($type)
     {
-        $this->set_default_property(self :: PROPERTY_TYPE, $type);
+        $this->set_default_property(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -299,7 +299,7 @@ abstract class ExternalObject
      */
     public function set_rights($rights)
     {
-        $this->set_default_property(self :: PROPERTY_RIGHTS, $rights);
+        $this->set_default_property(self::PROPERTY_RIGHTS, $rights);
     }
 
     /**
@@ -328,15 +328,15 @@ abstract class ExternalObject
      */
     public function get_icon_image()
     {
-        $source = Theme :: getInstance()->getImagePath(
-            static :: context(),
-            'Types/' . StringUtilities :: getInstance()->createString($this->get_icon_name())->upperCamelize());
+        $source = Theme::getInstance()->getImagePath(
+            static::context(), 
+            'Types/' . StringUtilities::getInstance()->createString($this->get_icon_name())->upperCamelize());
         
-        $name = Translation :: get(
-            'Type' . StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(),
-            null,
-            static :: context());
-
+        $name = Translation::get(
+            'Type' . StringUtilities::getInstance()->createString($this->get_type())->upperCamelize(), 
+            null, 
+            static::context());
+        
         return '<img src="' . $source . '" alt="' . $name . '" title="' . $name . '" />';
     }
 
@@ -346,7 +346,7 @@ abstract class ExternalObject
      */
     public function is_usable()
     {
-        return $this->get_right(self :: RIGHT_USE);
+        return $this->get_right(self::RIGHT_USE);
     }
 
     /**
@@ -355,7 +355,7 @@ abstract class ExternalObject
      */
     public function is_editable()
     {
-        return $this->get_right(self :: RIGHT_EDIT);
+        return $this->get_right(self::RIGHT_EDIT);
     }
 
     /**
@@ -364,7 +364,7 @@ abstract class ExternalObject
      */
     public function is_deletable()
     {
-        return $this->get_right(self :: RIGHT_DELETE);
+        return $this->get_right(self::RIGHT_DELETE);
     }
 
     /**
@@ -373,7 +373,7 @@ abstract class ExternalObject
      */
     public function is_downloadable()
     {
-        return $this->get_right(self :: RIGHT_DOWNLOAD);
+        return $this->get_right(self::RIGHT_DOWNLOAD);
     }
 
     /**
@@ -387,24 +387,24 @@ abstract class ExternalObject
             $sync_conditions = array();
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(),
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_OBJECT_ID),
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::class_name(), 
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID), 
                 new StaticConditionVariable($this->get_id()));
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(),
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_ID),
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::class_name(), 
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::PROPERTY_EXTERNAL_ID), 
                 new StaticConditionVariable($this->get_external_repository_id()));
             $sync_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-                new StaticConditionVariable(Session :: get_user_id()),
-                ContentObject :: get_table_name());
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+                new StaticConditionVariable(Session::get_user_id()), 
+                ContentObject::get_table_name());
             $sync_condition = new AndCondition($sync_conditions);
-
-            $this->synchronization_data = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_synchronization_data(
+            
+            $this->synchronization_data = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_synchronization_data(
                 $sync_condition);
         }
-
+        
         return $this->synchronization_data;
     }
 
@@ -428,21 +428,21 @@ abstract class ExternalObject
 
     public function get_connector()
     {
-        $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(),
+        $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
+            Instance::class_name(), 
             $this->get_external_repository_id());
-        return DataConnector :: get_instance($external_instance);
+        return DataConnector::getInstance($external_instance);
     }
 
     /**
      * Get the type of the ExternalObject
-     *
+     * 
      * @return string
      * @deprecated Use context() to get the namespace (= type)
      */
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     /**
@@ -451,6 +451,6 @@ abstract class ExternalObject
      */
     public static function package()
     {
-        return static :: context();
+        return static::context();
     }
 }

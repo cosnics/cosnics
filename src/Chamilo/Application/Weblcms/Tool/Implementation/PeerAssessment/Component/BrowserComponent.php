@@ -6,16 +6,17 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * Displays a list of published peer assessments in a course
- *
+ * 
  * @author Renaat De Muynck
  */
 class BrowserComponent extends Manager
 {
+
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }

@@ -11,5 +11,5 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
  */
 class AssessmentAttemptTable extends RecordTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_USER_ASSESSMENT;
+    const TABLE_IDENTIFIER = Manager::PARAM_USER_ASSESSMENT;
 }

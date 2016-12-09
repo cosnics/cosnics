@@ -24,8 +24,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
 
-require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
-require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
+require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
+require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -54,7 +54,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ACCESS_DETAILS = 'AccessDetails';
     const ACTION_VERSION_REVERT = 'VersionReverter';
     const ACTION_VERSION_DELETE = 'VersionDeleter';
-    const DEFAULT_ACTION = self :: ACTION_VIEW_WIKI;
+    const DEFAULT_ACTION = self::ACTION_VIEW_WIKI;
 
     private $search_form;
 
@@ -66,14 +66,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent::__construct($applicationConfiguration);
         
         $this->search_form = new ActionBarSearchForm($this->get_url());
     }
 
     public static function is_wiki_locked($wiki_id)
     {
-        $wiki = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(ContentObject :: class_name(), $wiki_id);
+        $wiki = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $wiki_id);
         return $wiki->get_locked() == 1;
     }
 
@@ -81,22 +81,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($wiki_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ComplexWikiPage :: class_name(), ComplexWikiPage :: PROPERTY_IS_HOMEPAGE), 
+            new PropertyConditionVariable(ComplexWikiPage::class_name(), ComplexWikiPage::PROPERTY_IS_HOMEPAGE), 
             new StaticConditionVariable(1));
         $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), 1, 0);
-        $complex_wiki_homepage = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexWikiPage :: class_name(), 
+        $complex_wiki_homepage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexWikiPage::class_name(), 
             $parameters);
         return $complex_wiki_homepage->next_result();
     }
 
     public static function get_current_page_complex_id()
     {
-        $selected_page = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $selected_page = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         
         if (! $selected_page)
         {
@@ -108,31 +108,31 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function get_breadcrumbtrail()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)), 
                 $this->get_root_content_object()->get_title()));
-        switch (Request :: get(self :: PARAM_ACTION))
+        switch (Request::get(self::PARAM_ACTION))
         {
-            case self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT :
+            case self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT :
                 break;
-            case self :: ACTION_CREATE_PAGE :
+            case self::ACTION_CREATE_PAGE :
                 $trail->add(
                     new Breadcrumb(
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_PAGE)), 
-                        Translation :: get('CreateWikiPage')));
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)), 
+                        Translation::get('CreateWikiPage')));
                 break;
-            case self :: ACTION_UPDATE_CONTENT_OBJECT :
+            case self::ACTION_UPDATE_CONTENT_OBJECT :
                 $trail->add(
                     new Breadcrumb(
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPDATE_CONTENT_OBJECT)), 
-                        Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES)));
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT)), 
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES)));
                 break;
-            case self :: ACTION_PAGE_STATISTICS :
-                $complex_wiki_page_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-                $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ComplexContentObjectItem :: class_name(), 
+            case self::ACTION_PAGE_STATISTICS :
+                $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+                $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ComplexContentObjectItem::class_name(), 
                     $complex_wiki_page_id);
                 $wiki_page = $complex_wiki_page->get_ref_object();
                 $trail->add(new Breadcrumb(null, $wiki_page->get_title()));
@@ -140,72 +140,72 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_PAGE_STATISTICS, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
-                        Translation :: get('Reporting')));
+                                self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                        Translation::get('Reporting')));
                 break;
-            case self :: ACTION_ACCESS_DETAILS :
+            case self::ACTION_ACCESS_DETAILS :
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_ACCESS_DETAILS, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
-                        Translation :: get('Reporting')));
+                                self::PARAM_ACTION => self::ACTION_ACCESS_DETAILS, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                        Translation::get('Reporting')));
                 break;
-            case self :: ACTION_VIEW_WIKI_PAGE :
+            case self::ACTION_VIEW_WIKI_PAGE :
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI_PAGE, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
                         $this->get_content_object_from_complex_id(
-                            Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
+                            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
                 break;
-            case self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM :
+            case self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM :
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI_PAGE, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
                         $this->get_content_object_from_complex_id(
-                            Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
+                            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
                 break;
-            case self :: ACTION_DISCUSS :
+            case self::ACTION_DISCUSS :
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI_PAGE, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
                         $this->get_content_object_from_complex_id(
-                            Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
+                            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => Request :: get(self :: PARAM_ACTION), 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
-                        Translation :: get('WikiDiscuss')));
+                                self::PARAM_ACTION => Request::get(self::PARAM_ACTION), 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                        Translation::get('WikiDiscuss')));
                 break;
-            case self :: ACTION_HISTORY :
+            case self::ACTION_HISTORY :
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI_PAGE, 
-                                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request :: get(
-                                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
+                                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))), 
                         $this->get_content_object_from_complex_id(
-                            Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
+                            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID))->get_title()));
                 
                 break;
         }
@@ -214,11 +214,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     private function get_content_object_from_complex_id($complex_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(), 
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(), 
             $complex_id);
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(), 
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), 
             $complex_content_object_item->get_ref());
     }
 
@@ -231,34 +231,34 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $html = array();
         
-        $html[] = parent :: render_header(null, false);
+        $html[] = parent::render_header(null, false);
         
         // The general menu
         $html[] = '<div class="wiki-menu">';
         
         $html[] = '<div class="wiki-menu-section">';
-        $toolbar = new Toolbar(Toolbar :: TYPE_VERTICAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('MainPage'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Home'), 
+                Translation::get('MainPage'), 
+                Theme::getInstance()->getCommonImagePath('Action/Home'), 
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)), 
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)), 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Contents'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_WIKI)), 
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                Translation::get('Contents'), 
+                Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)), 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Statistics'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Statistics'), 
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_STATISTICS)), 
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                Translation::get('Statistics'), 
+                Theme::getInstance()->getCommonImagePath('Action/Statistics'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)), 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL));
         $html[] = $toolbar->as_html();
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
@@ -279,13 +279,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
         
         $html[] = '<div class="wiki-menu-section">';
-        $toolbar = new Toolbar(Toolbar :: TYPE_VERTICAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('AddWikiPage'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Create'), 
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_PAGE)), 
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                Translation::get('AddWikiPage'), 
+                Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)), 
+                ToolbarItem::DISPLAY_ICON_AND_LABEL));
         $html[] = $toolbar->as_html();
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
@@ -298,36 +298,36 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         
         $display_action = $this->get_action();
         
-        if ($display_action != self :: ACTION_CREATE_PAGE)
+        if ($display_action != self::ACTION_CREATE_PAGE)
         {
             $html[] = '<ul class="wiki-pane-actions wiki-pane-actions-left">';
             if ($complex_wiki_page)
             {
                 $read_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI_PAGE, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 $discuss_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_DISCUSS, 
-                        'wiki_publication' => Request :: get('wiki_publication'), 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_DISCUSS, 
+                        'wiki_publication' => Request::get('wiki_publication'), 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 $statistics_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_PAGE_STATISTICS, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 
-                $html[] = '<li><a' . ($this->get_action() != self :: ACTION_DISCUSS &&
-                     $this->get_action() != self :: ACTION_PAGE_STATISTICS ? ' class="current"' : '') . ' href="' .
-                     $read_url . '">' . Translation :: get('WikiArticle') . '</a></li>';
-                $html[] = '<li><a' . ($this->get_action() == self :: ACTION_DISCUSS ? ' class="current"' : '') .
-                     ' href="' . $discuss_url . '">' . Translation :: get('WikiDiscuss') . '</a></li>';
-                $html[] = '<li><a' . ($this->get_action() == self :: ACTION_PAGE_STATISTICS ? ' class="current"' : '') .
-                     ' href="' . $statistics_url . '">' . Translation :: get('WikiStatistics') . '</a></li>';
+                $html[] = '<li><a' . ($this->get_action() != self::ACTION_DISCUSS &&
+                     $this->get_action() != self::ACTION_PAGE_STATISTICS ? ' class="current"' : '') . ' href="' .
+                     $read_url . '">' . Translation::get('WikiArticle') . '</a></li>';
+                $html[] = '<li><a' . ($this->get_action() == self::ACTION_DISCUSS ? ' class="current"' : '') . ' href="' .
+                     $discuss_url . '">' . Translation::get('WikiDiscuss') . '</a></li>';
+                $html[] = '<li><a' . ($this->get_action() == self::ACTION_PAGE_STATISTICS ? ' class="current"' : '') .
+                     ' href="' . $statistics_url . '">' . Translation::get('WikiStatistics') . '</a></li>';
             }
             else
             {
-                $html[] = '<li><a class="current" href="#">' . Translation :: get('WikiArticle') . '</a></li>';
+                $html[] = '<li><a class="current" href="#">' . Translation::get('WikiArticle') . '</a></li>';
             }
             
             $html[] = '</ul>';
@@ -343,43 +343,42 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             {
                 $delete_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 $history_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_HISTORY, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_HISTORY, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 $edit_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                        self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
+                        self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()));
                 
                 $complex_wiki_page_properties = $complex_wiki_page->get_ref_object()->get_properties();
                 
                 $html[] = '<li><a' .
-                     (in_array($this->get_action(), array(self :: ACTION_VIEW_WIKI, self :: ACTION_VIEW_WIKI_PAGE)) &&
-                     ! Request :: get(self :: PARAM_WIKI_VERSION_ID) ? ' class="current"' : '') . ' href="' . $read_url .
-                     '">' . Translation :: get('WikiRead') . '</a></li>';
+                     (in_array($this->get_action(), array(self::ACTION_VIEW_WIKI, self::ACTION_VIEW_WIKI_PAGE)) &&
+                     ! Request::get(self::PARAM_WIKI_VERSION_ID) ? ' class="current"' : '') . ' href="' . $read_url .
+                     '">' . Translation::get('WikiRead') . '</a></li>';
                 $html[] = '<li><a' .
-                     ($this->get_action() == self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ' class="current"' : '') .
-                     ' href="' . $edit_url . '">' . Translation :: get('WikiEdit') . '</a></li>';
+                     ($this->get_action() == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ' class="current"' : '') .
+                     ' href="' . $edit_url . '">' . Translation::get('WikiEdit') . '</a></li>';
                 $html[] = '<li><a' .
-                     (($this->get_action() == self :: ACTION_HISTORY) ||
-                     ($this->get_action() == self :: ACTION_VIEW_WIKI_PAGE &&
-                     Request :: get(self :: PARAM_WIKI_VERSION_ID)) ? ' class="current"' : '') . ' href="' . $history_url .
-                     '">' . Translation :: get('WikiHistory') . '</a></li>';
+                     (($this->get_action() == self::ACTION_HISTORY) ||
+                     ($this->get_action() == self::ACTION_VIEW_WIKI_PAGE && Request::get(self::PARAM_WIKI_VERSION_ID)) ? ' class="current"' : '') .
+                     ' href="' . $history_url . '">' . Translation::get('WikiHistory') . '</a></li>';
                 $html[] = '<li><a' .
-                     ($this->get_action() == self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? ' class="current"' : '') .
-                     ' href="' . $delete_url . '" onClick="return confirm(\'' . Translation :: get(
+                     ($this->get_action() == self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? ' class="current"' : '') .
+                     ' href="' . $delete_url . '" onClick="return confirm(\'' . Translation::get(
                         'WikiDeleteConfirm', 
                         array(
                             'WIKIPAGENAME' => $complex_wiki_page_properties['default_properties']['title'], 
                             'WIKINAME' => $this->get_root_content_object()->get_title()), 
-                        __NAMESPACE__) . '\')">' . Translation :: get('WikiDelete') . '</a></li>';
+                        __NAMESPACE__) . '\')">' . Translation::get('WikiDelete') . '</a></li>';
             }
             else
             {
-                $html[] = '<li><a class="current" href="#">' . Translation :: get('WikiRead') . '</a></li>';
+                $html[] = '<li><a class="current" href="#">' . Translation::get('WikiRead') . '</a></li>';
             }
             
             $html[] = '</ul>';
@@ -387,29 +386,29 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         else
         {
             $html[] = '<ul class="wiki-pane-actions wiki-pane-actions-left">';
-            $html[] = '<li><a class="current" href="#">' . Translation :: get('AddWikiPage') . '</a></li>';
+            $html[] = '<li><a class="current" href="#">' . Translation::get('AddWikiPage') . '</a></li>';
             $html[] = '</ul>';
             
             $html[] = '<ul class="wiki-pane-actions wiki-pane-actions-right">';
             
-            $repository_viewer_action = Request :: get(\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION);
+            $repository_viewer_action = Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
             $creator_url = $this->get_url(
                 array(
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_CREATOR));
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR));
             $browser_url = $this->get_url(
                 array(
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER));
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER));
             $html[] = '<li><a' .
-                 (($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager :: ACTION_CREATOR ||
-                 is_null($repository_viewer_action)) ? ' class="current"' : '') . ' href="' . $creator_url . '">' . Translation :: get(
+                 (($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR ||
+                 is_null($repository_viewer_action)) ? ' class="current"' : '') . ' href="' . $creator_url . '">' . Translation::get(
                     'WikiPageNew') . '</a></li>';
             $html[] = '<li><a' .
-                 ($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER ? ' class="current"' : '') .
-                 ' href="' . $browser_url . '">' . Translation :: get('WikiPageSelect') . '</a></li>';
+                 ($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER ? ' class="current"' : '') .
+                 ' href="' . $browser_url . '">' . Translation::get('WikiPageSelect') . '</a></li>';
             
-            if ($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager :: ACTION_VIEWER)
+            if ($repository_viewer_action == \Chamilo\Core\Repository\Viewer\Manager::ACTION_VIEWER)
             {
-                $html[] = '<li><a class="current" href="#">' . Translation :: get('WikiPagePreview') . '</a></li>';
+                $html[] = '<li><a class="current" href="#">' . Translation::get('WikiPagePreview') . '</a></li>';
             }
             
             $html[] = '</ul>';
@@ -428,16 +427,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html = array();
         
         $html[] = '<div class="clear"></div>';
-        $html[] = '<div class="wiki-pane-top"><a href=#top>' . Theme :: getInstance()->getCommonImage(
+        $html[] = '<div class="wiki-pane-top"><a href=#top>' . Theme::getInstance()->getCommonImage(
             'Action/AjaxAdd', 
             'png', 
-            Translation :: get('BackToTop')) . '</a></div>';
+            Translation::get('BackToTop')) . '</a></div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         
-        $html[] = parent :: render_footer();
+        $html[] = parent::render_footer();
         
         return implode(PHP_EOL, $html);
     }

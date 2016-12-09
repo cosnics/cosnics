@@ -27,7 +27,7 @@ abstract class Manager extends Application
     const ACTION_DEFAULT = 'Default';
     
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -35,11 +35,11 @@ abstract class Manager extends Application
      */
     public function getSelectedElementId()
     {
-        return $this->getRequest()->query->get(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID);
+        return $this->getRequest()->query->get(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
     }
 
     public function getSelectedUserId()
     {
-        return $this->getRequest()->query->get(self :: PARAM_USER_ID, 0);
+        return $this->getRequest()->query->get(self::PARAM_USER_ID, 0);
     }
 }

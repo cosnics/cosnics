@@ -94,7 +94,7 @@ class DataClassEntityFactory
      */
     public function getEntityFromDataClassName($dataClassName)
     {
-        return $this->getEntity($dataClassName, DataClassEntity :: INSTANCE_IDENTIFIER);
+        return $this->getEntity($dataClassName, DataClassEntity::INSTANCE_IDENTIFIER);
     }
 
     /**
@@ -108,11 +108,11 @@ class DataClassEntityFactory
         {
             $dataClassBaseName = $this->getClassNameUtilities()->getPackageNameFromNamespace($dataClassName);
             $dataClassPackage = $this->getClassNameUtilities()->getNamespaceParent($dataClassName, 3);
-
+            
             $this->entityClassNameCache[$dataClassName] = $dataClassPackage . '\Integration\\' . __NAMESPACE__ . '\\' .
                  $dataClassBaseName . 'Entity';
         }
-
+        
         return $this->entityClassNameCache[$dataClassName];
     }
 
@@ -122,10 +122,10 @@ class DataClassEntityFactory
      */
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self(ClassnameUtilities :: getInstance());
+            self::$instance = new self(ClassnameUtilities::getInstance());
         }
-        return self :: $instance;
+        return self::$instance;
     }
 }

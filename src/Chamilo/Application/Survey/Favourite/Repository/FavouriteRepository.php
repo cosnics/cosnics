@@ -27,7 +27,7 @@ class FavouriteRepository
      */
     public function findFavouriteByIdentifier($identifier)
     {
-        return DataManager :: retrieve_by_id(PublicationUserFavourite :: class_name(), $identifier);
+        return DataManager::retrieve_by_id(PublicationUserFavourite::class_name(), $identifier);
     }
 
     /**
@@ -39,23 +39,23 @@ class FavouriteRepository
     public function findPublicationUserFavouriteByUserAndPublicationIdentifier(User $user, $publicationIdentifier)
     {
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationUserFavourite :: class_name(),
-                PublicationUserFavourite :: PROPERTY_USER_ID),
+                PublicationUserFavourite::class_name(), 
+                PublicationUserFavourite::PROPERTY_USER_ID), 
             new StaticConditionVariable($user->getId()));
-
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationUserFavourite :: class_name(),
-                PublicationUserFavourite :: PROPERTY_PUBLICATION_ID),
+                PublicationUserFavourite::class_name(), 
+                PublicationUserFavourite::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($publicationIdentifier));
-
+        
         $condition = new AndCondition($conditions);
-
-        return DataManager :: retrieve(
-            PublicationUserFavourite :: class_name(),
+        
+        return DataManager::retrieve(
+            PublicationUserFavourite::class_name(), 
             new DataClassRetrieveParameters($condition));
     }
 }

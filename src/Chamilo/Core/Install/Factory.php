@@ -2,31 +2,37 @@
 namespace Chamilo\Core\Install;
 
 use Chamilo\Core\Install\Storage\DataManager;
+use Chamilo\Core\Install\Observer\InstallerObserver;
 
+/**
+ *
+ * @package Chamilo\Core\Install
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class Factory
 {
 
-    public function build_installer(Configuration $config)
+    public function getInstaller(InstallerObserver $installerObserver, Configuration $configuration)
     {
-        $data_manager = $this->build_data_manager($config);
-        return new PlatformInstaller($config, $data_manager);
+        $dataManager = $this->getDataManager($configuration);
+        return new PlatformInstaller($installerObserver, $configuration, $dataManager);
     }
 
-    public function build_config_from_array(array $values)
+    public function buildConfigurationFromArray(array $values)
     {
-        $res = new Configuration();
-        $res->load_array($values);
-        return $res;
+        $configuration = new Configuration();
+        $configuration->load_array($values);
+        return $configuration;
     }
 
-    public function build_installer_from_array(array $values)
+    public function getInstallerFromArray(InstallerObserver $installerObserver, array $values)
     {
-        $config = $this->build_config_from_array($values);
-        return $this->build_installer($config);
+        return $this->getInstaller($installerObserver, $this->buildConfigurationFromArray($values));
     }
 
-    public function build_data_manager(Configuration $config)
+    public function getDataManager(Configuration $configuration)
     {
-        return new DataManager($config);
+        return new DataManager($configuration);
     }
 }

@@ -25,37 +25,37 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object();
-
+        
         if ($object->is_image())
         {
             $width = 200;
             $height = 200;
-
-            $thumbnail_path = Path :: getInstance()->getTemporaryPath() . md5($object->get_full_path()) .
+            
+            $thumbnail_path = Path::getInstance()->getTemporaryPath() . md5($object->get_full_path()) .
                  basename($object->get_full_path());
-            $thumbnal_web_path = Path :: getInstance()->getTemporaryPath(null, true) . md5($object->get_full_path()) .
+            $thumbnal_web_path = Path::getInstance()->getTemporaryPath(null, true) . md5($object->get_full_path()) .
                  basename($object->get_full_path());
             if (! is_file($thumbnail_path))
             {
-                $thumbnail_creator = ImageManipulation :: factory($object->get_full_path());
+                $thumbnail_creator = ImageManipulation::factory($object->get_full_path());
                 $thumbnail_creator->scale($width, $height);
                 $thumbnail_creator->write_to_file($thumbnail_path);
             }
-
+            
             $thumbnailUrl = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager :: context(),
-                    \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager :: ACTION_THUMBNAIL,
-                    \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $object->getId(),
-                    ThumbnailComponent :: PARAM_WIDTH => $width,
-                    ThumbnailComponent :: PARAM_HEIGHT => $height));
-
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(), 
+                    \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_THUMBNAIL, 
+                    \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $object->getId(), 
+                    ThumbnailComponent::PARAM_WIDTH => $width, 
+                    ThumbnailComponent::PARAM_HEIGHT => $height));
+            
             return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . htmlentities($object->get_title()) .
                  '" class="thumbnail-image" />';
         }
         else
         {
-            return ContentObjectRendition :: launch($this);
+            return ContentObjectRendition::launch($this);
         }
     }
 }

@@ -2,8 +2,10 @@
 namespace Chamilo\Libraries\File\Export\Xml;
 
 use Chamilo\Libraries\File\Export\Export;
+
 /**
  * $Id: xml_export.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * 
  * @package common.export.xml
  */
 
@@ -12,6 +14,7 @@ use Chamilo\Libraries\File\Export\Export;
  */
 class XmlExport extends Export
 {
+
     private $level = 0;
     const EXPORT_TYPE = 'xml';
 
@@ -32,7 +35,7 @@ class XmlExport extends Export
         {
             if (is_numeric($key))
                 $key = 'item';
-
+            
             if (is_array($value))
             {
                 $all .= str_repeat("\t", $this->level) . '<' . $key . '>' . "\n";
@@ -51,6 +54,6 @@ class XmlExport extends Export
 
     public function get_type()
     {
-        return self :: EXPORT_TYPE;
+        return self::EXPORT_TYPE;
     }
 }

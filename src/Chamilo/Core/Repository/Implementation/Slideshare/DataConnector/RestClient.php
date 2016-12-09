@@ -16,8 +16,8 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
 
     public function __construct($slideshare_url)
     {
-        parent :: __construct('');
-
+        parent::__construct('');
+        
         $this->slideshare_url = $slideshare_url;
     }
 
@@ -26,13 +26,13 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
         if (is_array($data))
         {
             $tmp = array();
-
+            
             foreach ($data as $key => $value)
             {
                 if (is_array($value))
                 {
                     $subtmp = array();
-
+                    
                     foreach ($value as $subkey => $subvalue)
                     {
                         $tmp[] = $key . '[]' . '=' . $subvalue;
@@ -48,19 +48,19 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
     }
 
     /**
+     *
      * @param $method
      * @param $url
      * @param $data
-     *
      * @return RestResult
      */
     public function send_request($method, $url, $data = null)
     {
         $this->set_method($method);
         $this->set_data(new Plain(''));
-
+        
         // different method need different handling of data
-        if (($method == self :: METHOD_POST))
+        if (($method == self::METHOD_POST))
         {
             if (is_array($data))
             {
@@ -68,18 +68,18 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
             }
             $url = $this->slideshare_url . $url;
         }
-        elseif ($method == self :: METHOD_GET)
+        elseif ($method == self::METHOD_GET)
         {
             if (is_array($data))
             {
                 $tmp = array();
-
+                
                 foreach ($data as $key => $value)
                 {
                     if (is_array($value))
                     {
                         $subtmp = array();
-
+                        
                         foreach ($value as $subkey => $subvalue)
                         {
                             $tmp[] = $key . '[]' . '=' . $subvalue;
@@ -90,23 +90,23 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
                         $tmp[] = $key . '=' . $value;
                     }
                 }
-
+                
                 $get_string = implode('&', $tmp);
                 $url .= '?' . $get_string;
             }
             $url = $this->slideshare_url . $url;
         }
-        elseif ($method == self :: METHOD_PUT)
+        elseif ($method == self::METHOD_PUT)
         {
             if (is_array($data))
                 $this->set_data(new Form($data));
         }
-
+        
         $this->set_base_url($url);
-
+        
         /** @var RestResult $response */
         $response = parent::request();
-//        $response->set_response_content_xml();
+        // $response->set_response_content_xml();
         return $response;
     }
 
@@ -121,27 +121,27 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
         $result->set_request_http_method($this->get_http_method());
         $result->set_request_sent_data($this->get_data_to_send());
         $result->set_request_url($this->get_url());
-
+        
         $request_properties = array();
         $request_properties['method'] = $this->get_http_method();
         $request_properties['user'] = $this->get_basic_login();
         $request_properties['pass'] = $this->get_basic_password();
-
+        
         $request = new HTTP_Request($this->get_url(), $request_properties);
-
+        
         /*
          * addition
          */
         // possibly set a proxy
         if ($proxy = $this->get_proxy())
             $request->setProxy($proxy['server'], $proxy['port']);
-
+            
             // add data
         $data_to_send = $this->get_data_to_send();
-
+        
         if (isset($data_to_send))
         {
-
+            
             if (is_string($data_to_send))
             {
                 $request->setBody($data_to_send);
@@ -163,12 +163,12 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
                     if (count($values) > 0)
                     {
                         $file_path = $values[0];
-
-                        if ((string) StringUtilities :: getInstance()->createString($file_path)->startsWith('@'))
+                        
+                        if ((string) StringUtilities::getInstance()->createString($file_path)->startsWith('@'))
                         {
                             $file_path = substr($file_path, 1);
                         }
-
+                        
                         if (file_exists($file_path))
                         {
                             /*
@@ -185,7 +185,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
                      */
                     $file_content = $data_to_send['file'];
                 }
-
+                
                 $request->setBody($file_content);
             }
             /*
@@ -198,7 +198,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
                     $request->addPostData($key, $value);
                 }
             }
-
+            
             /*
              * If the mime type is given as a parameter, we use it to set the content-type request
              */
@@ -206,12 +206,12 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
             {
                 $request->addHeader('Content-type', $data_to_send['mime']);
             }
-
+            
             /*
              * addition
              */
             /* add additional headers */
-
+            
             if (is_array($this->get_header_data()))
             {
                 foreach ($this->get_header_data() as $n => $header)
@@ -220,7 +220,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
                 }
             }
         }
-
+        
         $req_result = $request->sendRequest(true);
         if ($req_result === true)
         {
@@ -237,7 +237,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
             $result->set_response_http_code($request->getResponseCode());
             $result->set_response_error($request->getResponseReason());
         }
-
+        
         return $result;
     }
 }

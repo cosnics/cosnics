@@ -27,7 +27,7 @@ trait TableRenderer
         {
             $this->calendar = $this->initializeCalendar();
         }
-
+        
         return $this->calendar;
     }
 

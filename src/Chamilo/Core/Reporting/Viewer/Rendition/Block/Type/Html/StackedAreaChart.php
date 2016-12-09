@@ -59,7 +59,7 @@ class StackedAreaChart extends Chart
             }
             
             $chart_data->loadPalette('spring.color');
-    
+            
             if ($number_of_rows > 1)
             {
                 if ($number_of_categories <= 11)
@@ -112,7 +112,7 @@ class StackedAreaChart extends Chart
             /* Set the default font properties */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() .
+                    'FontName' => Path::getInstance()->getVendorPath() .
                          'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 8, 
                         'R' => 0, 

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataC
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return FrequentlyAskedQuestions :: class_name();
+        return FrequentlyAskedQuestions::class_name();
     }
 }

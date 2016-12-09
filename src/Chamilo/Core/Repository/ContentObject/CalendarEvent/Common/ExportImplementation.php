@@ -9,6 +9,6 @@ class ExportImplementation extends ContentObjectExportImplementation
 
     public static function get_types()
     {
-        return parent :: get_types(array(ContentObjectExport :: FORMAT_ICAL, ContentObjectExport :: FORMAT_ZIP));
+        return parent::get_types(array(ContentObjectExport::FORMAT_ICAL, ContentObjectExport::FORMAT_ZIP));
     }
 }

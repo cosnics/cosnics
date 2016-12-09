@@ -17,7 +17,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         $ignore_case = $question->get_ignore_case();
         $max_score = $question->get_best_option()->get_score();
         $options = $question->get_options();
-
+        
         $result = 0;
         foreach ($options as $option)
         {

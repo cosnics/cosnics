@@ -15,49 +15,48 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent:: get_default_property_names(
-            array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID)
-        );
+        return parent::get_default_property_names(
+            array(self::PROPERTY_VIEWED, self::PROPERTY_CONTENT, self::PROPERTY_MODIFIER_ID));
     }
 
     public function get_viewed()
     {
-        return $this->get_default_property(self :: PROPERTY_VIEWED);
+        return $this->get_default_property(self::PROPERTY_VIEWED);
     }
 
     public function set_viewed($viewed)
     {
-        return $this->set_default_property(self :: PROPERTY_VIEWED, $viewed);
+        return $this->set_default_property(self::PROPERTY_VIEWED, $viewed);
     }
 
     public function get_content()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT);
+        return $this->get_default_property(self::PROPERTY_CONTENT);
     }
 
     public function set_content($content)
     {
-        return $this->set_default_property(self :: PROPERTY_CONTENT, $content);
+        return $this->set_default_property(self::PROPERTY_CONTENT, $content);
     }
 
     public function get_modifier_id()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIER_ID);
+        return $this->get_default_property(self::PROPERTY_MODIFIER_ID);
     }
 
     public function set_modifier_id($modifier_id)
     {
-        return $this->set_default_property(self :: PROPERTY_MODIFIER_ID, $modifier_id);
+        return $this->set_default_property(self::PROPERTY_MODIFIER_ID, $modifier_id);
     }
 
     public function get_preview()
     {
-        return $this->get_default_property(self :: PROPERTY_PREVIEW);
+        return $this->get_default_property(self::PROPERTY_PREVIEW);
     }
 
     public function set_preview($preview)
     {
-        return $this->set_default_property(self :: PROPERTY_PREVIEW, $preview);
+        return $this->set_default_property(self::PROPERTY_PREVIEW, $preview);
     }
 
     public function get_icon_link()
@@ -72,7 +71,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function get_export_links()
@@ -93,12 +92,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_export_link($exportFormat)
     {
         $exportLinks = $this->get_export_links();
-
-        if(!array_key_exists($exportFormat,$exportLinks))
+        
+        if (! array_key_exists($exportFormat, $exportLinks))
         {
             throw new \InvalidArgumentException('Could not find a valid export link for the given format');
         }
-
+        
         return $exportLinks[$exportFormat];
     }
 
@@ -113,16 +112,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_content_data($exportFormat)
     {
-        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager:: retrieve_by_id(
-            Instance:: class_name(),
-            $this->get_external_repository_id()
-        );
-
+        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
+            Instance::class_name(), 
+            $this->get_external_repository_id());
+        
         $externalExportURL = $this->get_export_link($exportFormat);
-
-        return DataConnector:: get_instance($external_repository)->import_external_repository_object(
-            $externalExportURL
-        );
+        
+        return DataConnector::getInstance($external_repository)->import_external_repository_object($externalExportURL);
     }
 
     public function get_icon_image()

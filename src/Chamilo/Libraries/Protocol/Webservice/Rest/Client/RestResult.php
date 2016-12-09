@@ -40,11 +40,12 @@ abstract class RestResult
     const FORMAT_XML = 'application/xml';
     const FORMAT_XML_DEPRECATED = 'text/xml';
 
-    private static $xml_format = array(self :: FORMAT_XML, self :: FORMAT_XML_DEPRECATED);
+    private static $xml_format = array(self::FORMAT_XML, self::FORMAT_XML_DEPRECATED);
 
     public static function factory($type = self :: TYPE_PLAIN)
     {
-        $rest_result_class = __NAMESPACE__ . '\Result\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
+        $rest_result_class = __NAMESPACE__ . '\Result\\' .
+             StringUtilities::getInstance()->createString($type)->upperCamelize();
         return new $rest_result_class();
     }
 
@@ -52,22 +53,22 @@ abstract class RestResult
     {
         switch ($content_type)
         {
-            case in_array($content_type, self :: $xml_format) :
-                $type = self :: TYPE_XML;
+            case in_array($content_type, self::$xml_format) :
+                $type = self::TYPE_XML;
                 break;
-            case self :: FORMAT_HTML :
-                $type = self :: TYPE_HTML;
+            case self::FORMAT_HTML :
+                $type = self::TYPE_HTML;
                 break;
-            case self :: FORMAT_JSON :
-                $type = self :: TYPE_JSON;
+            case self::FORMAT_JSON :
+                $type = self::TYPE_JSON;
                 break;
-            case self :: FORMAT_PLAIN :
-                $type = self :: TYPE_PLAIN;
+            case self::FORMAT_PLAIN :
+                $type = self::TYPE_PLAIN;
                 break;
             default :
-                $type = self :: TYPE_PLAIN;
+                $type = self::TYPE_PLAIN;
         }
-        return self :: factory($type);
+        return self::factory($type);
     }
 
     /**

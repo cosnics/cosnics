@@ -19,9 +19,9 @@ abstract class Manager extends Application
     const ACTION_INTERNAL_SYNC = 'InternalSyncer';
     const ACTION_EXTERNAL_SYNC = 'ExternalSyncer';
     const ACTION_FOLDER = 'Folder';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *

@@ -5,68 +5,71 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 -->
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Indent DEV sample</title>
-	<script src="../../../ckeditor.js"></script>
-	<style>
-		body {
-			padding: 20px;
-			margin: 0;
-		}
-		.editors {
-			display: block;
-			overflow: hidden;
-			width: 100%;
-			margin: 0px auto;
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
+<meta charset="utf-8">
+<title>Indent DEV sample</title>
+<script src="../../../ckeditor.js"></script>
+<style>
+body {
+	padding: 20px;
+	margin: 0;
+}
 
-			box-sizing: content-box;
-			-moz-box-sizing: content-box;
-			-webkit-box-sizing: content-box;
+.editors {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	margin: 0px auto;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	background: #eee;
+}
 
-			background: #eee;
-		}
-		.editors li {
-			width: 50%;
-			margin: 0;
-			padding: 10px;
-			float: left;
+.editors li {
+	width: 50%;
+	margin: 0;
+	padding: 10px;
+	float: left;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
 
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			-webkit-box-sizing: border-box;
+.editors li:nth-child(2n) {
+	background: #D4E59A;
+}
 
-		}
-		.editors li:nth-child(2n) {
-			background: #D4E59A;
-		}
-		#menu {
-			position: fixed;
-			top: 0;
-			right: 20px;
-			padding: 5px;
-			border: 1px solid #aaa;
-			background: #eee;
-		}
-
-	</style>
+#menu {
+	position: fixed;
+	top: 0;
+	right: 20px;
+	padding: 5px;
+	border: 1px solid #aaa;
+	background: #eee;
+}
+</style>
 </head>
 <body>
-	<p id="menu">
-		<a href="#listnblock">List &amp; Block</a>,
-		<a href="#classes">Classes</a>,
-		<a href="#list">List</a>,
-		<a href="#block">Block</a>,
-		<a href="#br">ENTER_BR</a>
-	</p>
+    <p id="menu">
+        <a href="#listnblock">List &amp; Block</a>
+        ,
+        <a href="#classes">Classes</a>
+        ,
+        <a href="#list">List</a>
+        ,
+        <a href="#block">Block</a>
+        ,
+        <a href="#br">ENTER_BR</a>
+    </p>
 
-	<h1 class="samples">Indent DEV sample</h1>
-	<h2 id="listnblock">List &amp; Block</h2>
-	<ul class="editors">
-		<li>
-			<textarea cols="80" id="editor1" rows="10">
+    <h1 class="samples">Indent DEV sample</h1>
+    <h2 id="listnblock">List &amp; Block</h2>
+    <ul class="editors">
+        <li>
+            <textarea cols="80" id="editor1" rows="10">
 				<p>xx</p>
 				<ul>
 					<li>x</li>
@@ -76,18 +79,25 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 
 				<br>
 
-				<ul><li><ol><li>xx</li></ol></li><li>yy</li></ul>
+				<ul>
+                    <li>
+                        <ol>
+                            <li>xx</li>
+                        </ol>
+                    </li>
+                    <li>yy</li>
+                </ul>
 			</textarea>
-		</li>
-		<li>
-			<pre id="editor1_out"></pre>
-		</li>
-	</ul>
+        </li>
+        <li>
+            <pre id="editor1_out"></pre>
+        </li>
+    </ul>
 
-	<h2 id="classes">Indent classes</h2>
-	<ul class="editors">
-		<li>
-			<textarea cols="80" id="editor2" rows="10">
+    <h2 id="classes">Indent classes</h2>
+    <ul class="editors">
+        <li>
+            <textarea cols="80" id="editor2" rows="10">
 				<ul>
 					<li>a</li>
 					<li>
@@ -100,16 +110,16 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 				</ul>
 				<p>moo</p>
 			</textarea>
-		</li>
-		<li>
-			<pre id="editor2_out"></pre>
-		</li>
-	</ul>
+        </li>
+        <li>
+            <pre id="editor2_out"></pre>
+        </li>
+    </ul>
 
-	<h2 id="list">List only</h2>
-	<ul class="editors">
-		<li>
-			<textarea cols="80" id="editor3" rows="10">
+    <h2 id="list">List only</h2>
+    <ul class="editors">
+        <li>
+            <textarea cols="80" id="editor3" rows="10">
 				<ul>
 					<li>a</li>
 					<li>
@@ -122,16 +132,16 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 				</ul>
 				<p>moo</p>
 			</textarea>
-		</li>
-		<li>
-			<pre id="editor3_out"></pre>
-		</li>
-	</ul>
+        </li>
+        <li>
+            <pre id="editor3_out"></pre>
+        </li>
+    </ul>
 
-	<h2 id="block">Block only</h2>
-	<ul class="editors">
-		<li>
-			<textarea cols="80" id="editor4" rows="10">
+    <h2 id="block">Block only</h2>
+    <ul class="editors">
+        <li>
+            <textarea cols="80" id="editor4" rows="10">
 				<ul>
 					<li>a</li>
 					<li>
@@ -144,16 +154,16 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 				</ul>
 				<p>moo</p>
 			</textarea>
-		</li>
-		<li>
-			<pre id="editor4_out"></pre>
-		</li>
-	</ul>
+        </li>
+        <li>
+            <pre id="editor4_out"></pre>
+        </li>
+    </ul>
 
-	<h2 id="br">CKEDITOR.ENTER_BR</h2>
-	<ul class="editors">
-		<li>
-			<textarea cols="80" id="editor5" rows="10">
+    <h2 id="br">CKEDITOR.ENTER_BR</h2>
+    <ul class="editors">
+        <li>
+            <textarea cols="80" id="editor5" rows="10">
 				Text
 				<br>
 				<ul>
@@ -161,12 +171,12 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 					<li>b</li>
 				</ul>
 			</textarea>
-		</li>
-		<li>
-			<pre id="editor5_out"></pre>
-		</li>
-	</ul>
-	<script>
+        </li>
+        <li>
+            <pre id="editor5_out"></pre>
+        </li>
+    </ul>
+    <script>
 
 		var plugins = 'enterkey,toolbar,htmlwriter,wysiwygarea,undo,sourcearea,clipboard,list,justify,indent,indentlist,indentblock';
 

@@ -25,25 +25,28 @@ class ResetComponent extends Manager
     {
         if (! $this->get_content_object()->is_complex_content_object())
         {
-            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
+            throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
         
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->get_content_object()->context(), 2).'\Display\Preview';
-        $factory = new ApplicationFactory($context , new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->get_content_object()->context(), 2) .
+             '\Display\Preview';
+        $factory = new ApplicationFactory(
+            $context, 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $preview = $factory->getComponent();
-       
+        
         if ($preview->supports_reset())
         {
             try
             {
                 if ($preview->reset())
                 {
-                    $message = Translation :: get('PreviewReset');
+                    $message = Translation::get('PreviewReset');
                     $is_error = false;
                 }
                 else
                 {
-                    $message = Translation :: get('PreviewNotReset');
+                    $message = Translation::get('PreviewNotReset');
                     $is_error = true;
                 }
             }
@@ -55,12 +58,12 @@ class ResetComponent extends Manager
         }
         else
         {
-            $message = Translation :: get('PreviewResetNotSupported');
+            $message = Translation::get('PreviewResetNotSupported');
             $is_error = true;
         }
         
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_DISPLAY;
+        $parameters[self::PARAM_ACTION] = self::ACTION_DISPLAY;
         
         $this->redirect($message, $is_error, $parameters);
     }

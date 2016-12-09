@@ -18,13 +18,13 @@ class ChangeLockComponent extends Manager
 
     public function run()
     {
-        $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->publication_id);
         
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication))
+        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
@@ -33,15 +33,15 @@ class ChangeLockComponent extends Manager
         if ($object->invert_locked())
         {
             $succes = true;
-            $message = Translation :: get('LockChanged');
+            $message = Translation::get('LockChanged');
         }
         else
         {
-            $message = Translation :: get('LockNotChanged');
+            $message = Translation::get('LockNotChanged');
         }
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_BROWSE_FORUMS;
+        $params[self::PARAM_ACTION] = self::ACTION_BROWSE_FORUMS;
         
         $this->redirect($message, ! $succes, $params);
     }

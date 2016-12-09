@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: question_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc
  */
 abstract class QuestionDisplay
@@ -28,7 +28,7 @@ abstract class QuestionDisplay
     {
         $this->formvalidator = $formvalidator;
         $this->renderer = $formvalidator->defaultRenderer();
-
+        
         $this->complex_content_object_question = $complex_content_object_question;
         $this->question_nr = $question_nr;
         $this->question = $question;
@@ -82,10 +82,10 @@ abstract class QuestionDisplay
     {
         $formvalidator = $this->formvalidator;
         $formvalidator->addElement(
-            'hidden',
-            'hint_question[' . $this->get_complex_content_object_question()->get_id() . ']',
+            'hidden', 
+            'hint_question[' . $this->get_complex_content_object_question()->get_id() . ']', 
             0);
-
+        
         $this->add_header();
         $this->add_question_form();
         $this->add_footer();
@@ -96,15 +96,15 @@ abstract class QuestionDisplay
     public function add_header()
     {
         $html = array();
-
+        
         $html[] = '<div class="panel panel-default">';
-
+        
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $this->question_nr . '. ' . $this->get_title() . '</h3>';
         $html[] = '</div>';
-
+        
         $html[] = $this->get_description();
-
+        
         $this->formvalidator->addElement('html', implode(PHP_EOL, $html));
     }
 
@@ -116,18 +116,18 @@ abstract class QuestionDisplay
     public function get_description()
     {
         $html = array();
-
+        
         if ($this->question->has_description())
         {
             $description = $this->question->get_description();
             $classes = $this->needsDescriptionBorder() ? 'panel-body panel-body-assessment-description' : 'panel-body';
             $renderer = new ContentObjectResourceRenderer($this, $description);
-
+            
             $html[] = '<div class="' . $classes . '">';
             $html[] = $renderer->run();
             $html[] = '</div>';
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -135,7 +135,7 @@ abstract class QuestionDisplay
     {
         $formvalidator = $this->formvalidator;
         $html[] = '</div>';
-
+        
         $footer = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $footer);
     }
@@ -153,10 +153,10 @@ abstract class QuestionDisplay
     public static function factory($formvalidator, $complex_content_object_question, $question_nr)
     {
         $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class_name(), 
             $complex_content_object_question->get_ref());
         $type = $question->get_type();
-
+        
         $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
              Assessment::package() . '\Display\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);

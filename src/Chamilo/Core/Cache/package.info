@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Cache</name>
-		<code>Cache</code>
-		<context>Chamilo\Core\Cache</context>
-		<type>Chamilo\Core</type>
-		<category>core</category>
-		<authors>
-			<author>
-				<name>Hans De Bisschop</name>
-				<company>Erasmus Hogeschool Brussel</company>
-			</author>
-		</authors>
-		<version>5.0.0</version>
-		<description />
-		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Configuration</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
-		</pre-depends>
-		<extra>
-			<core-install>1</core-install>
-		</extra>
-	</package>
+    <package>
+        <name>Cache</name>
+        <code>Cache</code>
+        <context>Chamilo\Core\Cache</context>
+        <type>Chamilo\Core</type>
+        <category>core</category>
+        <authors>
+            <author>
+                <name>Hans De Bisschop</name>
+                <company>Erasmus Hogeschool Brussel</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Configuration</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+        <extra>
+            <core-install>1</core-install>
+        </extra>
+    </package>
 </packages>

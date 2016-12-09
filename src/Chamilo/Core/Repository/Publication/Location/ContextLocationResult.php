@@ -22,7 +22,7 @@ abstract class ContextLocationResult extends LocationResult
     public function get_header()
     {
         $headers = array();
-        $headers[] = Translation :: get('Location', null, Manager :: context());
+        $headers[] = Translation::get('Location', null, Manager::context());
         return $headers;
     }
 

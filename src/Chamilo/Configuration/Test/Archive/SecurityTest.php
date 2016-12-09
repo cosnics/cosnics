@@ -18,7 +18,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
                 Only works in IE: <span style="width:eXpressiOn(alert('Ping!'));"></span> but allow normal styles <span style="color:red">red</span>
 EOT;
         
-        $secure = Security :: remove_XSS($html, false);
+        $secure = Security::remove_XSS($html, false);
         
         // filter injections
         $this->assertNotContains('<script>', $secure);

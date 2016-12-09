@@ -7,7 +7,6 @@ use Chamilo\Core\Group\Table\SubscribeUser\SubscribeUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -49,8 +48,8 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $group_id = Request :: get(self :: PARAM_GROUP_ID);
-        $this->set_parameter(self :: PARAM_GROUP_ID, $group_id);
+        $group_id = Request::get(self::PARAM_GROUP_ID);
+        $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
         
         if (isset($group_id))
         {
@@ -89,8 +88,8 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
     public function get_table_condition($object_table_class_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID), 
-            new StaticConditionVariable(Request :: get(GroupRelUser :: PROPERTY_GROUP_ID)));
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
+            new StaticConditionVariable(Request::get(GroupRelUser::PROPERTY_GROUP_ID)));
         
         $users = $this->retrieve_group_rel_users($condition);
         
@@ -99,7 +98,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                     new StaticConditionVariable($user->get_user_id())));
         }
         
@@ -108,13 +107,13 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
                 '*' . $query . '*');
             $conditions[] = new OrCondition($or_conditions);
         }
@@ -140,15 +139,15 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         
         if (! isset($this->buttonToolbarRenderer))
         {
-            $buttonToolbar = new ButtonToolBar($this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())));
+            $buttonToolbar = new ButtonToolBar($this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())));
             $commonActions = new ButtonGroup();
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -161,15 +160,15 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)), 
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)), 
+                Translation::get('BrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Application :: PARAM_ACTION => self :: ACTION_VIEW_GROUP, 
-                        self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))), 
-                Translation :: get('ViewerComponent')));
+                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, 
+                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))), 
+                Translation::get('ViewerComponent')));
         $breadcrumbtrail->add_help('group general');
     }
 }

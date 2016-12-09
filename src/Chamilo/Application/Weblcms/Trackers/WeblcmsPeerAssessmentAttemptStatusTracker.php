@@ -20,19 +20,19 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
 
     /**
      * Inherited
-     *
+     * 
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
     {
-        $this->set_attempt_id($parameters[self :: PROPERTY_ATTEMPT_ID]);
-        $this->set_user_id($parameters[self :: PROPERTY_USER_ID]);
-        $this->set_factor($parameters[self :: PROPERTY_FACTOR]);
-        $this->set_closed($parameters[self :: PROPERTY_CLOSED]);
-        $this->set_closed_by($parameters[self :: PROPERTY_CLOSED_BY]);
-        $this->set_progress($parameters[self :: PROPERTY_PROGRESS]);
-        $this->set_created($parameters[self :: PROPERTY_CREATED]);
-        $this->set_modified($parameters[self :: PROPERTY_MODIFIED]);
+        $this->set_attempt_id($parameters[self::PROPERTY_ATTEMPT_ID]);
+        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
+        $this->set_factor($parameters[self::PROPERTY_FACTOR]);
+        $this->set_closed($parameters[self::PROPERTY_CLOSED]);
+        $this->set_closed_by($parameters[self::PROPERTY_CLOSED_BY]);
+        $this->set_progress($parameters[self::PROPERTY_PROGRESS]);
+        $this->set_created($parameters[self::PROPERTY_CREATED]);
+        $this->set_modified($parameters[self::PROPERTY_MODIFIED]);
     }
 
     /**
@@ -40,16 +40,16 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
      */
     static function get_default_property_names()
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_ATTEMPT_ID,
-                self :: PROPERTY_USER_ID,
-                self :: PROPERTY_FACTOR,
-                self :: PROPERTY_PROGRESS,
-                self :: PROPERTY_CLOSED,
-                self :: PROPERTY_CLOSED_BY,
-                self :: PROPERTY_CREATED,
-                self :: PROPERTY_MODIFIED));
+                self::PROPERTY_ATTEMPT_ID, 
+                self::PROPERTY_USER_ID, 
+                self::PROPERTY_FACTOR, 
+                self::PROPERTY_PROGRESS, 
+                self::PROPERTY_CLOSED, 
+                self::PROPERTY_CLOSED_BY, 
+                self::PROPERTY_CREATED, 
+                self::PROPERTY_MODIFIED));
     }
 
     /*
@@ -78,7 +78,7 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

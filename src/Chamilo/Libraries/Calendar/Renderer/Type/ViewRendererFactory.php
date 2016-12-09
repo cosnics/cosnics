@@ -58,7 +58,7 @@ class ViewRendererFactory
      * @param integer $displayTime
      * @param string $linkTarget
      */
-    public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend,
+    public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend, 
         $displayTime, $actions = array(), $linkTarget = '')
     {
         $this->rendererType = $rendererType;
@@ -193,12 +193,12 @@ class ViewRendererFactory
     public function getRenderer()
     {
         $className = __NAMESPACE__ . '\View\\' . $this->getRendererType() . 'Renderer';
-
+        
         return new $className(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            $this->getActions(),
+            $this->getDataProvider(), 
+            $this->getLegend(), 
+            $this->getDisplayTime(), 
+            $this->getActions(), 
             $this->getLinkTarget());
     }
 }

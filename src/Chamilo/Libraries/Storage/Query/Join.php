@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * This class describes a storage unit you want to join with
- *
+ * 
  * @package Chamilo\Libraries\Storage\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 class Join implements Hashable
 {
     use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
-
+    
     /**
      * **************************************************************************************************************
      * Join Types *
@@ -31,24 +31,24 @@ class Join implements Hashable
      * Properties *
      * **************************************************************************************************************
      */
-
+    
     /**
      * The classname of the data_class you want to join with
-     *
+     * 
      * @var string
      */
     private $data_class;
 
     /**
      * The join type
-     *
+     * 
      * @var integer
      */
     private $type;
 
     /**
      * The join condition
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private $condition;
@@ -68,7 +68,7 @@ class Join implements Hashable
 
     /**
      * Returns the data class name
-     *
+     * 
      * @return string
      */
     public function get_data_class()
@@ -78,7 +78,7 @@ class Join implements Hashable
 
     /**
      * Sets the data class name
-     *
+     * 
      * @param string $data_class
      */
     public function set_data_class($data_class)
@@ -88,7 +88,7 @@ class Join implements Hashable
 
     /**
      * Returns the condition
-     *
+     * 
      * @return \libraries\storage\Condition
      */
     public function get_condition()
@@ -98,7 +98,7 @@ class Join implements Hashable
 
     /**
      * Sets the condition
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public function set_condition(Condition $condition = null)
@@ -108,7 +108,7 @@ class Join implements Hashable
 
     /**
      * Returns the type
-     *
+     * 
      * @return integer
      */
     public function get_type()
@@ -118,7 +118,7 @@ class Join implements Hashable
 
     /**
      * Sets the type
-     *
+     * 
      * @param integer $type
      */
     public function set_type($type)
@@ -129,11 +129,11 @@ class Join implements Hashable
     public function getHashParts()
     {
         $hashParts = array();
-
+        
         $hashParts[] = $this->get_data_class();
         $hashParts[] = $this->get_condition()->getHashParts();
         $hashParts[] = $this->get_type();
-
+        
         return $hashParts;
     }
 }

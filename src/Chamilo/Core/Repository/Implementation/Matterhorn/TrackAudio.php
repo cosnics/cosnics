@@ -147,10 +147,10 @@ class TrackAudio
             $html[] = $this->get_device();
         }
         $html[] = $this->get_encoder();
-        $html[] = $this->get_bitdepth() . Translation :: get('bit');
+        $html[] = $this->get_bitdepth() . Translation::get('bit');
         $html[] = $this->get_channels_as_string();
-        $html[] = $this->get_samplingrate() . Translation :: get('hz');
-        $html[] = round($this->get_bitrate() / 1000) . Translation :: get('kbps');
+        $html[] = $this->get_samplingrate() . Translation::get('hz');
+        $html[] = round($this->get_bitrate() / 1000) . Translation::get('kbps');
         
         return implode(", ", $html);
     }
@@ -160,19 +160,19 @@ class TrackAudio
         switch ($this->get_channels())
         {
             case 1 :
-                return Translation :: get('Mono');
+                return Translation::get('Mono');
                 break;
             case 2 :
-                return Translation :: get('Stereo');
+                return Translation::get('Stereo');
                 break;
             
             default :
-                return ($this->get_channels() . ' ' . Translation :: get('Surround'));
+                return ($this->get_channels() . ' ' . Translation::get('Surround'));
         }
     }
 
     public function is_html5()
     {
-        return Html5MediaValidator :: is_audio($this->get_encoder());
+        return Html5MediaValidator::is_audio($this->get_encoder());
     }
 }

@@ -18,7 +18,7 @@ abstract class RepositoryDataClass extends DataClass
      */
     public function __construct($defaultProperties = array ())
     {
-        parent :: __construct($defaultProperties);
+        parent::__construct($defaultProperties);
     }
 
     /**
@@ -29,7 +29,7 @@ abstract class RepositoryDataClass extends DataClass
      */
     public function get_default_property($name, $default_value = null)
     {
-        $value = parent :: get_default_property($name);
+        $value = parent::get_default_property($name);
         
         if (! isset($value) && isset($default_value))
         {
@@ -46,13 +46,13 @@ abstract class RepositoryDataClass extends DataClass
     {
         if (isset($created))
         {
-            $this->set_default_property(self :: PROPERTY_CREATED, $created);
+            $this->set_default_property(self::PROPERTY_CREATED, $created);
         }
     }
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATED);
+        return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
     /**
@@ -62,13 +62,13 @@ abstract class RepositoryDataClass extends DataClass
     {
         if (isset($modified))
         {
-            $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
+            $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
         }
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIED);
+        return $this->get_default_property(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -76,10 +76,10 @@ abstract class RepositoryDataClass extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_CREATED;
-        $extended_property_names[] = self :: PROPERTY_MODIFIED;
+        $extended_property_names[] = self::PROPERTY_CREATED;
+        $extended_property_names[] = self::PROPERTY_MODIFIED;
         
-        return parent :: get_default_property_names($extended_property_names);
+        return parent::get_default_property_names($extended_property_names);
     }
 
 /**

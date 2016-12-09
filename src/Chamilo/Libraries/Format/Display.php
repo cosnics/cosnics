@@ -25,7 +25,7 @@ class Display
      */
     public static function normal_message($message)
     {
-        return self :: message(self :: MESSAGE_TYPE_NORMAL, $message);
+        return self::message(self::MESSAGE_TYPE_NORMAL, $message);
     }
 
     /**
@@ -35,7 +35,7 @@ class Display
      */
     public static function error_message($message)
     {
-        return self :: message(self :: MESSAGE_TYPE_ERROR, $message);
+        return self::message(self::MESSAGE_TYPE_ERROR, $message);
     }
 
     /**
@@ -45,7 +45,7 @@ class Display
      */
     public static function warning_message($message)
     {
-        return self :: message(self :: MESSAGE_TYPE_WARNING, $message);
+        return self::message(self::MESSAGE_TYPE_WARNING, $message);
     }
 
     /**
@@ -57,12 +57,12 @@ class Display
     public static function message($type = self :: MESSAGE_TYPE_NORMAL, $message)
     {
         $html = array();
-
+        
         $html[] = '<div class="alert-message alert alert-' . $type . '">';
         $html[] = $message;
         $html[] = '<div class="close_message" id="closeMessage"></div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

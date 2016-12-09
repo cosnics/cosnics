@@ -19,9 +19,9 @@ class ImplementationNotifierIntegrationTest extends Test
     public function test_get_implementation_packages()
     {
         $implementation_notifier = new ImplementationNotifierDataClassListener(
-            $this->getMock(DataClass :: class_name()), 
+            $this->getMock(DataClass::class_name()), 
             'core\metadata', 
-            array(ImplementationNotifierDataClassListener :: BEFORE_DELETE => 'delete_event'));
+            array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_event'));
         
         $method = $this->get_method($implementation_notifier, 'get_implementation_packages');
         

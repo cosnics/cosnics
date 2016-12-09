@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface which indicates a component implements a repository\content_object\portfolio\display
- *
+ * 
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @todo The \core\repository\content_object\portfolio\Support requirements partially conflict (in definition) with the
@@ -20,7 +20,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Determine the complex content object that should be displayed
-     *
+     * 
      * @return ContentObject
      * @todo Fix DisplaySupport conflicts
      */
@@ -28,7 +28,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Retrieve a ResultSet of Feedback objects
-     *
+     * 
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      * @return \libraries\storage\ResultSet
      */
@@ -36,7 +36,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Count the number of Feedback objects
-     *
+     * 
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      * @return int
      */
@@ -44,7 +44,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Retrieve a specific Feedback instance
-     *
+     * 
      * @param int $feedback_id
      * @return \core\repository\content_object\portfolio\Feedback
      */
@@ -52,21 +52,21 @@ interface PortfolioDisplaySupport
 
     /**
      * Returns an newly instantiated Feedback object
-     *
+     * 
      * @return \core\repository\content_object\portfolio\Feedback
      */
     public function get_portfolio_feedback();
 
     /**
      * Return a URI-template for the portfolio tree menu
-     *
+     * 
      * @return string
      */
     public function get_portfolio_tree_menu_url();
 
     /**
      * Is the user allowed to update this feedback instance
-     *
+     * 
      * @param Feedback $feedback
      * @return boolean
      * @todo Fix DisplaySupport conflicts, footprint changed
@@ -75,7 +75,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Is the user allowed to delete this feedback instance
-     *
+     * 
      * @param Feedback $feedback
      * @return boolean
      * @todo Fix DisplaySupport conflicts, footprint changed
@@ -84,7 +84,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Is the user allowed to create feedback for the given node
-     *
+     * 
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
@@ -92,7 +92,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Is the user allowed to view feedback for the given node
-     *
+     * 
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
@@ -100,7 +100,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Is the user allowed to edit the content for the given node
-     *
+     * 
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
@@ -108,7 +108,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Is the user allowed to view the content for the given node
-     *
+     * 
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
@@ -122,14 +122,14 @@ interface PortfolioDisplaySupport
 
     /**
      * Determine whether the portfolio being displayed is the user's own portfolio
-     *
+     * 
      * @return boolean
      */
     public function is_own_portfolio();
 
     /**
      * Retrieve a Notification
-     *
+     * 
      * @param ComplexContentObjectPathNode $node
      * @return Notification
      */
@@ -146,7 +146,7 @@ interface PortfolioDisplaySupport
 
     /**
      * Returns an newly instantiated Notification object
-     *
+     * 
      * @return \core\repository\content_object\portfolio\Notification
      */
     public function get_portfolio_notification();

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Description of impact_view_table_column_model
- *
+ * 
  * @author Pieterjan Broekaert Hogeschool Gent
  */
 class ImpactViewTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -22,25 +22,19 @@ class ImpactViewTableColumnModel extends DataClassTableColumnModel implements Ta
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TITLE)
-        );
-
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
+        
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TYPE)
-        );
-
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TYPE));
+        
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_CATEGORY,
-                Translation::getInstance()->getTranslation('Category', array(), Manager::context())
-            )
-        );
-
+                self::COLUMN_CATEGORY, 
+                Translation::getInstance()->getTranslation('Category', array(), Manager::context())));
+        
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_SAFE_DELETE,
-                Translation::getInstance()->getTranslation('SafeDelete', array(), Manager::context())
-            )
-        );
+                self::COLUMN_SAFE_DELETE, 
+                Translation::getInstance()->getTranslation('SafeDelete', array(), Manager::context())));
     }
 }

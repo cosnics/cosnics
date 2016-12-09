@@ -18,7 +18,7 @@ class Display extends PageDisplay
         {
             if (! $node->is_root())
             {
-                $question_display = QuestionDisplay :: factory($this->get_formvalidator(), $node, $answerService);
+                $question_display = QuestionDisplay::factory($this->get_formvalidator(), $node, $answerService);
                 $question_display->run();
             }
         }

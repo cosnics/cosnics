@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Render content object type selection tabs based on their category
- *
+ * 
  * @author Hans De Bisschop
  */
 class FormTypeSelectorRenderer extends TypeSelectorRenderer
@@ -40,12 +40,12 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function __construct(Application $parent, TypeSelector $type_selector, $postback_url = null)
     {
-        parent :: __construct($parent, $type_selector);
-
+        parent::__construct($parent, $type_selector);
+        
         $this->postback_url = $postback_url ? $postback_url : $parent->get_url();
         $this->form = new FormValidator(
-            ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true),
-            'post',
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), 
+            'post', 
             $this->postback_url);
     }
 
@@ -69,41 +69,41 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      * Render the content object type selection form
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $form = $this->get_form();
-
+        
         $select = $form->addElement(
-            'select',
-            TypeSelector :: PARAM_SELECTION,
-            Translation :: get('CreateANew'),
-            array(),
+            'select', 
+            TypeSelector::PARAM_SELECTION, 
+            Translation::get('CreateANew'), 
+            array(), 
             array('class' => 'postback'));
-
+        
         foreach ($this->get_type_selector()->as_tree() as $key => $type)
         {
             $attributes = ! is_integer($key) ? array('disabled') : array();
             $select->addOption($type, $key, $attributes);
         }
-
-        $form->addElement('style_button', 'submit', Translation :: get('Select'), null, null, 'hand-up');
-
+        
+        $form->addElement('style_button', 'submit', Translation::get('Select'), null, null, 'hand-up');
+        
         $html = array();
-
+        
         $renderer = clone $form->defaultRenderer();
         $renderer->setElementTemplate('{label}&nbsp;&nbsp;{element}&nbsp;');
         $form->accept($renderer);
-
+        
         $html = array();
         $html[] = '<div style="margin-bottom: 20px;">';
         $html[] = $renderer->toHTML();
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js');
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js');
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

@@ -7,6 +7,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use RecordIterator now
  */
 class RecordResultSet extends \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
 {
@@ -19,11 +20,11 @@ class RecordResultSet extends \Chamilo\Libraries\Storage\ResultSet\RecordResultS
     {
         $records = array();
         
-        while ($record = $handle->fetch(\PDO :: FETCH_ASSOC))
+        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $records[] = $this->process_record($record);
         }
         
-        parent :: __construct($records);
+        parent::__construct($records);
     }
 }

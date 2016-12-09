@@ -1,259 +1,569 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="Chamilo\Core\Admin">
-	<settings>
-		<category name="administrator">
+    <settings>
+        <category name="administrator">
 
-			<setting name="show_administrator_data" field="toggle" default="1">
-				<options type="static">
-					<option name="show_administrator_data" value="1" />
-				</options>
-			</setting>
-			<setting name="administrator_firstname" field="text" default="Chamilo" />
+            <setting
+                name="show_administrator_data"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="show_administrator_data"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="administrator_firstname"
+                field="text"
+                default="Chamilo" />
 
-			<setting name="administrator_surname" field="text" default="Administrator" />
-			<setting name="administrator_email" field="text" default="chamilo.admin@mychamilo.com">
-				<validations>
-					<validation rule="email" message="MustBeAnEMailAddress" />
-				</validations>
-			</setting>
-			<setting name="administrator_website" field="text" />
-			<setting name="administrator_telephone" field="text" default="000/1234567" />
-		</category>
-		<category name="whoisonline">
-			<setting name="whoisonlineaccess" field="radio" default="2">
-				<options type="static">
-					<option name="disabled" value="0" />
-					<option name="world" value="1" />
-					<option name="registered" value="2" />
-				</options>
-			</setting>
-			<setting name="timelimit" field="text" default="30">
-				<validations>
-					<validation rule="numeric" message="MustBeNumeric" />
-				</validations>
-			</setting>
-		</category>
-		<category name="platform">
-			<setting name="site_name" field="text" default="Chamilo" />
-			<setting name="institution" field="text" default="Chamilo" />
-			<setting name="institution_url" field="text" default="http://www.chamilo.org">
-				<validations>
-					<validation rule="regex" format="/http:\/\/.*/" message="MustStartWithHTTP" />
-				</validations>
-			</setting>
-			<setting name="no_reply_email" field="text" default="">
-				<validations>
-					<validation rule="email" message="MustBeAnEMailAddress" />
-				</validations>
-			</setting>
-			<setting name="page_after_login" field="select" default="Chamilo\Core\Home">
-				<options type="dynamic" source="get_active_applications" />
-			</setting>
-			<setting name="active_online_email_editor" field="toggle" default="0">
-				<options type="static">
-					<option name="active_online_email_editor" value="1" />
-				</options>
-			</setting>
-			<setting name="maintenance_mode" field="toggle" default="0">
-				<options type="static">
-					<option name="maintenance_mode" value="1" />
-				</options>
-			</setting>
-			<setting name="installation_blocked" field="toggle" default="0">
-				<options type="static">
-					<option name="installation_blocked" value="1" />
-				</options>
-			</setting>
-			<setting name="passing_percentage" field="text" default="50">
-				<validations>
-					<validation rule="numeric" message="MustBeNumeric" />
-				</validations>
-			</setting>
-			<setting name="mailer" field="select" default="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer" user_setting="0">
-				<options type="dynamic" source="getMailers" />
-			</setting>
-			<setting name="google_analytics_tracking_id" field="text" default="" />
-		</category>
-		<category name="internationalization">
-			<setting name="hide_dcda_markup" field="toggle" default="1">
-				<options type="static">
-					<option name="hide_dcda_markup" value="1" />
-				</options>
-			</setting>
-			<setting name="show_variable_in_translation" field="toggle" default="0">
-				<options type="static">
-					<option name="show_variable_in_translation" value="1" />
-				</options>
-			</setting>
-			<setting name="cda_url" field="text" default="http://translate.chamilo.org/" />
-			<setting name="write_new_variables_to_translation_file" field="toggle" default="0">
-				<options type="static">
-					<option name="write_new_variables_to_translation_file" value="1" />
-				</options>
-			</setting>
-		</category>
-		<category name="visual">
-			<setting name="platform_language" field="select" default="english" user_setting="1">
-				<options type="dynamic" source="get_languages" />
-				<availability source="is_allowed_to_change_platform_language" />
-			</setting>
-			<setting name="theme" field="select" default="Aqua" user_setting="1">
-				<options type="dynamic" source="get_themes" />
-				<availability source="is_allowed_to_change_theme" />
-			</setting>
-			<setting name="html_editor" field="radio" default="ckeditor" user_setting="1">
-				<options type="static">
-					<option name="CKEditor" value="ckeditor" />
-					<!--<option name="TinyMCE" value="tinymce" /> -->
-				</options>
-			</setting>
-			<setting name="reload_templates" field="toggle" default="0">
-				<options type="static">
-					<option name="reload_templates" value="1" />
-				</options>
-			</setting>
-			<setting name="portal_home" field="html_editor" default="" />
-			<setting name="allow_portal_functionality" field="toggle" default="1">
-				<options type="static">
-					<option name="allow_portal_functionality" value="1" />
-				</options>
-			</setting>
-		</category>
-		<category name="security">
-			<setting name="type_of_filtering" field="radio" default="blacklist">
-				<options type="static">
-					<option name="blacklist" value="blacklist" />
-					<option name="whitelist" value="whitelist" />
-				</options>
-			</setting>
-			<setting name="blacklist" field="text" default="" />
-			<setting name="whitelist" field="text" default="" />
-			<setting name="rename_instead_of_disallow" field="toggle">
-				<options type="static">
-					<option name="rename_instead_of_disallow" value="1" />
-				</options>
-			</setting>
-			<setting name="replacement_extension" field="text" default="" />
-			<setting name="permissions_new_files" field="text" default="0660">
-				<validations>
-					<validation rule="numeric" message="MustBeNumeric" />
-				</validations>
-			</setting>
-		</category>
-		<category name="authentication">
-			<setting name="enableExternalAuthentication" field="toggle">
-				<options type="static">
-					<option name="enableExternalAuthentication" value="1" />
-				</options>
-			</setting>
-		</category>
+            <setting
+                name="administrator_surname"
+                field="text"
+                default="Administrator" />
+            <setting
+                name="administrator_email"
+                field="text"
+                default="chamilo.admin@mychamilo.com">
+                <validations>
+                    <validation
+                        rule="email"
+                        message="MustBeAnEMailAddress" />
+                </validations>
+            </setting>
+            <setting
+                name="administrator_website"
+                field="text" />
+            <setting
+                name="administrator_telephone"
+                field="text"
+                default="000/1234567" />
+        </category>
+        <category name="whoisonline">
+            <setting
+                name="timelimit"
+                field="text"
+                default="30">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeNumeric" />
+                </validations>
+            </setting>
+        </category>
+        <category name="platform">
+            <setting
+                name="site_name"
+                field="text"
+                default="Chamilo" />
+            <setting
+                name="institution"
+                field="text"
+                default="Chamilo" />
+            <setting
+                name="institution_url"
+                field="text"
+                default="http://www.chamilo.org">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/http:\/\/.*/"
+                        message="MustStartWithHTTP" />
+                </validations>
+            </setting>
+            <setting
+                name="no_reply_email"
+                field="text"
+                default="">
+                <validations>
+                    <validation
+                        rule="email"
+                        message="MustBeAnEMailAddress" />
+                </validations>
+            </setting>
+            <setting
+                name="page_after_login"
+                field="select"
+                default="Chamilo\Core\Home">
+                <options
+                    type="dynamic"
+                    source="get_active_applications" />
+            </setting>
+            <setting
+                name="active_online_email_editor"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="active_online_email_editor"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="maintenance_mode"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="maintenance_mode"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="installation_blocked"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="installation_blocked"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="passing_percentage"
+                field="text"
+                default="50">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeNumeric" />
+                </validations>
+            </setting>
+            <setting
+                name="mailer"
+                field="select"
+                default="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer"
+                user_setting="0">
+                <options
+                    type="dynamic"
+                    source="getMailers" />
+            </setting>
+            <setting
+                name="google_analytics_tracking_id"
+                field="text"
+                default="" />
+        </category>
+        <category name="internationalization">
+            <setting
+                name="hide_dcda_markup"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="hide_dcda_markup"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="show_variable_in_translation"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="show_variable_in_translation"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="cda_url"
+                field="text"
+                default="http://translate.chamilo.org/" />
+            <setting
+                name="write_new_variables_to_translation_file"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="write_new_variables_to_translation_file"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+        <category name="visual">
+            <setting
+                name="platform_language"
+                field="select"
+                default="english"
+                user_setting="1">
+                <options
+                    type="dynamic"
+                    source="get_languages" />
+                <availability source="is_allowed_to_change_platform_language" />
+            </setting>
+            <setting
+                name="theme"
+                field="select"
+                default="Aqua"
+                user_setting="1">
+                <options
+                    type="dynamic"
+                    source="get_themes" />
+                <availability source="is_allowed_to_change_theme" />
+            </setting>
+            <setting
+                name="html_editor"
+                field="radio"
+                default="ckeditor"
+                user_setting="1">
+                <options type="static">
+                    <option
+                        name="CKEditor"
+                        value="ckeditor" />
+                    <!--<option name="TinyMCE" value="tinymce" /> -->
+                </options>
+            </setting>
+            <setting
+                name="reload_templates"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="reload_templates"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="portal_home"
+                field="html_editor"
+                default="" />
+            <setting
+                name="allow_portal_functionality"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="allow_portal_functionality"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+        <category name="security">
+            <setting
+                name="type_of_filtering"
+                field="radio"
+                default="blacklist">
+                <options type="static">
+                    <option
+                        name="blacklist"
+                        value="blacklist" />
+                    <option
+                        name="whitelist"
+                        value="whitelist" />
+                </options>
+            </setting>
+            <setting
+                name="blacklist"
+                field="text"
+                default="" />
+            <setting
+                name="whitelist"
+                field="text"
+                default="" />
+            <setting
+                name="rename_instead_of_disallow"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="rename_instead_of_disallow"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="replacement_extension"
+                field="text"
+                default="" />
+            <setting
+                name="permissions_new_files"
+                field="text"
+                default="0660">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeNumeric" />
+                </validations>
+            </setting>
+        </category>
+        <category name="authentication">
+            <setting
+                name="enableExternalAuthentication"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="enableExternalAuthentication"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
 
-		<category name="credentials_authentication">
-			<setting name="enablePlatformAuthentication" field="toggle" default="1">
-				<options type="static">
-					<option name="enablePlatformAuthentication" value="1" />
-				</options>
-			</setting>
-			<setting name="enableLdapAuthentication" field="toggle">
-				<options type="static">
-					<option name="enableLdapAuthentication" value="1" />
-				</options>
-			</setting>
-		</category>
+        <category name="credentials_authentication">
+            <setting
+                name="enablePlatformAuthentication"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="enablePlatformAuthentication"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="enableLdapAuthentication"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="enableLdapAuthentication"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
 
-		<category name="query_authentication">
-			<setting name="enableSecurityTokenAuthentication" field="toggle">
-				<options type="static">
-					<option name="enableSecurityTokenAuthentication" value="1" />
-				</options>
-			</setting>
-		</category>
+        <category name="query_authentication">
+            <setting
+                name="enableSecurityTokenAuthentication"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="enableSecurityTokenAuthentication"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="enableAnonymousAuthentication"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="enableAnonymousAuthentication"
+                        value="0" />
+                </options>
+            </setting>
+        </category>
 
-		<category name="external_authentication">
-			<setting name="enableCasAuthentication" field="toggle">
-				<options type="static">
-					<option name="enableCasAuthentication" value="1" />
-				</options>
-			</setting>
-		</category>
-		<category name="ldap_authentication">
-			<setting name="ldap_host" field="text" default="" />
-			<setting name="ldap_port" field="text" default="" />
-			<setting name="ldap_password" field="text" default="" />
-			<setting name="ldap_remote_dn" field="text" default="" />
-			<setting name="ldap_search_dn" field="text" default="" />
-		</category>
-		<category name="cas_authentication">
-			<setting name="cas_host" field="text" default="" />
-			<setting name="cas_port" field="text" default="" />
-			<setting name="cas_uri" field="text" default="" />
-			<setting name="cas_version" field="radio" default="SAML_VERSION_1_1">
-				<options type="static">
-					<option name="SAML VERSION 1.1" value="SAML_VERSION_1_1" />
-					<option name="CAS VERSION 2.0" value="CAS_VERSION_2_0" />
-				</options>
-			</setting>
-			<setting name="cas_check_certificate" field="toggle" default="1">
-				<options type="static">
-					<option name="cas_check_certificate" value="1" />
-				</options>
-			</setting>
-			<setting name="cas_certificate" field="text" default="" />
-			<setting name="cas_enable_log" field="toggle">
-				<options type="static">
-					<option name="cas_enable_log" value="1" />
-				</options>
-			</setting>
-			<setting name="cas_log" field="text" default="" />
-			<setting name="cas_user_login" field="radio" default="login">
-				<options type="static">
-					<option name="Login" value="login" />
-					<option name="E-mail" value="email" />
-				</options>
-			</setting>
-			<setting name="cas_allow_change_password" field="toggle">
-				<options type="static">
-					<option name="cas_allow_change_password" value="1" />
-				</options>
-			</setting>
-			<setting name="cas_validation_string" field="text" default="EXT" />
-		</category>
-		<category name="logfiles">
-			<setting name="php_error_location" field="text" default="" />
-			<setting name="httpd_error_location" field="text" default="" />
-			<setting name="mysql_error_location" field="text" default="" />
-		</category>
-		<category name="proxy settings">
-			<setting name="proxy_settings_active" field="toggle">
-				<options type="static">
-					<option name="proxy_settings_active" value="1" />
-				</options>
-			</setting>
-			<setting name="proxy_server" field="text" default="http://" />
-			<setting name="proxy_port" field="text" default="" />
-			<setting name="proxy_username" field="text" default="" />
-			<setting name="proxy_password" field="text" default="" />
-		</category>
-		<category name="various">
-			<setting name="server_type" field="radio" default="production">
-				<options type="static">
-					<option name="production" value="production" />
-					<option name="test" value="test" />
-				</options>
-			</setting>
-			<setting name="session_timeout" field="text" default="120">
-				<validations>
-					<validation rule="numeric" message="MustBeNumeric" />
-				</validations>
-			</setting>
-			<setting name="version" field="text" default="2.0" locked="true" />
-			<setting name="enable_package_management" field="text" default="1" locked="true" />
-			<setting name="show_version_data" field="toggle" default="0">
-				<options type="static">
-					<option name="show_version_data" value="1" />
-				</options>
-			</setting>
-			<setting name="package_repository" field="text" default="http://packages.chamilo.org/" />
-		</category>
-	</settings>
+        <category name="anonymous_authentication">
+            <setting
+                name="anonymous_authentication_url"
+                field="text"
+                default="" />
+            <setting
+                name="recaptcha_site_key"
+                field="text"
+                default="" />
+            <setting
+                name="recaptcha_secret_key"
+                field="text"
+                default="" />
+            <setting
+                name="page_after_anonymous_access"
+                field="select"
+                default="Chamilo\Application\Weblcms">
+                <options
+                    type="dynamic"
+                    source="get_active_applications" />
+            </setting>
+        </category>
+
+        <category name="external_authentication">
+            <setting
+                name="enableCasAuthentication"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="enableCasAuthentication"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+        <category name="ldap_authentication">
+            <setting
+                name="ldap_host"
+                field="text"
+                default="" />
+            <setting
+                name="ldap_port"
+                field="text"
+                default="" />
+            <setting
+                name="ldap_password"
+                field="text"
+                default="" />
+            <setting
+                name="ldap_remote_dn"
+                field="text"
+                default="" />
+            <setting
+                name="ldap_search_dn"
+                field="text"
+                default="" />
+        </category>
+        <category name="cas_authentication">
+            <setting
+                name="cas_host"
+                field="text"
+                default="" />
+            <setting
+                name="cas_port"
+                field="text"
+                default="" />
+            <setting
+                name="cas_uri"
+                field="text"
+                default="" />
+            <setting
+                name="cas_version"
+                field="radio"
+                default="SAML_VERSION_1_1">
+                <options type="static">
+                    <option
+                        name="SAML VERSION 1.1"
+                        value="SAML_VERSION_1_1" />
+                    <option
+                        name="CAS VERSION 2.0"
+                        value="CAS_VERSION_2_0" />
+                </options>
+            </setting>
+            <setting
+                name="cas_check_certificate"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="cas_check_certificate"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="cas_certificate"
+                field="text"
+                default="" />
+            <setting
+                name="cas_enable_log"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="cas_enable_log"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="cas_log"
+                field="text"
+                default="" />
+            <setting
+                name="cas_user_login"
+                field="radio"
+                default="login">
+                <options type="static">
+                    <option
+                        name="Login"
+                        value="login" />
+                    <option
+                        name="E-mail"
+                        value="email" />
+                </options>
+            </setting>
+            <setting
+                name="cas_allow_change_password"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="cas_allow_change_password"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="cas_validation_string"
+                field="text"
+                default="EXT" />
+        </category>
+        <category name="logfiles">
+            <setting
+                name="php_error_location"
+                field="text"
+                default="" />
+            <setting
+                name="httpd_error_location"
+                field="text"
+                default="" />
+            <setting
+                name="mysql_error_location"
+                field="text"
+                default="" />
+        </category>
+        <category name="proxy settings">
+            <setting
+                name="proxy_settings_active"
+                field="toggle">
+                <options type="static">
+                    <option
+                        name="proxy_settings_active"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="proxy_server"
+                field="text"
+                default="http://" />
+            <setting
+                name="proxy_port"
+                field="text"
+                default="" />
+            <setting
+                name="proxy_username"
+                field="text"
+                default="" />
+            <setting
+                name="proxy_password"
+                field="text"
+                default="" />
+        </category>
+        <category name="various">
+            <setting
+                name="server_type"
+                field="radio"
+                default="production">
+                <options type="static">
+                    <option
+                        name="production"
+                        value="production" />
+                    <option
+                        name="test"
+                        value="test" />
+                </options>
+            </setting>
+            <setting
+                name="session_timeout"
+                field="text"
+                default="120">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeNumeric" />
+                </validations>
+            </setting>
+            <setting
+                name="version"
+                field="text"
+                default="2.0"
+                locked="true" />
+            <setting
+                name="enable_package_management"
+                field="text"
+                default="1"
+                locked="true" />
+            <setting
+                name="show_version_data"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="show_version_data"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="package_repository"
+                field="text"
+                default="http://packages.chamilo.org/" />
+        </category>
+    </settings>
 </package>

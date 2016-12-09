@@ -17,19 +17,21 @@ class GraphComponent extends Manager implements TemplateSupport
     public function run()
     {
         $question = $this->get_parent()->get_content_object();
-
+        
         if ((! $this->get_user()->is_platform_admin()) || ($this->get_user_id() != $question->get_owner_id()))
         {
             throw new NotAllowedException();
         }
         
-        $factory = new ApplicationFactory('\Chamilo\Core\Reporting\Viewer', new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            '\Chamilo\Core\Reporting\Viewer', 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
-        $viewer->set_template_by_name(GraphTemplate :: class_name());
+        $viewer->set_template_by_name(GraphTemplate::class_name());
         
-        return $viewer->run();        
+        return $viewer->run();
     }
-
+    
     // /*
     // * (non-PHPdoc) @see
     // * \repository\content_object\survey_matching_question\integration\reporting\TemplateSupport::get_answers()
@@ -38,7 +40,7 @@ class GraphComponent extends Manager implements TemplateSupport
     // {
     // return $this->get_answers($survey_matching_question_id);
     // }
-
+    
     /*
      * (non-PHPdoc) @see
      * \repository\content_object\survey_matching_question\integration\reporting\TemplateSupport::get_question()

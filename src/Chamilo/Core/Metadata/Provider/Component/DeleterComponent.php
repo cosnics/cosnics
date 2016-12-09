@@ -29,47 +29,47 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $providerLinkIds = $this->getRequest()->get(self :: PARAM_PROVIDER_LINK_ID);
-
+        
+        $providerLinkIds = $this->getRequest()->get(self::PARAM_PROVIDER_LINK_ID);
+        
         try
         {
             if (empty($providerLinkIds))
             {
-                throw new NoObjectSelectedException(Translation :: get('ProviderLink'));
+                throw new NoObjectSelectedException(Translation::get('ProviderLink'));
             }
-
+            
             if (! is_array($providerLinkIds))
             {
                 $providerLinkIds = array($providerLinkIds);
             }
-
+            
             foreach ($providerLinkIds as $providerLinkId)
             {
-                $providerLink = DataManager :: retrieve_by_id(ProviderLink :: class_name(), $providerLinkId);
-
+                $providerLink = DataManager::retrieve_by_id(ProviderLink::class_name(), $providerLinkId);
+                
                 if (! $providerLink->delete())
                 {
                     throw new \Exception(
-                        Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('ProviderLink')),
-                            Utilities :: COMMON_LIBRARIES));
+                        Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('ProviderLink')), 
+                            Utilities::COMMON_LIBRARIES));
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('ProviderLink')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('ProviderLink')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

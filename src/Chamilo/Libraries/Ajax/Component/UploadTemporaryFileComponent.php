@@ -20,20 +20,20 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
     public function run()
     {
         $file = $this->getFile();
-
-        $temporaryPath = Path :: getInstance()->getTemporaryPath(__NAMESPACE__);
-        $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
-
-        Filesystem :: create_dir($temporaryPath);
-
-        $fileName = md5(UUID :: v4());
+        
+        $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
+        $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
+        
+        Filesystem::create_dir($temporaryPath);
+        
+        $fileName = md5(UUID::v4());
         $temporaryFilePath = $temporaryPath . $fileName;
-
+        
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
-
+        
         if (! $result)
         {
-            JsonAjaxResult :: general_error(Translation :: get('FileNotUploaded'));
+            JsonAjaxResult::general_error(Translation::get('FileNotUploaded'));
         }
         else
         {

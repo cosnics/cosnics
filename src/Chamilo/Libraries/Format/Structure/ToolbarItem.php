@@ -6,7 +6,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: toolbar_item.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.html.toolbar
  */
 class ToolbarItem
@@ -44,7 +44,7 @@ class ToolbarItem
      * @param string $target
      * @param string $confirm_message
      */
-    public function __construct($label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null,
+    public function __construct($label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null, 
         $confirm_message = null, $extraAttributes = null)
     {
         $this->label = $label;
@@ -56,7 +56,7 @@ class ToolbarItem
         $this->target = $target;
         if ($confirm_message == null)
         {
-            $this->confirm_message = Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES);
+            $this->confirm_message = Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES);
         }
         else
         {
@@ -170,17 +170,17 @@ class ToolbarItem
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
         if (! $this->get_display())
         {
-            $this->display = self :: DISPLAY_ICON;
+            $this->display = self::DISPLAY_ICON;
         }
-        $display_label = ($this->display & self :: DISPLAY_LABEL) == self :: DISPLAY_LABEL && ! empty($label);
-
+        $display_label = ($this->display & self::DISPLAY_LABEL) == self::DISPLAY_LABEL && ! empty($label);
+        
         $button = '';
-        if (($this->display & self :: DISPLAY_ICON) == self :: DISPLAY_ICON && isset($this->image))
+        if (($this->display & self::DISPLAY_ICON) == self::DISPLAY_ICON && isset($this->image))
         {
-            $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' . htmlentities($label) . '"' .
-                 ($display_label ? ' class="labeled"' : '') . '/>';
+            $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' .
+                 htmlentities($label) . '"' . ($display_label ? ' class="labeled"' : '') . '/>';
         }
-
+        
         if ($this->class)
         {
             $class = ' class="' . $this->class . '"';
@@ -189,7 +189,7 @@ class ToolbarItem
         {
             $class = '';
         }
-
+        
         if ($display_label)
         {
             if ($this->get_href())
@@ -201,14 +201,14 @@ class ToolbarItem
                 $button .= '<span' . $class . '>' . $label . '</span>';
             }
         }
-
+        
         if ($this->get_href())
         {
             if ($this->get_confirmation() === true)
             {
-                $this->set_confirmation(Translation :: get($this->confirm_message));
+                $this->set_confirmation(Translation::get($this->confirm_message));
             }
-
+            
             if ($this->target)
             {
                 $target = ' target="' . $this->target . '"';
@@ -217,22 +217,23 @@ class ToolbarItem
             {
                 $target = '';
             }
-
+            
             $extraAttributesString = array();
-
+            
             foreach ($this->getExtraAttributes() as $extraAttributeKey => $extraAttributeValue)
             {
                 $extraAttributesString[] = $extraAttributeKey . '="' . $extraAttributeValue . '"';
             }
-
+            
             $extraAttributesString = implode(' ', $extraAttributesString);
-
-            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . htmlentities($label) . '"' .
+            
+            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' .
+                 htmlentities($label) . '"' .
                  ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
                  addslashes(htmlentities($this->get_confirmation())) . '\');"' : '') . ' ' . $extraAttributesString . '>' .
                  $button . '</a>';
         }
-
+        
         return $button;
     }
 

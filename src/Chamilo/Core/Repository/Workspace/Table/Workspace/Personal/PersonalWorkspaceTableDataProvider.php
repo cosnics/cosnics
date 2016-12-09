@@ -28,9 +28,9 @@ class PersonalWorkspaceTableDataProvider extends WorkspaceTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getWorkspaceService()->getWorkspacesByCreator(
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -53,7 +53,7 @@ class PersonalWorkspaceTableDataProvider extends WorkspaceTableDataProvider
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
-
+        
         return $this->workspaceService;
     }
 }

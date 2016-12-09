@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 
 /**
  * This type of condition requires that one or more of its aggregated conditions be met.
- *
+ * 
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @package common.libraries
@@ -12,7 +12,7 @@ class AndCondition extends MultipleAggregateCondition
 {
     /**
      * The operator
-     *
+     * 
      * @var string
      */
     const OPERATOR = ' AND ';
@@ -22,6 +22,6 @@ class AndCondition extends MultipleAggregateCondition
      */
     public function get_operator()
     {
-        return self :: OPERATOR;
+        return self::OPERATOR;
     }
 }

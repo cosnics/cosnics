@@ -9,6 +9,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
  */
 class HtmlInlinePptxRenditionImplementation extends HtmlInlineDocxRenditionImplementation
 {
+
     /**
      *
      * @return string[]

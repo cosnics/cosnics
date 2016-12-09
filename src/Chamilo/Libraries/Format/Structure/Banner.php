@@ -113,28 +113,29 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                User :: class_name(),
-                Session :: get_user_id());
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
+            $userFullName = $this->getApplication()->getUser()->get_fullname();
         }
         else
         {
             $user = null;
+            $userFullName = '';
         }
 
-        if (! is_null(Session :: get('_as_admin')))
+        if (! is_null(Session::get('_as_admin')))
         {
             $redirect = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_ADMIN_USER));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER));
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">' .
-                 Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
-                 $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
-                 Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
+                Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' .
+                 $userFullName. ' <a href="' . $link . '">' .
+                Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
         }
+
 
         $html[] = '<a name="top"></a>';
 
@@ -143,9 +144,9 @@ class Banner
             $request = $this->getApplication()->getRequest();
         }
 
-        $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
+        $menuRenderer = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 
-        $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
+        $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer::toHtml(
             $menuRenderer,
             $this->getContainerMode(),
             $request,
@@ -153,9 +154,9 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
+            if ($this->getViewMode() == Page::VIEW_MODE_FULL)
             {
-                $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+                $breadcrumbtrail = BreadcrumbTrail::getInstance();
                 $breadcrumbtrail->setContainerMode($this->getContainerMode());
 
                 if ($breadcrumbtrail->size() > 0)

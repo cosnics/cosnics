@@ -23,10 +23,10 @@ abstract class HtmlEditorProcessor
 
     public static function factory($type, $parent, $selected_content_objects)
     {
-        $editor = LocalSetting :: getInstance()->get('html_editor');
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($editor)->upperCamelize() .
+        $editor = LocalSetting::getInstance()->get('html_editor');
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($editor)->upperCamelize() .
              '\Processor';
-
+        
         if (class_exists($class))
         {
             return new $class($parent, $selected_content_objects);
@@ -72,30 +72,30 @@ abstract class HtmlEditorProcessor
     public function get_repository_document_display_url($parameters = array (), $filter = array(), $encode_entities = false)
     {
         $parameters = array_merge(
-            array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_DOCUMENT, 'display' => 1),
+            array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_DOCUMENT, 'display' => 1), 
             $parameters);
-
+        
         $redirect = new Redirect($parameters, $filter, $encode_entities);
-
+        
         return $redirect->getUrl();
     }
 
     public function get_repository_document_display_matching_url()
     {
-        $matching_url = self :: get_repository_document_display_url(
-            array(Manager :: PARAM_CONTENT_OBJECT_ID => '', ContentObject :: PARAM_SECURITY_CODE => ''));
+        $matching_url = self::get_repository_document_display_url(
+            array(Manager::PARAM_CONTENT_OBJECT_ID => '', ContentObject::PARAM_SECURITY_CODE => ''));
         $matching_url = preg_quote($matching_url);
-
-        $original_object_string = '&' . Manager :: PARAM_CONTENT_OBJECT_ID . '\=';
-        $replace_object_string = '&' . Manager :: PARAM_CONTENT_OBJECT_ID . '\=[0-9]+';
-
+        
+        $original_object_string = '&' . Manager::PARAM_CONTENT_OBJECT_ID . '\=';
+        $replace_object_string = '&' . Manager::PARAM_CONTENT_OBJECT_ID . '\=[0-9]+';
+        
         $matching_url = str_replace($original_object_string, $replace_object_string, $matching_url);
-
-        $original_object_string = '&' . ContentObject :: PARAM_SECURITY_CODE . '\=';
-        $replace_object_string = '(&' . ContentObject :: PARAM_SECURITY_CODE . '\=[^\&]+)?';
-
+        
+        $original_object_string = '&' . ContentObject::PARAM_SECURITY_CODE . '\=';
+        $replace_object_string = '(&' . ContentObject::PARAM_SECURITY_CODE . '\=[^\&]+)?';
+        
         $matching_url = str_replace($original_object_string, $replace_object_string, $matching_url);
-
+        
         return '/' . $matching_url . '/';
     }
 

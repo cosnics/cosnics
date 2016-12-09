@@ -27,7 +27,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         $this->checkInstallationAllowed();
-        
+
         $phpVersion = phpversion();
 
         $html = array();
@@ -39,9 +39,9 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             $buttonToolBar = new ButtonToolBar();
 
             $dropDownButton = new DropdownButton(
-                Translation :: get('Install'),
+                Translation::get('Install'),
                 new BootstrapGlyph('ok'),
-                Button :: DISPLAY_ICON_AND_LABEL,
+                Button::DISPLAY_ICON_AND_LABEL,
                 'btn-primary');
 
             $buttonToolBar->addItem($dropDownButton);
@@ -53,9 +53,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
                         $languageValue,
                         null,
                         $this->get_url(
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_REQUIREMENTS,
-                                self :: PARAM_LANGUAGE => $languageKey))));
+                            array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS, self::PARAM_LANGUAGE => $languageKey))));
             }
 
             $buttonToolBar->addItem(

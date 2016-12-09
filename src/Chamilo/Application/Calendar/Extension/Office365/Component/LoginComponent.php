@@ -20,14 +20,13 @@ class LoginComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $calendarService = new CalendarService(CalendarRepository :: getInstance());
-        $result = $calendarService->login(
-            $this->getRequest()->query->get(CalendarService :: PARAM_AUTHORIZATION_CODE));
-
+        $calendarService = new CalendarService(CalendarRepository::getInstance());
+        $result = $calendarService->login($this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE));
+        
         if ($result)
         {
             $nextAction = new Redirect(
-                array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
+                array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
             $nextAction->toUrl();
         }
     }

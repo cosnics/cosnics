@@ -24,7 +24,7 @@ class ContentObjectEntity extends DataClassEntity
      */
     public function getDataClassObject($dataClassName, $dataClassIdentifier)
     {
-        return DataManager :: retrieve_by_id(ContentObject :: class_name(), $dataClassIdentifier);
+        return DataManager::retrieve_by_id(ContentObject::class_name(), $dataClassIdentifier);
     }
 
     /**
@@ -34,7 +34,7 @@ class ContentObjectEntity extends DataClassEntity
     public function getType()
     {
         $dataClassName = $this->getDataClassName();
-        return Translation :: get('TypeName', null, $dataClassName :: package());
+        return Translation::get('TypeName', null, $dataClassName::package());
     }
 
     /**
@@ -45,21 +45,21 @@ class ContentObjectEntity extends DataClassEntity
     {
         $dataClass = $this->getDataClass();
         $dataClassName = $this->getDataClassName();
-
+        
         if ($dataClass instanceof ContentObject)
         {
             return $dataClass->get_icon_image($size);
         }
         else
         {
-            return Theme :: getInstance()->getImage(
-                'Logo/' . $size,
-                'png',
-                $this->getType(),
-                null,
-                ToolbarItem :: DISPLAY_ICON,
-                false,
-                $dataClassName :: package());
+            return Theme::getInstance()->getImage(
+                'Logo/' . $size, 
+                'png', 
+                $this->getType(), 
+                null, 
+                ToolbarItem::DISPLAY_ICON, 
+                false, 
+                $dataClassName::package());
         }
     }
 

@@ -10,14 +10,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to retrieve calendar events for the assignment tool based on the due date of assignments
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CalendarEventDataProviderRepository extends
-    \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository
+class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository
 {
 
     /**
+     *
      * @return string
      */
     protected function getToolName()
@@ -26,6 +26,7 @@ class CalendarEventDataProviderRepository extends
     }
 
     /**
+     *
      * @return string
      */
     protected function getContentObjectClassName()
@@ -34,6 +35,7 @@ class CalendarEventDataProviderRepository extends
     }
 
     /**
+     *
      * @param int $fromDate
      * @param int $toDate
      *
@@ -42,31 +44,23 @@ class CalendarEventDataProviderRepository extends
     protected function getSpecificContentObjectConditions($fromDate, $toDate)
     {
         $conditions = array();
-
-        if(!empty($fromDate))
+        
+        if (! empty($fromDate))
         {
             $conditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(
-                    Assignment::class_name(),
-                    Assignment::PROPERTY_END_TIME
-                ),
-                ComparisonCondition::GREATER_THAN_OR_EQUAL,
-                new StaticConditionVariable($fromDate)
-            );
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                ComparisonCondition::GREATER_THAN_OR_EQUAL, 
+                new StaticConditionVariable($fromDate));
         }
-
-        if(!empty($toDate))
+        
+        if (! empty($toDate))
         {
             $conditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(
-                    Assignment::class_name(),
-                    Assignment::PROPERTY_END_TIME
-                ),
-                ComparisonCondition::LESS_THAN_OR_EQUAL,
-                new StaticConditionVariable($toDate)
-            );
+                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                ComparisonCondition::LESS_THAN_OR_EQUAL, 
+                new StaticConditionVariable($toDate));
         }
-
+        
         return new AndCondition($conditions);
     }
 }

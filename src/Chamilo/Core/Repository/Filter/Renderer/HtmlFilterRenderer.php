@@ -30,61 +30,61 @@ class HtmlFilterRenderer extends FilterRenderer
     public function render()
     {
         $html = array();
-
+        
         if ($this->get_filter_data()->is_set())
         {
             $html[] = $this->add_header();
             $html[] = $this->add_properties();
             $html[] = $this->add_footer();
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function add_properties()
     {
         $filter_data = $this->get_filter_data();
-
+        
         $html = array();
-
+        
         // Text
-        if ($filter_data->has_filter_property(FilterData :: FILTER_TEXT))
+        if ($filter_data->has_filter_property(FilterData::FILTER_TEXT))
         {
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData :: FILTER_TEXT),
-                $filter_data->get_filter_property(FilterData :: FILTER_TEXT));
+                $this->get_parameter_name(FilterData::FILTER_TEXT), 
+                $filter_data->get_filter_property(FilterData::FILTER_TEXT));
         }
-
+        
         // Category id
-        $category_id = $filter_data->get_filter_property(FilterData :: FILTER_CATEGORY);
-
+        $category_id = $filter_data->get_filter_property(FilterData::FILTER_CATEGORY);
+        
         if (isset($category_id) && $category_id >= 0)
         {
-            $recursive = (boolean) $filter_data->get_filter_property(FilterData :: FILTER_CATEGORY_RECURSIVE);
-
+            $recursive = (boolean) $filter_data->get_filter_property(FilterData::FILTER_CATEGORY_RECURSIVE);
+            
             if ($recursive)
             {
                 if ($category_id == 0)
                 {
                     $html[] = $this->renderParameter(
-                        $this->get_parameter_name(FilterData :: FILTER_CATEGORY),
-                        Translation :: get(
-                            'InCategoryAndChildren',
+                        $this->get_parameter_name(FilterData::FILTER_CATEGORY), 
+                        Translation::get(
+                            'InCategoryAndChildren', 
                             array('CATEGORY' => $this->get_workspace()->getTitle())));
                 }
                 else
                 {
-                    $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-
+                    $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+                    
                     if ($category instanceof RepositoryCategory)
                     {
                         $html[] = $this->renderParameter(
-                            $this->get_parameter_name(FilterData :: FILTER_CATEGORY),
-                            Translation :: get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())));
+                            $this->get_parameter_name(FilterData::FILTER_CATEGORY), 
+                            Translation::get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())));
                     }
                     else
                     {
-                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                        $filter_data->set_filter_property(FilterData::FILTER_CATEGORY, null);
                     }
                 }
             }
@@ -93,100 +93,100 @@ class HtmlFilterRenderer extends FilterRenderer
                 if ($category_id == 0)
                 {
                     $html[] = $this->renderParameter(
-                        $this->get_parameter_name(FilterData :: FILTER_CATEGORY),
-                        Translation :: get('InCategory', array('CATEGORY' => $this->get_workspace()->getTitle())));
+                        $this->get_parameter_name(FilterData::FILTER_CATEGORY), 
+                        Translation::get('InCategory', array('CATEGORY' => $this->get_workspace()->getTitle())));
                 }
                 else
                 {
-                    $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-
+                    $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+                    
                     if ($category instanceof RepositoryCategory)
                     {
                         $html[] = $this->renderParameter(
-                            $this->get_parameter_name(FilterData :: FILTER_CATEGORY),
-                            Translation :: get('InCategory', array('CATEGORY' => $category->get_name())));
+                            $this->get_parameter_name(FilterData::FILTER_CATEGORY), 
+                            Translation::get('InCategory', array('CATEGORY' => $category->get_name())));
                     }
                     else
                     {
-                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                        $filter_data->set_filter_property(FilterData::FILTER_CATEGORY, null);
                     }
                 }
             }
         }
-
+        
         // Creation date
-        if ($filter_data->has_date(FilterData :: FILTER_CREATION_DATE))
+        if ($filter_data->has_date(FilterData::FILTER_CREATION_DATE))
         {
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE),
-                Translation :: get(
-                    'CreatedBetween',
+                $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), 
+                Translation::get(
+                    'CreatedBetween', 
                     array(
-                        'FROM' => $filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE),
-                        'TO' => $filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))));
+                        'FROM' => $filter_data->get_creation_date(FilterData::FILTER_FROM_DATE), 
+                        'TO' => $filter_data->get_creation_date(FilterData::FILTER_TO_DATE))));
         }
         else
         {
-            if ($filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE))
+            if ($filter_data->get_creation_date(FilterData::FILTER_FROM_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE),
-                    Translation :: get(
-                        'CreatedAfter',
-                        array('FROM' => $filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE))));
+                    $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), 
+                    Translation::get(
+                        'CreatedAfter', 
+                        array('FROM' => $filter_data->get_creation_date(FilterData::FILTER_FROM_DATE))));
             }
-            elseif ($filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))
+            elseif ($filter_data->get_creation_date(FilterData::FILTER_TO_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE),
-                    Translation :: get(
-                        'CreatedBefore',
-                        array('TO' => $filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))));
+                    $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), 
+                    Translation::get(
+                        'CreatedBefore', 
+                        array('TO' => $filter_data->get_creation_date(FilterData::FILTER_TO_DATE))));
             }
         }
-
+        
         // Modification date
-        if ($filter_data->has_date(FilterData :: FILTER_MODIFICATION_DATE))
+        if ($filter_data->has_date(FilterData::FILTER_MODIFICATION_DATE))
         {
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE),
-                Translation :: get(
-                    'ModifiedBetween',
+                $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), 
+                Translation::get(
+                    'ModifiedBetween', 
                     array(
-                        'FROM' => $filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE),
-                        'TO' => $filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))));
+                        'FROM' => $filter_data->get_modification_date(FilterData::FILTER_FROM_DATE), 
+                        'TO' => $filter_data->get_modification_date(FilterData::FILTER_TO_DATE))));
         }
         else
         {
-            if ($filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE))
+            if ($filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE),
-                    Translation :: get(
-                        'ModifiedAfter',
-                        array('FROM' => $filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE))));
+                    $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), 
+                    Translation::get(
+                        'ModifiedAfter', 
+                        array('FROM' => $filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))));
             }
-            elseif ($filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))
+            elseif ($filter_data->get_modification_date(FilterData::FILTER_TO_DATE))
             {
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE),
-                    Translation :: get(
-                        'ModifiedBefore',
-                        array('TO' => $filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))));
+                    $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), 
+                    Translation::get(
+                        'ModifiedBefore', 
+                        array('TO' => $filter_data->get_modification_date(FilterData::FILTER_TO_DATE))));
             }
         }
-
+        
         // Type
-        if ($filter_data->has_filter_property(FilterData :: FILTER_TYPE))
+        if ($filter_data->has_filter_property(FilterData::FILTER_TYPE))
         {
-            $type = $filter_data->get_filter_property(FilterData :: FILTER_TYPE);
-
+            $type = $filter_data->get_filter_property(FilterData::FILTER_TYPE);
+            
             // Category
             if (! is_numeric($type) && ! empty($type))
             {
-                $typeSelectorFactory = new TypeSelectorFactory(DataManager :: get_registered_types());
+                $typeSelectorFactory = new TypeSelectorFactory(DataManager::get_registered_types());
                 $type_selector = $typeSelectorFactory->getTypeSelector();
-
+                
                 try
                 {
                     $category_name = $type_selector->get_category_by_type($type)->get_name();
@@ -195,31 +195,31 @@ class HtmlFilterRenderer extends FilterRenderer
                 {
                     $category_name = $type;
                 }
-
-                $html[] = $this->renderParameter($this->get_parameter_name(FilterData :: FILTER_TYPE), $category_name);
+                
+                $html[] = $this->renderParameter($this->get_parameter_name(FilterData::FILTER_TYPE), $category_name);
             }
             // Template id
             elseif (is_numeric($type) && ! empty($type))
             {
-                $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($type);
+                $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($type);
                 $template = $template_registration->get_template();
                 $html[] = $this->renderParameter(
-                    $this->get_parameter_name(FilterData :: FILTER_TYPE),
+                    $this->get_parameter_name(FilterData::FILTER_TYPE), 
                     $template->translate('TypeName'));
             }
         }
-
+        
         // User view id
-        if ($filter_data->has_filter_property(FilterData :: FILTER_USER_VIEW))
+        if ($filter_data->has_filter_property(FilterData::FILTER_USER_VIEW))
         {
-            $user_view = DataManager :: retrieve_by_id(
-                UserView :: class_name(),
-                $filter_data->get_filter_property(FilterData :: FILTER_USER_VIEW));
+            $user_view = DataManager::retrieve_by_id(
+                UserView::class_name(), 
+                $filter_data->get_filter_property(FilterData::FILTER_USER_VIEW));
             $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData :: FILTER_USER_VIEW),
-                Translation :: get('UserViewFilter', array('VIEW' => $user_view->get_name())));
+                $this->get_parameter_name(FilterData::FILTER_USER_VIEW), 
+                Translation::get('UserViewFilter', array('VIEW' => $user_view->get_name())));
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -230,24 +230,24 @@ class HtmlFilterRenderer extends FilterRenderer
     public function add_header()
     {
         $html = array();
-
+        
         $workspaceId = $this->get_workspace() instanceof PersonalWorkspace ? null : $this->get_workspace()->getId();
-
+        
         $html[] = '<div class="panel panel-default" id="search-parameters" data-current-workspace-id="' . $workspaceId .
              '">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-
-        $html[] = '<div class="pull-right search-parameter" id="' . $this->get_parameter_name(self :: CLEAR_ALL) . '">';
+        
+        $html[] = '<div class="pull-right search-parameter" id="' . $this->get_parameter_name(self::CLEAR_ALL) . '">';
         $html[] = '<span class="glyphicon glyphicon-remove"></span>';
         $html[] = '</div>';
-
-        $html[] = Translation :: get('SearchParameters');
+        
+        $html[] = Translation::get('SearchParameters');
         $html[] = '</h3>';
         $html[] = '</div>';
-
+        
         $html[] = '<div class="list-group">';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -258,25 +258,25 @@ class HtmlFilterRenderer extends FilterRenderer
     public function add_footer()
     {
         $html = array();
-
+        
         $html[] = '</div>';
         $html[] = '</div>';
-
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'Search.js');
-
+        
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Search.js');
+        
         return implode(PHP_EOL, $html);
     }
 
     public function renderParameter($parameterIdentifier, $parameterText)
     {
         $html = array();
-
+        
         $html[] = '<div class="list-group-item search-parameter" id="' . $parameterIdentifier . '">';
         $html[] = '<span class="glyphicon glyphicon-remove pull-right"></span>';
         $html[] = $parameterText;
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

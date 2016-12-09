@@ -22,7 +22,7 @@ class CommandLineInstaller implements InstallerObserver
     {
         $installer_config = new Configuration();
         $installer_config->load_config_file($this->config_file);
-
+        
         $installer_factory = new Factory();
         $this->installer = $installer_factory->build_installer($installer_config);
         $this->installer->add_observer($this);
@@ -37,7 +37,7 @@ class CommandLineInstaller implements InstallerObserver
             ob_flush();
             return;
         }
-
+        
         $reason = implode(", ", $result->get_messages());
         echo "Ko ({$reason})";
         ob_flush();

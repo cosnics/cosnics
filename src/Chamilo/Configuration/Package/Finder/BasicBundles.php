@@ -2,8 +2,9 @@
 namespace Chamilo\Configuration\Package\Finder;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -77,11 +78,12 @@ class BasicBundles
     private function discoverPackages($rootNamespace)
     {
         $blacklist = $this->getBlacklistedFolders();
-        $rootNamespace = $rootNamespace == PackageList :: ROOT ? '' : $rootNamespace;
+        $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
 
-        $path = Path :: getInstance()->namespaceToFullPath($rootNamespace);
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $path = $pathBuilder->namespaceToFullPath($rootNamespace);
 
-        $folders = Filesystem :: get_directory_content($path, Filesystem :: LIST_DIRECTORIES, false);
+        $folders = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
 
         foreach ($folders as $folder)
         {
@@ -115,7 +117,8 @@ class BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $packageInfoPath = Path :: getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/package.info';
         return file_exists($packageInfoPath);
     }
 }

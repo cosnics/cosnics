@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class PublicationEntityRelation extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
@@ -32,12 +32,12 @@ class PublicationEntityRelation extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_ENTITY_TYPE,
-                self :: PROPERTY_ENTITY_ID,
-                self :: PROPERTY_RIGHTS));
+                self::PROPERTY_PUBLICATION_ID, 
+                self::PROPERTY_ENTITY_TYPE, 
+                self::PROPERTY_ENTITY_ID, 
+                self::PROPERTY_RIGHTS));
     }
 
     /**
@@ -46,7 +46,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function getPublicationId()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -57,9 +57,9 @@ class PublicationEntityRelation extends DataClass
     {
         if (! isset($this->publication))
         {
-            $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->get_publication());
+            $this->publication = DataManager::retrieve_by_id(Publication::class_name(), $this->get_publication());
         }
-
+        
         return $this->publication;
     }
 
@@ -69,7 +69,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function setPublicationId($publicationId)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION_ID, $publicationId);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publicationId);
     }
 
     /**
@@ -78,7 +78,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function getEntityType()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -87,7 +87,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function setEntityType($entityType)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -96,7 +96,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function getEntityId()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -105,7 +105,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function setEntityId($entityId)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entityId);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
     }
 
     /**
@@ -114,7 +114,7 @@ class PublicationEntityRelation extends DataClass
      */
     public function getRights()
     {
-        return $this->get_default_property(self :: PROPERTY_RIGHTS);
+        return $this->get_default_property(self::PROPERTY_RIGHTS);
     }
 
     /**
@@ -123,6 +123,6 @@ class PublicationEntityRelation extends DataClass
      */
     public function setRights($rights)
     {
-        $this->set_default_property(self :: PROPERTY_RIGHTS, $rights);
+        $this->set_default_property(self::PROPERTY_RIGHTS, $rights);
     }
 }

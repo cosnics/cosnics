@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: assessment_matrix_question.class.php $
- *
+ * 
  * @package repository.lib.content_object.matrix_question
  */
 class AssessmentMatrixQuestion extends ContentObject implements Versionable
@@ -22,17 +22,17 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
     {
         $options = $this->get_options();
         $options[] = $option;
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self :: PROPERTY_OPTIONS, serialize($options));
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self :: PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -48,17 +48,17 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
     {
         $matches = $this->get_matches();
         $matches[] = $match;
-        return $this->set_additional_property(self :: PROPERTY_MATCHES, serialize($matches));
+        return $this->set_additional_property(self::PROPERTY_MATCHES, serialize($matches));
     }
 
     public function set_matches($matches)
     {
-        return $this->set_additional_property(self :: PROPERTY_MATCHES, serialize($matches));
+        return $this->set_additional_property(self::PROPERTY_MATCHES, serialize($matches));
     }
 
     public function get_matches()
     {
-        if ($result = unserialize($this->get_additional_property(self :: PROPERTY_MATCHES)))
+        if ($result = unserialize($this->get_additional_property(self::PROPERTY_MATCHES)))
         {
             return $result;
         }
@@ -72,22 +72,22 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
 
     public function get_matrix_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_MATRIX_TYPE);
+        return $this->get_additional_property(self::PROPERTY_MATRIX_TYPE);
     }
 
     public function set_matrix_type($matrix_type)
     {
-        $this->set_additional_property(self :: PROPERTY_MATRIX_TYPE, $matrix_type);
+        $this->set_additional_property(self::PROPERTY_MATRIX_TYPE, $matrix_type);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_MATCHES, self :: PROPERTY_OPTIONS, self :: PROPERTY_MATRIX_TYPE);
+        return array(self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS, self::PROPERTY_MATRIX_TYPE);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
         ;
     }
 
@@ -104,7 +104,7 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
         }
         return $max;
     }
-
+    
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {

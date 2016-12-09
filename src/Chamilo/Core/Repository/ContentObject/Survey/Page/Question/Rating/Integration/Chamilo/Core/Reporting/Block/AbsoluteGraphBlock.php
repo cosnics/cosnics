@@ -29,7 +29,7 @@ class AbsoluteGraphBlock extends ReportingBlock
         }
         $options = array_keys($answer_count);
         
-        $answer_row = Translation :: get(self :: COUNT);
+        $answer_row = Translation::get(self::COUNT);
         $rows = array($answer_row);
         
         $reporting_data->set_rows($rows);
@@ -39,7 +39,7 @@ class AbsoluteGraphBlock extends ReportingBlock
             
             $reporting_data->add_category($option);
             $value = $answer_count[$option];
-            $reporting_data->add_data_category_row($option, Translation :: get(self :: COUNT), $value);
+            $reporting_data->add_data_category_row($option, Translation::get(self::COUNT), $value);
         }
         
         return $reporting_data;
@@ -53,15 +53,15 @@ class AbsoluteGraphBlock extends ReportingBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_BAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_LINE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_PIE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_POLAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_STACKED_AREA, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_STACKED_BAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_RADAR, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_3D_PIE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_RING, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_AREA);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_BAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_LINE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_POLAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_STACKED_AREA, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_STACKED_BAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_RADAR, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_3D_PIE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_RING, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_AREA);
     }
 }

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Admin extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_ORIGIN = 'origin';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
@@ -21,97 +21,97 @@ class Admin extends DataClass
     const PROPERTY_TARGET_ID = 'target_id';
     const PROPERTY_CREATED = 'created';
     const PROPERTY_MODIFIED = 'modified';
-
+    
     // Origins
     const ORIGIN_EXTERNAL = 1;
     const ORIGIN_INTERNAL = 2;
 
     /**
      * Get the default property names
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_ORIGIN,
-                self :: PROPERTY_ENTITY_TYPE,
-                self :: PROPERTY_ENTITY_ID,
-                self :: PROPERTY_TARGET_TYPE,
-                self :: PROPERTY_TARGET_ID,
-                self :: PROPERTY_CREATED,
-                self :: PROPERTY_MODIFIED));
+                self::PROPERTY_ORIGIN, 
+                self::PROPERTY_ENTITY_TYPE, 
+                self::PROPERTY_ENTITY_ID, 
+                self::PROPERTY_TARGET_TYPE, 
+                self::PROPERTY_TARGET_ID, 
+                self::PROPERTY_CREATED, 
+                self::PROPERTY_MODIFIED));
     }
 
     public function get_origin()
     {
-        return $this->get_default_property(self :: PROPERTY_ORIGIN);
+        return $this->get_default_property(self::PROPERTY_ORIGIN);
     }
 
     public function set_origin($origin)
     {
-        $this->set_default_property(self :: PROPERTY_ORIGIN, $origin);
+        $this->set_default_property(self::PROPERTY_ORIGIN, $origin);
     }
 
     public function get_entity_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     public function set_entity_type($entity_type)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }
 
     public function get_entity_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entity_id);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
     public function get_target_type()
     {
-        return $this->get_default_property(self :: PROPERTY_TARGET_TYPE);
+        return $this->get_default_property(self::PROPERTY_TARGET_TYPE);
     }
 
     public function set_target_type($target_type)
     {
-        $this->set_default_property(self :: PROPERTY_TARGET_TYPE, $target_type);
+        $this->set_default_property(self::PROPERTY_TARGET_TYPE, $target_type);
     }
 
     public function get_target_id()
     {
-        return $this->get_default_property(self :: PROPERTY_TARGET_ID);
+        return $this->get_default_property(self::PROPERTY_TARGET_ID);
     }
 
     public function set_target_id($target_id)
     {
-        $this->set_default_property(self :: PROPERTY_TARGET_ID, $target_id);
+        $this->set_default_property(self::PROPERTY_TARGET_ID, $target_id);
     }
 
     public function get_created()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATED);
+        return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
     public function set_created($created)
     {
-        $this->set_default_property(self :: PROPERTY_CREATED, $created);
+        $this->set_default_property(self::PROPERTY_CREATED, $created);
     }
 
     public function get_modified()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIED);
+        return $this->get_default_property(self::PROPERTY_MODIFIED);
     }
 
     public function set_modified($modified)
     {
-        $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
+        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
     }
 
     public function create($create_in_batch = false)
@@ -119,14 +119,14 @@ class Admin extends DataClass
         $now = time();
         $this->set_created($now);
         $this->set_modified($now);
-
-        return parent :: create();
+        
+        return parent::create();
     }
 
     public function update()
     {
         $this->set_modified(time());
-
-        return parent :: update();
+        
+        return parent::update();
     }
 }

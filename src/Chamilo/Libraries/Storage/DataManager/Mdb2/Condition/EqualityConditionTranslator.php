@@ -21,10 +21,10 @@ class EqualityConditionTranslator extends ConditionTranslator
     {
         if (is_null($this->get_condition()->get_value()))
         {
-            return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' IS NULL';
+            return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' IS NULL';
         }
-
-        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator :: render(
+        
+        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator::render(
             $this->get_condition()->get_value());
     }
 }

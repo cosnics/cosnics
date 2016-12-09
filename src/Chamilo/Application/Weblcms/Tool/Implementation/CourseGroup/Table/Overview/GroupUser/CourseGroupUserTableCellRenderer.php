@@ -12,11 +12,10 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
 
     /**
      * Renders a given cell.
-     *
+     * 
      * @param type $column
      * @param type $user_with_subscription_status User from the advanced join query in weblcms database class that
      *        includes his subscription status.
-     *
      * @return type
      */
     public function render_cell($column, $user)
@@ -25,18 +24,17 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
         {
             case CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME :
                 $subscriptionTime = $user[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME];
-
+                
                 if ($subscriptionTime)
                 {
                     return DatetimeUtilities::format_locale_date(
-                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
-                        $subscriptionTime
-                    );
+                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()), 
+                        $subscriptionTime);
                 }
-
+                
                 return null;
         }
-
+        
         return parent::render_cell($column, $user);
     }
 }

@@ -20,6 +20,6 @@ class AttemptLearningPathItemInteraction extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LpiAttemptInteraction :: class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LpiAttemptInteraction::class_name());
     }
 }

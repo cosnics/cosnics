@@ -86,7 +86,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
         }
         $entity->set_user_id($entity->get_user_id() + 1);
         $entity->set_course_id($entity->get_course_id() + 2);
-        $new_status = $entity->get_status() === CourseUserRelation :: STATUS_TEACHER ? CourseUserRelation :: STATUS_STUDENT : CourseUserRelation :: STATUS_TEACHER;
+        $new_status = $entity->get_status() === CourseUserRelation::STATUS_TEACHER ? CourseUserRelation::STATUS_STUDENT : CourseUserRelation::STATUS_TEACHER;
         $entity->set_status($new_status);
     }
     //

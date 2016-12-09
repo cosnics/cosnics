@@ -13,13 +13,13 @@ class UserAttemptOpenerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
+        if (! $this->is_allowed(self::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
-        $this->open_user_attempt(Request :: get(self :: PARAM_USER), Request :: get(self :: PARAM_ATTEMPT));
-
-        $this->redirect(null, false, array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS));
+        
+        $this->open_user_attempt(Request::get(self::PARAM_USER), Request::get(self::PARAM_ATTEMPT));
+        
+        $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_USER_ATTEMPT_STATUS));
     }
 }

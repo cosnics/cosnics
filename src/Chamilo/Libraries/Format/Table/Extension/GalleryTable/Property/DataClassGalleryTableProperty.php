@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class represents a data class property for the gallery table
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DataClassGalleryTableProperty extends GalleryTableProperty
@@ -13,7 +13,7 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
 
     /**
      * The class name of the dataclass
-     *
+     * 
      * @var string
      */
     private $class_name;
@@ -23,10 +23,10 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
      * Constructor *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Constructor
-     *
+     * 
      * @param string $class_name - The class name
      * @param string $property - The property or the property alias
      * @param string $title - [OPTIONAL] default translated title from property
@@ -34,15 +34,15 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
     public function __construct($class_name, $property, $title = null)
     {
         $this->class_name = $class_name;
-
-        $context = $class_name :: context();
-
+        
+        $context = $class_name::context();
+        
         if (! $title)
         {
-            $title = Translation :: get($property, null, $context);
+            $title = Translation::get($property, null, $context);
         }
-
-        parent :: __construct($property, $title);
+        
+        parent::__construct($property, $title);
     }
 
     /**
@@ -50,10 +50,10 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the class name
-     *
+     * 
      * @return string
      */
     public function get_class_name()
@@ -63,7 +63,7 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
 
     /**
      * Sets the class name
-     *
+     * 
      * @param string $class_name
      */
     public function set_class_name($class_name)

@@ -22,11 +22,11 @@ class UnsubscribedGroupTableColumnModel extends DataClassTableColumnModel implem
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_CODE));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_DESCRIPTION));
         $this->add_column(
-            new StaticTableColumn(Translation :: get(self :: USERS, null, \Chamilo\Core\User\Manager :: context())));
-        $this->add_column(new StaticTableColumn(Translation :: get(self :: SUBGROUPS)));
+            new StaticTableColumn(Translation::get(self::USERS, null, \Chamilo\Core\User\Manager::context())));
+        $this->add_column(new StaticTableColumn(Translation::get(self::SUBGROUPS)));
     }
 }

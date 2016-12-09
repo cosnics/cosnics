@@ -24,55 +24,55 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $entityRelationIdentifiers = $this->getRequest()->get(self :: PARAM_ENTITY_RELATION_ID);
-
+        $entityRelationIdentifiers = $this->getRequest()->get(self::PARAM_ENTITY_RELATION_ID);
+        
         try
         {
             if (empty($entityRelationIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('WorkspaceEntityRelation'));
+                throw new NoObjectSelectedException(Translation::get('WorkspaceEntityRelation'));
             }
-
+            
             if (! is_array($entityRelationIdentifiers))
             {
                 $entityRelationIdentifiers = array($entityRelationIdentifiers);
             }
-
+            
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-
-            $rightsService = RightsService :: getInstance();
-
+            
+            $rightsService = RightsService::getInstance();
+            
             foreach ($entityRelationIdentifiers as $entityRelationIdentifier)
             {
                 $entityRelation = $entityRelationService->getEntityRelationByIdentifier($entityRelationIdentifier);
-
+                
                 if ($rightsService->hasWorkspaceImplementationCreatorRights(
-                    $this->get_user(),
+                    $this->get_user(), 
                     $this->getCurrentWorkspace()))
                 {
                     if (! $entityRelationService->deleteEntityRelation($entityRelation))
                     {
                         throw new \Exception(
-                            Translation :: get(
-                                'ObjectNotDeleted',
-                                array('OBJECT' => Translation :: get('Workspace')),
-                                Utilities :: COMMON_LIBRARIES));
+                            Translation::get(
+                                'ObjectNotDeleted', 
+                                array('OBJECT' => Translation::get('Workspace')), 
+                                Utilities::COMMON_LIBRARIES));
                     }
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('Workspace')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('Workspace')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

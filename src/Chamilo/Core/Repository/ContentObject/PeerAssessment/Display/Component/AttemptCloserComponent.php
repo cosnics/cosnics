@@ -12,9 +12,9 @@ class AttemptCloserComponent extends Manager
      */
     public function run()
     {
-        $this->close_attempt(Request :: get(self :: PARAM_ATTEMPT));
+        $this->close_attempt(Request::get(self::PARAM_ATTEMPT));
         
         // TODO add message
-        $this->redirect(null, false, array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS));
+        $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_OVERVIEW_STATUS));
     }
 }

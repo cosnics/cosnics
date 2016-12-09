@@ -35,15 +35,15 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->context = Request :: get(self :: PARAM_CONTEXT);
-        $this->registration = \Chamilo\Configuration\Configuration :: registration($this->context);
+        $this->context = Request::get(self::PARAM_CONTEXT);
+        $this->registration = \Chamilo\Configuration\Configuration::registration($this->context);
         
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, 
-                Translation :: get(
+                Translation::get(
                     'ViewingPackage', 
-                    array('PACKAGE' => Translation :: get('TypeName', null, $this->context)))));
+                    array('PACKAGE' => Translation::get('TypeName', null, $this->context)))));
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
         $display = new PackageDisplay($this);
@@ -68,36 +68,36 @@ class ViewerComponent extends Manager implements DelegateComponent
             
             if (! empty($registration))
             {
-                if ($registration[Registration :: PROPERTY_STATUS])
+                if ($registration[Registration::PROPERTY_STATUS])
                 {
                     if (! is_subclass_of(
-                        $registration[Registration :: PROPERTY_CONTEXT] . '\Deactivator', 
+                        $registration[Registration::PROPERTY_CONTEXT] . '\Deactivator', 
                         'Chamilo\Configuration\Package\NotAllowed'))
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES), 
-                                Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Deactivate'), 
+                                Translation::get('Deactivate', array(), Utilities::COMMON_LIBRARIES), 
+                                Theme::getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Deactivate'), 
                                 $this->get_url(
                                     array(
-                                        self :: PARAM_ACTION => self :: ACTION_DEACTIVATE, 
-                                        self :: PARAM_CONTEXT => $this->context))));
+                                        self::PARAM_ACTION => self::ACTION_DEACTIVATE, 
+                                        self::PARAM_CONTEXT => $this->context))));
                     }
                 }
                 else
                 {
                     if (! is_subclass_of(
-                        $registration[Registration :: PROPERTY_CONTEXT] . '\Activator', 
+                        $registration[Registration::PROPERTY_CONTEXT] . '\Activator', 
                         'Chamilo\Configuration\Package\NotAllowed'))
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES), 
-                                Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Activate'), 
+                                Translation::get('Activate', array(), Utilities::COMMON_LIBRARIES), 
+                                Theme::getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Activate'), 
                                 $this->get_url(
                                     array(
-                                        self :: PARAM_ACTION => self :: ACTION_ACTIVATE, 
-                                        self :: PARAM_CONTEXT => $this->context))));
+                                        self::PARAM_ACTION => self::ACTION_ACTIVATE, 
+                                        self::PARAM_CONTEXT => $this->context))));
                     }
                 }
             }
@@ -105,13 +105,11 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('Install', array(), Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Install'), 
+                        Translation::get('Install', array(), Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Install'), 
                         $this->get_url(
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_INSTALL, 
-                                self :: PARAM_CONTEXT => $this->context)), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
+                            array(self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context)), 
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL, 
                         true));
             }
             

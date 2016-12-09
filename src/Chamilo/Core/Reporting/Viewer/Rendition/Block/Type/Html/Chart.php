@@ -30,7 +30,7 @@ abstract class Chart extends Html
         }
         else
         {
-            return Display :: normal_message(Translation :: get('NoDataNoChart'), true);
+            return Display::normal_message(Translation::get('NoDataNoChart'), true);
         }
     }
 
@@ -95,7 +95,7 @@ abstract class Chart extends Html
             {
                 if ($key2 == "Name")
                 {
-                    $value[$key2] = StringUtilities :: getInstance()->truncate(
+                    $value[$key2] = StringUtilities::getInstance()->truncate(
                         trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 
                         30, 
                         false, 
@@ -115,9 +115,9 @@ abstract class Chart extends Html
     {
         $graphUrl = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager :: context(), 
-                Application :: PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager :: ACTION_GRAPH, 
-                \Chamilo\Core\Reporting\Viewer\Ajax\Manager :: PARAM_GRAPHMD5 => $md5));
+                Application::PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::ACTION_GRAPH, 
+                \Chamilo\Core\Reporting\Viewer\Ajax\Manager::PARAM_GRAPHMD5 => $md5));
         
         return $graphUrl->getUrl();
     }
@@ -128,7 +128,7 @@ abstract class Chart extends Html
      */
     public function getFilePath($md5)
     {
-        $rootPath = Theme :: getInstance()->getPathUtilities()->getTemporaryPath();
-        return $rootPath.$md5. '.png';
+        $rootPath = Theme::getInstance()->getPathUtilities()->getTemporaryPath();
+        return $rootPath . $md5 . '.png';
     }
 }

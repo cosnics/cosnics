@@ -17,12 +17,12 @@ class PublicationUser extends DataClass
 
     /**
      * Get the default properties
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_PUBLICATION, self :: PROPERTY_USER));
+        return parent::get_default_property_names(array(self::PROPERTY_PUBLICATION, self::PROPERTY_USER));
     }
 
     /**
@@ -40,7 +40,7 @@ class PublicationUser extends DataClass
      */
     public function get_publication()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION);
     }
 
     /**
@@ -49,7 +49,7 @@ class PublicationUser extends DataClass
      */
     public function set_publication($publication)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION, $publication);
+        $this->set_default_property(self::PROPERTY_PUBLICATION, $publication);
     }
 
     /**
@@ -58,7 +58,7 @@ class PublicationUser extends DataClass
      */
     public function get_user()
     {
-        return $this->get_default_property(self :: PROPERTY_USER);
+        return $this->get_default_property(self::PROPERTY_USER);
     }
 
     /**
@@ -67,11 +67,11 @@ class PublicationUser extends DataClass
      */
     public function set_user($user)
     {
-        $this->set_default_property(self :: PROPERTY_USER, $user);
+        $this->set_default_property(self::PROPERTY_USER, $user);
     }
 
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 }

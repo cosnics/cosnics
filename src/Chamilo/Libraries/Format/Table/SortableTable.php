@@ -49,8 +49,8 @@ class SortableTable extends HtmlTable
      */
     public function getTableActionsJavascript()
     {
-        return ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'SortableTable.js');
+        return ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js');
     }
 
     /**
@@ -68,7 +68,7 @@ class SortableTable extends HtmlTable
      */
     public function processRowAttributes($rowIdentifier, $currentRow)
     {
-        $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
+        // $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
     }
 
     /**
@@ -77,7 +77,7 @@ class SortableTable extends HtmlTable
      */
     public function processContentAttributes()
     {
-        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
+        // $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
     }
 
     /**
@@ -86,8 +86,8 @@ class SortableTable extends HtmlTable
      */
     public function setTableFormActions(TableFormActions $actions = null)
     {
-        parent :: setTableFormActions($actions);
-
+        parent::setTableFormActions($actions);
+        
         if ($actions instanceof TableFormActions && $actions->has_form_actions())
         {
             $columnHeaderHtml = '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
@@ -96,7 +96,7 @@ class SortableTable extends HtmlTable
         {
             $columnHeaderHtml = '';
         }
-
+        
         $this->setColumnHeader(0, $columnHeaderHtml, false);
     }
 
@@ -108,7 +108,7 @@ class SortableTable extends HtmlTable
     {
         $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
              $this->getTableFormActions()->has_form_actions();
-
+        
         if ($hasActions)
         {
             if (strlen($row[0]) > 0)
@@ -116,7 +116,7 @@ class SortableTable extends HtmlTable
                 $row[0] = $this->getCheckboxHtml($row[0]);
             }
         }
-
+        
         foreach ($row as $index => & $value)
         {
             if (! is_numeric($value) && empty($value))
@@ -124,7 +124,7 @@ class SortableTable extends HtmlTable
                 $value = '-';
             }
         }
-
+        
         return $row;
     }
 }

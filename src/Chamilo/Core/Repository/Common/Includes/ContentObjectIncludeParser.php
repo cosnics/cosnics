@@ -6,7 +6,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: content_object_include_parser.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib
  */
 abstract class ContentObjectIncludeParser
@@ -36,7 +36,7 @@ abstract class ContentObjectIncludeParser
 
     public static function factory($type, $form)
     {
-        $class = __NAMESPACE__ . '\Type\Include' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Type\Include' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Parser';
         return new $class($form);
     }
@@ -49,10 +49,10 @@ abstract class ContentObjectIncludeParser
     public function parse_includes($form)
     {
         $content_object = $form->get_content_object();
-
+        
         $form_type = $form->get_form_type();
-
-        if ($form_type == ContentObjectForm :: TYPE_EDIT)
+        
+        if ($form_type == ContentObjectForm::TYPE_EDIT)
         {
             /*
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need
@@ -63,11 +63,11 @@ abstract class ContentObjectIncludeParser
                 $content_object->exclude_content_object($included_object->get_id());
             }
         }
-
-        $include_types = self :: get_include_types();
+        
+        $include_types = self::get_include_types();
         foreach ($include_types as $include_type)
         {
-            $parser = self :: factory($include_type, $form);
+            $parser = self::factory($include_type, $form);
             $parser->parse_editor();
         }
     }

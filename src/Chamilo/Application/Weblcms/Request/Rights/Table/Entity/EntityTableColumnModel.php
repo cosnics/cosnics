@@ -14,10 +14,10 @@ class EntityTableColumnModel extends DataClassTableColumnModel implements TableC
      */
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(Translation :: get('Type')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Entity')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Group')));
-        $this->add_column(new StaticTableColumn(Translation :: get('Path')));
+        $this->add_column(new StaticTableColumn(Translation::get('Type')));
+        $this->add_column(new StaticTableColumn(Translation::get('Entity')));
+        $this->add_column(new StaticTableColumn(Translation::get('Group')));
+        $this->add_column(new StaticTableColumn(Translation::get('Path')));
     }
 }
 ?>

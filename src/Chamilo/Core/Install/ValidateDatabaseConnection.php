@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\Install;
 
-use Chamilo\Libraries\Storage\DataManager\DataSourceName;
-use Doctrine\Common\ClassLoader;
-use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use HTML_QuickForm_Rule;
 
 /**
@@ -16,27 +15,21 @@ class ValidateDatabaseConnection extends HTML_QuickForm_Rule
 
     public function validate($parameters)
     {
-        $classLoader = new ClassLoader('Doctrine', __DIR__ . '/../../../../configuration/plugin/');
-        $classLoader->register();
-
         $configuration = new \Doctrine\DBAL\Configuration();
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine',
-            $parameters[0],
-            $parameters[2],
-            $parameters[1],
-            $parameters[4],
-            $parameters[3]);
 
-        $connection_parameters = array(
-            'user' => $data_source_name->get_username(),
-            'password' => $data_source_name->get_password(),
-            'host' => $data_source_name->get_host(),
-            'driverClass' => $data_source_name->get_driver(true));
+        $settings = array(
+            'driver' => $parameters[0],
+            'username' => $parameters[2],
+            'password' => $parameters[3],
+            'host' => $parameters[1],
+            'name' => $parameters[4],
+            'charset' => 'utf8');
+
+        $connectionFactory = new ConnectionFactory(new DataSourceName($settings));
 
         try
         {
-            DriverManager :: getConnection($connection_parameters, $configuration)->connect();
+            $connectionFactory->getConnection();
             return true;
         }
         catch (\Exception $exception)

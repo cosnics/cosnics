@@ -20,12 +20,12 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $value = $this->get_condition_variable()->get_value();
-
+        
         if ($this->get_condition_variable()->get_quote())
         {
-            $value = Database :: quote($value);
+            $value = Database::quote($value);
         }
-
+        
         return $value;
     }
 }

@@ -18,42 +18,42 @@ class AverageLearningPathScoreBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $reporting_data->set_rows(array(Translation :: get('LearningPath')));
-
+        $reporting_data->set_rows(array(Translation::get('LearningPath')));
+        
         $course_id = $this->get_course_id();
-
-        $course = CourseDataManager :: retrieve_by_id(Course :: class_name(), $course_id);
-
+        
+        $course = CourseDataManager::retrieve_by_id(Course::class_name(), $course_id);
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course->get_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable('LearningPath'));
-
+        
         $condition = new AndCondition($conditions);
-        $lops = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications($condition);
-
+        $lops = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications($condition);
+        
         while ($lop = $lops->next_result())
         {
             $lpo = $lop->get_content_object();
             // $arr[$lpo->get_title()] = 0;
             $reporting_data->add_data_category_row(
-                Translation :: get('LearningPath'),
-                Translation :: get('Average'),
+                Translation::get('LearningPath'), 
+                Translation::get('Average'), 
                 $lpo->get_title());
         }
-
+        
         // $datadescription[0] = Translation :: get('LearningPath');
         // $datadescription[1] = Translation :: get('Average');
-
+        
         // $reporting_data->add_category($learn);
-
+        
         return $reporting_data;
     }
 
@@ -65,7 +65,7 @@ class AverageLearningPathScoreBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_PIE);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
     }
 }

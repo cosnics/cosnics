@@ -24,16 +24,16 @@ class WorkspaceForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param string $form_url
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      */
     public function __construct($formUrl, Workspace $workspace = null)
     {
-        parent :: __construct('workspace', 'post', $formUrl);
-
+        parent::__construct('workspace', 'post', $formUrl);
+        
         $this->workspace = $workspace;
-
+        
         $this->buildForm();
         $this->setFormDefaults();
     }
@@ -43,33 +43,33 @@ class WorkspaceForm extends FormValidator
      */
     protected function buildForm()
     {
-        $this->addElement('text', Workspace :: PROPERTY_NAME, Translation :: get('Name'), array("size" => "50"));
-
+        $this->addElement('text', Workspace::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
+        
         $this->addRule(
-            Workspace :: PROPERTY_NAME,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Workspace::PROPERTY_NAME, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
-        $this->add_html_editor(Workspace :: PROPERTY_DESCRIPTION, Translation :: get('Description'));
-
+        
+        $this->add_html_editor(Workspace::PROPERTY_DESCRIPTION, Translation::get('Description'));
+        
         $this->addSaveResetButtons();
     }
 
     /**
      * Sets the default values
-     *
+     * 
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      */
     protected function setFormDefaults()
     {
         $defaults = array();
-
+        
         if ($this->workspace instanceof Workspace)
         {
-            $defaults[Workspace :: PROPERTY_NAME] = $this->workspace->getName();
-            $defaults[Workspace :: PROPERTY_DESCRIPTION] = $this->workspace->getDescription();
+            $defaults[Workspace::PROPERTY_NAME] = $this->workspace->getName();
+            $defaults[Workspace::PROPERTY_DESCRIPTION] = $this->workspace->getDescription();
         }
-
+        
         $this->setDefaults($defaults);
     }
 }

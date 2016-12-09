@@ -30,25 +30,25 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
     public function warmUpForIdentifier($identifier)
     {
         $localSettings = array();
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID), 
             new StaticConditionVariable($identifier));
-        $userSettings = \Chamilo\Core\User\Storage\DataManager :: retrieves(
-            UserSetting :: class_name(),
+        $userSettings = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            UserSetting::class_name(), 
             new DataClassRetrievesParameters($condition));
-
+        
         while ($userSetting = $userSettings->next_result())
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_ID),
+                new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_ID), 
                 new StaticConditionVariable($userSetting->get_setting_id()));
-            $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve(
-                Setting :: class_name(),
+            $setting = \Chamilo\Configuration\Storage\DataManager::retrieve(
+                Setting::class_name(), 
                 new DataClassRetrieveParameters($condition));
             $localSettings[$setting->get_application()][$setting->get_variable()] = $userSetting->get_value();
         }
-
+        
         return $this->getCacheProvider()->save($identifier, $localSettings);
     }
 
@@ -67,9 +67,9 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
      */
     public function getIdentifiers()
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager :: distinct(
-            User :: class_name(),
-            new DataClassDistinctParameters(null, User :: PROPERTY_ID));
+        return \Chamilo\Libraries\Storage\DataManager\DataManager::distinct(
+            User::class_name(), 
+            new DataClassDistinctParameters(null, User::PROPERTY_ID));
     }
 
     /**

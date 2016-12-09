@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Extension\Personal\Publisher;
 
 use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
@@ -11,28 +10,29 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * The publication handler for the personal calendar extension
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PublicationHandler implements PublicationHandlerInterface
 {
+
     /**
      * The publication Form
-     *
+     * 
      * @var PublicationForm
      */
     protected $publicationForm;
 
     /**
      * The parent component
-     *
+     * 
      * @var Application
      */
     protected $parentComponent;
 
     /**
      * PublicationHandler constructor.
-     *
+     * 
      * @param PublicationForm $publicationForm
      * @param Application $parentComponent
      */
@@ -44,38 +44,34 @@ class PublicationHandler implements PublicationHandlerInterface
 
     /**
      * Publishes the actual selected and configured content objects
-     *
+     * 
      * @param ContentObject[] $selectedContentObjects
      */
     public function publish($selectedContentObjects = array())
     {
         $translator = Translation::getInstance();
         $publication = $this->publicationForm->create_content_object_publications();
-
-        if (!$publication)
+        
+        if (! $publication)
         {
             $message = $translator->getTranslation(
-                'ObjectNotPublished',
-                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
-                Utilities :: COMMON_LIBRARIES
-            );
+                'ObjectNotPublished', 
+                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())), 
+                Utilities::COMMON_LIBRARIES);
         }
         else
         {
             $message = $translator->getTranslation(
-                'ObjectPublished',
-                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
-                Utilities :: COMMON_LIBRARIES
-            );
+                'ObjectPublished', 
+                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())), 
+                Utilities::COMMON_LIBRARIES);
         }
-
+        
         $this->parentComponent->redirect(
-            $message,
-            (!$publication ? true : false),
+            $message, 
+            (! $publication ? true : false), 
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager:: context(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Calendar\Manager :: ACTION_BROWSE
-            )
-        );
+                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(), 
+                Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE));
     }
 }

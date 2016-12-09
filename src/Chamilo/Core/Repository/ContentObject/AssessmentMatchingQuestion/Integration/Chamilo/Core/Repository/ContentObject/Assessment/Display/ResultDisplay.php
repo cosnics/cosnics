@@ -57,7 +57,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th class="list"></th>';
-        $html[] = '<th>' . Translation :: get('PossibleMatches') . '</th>';
+        $html[] = '<th>' . Translation::get('PossibleMatches') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
@@ -69,7 +69,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
             $html[] = '<td>' . $label . '.</td>';
             
-            if ($this->get_question()->get_display() == AssessmentMatchingQuestion :: DISPLAY_LIST)
+            if ($this->get_question()->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
             {
                 
                 $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $match);
@@ -90,17 +90,17 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th class="list"></th>';
-        $html[] = '<th>' . Translation :: get('Option') . '</th>';
-        $html[] = '<th>' . Translation :: get('YourMatch') . '</th>';
+        $html[] = '<th>' . Translation::get('Option') . '</th>';
+        $html[] = '<th>' . Translation::get('YourMatch') . '</th>';
         
         if ($configuration->show_solution())
         {
-            $html[] = '<th>' . Translation :: get('Correct') . '</th>';
+            $html[] = '<th>' . Translation::get('Correct') . '</th>';
         }
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -126,14 +126,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 if ($valid_answer)
                 {
-                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
-                         '" alt="' . Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                    $result = ' <img src="' . Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
+                         '" alt="' . Translation::get('Correct') . '" title="' . Translation::get('Correct') .
                          '" style="" />';
                 }
                 else
                 {
-                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
-                         '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                    $result = ' <img src="' . Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
+                         '" alt="' . Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
                 }
             }
             else
@@ -143,7 +143,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($answers[$i] == - 1)
             {
-                $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
+                $html[] = '<td>' . Translation::get('NoAnswer') . $result . '</td>';
             }
             else
             {
@@ -155,7 +155,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td>' . $labels[$option->get_match()] . '</td>';
             }
             
-            if (AnswerFeedbackDisplay :: allowed(
+            if (AnswerFeedbackDisplay::allowed(
                 $configuration, 
                 $this->get_complex_content_object_question(), 
                 true, 

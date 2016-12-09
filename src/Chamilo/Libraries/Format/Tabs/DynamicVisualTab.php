@@ -9,13 +9,13 @@ class DynamicVisualTab extends DynamicTab
     // Position constants
     const POSITION_LEFT = 'left';
     const POSITION_RIGHT = 'right';
-
+    
     // Display constants
     const DISPLAY_ICON = 1;
     const DISPLAY_TEXT = 2;
     const DISPLAY_BOTH = 3;
     const DISPLAY_BOTH_SELECTED = 4;
-
+    
     // Target constants
     const TARGET_WINDOW = 1;
     const TARGET_POPUP = 2;
@@ -65,10 +65,10 @@ class DynamicVisualTab extends DynamicTab
      * @param boolean $selected
      * @param boolean,string $confirmation
      */
-    public function __construct($id, $name, $image, $link, $selected = false, $confirmation = false,
+    public function __construct($id, $name, $image, $link, $selected = false, $confirmation = false, 
         $position = self :: POSITION_LEFT, $display = self :: DISPLAY_BOTH, $target = self :: TARGET_WINDOW)
     {
-        parent :: __construct($id, $name, $image);
+        parent::__construct($id, $name, $image);
         $this->link = $link;
         $this->selected = $selected;
         $this->confirmation = $confirmation;
@@ -209,35 +209,35 @@ class DynamicVisualTab extends DynamicTab
     public function header()
     {
         $classes = array();
-
+        
         if ($this->get_selected() == true)
         {
             $classes[] = 'active';
         }
-
+        
         $classes[] = 'pull-' . $this->get_position();
-
+        
         $html = array();
         $html[] = '<li class="' . implode(' ', $classes) . '">';
-
+        
         $link = array();
         $link[] = '<a';
-
-        if ($this->get_link() && $this->get_target() == self :: TARGET_WINDOW)
+        
+        if ($this->get_link() && $this->get_target() == self::TARGET_WINDOW)
         {
             $link[] = 'href="' . $this->get_link() . '"';
-
+            
             if ($this->needs_confirmation())
             {
                 $link[] = 'onclick="return confirm(\'' . addslashes(
                     htmlentities(
-                        $this->get_confirmation() === true ? Translation :: get(
-                            'Confirm',
-                            null,
-                            Utilities :: COMMON_LIBRARIES) : $this->get_confirmation())) . '\');"';
+                        $this->get_confirmation() === true ? Translation::get(
+                            'Confirm', 
+                            null, 
+                            Utilities::COMMON_LIBRARIES) : $this->get_confirmation())) . '\');"';
             }
         }
-        elseif ($this->get_link() && $this->get_target() == self :: TARGET_POPUP)
+        elseif ($this->get_link() && $this->get_target() == self::TARGET_POPUP)
         {
             $link[] = 'href="" onclick="javascript:openPopup(\'' . $this->get_link() . '\'); return false"';
         }
@@ -245,23 +245,23 @@ class DynamicVisualTab extends DynamicTab
         {
             $link[] = 'style="cursor: default;"';
         }
-
+        
         $link[] = '>';
-
+        
         $html[] = implode(' ', $link);
-
-        if ($this->get_image() && $this->get_display() != self :: DISPLAY_TEXT)
+        
+        if ($this->get_image() && $this->get_display() != self::DISPLAY_TEXT)
         {
             $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
                  $this->get_name() . '" title="' . htmlentities($this->get_name()) . '"/>';
         }
-
-        if ($this->get_name() && (($this->get_display() == self :: DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||
-             $this->get_display() == self :: DISPLAY_ICON || $this->get_display() == self :: DISPLAY_BOTH))
+        
+        if ($this->get_name() && (($this->get_display() == self::DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||
+             $this->get_display() == self::DISPLAY_ICON || $this->get_display() == self::DISPLAY_BOTH))
         {
             $html[] = '<span class="title">' . $this->get_name() . '</span>';
         }
-
+        
         $html[] = '</a>';
         $html[] = '</li>';
         return implode(PHP_EOL, $html);

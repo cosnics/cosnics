@@ -108,41 +108,41 @@ class EventParser
      */
     public function getEvents()
     {
-        $course = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            Course :: class_name(),
+        $course = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            Course::class_name(), 
             $this->getPublication()->get_course_id());
-
-        $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser :: factory(
-            $this->getPublication()->get_content_object(),
-            $this->getFromDate(),
-            $this->getToDate(),
-            Event :: class_name());
-
+        
+        $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
+            $this->getPublication()->get_content_object(), 
+            $this->getFromDate(), 
+            $this->getToDate(), 
+            Event::class_name());
+        
         $events = $parser->getEvents();
         foreach ($events as &$parsedEvent)
         {
             $parameters = array();
-            $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-            $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
-            $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-            $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $this->getPublication()->get_course_id();
-            $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $this->getPublication()->get_tool();
-            $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $this->getPublication()->get_id();
-
+            $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+            $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getPublication()->get_course_id();
+            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $this->getPublication()->get_tool();
+            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublication()->get_id();
+            
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-
+            
             $parsedEvent->setUrl($link);
             $parsedEvent->setSource(
-                Translation :: get('Course', null, \Chamilo\Application\Weblcms\Manager :: context()) . ' - ' .
+                Translation::get('Course', null, \Chamilo\Application\Weblcms\Manager::context()) . ' - ' .
                      $course->get_title());
             $parsedEvent->setId($this->getPublication()->get_id());
-            $parsedEvent->setContext(\Chamilo\Application\Weblcms\Manager :: context());
+            $parsedEvent->setContext(\Chamilo\Application\Weblcms\Manager::context());
             $parsedEvent->setCourseId($this->getPublication()->get_course_id());
-
+            
             $result[] = $parsedEvent;
         }
-
+        
         return $result;
     }
 }

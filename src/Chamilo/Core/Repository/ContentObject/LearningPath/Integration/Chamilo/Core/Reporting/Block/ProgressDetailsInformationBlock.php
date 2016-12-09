@@ -21,26 +21,26 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         $current_node = $this->get_parent()->get_parent()->get_current_node();
         $content_object = $current_node->get_content_object();
         $reporting_data = new ReportingData();
-
+        
         $reporting_data->set_rows(
             array(
-                Translation :: get('Title'),
-                Translation :: get('Description'),
-                Translation :: get('AverageScore'),
-                Translation :: get('NumberOfAttempts')));
-
+                Translation::get('Title'), 
+                Translation::get('Description'), 
+                Translation::get('AverageScore'), 
+                Translation::get('NumberOfAttempts')));
+        
         $reporting_data->add_category(0);
-        $reporting_data->add_data_category_row(0, Translation :: get('Title'), $content_object->get_title());
-        $reporting_data->add_data_category_row(0, Translation :: get('Description'), $content_object->get_description());
+        $reporting_data->add_data_category_row(0, Translation::get('Title'), $content_object->get_title());
+        $reporting_data->add_data_category_row(0, Translation::get('Description'), $content_object->get_description());
         $reporting_data->add_data_category_row(
-            0,
-            Translation :: get('AverageScore'),
+            0, 
+            Translation::get('AverageScore'), 
             $current_node->get_average_score() . '%');
         $reporting_data->add_data_category_row(
-            0,
-            Translation :: get('NumberOfAttempts'),
+            0, 
+            Translation::get('NumberOfAttempts'), 
             count($current_node->get_data()));
-
+        
         return $reporting_data;
     }
 
@@ -51,6 +51,6 @@ class ProgressDetailsInformationBlock extends ReportingBlock
 
     public function get_views()
     {
-        return array(PropertiesTable :: VIEW);
+        return array(PropertiesTable::VIEW);
     }
 }

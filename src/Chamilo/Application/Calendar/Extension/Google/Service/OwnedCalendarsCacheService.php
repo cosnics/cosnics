@@ -65,10 +65,10 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
     public function warmUpForIdentifier($identifier)
     {
         $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
-
+        
         return $this->getCacheProvider()->save(
-            $identifier,
-            $this->getCalendarRepository()->findOwnedCalendars(),
+            $identifier, 
+            $this->getCalendarRepository()->findOwnedCalendars(), 
             $lifetimeInMinutes * 60);
     }
 
@@ -89,7 +89,7 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
     {
         $calendarRepository = $this->getCalendarRepository();
         $identifier = $calendarRepository->getCacheIdentifier($calendarRepository->getAccessToken(), __METHOD__);
-
+        
         return $this->getForIdentifier($identifier);
     }
 }

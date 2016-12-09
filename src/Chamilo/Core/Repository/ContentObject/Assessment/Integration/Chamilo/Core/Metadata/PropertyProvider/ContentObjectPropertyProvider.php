@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Assessment :: class_name();
+        return Assessment::class_name();
     }
 }

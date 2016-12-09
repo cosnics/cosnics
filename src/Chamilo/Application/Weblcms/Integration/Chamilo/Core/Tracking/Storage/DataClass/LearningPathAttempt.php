@@ -27,9 +27,9 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_COURSE_ID;
-        $extended_property_names[] = self :: PROPERTY_LEARNING_PATH_ID;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_COURSE_ID;
+        $extended_property_names[] = self::PROPERTY_LEARNING_PATH_ID;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -38,7 +38,7 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self :: PROPERTY_COURSE_ID);
+        return $this->get_default_property(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -47,7 +47,7 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self :: PROPERTY_COURSE_ID, $course_id);
+        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     /**
@@ -56,7 +56,7 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public function get_learning_path_id()
     {
-        return $this->get_default_property(self :: PROPERTY_LEARNING_PATH_ID);
+        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
     }
 
     /**
@@ -65,7 +65,7 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public function set_learning_path_id($learning_path_id)
     {
-        $this->set_default_property(self :: PROPERTY_LEARNING_PATH_ID, $learning_path_id);
+        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learning_path_id);
     }
 
     /**
@@ -74,23 +74,23 @@ class LearningPathAttempt extends AbstractAttempt
      */
     public function delete()
     {
-        $succes = parent :: delete();
-
+        $succes = parent::delete();
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt :: class_name(),
-                LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ATTEMPT_ID),
+                LearningPathItemAttempt::class_name(), 
+                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
             new StaticConditionVariable($this->get_id()));
-
-        $trackers = DataManager :: retrieves(
-            LearningPathItemAttempt :: class_name(),
+        
+        $trackers = DataManager::retrieves(
+            LearningPathItemAttempt::class_name(), 
             new DataClassRetrievesParameters($condition));
-
+        
         while ($tracker = $trackers->next_result())
         {
             $succes &= $tracker->delete();
         }
-
+        
         return $succes;
     }
 }

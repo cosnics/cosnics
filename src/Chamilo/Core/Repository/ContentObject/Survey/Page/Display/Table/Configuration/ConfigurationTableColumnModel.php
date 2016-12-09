@@ -11,13 +11,14 @@ class ConfigurationTableColumnModel extends DataClassTableColumnModel implements
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Configuration :: class_name(), Configuration :: PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(Configuration :: class_name(), Configuration :: PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(Configuration::class_name(), Configuration::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(Configuration :: class_name(), Configuration :: PROPERTY_CREATED));
+            new DataClassPropertyTableColumn(Configuration::class_name(), Configuration::PROPERTY_DESCRIPTION));
         $this->add_column(
-            new DataClassPropertyTableColumn(Configuration :: class_name(), Configuration :: PROPERTY_UPDATED));
+            new DataClassPropertyTableColumn(Configuration::class_name(), Configuration::PROPERTY_CREATED));
+        $this->add_column(
+            new DataClassPropertyTableColumn(Configuration::class_name(), Configuration::PROPERTY_UPDATED));
     }
 }
 ?>

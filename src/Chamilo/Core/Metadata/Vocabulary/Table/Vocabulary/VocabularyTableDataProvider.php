@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Table data provider for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class VocabularyTableDataProvider extends DataClassTableDataProvider
@@ -16,7 +16,7 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -28,19 +28,19 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-
-        return DataManager :: retrieves(Vocabulary :: class_name(), $parameters);
+        
+        return DataManager::retrieves(Vocabulary::class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      *
      * @return int
      */
     public function count_data($condition)
     {
-        return DataManager :: count(Vocabulary :: class_name(), $condition);
+        return DataManager::count(Vocabulary::class_name(), $condition);
     }
 }

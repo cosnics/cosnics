@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Page">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Page</translation>
-			<translation language="nl">Pagina</translation>
-			<translation language="fr">Page</translation>
-			<translation language="de">Pagina</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Page</translation>
+            <translation language="nl">Pagina</translation>
+            <translation language="fr">Page</translation>
+            <translation language="de">Pagina</translation>
+        </variable>
+    </translations>
 </template>

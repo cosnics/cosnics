@@ -29,7 +29,7 @@ class ResourceBundles extends BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $resourcePath = Path :: getInstance()->getResourcesPath($folderNamespace);
+        $resourcePath = Path::getInstance()->getResourcesPath($folderNamespace);
         return file_exists($resourcePath) && is_dir($resourcePath);
     }
 }

@@ -18,60 +18,60 @@ class AccountTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         switch ($column->get_name())
         {
-            case Account :: PROPERTY_STATUS :
+            case Account::PROPERTY_STATUS :
                 return $object->get_status_icon();
         }
-        return parent :: render_cell($column, $object);
+        return parent::render_cell($column, $object);
     }
 
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                        Manager :: PARAM_ACCOUNT_ID => $object->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
+                        Manager::PARAM_ACCOUNT_ID => $object->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_ACCOUNT_ID => $object->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_ACCOUNT_ID => $object->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         if ($object->is_enabled())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Deactivate'),
+                    Translation::get('Deactivate', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Deactivate'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
-                            Manager :: PARAM_ACCOUNT_ID => $object->get_id())),
-                    ToolbarItem :: DISPLAY_ICON));
+                            Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE, 
+                            Manager::PARAM_ACCOUNT_ID => $object->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Activate'),
+                    Translation::get('Activate', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Activate'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,
-                            Manager :: PARAM_ACCOUNT_ID => $object->get_id())),
-                    ToolbarItem :: DISPLAY_ICON));
+                            Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE, 
+                            Manager::PARAM_ACCOUNT_ID => $object->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
-
+        
         return $toolbar->as_html();
     }
 }

@@ -16,7 +16,7 @@ class Url extends RestData
         }
         else
         {
-            throw new Exception(Translation :: get('NotAnArray'));
+            throw new Exception(Translation::get('NotAnArray'));
         }
     }
 }

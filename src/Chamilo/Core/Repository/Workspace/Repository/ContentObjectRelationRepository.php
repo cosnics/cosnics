@@ -33,26 +33,26 @@ class ContentObjectRelationRepository
      *
      * @return boolean
      */
-    public function findContentObjectInWorkspace(ContentObject $contentObject,
+    public function findContentObjectInWorkspace(ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation)
     {
         $relationConditions = array();
-
+        
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($contentObject->get_object_number()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($workspaceImplementation->getId()));
-
+        
         $relationCondition = new AndCondition($relationConditions);
-
-        return DataManager :: count(
-            WorkspaceContentObjectRelation :: class_name(),
+        
+        return DataManager::count(
+            WorkspaceContentObjectRelation::class_name(), 
             new DataClassCountParameters($relationCondition)) > 0;
     }
 
@@ -62,40 +62,42 @@ class ContentObjectRelationRepository
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function findContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace,
+    public function findContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace, 
         ContentObject $contentObject)
     {
         $relationConditions = array();
-
+        
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($contentObject->get_object_number()));
-
+        
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($workspace->getId()));
-
+        
         $relationCondition = new AndCondition($relationConditions);
-
-        return DataManager :: retrieve(
-            WorkspaceContentObjectRelation :: class_name(),
+        
+        return DataManager::retrieve(
+            WorkspaceContentObjectRelation::class_name(), 
             new DataClassRetrieveParameters($relationCondition));
     }
 
     /**
-    * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-    * @return ResultSet
-    */
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @return ResultSet
+     */
     public function findContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
         return $this->findContentObjectRelationsForContentObjectById($contentObject->getId());
     }
 
     /**
+     *
      * @param int $contentObjectId
      *
      * @return ResultSet
@@ -103,23 +105,23 @@ class ContentObjectRelationRepository
     // TODO: Where is this used? A content object number should be passed !
     public function findContentObjectRelationsForContentObjectById($contentObjectId)
     {
-        if(empty($contentObjectId))
+        if (empty($contentObjectId))
         {
             throw new \InvalidArgumentException('The given content object id can not be empty');
         }
-
+        
         $relationConditions = array();
-
+        
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($contentObjectId));
-
+        
         $relationCondition = new AndCondition($relationConditions);
-
-        return DataManager :: retrieves(
-            WorkspaceContentObjectRelation :: class_name(),
+        
+        return DataManager::retrieves(
+            WorkspaceContentObjectRelation::class_name(), 
             new DataClassRetrievesParameters($relationCondition));
     }
 
@@ -132,12 +134,12 @@ class ContentObjectRelationRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($contentObject->get_object_number()));
-
-        return DataManager :: distinct(
-            WorkspaceContentObjectRelation :: class_name(),
-            new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID));
+        
+        return DataManager::distinct(
+            WorkspaceContentObjectRelation::class_name(), 
+            new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID));
     }
 }

@@ -19,6 +19,6 @@ class PlatformGroupRelUserTableColumnModel extends DataClassTableColumnModel imp
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID));
+            new DataClassPropertyTableColumn(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID));
     }
 }

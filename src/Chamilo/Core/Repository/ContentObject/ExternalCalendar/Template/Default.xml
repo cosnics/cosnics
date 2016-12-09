@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\ExternalCalendar">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">External calendar</translation>
-			<translation language="nl">Externe kalender</translation>
-			<translation language="fr">Calendrier externe</translation>
-			<translation language="de">Externer Kalender</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">External calendar</translation>
+            <translation language="nl">Externe kalender</translation>
+            <translation language="fr">Calendrier externe</translation>
+            <translation language="de">Externer Kalender</translation>
+        </variable>
+    </translations>
 </template>

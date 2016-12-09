@@ -83,9 +83,9 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -118,7 +118,7 @@ class BrowserComponent extends Manager implements TableSupport
             }
             
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(RelationInstance :: class_name(), RelationInstance :: PROPERTY_RELATION_ID), 
+                new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID), 
                 $relationIdentifiers);
         }
         
@@ -128,9 +128,9 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = $entityConditionService->getEntitiesCondition(
                 $sourceEntities, 
-                RelationInstance :: class_name(), 
-                RelationInstance :: PROPERTY_SOURCE_TYPE, 
-                RelationInstance :: PROPERTY_SOURCE_ID);
+                RelationInstance::class_name(), 
+                RelationInstance::PROPERTY_SOURCE_TYPE, 
+                RelationInstance::PROPERTY_SOURCE_ID);
         }
         
         $targetEntities = $this->getTargetEntities();
@@ -139,9 +139,9 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = $entityConditionService->getEntitiesCondition(
                 $targetEntities, 
-                RelationInstance :: class_name(), 
-                RelationInstance :: PROPERTY_TARGET_TYPE, 
-                RelationInstance :: PROPERTY_TARGET_ID);
+                RelationInstance::class_name(), 
+                RelationInstance::PROPERTY_TARGET_TYPE, 
+                RelationInstance::PROPERTY_TARGET_ID);
         }
         
         return new AndCondition($conditions);

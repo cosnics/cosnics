@@ -69,15 +69,15 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
         {
             $item->get_additional_properties();
             $item->get_titles();
-
+            
             if (! isset($itemsByParentIdentifier[$item->get_parent()]))
             {
                 $itemsByParentIdentifier[$item->get_parent()] = array();
             }
-
+            
             $itemsByParentIdentifier[$item->get_parent()][] = $item;
         }
-
+        
         return $itemsByParentIdentifier;
     }
 
@@ -96,7 +96,7 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
      */
     public function getIdentifiers()
     {
-        return array(self :: IDENTIFIER_ITEMS);
+        return array(self::IDENTIFIER_ITEMS);
     }
 
     /**
@@ -105,12 +105,12 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
      */
     public function getItems()
     {
-        return $this->getForIdentifier(self :: IDENTIFIER_ITEMS);
+        return $this->getForIdentifier(self::IDENTIFIER_ITEMS);
     }
 
     /**
      * Resets the cache
-     *
+     * 
      * @return bool
      */
     public function resetCache()

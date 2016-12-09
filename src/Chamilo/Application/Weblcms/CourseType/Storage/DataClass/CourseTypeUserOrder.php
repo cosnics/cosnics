@@ -37,7 +37,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function __construct($default_properties = array(), $optional_properties = array())
     {
-        parent :: __construct($default_properties, $optional_properties);
+        parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
@@ -50,8 +50,8 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_COURSE_TYPE_ID, self :: PROPERTY_USER_ID, self :: PROPERTY_DISPLAY_ORDER));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_COURSE_TYPE_ID, self::PROPERTY_USER_ID, self::PROPERTY_DISPLAY_ORDER));
     }
 
     /**
@@ -83,7 +83,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_course_type_id()
     {
-        return $this->get_default_property(self :: PROPERTY_COURSE_TYPE_ID);
+        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_ID);
     }
 
     /**
@@ -93,7 +93,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function set_course_type_id($course_type_id)
     {
-        $this->set_default_property(self :: PROPERTY_COURSE_TYPE_ID, $course_type_id);
+        $this->set_default_property(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
     }
 
     /**
@@ -103,7 +103,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -113,7 +113,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -123,7 +123,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_display_order()
     {
-        return $this->get_default_property(self :: PROPERTY_DISPLAY_ORDER);
+        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -133,7 +133,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self :: PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     /**
@@ -149,7 +149,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -159,6 +159,6 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID));
+        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID));
     }
 }

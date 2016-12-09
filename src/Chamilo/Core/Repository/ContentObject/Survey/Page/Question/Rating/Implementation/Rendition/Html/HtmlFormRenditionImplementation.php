@@ -22,7 +22,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         
@@ -41,7 +41,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $tableHeader[] = '<table class="table table-striped table-bordered table-hover table-data take_survey">';
         $tableHeader[] = '<thead>';
         $tableHeader[] = '<tr>';
-        $tableHeader[] = '<th class="info" >' . Translation :: get('ChooseYourRating') . '</th>';
+        $tableHeader[] = '<th class="info" >' . Translation::get('ChooseYourRating') . '</th>';
         $tableHeader[] = '</tr>';
         $tableHeader[] = '</thead>';
         $tableHeader[] = '<tbody>';
@@ -68,7 +68,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $formValidator->addElement(
             'select', 
             $questionName, 
-            Translation :: get('Rating') . ': ', 
+            Translation::get('Rating') . ': ', 
             $scores, 
             'class="rating_slider"');
         
@@ -80,11 +80,11 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $formValidator->addElement('html', implode(PHP_EOL, $tableFooter));
         
         $renderer->setElementTemplate($element_template, $questionName);
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 3);
         $formValidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath($namespace, true) . 'Form.js'));
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath($namespace, true) . 'Form.js'));
         return $formValidator;
     }
 }

@@ -23,7 +23,7 @@ class AssessmentOpenQuestionDifference extends ContentObjectDifference
         $version_string = $version->get_question_type();
         
         $html = array();
-        $html[] = parent :: render();
+        $html[] = parent::render();
         
         $difference = new \Diff($version_string, $object_string);
         $renderer = new \Diff_Renderer_Html_SideBySide();

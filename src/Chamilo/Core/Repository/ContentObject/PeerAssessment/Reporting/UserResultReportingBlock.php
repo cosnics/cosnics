@@ -15,8 +15,8 @@ class UserResultReportingBlock extends ReportingBlock
 
     public function __construct($parent, $user, $attempt)
     {
-        parent :: __construct($parent, false);
-
+        parent::__construct($parent, false);
+        
         $this->user = $user;
         $this->attempt = $attempt;
     }
@@ -24,7 +24,7 @@ class UserResultReportingBlock extends ReportingBlock
     public static function factory($parent, $user, $attempt)
     {
         $processor = $parent->get_parent()->get_root_content_object()->get_scale();
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($processor)->upperCamelize() .
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($processor)->upperCamelize() .
              'UserResultReportingBlock';
         return new $class($parent, $user, $attempt);
     }
@@ -37,7 +37,7 @@ class UserResultReportingBlock extends ReportingBlock
     public function get_title()
     {
         $peer_assessment = $this->get_parent()->get_peer_assessment();
-        return Translation :: get('Score') . ' ' . ' ' . $this->user->get_lastname() . ' ' . $this->user->get_firstname() .
+        return Translation::get('Score') . ' ' . ' ' . $this->user->get_lastname() . ' ' . $this->user->get_firstname() .
              ' ' . $this->attempt->get_title();
     }
 
@@ -48,7 +48,7 @@ class UserResultReportingBlock extends ReportingBlock
 
     public function get_available_displaymodes()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 
     public function get_application()
@@ -58,11 +58,11 @@ class UserResultReportingBlock extends ReportingBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 }

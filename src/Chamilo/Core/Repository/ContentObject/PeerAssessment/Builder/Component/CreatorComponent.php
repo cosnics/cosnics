@@ -11,11 +11,11 @@ class CreatorComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
+            \Chamilo\Core\Repository\Builder\Action\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
-
+    
     /*
      * function get_additional_parameters() { return array(self :: PARAM_TYPE); }
      */

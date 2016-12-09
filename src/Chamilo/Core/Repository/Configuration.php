@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 
 /**
  * This class represents the current configuration
- *
+ * 
  * @package libraries
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -19,7 +19,7 @@ class Configuration
 
     /**
      * Instance of this class for the singleton pattern.
-     *
+     * 
      * @var Configuration
      */
     private static $instance;
@@ -40,16 +40,16 @@ class Configuration
 
     /**
      * Returns the instance of this class.
-     *
+     * 
      * @return Configuration The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new static();
+            self::$instance = new static();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     private function initialize()
@@ -64,7 +64,7 @@ class Configuration
      */
     public function get_registration_by_id($id)
     {
-        return $this->registrations[self :: REGISTRATION_ID][$id];
+        return $this->registrations[self::REGISTRATION_ID][$id];
     }
 
     /**
@@ -73,7 +73,7 @@ class Configuration
      */
     public static function registration_by_id($id)
     {
-        return self :: get_instance()->get_registration_by_id($id);
+        return self::getInstance()->get_registration_by_id($id);
     }
 
     /**
@@ -82,7 +82,7 @@ class Configuration
      */
     public function get_registration_default_by_type($type)
     {
-        return $this->registrations[self :: REGISTRATION_DEFAULT][$type];
+        return $this->registrations[self::REGISTRATION_DEFAULT][$type];
     }
 
     /**
@@ -91,12 +91,12 @@ class Configuration
      */
     public static function registration_default_by_type($type)
     {
-        return self :: get_instance()->get_registration_default_by_type($type);
+        return self::getInstance()->get_registration_default_by_type($type);
     }
 
     /**
      * Get the template registrations for a specific content object type and/or user_id
-     *
+     * 
      * @param string[] $types
      * @param int $user_id
      * @return TemplateRegistration[]
@@ -104,45 +104,45 @@ class Configuration
     public function get_registrations_by_types($types, $user_id = null)
     {
         $registered_types = array();
-
+        
         if (! is_array($types))
         {
             $types = array($types);
         }
-
+        
         foreach ($types as $type)
         {
-            $common_registrations = $this->registrations[self :: REGISTRATION_USER_ID][0][$type];
-
+            $common_registrations = $this->registrations[self::REGISTRATION_USER_ID][0][$type];
+            
             if (count($common_registrations) > 0)
             {
                 $registered_types = array_merge($registered_types, $common_registrations);
             }
-
+            
             if ($user_id)
             {
-                $user_registrations = $this->registrations[self :: REGISTRATION_USER_ID][$user_id][$type];
-
+                $user_registrations = $this->registrations[self::REGISTRATION_USER_ID][$user_id][$type];
+                
                 if (count($user_registrations) > 0)
                 {
                     $registered_types = array_merge($registered_types, $user_registrations);
                 }
             }
         }
-
+        
         return $registered_types;
     }
 
     /**
      * Get the template registrations for a specific content object type and/or user_id
-     *
+     * 
      * @param string[] $types
      * @param int $user_id
      * @return TemplateRegistration[]
      */
     public static function registrations_by_types($types, $user_id = null)
     {
-        return self :: get_instance()->get_registrations_by_types($types, $user_id);
+        return self::getInstance()->get_registrations_by_types($types, $user_id);
     }
 
     /**
@@ -159,7 +159,7 @@ class Configuration
      */
     public static function reset()
     {
-        DataClassResultSetCache :: truncates(array(TemplateRegistration :: class_name()));
-        self :: get_instance()->initialize();
+        DataClassResultSetCache::truncates(array(TemplateRegistration::class_name()));
+        self::getInstance()->initialize();
     }
 }

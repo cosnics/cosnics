@@ -20,13 +20,14 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  * $Id: learning_path_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.learning_path
  */
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+    IntroductionTextSupportInterface
 {
     const ACTION_DOWNLOAD_DOCUMENTS = 'DocumentSaver';
     const ACTION_VIEW_ASSESSMENT_RESULTS = 'AssessmentResultsViewer';
@@ -43,43 +44,43 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_available_browser_types()
     {
         $browser_types = array();
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_TABLE;
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_LIST;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
         return $browser_types;
     }
 
     public static function get_allowed_types()
     {
-        return array(LearningPath :: class_name());
+        return array(LearningPath::class_name());
     }
 
     public function add_content_object_publication_actions($toolbar, $publication)
     {
-        $allowed = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
-
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+        
         if (! $this->is_empty_learning_path($publication))
         {
             if ($allowed)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Statistics'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'),
+                        Translation::get('Statistics'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Statistics'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_STATISTICS,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
-                        ToolbarItem :: DISPLAY_ICON));
-
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_STATISTICS, 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
+                        ToolbarItem::DISPLAY_ICON));
+                
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('ExportRawResults'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Export'),
+                        Translation::get('ExportRawResults'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Export'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RAW_RESULTS,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
-                        ToolbarItem :: DISPLAY_ICON));
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS, 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
+                        ToolbarItem::DISPLAY_ICON));
             }
         }
         else
@@ -88,42 +89,42 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('StatisticsNA'),
-                        Theme :: getInstance()->getCommonImagePath('Action/StatisticsNa'),
-                        null,
-                        ToolbarItem :: DISPLAY_ICON));
+                        Translation::get('StatisticsNA'), 
+                        Theme::getInstance()->getCommonImagePath('Action/StatisticsNa'), 
+                        null, 
+                        ToolbarItem::DISPLAY_ICON));
             }
         }
     }
 
-    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup, 
         DropdownButton $dropdownButton)
     {
-        $allowed = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
-
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+        
         if (! $this->is_empty_learning_path($publication))
         {
             if ($allowed)
             {
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation :: get('Statistics'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'),
+                        Translation::get('Statistics'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Statistics'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_STATISTICS,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
-                        SubButton :: DISPLAY_LABEL));
-
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_STATISTICS, 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
+                        SubButton::DISPLAY_LABEL));
+                
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation :: get('ExportRawResults'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Export'),
+                        Translation::get('ExportRawResults'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Export'), 
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RAW_RESULTS,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
-                        SubButton :: DISPLAY_LABEL));
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS, 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
+                        SubButton::DISPLAY_LABEL));
             }
         }
     }
@@ -132,21 +133,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public function is_empty_learning_path($publication)
     {
-        if (! array_key_exists($publication[ContentObjectPublication :: PROPERTY_ID], $this->checked_publications))
+        if (! array_key_exists($publication[ContentObjectPublication::PROPERTY_ID], $this->checked_publications))
         {
-            $object = $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID];
+            $object = $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID];
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($object));
-            $count = \Chamilo\Core\Repository\Storage\DataManager :: count_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(),
+            $count = \Chamilo\Core\Repository\Storage\DataManager::count_complex_content_object_items(
+                ComplexContentObjectItem::class_name(), 
                 $condition);
-
-            $this->checked_publications[$publication[ContentObjectPublication :: PROPERTY_ID]] = $count == 0;
+            
+            $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]] = $count == 0;
         }
-
-        return $this->checked_publications[$publication[ContentObjectPublication :: PROPERTY_ID]];
+        
+        return $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]];
     }
 }

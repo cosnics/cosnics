@@ -1,20 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="peer_assessment_publication_setting">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="publication_id" type="integer" unsigned="1" notnull="1" />
-		<property name="direct_subscribe_available" type="integer" unsigned="1" length="1" />
-		<property name="unsubscribe_available" type="integer" unsigned="1" length="1" />
-		<property name="subscription_deadline" type="integer" unsigned="1" />
-		<property name="min_group_members" type="integer" unsigned="1" />
-		<property name="max_group_members" type="integer" unsigned="1" />
-		<property name="filter_min_max" type="integer" unsigned="1" length="1" />
-		<property name="filter_self" type="integer" unsigned="1" length="1" />
-		<property name="anonymous_feedback" type="integer" unsigned="1" length="1" />
-		<property name="enable_user_results_export" type="integer" unsigned="1" length="1" />
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="publication_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="direct_subscribe_available"
+            type="integer"
+            unsigned="1"
+            length="1" />
+        <property
+            name="unsubscribe_available"
+            type="integer"
+            unsigned="1"
+            length="1" />
+        <property
+            name="subscription_deadline"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="min_group_members"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="max_group_members"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="filter_min_max"
+            type="integer"
+            unsigned="1"
+            length="1" />
+        <property
+            name="filter_self"
+            type="integer"
+            unsigned="1"
+            length="1" />
+        <property
+            name="anonymous_feedback"
+            type="integer"
+            unsigned="1"
+            length="1" />
+        <property
+            name="enable_user_results_export"
+            type="integer"
+            unsigned="1"
+            length="1" />
 
-	</properties>
-	<index name="publication_id">
-		<indexproperty name="publication_id" />
-	</index>
+    </properties>
+    <index name="publication_id">
+        <indexproperty name="publication_id" />
+    </index>
 </object>

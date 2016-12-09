@@ -72,7 +72,7 @@ class UserSearchForm extends FormValidator
      */
     public function __construct($manager, $url)
     {
-        parent :: __construct(self :: FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, 'post', $url);
         $this->renderer = clone $this->defaultRenderer();
         $this->manager = $manager;
         $this->frozen_elements = array();
@@ -109,7 +109,7 @@ class UserSearchForm extends FormValidator
         }
         foreach ($this->frozen_elements as $element)
         {
-            $element->setValue(Request :: get($element->getName()));
+            $element->setValue(Request::get($element->getName()));
         }
     }
 
@@ -121,10 +121,10 @@ class UserSearchForm extends FormValidator
         $this->renderer->setElementTemplate('{element}');
         $this->frozen_elements[] = $this->addElement(
             'text', 
-            self :: PARAM_SIMPLE_SEARCH_QUERY, 
-            Translation :: get('Find'), 
+            self::PARAM_SIMPLE_SEARCH_QUERY, 
+            Translation::get('Find'), 
             'size="20" class="search_query"');
-        $this->addElement('submit', 'search', Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES));
+        $this->addElement('submit', 'search', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
@@ -158,18 +158,18 @@ class UserSearchForm extends FormValidator
     {
         $values = $this->exportValues();
         
-        $query = $values[self :: PARAM_SIMPLE_SEARCH_QUERY];
+        $query = $values[self::PARAM_SIMPLE_SEARCH_QUERY];
         
         if (isset($query) && $query != '')
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
-                '*' . $values[self :: PARAM_SIMPLE_SEARCH_QUERY] . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+                '*' . $values[self::PARAM_SIMPLE_SEARCH_QUERY] . '*');
             
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
-                '*' . $values[self :: PARAM_SIMPLE_SEARCH_QUERY] . '*');
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+                '*' . $values[self::PARAM_SIMPLE_SEARCH_QUERY] . '*');
             
             return new OrCondition($conditions);
         }

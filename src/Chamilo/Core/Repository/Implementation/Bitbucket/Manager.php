@@ -40,8 +40,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        parent :: __construct($external_repository, $application);
-        $this->set_parameter(self :: PARAM_FOLDER, Request :: get(self :: PARAM_FOLDER));
+        parent::__construct($external_repository, $application);
+        $this->set_parameter(self::PARAM_FOLDER, Request::get(self::PARAM_FOLDER));
     }
 
     /*
@@ -49,9 +49,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function validate_settings($external_repository)
     {
-        $username = Setting :: get('username', $external_repository->get_id());
-        $password = Setting :: get('password', $external_repository->get_id());
-
+        $username = Setting::get('username', $external_repository->get_id());
+        $password = Setting::get('password', $external_repository->get_id());
+        
         if (! $username || ! $password)
         {
             return false;
@@ -75,96 +75,96 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_privilege_revoking_url($id, $user)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_REVOKE_EXTERNAL_REPOSITORY_PRIVILEGE;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_USER] = $user;
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_REVOKE_EXTERNAL_REPOSITORY_PRIVILEGE;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_USER] = $user;
+        
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_group_privilege_revoking_url($id, $group)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_REVOKE_EXTERNAL_REPOSITORY_PRIVILEGE;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_REVOKE_EXTERNAL_REPOSITORY_PRIVILEGE;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
+        
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_privilege_granting_url($id, $users, $privilege)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_GRANT_EXTERNAL_REPOSITORY_PRIVILEGE;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_USER] = $users;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_PRIVILEGE] = $privilege;
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_GRANT_EXTERNAL_REPOSITORY_PRIVILEGE;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_USER] = $users;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_PRIVILEGE] = $privilege;
+        
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_object_privileges_viewing_url(ExternalObject $object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_group_deleting_url($group_id)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_EXTERNAL_REPOSITORY_GROUP;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_GROUP] = $group_id;
+        $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_EXTERNAL_REPOSITORY_GROUP;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_GROUP] = $group_id;
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_group_creating_url()
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_GROUP;
+        $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_GROUP;
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_adding_user_url($group)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_ADD_USER_TO_GROUP;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
+        $parameters[self::PARAM_ACTION] = self::ACTION_ADD_USER_TO_GROUP;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_deleting_user_url($group)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_USER_FROM_GROUP;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
+        $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_USER_FROM_GROUP;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_GROUP] = $group;
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_object_deleting_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
         return $this->get_url($parameters);
     }
 
     public function get_external_repository_object_editing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_EDIT_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        $parameters[self::PARAM_ACTION] = self::ACTION_EDIT_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
         return $this->get_url($parameters);
     }
 
@@ -174,24 +174,22 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         $my_repositories = array();
-        $my_repositories['title'] = Translation :: get('MyRepositories');
+        $my_repositories['title'] = Translation::get('MyRepositories');
         $my_repositories['url'] = $this->get_url(
-            array(self :: PARAM_FOLDER => self :: TYPE_OWN),
-            array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
+            array(self::PARAM_FOLDER => self::TYPE_OWN), 
+            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
         $my_repositories['class'] = 'user';
         $menu_items[] = $my_repositories;
-
+        
         $others_repositories = array();
-        $others_repositories['title'] = Translation :: get('OthersRepositories');
+        $others_repositories['title'] = Translation::get('OthersRepositories');
         $others_repositories['url'] = $this->get_url(
-            array(
-                self :: PARAM_FOLDER => self :: TYPE_OTHER,
-                ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY => 'chamilo'));
+            array(self::PARAM_FOLDER => self::TYPE_OTHER, ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY => 'chamilo'));
         $others_repositories['class'] = 'home';
         $menu_items[] = $others_repositories;
-
+        
         return $menu_items;
     }
 
@@ -199,28 +197,28 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         if ($object->is_editable())
         {
-            $toolbar_items[self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES] = new ToolbarItem(
-                Translation :: get('ViewPrivileges'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/ViewPrivileges'),
-                $this->get_external_repository_object_privileges_viewing_url($object),
-                ToolbarItem :: DISPLAY_ICON);
-            $toolbar_items[self :: ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation :: get('EditRepository'),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_external_repository_object_editing_url($object),
-                ToolbarItem :: DISPLAY_ICON);
+            $toolbar_items[self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES] = new ToolbarItem(
+                Translation::get('ViewPrivileges'), 
+                Theme::getInstance()->getImagePath(__NAMESPACE__, 'Action/ViewPrivileges'), 
+                $this->get_external_repository_object_privileges_viewing_url($object), 
+                ToolbarItem::DISPLAY_ICON);
+            $toolbar_items[self::ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
+                Translation::get('EditRepository'), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
+                $this->get_external_repository_object_editing_url($object), 
+                ToolbarItem::DISPLAY_ICON);
         }
-
+        
         if ($object->is_deletable())
         {
-            $toolbar_items[self :: ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation :: get('DeleteRepository'),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_external_repository_object_deleting_url($object),
-                ToolbarItem :: DISPLAY_ICON,
+            $toolbar_items[self::ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
+                Translation::get('DeleteRepository'), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                $this->get_external_repository_object_deleting_url($object), 
+                ToolbarItem::DISPLAY_ICON, 
                 true);
         }
-
+        
         return $toolbar_items;
     }
 
@@ -230,19 +228,19 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array();
-        $actions[] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-        $actions[] = self :: ACTION_MULTI_GRANT_EXTERNAL_REPOSITORY_PRIVILEGE;
-        $actions[] = self :: ACTION_GROUPS_VIEWER;
-        $actions[] = self :: ACTION_CREATE_REPOSITORY;
-
+        $actions[] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+        $actions[] = self::ACTION_MULTI_GRANT_EXTERNAL_REPOSITORY_PRIVILEGE;
+        $actions[] = self::ACTION_GROUPS_VIEWER;
+        $actions[] = self::ACTION_CREATE_REPOSITORY;
+        
         $is_platform = $this->get_user()->is_platform_admin();
         $has_setting = $this->get_external_repository()->has_settings();
-
+        
         if (! (! $has_setting || ! $is_platform))
         {
-            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+            $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
-
+        
         return $actions;
     }
 
@@ -259,6 +257,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 }

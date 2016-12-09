@@ -32,7 +32,7 @@ abstract class Renderer
 
     /**
      * The layout of the menubar
-     *
+     * 
      * @var String
      */
     protected $html;
@@ -112,7 +112,7 @@ abstract class Renderer
      */
     public static function toHtml($type, $containerMode = 'container-fluid', Request $request = null, $user = null)
     {
-        return self :: factory($type, $containerMode, $request, $user)->render();
+        return self::factory($type, $containerMode, $request, $user)->render();
     }
 
     /**
@@ -125,7 +125,7 @@ abstract class Renderer
         {
             $this->itemService = new ItemService(new ItemRepository());
         }
-
+        
         return $this->itemService;
     }
 
@@ -136,40 +136,48 @@ abstract class Renderer
 
     /**
      * Renders the menu
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $user = $this->get_user();
-
+        
         if (! $user instanceof User && ! $this->isMenuAvailableAnonymously())
         {
             return;
         }
-
+        
         $html = array();
-
-        $html[] = $this->display_menu_header();
-
+        
+        $numberOfItems = 0;
+        $itemRenditions = array();
+        
         if ($user)
         {
             $userRights = $this->getItemService()->determineRightsForUser($user);
-
+            
             foreach ($this->getRootItems() as $item)
             {
                 if ($userRights[$item->get_id()])
                 {
                     if (! $item->is_hidden())
                     {
-                        $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
+                        $itemRendition = \Chamilo\Core\Menu\Renderer\Item\Renderer::toHtml($this, $item);
+                        if (! empty($itemRendition))
+                        {
+                            $numberOfItems ++;
+                            $itemRenditions[] = $itemRendition;
+                        }
                     }
                 }
             }
         }
-
+        
+        $html[] = $this->display_menu_header($numberOfItems);
+        $html[] = implode(PHP_EOL, $itemRenditions);
         $html[] = $this->display_menu_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -181,7 +189,7 @@ abstract class Renderer
         return false;
     }
 
-    abstract public function display_menu_header();
+    abstract public function display_menu_header($numberOfItems = 0);
 
     abstract public function display_menu_footer();
 }

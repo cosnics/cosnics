@@ -32,8 +32,8 @@ class SelectForm extends ContentObjectForm
     const TAB_OPTION = 'option';
 
     private static $html_editor_options = array(
-        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75', 
-        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+        FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '75', 
+        FormValidatorHtmlEditorOptions::OPTION_COLLAPSE_TOOLBAR => true);
 
     /**
      * Prepare all the different tabs
@@ -42,29 +42,29 @@ class SelectForm extends ContentObjectForm
     {
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select', 
                     true) . 'Form.js'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_QUESTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_QUESTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_QUESTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select', 
-                    'Tab/' . self :: TAB_QUESTION), 
+                    'Tab/' . self::TAB_QUESTION), 
                 'build_question_form'));
         
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_OPTION, 
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath(
+                self::TAB_OPTION, 
+                Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_OPTION)->upperCamelize()), 
+                Theme::getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select', 
-                    'Tab/' . self :: TAB_OPTION), 
+                    'Tab/' . self::TAB_OPTION), 
                 'build_option_form'));
         
         $this->addDefaultTab();
@@ -74,15 +74,15 @@ class SelectForm extends ContentObjectForm
     function build_question_form()
     {
         $this->add_textfield(
-            Select :: PROPERTY_QUESTION, 
-            Translation :: get('Question'), 
+            Select::PROPERTY_QUESTION, 
+            Translation::get('Question'), 
             true, 
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
         $this->add_html_editor(
-            Select :: PROPERTY_INSTRUCTION, 
-            Translation :: get('Instruction'), 
+            Select::PROPERTY_INSTRUCTION, 
+            Translation::get('Instruction'), 
             false, 
-            self :: $html_editor_options);
+            self::$html_editor_options);
     }
 
     function setDefaults($defaults = array ())
@@ -91,15 +91,15 @@ class SelectForm extends ContentObjectForm
         {
             
             $object = $this->get_content_object();
-            $defaults[Select :: PROPERTY_QUESTION] = $defaults[Select :: PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Select :: PROPERTY_QUESTION];
-            $defaults[Select :: PROPERTY_INSTRUCTION] = $object->get_instruction();
+            $defaults[Select::PROPERTY_QUESTION] = $defaults[Select::PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Select::PROPERTY_QUESTION];
+            $defaults[Select::PROPERTY_INSTRUCTION] = $object->get_instruction();
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
                 
                 while ($option = $options->next_result())
                 {
-                    $defaults[SelectOption :: PROPERTY_VALUE . '[' . $option->get_display_order() . ']'] = $option->get_value();
+                    $defaults[SelectOption::PROPERTY_VALUE . '[' . $option->get_display_order() . ']'] = $option->get_value();
                 }
             }
             else
@@ -107,7 +107,7 @@ class SelectForm extends ContentObjectForm
                 $number_of_options = intval($_SESSION['select_number_of_options']);
             }
         }
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     function create_content_object()
@@ -116,10 +116,10 @@ class SelectForm extends ContentObjectForm
         
         $object = new Select();
         $object->set_answer_type($_SESSION['select_answer_type']);
-        $object->set_question($values[Select :: PROPERTY_QUESTION]);
-        $object->set_instruction($values[Select :: PROPERTY_INSTRUCTION]);
+        $object->set_question($values[Select::PROPERTY_QUESTION]);
+        $object->set_instruction($values[Select::PROPERTY_INSTRUCTION]);
         $this->set_content_object($object);
-        $object = parent :: create_content_object();
+        $object = parent::create_content_object();
         $this->add_options_to_object();
         return $object;
     }
@@ -130,10 +130,10 @@ class SelectForm extends ContentObjectForm
         
         $object = $this->get_content_object();
         $object->set_answer_type($_SESSION['select_answer_type']);
-        $object->set_question($values[Select :: PROPERTY_QUESTION]);
-        $object->set_instruction($values[Select :: PROPERTY_INSTRUCTION]);
+        $object->set_question($values[Select::PROPERTY_QUESTION]);
+        $object->set_instruction($values[Select::PROPERTY_INSTRUCTION]);
         $this->add_options_to_object();
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 
     function validate()
@@ -142,7 +142,7 @@ class SelectForm extends ContentObjectForm
         {
             return false;
         }
-        return parent :: validate();
+        return parent::validate();
     }
 
     function add_options_to_object()
@@ -150,17 +150,17 @@ class SelectForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
         
-        foreach ($values[SelectOption :: PROPERTY_VALUE] as $display_order => $value)
+        foreach ($values[SelectOption::PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(SelectOption::class_name(), SelectOption::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(SelectOption::class_name(), SelectOption::PROPERTY_DISPLAY_ORDER), 
                 new StaticConditionVariable($display_order));
             $condition = new AndCondition($conditions);
-            $option = DataManager :: retrieve(SelectOption :: class_name(), new DataClassRetrieveParameters($condition));
+            $option = DataManager::retrieve(SelectOption::class_name(), new DataClassRetrieveParameters($condition));
             
             if ($option)
             {
@@ -182,15 +182,13 @@ class SelectForm extends ContentObjectForm
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(SelectOption::class_name(), SelectOption::PROPERTY_QUESTION_ID), 
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(SelectOption::class_name(), SelectOption::PROPERTY_DISPLAY_ORDER), 
                 $options);
             $condition = new AndCondition($conditions);
-            $options = DataManager :: retrieve(
-                SelectOption :: class_name(), 
-                new DataClassRetrieveParameters($condition));
+            $options = DataManager::retrieve(SelectOption::class_name(), new DataClassRetrieveParameters($condition));
             while ($option = $options->next_result())
             {
                 $option->delete();
@@ -246,11 +244,11 @@ class SelectForm extends ContentObjectForm
         
         if ($_SESSION['select_answer_type'] == 'radio')
         {
-            $switch_label = Translation :: get('SwitchToMultipleSelect');
+            $switch_label = Translation::get('SwitchToMultipleSelect');
         }
         elseif ($_SESSION['select_answer_type'] == 'checkbox')
         {
-            $switch_label = Translation :: get('SwitchToSingleSelect');
+            $switch_label = Translation::get('SwitchToSingleSelect');
         }
         
         $this->addElement(
@@ -278,7 +276,7 @@ class SelectForm extends ContentObjectForm
         $buttons[] = $this->createElement(
             'style_button', 
             'add[]', 
-            Translation :: get('AddSelectOption'), 
+            Translation::get('AddSelectOption'), 
             array('id' => 'add_option'), 
             null, 
             'plus');
@@ -293,7 +291,7 @@ class SelectForm extends ContentObjectForm
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th style="width: 320px;">' . Translation :: get('Options') . '</th>';
+        $table_header[] = '<th style="width: 320px;">' . Translation::get('Options') . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -312,8 +310,8 @@ class SelectForm extends ContentObjectForm
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = & $this->createElement(
                     'text', 
-                    SelectOption :: PROPERTY_VALUE . '[' . $option_number . ']', 
-                    Translation :: get('Answer'), 
+                    SelectOption::PROPERTY_VALUE . '[' . $option_number . ']', 
+                    Translation::get('Answer'), 
                     array('style' => 'width: 300px;'));
                 
                 if ($number_of_options - count($_SESSION['select_skip_options']) > 2)
@@ -321,7 +319,7 @@ class SelectForm extends ContentObjectForm
                     $group[] = & $this->createElement(
                         'image', 
                         'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
@@ -331,18 +329,18 @@ class SelectForm extends ContentObjectForm
                         null, 
                         null, 
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
+                             Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
                 
-                $this->addGroup($group, SelectOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);
+                $this->addGroup($group, SelectOption::PROPERTY_VALUE . '_' . $option_number, null, '', false);
                 
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
                          '">{element}</tr>', 
-                        SelectOption :: PROPERTY_VALUE . '_' . $option_number);
+                        SelectOption::PROPERTY_VALUE . '_' . $option_number);
                 $renderer->setGroupElementTemplate(
                     '<td>{element}</td>', 
-                    SelectOption :: PROPERTY_VALUE . '_' . $option_number);
+                    SelectOption::PROPERTY_VALUE . '_' . $option_number);
             }
         }
         

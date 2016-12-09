@@ -30,7 +30,7 @@ class SubmissionCourseGroupsBrowserTableCellRenderer extends SubmissionGroupsBro
      */
     public function get_submitter_type()
     {
-        return AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP;
+        return AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP;
     }
 
     /**
@@ -43,7 +43,7 @@ class SubmissionCourseGroupsBrowserTableCellRenderer extends SubmissionGroupsBro
      */
     protected function is_subscribed_in_group($group_id, $user_id)
     {
-        return CourseGroupDataManager :: is_course_group_member($group_id, $user_id);
+        return CourseGroupDataManager::is_course_group_member($group_id, $user_id);
     }
 
     /**
@@ -54,7 +54,7 @@ class SubmissionCourseGroupsBrowserTableCellRenderer extends SubmissionGroupsBro
      */
     protected function retrieve_group_user_ids($group_id)
     {
-        return CourseGroupDataManager :: retrieve_course_group_user_ids($group_id);
+        return CourseGroupDataManager::retrieve_course_group_user_ids($group_id);
     }
 
     /**

@@ -20,15 +20,15 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' LIKE ' .
-             Database :: quote($this->search_string($this->get_condition()->get_pattern()));
+        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' LIKE ' .
+             Database::quote($this->search_string($this->get_condition()->get_pattern()));
     }
 
     /**
      * Translates a string with wildcard characters "?" (single character) and "*" (any character sequence) to a SQL
      * pattern for use in a LIKE condition.
      * Should be suitable for any SQL flavor.
-     *
+     * 
      * @param string $string
      * @return string
      */

@@ -20,27 +20,27 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             throw new NotAllowedException();
         }
-
-        $types = array(self :: ACTION_IMPORT, self :: ACTION_EXPORT);
-
+        
+        $types = array(self::ACTION_IMPORT, self::ACTION_EXPORT);
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         foreach ($types as $type)
         {
-            $html[] = '<a href="' . $this->get_url(array(self :: PARAM_ACTION => $type)) . '">';
-            $html[] = '<div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Core\Admin\Language',
+            $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => $type)) . '">';
+            $html[] = '<div class="create_block" style="background-image: url(' . Theme::getInstance()->getImagePath(
+                'Chamilo\Core\Admin\Language', 
                 'Component/' . $type) . ');">';
-            $html[] = Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'Component');
+            $html[] = Translation::get(
+                (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Component');
             $html[] = '</div>';
             $html[] = '</a>';
         }
-
+        
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

@@ -1,0 +1,2 @@
+Chamilo\Core\Repository:
+  - Package: ROLE_DEFAULT_USER

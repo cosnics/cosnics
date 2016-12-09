@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * $Id: assessment_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment.component
  */
 class AssessmentViewerComponent extends Manager implements DelegateComponent
@@ -31,21 +31,21 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     /**
      * The total number of pages for the assessment
-     *
+     * 
      * @var int
      */
     private $total_pages;
 
     /**
      * An array containing all ComplexContentObjectItem objects for individual questions.
-     *
+     * 
      * @var ComplexContentObjectItem[]
      */
     private $questions;
 
     /**
      * The form that displays the questions per page
-     *
+     * 
      * @var AssessmentViewerForm
      */
     private $question_form;
@@ -55,7 +55,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        BreadcrumbTrail:: get_instance()->add(
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
                 Translation:: get(
@@ -66,11 +66,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         );
 
         $this->initialize_assessment();
-
+        
         if ($this->question_form_submitted())
         {
             $result_processor = new AssessmentResultProcessor($this);
-
+            
             $results_page_number = $this->get_questions_page();
 
             if (!$this->get_configuration()->show_feedback_after_every_page())
@@ -78,25 +78,25 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 $results_page_number += ($this->get_action() == self :: FORM_NEXT ||
                     $this->get_action() == self :: FORM_SUBMIT) ? - 1 : + 1;
             }
-
+            
             $result_processor->save_answers($results_page_number);
         }
-
+        
         if (($this->result_form_submitted() || $this->question_form_submitted()) &&
             $this->get_action() == self :: FORM_SUBMIT
         )
         {
             $result_processor = new AssessmentResultProcessor($this);
             $result_processor->finish_assessment();
-
+            
             if ($this->get_configuration()->show_feedback_summary())
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $result_processor->get_results();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
             else
@@ -105,34 +105,34 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 $redirect->writeHeader($this->get_assessment_back_url());
             }
         }
-
+        
         if ($this->question_form_submitted() && $this->get_configuration()->show_feedback_after_every_page())
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $result_processor->get_results();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
         else
         {
             $this->question_form = new AssessmentViewerForm($this, 'post', $this->get_url());
-
+            
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $this->question_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
 
     /**
      * Returns the question form
-     *
+     * 
      * @return AssessmentViewerForm
      */
     public function get_question_form()
@@ -142,7 +142,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Returns the selected assessment
-     *
+     * 
      * @return Assessment
      */
     public function get_assessment()
@@ -156,12 +156,12 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     protected function initialize_assessment()
     {
         $assessment = $this->get_root_content_object();
-
+        
         $this->initialize_questions();
         $total_questions = count($this->questions);
-
+        
         $questions_per_page = $assessment->get_questions_per_page();
-
+        
         if ($questions_per_page == 0)
         {
             $this->total_pages = 1;
@@ -209,47 +209,47 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Retrieves the question ids for the assessment
-     *
+     * 
      * @return array
      */
     public function get_question_ids_for_assessment()
     {
         $assessment = $this->get_root_content_object();
         $questions = $assessment->get_questions();
-
+        
         $question_ids = array();
-
+        
         while ($question = $questions->next_result())
         {
             $question_ids[] = $question->get_id();
         }
-
+        
         $number_of_random_questions = $assessment->get_random_questions();
         if ($number_of_random_questions == 0 || count($question_ids) <= $number_of_random_questions)
         {
             return $question_ids;
         }
-
+        
         $random_question_keys = array_rand($question_ids, $assessment->get_random_questions());
 
         if (!is_array($random_question_keys))
         {
             $random_question_keys = array($random_question_keys);
         }
-
+        
         $random_question_ids = array();
-
+        
         foreach ($random_question_keys as $random_question_key)
         {
             $random_question_ids[] = $question_ids[$random_question_key];
         }
-
+        
         return $random_question_ids;
     }
 
     /**
      * Returns the total number of pages
-     *
+     * 
      * @return int
      */
     public function get_total_pages()
@@ -259,7 +259,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Returns the questions for this assessment
-     *
+     * 
      * @return \core\repository\storage\data_class\ComplexContentObjectItem[]
      */
     public function get_questions()
@@ -269,7 +269,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Returns the questions for this assessment
-     *
+     * 
      * @param int $page_number
      *
      * @return \core\repository\storage\data_class\ComplexContentObjectItem[]
@@ -278,25 +278,25 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     {
         $assessment = $this->get_root_content_object();
         $questions_per_page = $assessment->get_questions_per_page();
-
+        
         if ($questions_per_page == 0)
         {
             return $this->questions;
         }
-
+        
         $page_questions = array();
-
+        
         $start = (($page_number - 1) * $questions_per_page);
         $stop = $start + $questions_per_page;
         $questions_count = count($this->questions);
-
+        
         $stop = $stop >= $questions_count ? $questions_count : $stop;
-
+        
         for ($i = $start; $i < $stop; $i ++)
         {
             $page_questions[] = $this->questions[$i];
         }
-
+        
         return $page_questions;
     }
 
@@ -306,13 +306,13 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     public function get_question_answers()
     {
         $answers = array();
-
+        
         $question_attempts = $this->get_parent()->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)
         {
             $answers[$question_attempt->get_question_complex_id()] = unserialize($question_attempt->get_answer());
         }
-
+        
         return $answers;
     }
 
@@ -337,8 +337,8 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 return $action;
             }
         }
-
-        return self :: FORM_NEXT;
+        
+        return self::FORM_NEXT;
     }
 
     public function get_questions_page()
@@ -370,7 +370,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 $this->current_page = 1;
             }
         }
-
+        
         return $this->current_page;
     }
 
@@ -387,7 +387,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 $this->previous_page = 1;
             }
         }
-
+        
         return $this->previous_page;
     }
 
@@ -402,7 +402,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 return $matches[2];
             }
         }
-
+        
         return false;
     }
 }

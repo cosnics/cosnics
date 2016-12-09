@@ -20,9 +20,9 @@ class GetCourseGroupComponent extends \Chamilo\Application\Weblcms\Tool\Implemen
         
         if (! $course_group)
         {
-            JsonAjaxResult :: not_found(
-                Translation :: get('CourseGroupNotFound'), 
-                array('id' => $this->getPostDataValue(self :: PARAM_COURSE_GROUP_ID)));
+            JsonAjaxResult::not_found(
+                Translation::get('CourseGroupNotFound'), 
+                array('id' => $this->getPostDataValue(self::PARAM_COURSE_GROUP_ID)));
         }
         
         $properties = $course_group->get_default_properties() + $course_group->get_optional_properties();
@@ -38,12 +38,12 @@ class GetCourseGroupComponent extends \Chamilo\Application\Weblcms\Tool\Implemen
      */
     public function get_course_group()
     {
-        $id = $this->getPostDataValue(self :: PARAM_COURSE_GROUP_ID);
-        return DataManager :: retrieve_by_id(CourseGroup :: class_name(), $id);
+        $id = $this->getPostDataValue(self::PARAM_COURSE_GROUP_ID);
+        return DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
     }
 
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_COURSE_GROUP_ID);
+        return array(self::PARAM_COURSE_GROUP_ID);
     }
 }

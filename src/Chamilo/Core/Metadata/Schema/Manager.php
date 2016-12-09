@@ -25,5 +25,5 @@ abstract class Manager extends Application
     const ACTION_ELEMENT = 'Element';
     
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

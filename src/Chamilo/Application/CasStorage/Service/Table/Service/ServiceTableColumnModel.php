@@ -14,10 +14,10 @@ class ServiceTableColumnModel extends DataClassTableColumnModel implements Table
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Service :: class_name(), Service :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Service :: class_name(), Service :: PROPERTY_DESCRIPTION));
-        $this->add_column(new DataClassPropertyTableColumn(Service :: class_name(), Service :: PROPERTY_SERVICE_ID));
-        $this->add_column(new DataClassPropertyTableColumn(Service :: class_name(), Service :: PROPERTY_THEME));
-        $this->add_column(new DataClassPropertyTableColumn(Service :: class_name(), Service :: PROPERTY_ENABLED));
+        $this->add_column(new DataClassPropertyTableColumn(Service::class_name(), Service::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Service::class_name(), Service::PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Service::class_name(), Service::PROPERTY_SERVICE_ID));
+        $this->add_column(new DataClassPropertyTableColumn(Service::class_name(), Service::PROPERTY_THEME));
+        $this->add_column(new DataClassPropertyTableColumn(Service::class_name(), Service::PROPERTY_ENABLED));
     }
 }

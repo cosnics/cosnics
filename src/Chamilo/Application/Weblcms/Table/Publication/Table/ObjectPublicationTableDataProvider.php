@@ -48,8 +48,8 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
         $type = $tool_browser->get_publication_type();
         switch ($type)
         {
-            case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME :
-                return DataManager :: retrieve_my_publications(
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+                return DataManager::retrieve_my_publications(
                     $tool_browser->get_location(), 
                     $tool_browser->get_entities(), 
                     $tool_browser->get_publication_conditions(), 
@@ -58,15 +58,15 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
                     $count, 
                     $tool_browser->get_user_id());
                 break;
-            case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL :
-                return DataManager :: retrieve_content_object_publications(
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+                return DataManager::retrieve_content_object_publications(
                     $tool_browser->get_publication_conditions(), 
                     $order_property, 
                     $offset, 
                     $count);
                 break;
             default :
-                return DataManager :: retrieve_content_object_publications_with_view_right_granted_in_category_location(
+                return DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
                     $tool_browser->get_location(), 
                     $tool_browser->get_entities(), 
                     $tool_browser->get_publication_conditions(), 
@@ -94,19 +94,19 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
         {
             switch ($type)
             {
-                case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME :
-                    $this->count_cache = DataManager :: count_my_publications(
+                case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+                    $this->count_cache = DataManager::count_my_publications(
                         $tool_browser->get_location(), 
                         $tool_browser->get_entities(), 
                         $tool_browser->get_publication_conditions(), 
                         $tool_browser->get_user_id());
                     break;
-                case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL :
-                    $this->count_cache = DataManager :: count_content_object_publications(
+                case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+                    $this->count_cache = DataManager::count_content_object_publications(
                         $tool_browser->get_publication_conditions());
                     break;
                 default :
-                    $this->count_cache = DataManager :: count_content_object_publications_with_view_right_granted_in_category_location(
+                    $this->count_cache = DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
                         $tool_browser->get_location(), 
                         $tool_browser->get_entities(), 
                         $tool_browser->get_publication_conditions(), 

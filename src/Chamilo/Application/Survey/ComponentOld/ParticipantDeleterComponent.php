@@ -22,14 +22,14 @@ class ParticipantDeleterComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
+        $publication_id = Request::get(self::PARAM_PUBLICATION_ID);
         
-        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
+        if (! Rights::getInstance()->is_right_granted(Rights::INVITE_RIGHT, $publication_id))
         {
             throw new NotAllowedException(false);
         }
         
-        $ids = Request :: get(self :: PARAM_PARTICIPANT_ID);
+        $ids = Request::get(self::PARAM_PARTICIPANT_ID);
         $failures = 0;
         
         if (! empty($ids))
@@ -39,20 +39,24 @@ class ParticipantDeleterComponent extends Manager
                 $ids = array($ids);
             }
             $conditions = array();
-            $conditions[] = new EqualityCondition( new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), $publication_id);
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Participant::class_name(), Participant::PROPERTY_SURVEY_PUBLICATION_ID), 
+                $publication_id);
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_USER_ID), 
+                new PropertyConditionVariable(Participant::class_name(), Participant::PROPERTY_USER_ID), 
                 $ids);
-            $succes = DataManager :: deletes(Participant :: class_name(), new AndCondition($conditions));
+            $succes = DataManager::deletes(Participant::class_name(), new AndCondition($conditions));
             
             if ($succes)
             {
                 $conditions = array();
-                $conditions[] = new EqualityCondition( new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID), $publication_id);
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_PUBLICATION_ID), 
+                    $publication_id);
                 $conditions[] = new InCondition(
-                    new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID), 
+                    new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_USER_ID), 
                     $ids);
-                $succes = DataManager :: deletes(Answer :: class_name(), new AndCondition($conditions));
+                $succes = DataManager::deletes(Answer::class_name(), new AndCondition($conditions));
             }
             
             if (! $succes)
@@ -79,15 +83,15 @@ class ParticipantDeleterComponent extends Manager
             }
             
             $this->redirect(
-                Translation :: get($message), 
+                Translation::get($message), 
                 ($failures ? true : false), 
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE_PARTICIPANTS, 
-                    self :: PARAM_PUBLICATION_ID => $publication_id));
+                    self::PARAM_ACTION => self::ACTION_BROWSE_PARTICIPANTS, 
+                    self::PARAM_PUBLICATION_ID => $publication_id));
         }
         else
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoParticipantsSelected')));
+            $this->display_error_page(htmlentities(Translation::get('NoParticipantsSelected')));
         }
     }
 }

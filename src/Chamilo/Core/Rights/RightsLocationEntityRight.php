@@ -15,12 +15,12 @@ class RightsLocationEntityRight extends DataClass
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_RIGHT_ID,
-                self :: PROPERTY_ENTITY_ID,
-                self :: PROPERTY_ENTITY_TYPE,
-                self :: PROPERTY_LOCATION_ID));
+                self::PROPERTY_RIGHT_ID, 
+                self::PROPERTY_ENTITY_ID, 
+                self::PROPERTY_ENTITY_TYPE, 
+                self::PROPERTY_LOCATION_ID));
     }
 
     public function get_context()
@@ -35,46 +35,46 @@ class RightsLocationEntityRight extends DataClass
 
     public function get_entity_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entity_id);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
     public function get_entity_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     public function set_entity_type($entity_type)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }
 
     public function get_location_id()
     {
-        return $this->get_default_property(self :: PROPERTY_LOCATION_ID);
+        return $this->get_default_property(self::PROPERTY_LOCATION_ID);
     }
 
     public function set_location_id($location_id)
     {
-        $this->set_default_property(self :: PROPERTY_LOCATION_ID, $location_id);
+        $this->set_default_property(self::PROPERTY_LOCATION_ID, $location_id);
     }
 
     public function get_right_id()
     {
-        return $this->get_default_property(self :: PROPERTY_RIGHT_ID);
+        return $this->get_default_property(self::PROPERTY_RIGHT_ID);
     }
 
     public function set_right_id($right_id)
     {
-        $this->set_default_property(self :: PROPERTY_RIGHT_ID, $right_id);
+        $this->set_default_property(self::PROPERTY_RIGHT_ID, $right_id);
     }
 
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager::getInstance();
     }
 }

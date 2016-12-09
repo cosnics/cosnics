@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Hotpotatoes">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Hotpotatoes</translation>
-			<translation language="nl">Hot Potatoes</translation>
-			<translation language="fr">HotPotatoes</translation>
-			<translation language="de">Hotpotatoes</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Hotpotatoes</translation>
+            <translation language="nl">Hot Potatoes</translation>
+            <translation language="fr">HotPotatoes</translation>
+            <translation language="de">Hotpotatoes</translation>
+        </variable>
+    </translations>
 </template>

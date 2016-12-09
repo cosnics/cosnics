@@ -18,11 +18,11 @@ class PlatformGroupEntityTableColumnModel extends LocationEntityTableColumnModel
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_DESCRIPTION));
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_CODE));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_USERS));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_SUBGROUPS));
-        parent :: initialize_columns();
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_CODE));
+        $this->add_column(new StaticTableColumn(self::COLUMN_USERS));
+        $this->add_column(new StaticTableColumn(self::COLUMN_SUBGROUPS));
+        parent::initialize_columns();
     }
 }

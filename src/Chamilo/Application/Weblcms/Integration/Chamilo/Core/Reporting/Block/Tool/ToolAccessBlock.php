@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Base class to display the access to the tools ToolAccessBlock
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package application\weblcms\integration\core\reporting
  */
@@ -26,77 +26,77 @@ abstract class ToolAccessBlock extends ToolBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-
+        
         $reporting_data->set_rows(
             array(
-                Translation :: get('Tool'),
-                Translation :: get('FirstAccess'),
-                Translation :: get('LastAccess'),
-                Translation :: get('TotalVisits'),
-                Translation :: get('TotalTime'),
-                Translation :: get('TotalPublications')));
-
+                Translation::get('Tool'), 
+                Translation::get('FirstAccess'), 
+                Translation::get('LastAccess'), 
+                Translation::get('TotalVisits'), 
+                Translation::get('TotalTime'), 
+                Translation::get('TotalPublications')));
+        
         $course_id = $this->get_course_id();
-
+        
         $course_tools_summary_data = $this->retrieve_course_summary_data();
-
+        
         while ($course_tool_summary_data = $course_tools_summary_data->next_result())
         {
-            $tool_name = $course_tool_summary_data[CourseTool :: PROPERTY_NAME];
-
-            $tool_translation = Translation :: get(
-                'TypeName',
-                null,
-                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool_name));
-
+            $tool_name = $course_tool_summary_data[CourseTool::PROPERTY_NAME];
+            
+            $tool_translation = Translation::get(
+                'TypeName', 
+                null, 
+                \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool_name));
+            
             $params = array();
-
-            $params[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
-            $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-            $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $this->get_course_id();
-            $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $tool_name;
-
+            
+            $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+            $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+            $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->get_course_id();
+            $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $tool_name;
+            
             $redirect = new Redirect($params);
             $url = $redirect->getUrl();
-
+            
             $link = ' <a href="' . $url . '">' . $tool_translation . '</a>';
-
+            
             $reporting_data->add_category($tool_name);
-            $reporting_data->add_data_category_row($tool_name, Translation :: get('Tool'), $link);
-
+            $reporting_data->add_data_category_row($tool_name, Translation::get('Tool'), $link);
+            
             $reporting_data->add_data_category_row(
-                $tool_name,
-                Translation :: get('FirstAccess'),
-                $this->format_date($course_tool_summary_data[CourseVisit :: PROPERTY_FIRST_ACCESS_DATE]));
-
+                $tool_name, 
+                Translation::get('FirstAccess'), 
+                $this->format_date($course_tool_summary_data[CourseVisit::PROPERTY_FIRST_ACCESS_DATE]));
+            
             $reporting_data->add_data_category_row(
-                $tool_name,
-                Translation :: get('LastAccess'),
-                $this->format_date($course_tool_summary_data[CourseVisit :: PROPERTY_LAST_ACCESS_DATE]));
-
+                $tool_name, 
+                Translation::get('LastAccess'), 
+                $this->format_date($course_tool_summary_data[CourseVisit::PROPERTY_LAST_ACCESS_DATE]));
+            
             $reporting_data->add_data_category_row(
-                $tool_name,
-                Translation :: get('TotalVisits'),
-                $course_tool_summary_data[CourseVisit :: PROPERTY_TOTAL_NUMBER_OF_ACCESS] ? $course_tool_summary_data[CourseVisit :: PROPERTY_TOTAL_NUMBER_OF_ACCESS] : 0);
-
+                $tool_name, 
+                Translation::get('TotalVisits'), 
+                $course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS] ? $course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS] : 0);
+            
             $reporting_data->add_data_category_row(
-                $tool_name,
-                Translation :: get('TotalTime'),
-                $this->convert_seconds_to_hours($course_tool_summary_data[CourseVisit :: PROPERTY_TOTAL_TIME]));
-
+                $tool_name, 
+                Translation::get('TotalTime'), 
+                $this->convert_seconds_to_hours($course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_TIME]));
+            
             $reporting_data->add_data_category_row(
-                $tool_name,
-                Translation :: get('TotalPublications'),
+                $tool_name, 
+                Translation::get('TotalPublications'), 
                 $this->count_tool_publications($tool_name));
         }
-
+        
         $reporting_data->hide_categories();
         return $reporting_data;
     }
 
     /**
      * Counts the publications of a tool
-     *
+     * 
      * @param int $course_id
      * @param string $tool_name
      *
@@ -104,13 +104,13 @@ abstract class ToolAccessBlock extends ToolBlock
      */
     public function count_tool_publications($tool_name)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager :: count_content_object_publications(
+        return \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications(
             $this->get_tool_publications_condition($tool_name));
     }
 
     /**
      * Returns the condition for the tools publication count
-     *
+     * 
      * @param string $tool_name
      *
      * @return AndCondition
@@ -119,8 +119,8 @@ abstract class ToolAccessBlock extends ToolBlock
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable($tool_name));
     }
 
@@ -131,12 +131,12 @@ abstract class ToolAccessBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 
     /**
      * Returns the summary data for this course
-     *
+     * 
      * @return RecordResultSet
      */
     abstract public function retrieve_course_summary_data();

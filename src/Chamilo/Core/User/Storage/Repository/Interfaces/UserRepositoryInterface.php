@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Interface for the user repository
- *
+ * 
  * @package user
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -14,7 +14,7 @@ interface UserRepositoryInterface
 
     /**
      * Finds a user by a given id
-     *
+     * 
      * @param int $id
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -23,7 +23,7 @@ interface UserRepositoryInterface
 
     /**
      * Finds a user by a list of parameters
-     *
+     * 
      * @param Condition $condition
      * @param int $count
      * @param int $offset
@@ -35,7 +35,7 @@ interface UserRepositoryInterface
 
     /**
      * Finds a user by a given email
-     *
+     * 
      * @param string $email
      *
      * @return User;

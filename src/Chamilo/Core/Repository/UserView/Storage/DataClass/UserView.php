@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class UserView extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_NAME = 'name';
@@ -28,8 +28,8 @@ class UserView extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_NAME, self :: PROPERTY_DESCRIPTION, self :: PROPERTY_USER_ID));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION, self::PROPERTY_USER_ID));
     }
 
     /**
@@ -38,7 +38,7 @@ class UserView extends DataClass
      */
     public function get_name()
     {
-        return $this->get_default_property(self :: PROPERTY_NAME);
+        return $this->get_default_property(self::PROPERTY_NAME);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserView extends DataClass
      */
     public function get_description()
     {
-        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -56,7 +56,7 @@ class UserView extends DataClass
      */
     public function set_name($name)
     {
-        $this->set_default_property(self :: PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -65,7 +65,7 @@ class UserView extends DataClass
      */
     public function set_description($description)
     {
-        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserView extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -83,7 +83,7 @@ class UserView extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -93,10 +93,10 @@ class UserView extends DataClass
     public function get_dependencies()
     {
         return array(
-            UserViewRelContentObject :: class_name() => new EqualityCondition(
+            UserViewRelContentObject::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    UserViewRelContentObject :: class_name(),
-                    UserViewRelContentObject :: PROPERTY_USER_VIEW_ID),
+                    UserViewRelContentObject::class_name(), 
+                    UserViewRelContentObject::PROPERTY_USER_VIEW_ID), 
                 new StaticConditionVariable($this->get_id())));
     }
 }

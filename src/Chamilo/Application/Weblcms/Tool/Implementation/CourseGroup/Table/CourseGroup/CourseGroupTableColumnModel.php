@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * $Id: course_group_subscribed_user_browser_table_column_model.class.php 216
  * 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -29,20 +29,16 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup:: class_name(), CourseGroup :: PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup:: class_name(), CourseGroup :: PROPERTY_DESCRIPTION)
-        );
-
+            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_DESCRIPTION));
+        
         $this->add_column(
             new StaticTableColumn(
-                self::COLUMN_NUMBER_OF_MEMBERS,
-                Translation::getInstance()->getTranslation('NumberOfMembers', array(), Manager::context())
-            )
-        );
-
+                self::COLUMN_NUMBER_OF_MEMBERS, 
+                Translation::getInstance()->getTranslation('NumberOfMembers', array(), Manager::context())));
+        
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup:: class_name(), CourseGroup :: PROPERTY_MAX_NUMBER_OF_MEMBERS)
-        );
+            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));
     }
 }

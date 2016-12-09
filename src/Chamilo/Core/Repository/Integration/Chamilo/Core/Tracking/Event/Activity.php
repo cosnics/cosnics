@@ -20,6 +20,6 @@ class Activity extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity :: class_name());
+            \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity::class_name());
     }
 }

@@ -33,10 +33,10 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
      */
     public function warmUpForIdentifier($identifier)
     {
-        $path = $identifier->get(self :: PARAM_PATH);
-        $lifetime = $identifier->get(self :: PARAM_LIFETIME);
-
-        if (!file_exists($path))
+        $path = $identifier->get(self::PARAM_PATH);
+        $lifetime = $identifier->get(self::PARAM_LIFETIME);
+        
+        if (! file_exists($path))
         {
             if ($f = @fopen($path, 'r'))
             {
@@ -52,9 +52,9 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
         {
             $calendarData = file_get_contents($path);
         }
-
-        $calendar = VObject\Reader :: read($calendarData, VObject\Reader :: OPTION_FORGIVING);
-
+        
+        $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
+        
         return $this->getCacheProvider()->save($identifier, $calendar, $lifetime);
     }
 
@@ -78,10 +78,10 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
         $cacheIdentifier = md5(serialize($path));
         $parameterBag = new ParameterBag(
             array(
-                ParameterBag :: PARAM_IDENTIFIER => $cacheIdentifier,
-                self :: PARAM_PATH => $path,
-                self :: PARAM_LIFETIME => $lifetime));
-
+                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier, 
+                self::PARAM_PATH => $path, 
+                self::PARAM_LIFETIME => $lifetime));
+        
         return $this->getForIdentifier($parameterBag);
     }
 }

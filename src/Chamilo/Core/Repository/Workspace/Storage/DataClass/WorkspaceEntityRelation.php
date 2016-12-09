@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class WorkspaceEntityRelation extends DataClass
 {
-
+    
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
@@ -32,12 +32,12 @@ class WorkspaceEntityRelation extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_WORKSPACE_ID,
-                self :: PROPERTY_ENTITY_TYPE,
-                self :: PROPERTY_ENTITY_ID,
-                self :: PROPERTY_RIGHTS));
+                self::PROPERTY_WORKSPACE_ID, 
+                self::PROPERTY_ENTITY_TYPE, 
+                self::PROPERTY_ENTITY_ID, 
+                self::PROPERTY_RIGHTS));
     }
 
     /**
@@ -46,7 +46,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function get_workspace_id()
     {
-        return $this->get_default_property(self :: PROPERTY_WORKSPACE_ID);
+        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -57,9 +57,9 @@ class WorkspaceEntityRelation extends DataClass
     {
         if (! isset($this->workspace))
         {
-            $this->workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $this->get_workspace_id());
+            $this->workspace = DataManager::retrieve_by_id(Workspace::class_name(), $this->get_workspace_id());
         }
-
+        
         return $this->workspace;
     }
 
@@ -69,7 +69,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function set_workspace_id($workspace_id)
     {
-        $this->set_default_property(self :: PROPERTY_WORKSPACE_ID, $workspace_id);
+        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 
     /**
@@ -78,7 +78,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -87,7 +87,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function set_entity_type($entity_type)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }
 
     /**
@@ -96,7 +96,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function get_entity_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -105,7 +105,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entity_id);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
     /**
@@ -114,7 +114,7 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function get_rights()
     {
-        return $this->get_default_property(self :: PROPERTY_RIGHTS);
+        return $this->get_default_property(self::PROPERTY_RIGHTS);
     }
 
     /**
@@ -123,6 +123,6 @@ class WorkspaceEntityRelation extends DataClass
      */
     public function set_rights($rights)
     {
-        $this->set_default_property(self :: PROPERTY_RIGHTS, $rights);
+        $this->set_default_property(self::PROPERTY_RIGHTS, $rights);
     }
 }

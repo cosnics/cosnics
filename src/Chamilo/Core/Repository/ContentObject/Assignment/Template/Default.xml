@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Assignment">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Assignment</translation>
-			<translation language="nl">Opdracht</translation>
-			<translation language="fr">Tâche</translation>
-			<translation language="de">Auftrag</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Assignment</translation>
+            <translation language="nl">Opdracht</translation>
+            <translation language="fr">Tâche</translation>
+            <translation language="de">Auftrag</translation>
+        </variable>
+    </translations>
 </template>

@@ -18,7 +18,7 @@ class SearchForm extends FormValidator
      * #@+ Search parameter
      */
     const PARAM_SIMPLE_SEARCH_QUERY = 'query';
-
+    
     /**
      * Name of the search form
      */
@@ -26,20 +26,20 @@ class SearchForm extends FormValidator
 
     /**
      * Creates a new search form
-     *
+     * 
      * @param string $url The location to which the search request should be posted.
      */
     public function __construct($url)
     {
-        parent :: __construct(self :: FORM_NAME, 'post', $url);
-
+        parent::__construct(self::FORM_NAME, 'post', $url);
+        
         $query = $this->getQuery();
-
+        
         if ($query)
         {
-            $this->setDefaults(array(self :: PARAM_SIMPLE_SEARCH_QUERY => $query));
+            $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));
         }
-
+        
         $this->buildForm();
     }
 
@@ -49,23 +49,23 @@ class SearchForm extends FormValidator
     private function buildForm()
     {
         $this->addElement(
-            'text',
-            self :: PARAM_SIMPLE_SEARCH_QUERY,
-            Translation :: get('SearchFor'),
+            'text', 
+            self::PARAM_SIMPLE_SEARCH_QUERY, 
+            Translation::get('SearchFor'), 
             array('class' => 'form-control'));
-
+        
         $this->addElement(
-            'style_button',
-            'submit',
-            Translation :: get('Search'),
-            array('class' => 'btn-primary'),
-            'submit',
+            'style_button', 
+            'submit', 
+            Translation::get('Search'), 
+            array('class' => 'btn-primary'), 
+            'submit', 
             'search');
-
+        
         $renderer = $this->get_renderer();
         $renderer->setElementTemplate(
-            '<div class="form-group"><label>{label}</label>{element}</div>',
-            self :: PARAM_SIMPLE_SEARCH_QUERY);
+            '<div class="form-group"><label>{label}</label>{element}</div>', 
+            self::PARAM_SIMPLE_SEARCH_QUERY);
         $renderer->setElementTemplate('{element}', 'submit');
     }
 
@@ -79,23 +79,23 @@ class SearchForm extends FormValidator
 
     /**
      * Gets the conditions that this form introduces.
-     *
+     * 
      * @return String the query
      */
     public function getQuery()
     {
-        $query = Request :: post(self :: PARAM_SIMPLE_SEARCH_QUERY);
-
+        $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
+        
         if (! $query)
         {
-            $query = Request :: get(self :: PARAM_SIMPLE_SEARCH_QUERY);
+            $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
-
+        
         return $query;
     }
 
     public function clearFormSubmitted()
     {
-        return ! is_null(Request :: post('clear'));
+        return ! is_null(Request::post('clear'));
     }
 }

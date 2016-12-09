@@ -19,12 +19,12 @@ class PackageTypeMenu extends HtmlMenu
     public function __construct($current_type, $format)
     {
         $this->format = $format;
-
-        parent :: __construct(
+        
+        parent::__construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
-
+                    \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list())));
+        
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
@@ -35,22 +35,22 @@ class PackageTypeMenu extends HtmlMenu
         $item['class'] = 'category';
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
-        $item[OptionsMenuRenderer :: KEY_ID] = $package_list->get_type();
-
+        $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
+        
         $sub_items = array();
-
+        
         foreach ($package_list->get_children() as $child)
         {
             $sub_items[] = $this->get_items($child);
         }
-
+        
         if (count($sub_items) > 0)
         {
             usort($sub_items, array('\Chamilo\Core\Lynx\Manager\PackageTypeMenu', 'compare_items'));
-
+            
             $item['sub'] = $sub_items;
         }
-
+        
         return $item;
     }
 
@@ -58,12 +58,12 @@ class PackageTypeMenu extends HtmlMenu
     {
         $item_one = strtolower($item_one['title']);
         $item_two = strtolower($item_two['title']);
-
+        
         if ($item_one == $item_two)
         {
             return 0;
         }
-
+        
         return ($item_one > $item_two) ? + 1 : - 1;
     }
 
@@ -74,7 +74,7 @@ class PackageTypeMenu extends HtmlMenu
 
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         // $this->render($this->array_renderer, 'urhere');
         // $breadcrumbs = $this->array_renderer->toArray();
         // foreach ($breadcrumbs as $crumb)
@@ -89,7 +89,7 @@ class PackageTypeMenu extends HtmlMenu
 
     public function render_as_tree()
     {
-        $renderer = new TreeMenuRenderer(ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true));
+        $renderer = new TreeMenuRenderer(ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true));
         $this->render($renderer, 'sitemap');
         return $renderer->toHTML();
     }

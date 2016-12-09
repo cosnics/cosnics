@@ -20,6 +20,6 @@ class NoteForm extends ContentObjectForm
     {
         $object = new Note();
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 }

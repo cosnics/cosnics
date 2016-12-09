@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 use Chamilo\Libraries\Format\Table\TableColumnModel;
+
 /**
  *
  * @author Eduard Vossen <eduard.vossen@ehb.be>

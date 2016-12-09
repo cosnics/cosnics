@@ -23,8 +23,8 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $feedback_id = Request :: get(self :: PARAM_FEEDBACK_ID);
-        $this->set_parameter(self :: PARAM_FEEDBACK_ID, $feedback_id);
+        $feedback_id = Request::get(self::PARAM_FEEDBACK_ID);
+        $this->set_parameter(self::PARAM_FEEDBACK_ID, $feedback_id);
         
         $feedback = $this->get_parent()->retrieve_feedback($feedback_id);
         
@@ -41,15 +41,15 @@ class UpdaterComponent extends Manager
             {
                 $values = $form->exportValues();
                 
-                $feedback->set_comment($values[Feedback :: PROPERTY_COMMENT]);
+                $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
                 $success = $feedback->update();
                 
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
                 
-                $message = Translation :: get(
+                $message = Translation::get(
                     $translation, 
-                    array('OBJECT' => Translation :: get('Feedback')), 
-                    Utilities :: COMMON_LIBRARIES);
+                    array('OBJECT' => Translation::get('Feedback')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
             {
@@ -57,7 +57,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
             
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {

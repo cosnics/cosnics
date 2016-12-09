@@ -62,7 +62,7 @@ class RightsService
      * @param \Chamilo\Core\Repository\Workspace\Service\EntityRelationService $entityRelationService
      * @param \Chamilo\Core\Repository\Workspace\Service\EntityService $entityService
      */
-    public function __construct(ContentObjectRelationService $contentObjectRelationService,
+    public function __construct(ContentObjectRelationService $contentObjectRelationService, 
         EntityRelationService $entityRelationService, EntityService $entityService, WorkspaceService $workspaceService)
     {
         $this->contentObjectRelationService = $contentObjectRelationService;
@@ -157,10 +157,10 @@ class RightsService
         {
             return true;
         }
-
+        
         return $this->getEntityRelationService()->hasRight(
-            $this->getEntityService()->getEntitiesForUser($user),
-            $right,
+            $this->getEntityService()->getEntitiesForUser($user), 
+            $right, 
             $workspaceImplementation);
     }
 
@@ -188,15 +188,15 @@ class RightsService
         {
             return true;
         }
-
+        
         if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
         {
             return true;
         }
-
+        
         return $this->getEntityRelationService()->hasRight(
-            $this->getEntityService()->getEntitiesForUser($user),
-            self :: RIGHT_MANAGE,
+            $this->getEntityService()->getEntitiesForUser($user), 
+            self::RIGHT_MANAGE, 
             $workspaceImplementation);
     }
 
@@ -207,13 +207,13 @@ class RightsService
         {
             return true;
         }
-
+        
         // Check if the user is also the owner of the content object
         if ($this->isContentObjectOwner($user, $contentObject))
         {
             return true;
         }
-
+        
         return false;
     }
 
@@ -226,7 +226,7 @@ class RightsService
      */
     public function canViewContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_VIEW, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_VIEW, $user, $workspaceImplementation);
     }
 
     /**
@@ -238,7 +238,7 @@ class RightsService
      */
     public function canAddContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_ADD, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_ADD, $user, $workspaceImplementation);
     }
 
     /**
@@ -250,7 +250,7 @@ class RightsService
      */
     public function canEditContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_EDIT, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_EDIT, $user, $workspaceImplementation);
     }
 
     /**
@@ -262,7 +262,7 @@ class RightsService
      */
     public function canDeleteContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_DELETE, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_DELETE, $user, $workspaceImplementation);
     }
 
     /**
@@ -274,7 +274,7 @@ class RightsService
      */
     public function canUseContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_USE, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_USE, $user, $workspaceImplementation);
     }
 
     /**
@@ -286,7 +286,7 @@ class RightsService
      */
     public function canCopyContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_COPY, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_COPY, $user, $workspaceImplementation);
     }
 
     /**
@@ -298,7 +298,7 @@ class RightsService
      */
     public function canManageWorkspace(User $user, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->hasRightForWorkspace(self :: RIGHT_MANAGE, $user, $workspaceImplementation);
+        return $this->hasRightForWorkspace(self::RIGHT_MANAGE, $user, $workspaceImplementation);
     }
 
     /**
@@ -309,10 +309,10 @@ class RightsService
      *
      * @return boolean
      */
-    public function canViewContentObject(User $user, ContentObject $contentObject,
+    public function canViewContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_VIEW, $user, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self::RIGHT_VIEW, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -323,10 +323,10 @@ class RightsService
      *
      * @return boolean
      */
-    public function canEditContentObject(User $user, ContentObject $contentObject,
+    public function canEditContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_EDIT, $user, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self::RIGHT_EDIT, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -337,10 +337,10 @@ class RightsService
      *
      * @return boolean
      */
-    public function canDeleteContentObject(User $user, ContentObject $contentObject,
+    public function canDeleteContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_DELETE, $user, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self::RIGHT_DELETE, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -351,10 +351,10 @@ class RightsService
      *
      * @return boolean
      */
-    public function canUseContentObject(User $user, ContentObject $contentObject,
+    public function canUseContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_USE, $user, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self::RIGHT_USE, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -365,10 +365,10 @@ class RightsService
      *
      * @return boolean
      */
-    public function canCopyContentObject(User $user, ContentObject $contentObject,
+    public function canCopyContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_COPY, $user, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self::RIGHT_COPY, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -379,20 +379,20 @@ class RightsService
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      * @return boolean
      */
-    private function hasRightForContentObject($right, User $user, ContentObject $contentObject,
+    private function hasRightForContentObject($right, User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         if ($this->hasContentObjectOwnerRights($user, $contentObject))
         {
             return true;
         }
-
+        
         // Check if there is actually a workspaceImplementation
         if ($workspaceImplementation instanceof WorkspaceInterface)
         {
             // Check if the content object is in the workspace
             if ($this->getContentObjectRelationService()->isContentObjectInWorkspace(
-                $contentObject,
+                $contentObject, 
                 $workspaceImplementation))
             {
                 // Check if the user has the requested right in the workspace
@@ -407,9 +407,9 @@ class RightsService
         else
         {
             $contentObjectWorkspaces = $this->getContentObjectRelationService()->getWorkspacesForContentObject(
-                $this->getWorkspaceService(),
+                $this->getWorkspaceService(), 
                 $contentObject);
-
+            
             while ($contentObjectWorkspace = $contentObjectWorkspaces->next_result())
             {
                 if ($this->hasRightForWorkspace($right, $user, $contentObjectWorkspace))
@@ -417,7 +417,7 @@ class RightsService
                     return true;
                 }
             }
-
+            
             return false;
         }
     }
@@ -444,22 +444,22 @@ class RightsService
     public function getAggregatedRight($viewRight, $useRight, $copyRight, $manageRight)
     {
         $right = $viewRight;
-
+        
         if ($useRight)
         {
             $right = $right | $useRight;
         }
-
+        
         if ($copyRight)
         {
             $right = $right | $copyRight;
         }
-
+        
         if ($manageRight)
         {
             $right = $right | $manageRight;
         }
-
+        
         return $right;
     }
 
@@ -469,21 +469,21 @@ class RightsService
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
             $entityService = new EntityService();
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-
-            self :: $instance = new static(
-                $contentObjectRelationService,
-                $entityRelationService,
-                $entityService,
+            
+            self::$instance = new static(
+                $contentObjectRelationService, 
+                $entityRelationService, 
+                $entityService, 
                 $workspaceService);
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
 
     /**
@@ -492,14 +492,14 @@ class RightsService
      * As such it should currently be applied to actions (or their derivatives) which only the object's owner can
      * execute: moving to the recycle bin, unlinking, restoring from the recycle bin, permanent deletion and/or deleting
      * links with other content objects (outside the context of a display or builder)
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
      * @return boolean
      */
-    public function canDestroyContentObject(User $user, ContentObject $contentObject,
+    public function canDestroyContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         if ($workspaceImplementation && ! $workspaceImplementation instanceof PersonalWorkspace)

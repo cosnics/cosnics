@@ -20,26 +20,26 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_ACCOUNT_ID);
+        $ids = Request::get(self::PARAM_ACCOUNT_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-                $cas_account = DataManager :: retrieve_by_id(Service :: class_name(), (int) $id);
-
+                $cas_account = DataManager::retrieve_by_id(Service::class_name(), (int) $id);
+                
                 if (! $cas_account->delete())
                 {
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -62,16 +62,16 @@ class DeleterComponent extends Manager
                     $message = 'SelectedCasAccountsDeleted';
                 }
             }
-
+            
             $this->redirect(
-                Translation :: get($message, null, Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self :: PARAM_CAS_ACCOUNT_ACTION => self :: ACTION_BROWSE));
+                Translation::get($message, null, Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
+                array(self::PARAM_CAS_ACCOUNT_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation :: get('NoCasAccountSelected', null, Utilities :: COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoCasAccountSelected', null, Utilities::COMMON_LIBRARIES)));
         }
     }
 }

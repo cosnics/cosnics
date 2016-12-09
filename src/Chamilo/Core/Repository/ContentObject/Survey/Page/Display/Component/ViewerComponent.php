@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 class ViewerComponent extends TabComponent
 {
+
     function build()
     {
         $html = array();
@@ -19,9 +20,9 @@ class ViewerComponent extends TabComponent
         $html[] = $form->toHtml();
         
         $html[] = $this->get_hidden_fields();
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 1);
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath($namespace, true) . 'PageDisplay.js');
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 1);
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath($namespace, true) . 'PageDisplay.js');
         $html[] = $this->render_footer();
         
         return implode(PHP_EOL, $html);
@@ -32,16 +33,15 @@ class ViewerComponent extends TabComponent
         $html = array();
         $paramaters = $this->get_parent()->get_parameters();
         
-        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_parent());
-        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace, 1) . '\Ajax';
+        $ajaxNamespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($this->get_parent());
+        $ajaxContext = ClassnameUtilities::getInstance()->getNamespaceParent($ajaxNamespace, 1) . '\Ajax';
         
-        $paramaters[self :: PARAM_AJAX_CONTEXT] = $ajaxContext;
+        $paramaters[self::PARAM_AJAX_CONTEXT] = $ajaxContext;
         foreach ($paramaters as $name => $value)
         {
             $html[] = '<input type="hidden" value="' . $value . '" name="param_' . $name . '">';
         }
         return implode(PHP_EOL, $html);
     }
-
 }
 ?>

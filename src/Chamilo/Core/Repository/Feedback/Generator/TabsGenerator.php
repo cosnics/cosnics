@@ -35,17 +35,17 @@ class TabsGenerator extends NavigationGenerator
      * @param integer $feedbackCount
      * @param boolean $isActive
      */
-    public function __construct(DynamicTabsRenderer $tabsRenderer, Application $application, $baseParameters,
+    public function __construct(DynamicTabsRenderer $tabsRenderer, Application $application, $baseParameters, 
         $isAllowedToViewFeedback = false, $feedbackCount = 0, $hasNotification = false, $isActive = false)
     {
-        parent :: __construct(
-            $application,
-            $baseParameters,
-            $isAllowedToViewFeedback,
-            $feedbackCount,
-            $hasNotification,
+        parent::__construct(
+            $application, 
+            $baseParameters, 
+            $isAllowedToViewFeedback, 
+            $feedbackCount, 
+            $hasNotification, 
             $isActive);
-
+        
         $this->tabsRenderer = $tabsRenderer;
     }
 
@@ -71,66 +71,66 @@ class TabsGenerator extends NavigationGenerator
     {
         $application = $this->getApplication();
         $baseParameters = $this->getBaseParameters();
-
-        $title = Translation :: get('FeedbackComponent', null, $application :: package());
-
+        
+        $title = Translation::get('FeedbackComponent', null, $application::package());
+        
         if ($this->hasFeedback())
         {
             $title .= ' [' . $this->getFeedbackCount() . ']';
         }
-
+        
         $this->getTabsRenderer()->add_tab(
             new DynamicVisualTab(
-                $application :: ACTION_FEEDBACK,
-                $title,
-                Theme :: getInstance()->getImagePath($application :: package(), 'Tab/Feedback'),
-                $application->get_url($baseParameters),
-                $this->getIsActive(),
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-
+                $application::ACTION_FEEDBACK, 
+                $title, 
+                Theme::getInstance()->getImagePath($application::package(), 'Tab/Feedback'), 
+                $application->get_url($baseParameters), 
+                $this->getIsActive(), 
+                false, 
+                DynamicVisualTab::POSITION_LEFT, 
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED));
+        
         if ($this instanceof FeedbackNotificationSupport)
         {
             if ($this->isAllowedToViewFeedback())
             {
                 if ($this->hasNotification())
                 {
-
-                    $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBER;
-
+                    
+                    $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_UNSUBSCRIBER;
+                    
                     $this->getTabsRenderer()->add_tab(
                         new DynamicVisualTab(
-                            Manager :: ACTION_UNSUBSCRIBER,
-                            Translation :: get(
-                                'StopReceivingNotifications',
-                                null,
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'),
-                            Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/Unsubscribe'),
-                            $application->get_url($baseParameters),
-                            false,
-                            false,
-                            DynamicVisualTab :: POSITION_LEFT,
-                            DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                            Manager::ACTION_UNSUBSCRIBER, 
+                            Translation::get(
+                                'StopReceivingNotifications', 
+                                null, 
+                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'), 
+                            Theme::getInstance()->getImagePath(Manager::package(), 'Tab/Unsubscribe'), 
+                            $application->get_url($baseParameters), 
+                            false, 
+                            false, 
+                            DynamicVisualTab::POSITION_LEFT, 
+                            DynamicVisualTab::DISPLAY_BOTH_SELECTED));
                 }
                 else
                 {
                     $baseParameters = $this->getBaseParameters();
-                    $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBER;
-
+                    $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBER;
+                    
                     $this->getTabsRenderer()->add_tab(
                         new DynamicVisualTab(
-                            Manager :: ACTION_SUBSCRIBER,
-                            Translation :: get(
-                                'ReceiveNotifications',
-                                null,
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'),
-                            Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/Subscribe'),
-                            $application->get_url($baseParameters),
-                            false,
-                            false,
-                            DynamicVisualTab :: POSITION_LEFT,
-                            DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                            Manager::ACTION_SUBSCRIBER, 
+                            Translation::get(
+                                'ReceiveNotifications', 
+                                null, 
+                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'), 
+                            Theme::getInstance()->getImagePath(Manager::package(), 'Tab/Subscribe'), 
+                            $application->get_url($baseParameters), 
+                            false, 
+                            false, 
+                            DynamicVisualTab::POSITION_LEFT, 
+                            DynamicVisualTab::DISPLAY_BOTH_SELECTED));
                 }
             }
         }

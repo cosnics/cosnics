@@ -44,7 +44,7 @@ class Dependencies
         $this->set_operator($operator);
         $this->set_dependencies($dependencies);
         
-        $this->logger = MessageLogger :: get_instance($this);
+        $this->logger = MessageLogger::getInstance($this);
     }
 
     /**
@@ -114,13 +114,13 @@ class Dependencies
             $html[] = $dependency->as_html();
         }
         
-        if ($this->get_operator() == self :: OPERATOR_AND)
+        if ($this->get_operator() == self::OPERATOR_AND)
         {
-            $operator = Translation :: get('And');
+            $operator = Translation::get('And');
         }
-        elseif ($this->get_operator() == self :: OPERATOR_OR)
+        elseif ($this->get_operator() == self::OPERATOR_OR)
         {
-            $operator = Translation :: get('Or');
+            $operator = Translation::get('Or');
         }
         else
         {
@@ -149,11 +149,11 @@ class Dependencies
             $messages[] = $dependency->get_logger()->render();
         }
         
-        if ($this->get_operator() == self :: OPERATOR_AND)
+        if ($this->get_operator() == self::OPERATOR_AND)
         {
             $result = ($success == count($this->get_dependencies()));
         }
-        elseif ($this->get_operator() == self :: OPERATOR_OR)
+        elseif ($this->get_operator() == self::OPERATOR_OR)
         {
             $result = ($success > 0);
         }
@@ -164,13 +164,13 @@ class Dependencies
         
         // if (! $result)
         // {
-        if ($this->get_operator() == self :: OPERATOR_AND)
+        if ($this->get_operator() == self::OPERATOR_AND)
         {
-            $operator = Translation :: get('And');
+            $operator = Translation::get('And');
         }
-        elseif ($this->get_operator() == self :: OPERATOR_OR)
+        elseif ($this->get_operator() == self::OPERATOR_OR)
         {
-            $operator = Translation :: get('Or');
+            $operator = Translation::get('Or');
         }
         else
         {

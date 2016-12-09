@@ -34,10 +34,10 @@ class SubmissionUsersBrowserTableDataProvider extends SubmissionBrowserTableData
     public function get_order_properties($order_properties = array())
     {
         $order_properties[] = new OrderBy(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
             SORT_ASC);
         $order_properties[] = new OrderBy(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
             SORT_ASC);
         
         return $order_properties;
@@ -58,7 +58,7 @@ class SubmissionUsersBrowserTableDataProvider extends SubmissionBrowserTableData
     public function retrieve_from_data_manager($publication_id, $course_id, $offset, $count, $order_properties, 
         $condition)
     {
-        return DataManager :: retrieve_assignment_publication_target_users(
+        return DataManager::retrieve_assignment_publication_target_users(
             $publication_id, 
             $course_id, 
             $offset, 

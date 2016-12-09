@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: bookmark.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.bookmark
  */
 class Bookmark extends ContentObject implements Versionable, Includeable
@@ -18,20 +18,21 @@ class Bookmark extends ContentObject implements Versionable, Includeable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
      * If the content object "accept" the properties passed as argument it returns a new instance of itself based on
-     * properties passed as argument. Otherwise returns false.
-     *
+     * properties passed as argument.
+     * Otherwise returns false.
+     * 
      * @param array $properties
      * @return ContentObject | array | false
      */
     public static function accept($properties)
     {
-        $url = isset($properties[self :: PROPERTY_URL]) ? $properties[self :: PROPERTY_URL] : '';
-        $application = isset($properties[self :: PROPERTY_APPLICATION]) ? $properties[self :: PROPERTY_APPLICATION] : '';
+        $url = isset($properties[self::PROPERTY_URL]) ? $properties[self::PROPERTY_URL] : '';
+        $application = isset($properties[self::PROPERTY_APPLICATION]) ? $properties[self::PROPERTY_APPLICATION] : '';
         if ($url && $application)
         {
             $result = new self();
@@ -48,26 +49,26 @@ class Bookmark extends ContentObject implements Versionable, Includeable
 
     public function get_url()
     {
-        return $this->get_additional_property(self :: PROPERTY_URL);
+        return $this->get_additional_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_additional_property(self :: PROPERTY_URL, $url);
+        return $this->set_additional_property(self::PROPERTY_URL, $url);
     }
 
     public function get_application()
     {
-        return $this->get_additional_property(self :: PROPERTY_APPLICATION);
+        return $this->get_additional_property(self::PROPERTY_APPLICATION);
     }
 
     public function set_application($application)
     {
-        return $this->set_additional_property(self :: PROPERTY_APPLICATION, $application);
+        return $this->set_additional_property(self::PROPERTY_APPLICATION, $application);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_URL, self :: PROPERTY_APPLICATION);
+        return array(self::PROPERTY_URL, self::PROPERTY_APPLICATION);
     }
 }

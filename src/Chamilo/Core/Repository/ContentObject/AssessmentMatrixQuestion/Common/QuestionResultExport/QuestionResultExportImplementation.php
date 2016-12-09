@@ -32,7 +32,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
             
             switch ($question->get_matrix_type())
             {
-                case AssessmentMatrixQuestion :: MATRIX_TYPE_CHECKBOX :
+                case AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX :
                     foreach ($answer as $answer_part_id => &$answer_part_match_ids)
                     {
                         $answer_part_matches = array();
@@ -43,7 +43,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
                         $answer_part_match_ids = $options[$answer_part_id] . ' = ' . implode(', ', $answer_part_matches);
                     }
                     break;
-                case AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO :
+                case AssessmentMatrixQuestion::MATRIX_TYPE_RADIO :
                     foreach ($answer as $answer_part_id => &$answer_part)
                     {
                         $answer_part = $options[$answer_part_id] . ' = ' . $matches[$answer_part];

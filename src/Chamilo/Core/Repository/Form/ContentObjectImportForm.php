@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: content_object_import_form.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib
  */
 
@@ -37,7 +37,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
     /**
      * Constructor.
-     *
+     * 
      * @param ImportFormParameters $importFormParameters
      *
      * @throws \Exception
@@ -45,9 +45,9 @@ abstract class ContentObjectImportForm extends FormValidator
     public function __construct(ImportFormParameters $importFormParameters)
     {
         parent::__construct('import', $importFormParameters->getMethod(), $importFormParameters->getAction());
-
+        
         $this->importFormParameters = $importFormParameters;
-
+        
         $this->build_basic_form();
         $this->add_footer();
         $this->setDefaults();
@@ -55,17 +55,17 @@ abstract class ContentObjectImportForm extends FormValidator
 
     /**
      * Gets the categories defined in the user's repository.
-     *
+     * 
      * @return array The categories.
      */
     public function get_categories()
     {
         $categorymenu = new ContentObjectCategoryMenu(
-            $this->importFormParameters->getWorkspace(),
+            $this->importFormParameters->getWorkspace(), 
             $this->get_application()->get_user_id());
         $renderer = new OptionsMenuRenderer();
         $categorymenu->render($renderer, 'sitemap');
-
+        
         return $renderer->toArray();
     }
 
@@ -75,50 +75,50 @@ abstract class ContentObjectImportForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement('hidden', self::PROPERTY_TYPE);
-
+        
         $category_group = array();
-
+        
         $category_group[] = $this->createElement(
-            'select',
-            ContentObject::PROPERTY_PARENT_ID,
-            Translation::get('CategoryTypeName'),
-            $this->get_categories(),
+            'select', 
+            ContentObject::PROPERTY_PARENT_ID, 
+            Translation::get('CategoryTypeName'), 
+            $this->get_categories(), 
             array('id' => 'parent_id'));
-
+        
         $category_group[] = $this->createElement(
-            'image',
-            'add_category',
-            Theme::getInstance()->getCommonImagePath('Action/Add'),
+            'image', 
+            'add_category', 
+            Theme::getInstance()->getCommonImagePath('Action/Add'), 
             array('id' => 'add_category', 'style' => 'display:none'));
-
+        
         $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
-
+        
         $group = array();
         $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
         $group[] = $this->createElement('static', null, null, Translation::get('AddNewCategory'));
         $group[] = $this->createElement('text', self::NEW_CATEGORY);
         $group[] = $this->createElement('static', null, null, '</div>');
-
+        
         $this->addGroup($group);
     }
 
     public function add_footer()
     {
         $buttons = array();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'import_button',
-            Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
-            array('id' => 'import_button'),
-            null,
+            'style_submit_button', 
+            'import_button', 
+            Translation::get('Import', null, Utilities::COMMON_LIBRARIES), 
+            array('id' => 'import_button'), 
+            null, 
             'import');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-
+        
         $this->addElement(
-            'html',
-            ResourceManager::get_instance()->get_resource_html(
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Import.js'));
     }
 
@@ -138,15 +138,16 @@ abstract class ContentObjectImportForm extends FormValidator
     {
         $class = Manager::package() . '\Common\Import\\' .
              StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
-             '\\' . (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
+             '\\' .
+             (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
              'ContentObjectImportForm';
-
+        
         if (! class_exists($class))
         {
             throw new \Exception(
                 Translation::get('UnknownImportType', array('TYPE' => $importFormParameters->getImportFormType())));
         }
-
+        
         return new $class($importFormParameters);
     }
 }

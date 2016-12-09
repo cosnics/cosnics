@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: deleter.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib.user_manager.component
  */
 class EmailerComponent extends Manager
@@ -22,44 +22,46 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
-        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
-
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
+        $ids = $this->getRequest()->get(self::PARAM_USER_USER_ID);
+        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
+        
         if (! is_array($ids))
         {
             $ids = array($ids);
         }
-
+        
         if (count($ids) > 0)
         {
             $failures = 0;
-
+            
             foreach ($ids as $id)
             {
                 if (! $this->get_user()->is_platform_admin())
                 {
-                    $users[] = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                    $users[] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                         (int) $id);
                 }
             }
-
+            
             $factory = new ApplicationFactory(
-                \Chamilo\Core\User\Email\Manager :: context(),
+                \Chamilo\Core\User\Email\Manager::context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_target_users($users);
-            $component->set_parameter(self :: PARAM_USER_USER_ID, $ids);
+            $component->set_parameter(self::PARAM_USER_USER_ID, $ids);
             return $component->run();
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('User')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('User')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -67,8 +69,8 @@ class EmailerComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
-                Translation :: get('AdminUserBrowserComponent')));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)), 
+                Translation::get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_emailer');
     }
 }

@@ -19,14 +19,14 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'provider_action';
     const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
     const PARAM_ENTITY_TYPE = 'entity_type';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CONFIGURE = 'Configurer';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -69,7 +69,7 @@ abstract class Manager extends Application
             $entityConditionService = new EntityConditionService();
             $this->expandedEntities = $entityConditionService->expandEntities($this->getEntities());
         }
-
+        
         return $this->expandedEntities;
     }
 
@@ -77,7 +77,7 @@ abstract class Manager extends Application
     {
         if (count($this->getEntities()) == 0)
         {
-            throw new \InvalidArgumentException(Translation :: get('VerifyEntitiesProviderLinkSetup'));
+            throw new \InvalidArgumentException(Translation::get('VerifyEntitiesProviderLinkSetup'));
         }
     }
 }

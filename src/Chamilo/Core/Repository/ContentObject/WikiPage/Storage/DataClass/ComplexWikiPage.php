@@ -21,27 +21,27 @@ class ComplexWikiPage extends ComplexContentObjectItem
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_IS_HOMEPAGE, self :: PROPERTY_IS_LOCKED);
+        return array(self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED);
     }
 
     public function get_is_homepage()
     {
-        return $this->get_additional_property(self :: PROPERTY_IS_HOMEPAGE);
+        return $this->get_additional_property(self::PROPERTY_IS_HOMEPAGE);
     }
 
     public function get_is_locked()
     {
-        return $this->get_additional_property(self :: PROPERTY_IS_LOCKED);
+        return $this->get_additional_property(self::PROPERTY_IS_LOCKED);
     }
 
     public function set_is_homepage($value)
     {
-        $this->set_additional_property(self :: PROPERTY_IS_HOMEPAGE, $value);
+        $this->set_additional_property(self::PROPERTY_IS_HOMEPAGE, $value);
     }
 
     public function set_is_locked($value)
     {
-        $this->set_additional_property(self :: PROPERTY_IS_LOCKED, $value);
+        $this->set_additional_property(self::PROPERTY_IS_LOCKED, $value);
     }
 
     public function update()
@@ -51,22 +51,22 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_PARENT), 
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($this->get_parent()), 
-                ComplexContentObjectItem :: get_table_name());
+                ComplexContentObjectItem::get_table_name());
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(), 
-                        ComplexContentObjectItem :: PROPERTY_ID), 
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_ID), 
                     new StaticConditionVariable($this->get_id()), 
-                    ComplexContentObjectItem :: get_table_name()));
+                    ComplexContentObjectItem::get_table_name()));
             
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
             
-            $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(), 
+            $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                ComplexContentObjectItem::class_name(), 
                 $parameters);
             
             while ($child = $children->next_result())
@@ -80,6 +80,6 @@ class ComplexWikiPage extends ComplexContentObjectItem
             }
         }
         
-        return parent :: update();
+        return parent::update();
     }
 }

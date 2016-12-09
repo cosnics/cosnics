@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
  * Shows a big confirmation message to the user when his submission has been succesfull.
  * This component is separate so
  * nothing wrong can happen when a user clicks on the refresh button of the browser
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardComponent
@@ -21,48 +21,48 @@ class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardCompon
     public function run()
     {
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         $html[] = $this->renderConfirmationMessage(
             Translation::getInstance()->getTranslation(
-                'SubmissionSubmitConfirmation',
+                'SubmissionSubmitConfirmation', 
                 array(
-                    'ASSIGNMENT_TITLE' => $this->getPublication()->get_content_object()->get_title(),
-                    'USER_EMAIL' => $this->getUser()->get_email()),
+                    'ASSIGNMENT_TITLE' => $this->getPublication()->get_content_object()->get_title(), 
+                    'USER_EMAIL' => $this->getUser()->get_email()), 
                 Manager::context()));
-
+        
         $parameters = $this->get_parameters();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_BROWSE_SUBMISSIONS;
-
+        
         $redirect = new Redirect($parameters);
-
+        
         $button = new Button(
-            Translation::getInstance()->getTranslation('ReturnToSubmissionsBrowser', null, Manager::context()),
-            null,
-            $redirect->getUrl(),
-            Button::DISPLAY_ICON_AND_LABEL,
-            false,
+            Translation::getInstance()->getTranslation('ReturnToSubmissionsBrowser', null, Manager::context()), 
+            null, 
+            $redirect->getUrl(), 
+            Button::DISPLAY_ICON_AND_LABEL, 
+            false, 
             'btn-primary');
-
+        
         $buttonRenderer = new ButtonRenderer($button);
-
+        
         $html[] = '<div style="text-align:center">' . $buttonRenderer->render() . '</div>';
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the additional parameters
-     *
+     * 
      * @return array
      */
     public function get_additional_parameters()
     {
         return array(self::PARAM_PUBLICATION_ID, self::PARAM_SUBMITTER_TYPE, self::PARAM_TARGET_ID);
     }
-
+    
     // /**
     // * Add an additional breadcrumb to the trail.
     // *
@@ -83,10 +83,10 @@ class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardCompon
     // )
     // );
     // }
-
+    
     /**
      * Returns the selected step index
-     *
+     * 
      * @return bool
      */
     protected function getSelectedStepIndex()

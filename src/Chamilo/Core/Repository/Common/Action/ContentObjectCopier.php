@@ -87,7 +87,7 @@ class ContentObjectCopier
      * @param integer $targetUserIdentifier
      * @param integer $targetCategory
      */
-    public function __construct(User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace,
+    public function __construct(User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace, 
         $sourceUserIdentifier, WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0)
     {
         $this->currentUser = $currentUser;
@@ -103,80 +103,80 @@ class ContentObjectCopier
     {
         if (! $this->contentObjectIdentifiers)
         {
-            $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
+            $this->add_message(Translation::get('NoObjectSelected'), self::TYPE_ERROR);
             return false;
         }
-
+        
         if (! is_array($this->contentObjectIdentifiers))
         {
             $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
-
+        
         $exportableContentObjectIdentifiers = array();
-
+        
         foreach ($this->contentObjectIdentifiers as $contentObjectIdentifier)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $contentObjectIdentifier);
-
-            if (RightsService :: getInstance()->canCopyContentObject($this->currentUser, $content_object))
+            
+            if (RightsService::getInstance()->canCopyContentObject($this->currentUser, $content_object))
             {
                 $exportableContentObjectIdentifiers[] = $contentObjectIdentifier;
             }
         }
-
+        
         if (! $exportableContentObjectIdentifiers)
         {
-            $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
+            $this->add_message(Translation::get('NoObjectSelected'), self::TYPE_ERROR);
             return false;
         }
-
+        
         $exportParameters = new ExportParameters(
-            $this->sourceWorkspace,
-            $this->sourceUserIdentifier,
-            ContentObjectExport :: FORMAT_CPO,
+            $this->sourceWorkspace, 
+            $this->sourceUserIdentifier, 
+            ContentObjectExport::FORMAT_CPO, 
             $exportableContentObjectIdentifiers);
-
-        $exporter = ContentObjectExportController :: factory($exportParameters);
-
+        
+        $exporter = ContentObjectExportController::factory($exportParameters);
+        
         $path = $exporter->run();
-
-        $file = FileProperties :: from_path($path);
+        
+        $file = FileProperties::from_path($path);
         $pathInfo = pathinfo($path);
         $newPath = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $file->get_name() . '.cpo';
-
-        Filesystem :: move_file($path, $newPath);
-        $file = FileProperties :: from_path($newPath);
-
-        $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-            User :: class_name(),
+        
+        Filesystem::move_file($path, $newPath);
+        $file = FileProperties::from_path($newPath);
+        
+        $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+            User::class_name(), 
             $this->targetUserIdentifier);
-
-        $parameters = ImportParameters :: factory(
-            ContentObjectImport :: FORMAT_CPO,
-            $this->targetUserIdentifier,
-            $this->targetWorkspace,
-            $this->targetCategory,
+        
+        $parameters = ImportParameters::factory(
+            ContentObjectImport::FORMAT_CPO, 
+            $this->targetUserIdentifier, 
+            $this->targetWorkspace, 
+            $this->targetCategory, 
             $file);
-        $controller = ContentObjectImportController :: factory($parameters);
+        $controller = ContentObjectImportController::factory($parameters);
         $contentObjectIdentifiers = $controller->run();
-
+        
         $this->messages = $controller->get_messages();
-
+        
         if ($this->sourceUserIdentifier == $this->targetUserIdentifier)
         {
             $this->changeContentObjectNames($contentObjectIdentifiers);
         }
-
-        Filesystem :: remove($newPath);
-
+        
+        Filesystem::remove($newPath);
+        
         return $contentObjectIdentifiers;
     }
 
     /**
      * Adds a message to the message list
-     *
+     * 
      * @param string $message
      * @param integer $type
      */
@@ -186,13 +186,13 @@ class ContentObjectCopier
         {
             $this->messages[$type] = array();
         }
-
+        
         $this->messages[$type][] = $message;
     }
 
     /**
      * Checks wether the object has messages
-     *
+     * 
      * @return boolean
      */
     public function has_messages($type)
@@ -202,7 +202,7 @@ class ContentObjectCopier
 
     /**
      * Retrieves the list of messages
-     *
+     * 
      * @return string[]
      */
     public function get_messages($type = null)
@@ -233,7 +233,7 @@ class ContentObjectCopier
     {
         $messages = array();
         $message_types = array();
-
+        
         foreach ($this->get_messages() as $type => $type_messages)
         {
             foreach ($type_messages as $message)
@@ -242,31 +242,31 @@ class ContentObjectCopier
                 $message_types[] = $type;
             }
         }
-
-        return array(Application :: PARAM_MESSAGE => $messages, Application :: PARAM_MESSAGE_TYPE => $message_types);
+        
+        return array(Application::PARAM_MESSAGE => $messages, Application::PARAM_MESSAGE_TYPE => $message_types);
     }
 
     /**
      * Changes the title of the duplicated content objects by adding a copy value to show which object is the copied
      * one.
-     *
+     * 
      * @param array $contentObjectIdentifiers
      */
     protected function changeContentObjectNames(array $contentObjectIdentifiers)
     {
-        DataClassCache :: reset();
-
+        DataClassCache::reset();
+        
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
             $contentObjectIdentifiers);
-
+        
         $parameters = new DataClassRetrievesParameters($condition);
-
-        $content_objects = DataManager :: retrieve_content_objects(ContentObject :: class_name(), $parameters);
-
+        
+        $content_objects = DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters);
+        
         while ($content_object = $content_objects->next_result())
         {
-            $content_object->set_title($content_object->get_title() . ' (' . Translation :: get('Copy') . ')');
+            $content_object->set_title($content_object->get_title() . ' (' . Translation::get('Copy') . ')');
             $content_object->update();
         }
     }

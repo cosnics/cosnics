@@ -23,14 +23,14 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
 
     /**
      * Constructor
-     *
+     * 
      * @param $elementName string
      * @param $elementLabel string
      * @param $attributes array This should contain the keys 'receivers' and 'receivers_selected'
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
-        HTML_QuickForm_element :: __construct($elementName, $elementLabel, $attributes);
+        HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_appendName = false;
         $this->_type = 'upload_or_create';
@@ -42,24 +42,24 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
     public function _createElements()
     {
         $this->_elements[0] = new HTML_QuickForm_Radio(
-            self :: ELEMENT_CHOICE,
-            '',
-            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
-            '0',
+            self::ELEMENT_CHOICE, 
+            '', 
+            Translation::get('Upload', null, Utilities::COMMON_LIBRARIES), 
+            '0', 
             array(
                 'onclick' => 'javascript:editor_hide(\'editor_html_content\'); javascript:uncompress_show(\'' .
-                     self :: ELEMENT_UNCOMPRESS . '\')'));
+                     self::ELEMENT_UNCOMPRESS . '\')'));
         $this->_elements[0]->setChecked(true);
-        $this->_elements[1] = new HTML_QuickForm_file(self :: ELEMENT_FILE, '');
+        $this->_elements[1] = new HTML_QuickForm_file(self::ELEMENT_FILE, '');
         $this->_elements[2] = new HTML_QuickForm_Radio(
-            self :: ELEMENT_CHOICE,
-            '',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-            '1',
+            self::ELEMENT_CHOICE, 
+            '', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+            '1', 
             array(
                 'onclick' => 'javascript:editor_show(\'editor_html_content\'); javascript:editor_hide(\'' .
-                     self :: ELEMENT_UNCOMPRESS . '\')'));
-        $this->_elements[3] = new HTML_QuickForm_textarea(self :: ELEMENT_EDITOR, '');
+                     self::ELEMENT_UNCOMPRESS . '\')'));
+        $this->_elements[3] = new HTML_QuickForm_textarea(self::ELEMENT_EDITOR, '');
         // $this->_elements[4] = new HTML_QuickForm_checkbox(self ::
         // ELEMENT_UNCOMPRESS, '', Translation :: get('Uncompress', null, Utilities
         // :: COMMON_LIBRARIES), array(
@@ -72,7 +72,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
     public function toHtml()
     {
         $html[] = $this->_elements[0]->toHtml();
-        $html[] = '<div style="display: inline;" id="' . self :: ELEMENT_UNCOMPRESS . '">';
+        $html[] = '<div style="display: inline;" id="' . self::ELEMENT_UNCOMPRESS . '">';
         $html[] = $this->_elements[1]->toHtml();
         // $html[] = $this->_elements[4]->toHtml();
         $html[] = '</div>';
@@ -80,13 +80,13 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
         $html[] = $this->_elements[2]->toHtml();
         $html[] = '<div style="margin-left:20px;display:block;" id="editor_html_content">';
         // $html[] = $this->_elements[3]->toHtml();
-        $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: getInstance()->get('html_editor'),
-            self :: ELEMENT_EDITOR,
-            '',
-            false,
-            array(FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '500'));
-
+        $html_editor = FormValidatorHtmlEditor::factory(
+            LocalSetting::getInstance()->get('html_editor'), 
+            self::ELEMENT_EDITOR, 
+            '', 
+            false, 
+            array(FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '500'));
+        
         $html[] = $html_editor->render();
         $html[] = '</div>';
         $html[] = $this->getElementJS();

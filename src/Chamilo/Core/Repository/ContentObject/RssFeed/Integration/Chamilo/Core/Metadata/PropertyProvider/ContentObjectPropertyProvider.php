@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return RssFeed :: class_name();
+        return RssFeed::class_name();
     }
 }

@@ -26,68 +26,68 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-
+        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
+        
         $this->application = $application;
-
+        
         $this->form_type = $form_type;
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        
+        if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
-        elseif ($this->form_type == self :: TYPE_NEWFOLDER)
+        elseif ($this->form_type == self::TYPE_NEWFOLDER)
         {
             $this->build_newfolder_form();
         }
-
+        
         $this->setDefaults();
     }
 
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-
-        $defaults[ExternalObject :: PROPERTY_ID] = $external_repository_object->get_id();
-
-        $display = ExternalObjectDisplay :: factory($external_repository_object);
-        $defaults[self :: PREVIEW] = $display->get_preview();
-
-        parent :: setDefaults($defaults);
+        
+        $defaults[ExternalObject::PROPERTY_ID] = $external_repository_object->get_id();
+        
+        $display = ExternalObjectDisplay::factory($external_repository_object);
+        $defaults[self::PREVIEW] = $display->get_preview();
+        
+        parent::setDefaults($defaults);
     }
 
     public function build_basic_form()
     {
-        if ($this->form_type == self :: TYPE_EDIT)
+        if ($this->form_type == self::TYPE_EDIT)
         {
-            $this->add_information_message('dropbox_api_move', null, Translation :: get('DropboxAPIMoveImpossible'));
+            $this->add_information_message('dropbox_api_move', null, Translation::get('DropboxAPIMoveImpossible'));
         }
     }
 
     public function build_editing_form()
     {
-        $this->addElement('static', self :: PREVIEW);
-
+        $this->addElement('static', self::PREVIEW);
+        
         $this->build_basic_form();
-
-        $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
-
+        
+        $this->addElement('hidden', ExternalObject::PROPERTY_ID);
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -99,12 +99,12 @@ class ExternalObjectForm extends FormValidator
 
     public function upload_file()
     {
-        if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
+        if (StringUtilities::getInstance()->hasValue(($_FILES[self::FILE]['name'])))
         {
             if ($this->application->get_external_repository_manager_connector()->create_external_repository_object(
-                $_FILES[self :: FILE]['name'],
-                $_FILES[self :: FILE]['tmp_name']))
-                return $_FILES[self :: FILE]['name'];
+                $_FILES[self::FILE]['name'], 
+                $_FILES[self::FILE]['tmp_name']))
+                return $_FILES[self::FILE]['name'];
         }
         else
         {
@@ -115,18 +115,18 @@ class ExternalObjectForm extends FormValidator
     public function build_creation_form()
     {
         $this->build_basic_form();
-
-        $this->addElement('file', self :: FILE, Translation :: get('FileName'));
-
+        
+        $this->addElement('file', self::FILE, Translation::get('FileName'));
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -134,19 +134,19 @@ class ExternalObjectForm extends FormValidator
     {
         $this->addElement('text', 'foldername', 'Name of new folder', array('size' => '50'));
         $this->addRule(
-            'foldername',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'foldername', 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $this->addElement('hidden', 'folder');
-        $this->setDefaults(array('folder' => Request :: get('folder')));
-
-        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Create'));
+        $this->setDefaults(array('folder' => Request::get('folder')));
+        
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('Create'));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 

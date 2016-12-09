@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -15,14 +15,14 @@ class FileAsset extends \Assetic\Asset\FileAsset
 
     /**
      *
-     * @param Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param string $stylesheetPath
      * @param \Assetic\Filter\FilterInterface[] $filters
      */
-    public function __construct(Path $pathUtilities, $stylesheetPath, $filters = array())
+    public function __construct(PathBuilder $pathBuilder, $stylesheetPath, $filters = array())
     {
         $stylesheetPath = strtr($stylesheetPath, DIRECTORY_SEPARATOR, '/');
-        $basePath = strtr(realpath($pathUtilities->getBasePath()), DIRECTORY_SEPARATOR, '/');
-        parent :: __construct($stylesheetPath, $filters, $basePath);
+        $basePath = strtr(realpath($pathBuilder->getBasePath()), DIRECTORY_SEPARATOR, '/');
+        parent::__construct($stylesheetPath, $filters, $basePath);
     }
 }

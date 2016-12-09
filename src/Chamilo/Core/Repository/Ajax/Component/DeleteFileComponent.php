@@ -21,7 +21,7 @@ class DeleteFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CONTENT_OBJECT_ID);
     }
 
     /*
@@ -29,33 +29,33 @@ class DeleteFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function run()
     {
-        $contentObjectId = $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID);
-
+        $contentObjectId = $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID);
+        
         if (isset($contentObjectId))
         {
             $conditions = array();
-
+            
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-                new StaticConditionVariable(File :: class_name()));
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), 
+                new StaticConditionVariable(File::class_name()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
                 new StaticConditionVariable($this->getUser()->getId()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
                 new StaticConditionVariable($contentObjectId));
-
-            $file = DataManager :: retrieve(
-                ContentObject :: class_name(),
+            
+            $file = DataManager::retrieve(
+                ContentObject::class_name(), 
                 new DataClassRetrieveParameters(new AndCondition($conditions)));
-
+            
             if ($file instanceof File)
             {
-                if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed($file, 'version'))
+                if (\Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed($file, 'version'))
                 {
                     if (! $file->delete(true))
                     {
-                        JsonAjaxResult :: general_error(Translation :: get('FileNotDeleted'));
+                        JsonAjaxResult::general_error(Translation::get('FileNotDeleted'));
                     }
                     else
                     {
@@ -65,17 +65,17 @@ class DeleteFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 }
                 else
                 {
-                    JsonAjaxResult :: not_allowed();
+                    JsonAjaxResult::not_allowed();
                 }
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('NoFileSelected'));
+                JsonAjaxResult::general_error(Translation::get('NoFileSelected'));
             }
         }
         else
         {
-            JsonAjaxResult :: general_error(Translation :: get('NoFileSelected'));
+            JsonAjaxResult::general_error(Translation::get('NoFileSelected'));
         }
     }
 

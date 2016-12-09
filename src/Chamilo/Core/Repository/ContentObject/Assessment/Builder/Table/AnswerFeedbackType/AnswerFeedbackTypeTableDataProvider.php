@@ -25,12 +25,12 @@ class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
     {
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER));
-
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
+        
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-            ComplexContentObjectItem :: class_name(),
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 
@@ -40,8 +40,6 @@ class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: count(
-            ComplexContentObjectItem :: class_name(),
-            $condition);
+        return \Chamilo\Core\Repository\Storage\DataManager::count(ComplexContentObjectItem::class_name(), $condition);
     }
 }

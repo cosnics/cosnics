@@ -32,7 +32,7 @@ abstract class Installer extends Action
      */
     public function __construct($form_values)
     {
-        parent :: __construct();
+        parent::__construct();
 
         $this->form_values = $form_values;
     }
@@ -62,19 +62,19 @@ abstract class Installer extends Action
         if (method_exists($this, 'extra'))
         {
             $this->add_message(
-                self :: TYPE_NORMAL,
-                '<span class="subtitle">' . Translation :: get('Various', null, 'Chamilo\Core\Install') . '</span>');
+                self::TYPE_NORMAL,
+                '<span class="subtitle">' . Translation::get('Various', null, 'Chamilo\Core\Install') . '</span>');
             if (! $this->extra())
             {
-                return $this->failed(Translation :: get('VariousFailed', null, 'Chamilo\Core\Install'));
+                return $this->failed(Translation::get('VariousFailed', null, 'Chamilo\Core\Install'));
             }
             else
             {
                 $this->add_message(
-                    self :: TYPE_NORMAL,
-                    Translation :: get('VariousFinished', null, 'Chamilo\Core\Install'));
+                    self::TYPE_NORMAL,
+                    Translation::get('VariousFinished', null, 'Chamilo\Core\Install'));
             }
-            $this->add_message(self :: TYPE_NORMAL, '');
+            $this->add_message(self::TYPE_NORMAL, '');
         }
 
         if (! $this->register_package())
@@ -82,8 +82,8 @@ abstract class Installer extends Action
             return false;
         }
 
-        PlatformPackageBundles :: getInstance(PlatformPackageBundles :: MODE_AVAILABLE)->reset();
-        PlatformPackageBundles :: getInstance(PlatformPackageBundles :: MODE_INSTALLED)->reset();
+        PlatformPackageBundles::getInstance(PlatformPackageBundles::MODE_AVAILABLE)->reset();
+        PlatformPackageBundles::getInstance(PlatformPackageBundles::MODE_INSTALLED)->reset();
 
         return $this->successful();
     }
@@ -96,20 +96,20 @@ abstract class Installer extends Action
      */
     public function verify_dependencies()
     {
-        $context = ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
 
-        $verifier = new DependencyVerifier(Package :: get($context));
+        $verifier = new DependencyVerifier(Package::get($context));
         $success = $verifier->is_installable();
 
-        $this->add_message(self :: TYPE_NORMAL, $verifier->get_logger()->render());
+        $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
 
         if (! $success)
         {
-            return $this->failed(Translation :: get('PackageDependenciesFailed'));
+            return $this->failed(Translation::get('PackageDependenciesFailed'));
         }
         else
         {
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('PackageDependenciesVerified'));
+            $this->add_message(self::TYPE_NORMAL, Translation::get('PackageDependenciesVerified'));
             return true;
         }
     }
@@ -122,7 +122,7 @@ abstract class Installer extends Action
     public function install_storage_units()
     {
         $dir = $this->get_path() . 'Resources/Storage/';
-        $files = Filesystem :: get_directory_content($dir, Filesystem :: LIST_FILES);
+        $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES);
 
         foreach ($files as $file)
         {
@@ -208,25 +208,25 @@ abstract class Installer extends Action
      */
     public function create_storage_unit($path)
     {
-        $storage_unit_info = self :: parse_xml_file($path);
+        $storage_unit_info = self::parse_xml_file($path);
 
         $this->add_message(
-            self :: TYPE_NORMAL,
-            Translation :: getInstance()->getTranslation('StorageUnitCreation', null, 'Chamilo\Core\Install') . ': <em>' .
+            self::TYPE_NORMAL,
+            Translation::getInstance()->getTranslation('StorageUnitCreation', null, 'Chamilo\Core\Install') . ': <em>' .
                  $storage_unit_info['name'] . '</em>');
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
         $data_manager = $context . '\Storage\DataManager';
 
-        $table_name = $data_manager :: PREFIX . $storage_unit_info['name'];
+        $table_name = $data_manager::PREFIX . $storage_unit_info['name'];
 
-        if (! $data_manager :: create_storage_unit(
+        if (! $data_manager::create_storage_unit(
             $table_name,
             $storage_unit_info['properties'],
             $storage_unit_info['indexes']))
         {
             return $this->failed(
-                Translation :: getInstance()->getTranslation('StorageUnitCreationFailed', null, 'Chamilo\Core\Install') .
+                Translation::getInstance()->getTranslation('StorageUnitCreationFailed', null, 'Chamilo\Core\Install') .
                      ': <em>' . $storage_unit_info['name'] . '</em>');
         }
         else
@@ -265,7 +265,7 @@ abstract class Installer extends Action
             foreach ($xml as $name => $parameters)
             {
                 $setting = new Setting();
-                $setting->set_context(ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context()));
+                $setting->set_context(ClassnameUtilities::getInstance()->getNamespaceParent(static::context()));
                 $setting->set_variable($name);
                 $setting->set_value($parameters['default']);
 
@@ -281,14 +281,14 @@ abstract class Installer extends Action
 
                 if (! $setting->create())
                 {
-                    $message = Translation :: get('PackageConfigurationFailed', null, 'Chamilo\Core\Install');
+                    $message = Translation::get('PackageConfigurationFailed', null, 'Chamilo\Core\Install');
                     return $this->failed($message);
                 }
             }
 
             $this->add_message(
-                self :: TYPE_NORMAL,
-                Translation :: get('PackageSettingsAdded', null, 'Chamilo\Core\Install'));
+                self::TYPE_NORMAL,
+                Translation::get('PackageSettingsAdded', null, 'Chamilo\Core\Install'));
         }
 
         return true;
@@ -296,23 +296,23 @@ abstract class Installer extends Action
 
     public function register_package()
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
 
-        $this->add_message(self :: TYPE_NORMAL, Translation :: get('RegisteringPackage', null, 'Chamilo\Core\Install'));
+        $this->add_message(self::TYPE_NORMAL, Translation::get('RegisteringPackage', null, 'Chamilo\Core\Install'));
 
-        $package_info = Package :: get($namespace);
+        $package_info = Package::get($namespace);
 
         $application_registration = new Registration();
         $application_registration->set_type(($package_info->get_type()));
         $application_registration->set_name($package_info->get_code());
         $application_registration->set_category($package_info->get_category());
         $application_registration->set_version($package_info->get_version());
-        $application_registration->set_status(Registration :: STATUS_ACTIVE);
+        $application_registration->set_status(Registration::STATUS_ACTIVE);
         $application_registration->set_context($namespace);
 
         if (! $application_registration->create())
         {
-            return $this->failed(Translation :: get('PackageRegistrationFailed', null, 'Chamilo\Core\Install'));
+            return $this->failed(Translation::get('PackageRegistrationFailed', null, 'Chamilo\Core\Install'));
         }
         else
         {

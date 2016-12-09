@@ -3,14 +3,12 @@ namespace Chamilo\Libraries\Format\NotificationMessage;
 
 /**
  * Value object to describe a notification message
- *
+ * 
  * @package Chamilo\Libraries\Format
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Sven Vanpoucke - Hogeschool Gent
- *
  */
 class NotificationMessage
 {
@@ -20,23 +18,27 @@ class NotificationMessage
     const TYPE_DANGER = 'danger';
 
     /**
+     *
      * @var string
      */
     protected $type;
 
     /**
+     *
      * @var string
      */
     protected $message;
 
     /**
-     * A category for the message. Can be used to limit the number of messages of the same category.
-     *
+     * A category for the message.
+     * Can be used to limit the number of messages of the same category.
+     * 
      * @var string
      */
     protected $category;
 
     /**
+     *
      * @param string $message
      * @param string $type
      * @param null $category
@@ -49,6 +51,7 @@ class NotificationMessage
     }
 
     /**
+     *
      * @return string
      */
     public function getType()
@@ -57,6 +60,7 @@ class NotificationMessage
     }
 
     /**
+     *
      * @return string
      */
     public function getMessage()
@@ -65,6 +69,7 @@ class NotificationMessage
     }
 
     /**
+     *
      * @return string
      */
     public function getCategory()
@@ -73,6 +78,7 @@ class NotificationMessage
     }
 
     /**
+     *
      * @param string $message
      * @param string $category
      *
@@ -80,10 +86,11 @@ class NotificationMessage
      */
     public static function confirm($message, $category = null)
     {
-        return new self($message, self :: TYPE_SUCCESS, $category);
+        return new self($message, self::TYPE_SUCCESS, $category);
     }
 
     /**
+     *
      * @param string $message
      * @param string $category
      *
@@ -91,10 +98,11 @@ class NotificationMessage
      */
     public static function normal($message, $category = null)
     {
-        return new self($message, self :: TYPE_INFO, $category);
+        return new self($message, self::TYPE_INFO, $category);
     }
 
     /**
+     *
      * @param string $message
      * @param string $category
      *
@@ -102,10 +110,11 @@ class NotificationMessage
      */
     public static function warning($message, $category = null)
     {
-        return new self($message, self :: TYPE_WARNING, $category);
+        return new self($message, self::TYPE_WARNING, $category);
     }
 
     /**
+     *
      * @param string $message
      * @param string $category
      *
@@ -113,6 +122,6 @@ class NotificationMessage
      */
     public static function error($message, $category = null)
     {
-        return new self($message, self :: TYPE_DANGER, $category);
+        return new self($message, self::TYPE_DANGER, $category);
     }
 }

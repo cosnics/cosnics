@@ -17,7 +17,7 @@ class ToolbarMemoryComponent extends \Chamilo\Libraries\Ajax\Manager
     {
         $state = $_POST['state'];
         $_SESSION['toolbar_state'] = $state;
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Task :: class_name();
+        return Task::class_name();
     }
 }

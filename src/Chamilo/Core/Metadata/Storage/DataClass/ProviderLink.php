@@ -26,7 +26,7 @@ class ProviderLink extends DataClass
      * @var \Chamilo\Core\Metadata\Storage\DataClass\Element
      */
     private $element;
-
+    
     /**
      * **************************************************************************************************************
      * Properties *
@@ -41,21 +41,21 @@ class ProviderLink extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self :: PROPERTY_ELEMENT_ID;
-        $extended_property_names[] = self :: PROPERTY_PROVIDER_REGISTRATION_ID;
-
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
+        $extended_property_names[] = self::PROPERTY_ELEMENT_ID;
+        $extended_property_names[] = self::PROPERTY_PROVIDER_REGISTRATION_ID;
+        
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -63,14 +63,14 @@ class ProviderLink extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return string
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -79,7 +79,7 @@ class ProviderLink extends DataClass
      */
     public function set_entity_type($entityType)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -88,7 +88,7 @@ class ProviderLink extends DataClass
      */
     public function get_element_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ELEMENT_ID);
+        return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
     }
 
     /**
@@ -99,9 +99,9 @@ class ProviderLink extends DataClass
     {
         if (! isset($this->element))
         {
-            $this->element = DataManager :: retrieve_by_id(Element :: class_name(), $this->get_element_id());
+            $this->element = DataManager::retrieve_by_id(Element::class_name(), $this->get_element_id());
         }
-
+        
         return $this->element;
     }
 
@@ -111,7 +111,7 @@ class ProviderLink extends DataClass
      */
     public function set_element_id($elementId)
     {
-        $this->set_default_property(self :: PROPERTY_ELEMENT_ID, $elementId);
+        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $elementId);
     }
 
     /**
@@ -120,7 +120,7 @@ class ProviderLink extends DataClass
      */
     public function get_provider_registration_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PROVIDER_REGISTRATION_ID);
+        return $this->get_default_property(self::PROPERTY_PROVIDER_REGISTRATION_ID);
     }
 
     /**
@@ -129,7 +129,7 @@ class ProviderLink extends DataClass
      */
     public function set_provider_registration_id($providerRegistrationId)
     {
-        $this->set_default_property(self :: PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
+        $this->set_default_property(self::PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
     }
 
     /**
@@ -140,11 +140,11 @@ class ProviderLink extends DataClass
     {
         if (! isset($this->providerRegistration))
         {
-            $this->providerRegistration = DataManager :: retrieve_by_id(
-                ProviderRegistration :: class_name(),
+            $this->providerRegistration = DataManager::retrieve_by_id(
+                ProviderRegistration::class_name(), 
                 $this->get_provider_registration_id());
         }
-
+        
         return $this->providerRegistration;
     }
 }

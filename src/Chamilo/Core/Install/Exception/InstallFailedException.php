@@ -3,7 +3,7 @@ namespace Chamilo\Core\Install\Exception;
 
 /**
  * Exception when the installation failes
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -12,7 +12,7 @@ class InstallFailedException extends \Exception
 
     /**
      * The package of which the installation fails
-     *
+     * 
      * @var string
      */
     private $package;
@@ -25,7 +25,7 @@ class InstallFailedException extends \Exception
 
     /**
      * Constructor
-     *
+     * 
      * @param string $package
      * @param string $message
      */
@@ -33,13 +33,13 @@ class InstallFailedException extends \Exception
     {
         $this->package = $package;
         $this->previousResults = $previousResults;
-
-        parent :: __construct($message);
+        
+        parent::__construct($message);
     }
 
     /**
      * Returns the package name
-     *
+     * 
      * @return string
      */
     public function getPackage()
@@ -49,7 +49,7 @@ class InstallFailedException extends \Exception
 
     /**
      * Sets the package name
-     *
+     * 
      * @param $package
      */
     public function setPackage($package)

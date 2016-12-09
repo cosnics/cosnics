@@ -22,16 +22,16 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
 
     /**
      * Runs this component
-     *
+     * 
      * @throws \Exception
      */
     public function run()
     {
         $user = $this->getUserFromRequest();
-
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::get_instance());
+        
+        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
         $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
-
+        
         return $userPictureProvider->downloadUserPicture($user, $this->getUser());
     }
 

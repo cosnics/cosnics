@@ -24,10 +24,10 @@ class MonthRenderer extends FullTableRenderer
     public function initializeCalendar()
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self :: PARAM_TIME] = MonthCalendar :: TIME_PLACEHOLDER;
-        $displayParameters[self :: PARAM_TYPE] = self :: TYPE_DAY;
+        $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
         $dayUrlTemplate = new Redirect($displayParameters);
-
+        
         return new MonthCalendar($this->getDisplayTime(), $dayUrlTemplate->getUrl(), array('table-calendar-month'));
     }
 
@@ -38,38 +38,38 @@ class MonthRenderer extends FullTableRenderer
     public function renderFullCalendar()
     {
         $calendar = $this->getCalendar();
-
+        
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
-
+        
         $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
-
+        
         while ($tableDate <= $endTime)
         {
             $nextTableDate = strtotime('+1 Day', $tableDate);
-
+            
             foreach ($events as $index => $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
-
+                
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-
+                    
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
-
+                    
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-
+            
             $tableDate = $nextTableDate;
         }
-
+        
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
@@ -79,7 +79,7 @@ class MonthRenderer extends FullTableRenderer
      */
     public function renderTitle()
     {
-        return Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
              date('Y', $this->getDisplayTime());
     }
 

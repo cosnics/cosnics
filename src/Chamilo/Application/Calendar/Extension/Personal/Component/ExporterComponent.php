@@ -24,22 +24,22 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        $id = Request :: get(self :: PARAM_PUBLICATION_ID);
+        $id = Request::get(self::PARAM_PUBLICATION_ID);
         if ($id)
         {
-            $calendar_event_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
-
+            $calendar_event_publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
+            
             $parameters = new ExportParameters(
-                $this->get_user_id(),
-                ContentObjectExport :: FORMAT_ICAL,
+                $this->get_user_id(), 
+                ContentObjectExport::FORMAT_ICAL, 
                 array($calendar_event_publication->get_content_object_id()));
-            $exporter = ContentObjectExportController :: factory($parameters);
+            $exporter = ContentObjectExportController::factory($parameters);
             $exporter->download();
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation :: get('NoObjectsSelected', null, Utilities :: COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES)));
         }
     }
 }

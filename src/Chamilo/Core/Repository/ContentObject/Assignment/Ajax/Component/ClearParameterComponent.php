@@ -15,47 +15,47 @@ use Chamilo\Libraries\Platform\Session\Session;
 class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager
 {
     const PARAM_PARAMETER = 'parameter';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETER);
+        return array(self::PARAM_PARAMETER);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
-        $parameter = $this->getPostDataValue(self :: PARAM_PARAMETER);
+        $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
         
-        $session = unserialize(Session :: retrieve('advanced_filter'));
+        $session = unserialize(Session::retrieve('advanced_filter'));
         
         if ($parameter[1] == 'assignment')
         {
             switch ($parameter[2])
             {
                 case 'start_time' :
-                    unset($session[Assignment :: PROPERTY_START_TIME]);
+                    unset($session[Assignment::PROPERTY_START_TIME]);
                     break;
                 case 'end_time' :
-                    unset($session[Assignment :: PROPERTY_END_TIME]);
+                    unset($session[Assignment::PROPERTY_END_TIME]);
                     break;
                 case 'time' :
-                    unset($session[Assignment :: PROPERTY_START_TIME]);
-                    unset($session[Assignment :: PROPERTY_END_TIME]);
+                    unset($session[Assignment::PROPERTY_START_TIME]);
+                    unset($session[Assignment::PROPERTY_END_TIME]);
                     break;
             }
             
-            Session :: register('advanced_filter', serialize($session));
-            JsonAjaxResult :: success();
+            Session::register('advanced_filter', serialize($session));
+            JsonAjaxResult::success();
         }
         else
         {
-            JsonAjaxResult :: bad_request();
+            JsonAjaxResult::bad_request();
         }
     }
 }

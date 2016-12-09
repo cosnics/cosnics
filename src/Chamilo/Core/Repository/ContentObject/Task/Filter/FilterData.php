@@ -11,11 +11,11 @@ use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 {
     // Available type filters
-    const FILTER_START_DATE = Task :: PROPERTY_START_DATE;
-    const FILTER_DUE_DATE = Task :: PROPERTY_DUE_DATE;
-    const FILTER_FREQUENCY = Task :: PROPERTY_FREQUENCY;
-    const FILTER_CATEGORY = Task :: PROPERTY_CATEGORY;
-    const FILTER_PRIORITY = Task :: PROPERTY_PRIORITY;
+    const FILTER_START_DATE = Task::PROPERTY_START_DATE;
+    const FILTER_DUE_DATE = Task::PROPERTY_DUE_DATE;
+    const FILTER_FREQUENCY = Task::PROPERTY_FREQUENCY;
+    const FILTER_CATEGORY = Task::PROPERTY_CATEGORY;
+    const FILTER_PRIORITY = Task::PROPERTY_PRIORITY;
 
     /**
      * Determine whether one or more of the parameters were set
@@ -24,9 +24,9 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function is_set()
     {
-        return parent :: is_set() || $this->has_filter_property(self :: FILTER_FREQUENCY) ||
-             $this->has_date(self :: FILTER_START_DATE) || $this->has_date(self :: FILTER_DUE_DATE) ||
-             $this->has_date(self :: FILTER_CATEGORY) || $this->has_date(self :: FILTER_PRIORITY);
+        return parent::is_set() || $this->has_filter_property(self::FILTER_FREQUENCY) ||
+             $this->has_date(self::FILTER_START_DATE) || $this->has_date(self::FILTER_DUE_DATE) ||
+             $this->has_date(self::FILTER_CATEGORY) || $this->has_date(self::FILTER_PRIORITY);
     }
 
     /**
@@ -36,13 +36,13 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_filter_properties($filter_properties = array())
     {
-        $filter_properties[] = self :: FILTER_START_DATE;
-        $filter_properties[] = self :: FILTER_DUE_DATE;
-        $filter_properties[] = self :: FILTER_FREQUENCY;
-        $filter_properties[] = self :: FILTER_CATEGORY;
-        $filter_properties[] = self :: FILTER_PRIORITY;
+        $filter_properties[] = self::FILTER_START_DATE;
+        $filter_properties[] = self::FILTER_DUE_DATE;
+        $filter_properties[] = self::FILTER_FREQUENCY;
+        $filter_properties[] = self::FILTER_CATEGORY;
+        $filter_properties[] = self::FILTER_PRIORITY;
         
-        return parent :: get_filter_properties($filter_properties);
+        return parent::get_filter_properties($filter_properties);
     }
 
     /**
@@ -51,7 +51,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function has_start_date()
     {
-        return $this->has_date(self :: FILTER_START_DATE);
+        return $this->has_date(self::FILTER_START_DATE);
     }
 
     /**
@@ -60,7 +60,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function has_due_date()
     {
-        return $this->has_date(self :: FILTER_DUE_DATE);
+        return $this->has_date(self::FILTER_DUE_DATE);
     }
 
     /**
@@ -70,7 +70,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_start_date($type = self :: FILTER_FROM_DATE)
     {
-        return $this->get_date(self :: FILTER_START_DATE, $type);
+        return $this->get_date(self::FILTER_START_DATE, $type);
     }
 
     /**
@@ -80,6 +80,6 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_due_date($type = self :: FILTER_FROM_DATE)
     {
-        return $this->get_date(self :: FILTER_DUE_DATE, $type);
+        return $this->get_date(self::FILTER_DUE_DATE, $type);
     }
 }

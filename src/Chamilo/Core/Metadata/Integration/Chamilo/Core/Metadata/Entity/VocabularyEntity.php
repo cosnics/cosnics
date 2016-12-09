@@ -21,7 +21,7 @@ class VocabularyEntity extends DataClassEntity
      */
     public function getType()
     {
-        return Translation :: get('Vocabulary', null, 'Chamilo\Core\Metadata');
+        return Translation::get('Vocabulary', null, 'Chamilo\Core\Metadata');
     }
 
     /**
@@ -30,7 +30,7 @@ class VocabularyEntity extends DataClassEntity
      */
     public function getIcon($size = Theme::ICON_MINI)
     {
-        return Theme :: getInstance()->getImage('Logo/' . $size, 'png', $this->getType());
+        return Theme::getInstance()->getImage('Logo/' . $size, 'png', $this->getType());
     }
 
     /**
@@ -39,6 +39,6 @@ class VocabularyEntity extends DataClassEntity
      */
     public function getDisplayName()
     {
-        return $this->getDataClass()->getTranslationByIsocode(Translation :: getInstance()->getLanguageIsocode());
+        return $this->getDataClass()->getTranslationByIsocode(Translation::getInstance()->getLanguageIsocode());
     }
 }

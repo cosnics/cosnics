@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * A table which represents all users which have portfolios published
- *
+ * 
  * @package application\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -20,22 +20,22 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      * Returns the implemented form actions
-     *
+     * 
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(Manager::context(), Manager::PARAM_FAVOURITE_USER_ID);
-
+        
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(
-                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
-                        Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
-                Translation::getInstance()->getTranslation('CreateFavourites', null, Manager::context()),
+                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES, 
+                        Manager::PARAM_ACTION => Manager::ACTION_CREATE)), 
+                Translation::getInstance()->getTranslation('CreateFavourites', null, Manager::context()), 
                 false));
-
+        
         return $actions;
     }
 }

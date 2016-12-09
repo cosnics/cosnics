@@ -13,6 +13,6 @@ class LastAccessToToolsPlatformBlock extends ToolAccessBlock
      */
     public function retrieve_course_summary_data()
     {
-        return WeblcmsTrackingDataManager :: retrieve_tools_access_summary_data();
+        return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data();
     }
 }

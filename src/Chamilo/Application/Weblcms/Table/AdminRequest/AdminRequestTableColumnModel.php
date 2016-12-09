@@ -23,15 +23,15 @@ class AdminRequestTableColumnModel extends DataClassTableColumnModel implements 
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(self :: USER_NAME));
-        $this->add_column(new StaticTableColumn(self :: COURSE_NAME));
+        $this->add_column(new StaticTableColumn(self::USER_NAME));
+        $this->add_column(new StaticTableColumn(self::COURSE_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseRequest :: class_name(), CourseRequest :: PROPERTY_SUBJECT));
+            new DataClassPropertyTableColumn(CourseRequest::class_name(), CourseRequest::PROPERTY_SUBJECT));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseRequest :: class_name(), CourseRequest :: PROPERTY_MOTIVATION));
+            new DataClassPropertyTableColumn(CourseRequest::class_name(), CourseRequest::PROPERTY_MOTIVATION));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseRequest :: class_name(), CourseRequest :: PROPERTY_CREATION_DATE));
+            new DataClassPropertyTableColumn(CourseRequest::class_name(), CourseRequest::PROPERTY_CREATION_DATE));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION_DATE));
+            new DataClassPropertyTableColumn(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION_DATE));
     }
 }

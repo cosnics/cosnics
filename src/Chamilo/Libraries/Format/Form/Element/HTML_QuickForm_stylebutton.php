@@ -29,21 +29,20 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @param string $value
      * @param string $glyph
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null,
-        $glyph = null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = null)
     {
-        HTML_QuickForm_element :: __construct($elementName, null, $attributes);
-
+        HTML_QuickForm_element::__construct($elementName, null, $attributes);
+        
         $defaultAttributes = array();
         $defaultAttributes[] = 'btn';
         $defaultAttributes[] = 'btn-default';
         $defaultAttributes[] = $this->getAttribute('class');
-
+        
         $this->setAttribute('class', implode(' ', $defaultAttributes));
-
+        
         $this->styleButtonLabel = $elementLabel;
         $this->glyph = $glyph;
-
+        
         if (isset($value))
         {
             $this->setValue($value);
@@ -140,22 +139,22 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         else
         {
             $html = array();
-
+            
             $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
-
+            
             if ($this->getGlyph())
             {
                 $html[] = $this->_getTabs() . '<span class="glyphicon glyphicon-' . $this->getGlyph() .
                      '" aria-hidden="true"></span>' . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
             }
-
+            
             if ($this->getStyleButtonLabel())
             {
                 $html[] = $this->_getTabs() . $this->getStyleButtonLabel();
             }
-
+            
             $html[] = $this->_getTabs() . '</button>';
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -179,7 +178,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         $type = $this->getType();
         if (('updateValue' != $event) || ('submit' != $type && 'reset' != $type && 'button' != $type))
         {
-            parent :: onQuickFormEvent($event, $arg, $caller);
+            parent::onQuickFormEvent($event, $arg, $caller);
         }
         else
         {
@@ -209,7 +208,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
         else
         {
-            return parent :: exportValue($submitValues, $assoc);
+            return parent::exportValue($submitValues, $assoc);
         }
     }
 }

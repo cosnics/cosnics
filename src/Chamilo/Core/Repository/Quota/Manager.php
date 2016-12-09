@@ -15,5 +15,5 @@ abstract class Manager extends Application
     const ACTION_DENY = 'Denier';
     const ACTION_GRANT = 'Granter';
     const ACTION_RIGHTS = 'Rights';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

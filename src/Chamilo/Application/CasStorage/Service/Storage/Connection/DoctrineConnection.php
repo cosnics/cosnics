@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\CasStorage\Service\Storage\Connection;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\Common\ClassLoader;
 
@@ -31,22 +31,23 @@ class DoctrineConnection extends \Chamilo\Libraries\Storage\DataManager\Doctrine
      */
     private function __construct($connection = null)
     {
-        $classLoader = new ClassLoader('Doctrine', Path :: getInstance()->getPluginPath());
+        $classLoader = new ClassLoader('Doctrine', Path::getInstance()->getPluginPath());
         $classLoader->register();
         
         if (is_null($connection))
         {
-            $cas_dbms = PlatformSetting :: get('dbms', \Chamilo\Application\CasStorage\Account\Manager :: context());
-            $cas_user = PlatformSetting :: get('user', \Chamilo\Application\CasStorage\Account\Manager :: context());
-            $cas_password = PlatformSetting :: get(
-                'password', 
-                \Chamilo\Application\CasStorage\Account\Manager :: context());
-            $cas_host = PlatformSetting :: get('host', \Chamilo\Application\CasStorage\Account\Manager :: context());
-            $cas_database = PlatformSetting :: get(
-                'database', 
-                \Chamilo\Application\CasStorage\Account\Manager :: context());
+            $cas_dbms = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Application\CasStorage\Service\Manager::context(), 'dbms'));
+            $cas_user = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Application\CasStorage\Service\Manager::context(), 'user'));
+            $cas_password = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Application\CasStorage\Service\Manager::context(), 'password'));
+            $cas_host = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Application\CasStorage\Service\Manager::context(), 'host'));
+            $cas_database = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Application\CasStorage\Service\Manager::context(), 'database'));
             
-            $data_source_name = DataSourceName :: factory(
+            $data_source_name = DataSourceName::factory(
                 'doctrine', 
                 $cas_dbms, 
                 $cas_user, 
@@ -61,7 +62,7 @@ class DoctrineConnection extends \Chamilo\Libraries\Storage\DataManager\Doctrine
                 'password' => $data_source_name->get_password(), 
                 'host' => $data_source_name->get_host(), 
                 'driverClass' => $data_source_name->get_driver(true));
-            $this->connection = \Doctrine\DBAL\DriverManager :: getConnection($connection_parameters, $configuration);
+            $this->connection = \Doctrine\DBAL\DriverManager::getConnection($connection_parameters, $configuration);
         }
         else
         {
@@ -74,18 +75,18 @@ class DoctrineConnection extends \Chamilo\Libraries\Storage\DataManager\Doctrine
      * 
      * @return Connection The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     public static function set_instance($connection)
     {
-        self :: $instance = new self($connection);
+        self::$instance = new self($connection);
     }
 
     /**

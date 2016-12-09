@@ -109,25 +109,25 @@ class TabRenderer
     {
         $tab = $this->getTab();
         $request = $this->getApplication()->getRequest();
-
+        
         $html = array();
-
+        
         $html[] = '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' .
              $tab->getId() . '">';
-
+        
         $columns = $this->getHomeService()->getElements(
-            $this->getApplication()->getUser(),
-            Column :: class_name(),
+            $this->getApplication()->getUser(), 
+            Column::class_name(), 
             $tab->getId());
-
+        
         foreach ($columns as $column)
         {
             $columnRenderer = new ColumnRenderer($this->getApplication(), $this->getHomeService(), $column);
             $html[] = $columnRenderer->render();
         }
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

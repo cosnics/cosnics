@@ -20,34 +20,35 @@ class Table extends Html
     public function get_content()
     {
         $block = $this->get_block();
-
+        
         $reporting_data = $block->get_data();
-
+        
         $parameters = $this->get_context()->get_context()->get_parameters();
-        $parameters[Manager :: PARAM_BLOCK_ID] = $this->get_block()->get_id();
-        $parameters[Manager :: PARAM_VIEWS] = $this->get_view();
-
+        $parameters[Manager::PARAM_BLOCK_ID] = $this->get_block()->get_id();
+        $parameters[Manager::PARAM_VIEWS] = $this->get_view();
+        
         $headers = array();
-
+        
         if ($reporting_data->is_categories_visible())
         {
             $headers[] = new StaticTableColumn(); // $this->th_attributes, $this->td_attributes);
         }
-
+        
         foreach ($reporting_data->get_rows() as $row)
         {
-            $headers[] = new SortableStaticTableColumn($row, $row); // , true, $this->th_attributes, $this->td_attributes);
+            $headers[] = new SortableStaticTableColumn($row, $row); // , true, $this->th_attributes,
+                                                                    // $this->td_attributes);
         }
-
+        
         $table = new SortableTableFromArray(
-            $this->convert_reporting_data($reporting_data),
-            $headers,
-            $parameters,
-            $this->column,
-            20,
-            $this->direction,
-            ClassnameUtilities :: getInstance()->getClassnameFromObject($block, true));
-
+            $this->convert_reporting_data($reporting_data), 
+            $headers, 
+            $parameters, 
+            $this->column, 
+            20, 
+            $this->direction, 
+            ClassnameUtilities::getInstance()->getClassnameFromObject($block, true));
+        
         return $table->toHtml();
     }
 

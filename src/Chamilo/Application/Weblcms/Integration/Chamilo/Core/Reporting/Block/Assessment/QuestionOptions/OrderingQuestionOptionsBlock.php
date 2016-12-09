@@ -25,11 +25,11 @@ class OrderingQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
         
         $reporting_data->set_rows(
             array(
-                Translation :: get('Answer'), 
-                Translation :: get('Order'), 
-                Translation :: get('Correct'), 
-                Translation :: get('TimesChosen'), 
-                Translation :: get('DifficultyIndex')));
+                Translation::get('Answer'), 
+                Translation::get('Order'), 
+                Translation::get('Correct'), 
+                Translation::get('TimesChosen'), 
+                Translation::get('DifficultyIndex')));
         
         $question = $this->get_question();
         $options = $question->get_options();
@@ -49,7 +49,7 @@ class OrderingQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
                 $answers_count[$option_index + 1][$option->get_order()], 
                 $total_attempts);
             
-            $reporting_data->add_data_category_row($row_count, Translation :: get('Order'), $option->get_order());
+            $reporting_data->add_data_category_row($row_count, Translation::get('Order'), $option->get_order());
             
             $row_count ++;
         }

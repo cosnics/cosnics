@@ -24,7 +24,7 @@ class UserEntityFeedComponent extends UsersFeedComponent
     protected function get_element_for_user($user)
     {
         return new AdvancedElementFinderElement(
-            UserEntity :: ENTITY_TYPE . '_' . $user->get_id(), 
+            UserEntity::ENTITY_TYPE . '_' . $user->get_id(), 
             'type type_user', 
             $user->get_fullname(), 
             $user->get_official_code());

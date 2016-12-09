@@ -4,8 +4,9 @@ namespace Chamilo\Libraries\Platform;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -29,7 +30,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      */
     public function getIdentifiers()
     {
-        return array_keys(Configuration :: get_instance()->getLanguages());
+        return array_keys(Configuration::getInstance()->getLanguages());
     }
 
     /**
@@ -49,7 +50,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
     {
         if (! isset($this->internationalizationContexts))
         {
-            $internationalizationBundles = new InternationalizationBundles(PackageList :: ROOT);
+            $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
             $this->internationalizationContexts = $internationalizationBundles->getPackageNamespaces();
         }
 
@@ -64,7 +65,8 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      */
     private function getInternationalizationPath($context, $isocode)
     {
-        return Path :: getInstance()->getI18nPath($context) . $isocode . '.i18n';
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        return $pathBuilder->getI18nPath($context) . $isocode . '.i18n';
     }
 
     /**

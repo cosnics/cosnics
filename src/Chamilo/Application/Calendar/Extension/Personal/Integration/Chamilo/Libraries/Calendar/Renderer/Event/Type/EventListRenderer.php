@@ -23,11 +23,11 @@ class EventListRenderer extends \Chamilo\Core\Repository\Integration\Chamilo\Lib
     function getAttachmentLink(Event $event, ContentObject $attachment)
     {
         $parameters = array(
-            Application :: PARAM_CONTEXT => $event->getContext(),
-            Application :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_VIEW_ATTACHMENT,
-            \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID => $event->getId(),
-            \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_OBJECT => $attachment->get_id());
-
+            Application::PARAM_CONTEXT => $event->getContext(), 
+            Application::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW_ATTACHMENT, 
+            \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $event->getId(), 
+            \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_OBJECT => $attachment->get_id());
+        
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }

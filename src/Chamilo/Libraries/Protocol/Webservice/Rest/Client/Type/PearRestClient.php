@@ -12,9 +12,9 @@ class PearRestClient extends RestClient
 
     public function __construct($base_url)
     {
-        parent :: __construct($base_url);
-        $this->set_mode(self :: MODE_PEAR);
-
+        parent::__construct($base_url);
+        $this->set_mode(self::MODE_PEAR);
+        
         $this->set_check_target_certificate(false);
     }
 
@@ -25,21 +25,21 @@ class PearRestClient extends RestClient
         $result->set_request_http_method($this->get_method());
         $result->set_request_sent_data($this->get_data());
         $result->set_request_url($this->get_url());
-
+        
         $request_properties = array();
         $request_properties['method'] = $this->get_http_method();
         $request_properties['user'] = $this->get_basic_login();
         $request_properties['pass'] = $this->get_basic_password();
-
+        
         $request = new \HTTP_Request($this->get_url(), $request_properties);
-
+        
         /*
          * addition
          */
         // possibly set a proxy
         if ($proxy = $this->get_proxy())
             $request->setProxy($proxy['server'], $proxy['port']);
-
+            
             // add data
         if ($this->has_data())
         {
@@ -65,12 +65,12 @@ class PearRestClient extends RestClient
                     if (count($values) > 0)
                     {
                         $file_path = $values[0];
-
-                        if ((string) StringUtilities :: getInstance()->createString($file_path)->startsWith('@'))
+                        
+                        if ((string) StringUtilities::getInstance()->createString($file_path)->startsWith('@'))
                         {
                             $file_path = substr($file_path, 1);
                         }
-
+                        
                         if (file_exists($file_path))
                         {
                             /*
@@ -87,7 +87,7 @@ class PearRestClient extends RestClient
                      */
                     $file_content = $data_to_send['file'];
                 }
-
+                
                 $request->setBody($file_content);
             }
             /*
@@ -100,7 +100,7 @@ class PearRestClient extends RestClient
                     $request->addPostData($key, $value);
                 }
             }
-
+            
             /*
              * If the mime type is given as a parameter, we use it to set the content-type request
              */
@@ -108,12 +108,12 @@ class PearRestClient extends RestClient
             {
                 $request->addHeader('Content-type', $data_to_send['mime']);
             }
-
+            
             /*
              * addition
              */
-            /*add additional headers*/
-
+            /* add additional headers */
+            
             if (is_array($this->get_header_data()))
             {
                 foreach ($this->get_header_data() as $n => $header)
@@ -122,7 +122,7 @@ class PearRestClient extends RestClient
                 }
             }
         }
-
+        
         $req_result = $request->sendRequest(true);
         if ($req_result === true)
         {
@@ -139,7 +139,7 @@ class PearRestClient extends RestClient
             $result->set_response_http_code($request->getResponseCode());
             $result->set_response_error($request->getResponseReason());
         }
-
+        
         return $result;
     }
 

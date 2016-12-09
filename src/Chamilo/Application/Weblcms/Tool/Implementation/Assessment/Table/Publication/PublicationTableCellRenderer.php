@@ -34,11 +34,11 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     {
         switch ($column->get_name())
         {
-            case ContentObject :: PROPERTY_TYPE :
+            case ContentObject::PROPERTY_TYPE :
                 {
-                    $type = Translation :: get('TypeName', $publication[ContentObject :: PROPERTY_TYPE]);
+                    $type = Translation::get('TypeName', $publication[ContentObject::PROPERTY_TYPE]);
                     
-                    if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
+                    if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
                     {
                         return '<span style="color: gray">' . $type . '</span>';
                     }
@@ -49,20 +49,20 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                     
                     break;
                 }
-            case ContentObject :: PROPERTY_TITLE :
+            case ContentObject::PROPERTY_TITLE :
                 {
-                    if ($publication[ContentObject :: PROPERTY_TYPE] == Hotpotatoes :: class_name())
+                    if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class_name())
                     {
                         $details_url = $this->get_component()->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
                         
                         return '<a href="' . $details_url . '">' . $publication[ContentObject::PROPERTY_TITLE] . '</a>';
                     }
                 }
         }
         
-        return parent :: render_cell($column, $publication);
+        return parent::render_cell($column, $publication);
     }
 }

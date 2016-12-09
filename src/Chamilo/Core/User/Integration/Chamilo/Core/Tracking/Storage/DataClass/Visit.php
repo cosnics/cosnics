@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class tracks the visits to pages
- *
+ * 
  * @package users.lib.trackers
  */
 class Visit extends SimpleTracker
@@ -23,27 +23,27 @@ class Visit extends SimpleTracker
 
     public function validate_parameters(array $parameters = array())
     {
-        if (isset($parameters[self :: PROPERTY_USER_ID]))
-            $this->set_user_id($parameters[self :: PROPERTY_USER_ID]);
-        if (isset($parameters[self :: PROPERTY_LOCATION]))
-            $this->set_location($parameters[self :: PROPERTY_LOCATION]);
-        if (isset($parameters[self :: PROPERTY_ID]))
-            $this->set_id($parameters[self :: PROPERTY_ID]);
+        if (isset($parameters[self::PROPERTY_USER_ID]))
+            $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
+        if (isset($parameters[self::PROPERTY_LOCATION]))
+            $this->set_location($parameters[self::PROPERTY_LOCATION]);
+        if (isset($parameters[self::PROPERTY_ID]))
+            $this->set_id($parameters[self::PROPERTY_ID]);
     }
 
     public function run(array $parameters = array())
     {
         $this->validate_parameters($parameters);
         $type = $this->get_event()->getType();
-
+        
         switch ($type)
         {
             default :
                 break;
-            case self :: TYPE_ENTER :
+            case self::TYPE_ENTER :
                 $this->track_enter($parameters);
                 break;
-            case self :: TYPE_LEAVE :
+            case self::TYPE_LEAVE :
                 $this->track_leave($parameters);
                 break;
         }
@@ -57,7 +57,7 @@ class Visit extends SimpleTracker
         {
             $tracker_id = $this->get_id();
             $html_header = "<script type=\"text/javascript\">var tracker={$tracker_id};</script>";
-            Page :: getInstance()->getHeader()->addHtmlHeader($html_header);
+            Page::getInstance()->getHeader()->addHtmlHeader($html_header);
         }
     }
 
@@ -80,13 +80,13 @@ class Visit extends SimpleTracker
 
     /**
      * Inherited
-     *
+     * 
      * @see MainTracker :: empty_tracker
      */
     public function empty_tracker()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
             new StaticConditionVariable($this->get_event()->get_name()));
         return $this->remove($condition);
     }
@@ -98,89 +98,89 @@ class Visit extends SimpleTracker
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
             new StaticConditionVariable($event->get_name()));
-        return parent :: export($start_date, $end_date, $conditions);
+        return parent::export($start_date, $end_date, $conditions);
     }
 
     /**
      * Get's the userid of the visit tracker
-     *
+     * 
      * @return int $userid the userid
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
      * Sets the userid of the visit tracker
-     *
+     * 
      * @param int $userid the userid
      */
     public function set_user_id($userid)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $userid);
+        $this->set_default_property(self::PROPERTY_USER_ID, $userid);
     }
 
     /**
      * Get's the enter date of the visit tracker
-     *
+     * 
      * @return int $date the date
      */
     public function get_enter_date()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTER_DATE);
+        return $this->get_default_property(self::PROPERTY_ENTER_DATE);
     }
 
     /**
      * Sets the enter date of the visit tracker
-     *
+     * 
      * @param int $date the date
      */
     public function set_enter_date($value)
     {
-        $this->set_default_property(self :: PROPERTY_ENTER_DATE, $value);
+        $this->set_default_property(self::PROPERTY_ENTER_DATE, $value);
     }
 
     /**
      * Get's the leave date of the visit tracker
-     *
+     * 
      * @return int $date the date
      */
     public function get_leave_date()
     {
-        return $this->get_default_property(self :: PROPERTY_LEAVE_DATE);
+        return $this->get_default_property(self::PROPERTY_LEAVE_DATE);
     }
 
     /**
      * Sets the leave date of the visit tracker
-     *
+     * 
      * @param int $date the date
      */
     public function set_leave_date($value)
     {
-        $this->set_default_property(self :: PROPERTY_LEAVE_DATE, $value);
+        $this->set_default_property(self::PROPERTY_LEAVE_DATE, $value);
     }
 
     /**
      * Get's the location of the visit tracker
-     *
+     * 
      * @return int $ip the ip
      */
     public function get_location()
     {
-        return $this->get_default_property(self :: PROPERTY_LOCATION);
+        return $this->get_default_property(self::PROPERTY_LOCATION);
     }
 
     /**
      * Sets the location of the visit tracker
-     *
+     * 
      * @param int $ip the ip
      */
     public function set_location($value)
     {
-        $this->set_default_property(self :: PROPERTY_LOCATION, $value);
+        $this->set_default_property(self::PROPERTY_LOCATION, $value);
     }
 
     /**
@@ -188,11 +188,11 @@ class Visit extends SimpleTracker
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID,
-                self :: PROPERTY_ENTER_DATE,
-                self :: PROPERTY_LEAVE_DATE,
-                self :: PROPERTY_LOCATION));
+                self::PROPERTY_USER_ID, 
+                self::PROPERTY_ENTER_DATE, 
+                self::PROPERTY_LEAVE_DATE, 
+                self::PROPERTY_LOCATION));
     }
 }

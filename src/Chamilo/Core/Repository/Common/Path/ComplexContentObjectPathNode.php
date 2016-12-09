@@ -118,7 +118,7 @@ abstract class ComplexContentObjectPathNode
      * @param \core\repository\ContentObject $content_object
      * @param multitype:mixed $properties
      */
-    public function __construct($tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id,
+    public function __construct($tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id, 
         ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = array())
     {
         $this->tree = $tree;
@@ -253,10 +253,10 @@ abstract class ComplexContentObjectPathNode
      * Properties functionality
      * *************************************************************************************************************
      */
-
+    
     /**
      * Gets the additional properties of this ComplexContentObjectPathNode
-     *
+     * 
      * @return multitype:mixed
      */
     public function get_properties()
@@ -266,7 +266,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      * Sets the additional properties of this ComplexContentObjectPathNode
-     *
+     * 
      * @param multitype:mixed $properties
      */
     public function set_properties($properties)
@@ -276,7 +276,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      * Gets a additional property of this ComplexContentObjectPathNode object by name.
-     *
+     * 
      * @param $name string The name of the property.
      */
     public function get_property($name)
@@ -286,7 +286,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      * Sets a additional property of this ComplexContentObjectPathNode by name
-     *
+     * 
      * @param string $name
      * @param mixed $value
      */
@@ -352,9 +352,9 @@ abstract class ComplexContentObjectPathNode
     public function get_previous()
     {
         $previous = null;
-
+        
         $previous_sibling = $this->get_previous_sibling();
-
+        
         if ($previous_sibling instanceof ComplexContentObjectPathNode)
         {
             if ($previous_sibling->has_children())
@@ -364,14 +364,14 @@ abstract class ComplexContentObjectPathNode
                     $previous_sibling = array_pop($previous_sibling->get_children());
                 }
             }
-
+            
             $previous = $previous_sibling;
         }
         else
         {
             $previous = $this->get_parent();
         }
-
+        
         return $previous;
     }
 
@@ -407,29 +407,29 @@ abstract class ComplexContentObjectPathNode
     public function get_next()
     {
         $next = null;
-
+        
         if ($this->has_children())
         {
             $next = array_shift($this->get_children());
         }
-
+        
         if (! $next instanceof ComplexContentObjectPathNode)
         {
             $next = $this->get_next_sibling();
         }
-
+        
         if (! $next instanceof ComplexContentObjectPathNode && ! $this->is_root())
         {
             $parent = $this->get_parent();
-
+            
             while (! $parent->is_root() && ! $parent->get_next_sibling() instanceof ComplexContentObjectPathNode)
             {
                 $parent = $parent->get_parent();
             }
-
+            
             $next = $parent->get_next_sibling();
         }
-
+        
         return $next;
     }
 
@@ -443,9 +443,9 @@ abstract class ComplexContentObjectPathNode
     {
         if (! isset($this->parents[$include_self][$reverse]))
         {
-            $this->parents[$include_self][$reverse] = self :: get_node_parents($this, $include_self, $reverse);
+            $this->parents[$include_self][$reverse] = self::get_node_parents($this, $include_self, $reverse);
         }
-
+        
         return $this->parents[$include_self][$reverse];
     }
 
@@ -461,15 +461,15 @@ abstract class ComplexContentObjectPathNode
         {
             $parent_nodes = $this->get_parents($include_self, $reverse);
             $parents_content_object_ids = array();
-
+            
             foreach ($parent_nodes as $parent_node)
             {
                 $parents_content_object_ids[] = $parent_node->get_content_object()->get_id();
             }
-
+            
             $this->parents_content_object_ids[$include_self][$reverse] = $parents_content_object_ids;
         }
-
+        
         return $this->parents_content_object_ids[$include_self][$reverse];
     }
 
@@ -481,9 +481,9 @@ abstract class ComplexContentObjectPathNode
     {
         if (! isset($this->children))
         {
-            $this->children = self :: get_node_children($this);
+            $this->children = self::get_node_children($this);
         }
-
+        
         return $this->children;
     }
 
@@ -495,9 +495,9 @@ abstract class ComplexContentObjectPathNode
     {
         if (! isset($this->descendants))
         {
-            $this->descendants = self :: get_node_descendants($this);
+            $this->descendants = self::get_node_descendants($this);
         }
-
+        
         return $this->descendants;
     }
 
@@ -506,15 +506,15 @@ abstract class ComplexContentObjectPathNode
         if (! isset($this->descendants_content_object_ids))
         {
             $descendants_content_object_ids = array();
-
+            
             foreach ($this->get_descendants() as $descendant_node)
             {
                 $descendants_content_object_ids[] = $descendant_node->get_content_object()->get_id();
             }
-
+            
             $this->descendants_content_object_ids = $descendants_content_object_ids;
         }
-
+        
         return $this->descendants_content_object_ids;
     }
 
@@ -537,7 +537,7 @@ abstract class ComplexContentObjectPathNode
         {
             $children = $this->get_parent()->get_children();
             $this->siblings = array();
-
+            
             foreach ($children as $child)
             {
                 if ($child->get_id() != $this->get_id())
@@ -546,7 +546,7 @@ abstract class ComplexContentObjectPathNode
                 }
             }
         }
-
+        
         return $this->siblings;
     }
 
@@ -558,7 +558,7 @@ abstract class ComplexContentObjectPathNode
     {
         return count($this->get_parent()->get_children()) > 1;
     }
-
+    
     // /**
     // *
     // * @return NULL,\repository\ComplexContentObjectPathNode
@@ -574,7 +574,7 @@ abstract class ComplexContentObjectPathNode
     // return $this->get_tree()->get_node($this->get_id() + 1);
     // }
     // }
-
+    
     // /**
     // *
     // * @return NULL,\repository\ComplexContentObjectPathNode
@@ -590,7 +590,7 @@ abstract class ComplexContentObjectPathNode
     // return $this->get_tree()->get_node($this->get_id() - 1);
     // }
     // }
-
+    
     /**
      *
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
@@ -601,23 +601,23 @@ abstract class ComplexContentObjectPathNode
     public static function get_node_parents(ComplexContentObjectPathNode $node, $include_self = false, $reverse = false)
     {
         $parents = array();
-
+        
         if ($include_self)
         {
             $parents[] = $node;
         }
-
+        
         while ($node->get_parent_id() !== 0)
         {
             $node = $node->get_tree()->get_node($node->get_parent_id());
             $parents[] = $node;
         }
-
+        
         if ($reverse)
         {
             krsort($parents);
         }
-
+        
         return $parents;
     }
 
@@ -629,7 +629,7 @@ abstract class ComplexContentObjectPathNode
     public static function get_node_children(ComplexContentObjectPathNode $parent)
     {
         $children = array();
-
+        
         foreach ($parent->get_tree()->get_nodes() as $node)
         {
             if ($node->get_parent_id() == $parent->get_id())
@@ -637,7 +637,7 @@ abstract class ComplexContentObjectPathNode
                 $children[] = $node;
             }
         }
-
+        
         return $children;
     }
 
@@ -649,16 +649,16 @@ abstract class ComplexContentObjectPathNode
     public static function get_node_descendants(ComplexContentObjectPathNode $parent)
     {
         $descendants = array();
-
+        
         foreach ($parent->get_children() as $child_node)
         {
             $descendants[] = $child_node;
             if ($child_node->has_children())
             {
-                $descendants = array_merge($descendants, self :: get_node_descendants($child_node));
+                $descendants = array_merge($descendants, self::get_node_descendants($child_node));
             }
         }
-
+        
         return $descendants;
     }
 
@@ -669,10 +669,10 @@ abstract class ComplexContentObjectPathNode
      */
     public function forms_cycle_with($content_object_id)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), 
             $content_object_id);
-
+        
         if ($content_object->is_complex_content_object())
         {
             $parent_ids = $this->get_parents_content_object_ids();
@@ -694,20 +694,20 @@ abstract class ComplexContentObjectPathNode
     public function get_fully_qualified_name($include_self = true, $reverse = false)
     {
         $parent_nodes = $this->get_parents($include_self, $reverse);
-
+        
         $node_names = array();
-
+        
         foreach ($parent_nodes as $parent_node)
         {
             $node_names[] = $parent_node->get_content_object()->get_title();
         }
-
+        
         return implode(' > ', $node_names);
     }
 
     /**
      * Get the type of the node expressed as the namespace of the ContentObject it represents
-     *
+     * 
      * @return string
      */
     public function get_type()
@@ -717,7 +717,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      * Get a unique hash based on the unique structural path of the node within the path
-     *
+     * 
      * @return string
      */
     public function get_hash()
@@ -739,18 +739,18 @@ abstract class ComplexContentObjectPathNode
      *
      * @return ComplexContentObjectPathNode
      */
-    public static function factory($type, $tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id,
+    public static function factory($type, $tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id, 
         ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = array())
     {
         $class = $type . '\ComplexContentObjectPathNode';
         return new $class(
-            $tree,
-            $id,
-            $parent_id,
-            $previous_sibling_id,
-            $next_sibling_id,
-            $complex_content_object_item,
-            $content_object,
+            $tree, 
+            $id, 
+            $parent_id, 
+            $previous_sibling_id, 
+            $next_sibling_id, 
+            $complex_content_object_item, 
+            $content_object, 
             $properties);
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Common\Renderer;
 
 use Chamilo\Configuration\Category\Form\ImpactViewForm;
@@ -11,24 +10,32 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Renderer to render the impact viewer
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ImpactViewRenderer implements TableSupport
 {
+
     /**
+     *
      * @var Condition
      */
     private $impact_view_table_condition;
+
     /**
+     *
      * @var ImpactViewForm
      */
     private $form;
+
     /**
+     *
      * @var array
      */
     private $co_ids;
+
     /**
+     *
      * @var \Chamilo\Core\Repository\Manager
      */
     private $parent;
@@ -48,20 +55,16 @@ class ImpactViewRenderer implements TableSupport
         $this->parent = $parent;
         $this->co_ids = $co_ids;
         $this->has_impact = $has_impact;
-
+        
         $this->form = new ImpactViewForm(
             $this->parent->get_url(
-                array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID
-                    => $co_ids
-                )
-            ), $has_impact
-        );
+                array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $co_ids)), 
+            $has_impact);
     }
 
     /**
      * Renders the impact view using the specified condition for content objects.
-     *
+     * 
      * @param Condition $co_condition
      *
      * @return string
@@ -75,16 +78,16 @@ class ImpactViewRenderer implements TableSupport
         else
         {
             $view = '<div class="normal-message">' . Translation::get('NoImpact', array(), 'Chamilo\Core\Repository') .
-                '</div>';
+                 '</div>';
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->parent->render_header();
         $html[] = $view;
         $html[] = $this->form->toHtml();
         $html[] = $this->parent->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -98,15 +101,16 @@ class ImpactViewRenderer implements TableSupport
         return $this->parent->get_url($parameters, $filter, $encode_entities);
     }
 
-    /****************************************************************************************************************
+    /**
+     * **************************************************************************************************************
      * Inherited
-     ****************************************************************************************************************/
-
+     * **************************************************************************************************************
+     */
+    
     /**
      * Get the condition for the impact view table.
-     *
+     * 
      * @param $class_name
-     *
      * @return Condition
      */
     public function get_table_condition($class_name)
@@ -116,26 +120,27 @@ class ImpactViewRenderer implements TableSupport
 
     /**
      * Renders the impact view table.
-     *
+     * 
      * @param $condition
-     *
      * @return string
      */
     private function render_impact_view(Condition $condition)
     {
         $this->impact_view_table_condition = $condition;
         $impact_view_table = new ImpactViewTable($this);
-
+        
         return $impact_view_table->as_html();
     }
 
-    /****************************************************************************************************************
+    /**
+     * **************************************************************************************************************
      * Impact view table requirements (not in interface)
-     ****************************************************************************************************************/
-
+     * **************************************************************************************************************
+     */
+    
     /**
      * Returns the url to the content object preview.
-     *
+     * 
      * @param ContentObject $content_object
      *
      * @return string
@@ -144,11 +149,9 @@ class ImpactViewRenderer implements TableSupport
     {
         return $this->parent->get_url(
             array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS,
-                \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
-                \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => $content_object->get_parent_id()
-            )
-        );
+                \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS, 
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                \Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
     }
 }
 

@@ -21,33 +21,33 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
     {
         $publication = $this->get_component()->getCurrentPublication();
         
-        $this->add_column(new StaticTableColumn(self :: COLUMN_ENTITY));
+        $this->add_column(new StaticTableColumn(self::COLUMN_ENTITY));
         
         if ($publication->getId() == 0)
         {
             $this->add_column(
                 new StaticTableColumn(
-                    RightsService :: RIGHT_PUBLISH, 
-                    $this->getRightIcon(RightsService :: RIGHT_PUBLISH, 'PublishRight')));
+                    RightsService::RIGHT_PUBLISH, 
+                    $this->getRightIcon(RightsService::RIGHT_PUBLISH, 'PublishRight')));
         }
         else
         {
             $this->add_column(
                 new StaticTableColumn(
-                    RightsService :: RIGHT_TAKE, 
-                    $this->getRightIcon(RightsService :: RIGHT_TAKE, 'TakeRight')));
+                    RightsService::RIGHT_TAKE, 
+                    $this->getRightIcon(RightsService::RIGHT_TAKE, 'TakeRight')));
             $this->add_column(
                 new StaticTableColumn(
-                    RightsService :: RIGHT_MAIL, 
-                    $this->getRightIcon(RightsService :: RIGHT_MAIL, 'MailRight')));
+                    RightsService::RIGHT_MAIL, 
+                    $this->getRightIcon(RightsService::RIGHT_MAIL, 'MailRight')));
             $this->add_column(
                 new StaticTableColumn(
-                    RightsService :: RIGHT_REPORT, 
-                    $this->getRightIcon(RightsService :: RIGHT_REPORT, 'ReportRight')));
+                    RightsService::RIGHT_REPORT, 
+                    $this->getRightIcon(RightsService::RIGHT_REPORT, 'ReportRight')));
             $this->add_column(
                 new StaticTableColumn(
-                    RightsService :: RIGHT_MANAGE, 
-                    $this->getRightIcon(RightsService :: RIGHT_MANAGE, 'ManageRight')));
+                    RightsService::RIGHT_MANAGE, 
+                    $this->getRightIcon(RightsService::RIGHT_MANAGE, 'ManageRight')));
         }
     }
 
@@ -59,13 +59,13 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
      */
     private function getRightIcon($right, $translationVariable)
     {
-        return Theme :: getInstance()->getImage(
+        return Theme::getInstance()->getImage(
             'Rights/' . $right, 
             'png', 
-            Translation :: get($translationVariable), 
+            Translation::get($translationVariable), 
             null, 
-            ToolbarItem :: DISPLAY_ICON, 
+            ToolbarItem::DISPLAY_ICON, 
             false, 
-            \Chamilo\Application\Survey\Manager :: context());
+            \Chamilo\Application\Survey\Manager::context());
     }
 }

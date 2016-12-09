@@ -19,63 +19,63 @@ class UserMail extends DataClass
      */
     static function get_default_property_names()
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID,
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_SEND_DATE,
-                self :: PROPERTY_STATUS,
-                self :: PROPERTY_MAIL_ID));
+                self::PROPERTY_USER_ID, 
+                self::PROPERTY_PUBLICATION_ID, 
+                self::PROPERTY_SEND_DATE, 
+                self::PROPERTY_STATUS, 
+                self::PROPERTY_MAIL_ID));
     }
 
     function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     function get_publication_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     function set_publication_id($publication_id)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     function get_mail_id()
     {
-        return $this->get_default_property(self :: PROPERTY_MAIL_ID);
+        return $this->get_default_property(self::PROPERTY_MAIL_ID);
     }
 
     function set_mail_id($mail_id)
     {
-        $this->set_default_property(self :: PROPERTY_MAIL_ID, $mail_id);
+        $this->set_default_property(self::PROPERTY_MAIL_ID, $mail_id);
     }
 
     function get_send_date()
     {
-        return $this->get_default_property(self :: PROPERTY_SEND_DATE);
+        return $this->get_default_property(self::PROPERTY_SEND_DATE);
     }
 
     function set_send_date($date)
     {
-        $this->set_default_property(self :: PROPERTY_SEND_DATE, $date);
+        $this->set_default_property(self::PROPERTY_SEND_DATE, $date);
     }
 
     function get_status()
     {
-        return $this->get_default_property(self :: PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_STATUS);
     }
 
     function set_status($status)
     {
-        $this->set_default_property(self :: PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 }
 ?>

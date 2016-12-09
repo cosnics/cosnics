@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 
 /**
  * Feed to return the platform groups for the platform group entity
- *
+ * 
  * @package roup
  * @author Sven Vanpoucke
  */
@@ -21,7 +21,7 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
 
     /**
      * Returns the element for a specific group
-     *
+     * 
      * @param \core\group\Group $group
      *
      * @return AdvancedElementFinderElement
@@ -29,18 +29,18 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
     public function get_group_element($group)
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-
+        
         return new AdvancedElementFinderElement(
-            PlatformGroupEntity :: ENTITY_TYPE . '_' . $group->get_id(),
-            'type type_group',
-            $group->get_name(),
-            $description,
-            AdvancedElementFinderElement :: TYPE_SELECTABLE_AND_FILTER);
+            PlatformGroupEntity::ENTITY_TYPE . '_' . $group->get_id(), 
+            'type type_group', 
+            $group->get_name(), 
+            $description, 
+            AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER);
     }
 
     /**
      * Returns the element for a specific user
-     *
+     * 
      * @param \core\user\storage\data_class\User $user
      *
      * @return AdvancedElementFinderElement
@@ -48,9 +48,9 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
     public function get_user_element($user)
     {
         return new AdvancedElementFinderElement(
-            UserEntity :: ENTITY_TYPE . '_' . $user->get_id(),
-            'type type_user',
-            $user->get_fullname(),
+            UserEntity::ENTITY_TYPE . '_' . $user->get_id(), 
+            'type type_user', 
+            $user->get_fullname(), 
             $user->get_official_code());
     }
 }

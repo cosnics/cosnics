@@ -9,7 +9,7 @@ class BrowserComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
     }
 
     /*
@@ -23,17 +23,17 @@ class BrowserComponent extends Manager
     public function render_header($visible_tools = null, $show_introduction_text = false)
     {
         $html = array();
-
-        $html[] = parent :: render_header($visible_tools, $show_introduction_text);
-
+        
+        $html[] = parent::render_header($visible_tools, $show_introduction_text);
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }

@@ -28,35 +28,35 @@ class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
         $homeRepository = new HomeRepository();
         $homeService = new HomeService($homeRepository, new ElementRightsService($rightsRepository));
         $blockTypeRightsService = new BlockTypeRightsService($rightsRepository, new HomeRepository());
-
-        $platformBlocks = DataManager :: getPlatformBlocks();
-
-        foreach($platformBlocks as $context => &$contextBlocksInfo)
+        
+        $platformBlocks = DataManager::getPlatformBlocks();
+        
+        foreach ($platformBlocks as $context => &$contextBlocksInfo)
         {
             $validComponents = array();
-
+            
             $components = $contextBlocksInfo['components'];
-            foreach($components as $component)
+            foreach ($components as $component)
             {
                 $class = $component['id'];
                 $blockRenderer = new $class($this, $homeService, new Block());
-
-                if($blockTypeRightsService->canUserViewBlockRenderer($this->getUser(), $blockRenderer))
+                
+                if ($blockTypeRightsService->canUserViewBlockRenderer($this->getUser(), $blockRenderer))
                 {
                     $validComponents[] = $component;
                 }
             }
-
+            
             $contextBlocksInfo['components'] = $validComponents;
-
-            if(empty($contextBlocksInfo['components']))
+            
+            if (empty($contextBlocksInfo['components']))
             {
                 unset($platformBlocks[$context]);
             }
         }
-
+        
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_BLOCKS, $platformBlocks);
+        $result->set_property(self::PROPERTY_BLOCKS, $platformBlocks);
         $result->display();
     }
 }

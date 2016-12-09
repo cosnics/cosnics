@@ -26,8 +26,6 @@ class Configuration
 
     private $platform_language = 'english';
 
-    private $base_url = 'http://localhost/chamilo/web';
-
     private $archive_path;
 
     private $cache_path;
@@ -70,8 +68,6 @@ class Configuration
 
     private $crypt_algorithm = 'sha1';
 
-    private $server_type = 'production';
-
     public function __construct()
     {
     }
@@ -92,7 +88,6 @@ class Configuration
         $values['database_password'] = $this->get_db_password();
 
         $values['platform_language'] = $this->get_platform_language();
-        $values['platform_url'] = $this->get_base_url();
         $values['archive_path'] = $this->get_archive_path();
         $values['cache_path'] = $this->get_cache_path();
         $values['garbage_path'] = $this->get_garbage_path();
@@ -118,8 +113,6 @@ class Configuration
         $values['self_reg'] = $this->get_self_register();
 
         $values['hashing_algorithm'] = $this->get_crypt_algorithm();
-
-        $values['server_type'] = $this->get_server_type();
 
         foreach ($this->packages as $package)
         {
@@ -172,10 +165,6 @@ class Configuration
 
         if (isset($values['platform_language']))
             $this->set_platform_language($values['platform_language']);
-        if (isset($values['platform_url']))
-            $this->set_base_url($values['platform_url']);
-        if (isset($values['url_append']))
-            $this->set_url_append($values['url_append']);
 
         if (isset($values['archive_path']))
             $this->set_archive_path($values['archive_path']);
@@ -220,8 +209,6 @@ class Configuration
             $this->set_self_register($values['self_reg']);
         if (isset($values['hashing_algorithm']))
             $this->set_crypt_algorithm($values['hashing_algorithm']);
-        if (isset($values['server_type']))
-            $this->set_server_type($values['server_type']);
 
         $this->set_packages(array_keys((array) $values['install']));
     }
@@ -319,16 +306,6 @@ class Configuration
     public function set_platform_language($platform_language)
     {
         $this->platform_language = $platform_language;
-    }
-
-    public function get_base_url()
-    {
-        return $this->base_url;
-    }
-
-    public function set_base_url($base_url)
-    {
-        $this->base_url = $base_url;
     }
 
     public function get_archive_path()
@@ -529,16 +506,6 @@ class Configuration
     public function set_crypt_algorithm($crypt_algorithm)
     {
         $this->crypt_algorithm = $crypt_algorithm;
-    }
-
-    public function get_server_type()
-    {
-        return $this->server_type;
-    }
-
-    public function set_server_type($server_type)
-    {
-        $this->server_type = $server_type;
     }
 
     public function get_url_append()

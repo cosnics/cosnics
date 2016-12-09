@@ -15,19 +15,19 @@ class ExternalLinkTableColumnModel extends DataClassTableColumnModel implements 
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_IMPLEMENTATION, 
-                Theme :: getInstance()->getImage(
-                    'Logo/' . Theme :: ICON_MINI, 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_IMPLEMENTATION, 
+                Theme::getInstance()->getImage(
+                    'Logo/' . Theme::ICON_MINI, 
                     'png', 
-                    Translation :: get('RepositoryType'), 
+                    Translation::get('RepositoryType'), 
                     null, 
-                    ToolbarItem :: DISPLAY_ICON, 
+                    ToolbarItem::DISPLAY_ICON, 
                     false, 
-                    \Chamilo\Core\Repository\External\Manager :: context())));
+                    \Chamilo\Core\Repository\External\Manager::context())));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(), 
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TITLE));
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TITLE));
     }
 }

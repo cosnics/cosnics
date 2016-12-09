@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="frequently_asked_questions_item">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" />
-		<property name="reference_id" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="id" type="primary">
-		<indexproperty name="id" />
-	</index>
-	<index name="reference_id">
-		<indexproperty name="reference_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="reference_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+    <index name="reference_id">
+        <indexproperty name="reference_id" />
+    </index>
 </object>

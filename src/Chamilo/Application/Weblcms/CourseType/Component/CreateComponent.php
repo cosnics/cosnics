@@ -61,6 +61,6 @@ class CreateComponent extends CourseTypeFormActionComponent
     {
         $breadcrumbtrail->add_help('weblcms_course_type_create');
         $breadcrumbtrail->add(
-            new Breadcrumb($this->get_browse_course_type_url(), Translation :: get('CourseTypeManagerBrowseComponent')));
+            new Breadcrumb($this->get_browse_course_type_url(), Translation::get('CourseTypeManagerBrowseComponent')));
     }
 }

@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\File\Filter\FilterData;
  */
 class ParameterFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\ParameterFilterRenderer
 {
-    
+
     /*
      * (non-PHPdoc) @see \core\repository\filter\renderer\ParameterFilterRenderer::render()
      */
@@ -20,21 +20,21 @@ class ParameterFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\P
         
         switch ($this->get_filter_property())
         {
-            case FilterData :: FILTER_EXTENSION :
-                $filter_data->set_filter_property(FilterData :: FILTER_EXTENSION, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_EXTENSION_TYPE, null);
+            case FilterData::FILTER_EXTENSION :
+                $filter_data->set_filter_property(FilterData::FILTER_EXTENSION, null);
+                $filter_data->set_filter_property(FilterData::FILTER_EXTENSION_TYPE, null);
                 break;
-            case FilterData :: FILTER_EXTENSION_TYPE :
-                $filter_data->set_filter_property(FilterData :: FILTER_EXTENSION, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_EXTENSION_TYPE, null);
+            case FilterData::FILTER_EXTENSION_TYPE :
+                $filter_data->set_filter_property(FilterData::FILTER_EXTENSION, null);
+                $filter_data->set_filter_property(FilterData::FILTER_EXTENSION_TYPE, null);
                 break;
-            case FilterData :: FILTER_FILESIZE :
-                $filter_data->set_filter_property(FilterData :: FILTER_COMPARE, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_FILESIZE, null);
-                $filter_data->set_filter_property(FilterData :: FILTER_FORMAT, null);
+            case FilterData::FILTER_FILESIZE :
+                $filter_data->set_filter_property(FilterData::FILTER_COMPARE, null);
+                $filter_data->set_filter_property(FilterData::FILTER_FILESIZE, null);
+                $filter_data->set_filter_property(FilterData::FILTER_FORMAT, null);
                 break;
         }
         
-        parent :: render();
+        parent::render();
     }
 }

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This represents the component for unsubscribing a forum at forum application level.
- *
+ * 
  * @author Mattias De Pauw - Hogeschool Gent
  * @author Maarten Volckaert - Hogeschool Gent ForumManagerForumUnsubscribeComponent
  */
@@ -21,36 +21,36 @@ class ForumUnsubscribeComponent extends Manager
 
     public function run()
     {
-        $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
-
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(),
+        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
+        
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->publication_id);
-
-        if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $publication))
+        
+        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
-
+        
         $success = false;
-        $subscribe_id = Request :: get(self :: PARAM_SUBSCRIBE_ID);
-
+        $subscribe_id = Request::get(self::PARAM_SUBSCRIBE_ID);
+        
         if ($subscribe_id)
         {
-            $subscribe = ForumDataManager :: retrieve_subscribe($subscribe_id, $this->get_user_id());
+            $subscribe = ForumDataManager::retrieve_subscribe($subscribe_id, $this->get_user_id());
             $success = $subscribe && $subscribe->delete();
         }
-
-        $message = Translation :: get(
-            $success ? "SuccesUnSubscribe" : "UnSuccesUnSubscribe",
-            null,
-            ContentObject :: get_content_object_type_namespace('Forum'));
-
+        
+        $message = Translation::get(
+            $success ? "SuccesUnSubscribe" : "UnSuccesUnSubscribe", 
+            null, 
+            ContentObject::get_content_object_type_namespace('Forum'));
+        
         $this->redirect(
-            $message,
-            ! $success,
-            array(self :: PARAM_ACTION => self :: ACTION_BROWSE),
-            array(self :: PARAM_PUBLICATION_ID));
+            $message, 
+            ! $success, 
+            array(self::PARAM_ACTION => self::ACTION_BROWSE), 
+            array(self::PARAM_PUBLICATION_ID));
     }
 }

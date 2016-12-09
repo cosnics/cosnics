@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Description of submitter_user_submissions_browser_table_data_provider
- *
+ * 
  * @author Anthony Hurst (Hogeschool Gent)
  */
 class SubmitterUserSubmissionsTableDataProvider extends DataClassTableDataProvider
@@ -22,12 +22,12 @@ class SubmitterUserSubmissionsTableDataProvider extends DataClassTableDataProvid
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(),
-                    AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
+                    AssignmentSubmission::class_name(), 
+                    AssignmentSubmission::PROPERTY_DATE_SUBMITTED));
         }
-
-        return DataManager :: retrieves(
-            AssignmentSubmission :: class_name(),
+        
+        return DataManager::retrieves(
+            AssignmentSubmission::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 

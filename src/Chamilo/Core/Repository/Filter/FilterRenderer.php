@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * Abstract FilterRenderer to facilitate the processing of FilterData for various purposes
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class FilterRenderer

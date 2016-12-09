@@ -15,14 +15,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\External\Action\Manager :: context(),
+                \Chamilo\Core\Repository\External\Action\Manager::context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
+            
             return $factory->run();
         }
         else
         {
-            return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
+            return $this->display_warning_page(Translation::get('YouMustBeLoggedIn'));
         }
     }
 }

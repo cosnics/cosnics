@@ -15,31 +15,31 @@ class HotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\Ma
 
     public function run()
     {
-        $id = Request :: post('id');
-        $score = Request :: post('score');
-
+        $id = Request::post('id');
+        $score = Request::post('score');
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ID),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ID), 
             new StaticConditionVariable($id));
-
-        $tracker = DataManager :: retrieve(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
+        
+        $tracker = DataManager::retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(), 
             new DataClassRetrieveParameters($condition));
-
+        
         if ($tracker)
         {
             $end_time = time();
-
+            
             $tracker->set_total_score($score);
-            $tracker->set_status(AssessmentAttempt :: STATUS_COMPLETED);
+            $tracker->set_status(AssessmentAttempt::STATUS_COMPLETED);
             $tracker->set_end_time($end_time);
             $tracker->set_total_time($tracker->get_total_time() + ($end_time - $tracker->get_start_time()));
-
+            
             $tracker->update();
         }
-
-        JsonAjaxResult :: success();
+        
+        JsonAjaxResult::success();
     }
 }

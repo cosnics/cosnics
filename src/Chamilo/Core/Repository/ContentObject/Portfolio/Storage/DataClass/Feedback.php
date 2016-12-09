@@ -19,7 +19,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_COMPLEX_CONTENT_OBJECT_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_COMPLEX_CONTENT_OBJECT_ID));
     }
 
     /**
@@ -28,7 +28,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public function get_complex_content_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_COMPLEX_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_COMPLEX_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -37,6 +37,6 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      */
     public function set_complex_content_object_id($complex_content_object_id)
     {
-        $this->set_default_property(self :: PROPERTY_COMPLEX_CONTENT_OBJECT_ID, $complex_content_object_id);
+        $this->set_default_property(self::PROPERTY_COMPLEX_CONTENT_OBJECT_ID, $complex_content_object_id);
     }
 }

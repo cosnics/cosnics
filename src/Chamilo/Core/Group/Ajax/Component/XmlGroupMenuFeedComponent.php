@@ -23,19 +23,19 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
     public function run()
     {
         $groups_tree = array();
-
-        $parent_id = Request :: get('parent_id');
+        
+        $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
             new StaticConditionVariable($parent_id));
-        $groups_tree = DataManager :: retrieves(
-            Group :: class_name(),
+        $groups_tree = DataManager::retrieves(
+            Group::class_name(), 
             new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                new OrderBy(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME))))->as_array();
-
+                $condition, 
+                null, 
+                null, 
+                new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))))->as_array();
+        
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";
         echo $this->dump_tree($groups_tree);
@@ -45,7 +45,7 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
     public function dump_tree($groups)
     {
         $html = array();
-
+        
         if ($this->contains_results($groups))
         {
             $this->dump_groups_tree($groups);
@@ -57,7 +57,7 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         foreach ($groups as $group)
         {
             $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-
+            
             $has_children = $group->has_children() ? 1 : 0;
             echo '<leaf id="' . $group->get_id() . '" classes="category" has_children="' . $has_children . '" title="' .
                  htmlspecialchars($group->get_name()) . '" description="' . htmlspecialchars($description) . '"/>' . "\n";

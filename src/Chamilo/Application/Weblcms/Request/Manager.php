@@ -15,7 +15,7 @@ abstract class Manager extends Application
     const ACTION_DENY = 'Denier';
     const ACTION_GRANT = 'Granter';
     const ACTION_RIGHTS = 'Rights';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public function request_allowed()
     {
@@ -23,19 +23,19 @@ abstract class Manager extends Application
         {
             return true;
         }
-
-        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
+        
+        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
         while ($course_type = $course_types->next_result())
         {
-            if (CourseManagementRights :: get_instance()->is_allowed(
-                CourseManagementRights :: REQUEST_COURSE_RIGHT,
-                $course_type->get_id(),
-                CourseManagementRights :: TYPE_COURSE_TYPE))
+            if (CourseManagementRights::getInstance()->is_allowed(
+                CourseManagementRights::REQUEST_COURSE_RIGHT, 
+                $course_type->get_id(), 
+                CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 return true;
             }
         }
-
+        
         return false;
     }
 }
