@@ -39,7 +39,8 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
         $value = ! empty($action) ? new StaticConditionVariable($action) : null;
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(StructureLocation::class_name(), StructureLocation::PROPERTY_ACTION),
-            new StaticConditionVariable($value));
+            $value
+        );
 
         $condition = new AndCondition($conditions);
         
