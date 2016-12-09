@@ -1,0 +1,9 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\chat
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Chat"
+FileMTimeWarning = "Tijd waarschuwing"
+ViewerComponent = "Bekijk chat"
+ChatNotWorking = "Het is momenteel niet mogelijk om de chat module te gebruiken. We proberen dit zo snel mogelijk op te lossen."

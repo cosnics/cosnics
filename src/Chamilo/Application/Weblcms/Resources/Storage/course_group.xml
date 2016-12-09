@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_group">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="parent_id" type="integer" unsigned="1" notnull="1" />
+		<property name="left_value" type="integer" unsigned="1" notnull="1" />
+		<property name="right_value" type="integer" unsigned="1" notnull="1" />
+		<property name="course_id" type="integer" notnull="1" />
+		<property name="max_number_of_course_group_per_member" type="integer" unsigned="1" default="0" />
+		<property name="max_number_of_members" type="integer" unsigned="1" default="0" />
+		<property name="self_reg_allowed" type="integer" length="1" unsigned="1" notnull="1" default="0" />
+		<property name="self_unreg_allowed" type="integer" length="1" unsigned="1" notnull="1" default="0" />
+		<property name="name" type="text" length="100" notnull="1" default="" />
+		<property name="random_registration_allowed" type="integer" length="1" unsigned="1" notnull="1" default="0" />
+		<property name="description" type="text" />
+		<property name="document_category_id" type="integer" notnull="1" unsigned="1" default="0" />
+		<property name="forum_category_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="group_id" type="integer" unsigned="1" notnull="0" default="0" />
+	</properties>
+	<index name="course_id">
+		<indexproperty name="course_id" />
+	</index>
+</object>

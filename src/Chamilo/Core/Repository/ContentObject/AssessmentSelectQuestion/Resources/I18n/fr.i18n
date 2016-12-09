@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_select_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Sélectionnez une question"
+SelectAtLeastOneCorrectAnswer = "Sélectionnez au moins une bonne réponse"
+SelectACorrectAnswer = "Sélectionnez la bonne réponse"
+SwitchToMultipleSelect = "Autoriser des réponses multiples"
+SwitchToSingleSelect = "Autoriser une seule réponse"
+AddSelectOption = "Ajouter une option"
+Answer = "Réponse"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Corriger"
+Weight = "Poids"
+Title = "Titre"
+Description = "Description"
+Options = "Options"
+Hint = "Aide"

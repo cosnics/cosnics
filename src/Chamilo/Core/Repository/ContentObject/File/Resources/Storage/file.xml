@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="file">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" />
+		<property name="storage_path" type="text" length="255" notnull="1" />
+		<property name="path" type="text" length="255" notnull="1" />
+		<property name="filename" type="text" length="255" notnull="1" />
+		<property name="filesize" type="integer" unsigned="1" notnull="1" />
+		<property name="hash" type="text" length="50" notnull="1" />
+		<property name="show_inline" type="boolean" notnull="1" default="1" />
+	</properties>
+	<index name="id" type="primary">
+		<indexproperty name="id" />
+	</index>
+	<index name="hash">
+		<indexproperty name="hash" />
+	</index>
+</object>

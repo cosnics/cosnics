@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Home">
+	<settings>
+		<category name="visual">
+			<setting name="allow_user_home" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_user_home" value="1" />
+				</options>
+			</setting>
+		</category>
+	</settings>
+</package>

@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\blog
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+Properties = "Propriétés"
+BlogLayout = "Agencement"
+AuthorUnknown = "Auteur inconnu"
+Attachments = "Pièces jointes"
+BlogLayoutNotExists = "La mise en page sélectionnée n'existe pas"
+Title = "Titre"
+Description = "Description"
+BlogToolBrowserComponent = "Blogs"
+BlogToolIntroductionPublisherComponent = "Publier une introduction"
+BlogToolUpdaterComponent = "Mettre à jour"
+BlogToolViewerComponent = "Voir le blog"
+PersonalBlogLayout = "Mise en page du blog personnel"

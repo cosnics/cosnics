@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\HotspotQuestion">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Hotspot question</translation>
+			<translation language="nl">Hotspot vraag</translation>
+			<translation language="fr">Question Hotspot</translation>
+			<translation language="de">Hotspot-Frage</translation>
+		</variable>
+	</translations>
+</template>

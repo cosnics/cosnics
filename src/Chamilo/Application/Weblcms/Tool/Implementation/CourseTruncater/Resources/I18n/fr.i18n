@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_truncater
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Empty this course"
+EmptyConfirmationQuestion = "Are you sure you want to empty this course?"
+AllSelectedObjectsRemoved = "All selected opbjects are removed"
+NotAllSelectedObjectsRemoved = "Not all selected objects are removed"
+EmptyThisCourse = "Vider le cours"
+EmptyThisCourseInformation = "Supprimer la sélection"
+SelectAItem = "Sélectionnez au moins 1 élément"
+Course = "Cours"
+Publications = "Publication"
+NoPublications = "Il n'y a pas de publications et sections dans ce cours"
+SelectPublications = "Sélecionnez une publication"
+CategoryTypeName = "Catégorie "
+CourseSections = "Sections de cours"
+CourseAdministration = "Gestion du cours"
+PublicationCategories = "Publication d'une catégorie"
+ContentObjectNotImported = "L'objet n'a pas été importé"
+CourseDeleteFailed = "Le cours n'a pas été supprimé"
