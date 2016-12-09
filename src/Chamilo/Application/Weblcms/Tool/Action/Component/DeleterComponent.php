@@ -46,7 +46,7 @@ class DeleterComponent extends Manager implements DelegateComponent
 
             if(empty($publication)) {
                 $failures ++;
-                break;
+                continue;
             }
 
             $content_object = $publication->get_content_object();
