@@ -38,7 +38,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
     public function run()
     {
         $source = $this->getPostDataValue(self :: PARAM_SOURCE);
-        $context = ClassnameUtilities :: getNamespaceParent(static :: context(), 2) . '\Storage\DataClass';
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static :: context(), 2) . '\Storage\DataClass';
         $visibilityClass = $context . '\Visibility';
 
         $conditions = array();
