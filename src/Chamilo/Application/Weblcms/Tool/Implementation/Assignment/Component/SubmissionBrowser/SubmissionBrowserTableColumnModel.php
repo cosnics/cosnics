@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\S
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Platform\Translation;
@@ -41,7 +42,7 @@ abstract class SubmissionBrowserTableColumnModel extends RecordTableColumnModel 
                 $this->getTranslation(Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS)));
 
         $this->add_column(
-            new SortableStaticTableColumn(
+            new StaticTableColumn(
                 Manager :: PROPERTY_NUMBER_OF_FEEDBACKS,
                 $this->getTranslation(Manager :: PROPERTY_NUMBER_OF_FEEDBACKS)));
     }
