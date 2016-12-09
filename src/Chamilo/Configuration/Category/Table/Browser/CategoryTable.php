@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CategoryTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID_TO_DELETE;
+    const TABLE_IDENTIFIER = Manager :: PARAM_CATEGORY_ID;
 
     public function get_implemented_form_actions()
     {
