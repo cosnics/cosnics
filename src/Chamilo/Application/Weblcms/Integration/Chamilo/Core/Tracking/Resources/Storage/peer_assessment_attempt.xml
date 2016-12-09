@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="peer_assessment_attempt">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="publication_id" type="integer" unsigned="1" notnull="1" />
+		<property name="title" type="text" notnull="1" />
+		<property name="description" type="text" />
+		<property name="start_date" type="integer" unsigned="1" />
+		<property name="end_date" type="integer" unsigned="1" />
+		<property name="closed" type="integer" unsigned="1" />
+		<property name="weight" type="integer" unsigned="1" notnull="1" />
+		<property name="hidden" type="integer" unsigned="1" />
+	</properties>
+	<index name="publication_id">
+		<indexproperty name="publication_id" />
+	</index>
+	<!-- <index name="user_id"> -->
+	<!-- <indexproperty name="user_id" /> -->
+	<!-- </index> -->
+</object>

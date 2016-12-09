@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\User">
+	<settings>
+		<category name="name">
+			<setting name="allow_change_username" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_username" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_firstname" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_firstname" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_lastname" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_lastname" value="1" />
+				</options>
+			</setting>
+			<setting name="fullname_format" field="select" default="0">
+				<options type="dynamic" source="get_fullname_formats" />
+			</setting>
+		</category>
+		<category name="profile">
+			<setting name="allow_change_email" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_email" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_phone" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_phone" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_official_code" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_official_code" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_password" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_password" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_user_picture" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_user_picture" value="1" />
+				</options>
+			</setting>
+			<setting name="restrict_picture_height" field="toggle" default="1">
+				<options type="static">
+					<option name="restrict_picture_height" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_change_placeholder_data" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_change_placeholder_data" value="1" />
+				</options>
+			</setting>
+			<setting name="show_personal_token" field="toggle" default="1">
+				<options type="static">
+					<option name="show_personal_token" value="1" />
+				</options>
+			</setting>
+			<setting name="personal_data_placeholder" field="text" default="???" />
+			<setting name="user_picture_provider" field="select" default="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
+				<options type="dynamic" source="getUserPictureProviders" />
+			</setting>
+		</category>
+		<category name="personalisation">
+			<setting name="allow_user_change_platform_timezone" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_user_change_platform_timezone" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_user_change_platform_language" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_user_change_platform_language" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_user_theme_selection" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_user_theme_selection" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_user_quick_change_platform_language" field="toggle" default="0">
+				<options type="static">
+					<option name="allow_user_quick_change_platform_language" value="1" />
+				</options>
+			</setting>
+		</category>
+		<category name="registration">
+			<setting name="allow_registration" field="radio" default="1">
+				<options type="static">
+					<option name="after_aproval" value="2" />
+					<option name="confirm_true" value="1" />
+					<option name="confirm_false" value="0" />
+				</options>
+			</setting>
+			<setting name="allow_teacher_registration" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_teacher_registration" value="1" />
+				</options>
+			</setting>
+			<setting name="date_terms_and_conditions_update" field="select" default=" ">
+				<options type="dynamic" source="get_date_terms_and_conditions_update" />
+			</setting>
+			<setting name="enable_terms_and_conditions" field="toggle" default="0">
+				<options type="static">
+					<option name="enable_terms_and_conditions" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_password_retrieval" field="toggle" default="1">
+				<options type="static">
+					<option name="allow_password_retrieval" value="1" />
+				</options>
+			</setting>
+			<setting name="require_official_code" field="toggle" default="1">
+				<options type="static">
+					<option name="require_official_code" value="1" />
+				</options>
+			</setting>
+			<setting name="require_email" field="toggle" default="1">
+				<options type="static">
+					<option name="require_email" value="1" />
+				</options>
+			</setting>
+			<setting name="require_language" field="toggle" default="1">
+				<options type="static">
+					<option name="require_language" value="1" />
+				</options>
+			</setting>
+			<setting name="days_valid" field="text" default="366">
+				<validations>
+					<validation rule="numeric" message="MustBeNumeric" />
+				</validations>
+			</setting>
+			<setting name="show_email_addresses" field="toggle" default="1">
+				<options type="static">
+					<option name="show_email_addresses" value="1" />
+				</options>
+			</setting>
+			<setting name="email_template" field="html_editor" default="[username] - [password]" />
+
+		</category>
+		<category name="session">
+			<setting name="prevent_double_login" field="toggle" default="0">
+				<options type="static">
+					<option name="prevent_double_login" value="0" />
+				</options>
+			</setting>
+			<setting name="double_login_exceptions" field="text" default="" />
+		</category>
+	</settings>
+</package>

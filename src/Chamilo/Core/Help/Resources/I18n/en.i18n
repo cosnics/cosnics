@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = help
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Help"
+TypeCategory = "Core Applications"
+HelpItemsInstalled = "Help items installed"
+Url = "Url"
+UpdateItem = "Update item"
+NoHelpItemSelected = "No help item selected"
+List = "List"
+ListDescription = "View the list of the available help items on the platform with possibility to link to own help pages per topic"
+Help = "Help"
+HelpItemUpdated = "Help item updated"
+HelpItemNotUpdated = "Help item not updated"
+HelpManagerBrowserComponent = "Browser"
+HelpManagerUpdaterComponent = "Updater"
+Context = "Context"
+Identifier = "Identifier"
+Language = "Language"
+HideEmptyPages = "Hide empty pages"
+HelpUrl = "Help URL"
+AutocompleteMissingPages = "Autocomplete missing pages"
+AutocompleteAllLanguages = "Autocomplete all languages"
+General = "General"

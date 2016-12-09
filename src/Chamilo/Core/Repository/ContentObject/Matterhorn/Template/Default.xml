@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Matterhorn">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Matterhorn</translation>
+			<translation language="nl">Matterhorn</translation>
+			<translation language="fr">Matterhorn</translation>
+			<translation language="de">Matterhorn</translation>
+		</variable>
+	</translations>
+</template>

@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\Office365Office
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Office 365 Video"
+NoExternalObject = ""
+Properties = ""
+Title = ""
+Description = ""
+ThisFieldIsRequired = ""
+Office365VideoExternalRepositoryManagerBrowserComponent = ""
+Office365VideoExternalRepositoryManagerSelecterComponent = ""

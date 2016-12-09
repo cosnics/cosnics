@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\external_calendar
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Externe kalender"
+EventCount = "Aantal gebeurtenissen"
+Properties = "Eigenschappen"
+ICalURL = "URL"
+Title = "Titel"
+Description = "Beschrijving"
+Description = "Beschrijving"
+PathTypeRemote = "Een online iCal / ICS agenda"
+PathTypeLocal = "Een iCal / ICS agenda uploaden vanop je eigen PC"
+MaximumFileSizeUser = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen repository voor het uploaden van documenten. Indien dit niet voldoende is, klik dan <a href="{URL}" target="_blank">hier</a> om je quotum te <a href="{URL}" target="_blank">verhogen</a>. De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{SERVER}</b>."
+MaximumFileSizeUserNoUpgrade = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen repository voor het uploaden van documenten. De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{SERVER}</b>."
+MaximumFileSizeServer = "De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{FILESIZE}</b>"

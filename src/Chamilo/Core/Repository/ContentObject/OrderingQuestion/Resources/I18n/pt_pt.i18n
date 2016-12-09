@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\ordering_question
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Ordering question"
+Weight = "Weight"
+PutAnswersCorrectOrder = "Put answers in the correct order"
+Items = "Items"
+AddItem = "Add an item"
+Item = "Item"
+Order = "Order"
+Rank = "Ranking"
+Title = ""
+Description = ""
+Hint = ""
