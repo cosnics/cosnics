@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="application\weblcms">
+	<settings>
+		<category name="general">
+			<setting name="category" field="select" default="1">
+				<options type="dynamic" source="get_categories" />
+			</setting>
+			<setting name="titular" field="select" default="2">
+				<options type="dynamic" source="get_titulars" />
+			</setting>
+			<setting name="visibility" field="toggle" default="1" />
+			<setting name="language" field="select" default="en">
+				<options type="dynamic" source="get_languages" />
+			</setting>
+			<setting name="course_access" field="radio" default="1">
+				<options type="static">
+					<option name="open" value="1" />
+					<option name="closed" value="2" />
+				</options>
+			</setting>
+			<setting name="open_course_access_type" field="radio" default="1">
+				<options type="static">
+					<option name="registered_users" value="1" />
+					<option name="platform" value="2" />
+					<option name="the_world" value="3" />
+				</options>
+			</setting>
+		</category>
+		<category name="layout">
+			<setting name="theme" field="select" default="Aqua">
+				<options type="dynamic" source="get_themes" />
+			</setting>
+			<setting name="tool_layout" field="select" default="1">
+				<options type="static">
+					<option name="two_columns" value="1" />
+					<option name="three_columns" value="2" />
+					<option name="two_columns_group_inactive" value="3" />
+					<option name="three_columns_group_inactive" value="4" />
+				</options>
+			</setting>
+			<setting name="breadcrumb_layout" field="select" default="1">
+				<options type="static">
+					<option name="title" value="1" />
+					<option name="code" value="2" />
+					<option name="course_home" value="3" />
+				</options>
+			</setting>
+			<setting name="tool_shortcut_menu" field="toggle" default="1" />
+			<setting name="allow_feedback" field="toggle" default="1" />
+			<setting name="allow_introduction_text" field="toggle" default="1" />
+			<setting name="show_course_code" field="toggle" default="1" />
+			<setting name="show_course_titular" field="toggle" default="1" />
+			<setting name="show_course_language" field="toggle" default="1" />
+		</category>
+	</settings>
+</package>

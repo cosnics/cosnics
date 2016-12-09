@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_truncater
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = ""
+EmptyConfirmationQuestion = ""
+AllSelectedObjectsRemoved = ""
+NotAllSelectedObjectsRemoved = ""
+EmptyThisCourse = ""
+EmptyThisCourseInformation = ""
+SelectAItem = ""
+Course = ""
+Publications = ""
+NoPublications = ""
+SelectPublications = ""
+CategoryTypeName = ""
+CourseSections = ""
+CourseAdministration = ""
+PublicationCategories = ""
+ContentObjectNotImported = ""
+CourseDeleteFailed = ""

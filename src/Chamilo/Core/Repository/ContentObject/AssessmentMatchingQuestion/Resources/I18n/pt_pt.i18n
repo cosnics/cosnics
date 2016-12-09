@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matching_question
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matching question"
+Options = "Options"
+AddMatchingQuestionOption = "Add an option"
+Answer = "Answer"
+Matches = "Matches"
+Feedback = "Feedback"
+Score = "Score"
+Comment = "Comment"
+Weight = "Weight"
+AddMatch = "Add a match"
+Match = "Match"
+Title = ""
+Description = ""

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="content_object">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="owner_id" type="integer" unsigned="1" notnull="1" />
+		<property name="object_number" type="text" length="36" notnull="1" />
+		<property name="parent_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="template_registration_id" type="integer" unsigned="1" default="NULL" />
+		<property name="created" type="integer" unsigned="1" notnull="1" />
+		<property name="modified" type="integer" unsigned="1" notnull="1" />
+		<property name="state" type="integer" length="1" unsigned="1" notnull="1" default="2" />
+		<property name="current" type="integer" length="3" unsigned="1" notnull="1" default="1" />
+		<property name="comment" type="text" length="60" />
+		<property name="type" type="text" length="255" notnull="1" />
+		<property name="title" type="text" notnull="1" />
+		<property name="description" type="text" />
+		<property name="content_hash" type="text" length="32" />
+	</properties>
+	<index name="owner_id">
+		<indexproperty name="owner_id" />
+	</index>
+	<index name="object_number">
+		<indexproperty name="object_number" />
+	</index>
+	<index name="type">
+		<indexproperty name="type" />
+	</index>
+	<index name="parent_id">
+		<indexproperty name="parent_id" />
+	</index>
+	<index name="state">
+		<indexproperty name="state" />
+	</index>
+	<index name="category">
+		<indexproperty name="owner_id" />
+		<indexproperty name="type" />
+
+	</index>
+</object>

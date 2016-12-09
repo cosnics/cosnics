@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="application\calendar\extension\personal\upgrade" default="build">
+	<resolvepath propertyName="package-directory" file="../../" />
+	<import file="../../../../../../../libraries/php/build/build.xml" />
+</project>

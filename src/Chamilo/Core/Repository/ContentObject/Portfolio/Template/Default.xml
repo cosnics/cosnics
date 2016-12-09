@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Portfolio">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Portfolio folder</translation>
+			<translation language="nl">Portfoliomap</translation>
+			<translation language="fr">Portfolio</translation>
+			<translation language="de">Portfolio</translation>
+		</variable>
+	</translations>
+</template>
