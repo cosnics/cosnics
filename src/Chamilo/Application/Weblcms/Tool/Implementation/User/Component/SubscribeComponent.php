@@ -183,7 +183,7 @@ class SubscribeComponent extends Manager
      *
      * @return string
      */
-    protected function renderRequestUserList(Translation $translator, array $requestUsers = array())
+    protected function renderRequestUserList(Translation $translator, $requestUsers = array())
     {
         $requestUserIds = array();
         
