@@ -82,6 +82,7 @@ ALTER TABLE `menu_application_item`
 /* Perspectief */
 
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Admin', 'google_analytics_tracking_id', '', 0);
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Menu', 'brand_image', '', 0);
 
 ALTER TABLE `repository_file`
   ADD COLUMN `show_inline` INT(3) NOT NULL DEFAULT 1 AFTER `hash`;
@@ -127,7 +128,7 @@ INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'recap
 INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'page_after_anonymous_access', '', '0');
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Repository\\Form', 'omit_content_object_title_check', '0', '0');
 
-INSERT INTO `chamilo2016-17`.`configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_version', 'SAML_VERSION_1_1', '0');
-INSERT INTO `chamilo2016-17`.`configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_check_certificate', '1', '0');
-INSERT INTO `chamilo2016-17`.`configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_user_login', 'login', '0');
-INSERT INTO `chamilo2016-17`.`configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_validation_string', 'EXT', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_version', 'SAML_VERSION_1_1', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_check_certificate', '1', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_user_login', 'login', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_validation_string', 'EXT', '0');
