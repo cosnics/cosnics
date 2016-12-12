@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class QuickCreateComponent extends CreateComponent
 {
 
+
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
