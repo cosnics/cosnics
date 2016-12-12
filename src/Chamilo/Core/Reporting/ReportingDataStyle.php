@@ -39,7 +39,7 @@ class ReportingDataStyle
     {
         $this->headingCellStyle = new ReportingDataCellStyle();
         $this->headingCellStyle->setAlignment(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cellAlignment'));
+            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
         $this->headingCellStyle->setTextColor(
             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
         $this->headingCellStyle->setBackgroundColor(
@@ -54,7 +54,7 @@ class ReportingDataStyle
         
         $this->dataCellStyle = new ReportingDataCellStyle();
         $this->dataCellStyle->setAlignment(
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cellAlignment'));
+            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
         $this->dataCellStyle->setTextColor(
             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_text_color'));
         $this->dataCellStyle->setBackgroundColor(
