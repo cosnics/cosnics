@@ -141,7 +141,7 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
             $assignmentTableIds);
         
         $data_manager_class = $this->get_data_manager_class();
-        $doctrineExtension = new DoctrineExtension($data_manager_class::get_instance());
+        $doctrineExtension = new DoctrineExtension($data_manager_class::getInstance());
 
         $requests = $doctrineExtension->retrieve_results_by_assignment(
             new DataClassRetrievesParameters($condition)
