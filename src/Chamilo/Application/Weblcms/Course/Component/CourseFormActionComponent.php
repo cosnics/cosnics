@@ -41,6 +41,8 @@ abstract class CourseFormActionComponent extends Manager
         {
             $course->set_course_type_id($possible_course_type_id);
         }
+
+        $this->checkComponentAuthorization($course);
         
         $form = new CourseForm($this->get_url(), $course);
         
@@ -144,4 +146,11 @@ abstract class CourseFormActionComponent extends Manager
      * @return boolean
      */
     abstract public function handle_form(Course $course_type, $form_values);
+
+    /**
+     * Checks the authorization for the current component
+     *
+     * @param Course $course
+     */
+    abstract protected function checkComponentAuthorization(Course $course);
 }
