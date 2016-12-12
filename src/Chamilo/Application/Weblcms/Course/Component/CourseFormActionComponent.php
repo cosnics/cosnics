@@ -31,8 +31,6 @@ abstract class CourseFormActionComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
-        
         set_time_limit(0);
         
         $course = $this->get_course();

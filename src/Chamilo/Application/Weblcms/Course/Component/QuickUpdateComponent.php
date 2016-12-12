@@ -20,7 +20,13 @@ class QuickUpdateComponent extends UpdateComponent implements DelegateComponent
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
+    public function run()
+    {
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
+        parent::run();
+    }
+
     /**
      * Redirects this component after the update
      * 
