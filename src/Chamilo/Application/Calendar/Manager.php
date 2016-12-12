@@ -41,17 +41,6 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
-     */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent::__construct($applicationConfiguration);
-        
-        $this->checkAuthorization(Manager::context());
-    }
-
-    /**
-     *
      * @return string
      */
     public function getCurrentRendererType()
