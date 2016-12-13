@@ -1,0 +1,6 @@
+/web/*
+/files/*
+/vendor/*
+/bin/*
+
+!/web/index.php
