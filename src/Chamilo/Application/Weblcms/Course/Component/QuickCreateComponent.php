@@ -16,22 +16,13 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class QuickCreateComponent extends CreateComponent
 {
 
+
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
      * **************************************************************************************************************
      */
     
-    /**
-     * Runs this component and display's it's output
-     */
-    public function run()
-    {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
-        
-        return CourseFormActionComponent::run();
-    }
-
     /**
      * Handles the form Basic form handler + subscription of current user
      * 

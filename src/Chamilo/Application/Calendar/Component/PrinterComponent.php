@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
+use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -21,6 +22,8 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context());
+
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         
         $header = Page::getInstance()->getHeader();

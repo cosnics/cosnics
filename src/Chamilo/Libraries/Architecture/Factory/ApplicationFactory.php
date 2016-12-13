@@ -221,7 +221,7 @@ class ApplicationFactory
             throw new \Exception(
                 $this->getTranslation()->getTranslation(
                     'NoManagerFound',
-                    array('CONTEXT' => $this->getContext()),
+                    array('CONTEXT' => $context),
                     'Chamilo\Libraries'));
         }
 

@@ -20,6 +20,8 @@ class AvailabilityComponent extends Manager
 
     public function run()
     {
+        $this->checkAuthorization(Manager::context());
+        
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
         $form = $this->getForm($availabilityService);
         

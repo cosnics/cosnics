@@ -20,6 +20,7 @@ class QuickUpdateComponent extends UpdateComponent implements DelegateComponent
      * Inherited Functionality *
      * **************************************************************************************************************
      */
+
     
     /**
      * Redirects this component after the update
