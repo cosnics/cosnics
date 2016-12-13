@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * Logs Exceptions to Sentry (sentry.io)
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
@@ -19,7 +19,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
     /**
      * SentryExceptionLogger constructor.
-     * 
+     *
      * @param string $sentryConnectionString
      *
      * @throws \Exception
@@ -30,20 +30,22 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         {
             throw new \Exception('Can not use the SentryExceptionLogger when sentry is not included');
         }
-        
+
         if (empty($sentryConnectionString))
         {
             throw new \Exception('The given connection string for sentry can not be empty');
         }
-        
-        $this->sentryClient = new \Raven_Client($sentryConnectionString);
-        
+
+        $this->sentryClient = new \Raven_Client(
+            $sentryConnectionString, array('install_default_breadcrumb_handlers' => false)
+        );
+
         $this->configureChamiloParameters();
     }
 
     /**
      * Logs an exception
-     * 
+     *
      * @param \Exception $exception
      * @param int $exceptionLevel
      * @param string $file
@@ -55,7 +57,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         {
             return;
         }
-        
+
         $this->sentryClient->captureException($exception);
     }
 

@@ -6,6 +6,7 @@ use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Configuration\Form\Storage\DataClass\Value;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
@@ -88,7 +90,12 @@ class Viewer
         $condition = new AndCondition($conditions);
         
         $form = DataManager::retrieve(Instance::class_name(), new DataClassRetrieveParameters($condition));
-        
+
+        if(!$form)
+        {
+            return new ArrayResultset(array());
+        }
+
         $subcondition = new EqualityCondition(
             new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
             new StaticConditionVariable($form->get_id()));

@@ -137,12 +137,12 @@ class ErrorHandler
             E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING, 
             E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING, 
             E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR);
-        
+
         if (! array_key_exists($errorNumber, $exceptionTypes))
         {
             return true;
         }
-        
+
         $exceptionLevel = $exceptionTypes[$errorNumber];
         
         $this->getExceptionLogger()->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
