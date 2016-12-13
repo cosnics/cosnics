@@ -46,6 +46,8 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context());
+        
         $header = Page::getInstance()->getHeader();
         $header->addCssFile(Theme::getInstance()->getCssPath(self::package(), true) . 'Print.css', 'print');
         

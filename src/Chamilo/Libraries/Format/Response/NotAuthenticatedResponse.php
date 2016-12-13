@@ -29,7 +29,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = $this->renderPanel();
         $html[] = $page->getFooter()->toHtml();
         
-        parent::__construct(implode(PHP_EOL, $html));
+        parent::__construct('', implode(PHP_EOL, $html));
     }
 
     /**

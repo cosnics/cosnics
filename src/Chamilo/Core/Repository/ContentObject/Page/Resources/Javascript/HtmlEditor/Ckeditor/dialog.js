@@ -4,7 +4,7 @@
  */
 CKEDITOR.dialog
         .add(
-                'documentDialog',
+                'pageDialog',
                 function(editor)
                 {
                     function commitContent()

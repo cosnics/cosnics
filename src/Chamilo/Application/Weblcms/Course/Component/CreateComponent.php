@@ -17,6 +17,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CreateComponent extends CourseFormActionComponent
 {
+    /**
+     * Checks the authorization for the current component
+     *
+     * @param Course $course
+     */
+    protected function checkComponentAuthorization(Course $course)
+    {
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
+    }
 
     /**
      * Returns the course for this form action

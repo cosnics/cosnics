@@ -82,6 +82,7 @@ ALTER TABLE `menu_application_item`
 /* Perspectief */
 
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Admin', 'google_analytics_tracking_id', '', 0);
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Menu', 'brand_image', '', 0);
 
 ALTER TABLE `repository_file`
   ADD COLUMN `show_inline` INT(3) NOT NULL DEFAULT 1 AFTER `hash`;
@@ -126,3 +127,38 @@ INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'recap
 INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'recaptcha_secret_key', '', '0');
 INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'page_after_anonymous_access', '', '0');
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Repository\\Form', 'omit_content_object_title_check', '0', '0');
+
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_version', 'SAML_VERSION_1_1', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_check_certificate', '1', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_user_login', 'login', '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'cas_validation_string', 'EXT', '0');
+
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (120,'Chamilo\\Core\\Reporting','paper_orientation','Portrait',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (121,'Chamilo\\Core\\Reporting','template_header_text_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (122,'Chamilo\\Core\\Reporting','template_header_font_family','Arial',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (123,'Chamilo\\Core\\Reporting','template_header_font_style','B',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (124,'Chamilo\\Core\\Reporting','template_header_font_size','11',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (125,'Chamilo\\Core\\Reporting','template_header_line_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (126,'Chamilo\\Core\\Reporting','template_footer_text_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (127,'Chamilo\\Core\\Reporting','template_footer_font_family','Arial',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (128,'Chamilo\\Core\\Reporting','template_footer_font_style','B',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (129,'Chamilo\\Core\\Reporting','template_footer_font_size','10',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (130,'Chamilo\\Core\\Reporting','block_title_text_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (131,'Chamilo\\Core\\Reporting','block_title_font_family','Arial',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (132,'Chamilo\\Core\\Reporting','block_title_font_style','B',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (133,'Chamilo\\Core\\Reporting','block_title_font_size','11',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (134,'Chamilo\\Core\\Reporting','min_relative_width','0.1',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (135,'Chamilo\\Core\\Reporting','heading_cell_alignment','Left',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (136,'Chamilo\\Core\\Reporting','heading_cell_text_color','255, 255, 255',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (137,'Chamilo\\Core\\Reporting','heading_cell_background_color','150, 150, 150',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (138,'Chamilo\\Core\\Reporting','heading_cell_border_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (139,'Chamilo\\Core\\Reporting','heading_cell_font_family','Arial',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (140,'Chamilo\\Core\\Reporting','heading_cell_font_style','',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (141,'Chamilo\\Core\\Reporting','heading_cell_font_size','10',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (142,'Chamilo\\Core\\Reporting','data_cell_alignment','Left',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (143,'Chamilo\\Core\\Reporting','data_cell_text_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (144,'Chamilo\\Core\\Reporting','data_cell_background_color','255, 255, 255',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (145,'Chamilo\\Core\\Reporting','data_cell_border_color','0, 0, 0',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (146,'Chamilo\\Core\\Reporting','data_cell_font_family','Arial',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (147,'Chamilo\\Core\\Reporting','data_cell_font_style','',0);
+INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (148,'Chamilo\\Core\\Reporting','data_cell_font_size','10',0);

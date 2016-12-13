@@ -14,6 +14,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -98,7 +99,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
         if (! $this->course_tool_registration)
         {
-            throw new \Exception(Translation::get('SelectedCourseToolNotValid'));
+            throw new UserException(Translation::get('SelectedCourseToolNotValid'));
         }
 
         if ($tool != 'CourseGroup')
