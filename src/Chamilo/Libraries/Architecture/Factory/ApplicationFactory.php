@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\Factory;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -218,11 +219,9 @@ class ApplicationFactory
 
         if (! class_exists($managerClass))
         {
-            throw new \Exception(
-                $this->getTranslation()->getTranslation(
-                    'NoManagerFound',
-                    array('CONTEXT' => $context),
-                    'Chamilo\Libraries'));
+            throw new UserException(
+                Translation::get('InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries')
+            );
         }
 
         return $managerClass;
