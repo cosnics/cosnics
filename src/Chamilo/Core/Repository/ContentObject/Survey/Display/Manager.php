@@ -3,7 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
@@ -108,8 +110,20 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function get_current_node()
     {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
-            $this->get_current_step());
+        try
+        {
+            return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
+                $this->get_current_step()
+            );
+        }
+        catch(\Exception $ex)
+        {
+            throw new UserException(
+                Translation::getInstance()->getTranslation(
+                    'CouldNotRetrieveSelectedNode', null, 'Chamilo\Core\Repository'
+                )
+            );
+        }
     }
 
     public function get_complex_content_object_path()
