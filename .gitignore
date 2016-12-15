@@ -2,5 +2,9 @@
 /files/*
 /vendor/*
 /bin/*
+/src/*
+/.idea/
 
+!/src/Chamilo
 !/web/index.php
+/composer.lock
