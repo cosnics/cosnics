@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -50,7 +51,12 @@ class CreateComponent extends CourseFormActionComponent
             $countDirect ++;
         }
 
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses') || $countDirect > 0;
+        if (!$this->isAuthorized(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses') &&
+            $countDirect == 0
+        )
+        {
+            throw new NotAllowedException();
+        }
     }
 
     /**
