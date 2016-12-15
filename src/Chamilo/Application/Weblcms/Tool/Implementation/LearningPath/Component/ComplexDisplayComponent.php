@@ -309,9 +309,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function save_assessment_result($total_score)
     {
+        $currentAttempt = $this->get_current_node()->get_current_attempt();
+
+        if(!$currentAttempt)
+        {
+            return;
+        }
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(LearningPathItemAttempt::class_name(), LearningPathItemAttempt::PROPERTY_ID), 
-            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id()));
+            new StaticConditionVariable($currentAttempt->get_id()));
         
         $learning_path_item_attempt = DataManager::retrieve(
             LearningPathItemAttempt::class_name(), 
@@ -409,22 +416,30 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     protected function retrieve_question_attempts()
     {
         $question_attempts = array();
-        
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
-            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id()));
-        
-        $question_attempts_result_set = DataManager::retrieves(
-            LearningPathQuestionAttempt::class_name(), 
-            new DataClassRetrievesParameters($condition));
-        
-        while ($question_attempt = $question_attempts_result_set->next_result())
+
+        $currentAttempt = $this->get_current_node()->get_current_attempt();
+
+        if($currentAttempt)
         {
-            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    LearningPathQuestionAttempt::class_name(),
+                    LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+                ),
+                new StaticConditionVariable($currentAttempt->get_id())
+            );
+
+            $question_attempts_result_set = DataManager::retrieves(
+                LearningPathQuestionAttempt::class_name(),
+                new DataClassRetrievesParameters($condition)
+            );
+
+            while ($question_attempt = $question_attempts_result_set->next_result())
+            {
+                $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
+            }
         }
-        
+
         return $question_attempts;
     }
 
@@ -435,12 +450,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function register_question_ids($question_ids)
     {
-        $current_node = $this->get_current_node();
-        
+        $currentAttempt = $this->get_current_node()->get_current_attempt();
+        if(!$currentAttempt)
+        {
+            return;
+        }
+
         foreach ($question_ids as $complex_question_id)
         {
             $attempt = new LearningPathQuestionAttempt();
-            $attempt->set_item_attempt_id($current_node->get_current_attempt()->get_id());
+            $attempt->set_item_attempt_id($currentAttempt->get_id());
             $attempt->set_question_complex_id($complex_question_id);
             $attempt->set_answer('');
             $attempt->set_score(0);
