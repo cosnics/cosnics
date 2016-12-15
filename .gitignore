@@ -8,3 +8,7 @@
 !/src/Chamilo
 !/web/index.php
 /composer.lock
+/.buildpath
+/.project
+/.settings/org.eclipse.php.core.prefs
+/.settings/org.eclipse.wst.validation.prefs

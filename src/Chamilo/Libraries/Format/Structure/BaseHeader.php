@@ -82,7 +82,6 @@ class BaseHeader implements HeaderInterface
         $this->textDirection = $textDirection;
 
         $this->htmlHeaders = array();
-        $this->addDefaultHeaders();
     }
 
     /**
@@ -318,6 +317,8 @@ class BaseHeader implements HeaderInterface
      */
     public function toHtml()
     {
+        $this->addDefaultHeaders();
+
         $html = array();
 
         $html[] = '<!DOCTYPE html>';
