@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Compon
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Forms\CourseTruncaterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Manager;
 use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -36,7 +37,7 @@ class BrowserComponent extends Manager
         if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
             $course_id) == 0 && $count_custom_course_sections == 0)
         {
-            throw new \Exception(Translation::get('NoPublications'));
+            throw new UserException(Translation::get('NoPublications'));
         }
         
         $publicationSelectorDataMapper = new PublicationSelectorDataMapper();
