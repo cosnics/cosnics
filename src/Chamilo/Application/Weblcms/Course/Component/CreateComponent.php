@@ -2,7 +2,9 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -24,7 +26,31 @@ class CreateComponent extends CourseFormActionComponent
      */
     protected function checkComponentAuthorization(Course $course)
     {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
+        $countDirect = $countRequest = 0;
+
+        $courseManagementRights = CourseManagementRights::getInstance();
+        $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
+
+        while ($courseType = $courseTypes->next_result())
+        {
+            if ($courseManagementRights->is_allowed(
+                CourseManagementRights::CREATE_COURSE_RIGHT,
+                $courseType->get_id(),
+                CourseManagementRights::TYPE_COURSE_TYPE))
+            {
+                $countDirect ++;
+            }
+        }
+
+        $allowCourseCreationWithoutCoursetype = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype'));
+
+        if ($allowCourseCreationWithoutCoursetype)
+        {
+            $countDirect ++;
+        }
+
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses') || $countDirect > 0;
     }
 
     /**
