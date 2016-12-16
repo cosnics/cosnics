@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: whois_online.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
- * 
+ *
  * @package admin.lib.admin_manager.component
  */
 
@@ -36,9 +36,9 @@ class WhoisOnlineComponent extends Manager implements TableSupport
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ViewWhoisOnline');
-        
+
         $world = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'whoisonlineaccess'));
-        
+
         if ($world == "1" || ($this->get_user_id() && $world == "2"))
         {
             $user_id = Request::get('uid');
@@ -48,15 +48,29 @@ class WhoisOnlineComponent extends Manager implements TableSupport
             }
             else
             {
-                $output = $this->get_table_html();
+                $currentUrl = $this->get_url();
+
+                try
+                {
+                    $output = $this->get_table_html();
+                }
+                catch (\Exception $ex)
+                {
+                    if ($ex->getMessage() == 'Invalid page number')
+                    {
+                        $output = '<div class="alert alert-warning">' . Translation::getInstance()->getTranslation(
+                                'TableHasChanged', array('URL' => $currentUrl), Manager::context()
+                            ) . '</div>';
+                    }
+                }
             }
-            
+
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $output;
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
         else
@@ -68,48 +82,53 @@ class WhoisOnlineComponent extends Manager implements TableSupport
     private function get_table_html()
     {
         $parameters = $this->get_parameters(true);
-        
+
         $table = new WhoisOnlineTable($this);
-        
+
         $html = array();
         $html[] = $table->as_html();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($class_name)
     {
         $pastTime = strtotime(
-            '-' . Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'timelimit')) . ' seconds', 
-            time());
-        
+            '-' . Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'timelimit')) . ' seconds',
+            time()
+        );
+
         $parameters = new DataClassDistinctParameters(
             new InequalityCondition(
-                new PropertyConditionVariable(Online::class_name(), Online::PROPERTY_LAST_ACCESS_DATE), 
-                InEqualityCondition::GREATER_THAN, 
-                new StaticConditionVariable($pastTime)), 
-            Online::PROPERTY_USER_ID);
-        
+                new PropertyConditionVariable(Online::class_name(), Online::PROPERTY_LAST_ACCESS_DATE),
+                InEqualityCondition::GREATER_THAN,
+                new StaticConditionVariable($pastTime)
+            ),
+            Online::PROPERTY_USER_ID
+        );
+
         $userIds = DataManager::distinct(Online::class_name(), $parameters);
-        
-        if (! empty($userIds))
+
+        if (!empty($userIds))
         {
             return new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds);
         }
         else
         {
             return new EqualityCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
-                new StaticConditionVariable(- 1));
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                new StaticConditionVariable(- 1)
+            );
         }
     }
 
     private function get_user_html($user_id)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-            (int) $user_id);
-        
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            (int) $user_id
+        );
+
         $html[] = '<br /><div style="float: left; width: 150px;">';
         $html[] = Translation::get('Username', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
         $html[] = Translation::get('Fullname', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
@@ -123,16 +142,18 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $html[] = $user->get_email() . '<br />';
         $html[] = $user->get_status_name() . '<br />';
         $html[] = '</div><div style="float: right; max-width: 400px;">';
-        
+
         $profilePhotoUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(), 
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE, 
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user_id));
-        
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user_id
+            )
+        );
+
         $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" />';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
