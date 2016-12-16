@@ -59,7 +59,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
                     if ($ex->getMessage() == 'Invalid page number')
                     {
                         $output = '<div class="alert alert-warning">' . Translation::getInstance()->getTranslation(
-                                'TableHasChanged', array('URL' => $currentUrl), Manager::context()
+                                'WhoisOnlineTableChanged', array('URL' => $currentUrl), Manager::context()
                             ) . '</div>';
                     }
                 }
