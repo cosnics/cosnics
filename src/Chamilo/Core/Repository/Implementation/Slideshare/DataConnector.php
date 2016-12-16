@@ -43,15 +43,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $login = Setting::get('username', $this->get_external_repository_instance_id());
         $password = Setting::get('password', $this->get_external_repository_instance_id());
         
-        $request = $this->slideshare->request('POST', '');
-        $postBody = $request->getBody();
-        $postBody->setField('action', 'login');
-        $postBody->setField('lgname', $login);
-        $postBody->setField('lgpassword', $password);
-        $postBody->setField('format', 'xml');
-        $postBody->setField('redirects', true);
-        
-        $response = $this->slideshare->send($request);
+//        $request = $this->slideshare->request('POST', '');
+//        $postBody = $request->getBody();
+//        $postBody->setField('action', 'login');
+//        $postBody->setField('lgname', $login);
+//        $postBody->setField('lgpassword', $password);
+//        $postBody->setField('format', 'xml');
+//        $postBody->setField('redirects', true);
+//
+//        $response = $this->slideshare->send($request);
     }
 
     /**
