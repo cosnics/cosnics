@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Exception;
@@ -26,7 +27,7 @@ class ViewerComponent extends Manager
     {
         if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            throw new Exception('not-allowed');
+            throw new NotAllowedException();
         }
         
         $template_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID);

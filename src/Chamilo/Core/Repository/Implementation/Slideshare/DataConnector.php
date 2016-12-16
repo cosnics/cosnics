@@ -10,6 +10,9 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
+    /**
+     * @var \GuzzleHttp\Client
+     */
     private $slideshare;
 
     private $consumer_key;
@@ -31,7 +34,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->consumer_key = Setting::get('consumer_key', $this->get_external_repository_instance_id());
         $this->consumer_secret = Setting::get('consumer_secret', $this->get_external_repository_instance_id());
         
-        $this->slideshare = new \GuzzleHttp\Client(['base_url' => 'https://www.slideshare.net/api/2/']);
+        $this->slideshare = new \GuzzleHttp\Client(['base_uri' => 'https://www.slideshare.net/api/2/']);
         $this->login();
     }
 
@@ -40,15 +43,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $login = Setting::get('username', $this->get_external_repository_instance_id());
         $password = Setting::get('password', $this->get_external_repository_instance_id());
         
-        $request = $this->slideshare->createRequest('POST', '');
-        $postBody = $request->getBody();
-        $postBody->setField('action', 'login');
-        $postBody->setField('lgname', $login);
-        $postBody->setField('lgpassword', $password);
-        $postBody->setField('format', 'xml');
-        $postBody->setField('redirects', true);
-        
-        $response = $this->slideshare->send($request);
+//        $request = $this->slideshare->request('POST', '');
+//        $postBody = $request->getBody();
+//        $postBody->setField('action', 'login');
+//        $postBody->setField('lgname', $login);
+//        $postBody->setField('lgpassword', $password);
+//        $postBody->setField('format', 'xml');
+//        $postBody->setField('redirects', true);
+//
+//        $response = $this->slideshare->send($request);
     }
 
     /**

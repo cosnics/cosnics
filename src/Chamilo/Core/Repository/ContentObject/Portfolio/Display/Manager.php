@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios
@@ -86,7 +88,19 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function get_current_node()
     {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
-            $this->get_current_step());
+        try
+        {
+            return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
+                $this->get_current_step()
+            );
+        }
+        catch(\Exception $ex)
+        {
+            throw new UserException(
+                Translation::getInstance()->getTranslation(
+                    'CouldNotRetrieveSelectedNode', null, 'Chamilo\Core\Repository'
+                )
+            );
+        }
     }
 }
