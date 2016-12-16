@@ -106,11 +106,14 @@ class ViewerComponent extends Manager
             return null;
         }
 
+        $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_VIEW_ID);
+
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => 'Chamilo\Core\Repository',
                 Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_ATTACHMENT,
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $attachment->getId()
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $contentObjectIdentifier,
+                \Chamilo\Core\Repository\Manager::PARAM_ATTACHMENT_ID => $attachment->getId()
             )
         );
 
