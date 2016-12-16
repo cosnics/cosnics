@@ -10,6 +10,9 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
+    /**
+     * @var \GuzzleHttp\Client
+     */
     private $slideshare;
 
     private $consumer_key;
@@ -40,7 +43,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $login = Setting::get('username', $this->get_external_repository_instance_id());
         $password = Setting::get('password', $this->get_external_repository_instance_id());
         
-        $request = $this->slideshare->createRequest('POST', '');
+        $request = $this->slideshare->request('POST', '');
         $postBody = $request->getBody();
         $postBody->setField('action', 'login');
         $postBody->setField('lgname', $login);
