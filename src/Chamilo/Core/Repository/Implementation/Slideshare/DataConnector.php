@@ -34,7 +34,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->consumer_key = Setting::get('consumer_key', $this->get_external_repository_instance_id());
         $this->consumer_secret = Setting::get('consumer_secret', $this->get_external_repository_instance_id());
         
-        $this->slideshare = new \GuzzleHttp\Client(['base_url' => 'https://www.slideshare.net/api/2/']);
+        $this->slideshare = new \GuzzleHttp\Client(['base_uri' => 'https://www.slideshare.net/api/2/']);
         $this->login();
     }
 
