@@ -445,15 +445,15 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                 case self::SELECTED_TAB_OTHER_PLATFORM_GROUPS :
                     return new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup::class_name(), Group::PROPERTY_NAME), 
+                        new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME),
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                 case self::SELECTED_TAB_OTHER_USERS :
                     $or_conditions = array();
                     $or_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup::class_name(), User::PROPERTY_FIRSTNAME), 
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                     $or_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup::class_name(), User::PROPERTY_LASTNAME), 
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
                         '*' . $this->buttonToolbarRenderer->getSearchForm()->getQuery() . '*');
                     return new OrCondition($or_conditions);
             }
