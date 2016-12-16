@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\R
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -49,13 +50,13 @@ class BrowserComponent extends Manager
         
         if ($contentObjectPublicationsCount == 0 && $courseGroupsCount <= 1)
         {
-            throw new \Exception(Translation::get('NoPublications'));
+            throw new UserException(Translation::get('NoPublications'));
         }
         
         if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_courses_from_user_where_user_is_teacher(
             $this->get_user()) <= 1)
         {
-            throw new \Exception(Translation::get('NoCoursesToCopy'));
+            throw new UserException(Translation::get('NoCoursesToCopy'));
         }
         
         $publicationSelectorDataMapper = new PublicationSelectorDataMapper();

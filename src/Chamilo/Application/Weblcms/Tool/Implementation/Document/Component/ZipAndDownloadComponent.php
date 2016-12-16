@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -39,10 +40,11 @@ class ZipAndDownloadComponent extends Manager
     {
         $archivePath = $this->create_document_archive();
         $archiveName = $this->zip_name . '.zip';
-        $archiveSafeName = Filesystem::create_safe_name($archiveName);
-        
+        $archiveSafeName = StringUtilities::getInstance()->createString($archiveName)->toAscii()->replace('/', '-')
+            ->replace('\\', '-')->replace('%', '_')->__toString();
+
         $response = new BinaryFileResponse($archivePath, 200, array('Content-Type' => 'application/zip'));
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archiveName, $archiveSafeName);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archiveSafeName);
         $response->prepare($this->getRequest());
         $response->send();
         
