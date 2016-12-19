@@ -27,6 +27,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -647,7 +648,12 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 
                 if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() != '')
                 {
-                    $conditions[] = $this->get_search_condition();
+                    $condition = $this->get_search_condition();
+
+                    if($condition instanceof Condition)
+                    {
+                        $conditions[] = $condition;
+                    }
                 }
                 
                 $conditions[] = $this->get_own_table_conditions();
