@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -40,7 +41,12 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
             case StudentSubmissionsOwnGroupsTableColumnModel::PROPERTY_PUBLICATION_TITLE :
                 return $this->construct_title_link($submission);
             case StudentSubmissionsOwnGroupsTableColumnModel::PROPERTY_CONTENT_OBJECT_DESCRIPTION :
-                return $submission->get_content_object()->get_description();
+                if($submission->get_content_object() instanceof ContentObject)
+                {
+                    return $submission->get_content_object()->get_description();
+                }
+
+                return null;
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_DATE_SUBMITTED :
                 return $this->format_date($submission->get_date_submitted());
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID :
@@ -211,8 +217,13 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
      */
     private function construct_title_link($submission)
     {
-        return '<a href="' . $this->construct_title_url($submission) . '">' .
-             $submission->get_content_object()->get_title() . '</a>';
+        if($submission->get_content_object())
+        {
+            return '<a href="' . $this->construct_title_url($submission) . '">' .
+            $submission->get_content_object()->get_title() . '</a>';
+        }
+
+        return Translation::getInstance()->getTranslation('ContentObjectUnknown', null, Manager::context());
     }
 
     /**
