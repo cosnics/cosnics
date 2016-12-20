@@ -84,7 +84,10 @@ class TopicEmailNotificator extends EmailNotificator
         $message = $message . '<br/>' . Translation::get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
              $this->action_user->get_lastname();
         
-        $mail = new Mail($subject, $message, $targetUsers);
+        $mail = new Mail(
+            $subject, $message, $targetUsers, true, array(), array(), $this->action_user->get_fullname(),
+            $this->action_user->get_email()
+        );
         
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * this class contains a list of subscribed users and notificates the users
  * 
@@ -22,6 +24,9 @@ abstract class EmailNotificator
 
     public $action_body;
 
+    /**
+     * @var User
+     */
     public $action_user;
 
     /**
