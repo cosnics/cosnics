@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *

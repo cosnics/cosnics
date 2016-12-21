@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
-
 /**
  *
  * @package Chamilo\Configuration\Service
@@ -23,7 +21,7 @@ class ConfigurationConsulter extends DataConsulter
 
     /**
      * Gets a parameter from the configuration.
-     * 
+     *
      * @param string[] $keys
      * @throws \Exception
      * @return string
@@ -37,11 +35,11 @@ class ConfigurationConsulter extends DataConsulter
     {
         $variables = $keys;
         $values = $this->getSettings();
-        
+
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-            
+
             if (! array_key_exists($key, $values))
             {
                 throw new \Exception(
@@ -53,7 +51,7 @@ class ConfigurationConsulter extends DataConsulter
                 $values = $values[$key];
             }
         }
-        
+
         return $values;
     }
 
@@ -66,11 +64,11 @@ class ConfigurationConsulter extends DataConsulter
     {
         $variables = $keys;
         $values = &$this->getSettings();
-        
+
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-            
+
             if (! isset($values[$key]))
             {
                 $values[$key] = null;
@@ -81,7 +79,7 @@ class ConfigurationConsulter extends DataConsulter
                 $values = &$values[$key];
             }
         }
-        
+
         $values = $value;
     }
 

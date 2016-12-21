@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Ajax\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Translation;
@@ -22,16 +21,16 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
 
     /**
      * Runs this component
-     * 
+     *
      * @throws \Exception
      */
     public function run()
     {
         $user = $this->getUserFromRequest();
-        
+
         $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
         $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
-        
+
         return $userPictureProvider->downloadUserPicture($user, $this->getUser());
     }
 

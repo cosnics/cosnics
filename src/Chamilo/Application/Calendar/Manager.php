@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
@@ -17,13 +16,13 @@ abstract class Manager extends Application
     const PARAM_TIME = 'time';
     const PARAM_VIEW = 'view';
     const PARAM_DOWNLOAD = 'download';
-    
+
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_AVAILABILITY = 'Availability';
     const ACTION_ICAL = 'ICal';
     const ACTION_PRINT = 'Printer';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
@@ -46,11 +45,11 @@ abstract class Manager extends Application
     public function getCurrentRendererType()
     {
         $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
-        
+
         if (! $rendererType)
         {
             $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
-            
+
             if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
@@ -60,7 +59,7 @@ abstract class Manager extends Application
                 }
             }
         }
-        
+
         return $rendererType;
     }
 
@@ -74,7 +73,7 @@ abstract class Manager extends Application
         {
             $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
         }
-        
+
         return $this->currentTime;
     }
 

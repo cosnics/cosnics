@@ -8,11 +8,10 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Exception;
 
 /**
  * $Id: reporting_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.reporting.component
  */
 
@@ -29,13 +28,13 @@ class ViewerComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $template_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID);
-        
+
         if (! isset($template_id))
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(), 
+                \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(
@@ -48,11 +47,11 @@ class ViewerComponent extends Manager
             {
                 $this->set_parameter(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_VIEW, $view);
             }
-            
+
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID, $template_id);
-            
+
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(), 
+                \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name($template_id);
@@ -63,9 +62,9 @@ class ViewerComponent extends Manager
     function get_additional_parameters()
     {
         return array(
-            \Chamilo\Application\Weblcms\Manager::PARAM_USERS, 
-            \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID, 
-            \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID, 
+            \Chamilo\Application\Weblcms\Manager::PARAM_USERS,
+            \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID,
+            \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID,
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }
 
