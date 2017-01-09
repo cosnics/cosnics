@@ -18,6 +18,8 @@ class HtmlInlineSwfRenditionImplementation extends HtmlInlineRenditionImplementa
      */
     public function render($parameters)
     {
+        $parameters = $this->validateParameters($parameters);
+        
         $object = $this->get_content_object();
         $url = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
             $object->get_id(), 

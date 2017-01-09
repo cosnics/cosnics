@@ -31,4 +31,22 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     {
         return $this->renderInline($parameters);
     }
+
+    /**
+     * Validates and (optionally) sets the default width and height when they are not set
+     *
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    protected function validateParameters($parameters)
+    {
+        if(!array_key_exists(self::PARAM_WIDTH, $parameters))
+        {
+            $parameters[self::PARAM_WIDTH] = self::DEFAULT_WIDTH;
+            $parameters[self::PARAM_HEIGHT] = self::DEFAULT_HEIGHT;
+        }
+
+        return $parameters;
+    }
 }
