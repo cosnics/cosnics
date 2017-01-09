@@ -16,11 +16,8 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
-        
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+
         $ids = $this->getRequest()->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
         $failures = 0;

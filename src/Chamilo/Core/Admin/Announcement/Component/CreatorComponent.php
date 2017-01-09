@@ -18,11 +18,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
-        
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+
         if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
