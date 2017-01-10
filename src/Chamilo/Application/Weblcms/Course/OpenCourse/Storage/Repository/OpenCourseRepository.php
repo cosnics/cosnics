@@ -290,7 +290,15 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     protected function getClosedCoursesCondition(Condition $condition = null,
         Condition $courseEntityRelationCondition = null)
     {
-        return new NotCondition($this->getOpenCoursesCondition($condition, $courseEntityRelationCondition));
+        $conditions = array();
+        $conditions[] = new NotCondition($this->getOpenCoursesCondition($condition, $courseEntityRelationCondition));
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        return new AndCondition($conditions);
     }
 
     /**
