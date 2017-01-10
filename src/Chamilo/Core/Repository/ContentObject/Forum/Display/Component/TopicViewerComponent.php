@@ -212,19 +212,30 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     public function renderPosts()
     {
         $html = array();
-        
-        $html[] = '<ul class="media-list forum">';
-        
-        foreach ($this->getVisibleForumTopicPosts() as $forumTopicPost)
+
+        $forumPosts = $this->getVisibleForumTopicPosts();
+
+        if(count($forumPosts) == 0)
         {
-            $html[] = '<li class="media well">';
-            $html[] = $this->renderPostUser($forumTopicPost);
-            $html[] = $this->renderPostBody($forumTopicPost);
-            $html[] = '</li>';
+            $html[] = '<div class="alert alert-info">';
+            $html[] = Translation::getInstance()->getTranslation('NoForumPostsFound', null, Manager::context());
+            $html[] = '</div>';
         }
-        
-        $html[] = '</ul>';
-        
+        else
+        {
+            $html[] = '<ul class="media-list forum">';
+
+            foreach ($forumPosts as $forumTopicPost)
+            {
+                $html[] = '<li class="media well">';
+                $html[] = $this->renderPostUser($forumTopicPost);
+                $html[] = $this->renderPostBody($forumTopicPost);
+                $html[] = '</li>';
+            }
+
+            $html[] = '</ul>';
+        }
+
         return implode(PHP_EOL, $html);
     }
 
@@ -532,10 +543,17 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function renderPager()
     {
-        $pagerRenderer = new PagerRenderer($this->getPager());
-        return $pagerRenderer->renderPaginationWithPageLimit(
-            $this->get_parameters(), 
-            ForumTopic::get_table_name() . '_' . 'page_nr');
+        try
+        {
+            $pagerRenderer = new PagerRenderer($this->getPager());
+            return $pagerRenderer->renderPaginationWithPageLimit(
+                $this->get_parameters(),
+                ForumTopic::get_table_name() . '_' . 'page_nr');
+        }
+        catch(\Exception $ex)
+        {
+
+        }
     }
 
     /**
