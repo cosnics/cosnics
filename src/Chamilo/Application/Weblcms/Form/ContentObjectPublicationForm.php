@@ -17,6 +17,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
@@ -799,7 +800,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         
         if ($category > 0 && ! array_key_exists($category, $this->categories))
         {
-            throw new \Exception(Translation::get("PublicationInSelectedCategoryNotAllowed"));
+            throw new UserException(Translation::get("PublicationInSelectedCategoryNotAllowed"));
         }
         
         if ($values[self::PROPERTY_FOREVER] != 0)
