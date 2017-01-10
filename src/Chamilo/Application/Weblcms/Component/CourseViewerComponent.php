@@ -374,9 +374,50 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function is_tool_accessible()
     {
+        if(!$this->isToolActive())
+        {
+            return false;
+        }
+
+        if($this->is_teacher())
+        {
+            return true;
+        }
+
+        return $this->isToolVisible();
+    }
+
+    /**
+     * Returns whether or not the tool is active
+     *
+     * @return bool
+     *
+     * @throws NoObjectSelectedException
+     * @throws ObjectNotExistException
+     */
+    protected function isToolActive()
+    {
         return CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(),
             CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $this->get_tool_registration()->get_id());
+            $this->get_tool_registration()->get_id()
+        );
+    }
+
+    /**
+     * Returns whether or not the tool is visible
+     *
+     * @return bool
+     *
+     * @throws NoObjectSelectedException
+     * @throws ObjectNotExistException
+     */
+    protected function isToolVisible()
+    {
+        return CourseSettingsController::getInstance()->get_course_setting(
+            $this->get_course(),
+            CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
+            $this->get_tool_registration()->get_id()
+        );
     }
 }
