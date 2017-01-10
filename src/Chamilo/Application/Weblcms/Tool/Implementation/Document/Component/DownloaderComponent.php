@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,9 +28,9 @@ class DownloaderComponent extends Manager
             $publication_id
         );
 
-        if (!$publication instanceof Publication)
+        if (!$publication instanceof ContentObjectPublication)
         {
-            throw new NoObjectSelectedException(
+            throw new ObjectNotExistException(
                 Translation::getInstance()->getTranslation(
                     'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
                 ), $publication_id
