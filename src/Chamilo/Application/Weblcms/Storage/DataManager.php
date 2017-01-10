@@ -671,7 +671,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $attributes->set_id($record[ContentObjectPublication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[ContentObjectPublication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[ContentObjectPublication::PROPERTY_PUBLICATION_DATE]);
-        $attributes->set_application(__NAMESPACE__);
+        $attributes->set_application('Chamilo\Application\Weblcms');
         
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
             \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(), 
