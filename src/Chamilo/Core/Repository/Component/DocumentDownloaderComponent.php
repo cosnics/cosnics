@@ -40,12 +40,12 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         $valid_types = array(
             'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File', 
             'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage', 
-            'Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page', 
-            'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar');
+            'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar'
+        );
         
         if (! $object || ! in_array($object->get_type(), $valid_types))
         {
-            throw new \Exception(Translation::get('ContentObjectMustBeDocument'));
+            throw new UserException(Translation::get('ContentObjectMustBeDocument'));
         }
         
         $security_code = Request::get(ContentObject::PARAM_SECURITY_CODE);
