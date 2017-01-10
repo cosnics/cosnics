@@ -264,7 +264,10 @@ class UserImportForm extends FormValidator
             {
                 $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
                     $csvuser[User::PROPERTY_USERNAME]);
-                if (! $user->delete())
+
+                $user->set_active(0);
+
+                if (! $user->update())
                 {
                     $failures ++;
                     $this->failedcsv[] = Translation::get('DeleteFailed') . ': ' . implode($csvuser, ';');
