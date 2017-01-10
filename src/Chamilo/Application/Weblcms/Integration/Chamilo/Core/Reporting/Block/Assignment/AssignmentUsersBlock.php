@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataManager as AssignmentDataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -52,6 +53,9 @@ class AssignmentUsersBlock extends AssignmentSubmittersBlock
      */
     public function get_submitter_name($submitter)
     {
-        return $submitter->get_fullname();
+        if($submitter instanceof User)
+        {
+            return $submitter->get_fullname();
+        }
     }
 }
