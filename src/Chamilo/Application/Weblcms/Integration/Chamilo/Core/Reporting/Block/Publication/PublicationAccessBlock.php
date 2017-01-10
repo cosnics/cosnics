@@ -38,16 +38,24 @@ class PublicationAccessBlock extends ToolBlock
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 User::class_name(), 
                 $course_visit->get_user_id());
-            
+
+            if($user)
+            {
+                $name = $user->get_fullname();
+                $officialCode = $user->get_official_code();
+            }
+
             $reporting_data->add_data_category_row(
-                $counter, 
-                Translation::get('User', null, \Chamilo\Core\User\Manager::context()), 
-                $user->get_fullname());
-            
+                $counter,
+                Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
+                $name
+            );
+
             $reporting_data->add_data_category_row(
-                $counter, 
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()), 
-                $user->get_official_code());
+                $counter,
+                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()),
+                $officialCode
+            );
             
             $this->add_reporting_data_from_course_visit_as_row($counter, $reporting_data, $course_visit);
             
