@@ -664,7 +664,12 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 
                 if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() != '')
                 {
-                    $conditions[] = $this->get_search_condition();
+                    $condition = $this->get_search_condition();
+
+                    if($condition instanceof Condition)
+                    {
+                        $conditions[] = $condition;
+                    }
                 }
                 
                 $conditions[] = $this->get_own_table_conditions();
