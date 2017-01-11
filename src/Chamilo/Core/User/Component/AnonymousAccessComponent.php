@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
@@ -9,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -48,28 +50,44 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             }
             ;
         }
-        
+
+        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+
         $html = array();
         
         $html[] = $this->render_header(' ');
-        
+
         $html[] = '<div class="anonymous-page">';
         
-        $html[] = '<div class="alert alert-info">';
+        $html[] = '<div class="panel anonymous-container">';
+        $html[] = '<div class="panel-body">';
+
+
+        $html[] = '<h2 class="header">';
+        $html[] = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'institution'));
+        $html[] = '</h2>';
+
+        $html[] = '<div class="anonymous-welcome-message">';
         $html[] = Translation::getInstance()->getTranslation('AnonymousWelcomeMessage', null, Manager::context());
         $html[] = '</div>';
-        
+
         $html[] = '<div class="anonymous-form-container">';
         
         if ($errorMessage)
         {
             $html[] = '<div class="alert alert-danger">' . $errorMessage . '</div>';
         }
-        
+
+        $html[] = '<div class="anonymous-captcha-form">';
         $html[] = $form->toHtml();
-        
+        $html[] = '</div>';
+
         $html[] = '</div>';
         $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $this->render_footer();
         
         return implode(PHP_EOL, $html);
@@ -193,5 +211,13 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     protected function getUserRoleService()
     {
         return $this->getService('chamilo.core.user.roles.service.user_role_service');
+    }
+
+    /**
+     * @return ConfigurationConsulter
+     */
+    protected function getConfigurationConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.configuration_consulter');
     }
 }

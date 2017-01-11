@@ -5,20 +5,51 @@ img.chamilo-menu-my-account-photo {
 }
 
 .anonymous-page {
-	margin-top: 30px;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	background-image: url("../../../../../Configuration/Resources/Images/Aqua/Background/ErrorPage.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.anonymous-form-container {
+.anonymous-container {
 	max-width: 500px;
-	margin: auto;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+.anonymous-container .header {
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.anonymous-container .anonymous-welcome-message {
+	color: #666666;
+	font-size: 14px;
+}
+
+.anonymous-container .anonymous-captcha-form {
+	margin-top: 20px;
 	text-align: center;
 }
 
-.anonymous-view-button {
-	width: 304px;
+.anonymous-container .anonymous-view-button {
+	width: 100%;
 	height: 40px;
 }
 
-.g-recaptcha {
+.anonymous-container .g-recaptcha {
 	display: inline-block;
+	margin-bottom: 20px;
+}
+
+@media screen and (min-width: 520px) {
+	.anonymous-container {
+		width: 500px;
+	}
 }

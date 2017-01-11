@@ -43,7 +43,7 @@ class AnonymousUserForm extends FormValidator
             'style_submit_button', 
             'submit', 
             Translation::getInstance()->getTranslation('ViewAnonymously', null, Manager::context()), 
-            array('class' => 'anonymous-view-button'), 
+            array('class' => 'anonymous-view-button'),
             null, 
             'user');
     }
@@ -58,8 +58,7 @@ class AnonymousUserForm extends FormValidator
         $html = array();
         
         $html[] = '<script src="https://www.google.com/recaptcha/api.js"></script>';
-        $html[] = '<div class="g-recaptcha" data-sitekey="' . $recaptchaSiteKey .
-             '" style="display: inline-block;"></div>';
+        $html[] = '<div class="g-recaptcha" data-sitekey="' . $recaptchaSiteKey . '"></div>';
         
         $this->addElement('html', implode(PHP_EOL, $html));
     }
