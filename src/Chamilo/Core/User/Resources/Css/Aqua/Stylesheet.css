@@ -48,6 +48,10 @@ img.chamilo-menu-my-account-photo {
 	margin-bottom: 20px;
 }
 
+.anonymous-container .anonymous-error-message {
+	margin-top: 20px;
+}
+
 @media screen and (min-width: 520px) {
 	.anonymous-container {
 		width: 500px;

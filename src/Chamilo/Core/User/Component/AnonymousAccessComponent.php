@@ -74,7 +74,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         if ($errorMessage)
         {
-            $html[] = '<div class="alert alert-danger">' . $errorMessage . '</div>';
+            $html[] = '<div class="alert alert-danger anonymous-error-message">' . $errorMessage . '</div>';
         }
 
         $html[] = '<div class="anonymous-captcha-form">';
