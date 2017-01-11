@@ -180,7 +180,7 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        if($this->getUser())
+        if($this->getUser() && $this->get_action() != self::ACTION_DOWNLOAD_DOCUMENT)
         {
             $this->checkAuthorization(Manager::context());
         }
