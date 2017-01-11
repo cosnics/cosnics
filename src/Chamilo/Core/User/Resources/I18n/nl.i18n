@@ -396,3 +396,4 @@ ResetLinkHasBeenSend = "De link om uw wachtwoord te herstellen werd verzonden vi
 YourNewPasswordHasBeenMailedToYou = "Uw nieuw wachtwoord werd verzonden via e-mail"
 AnonymousWelcomeMessage = "Welkom op onze open elektronische leeromgeving"
 ViewAnonymously = "Ga verder"
+UseCaptchaToProceed = "Gebruik de onderstaande captcha om verder te gaan"
