@@ -27,14 +27,14 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     public function run()
     {
-        if (! $this->anonymousAccessAllowed())
+        if (!$this->anonymousAccessAllowed())
         {
             throw new NotAllowedException();
         }
-        
+
         $form = new AnonymousUserForm($this->get_url());
         $errorMessage = null;
-        
+
         if ($form->validate())
         {
             try
@@ -46,22 +46,21 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             }
             catch (\Exception $ex)
             {
-                $errorMessage = Translation::getInstance()->getTranslation('UseCaptchaToProceed');
+                $errorMessage =
+                    Translation::getInstance()->getTranslation('UseCaptchaToProceed', null, Manager::context());
             }
-            ;
         }
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $html = array();
-        
+
         $html[] = $this->render_header(' ');
 
         $html[] = '<div class="anonymous-page">';
-        
+
         $html[] = '<div class="panel anonymous-container">';
         $html[] = '<div class="panel-body">';
-
 
         $html[] = '<h2 class="header">';
         $html[] = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'institution'));
@@ -72,7 +71,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $html[] = '</div>';
 
         $html[] = '<div class="anonymous-form-container">';
-        
+
         if ($errorMessage)
         {
             $html[] = '<div class="alert alert-danger">' . $errorMessage . '</div>';
@@ -89,13 +88,13 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $html[] = '</div>';
 
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Validates the given captcha value
-     * 
+     *
      * @param string $captchaResponseValue
      *
      * @throws \Exception
@@ -103,12 +102,13 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     protected function validateCaptcha($captchaResponseValue)
     {
         $recaptchaSecretKey = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'recaptcha_secret_key'));
-        
+            array('Chamilo\Core\Admin', 'recaptcha_secret_key')
+        );
+
         $recaptcha = new \ReCaptcha\ReCaptcha($recaptchaSecretKey);
         $response = $recaptcha->verify($captchaResponseValue, $this->getRequest()->server->get('REMOTE_ADDR'));
-        
-        if (! $response->isSuccess())
+
+        if (!$response->isSuccess())
         {
             throw new \Exception('Could not verify the captcha code: ' . implode(' / ', $response->getErrorCodes()));
         }
@@ -116,7 +116,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
     /**
      * Creates an anonymous user
-     * 
+     *
      * @return User
      *
      * @throws \Exception
@@ -128,18 +128,18 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $user->set_lastname('User');
         $user->set_username(uniqid());
         $user->set_email('no-reply@chamilo.org');
-        
-        if (! $user->create())
+
+        if (!$user->create())
         {
             throw new \Exception('Could not create a new anonymous user');
         }
-        
+
         return $user;
     }
 
     /**
      * Adds the anonymous role to the user
-     * 
+     *
      * @param User $user
      */
     protected function addAnonymousRoleToUser(User $user)
@@ -154,32 +154,34 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     protected function setAuthenticationCookieAndRedirect(User $user)
     {
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
-        
+
         $parameters = Session::get('requested_url_parameters');
 
         if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == self::context() &&
-             $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
+                $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
             $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home'
         )
         {
             $parameters = array(
                 self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
-                    array('Chamilo\Core\Admin', 'page_after_anonymous_access')));
+                    array('Chamilo\Core\Admin', 'page_after_anonymous_access')
+                )
+            );
         }
-        
+
         $redirect = new Redirect($parameters);
-        
+
         $response = new RedirectResponse($redirect->getUrl());
         $response->headers->setCookie($cookie);
-        
+
         $response->send();
-        
+
         exit();
     }
 
     /**
      * Checks whether or not the anonymous access is allowed
-     * 
+     *
      * @return bool
      */
     protected function anonymousAccessAllowed()
@@ -188,19 +190,22 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         {
             return false;
         }
-        
+
         $anonymousAuthentication = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'enableAnonymousAuthentication'));
-        
-        if (! $anonymousAuthentication)
+            array('Chamilo\Core\Admin', 'enableAnonymousAuthentication')
+        );
+
+        if (!$anonymousAuthentication)
         {
             return false;
         }
-        
+
         $allowedAnonymousAuthenticationUrl = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'anonymous_authentication_url'));
-        
+            array('Chamilo\Core\Admin', 'anonymous_authentication_url')
+        );
+
         $baseUrl = $this->getRequest()->server->get('SERVER_NAME');
+
         return strpos($allowedAnonymousAuthenticationUrl, $baseUrl) !== false;
     }
 
