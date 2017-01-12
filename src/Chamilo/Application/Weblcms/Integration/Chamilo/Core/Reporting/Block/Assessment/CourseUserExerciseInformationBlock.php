@@ -131,7 +131,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                          Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), 
                         $value['last']);
                 $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
-                $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '">' . $img . '</a>';
+                $link = '<a href="' . $this->get_parent()->get_url($params_detail, $filterParams) . '">' . $img . '</a>';
                 $count = $value['count'];
             }
             
