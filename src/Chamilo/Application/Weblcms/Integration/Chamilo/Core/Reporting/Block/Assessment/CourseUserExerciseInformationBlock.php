@@ -85,7 +85,9 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = Assessment::get_type_name();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        
+
+        $filterParams = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+
         $params_detail = $this->get_parent()->get_parameters();
         $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsUserTemplate::class_name();
         
@@ -139,7 +141,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                 ContentObject::class_name(), 
                 $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
             
-            $redirect = new Redirect($params);
+            $redirect = new Redirect($params, $filterParams);
             $objectLink = $redirect->getUrl();
             
             $title = '<a href="' . $objectLink . '">' . $content_object->get_title() . '</a>';
