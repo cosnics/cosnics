@@ -31,14 +31,27 @@ class DeleterComponent extends Manager
         $path = $this->get_root_content_object()->get_complex_content_object_path();
         
         $available_nodes = array();
-        
+
+        $failures = 0;
+
         foreach ($selected_steps as $selected_step)
         {
-            $selected_node = $path->get_node($selected_step);
-            
-            if ($this->canEditComplexContentObjectPathNode($selected_node->get_parent()))
+            try
             {
-                $available_nodes[] = $selected_node;
+                $selected_node = $path->get_node($selected_step);
+
+                if ($this->canEditComplexContentObjectPathNode($selected_node->get_parent()))
+                {
+                    $available_nodes[] = $selected_node;
+                }
+                else
+                {
+                    $failures++;
+                }
+            }
+            catch(\Exception $ex)
+            {
+                $failures++;
             }
         }
         
@@ -56,8 +69,6 @@ class DeleterComponent extends Manager
                 true, 
                 $parameters);
         }
-        
-        $failures = 0;
         
         foreach ($available_nodes as $available_node)
         {
