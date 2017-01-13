@@ -150,7 +150,8 @@ class BrowserComponent extends Manager implements TableSupport
         }
         
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
-        
+        $filterData->setExcludedContentObjectIds($this->get_excluded_objects());
+
         $this->filterData = $filterData;
     }
 
