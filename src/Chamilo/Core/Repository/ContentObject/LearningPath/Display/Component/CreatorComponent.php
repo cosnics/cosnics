@@ -205,7 +205,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
         $excluded_items = array();
         
         $current_node = $this->get_current_node();
-        
+
         foreach ($current_node->get_children() as $child_node)
         {
             $excluded_items[] = $child_node->get_content_object()->get_id();

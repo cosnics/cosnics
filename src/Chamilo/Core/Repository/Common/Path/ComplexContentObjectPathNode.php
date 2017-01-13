@@ -675,8 +675,10 @@ abstract class ComplexContentObjectPathNode
         
         if ($content_object->is_complex_content_object())
         {
-            $parent_ids = $this->get_parents_content_object_ids();
+            $parent_ids = $this->get_parents_content_object_ids(true);
             $content_object_descendant_ids = $content_object->get_complex_content_object_path()->get_root()->get_descendants_content_object_ids();
+            $content_object_descendant_ids[] = $content_object->get_complex_content_object_path()->get_root()->get_content_object()->getId();
+
             return count(array_intersect($content_object_descendant_ids, $parent_ids)) > 0;
         }
         else
