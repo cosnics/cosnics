@@ -100,8 +100,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $redirect = new Redirect();
-                $redirect->writeHeader($this->get_assessment_back_url());
+                if($this->get_assessment_back_url())
+                {
+                    $redirect = new Redirect();
+                    $redirect->writeHeader($this->get_assessment_back_url());
+                }
             }
         }
 
