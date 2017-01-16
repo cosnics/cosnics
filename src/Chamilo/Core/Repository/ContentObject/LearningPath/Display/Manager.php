@@ -219,7 +219,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         catch (\Exception $ex)
         {
             $bestPossibleNode = $this->detectBestPossibleNode();
-            
+
             if(!$bestPossibleNode)
             {
                 throw new UserException(
