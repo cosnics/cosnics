@@ -148,6 +148,11 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $types = $all_types;
         }
+
+        if(count($types) == 1)
+        {
+            $types = $types[0];
+        }
         
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
         $filterData->setExcludedContentObjectIds($this->get_excluded_objects());

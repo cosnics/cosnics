@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
+use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -20,11 +21,14 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
 
+        /** @var FilterData $filterData */
+        $filterData = $this->get_component()->getFilterData();
+
         return $contentObjectService->getContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
+            $filterData->getTypeDataClass(),
             $this->get_component()->getWorkspace(),
             new ConditionFilterRenderer(
-                $this->get_component()->getFilterData(),
+                $filterData,
                 $this->get_component()->getWorkspace()
             ),
             $count,
@@ -40,11 +44,14 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
 
+        /** @var FilterData $filterData */
+        $filterData = $this->get_component()->getFilterData();
+
         return $contentObjectService->countContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
+            $filterData->getTypeDataClass(),
             $this->get_component()->getWorkspace(),
             new ConditionFilterRenderer(
-                $this->get_component()->getFilterData(),
+                $filterData,
                 $this->get_component()->getWorkspace()
             )
         );
