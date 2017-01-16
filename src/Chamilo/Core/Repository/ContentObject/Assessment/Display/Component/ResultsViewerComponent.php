@@ -120,28 +120,25 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         
         if ($this->get_configuration()->show_score())
         {
-            $html = array();
-            
-            $html[] = '<div class="question">';
-            $html[] = '<div class="title">';
-            $html[] = '<div class="text">';
-            $html[] = '<div class="bevel" style="float: left;">';
-            $html[] = Translation::get('TotalScore');
-            $html[] = '</div>';
-            $html[] = '<div class="bevel" style="text-align: right;">';
-            
+            $html[] = '<div class="panel panel-default">';
+
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title pull-left">' . Translation::get('TotalScore') . '</h3>';
+            $html[] = '<div class="pull-right">';
+
             if ($total_score < 0)
             {
                 $total_score = 0;
             }
-            
+
             $percent = round(($total_score / $total_weight) * 100);
-            
+
             $html[] = $total_score . ' / ' . $total_weight . ' (' . $percent . '%)';
+
             $html[] = '</div>';
-            
-            $html[] = '</div></div></div>';
-            $html[] = '<div class="clear"></div>';
+            $html[] = '<div class="clearfix"></div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
             
             $form->addElement('html', implode(PHP_EOL, $html));
         }

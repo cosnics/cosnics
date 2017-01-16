@@ -178,4 +178,9 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         return implode(PHP_EOL, $html);
     }
+
+    public function needsDescriptionBorder()
+    {
+        return true;
+    }
 }

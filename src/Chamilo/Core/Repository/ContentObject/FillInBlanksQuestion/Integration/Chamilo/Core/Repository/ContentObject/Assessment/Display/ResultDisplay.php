@@ -41,7 +41,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $answer_text = nl2br($answer_text);
         $this->parts = preg_split(FillInBlanksQuestionAnswer::QUESTIONS_REGEX, $answer_text);
 
-        $html[] = '<div class="with_borders">';
+        $html[] = '<div class="fill-in-the-blanks-result">';
         $html[] = array_shift($this->parts);
 
         $text = array();
@@ -356,5 +356,10 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         return Translation::getInstance()->getTranslation(
             $variable, $parameters, 'Chamilo\Core\Repository\ContentObject\Assessment'
         );
+    }
+
+    public function needsDescriptionBorder()
+    {
+        return true;
     }
 }

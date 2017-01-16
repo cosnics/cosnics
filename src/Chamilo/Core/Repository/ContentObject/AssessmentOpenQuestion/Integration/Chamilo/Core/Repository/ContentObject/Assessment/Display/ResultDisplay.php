@@ -126,4 +126,9 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<br />';
         return implode(PHP_EOL, $html);
     }
+
+    public function needsDescriptionBorder()
+    {
+        return true;
+    }
 }

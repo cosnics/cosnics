@@ -102,7 +102,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 
                 $html[] = '<td><input type="radio" name="yourchoice_' .
                      $this->get_complex_content_object_question()->get_id() . '" value="' . $i . '" disabled' . $selected .
-                     '/>' . $result . '</td>';
+                     '/> ' . $result . '</td>';
             }
             else
             {
@@ -137,7 +137,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $result = '';
                 }
                 
-                $html[] = '<td><input type="checkbox" name="yourchoice' . $i . '" disabled' . $selected . '/>' . $result .
+                $html[] = '<td><input type="checkbox" name="yourchoice' . $i . '" disabled' . $selected . '/> ' . $result .
                      '</td>';
             }
             

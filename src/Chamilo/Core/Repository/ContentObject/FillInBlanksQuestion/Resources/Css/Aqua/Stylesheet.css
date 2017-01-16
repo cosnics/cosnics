@@ -45,3 +45,8 @@ span.inline_answer_hint {
 	color: #565656;
 	font-weight: bold;
 }
+
+div.fill-in-the-blanks-result {
+	padding: 15px;
+	border-bottom: 1px solid #dddddd;
+}

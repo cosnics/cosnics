@@ -34,6 +34,11 @@ class QuestionResultDisplay
 
     private $can_change;
 
+    /**
+     * @var QuestionResultDisplay
+     */
+    private $questionResultDisplay;
+
     public function __construct($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers, 
         $score, $hints, $feedback, $can_change)
     {
@@ -91,6 +96,14 @@ class QuestionResultDisplay
 
     public function render()
     {
+        $this->questionResultDisplay = AssessmentQuestionResultDisplay::factory(
+            $this->results_viewer,
+            $this->complex_content_object_question,
+            $this->question_nr,
+            $this->answers,
+            $this->score,
+            $this->hints);
+
         $this->render_header();
         
         if ($this->add_borders())
@@ -100,16 +113,8 @@ class QuestionResultDisplay
             
             $this->form->addElement('html', implode(PHP_EOL, $header));
         }
-        
-        $display = AssessmentQuestionResultDisplay::factory(
-            $this->results_viewer, 
-            $this->complex_content_object_question, 
-            $this->question_nr, 
-            $this->answers, 
-            $this->score, 
-            $this->hints);
-        
-        $this->form->addElement('html', $display->get_question_result());
+
+        $this->form->addElement('html', $this->questionResultDisplay->get_question_result());
         
         if ($this->add_borders())
         {
@@ -127,20 +132,14 @@ class QuestionResultDisplay
     public function render_header()
     {
         $html = array();
-        
-        $html[] = '<div class="question">';
-        $html[] = '<div class="title">';
-        $html[] = '<div class="number">';
-        $html[] = '<div class="bevel">';
-        $html[] = $this->question_nr . '.';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="text">';
-        
-        $html[] = '<div class="bevel" style="float: left;">';
-        $html[] = $this->question->get_title();
-        $html[] = '</div>';
-        $html[] = '<div class="bevel" style="text-align: right;">';
+
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title pull-left">' . $this->question_nr . '. ' . $this->question->get_title() . '</h3>';
+
+        $html[] = '<div class="pull-right">';
+
         $this->form->addElement('html', implode(PHP_EOL, $html));
         $html = array();
         
@@ -180,40 +179,46 @@ class QuestionResultDisplay
             $defaults[$this->complex_content_object_question->get_id() . '_score'] = $this->get_score();
             $this->form->setDefaults($defaults);
         }
-        
+
         $html[] = '</div>';
-        
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="answer">';
-        
-        $description = $this->question->get_description();
-        
+
+        $html[] = $this->get_description();
+
+        $this->form->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    public function get_description()
+    {
+        $html = array();
+
         if ($this->question->has_description())
         {
-            $html[] = '<div class="description">';
-            
+            $description = $this->question->get_description();
+            $classes = $this->needsDescriptionBorder() ? 'panel-body panel-body-assessment-description' : 'panel-body';
             $renderer = new ContentObjectResourceRenderer($this, $description);
+
+            $html[] = '<div class="' . $classes . '">';
             $html[] = $renderer->run();
-            
-            $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
-        
-        $html[] = '<div class="clear"></div>';
-        
-        $this->form->addElement('html', implode(PHP_EOL, $html));
+
+        return implode(PHP_EOL, $html);
     }
 
     public function display_feedback()
     {
+        $html = array();
+
+        $html[] = '<div class="before_feedback"></div>';
+
         if (! $this->can_change)
         {
-            $html[] = '<div class="splitter">';
+            $html[] = '<div class="feedback_splitter">';
             $html[] = Translation::get('CourseAdministratorFeedback');
             $html[] = '</div>';
-            $html[] = '<div class="with_borders">';
+            $html[] = '<div class="feedback">';
             if (! $this->feedback)
             {
                 $html[] = '<div class="warning-message">' . Translation::get('NotYetRatedWarning') . '</div>';
@@ -229,10 +234,10 @@ class QuestionResultDisplay
         }
         else
         {
-            $html[] = '<div class="splitter">';
+            $html[] = '<div class="feedback_splitter">';
             $html[] = Translation::get('CourseAdministratorFeedback');
             $html[] = '</div>';
-            $html[] = '<div class="with_borders">';
+            $html[] = '<div class="feedback">';
             
             if (! $this->feedback)
             {
@@ -254,8 +259,7 @@ class QuestionResultDisplay
     public function render_footer()
     {
         $html[] = '</div>';
-        $html[] = '</div>';
-        
+
         $footer = implode(PHP_EOL, $html);
         return $footer;
     }
@@ -263,5 +267,10 @@ class QuestionResultDisplay
     public function add_borders()
     {
         return false;
+    }
+
+    public function needsDescriptionBorder()
+    {
+        return $this->questionResultDisplay->needsDescriptionBorder();
     }
 }

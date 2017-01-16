@@ -113,20 +113,13 @@ abstract class AssessmentQuestionResultDisplay
     public function header()
     {
         $html = array();
-        
-        $html[] = '<div class="question">';
-        $html[] = '<div class="title">';
-        $html[] = '<div class="number">';
-        $html[] = '<div class="bevel">';
-        $html[] = $this->question_nr . '.';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="text">';
-        
-        $html[] = '<div class="bevel" style="float: left;">';
-        $html[] = $this->question->get_title();
-        $html[] = '</div>';
-        $html[] = '<div class="bevel" style="text-align: right;">';
+
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title pull-left">' . $this->question_nr . '. ' . $this->question->get_title() . '</h3>';
+
+        $html[] = '<div class="pull-right">';
         
         if ($this->hints > 0)
         {
@@ -142,41 +135,47 @@ abstract class AssessmentQuestionResultDisplay
         {
             $html[] = $this->get_score() . ' / ' . $this->get_complex_content_object_question()->get_weight();
         }
+
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
+        $html[] = $this->get_description();
         
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="answer">';
-        
-        $description = $this->question->get_description();
-        $has_description = StringUtilities::getInstance()->hasValue($description, true);
-        if ($has_description)
+        return implode(PHP_EOL, $html);
+    }
+
+    public function get_description()
+    {
+        $html = array();
+
+        if ($this->question->has_description())
         {
-            $html[] = '<div class="description">';
-            
+            $description = $this->question->get_description();
+            $classes = $this->needsDescriptionBorder() ? 'panel-body panel-body-assessment-description' : 'panel-body';
             $renderer = new ContentObjectResourceRenderer($this, $description);
+
+            $html[] = '<div class="' . $classes . '">';
             $html[] = $renderer->run();
-            
-            $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
-        
-        $html[] = '<div class="clear"></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function footer()
     {
         $html[] = '</div>';
-        $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function add_borders()
+    {
+        return false;
+    }
+
+    public function needsDescriptionBorder()
     {
         return false;
     }
