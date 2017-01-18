@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserF
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -36,13 +37,18 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
     {
         switch ($column->get_name())
         {
-            case Workspace::PROPERTY_CREATOR_ID :
-                return $workspace->getCreator()->get_fullname();
-            case Workspace::PROPERTY_CREATION_DATE :
+            case Workspace::PROPERTY_CREATOR_ID:
+                if($workspace->getCreator() instanceof User)
+                {
+                    return $workspace->getCreator()->get_fullname();
+                }
+
+                return Translation::getInstance()->getTranslation('Unknown', null, Utilities::COMMON_LIBRARIES);
+            case Workspace::PROPERTY_CREATION_DATE:
                 return DatetimeUtilities::format_locale_date(
                     Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
                     $workspace->getCreationDate());
-            case Workspace::PROPERTY_NAME :
+            case Workspace::PROPERTY_NAME:
                 return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
                      parent::render_cell($column, $workspace) . '</a>';
         }
