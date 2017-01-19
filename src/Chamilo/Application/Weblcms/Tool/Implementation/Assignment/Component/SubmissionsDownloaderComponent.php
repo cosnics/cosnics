@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -303,5 +304,14 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->get_publication_id());
+
+        if (!$this->publication instanceof ContentObjectPublication)
+        {
+            throw new ObjectNotExistException(
+                Translation::getInstance()->getTranslation(
+                    'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
+                ), $this->get_publication_id()
+            );
+        }
     }
 }
