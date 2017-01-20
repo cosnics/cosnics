@@ -206,7 +206,7 @@ class DataManager
             if ($parameters->get_joins() instanceof Joins)
             {
                 $joins = $parameters->get_joins();
-                $joins->add($join);
+                $joins->prepend($join);
                 $parameters->set_joins($joins);
             }
             else

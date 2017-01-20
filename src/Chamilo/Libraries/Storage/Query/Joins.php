@@ -46,6 +46,14 @@ class Joins implements \Countable
         $this->joins[] = $join;
     }
 
+    /**
+     * @param Join $join
+     */
+    public function prepend($join)
+    {
+        array_unshift($this->joins, $join);
+    }
+
     public function getHashParts()
     {
         $hashes = array();
