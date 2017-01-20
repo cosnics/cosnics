@@ -43,7 +43,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
             ContentObjectPublication::class_name(), 
             $publication_id);
         
-        if (! isset($publication))
+        if (!$publication instanceof ContentObjectPublication)
         {
             throw new ObjectNotExistException(Translation::get('Publication'), $publication_id);
         }
