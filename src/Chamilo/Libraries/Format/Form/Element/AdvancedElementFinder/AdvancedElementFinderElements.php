@@ -34,9 +34,9 @@ class AdvancedElementFinderElements
      * 
      * @param AdvancedElementFinderElement $element
      */
-    public function add_element(AdvancedElementFinderElement $element)
+    public function add_element(AdvancedElementFinderElement $element = null)
     {
-        if (! $element)
+        if (! $element instanceof AdvancedElementFinderElement)
         {
             return false;
         }
