@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -69,7 +70,10 @@ class DeleterComponent extends Manager
             $success = false;
             $message = $ex->getMessage();
         }
-        
-        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+
+        $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
+        $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
+
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
     }
 }

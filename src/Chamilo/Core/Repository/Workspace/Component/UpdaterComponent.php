@@ -56,8 +56,11 @@ class UpdaterComponent extends TabComponent
                 $success = false;
                 $message = $ex->getMessage();
             }
-            
-            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+
+            $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
+            $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
+
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
         }
         else
         {
