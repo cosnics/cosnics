@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultVie
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -32,7 +33,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         
         if (count($question_cids) <= 0)
         {
-            throw new \Exception(Translation::get('ThisAssessmentHasNoAnswers'));
+            throw new UserException(Translation::get('ThisAssessmentHasNoAnswers'));
         }
         
         $condition = new InCondition(
