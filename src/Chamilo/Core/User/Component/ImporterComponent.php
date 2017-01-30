@@ -79,7 +79,7 @@ class ImporterComponent extends Manager
         $text .= 'language;status;active;<b>official_code</b>;phone;activation_date;expiration_date;auth_source;password';
         $html[] = $text;
         
-        $text = '<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;';
+        $text = '<b>A / U / UA / D</b>;<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;';
         
         if ($requireEmail)
         {
@@ -102,7 +102,7 @@ class ImporterComponent extends Manager
         $html[] = '';
         $html[] = '&lt;Contacts&gt;';
         $html[] = '    &lt;Contact&gt;';
-        $html[] = '        <b>&lt;action&gt;A/U/D&lt;/action&gt;</b>';
+        $html[] = '        <b>&lt;action&gt;A / U / UA / D&lt;/action&gt;</b>';
         $html[] = '        <b>&lt;lastname&gt;xxx&lt;/lastname&gt;</b>';
         $html[] = '        <b>&lt;firstname&gt;xxx&lt;/firstname&gt;</b>';
         $html[] = '        <b>&lt;username&gt;xxx&lt;/username&gt;</b>';
@@ -141,6 +141,7 @@ class ImporterComponent extends Manager
         $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
         $html[] = '<br />A: ' . Translation::get('Add', null, Utilities::COMMON_LIBRARIES);
         $html[] = '<br />U: ' . Translation::get('Update', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '<br />UA: ' . Translation::get('UpdateOrAddUser', null, 'Chamilo\Core\User');
         $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '<br /><br />';
         $html[] = '<u><b>' . Translation::get('Status') . '</u></b>';
