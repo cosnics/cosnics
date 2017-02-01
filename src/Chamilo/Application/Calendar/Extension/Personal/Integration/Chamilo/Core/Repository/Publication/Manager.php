@@ -201,7 +201,7 @@ class Manager implements PublicationInterface
         $attributes->set_id($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(\Chamilo\Application\Calendar\Manager::context());
+        $attributes->set_application(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
         $attributes->set_location(Translation::get('TypeName', null, \Chamilo\Application\Calendar\Manager::context()));
         $attributes->set_url(
             'index.php?application=Chamilo\Application\Calendar&amp;go=view&personal_calendar=' . $attributes->get_id());
