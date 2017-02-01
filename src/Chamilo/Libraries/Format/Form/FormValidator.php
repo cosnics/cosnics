@@ -1260,6 +1260,22 @@ EOT;
     }
 
     /**
+     * Disables the submit button
+     */
+    protected function disableSubmitButton()
+    {
+        $javascriptHtml = array();
+
+        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '$(document).ready(function() {';
+        $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', true)';
+        $javascriptHtml[] = '});';
+        $javascriptHtml[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+    }
+
+    /**
      *
      * @param string $elementName
      * @param string[] $dropzoneOptions
@@ -1271,16 +1287,8 @@ EOT;
         $dropzoneOptions['removedfileCallbackFunction'] = 'chamilo.libraries.single.deleteUploadedFile';
         
         $this->addFileDropzone($elementName, $dropzoneOptions, $includeLabel);
-        
-        $javascriptHtml = array();
-        
-        $javascriptHtml[] = '<script type="text/javascript">';
-        $javascriptHtml[] = '$(document).ready(function() {';
-        $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', true)';
-        $javascriptHtml[] = '});';
-        $javascriptHtml[] = '</script>';
-        
-        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+
+        $this->disableSubmitButton();
         
         $this->addElement(
             'html', 
@@ -1297,6 +1305,16 @@ EOT;
      */
     public function addFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true)
     {
+        $autoProcess = true;
+        if(array_key_exists('autoProcessQueue', $dropzoneOptions))
+        {
+            if($dropzoneOptions['autoProcessQueue'] === false)
+            {
+                $dropzoneOptions['autoProcessQueue'] = 'false';
+                $autoProcess = false;
+            }
+        }
+
         $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
         
         $this->addElement('html', '<div id="' . $elementName . '-upload-input">');
@@ -1329,10 +1347,16 @@ EOT;
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') .
              '</span>';
         $dropzoneHtml[] = '</button>';
-        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
-             '</span>';
-        $dropzoneHtml[] = '</button>';
+
+
+        if($autoProcess)
+        {
+            $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
+            $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
+                '</span>';
+            $dropzoneHtml[] = '</button>';
+        }
+
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';

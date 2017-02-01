@@ -12,4 +12,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    const PARAM_UPLOAD_TICKET = 'upload_ticket';
 }
