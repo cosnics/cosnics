@@ -252,8 +252,13 @@ class ContentObjectCopier
      * 
      * @param array $contentObjectIdentifiers
      */
-    protected function changeContentObjectNames(array $contentObjectIdentifiers)
+    protected function changeContentObjectNames($contentObjectIdentifiers = array())
     {
+        if(empty($contentObjectIdentifiers))
+        {
+            return;
+        }
+
         DataClassCache::reset();
         
         $condition = new InCondition(
