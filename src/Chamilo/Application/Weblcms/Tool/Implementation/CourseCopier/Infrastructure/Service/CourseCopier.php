@@ -89,9 +89,15 @@ class CourseCopier implements CourseCopierInterface
         foreach ($selectedContentObjectPublicationIds as $publicationId)
         {
             $contentObjectPublication = $this->courseCopierRepository->findContentObjectPublicationById($publicationId);
+
             $publicationExtension = $this->courseCopierRepository->findContentObjectPublicationExtension(
                 $contentObjectPublication);
-            
+
+            if(!$publicationExtension instanceof DataClass)
+            {
+                $publicationExtension = null;
+            }
+
             $parentId = $contentObjectPublication->get_category_id();
             $oldId = $contentObjectPublication->getId();
             
