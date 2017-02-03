@@ -310,7 +310,7 @@ abstract class ContentObjectForm extends FormValidator
     /**
      * Sets the content object associated with this form.
      * 
-     * @param $content_object The content object
+     * @param ContentObject $content_object
      */
     protected function set_content_object($content_object)
     {

@@ -30,7 +30,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             Matterhorn::class_name(), 
             Office365Video::class_name());
         
-        $hogentTypes = array('Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa');
+        $hogentTypes = array(
+            'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa',
+            'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Video'
+        );
         
         foreach ($hogentTypes as $hogentType)
         {
