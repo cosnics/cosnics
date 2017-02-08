@@ -45,11 +45,29 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 
     /**
      *
+     * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function getFile()
     {
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
-        return $this->getRequest()->files->get($filePropertyName);
+        if(empty($filePropertyName)) {
+            throw new \Exception('filePropertyName parameter not available in request');
+        }
+
+        $file = $this->getRequest()->files->get($filePropertyName);
+        if(empty($file)) {
+            $errorMessage = "File with key " . $filePropertyName . "not found in request.";
+
+            $availableKeys = $this->getRequest()->files->keys();
+            if(!empty($availableKeys)) {
+                $errorMessage .= " Available file keys: " . implode(', ', $availableKeys) . ".";
+            }
+
+            throw new \Exception($errorMessage);
+        }
+
+        return $file;
     }
 }
