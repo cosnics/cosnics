@@ -2133,7 +2133,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     foreach ($entity_ids as $course_group_id)
                     {
                         $course_group = self::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
-                        
+
+                        if(empty($course_group)) { //course group no longer exists
+                            continue;
+                        }
+
                         $course_group_users = CourseGroupDataManager::retrieve_course_group_user_ids(
                             $course_group->get_id());
                         
