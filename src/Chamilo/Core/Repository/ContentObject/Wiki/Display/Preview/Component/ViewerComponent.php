@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Preview\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Translation;
 
 class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implements WikiDisplaySupport
@@ -22,7 +23,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implement
      */
     public function get_wiki_page_statistics_reporting_template_name()
     {
-        throw new \Exception(Translation::get('ImpossibleInPreviewMode'));
+        throw new UserException(Translation::get('ImpossibleInPreviewMode'));
     }
 
     /**
@@ -30,6 +31,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implement
      */
     public function get_wiki_statistics_reporting_template_name()
     {
-        throw new \Exception(Translation::get('ImpossibleInPreviewMode'));
+        throw new UserException(Translation::get('ImpossibleInPreviewMode'));
     }
 }
