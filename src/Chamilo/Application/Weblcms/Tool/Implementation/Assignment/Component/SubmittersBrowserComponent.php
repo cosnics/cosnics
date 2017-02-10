@@ -4,12 +4,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionCourseGroupBrowser\SubmissionCourseGroupsBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionGroupsBrowser\SubmissionGroupsBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionUsersBrowser\SubmissionUsersBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -84,10 +86,17 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
 
     public function run()
     {
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        /**
+         * @var ContentObjectPublication $publication
+         */
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->get_publication_id());
-        
+
+        if(empty($publication)) {
+            throw new ObjectNotExistException(Translation::get("Publication"), $this->get_publication_id());
+        }
+
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) ||
              ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
@@ -96,7 +105,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                 false, 
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_STUDENT_BROWSE_SUBMISSIONS, 
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->getId()));
         }
         
         $this->assignment = $publication->get_content_object();
@@ -131,19 +140,19 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
      */
     private function get_submitters_data()
     {
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
         // Users
-        $this->users = \Chamilo\Application\Weblcms\Storage\DataManager::get_publication_target_users_by_publication_id(
+        $this->users = DataManager::get_publication_target_users_by_publication_id(
             $this->get_publication_id());
         // Course groups
-        $this->course_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_course_groups(
+        $this->course_groups = DataManager::retrieve_publication_target_course_groups(
             $this->get_publication_id(), 
             $publication->get_course_id())->as_array();
         // Platform groups
-        $this->platform_groups = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_platform_groups(
+        $this->platform_groups = DataManager::retrieve_publication_target_platform_groups(
             $this->get_publication_id(), 
             $publication->get_course_id())->as_array();
     }
@@ -164,7 +173,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $html[] = '</div><br />';
         
         // retrieve group submissions allowed
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->get_publication_id());
         
@@ -466,7 +475,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                         ToolbarItem::DISPLAY_ICON_AND_LABEL));
                 
                 $course = $this->get_course();
-                $ephorus_tool = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name(
+                $ephorus_tool = DataManager::retrieve_course_tool_by_name(
                     'Ephorus');
                 if ($ephorus_tool && $course->get_course_setting(
                     \Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting::COURSE_SETTING_TOOL_ACTIVE, 
