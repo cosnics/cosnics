@@ -1,13 +1,16 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -41,7 +44,7 @@ class CourseGroupMenu extends HtmlMenu
     /**
      * The selected group
      * 
-     * @var int
+     * @var CourseGroup
      */
     private $current_group;
 
@@ -53,14 +56,13 @@ class CourseGroupMenu extends HtmlMenu
     private $course;
 
     /**
-     * Creates a new course group navigation menu.
-     * 
-     * @param $owner int The ID of the owner of the categories to provide in this menu.
-     * @param $current_group int The ID of the current group in the menu.
-     * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
+     * CourseGroupMenu constructor.
+     * @param Course $course
+     * @param $current_group
+     * @param string $url_format
+     * @throws ObjectNotExistException
      */
-    public function __construct($course, $current_group, 
+    public function __construct(Course $course, $current_group,
         $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&tool_action=Details&course=%s&course_group=%s')
     {
         $this->course = $course;
@@ -68,12 +70,18 @@ class CourseGroupMenu extends HtmlMenu
         
         if ($current_group == '0' || is_null($current_group))
         {
-            $this->current_group = DataManager::retrieve_course_group_root($course->get_id());
+            $this->current_group = DataManager::retrieve_course_group_root($course->getId());
             $url = $this->get_home_url();
         }
         else
         {
             $this->current_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $current_group);
+            if(empty($this->current_group)) {
+                throw new ObjectNotExistException(
+                    Translation::get('TypeNameSingle', array(), 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'),
+                    $current_group
+                );
+            }
             $url = $this->get_url($this->current_group->get_id());
         }
         
@@ -85,7 +93,7 @@ class CourseGroupMenu extends HtmlMenu
 
     public function get_menu()
     {
-        $course_group = DataManager::retrieve_course_group_root($this->course->get_id());
+        $course_group = DataManager::retrieve_course_group_root($this->course->getId());
         
         $menu = array();
         
@@ -148,7 +156,7 @@ class CourseGroupMenu extends HtmlMenu
      */
     public function get_url($group)
     {
-        return htmlentities(sprintf($this->urlFmt, $this->course->get_id(), $group));
+        return htmlentities(sprintf($this->urlFmt, $this->course->getId(), $group));
     }
 
     private function get_home_url()
@@ -159,7 +167,7 @@ class CourseGroupMenu extends HtmlMenu
                     'tool_action=Details', 
                     'tool_action=Browser', 
                     str_replace('&course_group=%s', '', $this->urlFmt)), 
-                $this->course->get_id()));
+                $this->course->getId()));
     }
 
     /**
