@@ -203,9 +203,9 @@ class Translation
      */
     public function getTranslation($variable, $parameters = array(), $context = null, $isocode = null)
     {
-        $translation = $this->doTranslation($variable, $context, $isocode);
-
         $this->determineDefaultTranslationContext();
+
+        $translation = $this->doTranslation($variable, $context, $isocode);
 
         if (empty($parameters))
         {
@@ -294,14 +294,15 @@ class Translation
     protected function determineDefaultTranslationContext()
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-        $class = $backtrace[1]['class'];
+        $counter = 1;
 
         /** If called by deprecated method get, the actual class is deeper in the stack trace */
-        if ($class == __CLASS__)
+        do
         {
-            $class = $backtrace[2]['class'];
+            $class = $backtrace[$counter]['class'];
+            $counter++;
         }
+        while($class == __CLASS__);
 
         self::$calledClass = $class;
     }
