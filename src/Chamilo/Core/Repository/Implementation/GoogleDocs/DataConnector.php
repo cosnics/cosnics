@@ -394,21 +394,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (is_array($file))
         {
             $title = explode('.', $file['name']);
-            $google_file->setTitle($title[0]);
+            $google_file->setName($title[0]);
             $google_file->setMimeType($file['type']);
             
             $data = file_get_contents($file['name']);
         }
         else
         {
-            $google_file->setTitle($file);
+            $google_file->setName($file);
             $google_file->setMimeType('application/vnd.google-apps.folder');
             $data = null;
         }
         
-        $parent = new \Google_Service_Drive_ParentReference();
-        $parent->setId($folder);
-        $google_file->setParents(array($parent));
+        $google_file->setParents(array($folder));
         
         $fileCreated = $this->service->files->insert($google_file, array('data' => $data, 'mimeType' => $file['type']));
         
