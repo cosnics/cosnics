@@ -36,7 +36,12 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
         }
         
         $tab = DataManager::retrieve_by_id(Tab::class_name(), intval($this->getPostDataValue(self::PARAM_TAB)));
-        
+
+        if(!$tab instanceof Tab)
+        {
+            JsonAjaxResult::general_error(Translation::getInstance()->getTranslation('NoValidTabSelected'));
+        }
+
         if ($tab->getUserId() == $userId && $tab->canBeDeleted())
         {
             if ($tab->delete())
