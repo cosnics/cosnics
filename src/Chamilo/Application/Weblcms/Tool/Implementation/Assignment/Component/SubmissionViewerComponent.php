@@ -16,6 +16,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\Document\Document;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -197,7 +198,11 @@ class SubmissionViewerComponent extends SubmissionsManager
         
         // Submission
         $submissions = AssignmentSubmission::get_data(AssignmentSubmission::class_name(), null, $condition)->as_array();
-        $this->submission = $submissions[0]->get_content_object();
+
+        if($submissions[0])
+        {
+            $this->submission = $submissions[0]->get_content_object();
+        }
     }
 
     /**
