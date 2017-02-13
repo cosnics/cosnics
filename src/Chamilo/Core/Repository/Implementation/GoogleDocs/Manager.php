@@ -83,29 +83,29 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             // Special lists of documents
             $owned = array();
             
-            $shared = array();
-            $shared['title'] = Translation::get('SharedWithMe');
-            $shared['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_SHARED));
-            $shared['class'] = 'external_repository';
-            $menu_items[] = $shared;
+//            $shared = array();
+//            $shared['title'] = Translation::get('SharedWithMe');
+//            $shared['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_SHARED));
+//            $shared['class'] = 'external_repository';
+//            $menu_items[] = $shared;
             
-            $recent = array();
-            $recent['title'] = Translation::get('Recent');
-            $recent['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_RECENT));
-            $recent['class'] = 'recent';
-            $menu_items[] = $recent;
+//            $recent = array();
+//            $recent['title'] = Translation::get('Recent');
+//            $recent['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_RECENT));
+//            $recent['class'] = 'recent';
+//            $menu_items[] = $recent;
             
-            $followed = array();
-            $followed['title'] = Translation::get('Followed');
-            $followed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_FOLLOWED));
-            $followed['class'] = 'followed';
-            $menu_items[] = $followed;
+//            $followed = array();
+//            $followed['title'] = Translation::get('Followed');
+//            $followed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_FOLLOWED));
+//            $followed['class'] = 'followed';
+//            $menu_items[] = $followed;
             
-            $trashed = array();
-            $trashed['title'] = Translation::get('Trash');
-            $trashed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_TRASH));
-            $trashed['class'] = 'trash';
-            $menu_items[] = $trashed;
+//            $trashed = array();
+//            $trashed['title'] = Translation::get('Trash');
+//            $trashed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_TRASH));
+//            $trashed['class'] = 'trash';
+//            $menu_items[] = $trashed;
             
             return $menu_items;
         }
