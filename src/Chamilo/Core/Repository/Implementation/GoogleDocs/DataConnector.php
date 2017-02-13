@@ -408,7 +408,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         
         $google_file->setParents(array($folder));
         
-        $fileCreated = $this->service->files->insert($google_file, array('data' => $data, 'mimeType' => $file['type']));
+        $fileCreated = $this->service->files->create($google_file, array('data' => $data, 'mimeType' => $file['type']));
         
         return $fileCreated->getId();
     }
