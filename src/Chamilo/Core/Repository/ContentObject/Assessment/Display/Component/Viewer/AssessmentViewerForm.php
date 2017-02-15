@@ -95,6 +95,13 @@ class AssessmentViewerForm extends FormValidator
                      ': <strong><div class="time">' . $current_time . '</div>' . Translation::get('SecondsShort') .
                      '</div></strong>');
         }
+
+        $this->addElement(
+            'html',
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HeartBeat.js'
+            )
+        );
     }
 
     public function add_buttons()
