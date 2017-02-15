@@ -52,6 +52,6 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
         }
         
         $this->set_option(self::OPTION_CONFIGURATION, $path);
-        $this->set_option(self::OPTION_SKIN, 'moono');
+        $this->set_option(self::OPTION_SKIN, 'bootstrapck');
     }
 }

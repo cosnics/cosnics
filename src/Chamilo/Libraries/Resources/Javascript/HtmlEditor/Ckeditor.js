@@ -3,10 +3,14 @@ Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 
+CKEDITOR.plugins.addExternal( 'chamilo', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/chamilo/');
+CKEDITOR.plugins.addExternal( 'chamilofakeobjects', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/chamilofakeobjects/');
+
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
-    config.plugins = 'a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,chamilo,chamilofakeobjects,eqneditor,oembed,widget';
+    config.plugins = 'a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,oembed,widget';
+    config.extraPlugins = "chamilo,chamilofakeobjects";
     
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
             + 'anchor,link,image,flash,'
@@ -43,10 +47,10 @@ CKEDITOR.editorConfig = function(config)
     config.filebrowserChamiloHandbookLinkBrowseUrl = web_path
             + 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
     config.latexDialogUrl = web_path
-            + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/release/ckeditor/plugins/latex/dialogs/latex.html?a=b';
+            + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
     
     config.contentsCss = [
-            web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/release/ckeditor/contents.css',
+            web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/contents.css',
             web_path + 'index.php?application=Chamilo\\Libraries\\Ajax&go=CkeditorCss&theme=' + getTheme() ];
     
     config.disableNativeSpellChecker = false;
@@ -55,4 +59,9 @@ CKEDITOR.editorConfig = function(config)
 
     // allow i tags to be empty (for font awesome)
     CKEDITOR.dtd.$removeEmpty['i'] = false;
+
+    //fix for bootstrap skin
+    CKEDITOR.skin.chameleon = function(){
+        return '';
+    };
 };
