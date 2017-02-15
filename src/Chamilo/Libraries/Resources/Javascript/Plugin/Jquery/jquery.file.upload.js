@@ -22,7 +22,8 @@ var dropzoneCallbacks = {};
                 removedfileCallbackFunction : null,
                 acceptCallbackFunction: null,
                 initCallbackFunction: null,
-                autoProcessQueue: true
+                autoProcessQueue: true,
+                acceptedFiles: ''
             };
 
             var settings = $.extend(defaults, options);
@@ -166,6 +167,7 @@ var dropzoneCallbacks = {};
                     url : settings.uploadUrl,
                     parallelUploads : 2,
                     autoProcessQueue: settings.autoProcessQueue === true || settings.autoProcessQueue === 'true',
+                    acceptedFiles: settings.acceptedFiles,
                     init : function()
                     {
                         this.on("success", processUploadedFile);
