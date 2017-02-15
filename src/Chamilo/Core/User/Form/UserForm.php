@@ -275,7 +275,6 @@ class UserForm extends FormValidator
     {
         $exportValues = $this->exportValues();
         $customPassword = $exportValues['pw']['pass'] == 0;
-        var_dump($customPassword);
 
         if (!$customPassword)
         {
