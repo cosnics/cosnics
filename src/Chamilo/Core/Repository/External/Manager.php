@@ -551,14 +551,17 @@ abstract class Manager extends Application implements NoContextComponent
 
     public static function get_namespace($type = null)
     {
-        if ($type)
-        {
-            return 'Chamilo\Core\Repository\Implementation\\' . $type;
-        }
-        else
+        if(empty($type))
         {
             return __NAMESPACE__;
         }
+
+        if (strpos($type, '\\') === false)
+        {
+            return 'Chamilo\Core\Repository\Implementation\\' . $type;
+        }
+
+        return $type;
     }
 
     public static function get_registered_types($status = Registration :: STATUS_ACTIVE)
