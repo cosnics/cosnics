@@ -37,6 +37,10 @@ blockquote {
 	box-shadow: none !important;
 }
 
+body.cke_editable {
+	margin: 15px;
+}
+
 /**************
  * ACTION BAR *
  **************/
