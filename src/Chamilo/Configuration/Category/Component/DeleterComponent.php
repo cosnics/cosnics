@@ -120,6 +120,12 @@ class DeleterComponent extends Manager
                         new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID), 
                         new StaticConditionVariable($id)));
                 $category = $categories->next_result();
+
+                if(!$category instanceof PlatformCategory)
+                {
+                    return false;
+                }
+
                 $this->redirect_to_parent = $category->get_parent();
                 
                 return $category->delete();
