@@ -10,6 +10,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
@@ -59,12 +60,19 @@ class LearningPathAttemptProgressBlock extends ToolBlock
         
         $menu = new LearningPathTree($publication->get_content_object_id(), null, null, $attempt_data);
         $objects = $menu->get_objects();
-        
+
+        /** @var LearningPath $contentObject */
+        $contentObject = $publication->get_content_object();
+        $learningPathComplexContentObjectPath = $contentObject->get_complex_content_object_path($attempt_data);
+
         $counter = 1;
         $total = 0;
         
-        foreach ($objects as $wrapper_id => $object)
+        foreach($learningPathComplexContentObjectPath->get_nodes() as $node)
         {
+            $object = $node->get_content_object();
+            $wrapper_id = $node->get_complex_content_object_item()->getId();
+
             $tracker_data = $attempt_data[$wrapper_id];
             
             if ($object instanceof Assessment)
@@ -217,7 +225,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 new StaticConditionVariable($publication->get_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_USER_ID), 
-                new StaticConditionVariable(Session::get_user_id()));
+                new StaticConditionVariable($this->get_parent()->user_id));
             $condition = new AndCondition($conditions);
             
             $attempt = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve(
@@ -227,7 +235,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
             if (! $attempt)
             {
                 $attempt = new LearningPathAttempt();
-                $attempt->set_user_id($this->get_parent()->get_user_id());
+                $attempt->set_user_id($this->get_parent()->user_id);
                 $attempt->set_course_id($this->get_course_id());
                 $attempt->set_learning_path_id($publication->get_content_object_id());
                 $attempt->create();

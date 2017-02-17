@@ -68,11 +68,6 @@ class ViewerComponent extends TabComponent
         // // Get the currently displayed content object
         $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
         
-        // Update the main tracker
-        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->set_progress(
-            $this->get_complex_content_object_path()->get_progress());
-        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->update();
-        
         $translator = new PrerequisitesTranslator($this->get_current_node());
         
         if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()) && ! $translator->can_execute())
@@ -100,6 +95,11 @@ class ViewerComponent extends TabComponent
             $learning_path_item_attempt->set_start_time(time());
             $learning_path_item_attempt->update();
         }
+
+        // Update the main tracker
+        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->set_progress(
+            $this->get_complex_content_object_path()->get_progress());
+        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->update();
         
         $embedder = Embedder::factory($this, $this->get_current_node());
         

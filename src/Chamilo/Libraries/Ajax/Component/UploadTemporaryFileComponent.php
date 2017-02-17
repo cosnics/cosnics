@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -20,7 +21,14 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
     public function run()
     {
         $file = $this->getFile();
-        
+
+        if (!$file->isValid())
+        {
+            JsonAjaxResult::bad_request(
+                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
+            );
+        }
+
         $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
         $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
         
