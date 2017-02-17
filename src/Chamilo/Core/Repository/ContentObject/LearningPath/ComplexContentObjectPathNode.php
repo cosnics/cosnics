@@ -75,6 +75,14 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
     }
 
     /**
+     * Cache busting for isCompleted variable
+     */
+    public function recalculateIsCompleted()
+    {
+        unset($this->is_completed);
+    }
+
+    /**
      *
      * @return boolean
      */

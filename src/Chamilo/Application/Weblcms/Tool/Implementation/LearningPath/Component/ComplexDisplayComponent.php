@@ -13,6 +13,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
@@ -345,24 +347,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             );
         }
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathItemAttempt::class_name(), LearningPathItemAttempt::PROPERTY_ID),
-            new StaticConditionVariable($currentAttempt->get_id())
-        );
-
-        $learning_path_item_attempt = DataManager::retrieve(
-            LearningPathItemAttempt::class_name(),
-            new DataClassRetrieveParameters($condition)
-        );
-
-        if (!$learning_path_item_attempt instanceof LearningPathItemAttempt)
-        {
-            return;
-        }
-
-        $learning_path_item_attempt->set_score($total_score);
-        $learning_path_item_attempt->set_total_time(
-            $learning_path_item_attempt->get_total_time() + (time() - $learning_path_item_attempt->get_start_time())
+        $currentAttempt->set_score($total_score);
+        $currentAttempt->set_total_time(
+            $currentAttempt->get_total_time() + (time() - $currentAttempt->get_start_time())
         );
 
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
@@ -374,15 +361,23 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         if ($mastery_score)
         {
-            $status = ($total_score >= $mastery_score) ? 'passed' : 'failed';
+            $status = ($total_score >= $mastery_score) ? AbstractItemAttempt::STATUS_PASSED : AbstractItemAttempt::STATUS_FAILED;
         }
         else
         {
-            $status = 'completed';
+            $status = AbstractItemAttempt::STATUS_COMPLETED;
         }
 
-        $learning_path_item_attempt->set_status($status);
-        $learning_path_item_attempt->update();
+        $currentAttempt->set_status($status);
+        if($currentAttempt->update())
+        {
+            $this->get_current_node()->recalculateIsCompleted();
+            $learningPathTracker = $this->retrieve_learning_path_tracker();
+            $learningPathTracker->set_progress($this->getComplexContentObjectPath()->get_progress());
+            $learningPathTracker->update();
+        }
+
+
     }
 
     public function get_assessment_current_attempt_id()
@@ -398,11 +393,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     private function get_current_node()
     {
-        $root_content_object = $this->publication->get_content_object();
-        $learning_path_item_attempt_data = $this->retrieve_learning_path_tracker_items(
-            $this->retrieve_learning_path_tracker()
-        );
-        $path = $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
+        $path = $this->getComplexContentObjectPath();
 
         return $path->get_node(
             Request::get(
@@ -410,6 +401,19 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 $path->get_root()->get_id()
             )
         );
+    }
+
+    /**
+     * @return ComplexContentObjectPath
+     */
+    protected function getComplexContentObjectPath()
+    {
+        $root_content_object = $this->publication->get_content_object();
+        $learning_path_item_attempt_data = $this->retrieve_learning_path_tracker_items(
+            $this->retrieve_learning_path_tracker()
+        );
+
+        return $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
     }
 
     public function get_assessment_configuration()

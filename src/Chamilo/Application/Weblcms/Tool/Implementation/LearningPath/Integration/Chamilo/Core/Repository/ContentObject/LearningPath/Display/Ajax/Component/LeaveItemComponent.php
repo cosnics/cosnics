@@ -32,13 +32,13 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     public function run()
     {
         $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            LearningPathItemAttempt::class_name(), 
+            LearningPathItemAttempt::class_name(),
             $this->getPostDataValue(self::PARAM_TRACKER_ID));
-        
+
         if ($attempt instanceof LearningPathItemAttempt)
         {
             $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
-            
+
             if ($attempt->update())
             {
                 JsonAjaxResult::success();
