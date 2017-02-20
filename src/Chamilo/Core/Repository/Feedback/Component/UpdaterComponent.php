@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -27,7 +28,12 @@ class UpdaterComponent extends Manager
         $this->set_parameter(self::PARAM_FEEDBACK_ID, $feedback_id);
         
         $feedback = $this->get_parent()->retrieve_feedback($feedback_id);
-        
+
+        if(!$feedback instanceof Feedback)
+        {
+            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Feedback'), $feedback_id);
+        }
+
         if (! $this->get_parent()->is_allowed_to_update_feedback($feedback))
         {
             throw new NotAllowedException();
