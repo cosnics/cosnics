@@ -88,6 +88,9 @@ abstract class Embedder
         
         $attempt_data->set_status(AbstractItemAttempt::STATUS_COMPLETED);
         $attempt_data->update();
+
+        $this->get_node()->recalculateIsCompleted();
+        $this->get_application()->recalculateLearningPathProgress();
         
         // We need the second parent as the first one is just the display itself, since the embedder is a child of the
         // display execution wise and the required context is that of the display itself
