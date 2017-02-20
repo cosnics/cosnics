@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -37,6 +38,11 @@ class BlockDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
         $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
         
         $block = DataManager::retrieve_by_id(Block::class_name(), $blockId);
+
+        if(!$block instanceof Block)
+        {
+            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Block'), $blockId);
+        }
         
         if ($block->getUserId() == $userId)
         {

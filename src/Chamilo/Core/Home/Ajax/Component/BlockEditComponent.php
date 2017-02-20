@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -40,7 +41,12 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title = $this->getPostDataValue(self::PARAM_TITLE);
         
         $block = DataManager::retrieve_by_id(Block::class_name(), $block);
-        
+
+        if(!$block instanceof Block)
+        {
+            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Block'));
+        }
+
         if ($block->getUserId() == $user_id)
         {
             $block->setTitle($title);
