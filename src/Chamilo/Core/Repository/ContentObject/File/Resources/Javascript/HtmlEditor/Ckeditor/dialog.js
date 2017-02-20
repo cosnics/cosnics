@@ -661,8 +661,7 @@ CKEDITOR.dialog
                                                                                                                                 'height',
                                                                                                                                 Math
                                                                                                                                         .round(height));
-                                                                                                                updatePreview(this
-                                                                                                                        .getDialog());
+                                                                                                                updatePreview(this);
                                                                                                             }
                                                                                                         }
                                                                                                         evt.data
