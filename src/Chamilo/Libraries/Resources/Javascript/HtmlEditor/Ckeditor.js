@@ -64,7 +64,4 @@ CKEDITOR.editorConfig = function(config)
     CKEDITOR.skin.chameleon = function(){
         return '';
     };
-
-    //Cache Busting
-    CKEDITOR.timestamp='v2';
 };
