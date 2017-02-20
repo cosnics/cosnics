@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -61,6 +62,11 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
         
         $this->root_content_object = $publication->get_content_object();
+
+        if($this->root_content_object instanceof Introduction)
+        {
+            return parent::run();
+        }
         
         $context = Forum::package() . '\Display';
         $factory = new ApplicationFactory(

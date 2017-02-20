@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -37,7 +38,12 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
         }
         
         $block = DataManager::retrieve_by_id(Block::class_name(), intval($this->getPostDataValue(self::PARAM_BLOCK)));
-        
+
+        if(!$block instanceof Block)
+        {
+            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Block'));
+        }
+
         if ($block->getUserId() == $user_id)
         {
             $block->setParentId($this->getPostDataValue(self::PARAM_COLUMN));
