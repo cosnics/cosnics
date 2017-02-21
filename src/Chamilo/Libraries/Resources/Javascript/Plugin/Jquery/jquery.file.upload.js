@@ -12,7 +12,7 @@ var dropzoneCallbacks = {};
             // Settings list and the default values
             var defaults = {
                 name : 'file',
-                maxFileSize : 100,
+                maxFilesize : 100,
                 thumbnailWidth : 200,
                 thumbnailHeight : 150,
                 maxFiles : null,
