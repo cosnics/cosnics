@@ -1343,19 +1343,11 @@ EOT;
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
-        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') .
-             '</span>';
+
+        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
+            '</span>';
         $dropzoneHtml[] = '</button>';
-
-
-        if($autoProcess)
-        {
-            $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
-            $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
-                '</span>';
-            $dropzoneHtml[] = '</button>';
-        }
 
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
