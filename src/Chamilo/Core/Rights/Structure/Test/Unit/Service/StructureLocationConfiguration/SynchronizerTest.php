@@ -113,4 +113,20 @@ class SynchronizerTest extends Test
 
         $this->configurationSynchronizer->synchronize();
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSynchronizeFailsWithEmptyConfiguration()
+    {
+        $this->registrationConsulterMock->expects($this->once())
+            ->method('getRegistrationContexts')
+            ->will($this->returnValue(array()));
+
+        $this->configurationLoader->expects($this->once())
+            ->method('loadConfiguration')
+            ->will($this->returnValue(array()));
+
+        $this->configurationSynchronizer->synchronize();
+    }
 }
