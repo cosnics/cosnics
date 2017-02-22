@@ -64,7 +64,12 @@ class Synchronizer implements SynchronizerInterface
     {
         $configuration = $this->structureLocationConfigurationLoader->loadConfiguration(
             $this->registrationConsulter->getRegistrationContexts());
-        
+
+        if(empty($configuration))
+        {
+            throw new \RuntimeException('Could not load the structure location configuration files');
+        }
+
         $this->structureLocationService->truncateStructureLocations();
         
         foreach ($configuration as $package => $packageConfiguration)
