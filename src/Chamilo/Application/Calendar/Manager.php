@@ -46,14 +46,14 @@ abstract class Manager extends Application
     {
         $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
 
-        if (! $rendererType)
+        if (!$rendererType)
         {
             $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
 
             if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
-                if ($detect->isMobile() && ! $detect->isTablet())
+                if ($detect->isMobile() && !$detect->isTablet())
                 {
                     $rendererType = ViewRenderer::TYPE_LIST;
                 }
@@ -69,9 +69,14 @@ abstract class Manager extends Application
      */
     public function getCurrentRendererTime()
     {
-        if (! isset($this->currentTime))
+        if (!isset($this->currentTime))
         {
-            $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
+            $defaultRenderDate = new \DateTime();
+            $defaultRenderDate->setTime(0, 0, 0);
+
+            $this->currentTime = $this->getRequest()->query->get(
+                ViewRenderer::PARAM_TIME, $defaultRenderDate->getTimestamp()
+            );
         }
 
         return $this->currentTime;
