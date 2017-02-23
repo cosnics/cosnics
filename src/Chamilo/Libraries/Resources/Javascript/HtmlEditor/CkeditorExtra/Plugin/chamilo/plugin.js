@@ -42,12 +42,15 @@
                 var realElement = CKEDITOR.dom.element.createFromHtml(decodeURIComponent(element
                         .getAttribute('data-cke-realelement')), this.document);
                 var objectType = realElement.getAttribute('type');
+
+                var context = (objectType == 'video') ? 'Hogent' : 'Chamilo';
+
                 if (!CKEDITOR.dialog.exists(objectType + 'Dialog'))
                 {
-                    CKEDITOR.dialog.add(objectType + 'Dialog', web_path + 'Chamilo/Core/Repository/ContentObject/' + toTitleCase(objectType)
+                    CKEDITOR.dialog.add(objectType + 'Dialog', web_path + context + '/Core/Repository/ContentObject/' + toTitleCase(objectType)
                         + '/Resources/Javascript/HtmlEditor/Ckeditor/dialog.js');
                 }
-                
+
                 editor.openDialog(objectType + 'Dialog');
             }
         }
