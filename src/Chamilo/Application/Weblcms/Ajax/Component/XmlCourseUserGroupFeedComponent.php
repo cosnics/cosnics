@@ -155,10 +155,16 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
                 foreach ($group_relations as $group_relation)
                 {
+                    // var_dump($group_relation);
                     $group = DataManager::retrieve_by_id(Group::class_name(), $group_relation->getEntityId());
-                    $group_user_ids = $group->get_users(true, true);
+                    // var_dump($group);
 
-                    $this->group_users = array_merge($this->group_users, $group_user_ids);
+                    if ($group instanceof Group)
+                    {
+                        $group_user_ids = $group->get_users(true, true);
+
+                        $this->group_users = array_merge($this->group_users, $group_user_ids);
+                    }
                 }
 
                 $user_ids = array_merge($user_ids, $this->group_users);
@@ -338,7 +344,11 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
                     Group::class_name(),
                     $group_relation->getEntityId());
-                $this->dump_platform_group($group);
+
+                if ($group instanceof Group)
+                {
+                    $this->dump_platform_group($group);
+                }
             }
 
             echo '</node>', "\n";
