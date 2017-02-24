@@ -467,6 +467,7 @@ abstract class Manager extends Application
         $id = Session::get_user_id();
         $va_id = Session::get(self::PARAM_VIEW_AS_ID);
         $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
+
         // fake the id with the set "login as id" only if we're in the right
         // course
         if (isset($va_id) && isset($course_id))
@@ -475,24 +476,13 @@ abstract class Manager extends Application
             {
                 $id = $va_id;
             }
-            else
-            {
-                // not the course we're viewing as another user, so check
-                // regular stuff
-                if ($this->get_parent()->is_teacher())
-                {
-                    return true;
-                }
-            }
         }
-        else // try to get rid of duplication
+
+        if ($this->get_parent()->is_teacher()) //also checks "view as" id.
         {
-            // no valid view as information
-            if ($this->get_parent()->is_teacher())
-            {
                 return true;
-            }
         }
+
         if ($publication)
         {
             if ($publication instanceof ContentObjectPublication)
