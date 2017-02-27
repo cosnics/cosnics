@@ -39,9 +39,7 @@ class ResultReportingTemplate extends ReportingTemplate
         // one report per group > attempt > user
         foreach ($groups as $group)
         {
-//             var_dump($group);
             $users = $parent->get_group_users($group->get_id());
-//             var_dump($users);
 
             foreach ($attempts as $attempt)
             {
@@ -58,8 +56,6 @@ class ResultReportingTemplate extends ReportingTemplate
                     }
                 }
             }
-
-//             echo '<hr />';
         }
     }
 

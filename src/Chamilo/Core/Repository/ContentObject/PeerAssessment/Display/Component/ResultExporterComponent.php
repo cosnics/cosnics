@@ -27,11 +27,11 @@ class ResultExporterComponent extends Manager
         $file_path = TemplateRenditionImplementation::launch(
             $this,
             $template,
-            TemplateRendition::FORMAT_XLSX,
+            TemplateRendition::FORMAT_PDF,
             TemplateRendition::VIEW_BASIC);
 
         $file_properties = FileProperties::from_path($file_path);
-//         exit;
+
         Filesystem::file_send_for_download(
             $file_path,
             true,

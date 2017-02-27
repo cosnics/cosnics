@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\Iterator;
 
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\Iterator
@@ -14,6 +16,58 @@ class DataClassIterator extends \ArrayIterator
     const POSITION_SINGLE = 3;
     const POSITION_MIDDLE = 4;
     const POSITION_INVALID = 5;
+
+    /**
+     *
+     * @var string
+     */
+    private $dataClassName;
+
+    public function __construct($dataClassName, $dataClasses)
+    {
+        parent::__construct($dataClasses);
+        $this->dataClassName = $dataClassName;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getDataClassName()
+    {
+        return $this->dataClassName;
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     */
+    protected function setDataClassName($dataClassName)
+    {
+        $this->dataClassName = $dataClassName;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCacheClassName()
+    {
+        $compositeDataClassName = CompositeDataClass::class_name();
+        $className = $this->getDataClassName();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            return $className::parent_class_name();
+        }
+        else
+        {
+            return $className;
+        }
+    }
 
     /**
      *
