@@ -34,6 +34,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
 
     private $impact_view_table_condition;
 
+    protected $impact_view_selected_categories;
+
     /**
      * Runs this component and displays its output.
      */
@@ -77,6 +79,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function render_impact_view($selected_category_ids = array())
     {
+        $this->impact_view_selected_categories = $selected_category_ids;
+
         $conditions = array();
         foreach ($selected_category_ids as $selected_category_id)
         {
@@ -296,5 +300,18 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     public function allowed_to_add_category($parent_category_id)
     {
         return true;
+    }
+
+    public function get_parameters($include_search = false)
+    {
+        $extra_parameters = array();
+        if(!empty($this->impact_view_selected_categories)) {
+            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID] = $this->impact_view_selected_categories;
+            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_ACTION] = \Chamilo\Configuration\Category\Manager::ACTION_IMPACT_VIEW;
+        }
+
+        return array_merge(
+            $extra_parameters,
+            parent::get_parameters($include_search));
     }
 }
