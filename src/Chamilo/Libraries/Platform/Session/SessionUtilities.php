@@ -168,7 +168,7 @@ class SessionUtilities
 
     public function clear()
     {
-        session_regenerate_id();
+//        session_regenerate_id();
         session_unset();
         $_SESSION = array();
     }
