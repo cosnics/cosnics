@@ -30,7 +30,7 @@ class DataClassRepositoryCache
 
     /**
      * The cache
-     * 
+     *
      * @var mixed[][]
      */
     private $cache;
@@ -45,7 +45,7 @@ class DataClassRepositoryCache
 
     /**
      * Get a DataClass object from the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
@@ -57,7 +57,7 @@ class DataClassRepositoryCache
             return $this->cache[$class][$parameters->hash()];
         }
         else
-        
+
         {
             return false;
         }
@@ -65,7 +65,7 @@ class DataClassRepositoryCache
 
     /**
      * Returns whether a DataClass object exists in the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters $parameters
      * @return boolean
@@ -73,7 +73,7 @@ class DataClassRepositoryCache
     public function exists($class, DataClassParameters $parameters)
     {
         $hash = $parameters->hash();
-        
+
         if (isset($this->cache[$class][$hash]))
         {
             return true;
@@ -86,7 +86,7 @@ class DataClassRepositoryCache
 
     /**
      * Clear the cache for a specific DataClass type
-     * 
+     *
      * @param string $class
      * @return boolean
      */
@@ -96,13 +96,13 @@ class DataClassRepositoryCache
         {
             unset($this->cache[$class]);
         }
-        
+
         return true;
     }
 
     /**
      * Clear the cache for a set of specific DataClass types
-     * 
+     *
      * @param string[] $classes
      * @return boolean
      */
@@ -115,13 +115,13 @@ class DataClassRepositoryCache
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * Set the cache value for a specific DataClass object type, hash
-     * 
+     *
      * @param string $class
      * @param string $hash
      * @param mixed $value
@@ -144,7 +144,7 @@ class DataClassRepositoryCache
         {
             $this->set($className, $parameters->hash(), $value);
         }
-        
+
         return true;
     }
 
@@ -162,11 +162,11 @@ class DataClassRepositoryCache
      */
     public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters = null)
     {
-        if (! $parameters instanceof DataClassRetrieveParameters)
+        if (! $parameters instanceof DataClassRetrieveParameters && $parameters != null)
         {
             throw new \Exception('Illegal parameters passed to the DataClassServiceCache');
         }
-        
+
         if (! $object instanceof DataClass)
         {
             $type = is_object($object) ? get_class($object) : gettype($object);
@@ -174,9 +174,9 @@ class DataClassRepositoryCache
                 'The DataClassServiceCache only allows for caching of DataClass objects. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         $className = $this->getDataClassCacheClassName($object);
-        
+
         foreach ($object->get_cacheable_property_names() as $cacheableProperty)
         {
             $value = $object->get_default_property($cacheableProperty);
@@ -184,17 +184,17 @@ class DataClassRepositoryCache
             {
                 $cacheablePropertyParameters = new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable($className, $cacheableProperty), 
+                        new PropertyConditionVariable($className, $cacheableProperty),
                         new StaticConditionVariable($value)));
                 $this->set($className, $cacheablePropertyParameters->hash(), $object);
             }
         }
-        
+
         if ($parameters instanceof DataClassRetrieveParameters)
         {
             $this->set($className, $parameters->hash(), $object);
         }
-        
+
         return true;
     }
 
@@ -206,10 +206,10 @@ class DataClassRepositoryCache
     private function getDataClassCacheClassName(DataClass $object)
     {
         $compositeDataClassName = CompositeDataClass::class_name();
-        
+
         $isCompositeDataClass = $object instanceof $compositeDataClassName;
         $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;
-        
+
         if ($isCompositeDataClass && $isExtensionClass)
         {
             return $object::parent_class_name();
@@ -243,18 +243,18 @@ class DataClassRepositoryCache
         {
             throw new \Exception('Not a DataClass');
         }
-        
+
         $className = $this->getDataClassCacheClassName($object);
-        
+
         foreach ($object->get_cacheable_property_names() as $cacheableProperty)
         {
             $cacheablePropertyParameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable($className, $cacheableProperty), 
+                    new PropertyConditionVariable($className, $cacheableProperty),
                     new StaticConditionVariable($object->get_default_property($cacheableProperty))));
             $this->set($className, $cacheablePropertyParameters->hash(), null);
         }
-        
+
         return true;
     }
 
@@ -265,14 +265,14 @@ class DataClassRepositoryCache
      * @throws \Exception
      * @return boolean
      */
-    public function addForDataClassIterator(DataClassIterator $dataClassIterator, 
+    public function addForDataClassIterator(DataClassIterator $dataClassIterator,
         DataClassRetrievesParameters $parameters)
     {
         if (! $parameters instanceof DataClassRetrievesParameters)
         {
             throw new \Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
-        
+
         if (! $dataClassIterator instanceof DataClassIterator)
         {
             $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
@@ -280,7 +280,7 @@ class DataClassRepositoryCache
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         return $this->add($dataClassIterator->getCacheClassName(), $parameters, $dataClassIterator);
     }
 
@@ -298,7 +298,7 @@ class DataClassRepositoryCache
         {
             throw new \Exception('Illegal parameters passed to the DataClassCountCache');
         }
-        
+
         if (! is_integer($count))
         {
             $type = is_object($count) ? get_class($count) : gettype($count);
@@ -306,7 +306,7 @@ class DataClassRepositoryCache
                 'The DataClassCountCache cache only allows for caching of integers. Currently trying to add: ' . $type .
                      '.');
         }
-        
+
         return $this->add($className, $parameters, $count);
     }
 
@@ -324,7 +324,7 @@ class DataClassRepositoryCache
         {
             throw new \Exception('Illegal parameters passed to the DataClassDistinctCache');
         }
-        
+
         if (! is_array($propertyValues))
         {
             $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
@@ -332,7 +332,7 @@ class DataClassRepositoryCache
                 'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         return $this->add($className, $parameters, $propertyValues);
     }
 
@@ -350,7 +350,7 @@ class DataClassRepositoryCache
         {
             throw new \Exception('Illegal parameters passed to the DataClassCountGroupedCache');
         }
-        
+
         if (! is_array($counts))
         {
             $type = is_object($counts) ? get_class($counts) : gettype($counts);
@@ -358,7 +358,7 @@ class DataClassRepositoryCache
                 'The DataClassCountGroupedCache cache only allows for caching of integer arrays. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         return $this->add($className, $parameters, $counts);
     }
 
@@ -377,12 +377,12 @@ class DataClassRepositoryCache
                 'The RecordResultCache only allows for caching of records. Currently trying to add: ' . gettype($record) .
                      '.');
         }
-        
+
         if ($parameters instanceof RecordRetrieveParameters)
         {
             $this->set($className, $parameters->hash(), $record);
         }
-        
+
         return true;
     }
 
@@ -393,14 +393,14 @@ class DataClassRepositoryCache
      * @throws \Exception
      * @return boolean
      */
-    public function addForRecordIterator($className, RecordIterator $recordIterator, 
+    public function addForRecordIterator($className, RecordIterator $recordIterator,
         RecordRetrievesParameters $parameters)
     {
         if (! $parameters instanceof RecordRetrievesParameters)
         {
             throw new \Exception('Illegal parameters passed to the RecordResultSetCache');
         }
-        
+
         if (! $recordIterator instanceof RecordIterator)
         {
             $type = is_object($recordIterator) ? get_class($recordIterator) : gettype($recordIterator);
@@ -408,7 +408,7 @@ class DataClassRepositoryCache
                 'The RecordResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         return $this->add($className, $parameters, $recordIterator);
     }
 }

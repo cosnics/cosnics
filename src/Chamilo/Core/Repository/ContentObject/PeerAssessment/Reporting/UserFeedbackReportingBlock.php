@@ -15,7 +15,7 @@ class UserFeedbackReportingBlock extends ReportingBlock
     public function __construct($parent, $user, $attempt)
     {
         parent::__construct($parent);
-        
+
         $this->user = $user;
         $this->attempt = $attempt;
     }
@@ -57,14 +57,14 @@ class UserFeedbackReportingBlock extends ReportingBlock
     public function compose_data()
     {
         $reporting_data = new ReportingData();
-        
+
         $rows = array(Translation::get('Feedback'));
         $reporting_data->set_rows($rows);
-        
+
         $feedback = $this->get_parent()->get_parent()->get_user_feedback_received(
-            $this->user->get_id(), 
+            $this->user->get_id(),
             $this->attempt->get_id());
-        
+
         foreach ($feedback as $user_id => $feedback_row)
         {
             if ($user_id == $this->user->get_id())
@@ -74,17 +74,17 @@ class UserFeedbackReportingBlock extends ReportingBlock
             else
             {
                 $giver = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                     (int) $user_id);
             }
-            
+
             $user_title = $giver->get_firstname() . ' ' . $giver->get_lastname();
-            
+
             $reporting_data->add_category($user_title);
             $reporting_data->add_data_category_row($user_title, Translation::get('Feedback'), $feedback_row);
         }
-        
-        $reporting_data->hide_categories();
+
+//         $reporting_data->hide_categories();
         return $reporting_data;
     }
 
