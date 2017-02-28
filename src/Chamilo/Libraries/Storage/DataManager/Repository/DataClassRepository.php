@@ -707,7 +707,7 @@ class DataClassRepository
      */
     protected function __records($dataClassName, $parameters)
     {
-        return new RecordIterator($this->getDataClassDatabase()->records($dataClassName, $parameters));
+        return new RecordIterator($dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters));
     }
 
     /**
