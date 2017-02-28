@@ -112,7 +112,7 @@ class ErrorHandler
         if (! is_null($error) && $error['type'] == E_ERROR)
         {
             $this->getExceptionLogger()->logException(
-                new \Exception($error['message']), 
+                new \Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
                 ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR, 
                 $error['file'], 
                 $error['line']);
