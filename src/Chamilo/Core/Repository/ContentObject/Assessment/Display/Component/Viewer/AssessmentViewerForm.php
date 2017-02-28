@@ -119,7 +119,7 @@ class AssessmentViewerForm extends FormValidator
                 array('style' => 'display: none;'));
         }
         
-        if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
+        if ($this->assessment_viewer->showFeedbackAfterEveryPage())
         {
             $buttons[] = $this->createElement(
                 'style_button', 

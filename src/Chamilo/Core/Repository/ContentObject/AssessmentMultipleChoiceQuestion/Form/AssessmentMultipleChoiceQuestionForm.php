@@ -28,6 +28,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     protected function build_creation_form()
     {
         parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
+
         $this->buildBasicQuestionForm();
     }
 
@@ -54,10 +55,10 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->add_options();
         
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion', 
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion',
                     true) . 'AssessmentMultipleChoiceQuestion.js'));
     }
 
@@ -98,6 +99,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 }
                 
                 $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT] = 0;
+                $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE][0] = 1;
             }
         }
         

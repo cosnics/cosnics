@@ -5,8 +5,8 @@
         <answer_type>1</answer_type>
         <options>
             <option
-                correct="0"
-                score="0"
+                correct="1"
+                score="1"
                 feedback=""></option>
             <option
                 correct="0"

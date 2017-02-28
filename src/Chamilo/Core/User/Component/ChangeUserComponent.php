@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,12 +38,13 @@ class ChangeUserComponent extends Manager
         
         if ($id)
         {
-            
-            $checkurl = \Chamilo\Libraries\Platform\Session\Session::retrieve('checkChamiloURL');
-            \Chamilo\Libraries\Platform\Session\Session::clear();
-            \Chamilo\Libraries\Platform\Session\Session::register('_uid', $id);
-            \Chamilo\Libraries\Platform\Session\Session::register('_as_admin', $this->get_user_id());
-            \Chamilo\Libraries\Platform\Session\Session::register('checkChamiloURL', $checkurl);
+            $sessionUtilities = $this->getSessionUtilities();
+
+            $checkurl = $sessionUtilities->retrieve('checkChamiloURL');
+            $sessionUtilities->clear();
+            $sessionUtilities->register('_uid', $id);
+            $sessionUtilities->register('_as_admin', $this->get_user_id());
+            $sessionUtilities->register('checkChamiloURL', $checkurl);
             
             $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
             $response = new RedirectResponse($this->get_link(array(Application::PARAM_CONTEXT => $loginApplication)));
@@ -67,5 +69,13 @@ class ChangeUserComponent extends Manager
                 Translation::get('AdminUserBrowserComponent')));
         
         $breadcrumbtrail->add_help('user_changer');
+    }
+
+    /**
+     * @return SessionUtilities
+     */
+    protected function getSessionUtilities()
+    {
+        return $this->getService('chamilo.libraries.platform.session.session_utilities');
     }
 }

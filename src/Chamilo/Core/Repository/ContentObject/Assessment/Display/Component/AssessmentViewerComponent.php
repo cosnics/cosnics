@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\As
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentResultViewerForm;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentViewerForm;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
@@ -72,7 +73,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
             $results_page_number = $this->get_questions_page();
 
-            if (!$this->get_configuration()->show_feedback_after_every_page())
+            if (!$this->showFeedbackAfterEveryPage())
             {
                 $results_page_number += ($this->get_action() == self :: FORM_NEXT ||
                     $this->get_action() == self :: FORM_SUBMIT) ? - 1 : + 1;
@@ -108,7 +109,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             }
         }
 
-        if ($this->question_form_submitted() && $this->get_configuration()->show_feedback_after_every_page())
+        if ($this->question_form_submitted() && $this->showFeedbackAfterEveryPage())
         {
             $html = array();
 
@@ -349,7 +350,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         {
             if ($this->result_form_submitted() || $this->question_form_submitted())
             {
-                if ($this->question_form_submitted() && $this->get_configuration()->show_feedback_after_every_page())
+                if ($this->question_form_submitted() && $this->showFeedbackAfterEveryPage())
                 {
                     // Submitted page number, but results page
                     $this->current_page = $this->get_submitted_page_number();
@@ -406,5 +407,23 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
 
         return false;
+    }
+
+    public function showFeedbackAfterEveryPage()
+    {
+        if(!$this->get_configuration()->show_feedback_after_every_page())
+        {
+            return false;
+        }
+
+        /** @var Assessment $assessment */
+        $assessment = $this->get_root_content_object();
+
+        if($assessment->get_questions_per_page() == 0)
+        {
+            return false;
+        }
+
+        return $assessment->get_questions_per_page() < count($this->questions);
     }
 }

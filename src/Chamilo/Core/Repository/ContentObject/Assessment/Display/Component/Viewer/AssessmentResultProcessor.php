@@ -91,7 +91,7 @@ class AssessmentResultProcessor
                 $question_cloi->get_weight());
             $score = $score_calculator->calculate_score();
             
-            if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
+            if ($this->assessment_viewer->showFeedbackAfterEveryPage())
             {
                 $display = AssessmentQuestionResultDisplay::factory(
                     $this->get_assessment_viewer(), 
