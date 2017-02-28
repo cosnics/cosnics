@@ -63,7 +63,6 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
         if (isset($complex_content_object_item))
         {
             $defaults[ComplexAssessmentMatchTextQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
 
             if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
             {
@@ -73,6 +72,16 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
             {
                 $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
                 $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            }
+
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+
+            if($complex_content_object_item->get_weight() > 0)
+            {
+                if($complex_content_object_item->get_weight() != $complex_content_object_item->get_ref_object()->get_default_weight())
+                {
+                    $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 0;
+                }
             }
         }
         

@@ -149,27 +149,31 @@ $(function()
         fieldSelection += '</div>';
         
         fieldAnswer = renderHtmlEditor('value[' + numberOfOptions + ']', htmlEditorOptions);
-        
+
+        var feedbackLabel = getTranslation('Feedback', null, translationContext);
+        var scoreLabel = getTranslation('Score', null, translationContext);
+        var deleteLabel = getTranslation('Delete', null, 'Chamilo\\Libraries');
+
         fieldFeedback = '<div class="option-feedback-field form-assessment-extra-container" data-element="feedback['
                 + numberOfOptions + ']">';
-        fieldFeedback += '<label>' + getTranslation('Feedback', null, translationContext) + '</label>';
+        fieldFeedback += '<label>' + feedbackLabel + '</label>';
         fieldFeedback += renderHtmlEditor('feedback[' + numberOfOptions + ']', htmlEditorOptions);
         fieldFeedback += '</div>';
         
         fieldScore = '<div class="option-score-field form-assessment-extra-container form-inline" data-element="score['
                 + numberOfOptions + ']">';
-        fieldScore += '<label>' + getTranslation('Score', null, translationContext) + ':</label> ';
+        fieldScore += '<label>' + scoreLabel + ':</label> ';
         fieldScore += '<input size="2" class="input_numeric form-control" name="score[' + numberOfOptions
                 + ']" value="0" type="text">';
         fieldScore += '</div>';
         
-        fieldActions = '<span data-option-id="' + numberOfOptions
+        fieldActions = '<span title="' + feedbackLabel + '" data-option-id="' + numberOfOptions
                 + '" class="option-action option-feedback fa fa-comment text-primary"></span>';
         fieldActions += '<br>';
-        fieldActions += '<span data-option-id="' + numberOfOptions
+        fieldActions += '<span title="' + scoreLabel + '" data-option-id="' + numberOfOptions
                 + '" class="option-action option-score fa fa-percent text-primary"></span>';
         fieldActions += '<br>';
-        fieldActions += '<span data-option-id="' + numberOfOptions
+        fieldActions += '<span title="' + deleteLabel + '" data-option-id="' + numberOfOptions
                 + '" class="option-action option-remove fa fa-trash text-danger"></span>';
         
         tableRow = '<tr data-option-id="' + numberOfOptions + '">';

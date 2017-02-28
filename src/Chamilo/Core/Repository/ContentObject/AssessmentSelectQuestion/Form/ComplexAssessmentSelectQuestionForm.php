@@ -60,7 +60,6 @@ class ComplexAssessmentSelectQuestionForm extends ComplexContentObjectItemForm
         if (isset($complex_content_object_item))
         {
             $defaults[ComplexAssessmentSelectQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
             $defaults[ComplexAssessmentSelectQuestion::PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
 
             if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
@@ -71,6 +70,16 @@ class ComplexAssessmentSelectQuestionForm extends ComplexContentObjectItemForm
             {
                 $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
                 $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            }
+
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+
+            if($complex_content_object_item->get_weight() > 0)
+            {
+                if($complex_content_object_item->get_weight() != $complex_content_object_item->get_ref_object()->get_default_weight())
+                {
+                    $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 0;
+                }
             }
         }
         

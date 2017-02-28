@@ -60,8 +60,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 }
                 else
                 {
-                    $title_short = '<a href="' . $this->get_component()->get_complex_content_object_item_view_url(
-                        $cloi->get_id()) . '">' . $title_short . '</a>';
+                    $title_short = '<a href="' . $this->getTitleLink($cloi) . '">' . $title_short . '</a>';
                 }
                 
                 return $title_short;
@@ -83,6 +82,18 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         }
         
         return parent::render_cell($column, $cloi);
+    }
+
+    /**
+     * Returns the link for the title
+     *
+     * @param ComplexContentObjectItem $complexContentObjectItem
+     *
+     * @return string
+     */
+    protected function getTitleLink($complexContentObjectItem)
+    {
+        return $this->get_component()->get_complex_content_object_item_edit_url($complexContentObjectItem->getId());
     }
 
     public function get_actions($cloi)

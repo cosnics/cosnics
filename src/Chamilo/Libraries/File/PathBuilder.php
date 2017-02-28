@@ -34,7 +34,7 @@ class PathBuilder
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
     protected static $instance = null;
 
@@ -53,7 +53,7 @@ class PathBuilder
     /**
      * Return 'this' as singleton
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
     static public function getInstance()
     {

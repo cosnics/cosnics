@@ -5,12 +5,17 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Common\Template\Template;
+use Chamilo\Core\Repository\Service\ConfigurationCacheService;
+use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
+use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -100,43 +105,15 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
 
     public function register_templates()
     {
-        $templates_path = Path::getInstance()->namespaceToFullPath(static::package()) . 'Template' . DIRECTORY_SEPARATOR;
+        $contentObjectTemplateSynchronizer = new ContentObjectTemplateSynchronizer(
+            new ContentObjectTemplateLoader(PathBuilder::getInstance()),
+            new ContentObjectTemplateRepository(),
+            new ConfigurationCacheService()
+        );
         
         try
         {
-            $template_file_names = Filesystem::get_directory_content($templates_path, Filesystem::LIST_FILES, false);
-            
-            foreach ($template_file_names as $template_file_name)
-            {
-                $template_name = pathinfo($template_file_name, PATHINFO_FILENAME);
-                $template_extension = pathinfo($template_file_name, PATHINFO_EXTENSION);
-                
-                if ($template_extension == 'xml')
-                {
-                    $template_registration = new TemplateRegistration();
-                    $template_registration->set_content_object_type(static::package());
-                    $template_registration->set_name($template_name);
-                    
-                    if ($template_name == 'Default')
-                    {
-                        $template_registration->set_default(true);
-                    }
-                    
-                    try
-                    {
-                        $template_registration->set_template(Template::get(static::package(), $template_name));
-                    }
-                    catch (\Exception $exception)
-                    {
-                        return false;
-                    }
-                    
-                    if (! $template_registration->create())
-                    {
-                        return false;
-                    }
-                }
-            }
+            $contentObjectTemplateSynchronizer->synchronize(static::package());
             
             return true;
         }

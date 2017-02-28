@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+                id="chamilo.core.repository.service.content_object_template.loader"
+                class="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader">
+            <argument type="service" id="chamilo.libraries.file.path_builder" />
+        </service>
+
+        <service
+                id="chamilo.core.repository.service.configuration_cache_service"
+                class="Chamilo\Core\Repository\Service\ConfigurationCacheService">
+        </service>
+
+        <service
+                id="chamilo.core.repository.storage.repository.content_object_template_repository"
+                class="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository">
+        </service>
+
+        <service
+                id="chamilo.core.repository.service.content_object_template.synchronizer"
+                class="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer">
+            <argument type="service" id="chamilo.core.repository.service.content_object_template.loader" />
+            <argument type="service" id="chamilo.core.repository.storage.repository.content_object_template_repository" />
+            <argument type="service" id="chamilo.core.repository.service.configuration_cache_service" />
+        </service>
+    </services>
+</container>

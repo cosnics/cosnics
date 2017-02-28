@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Template;
 
+use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -109,36 +111,12 @@ class Template
      *
      * @param string $content_object_type
      * @param string $template_name
-     * @return use core\repository\common\template\Template
+     * @return Template
      * @throws \Exception
      */
     public static function get($content_object_type, $template_name)
     {
-        $template_path = Path::getInstance()->namespaceToFullPath($content_object_type) . 'Template' .
-             DIRECTORY_SEPARATOR . $template_name . '.xml';
-        
-        $template_class_name = $content_object_type . '\Template\Template';
-        
-        if (file_exists($template_path))
-        {
-            $dom_document = new \DOMDocument('1.0', 'UTF-8');
-            $dom_document->load($template_path);
-            $dom_xpath = new \DOMXPath($dom_document);
-            
-            if (! is_subclass_of($template_class_name, 'Chamilo\Core\Repository\Common\Template\TemplateParser'))
-            {
-                throw new \Exception(
-                    $template_class_name .
-                         ' doesn\'t seem to support parsing, please implement the Chamilo\Core\Repository\Common\Template\TemplateParser interface');
-            }
-            else
-            {
-                return $template_class_name::parse($dom_xpath);
-            }
-        }
-        else
-        {
-            throw new \Exception($template_path);
-        }
+        $contentObjectTemplateLoader = new ContentObjectTemplateLoader(PathBuilder::getInstance());
+        return $contentObjectTemplateLoader->loadTemplate($content_object_type, $template_name);
     }
 }
