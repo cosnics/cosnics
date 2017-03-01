@@ -132,6 +132,18 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
+     * Returns the publications for a giventool
+     *
+     * @param string $tool
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function getPublicationsByTool($tool)
+    {
+        return $this->publicationRepository->findPublicationsByTool($tool);
+    }
+    
+    /**
      * Returns the publications for a given course and tool
      * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course

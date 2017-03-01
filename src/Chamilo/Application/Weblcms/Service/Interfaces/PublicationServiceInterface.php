@@ -44,6 +44,15 @@ interface PublicationServiceInterface
     public function getPublicationForUser(User $user, $publicationId);
 
     /**
+     * Returns the publications for a giventool
+     *
+     * @param string $tool
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function getPublicationsByTool($tool);
+
+    /**
      * Returns the publications for a given course and tool
      * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course

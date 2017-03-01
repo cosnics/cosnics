@@ -15,6 +15,15 @@ interface PublicationRepositoryInterface
 {
 
     /**
+     * Finds publications for a given tool
+     *
+     * @param string $tool
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function findPublicationsByTool($tool);
+
+    /**
      * Finds publications for a given course and tool
      * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course

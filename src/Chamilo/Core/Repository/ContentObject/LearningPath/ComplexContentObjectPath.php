@@ -45,6 +45,14 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
     public function set_nodes_attempt_data($nodes_attempt_data)
     {
         $this->nodes_attempt_data = $nodes_attempt_data;
+        foreach($this->get_nodes() as $node)
+        {
+            $node->set_properties(
+                $this->get_properties($node->get_parent_id(), $node->get_complex_content_object_item(), null)
+            );
+            
+            $node->recalculateIsCompleted(false);
+        }
     }
 
     /**
