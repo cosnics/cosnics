@@ -527,7 +527,7 @@ class SettingsForm extends FormValidator
             // Database
             $defaults['database_driver'] = 'mysqli';
             $defaults['database_host'] = 'localhost';
-            $defaults['database_name'] = 'chamilo';
+            $defaults['database_name'] = 'cosnics';
 
             // General settings
 
@@ -543,7 +543,7 @@ class SettingsForm extends FormValidator
             $defaults['admin_username'] = 'admin';
             $defaults['platform_name'] = Translation::get('MyChamilo');
             $defaults['organization_name'] = Translation::get('Chamilo');
-            $defaults['organization_url'] = 'http://www.chamilo.org';
+            $defaults['organization_url'] = 'http://www.cosnics.org';
             $defaults['self_reg'] = 0;
             $defaults['encrypt_password'] = 1;
             $defaults['hashing_algorithm'] = 'Sha1';
