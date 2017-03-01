@@ -46,6 +46,12 @@ class LearningPathProgressFixer
 
         foreach($publications as $publication)
         {
+            /** Do not fix publications older then the 1st of january 2016 */
+            if($publication->get_publication_date() < 1451602800)
+            {
+                continue;
+            }
+
             $contentObject = $publication->getContentObject();
             if(!$contentObject instanceof LearningPath)
             {
