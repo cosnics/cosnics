@@ -35,5 +35,17 @@
                 id="chamilo.libraries.cache.cache_director" />
             <tag name="chamilo.libraries.console.command" />
         </service>
+
+        <service
+                id="chamilo.libraries.console.command.process_resources_command"
+                class="Chamilo\Libraries\Console\Command\ProcessResourcesCommand">
+            <argument
+                    type="service"
+                    id="symfony.component.translation.translator" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.format.utilities.resource_processor" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
     </services>
 </container>

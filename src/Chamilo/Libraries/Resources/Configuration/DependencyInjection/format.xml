@@ -18,5 +18,8 @@
                 type="service"
                 id="chamilo.libraries.file.path_builder" />
         </service>
+        <service id="chamilo.libraries.format.utilities.resource_processor" class="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
+            <argument type="service" id="chamilo.libraries.file.path_builder" />
+        </service>
     </services>
 </container>

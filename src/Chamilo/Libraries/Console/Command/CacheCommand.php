@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Cache\CacheDirector;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,18 +15,11 @@ use Symfony\Component\Translation\Translator;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class CacheCommand extends Command
+abstract class CacheCommand extends ChamiloCommand
 {
     const OPT_LIST = 'list';
     const OPT_LIST_SHORT = 'l';
     const ARG_CACHE_SERVICES = 'cache_services';
-
-    /**
-     * The translator
-     * 
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
 
     /**
      * The CacheDirector
@@ -44,10 +36,8 @@ abstract class CacheCommand extends Command
      */
     public function __construct(Translator $translator, CacheDirector $cacheDirector)
     {
-        $this->translator = $translator;
         $this->cacheDirector = $cacheDirector;
-        
-        parent::__construct();
+        parent::__construct($translator);
     }
 
     /**

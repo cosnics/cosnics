@@ -54,7 +54,7 @@
     "scripts":{
         "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
         "pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-        "post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-        "post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
+        "post-update-cmd": "php console chamilo:process_resources",
+        "post-install-cmd": "php console chamilo:process_resources"
     }
 }
