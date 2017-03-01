@@ -1,5 +1,5 @@
 TypeName = "User Favourites"
 CreateFavourite = "Add as favourite user"
 CreateFavourites = "Add selected users as favourite users"
-DeleteFavourite = "Remove as favourite user
+DeleteFavourite = "Remove as favourite user"
 UserFavourite = "Favourite user"
