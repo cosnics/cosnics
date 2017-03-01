@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Console\Command;
 
 use Chamilo\Application\Weblcms\Service\LearningPathProgressFixer;
+use Chamilo\Libraries\Utilities\Timer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -62,6 +63,14 @@ class LearningPathProgressFixerCommand extends Command
             $output->writeln('Executing LearningPathProgressFixer in dry run mode');
         }
 
+        ini_set('memory_limit', -1);
+
+        $timer = new Timer();
+        $timer->start();
+
         $this->learningPathProgressFixer->fixLearningPathProgress($dryRun);
+
+        $timer->stop();
+        $output->writeln('Time spent: ' . $timer->get_time_in_hours());
     }
 }
