@@ -64,7 +64,7 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                  'HtmlEditor/Ckeditor/ckeditor.js');
         $scripts[] = '<script type="text/javascript">';
-        $scripts[] = 'CKEDITOR.timestamp = "v3"';
+        $scripts[] = 'CKEDITOR.timestamp = "v4"';
         $scripts[] = '</script>';
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .

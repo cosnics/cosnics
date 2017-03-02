@@ -43,7 +43,7 @@ CKEDITOR.editorConfig = function(config)
                     'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     config.filebrowserChamiloBrowseUrl = web_path
-            + 'index.php?application=Chamilo\\Core\\Repository&go=html_editor_file&plugin=chamilo';
+            + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';
     config.filebrowserChamiloHandbookLinkBrowseUrl = web_path
             + 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
     config.latexDialogUrl = web_path

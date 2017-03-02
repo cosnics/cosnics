@@ -326,6 +326,7 @@ class BrowserComponent extends Manager implements TableSupport
                         array_merge(
                             $this->get_parameters(), 
                             array(
+                                self::PARAM_TAB => self::TAB_VIEWER,
                                 self::PARAM_ACTION => self::ACTION_VIEWER, 
                                 self::PARAM_VIEW_ID => $content_object->get_id())), 
                         false), 
@@ -343,6 +344,7 @@ class BrowserComponent extends Manager implements TableSupport
                         array_merge(
                             $this->get_parameters(), 
                             array(
+                                self::PARAM_TAB => self::TAB_CREATOR,
                                 self::PARAM_ACTION => self::ACTION_CREATOR, 
                                 self::PARAM_EDIT_ID => $content_object->get_id())), 
                         false), 

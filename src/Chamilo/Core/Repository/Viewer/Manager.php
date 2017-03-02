@@ -34,16 +34,23 @@ abstract class Manager extends Application
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
     const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_IN_WORKSPACES = 'in_workspaces';
-    
+    const PARAM_TAB = 'tab';
+
     // Actions
     const ACTION_CREATOR = 'Creator';
     const ACTION_BROWSER = 'Browser';
     const ACTION_VIEWER = 'Viewer';
     const ACTION_IMPORTER = 'Importer';
-    
+
+    const TAB_CREATOR = 'Creator';
+    const TAB_BROWSER = 'Browser';
+    const TAB_WORKSPACE_BROWSER = 'WorkspaceBrowser';
+    const TAB_IMPORTER = 'Importer';
+    const TAB_VIEWER = 'Viewer';
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_CREATOR;
-    
+
     // Configuration
     const SETTING_TABS_DISABLED = 'tabs_disabled';
     const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
@@ -69,17 +76,17 @@ abstract class Manager extends Application
     private $tabs;
 
     private $creation_defaults;
-    
+
     /**
      * Allow selection of multiple content objects in the viewer
-     * 
+     *
      * @var int
      */
     const SELECT_MULTIPLE = 0;
-    
+
     /**
      * Allow selection of just one content object in the viewer
-     * 
+     *
      * @var int
      */
     const SELECT_SINGLE = 1;
@@ -95,11 +102,11 @@ abstract class Manager extends Application
         $this->default_content_objects = array();
         $this->parameters = array();
         $this->excluded_objects = array();
-        
-        $this->set_actions(array(self::ACTION_CREATOR, self::ACTION_BROWSER, self::ACTION_IMPORTER));
+
         $this->set_parameter(
-            self::PARAM_ACTION, 
-            (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR));
+            self::PARAM_ACTION,
+            (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR)
+        );
     }
 
     public function render_header()
@@ -108,49 +115,43 @@ abstract class Manager extends Application
         {
             return parent::render_header();
         }
-        
+
         $html = array();
-        
+
         $html[] = parent::render_header();
-        
-        $current_action = $this->get_parameter(self::PARAM_ACTION);
-        
-        $actions = $this->get_actions();
-        
-        if ($current_action == self::ACTION_VIEWER)
+
+        $currentTab = $this->getRequest()->get(self::PARAM_TAB);
+        if(empty($currentTab))
         {
-            $actions[] = self::ACTION_VIEWER;
+            $currentTab = self::TAB_CREATOR;
         }
-        
+
+        $tabs = $this->getTabs();
+
         $this->tabs = new DynamicVisualTabsRenderer('viewer');
-        
-        foreach ($actions as $viewer_action)
+
+        foreach ($tabs as $tabName => $tabAction)
         {
-            $selected = ($current_action == $viewer_action ? true : false);
-            
-            $parameters = $this->get_parameters();
-            $parameters[self::PARAM_ACTION] = $viewer_action;
-            
-            if ($viewer_action == self::ACTION_VIEWER)
-            {
-                $parameters[self::PARAM_ID] = Request::get(self::PARAM_ID);
-            }
-            
+            $selected = ($currentTab == $tabName ? true : false);
+
             $label = Translation::get(
-                (string) StringUtilities::getInstance()->createString($viewer_action)->upperCamelize() . 'Title');
-            $link = $this->get_url($parameters);
+                (string) StringUtilities::getInstance()->createString($tabName)->upperCamelize() . 'Title'
+            );
+
             $this->tabs->add_tab(
                 new DynamicVisualTab(
-                    $viewer_action, 
-                    $label, 
-                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $viewer_action), 
-                    $link, 
-                    $selected));
+                    $tabName,
+                    $label,
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $tabName),
+                    $tabAction,
+                    $selected
+                )
+            );
         }
-        
+
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -160,13 +161,13 @@ abstract class Manager extends Application
         {
             return parent::render_footer();
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
         $html[] = parent::render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -190,7 +191,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the types of content object that the viewer can use.
-     * 
+     *
      * @return multitype:string
      */
     public function get_types()
@@ -209,7 +210,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param multitype:string $actions
+     * @param multitype :string $actions
      */
     public function set_actions($actions)
     {
@@ -227,7 +228,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param multitype:int $excluded_objects
+     * @param multitype :int $excluded_objects
      */
     public function set_excluded_objects($excluded_objects)
     {
@@ -240,7 +241,7 @@ abstract class Manager extends Application
      */
     public function any_object_selected()
     {
-        return ! is_null(self::get_selected_objects());
+        return !is_null(self::get_selected_objects());
     }
 
     /**
@@ -250,12 +251,12 @@ abstract class Manager extends Application
     public static function get_selected_objects()
     {
         $requestedObjects = Request::get(self::PARAM_ID);
-        
-        if (! $requestedObjects)
+
+        if (!$requestedObjects)
         {
             $requestedObjects = Request::post(self::PARAM_ID);
         }
-        
+
         return $requestedObjects;
     }
 
@@ -280,7 +281,7 @@ abstract class Manager extends Application
     public function areTabsDisabled()
     {
         return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true ||
-             ! $this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
+        !$this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
     }
 
     /**
@@ -294,11 +295,55 @@ abstract class Manager extends Application
 
     /**
      * Returns the breadcrumb generator
-     * 
+     *
      * @return BreadcrumbGenerator
      */
     public function get_breadcrumb_generator()
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+    }
+
+    /**
+     * Returns a list of the available tabs
+     *
+     * @return array
+     */
+    protected function getTabs()
+    {
+        $tabs = array();
+
+        $tabs[self::TAB_CREATOR] = $this->get_url(
+            array(self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR)
+        );
+
+        $tabs[self::TAB_BROWSER] = $this->get_url(
+            array(
+                self::PARAM_TAB => self::TAB_BROWSER, self::PARAM_ACTION => self::ACTION_BROWSER,
+                self::PARAM_IN_WORKSPACES => false
+            )
+        );
+
+        $tabs[self::TAB_WORKSPACE_BROWSER] = $this->get_url(
+            array(
+                self::PARAM_TAB => self::TAB_WORKSPACE_BROWSER, self::PARAM_ACTION => self::ACTION_BROWSER,
+                self::PARAM_IN_WORKSPACES => true
+            )
+        );
+
+        $tabs[self::TAB_IMPORTER] = $this->get_url(
+            array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
+        );
+
+        if ($this->get_action() == self::ACTION_VIEWER)
+        {
+            $tabs[self::TAB_VIEWER] = $this->get_url(
+                array(
+                    self::PARAM_TAB => self::TAB_VIEWER, self::PARAM_ACTION => self::ACTION_VIEWER,
+                    self::PARAM_ID => $this->getRequest()->get(self::PARAM_ID)
+                )
+            );
+        }
+
+        return $tabs;
     }
 }

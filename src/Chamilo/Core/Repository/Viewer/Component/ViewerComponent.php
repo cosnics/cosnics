@@ -67,6 +67,7 @@ class ViewerComponent extends Manager
                             array_merge(
                                 $this->get_parameters(),
                                 array(
+                                    self::PARAM_TAB => self::TAB_CREATOR,
                                     self::PARAM_ACTION => self::ACTION_CREATOR,
                                     self::PARAM_EDIT_ID => $content_object->get_id()
                                 )

@@ -741,6 +741,11 @@ abstract class Manager extends Application
 
         $html[] = parent::render_header();
 
+        if($this->get_action() == self::ACTION_HTML_EDITOR_FILE)
+        {
+            return implode(PHP_EOL, $html);
+        }
+
         if (! $this->getWorkspace() instanceof PersonalWorkspace)
         {
             /** @var Workspace $workspace */
