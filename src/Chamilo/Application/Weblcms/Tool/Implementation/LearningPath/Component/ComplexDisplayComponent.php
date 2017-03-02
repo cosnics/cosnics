@@ -24,6 +24,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
@@ -58,13 +60,27 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function run()
     {
+        $contentObjectPublicationTranslation =
+            Translation::getInstance()->getTranslation('ContentObjectPublication', null, 'Chamilo\Application\Weblcms');
+
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+
+        if(empty($publication_id))
+        {
+            throw new NoObjectSelectedException($contentObjectPublicationTranslation);
+        }
+
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $publication_id
         );
+
+        if (!$this->publication instanceof ContentObjectPublication)
+        {
+            throw new ObjectNotExistException($contentObjectPublicationTranslation, $publication_id);
+        }
 
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
@@ -361,7 +377,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         if ($mastery_score)
         {
-            $status = ($total_score >= $mastery_score) ? AbstractItemAttempt::STATUS_PASSED : AbstractItemAttempt::STATUS_FAILED;
+            $status = ($total_score >= $mastery_score) ? AbstractItemAttempt::STATUS_PASSED :
+                AbstractItemAttempt::STATUS_FAILED;
         }
         else
         {
@@ -369,15 +386,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         }
 
         $currentAttempt->set_status($status);
-        if($currentAttempt->update())
+        if ($currentAttempt->update())
         {
             $this->get_current_node()->recalculateIsCompleted();
             $learningPathTracker = $this->retrieve_learning_path_tracker();
             $learningPathTracker->set_progress($this->getComplexContentObjectPath()->get_progress());
             $learningPathTracker->update();
         }
-
-
     }
 
     public function get_assessment_current_attempt_id()
