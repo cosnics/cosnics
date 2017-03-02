@@ -51,6 +51,8 @@ class Bootstrap
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     * @param ErrorHandler $errorHandler
+     * @param bool $showErrors
      */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
         FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
