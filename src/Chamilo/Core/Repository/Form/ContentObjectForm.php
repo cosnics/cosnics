@@ -658,7 +658,7 @@ EOT;
         // omit this check. (this way, the platform setting is unobtrusive).
 
         $omitContentObjectTitleCheck = Configuration::getInstance()->get_setting(
-            array(__NAMESPACE__, 'omit_content_object_title_check')
+            array('Chamilo\Core\Repository', 'omit_content_object_title_check')
         );
 
         if ($omitContentObjectTitleCheck != 1)
