@@ -35,7 +35,7 @@
         <parameter key="chamilo.configuration.general.hashing_algorithm">{chamilo.configuration.general.hashing_algorithm}</parameter>
         <parameter key="chamilo.configuration.general.install_date">{chamilo.configuration.general.install_date}</parameter>
         <parameter key="chamilo.configuration.general.language">en</parameter>
-        <parameter key="chamilo.configuration.general.theme">aqua</parameter>
+        <parameter key="chamilo.configuration.general.theme">Aqua</parameter>
         <parameter key="chamilo.configuration.debug.show_errors">{chamilo.configuration.debug.show_errors}</parameter>
         <parameter key="chamilo.configuration.debug.enable_query_cache">{chamilo.configuration.debug.enable_query_cache}</parameter>
         <parameter key="chamilo.configuration.session.session_handler">chamilo</parameter>
