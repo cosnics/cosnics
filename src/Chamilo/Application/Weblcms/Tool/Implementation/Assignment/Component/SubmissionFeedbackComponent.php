@@ -9,6 +9,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -98,9 +100,16 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $submissionTranslation = Translation::getInstance()->getTranslation('Submission');
+
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->submission_id = Request::get(self::PARAM_SUBMISSION);
-        
+
+        if(empty($this->submission_id))
+        {
+            throw new NoObjectSelectedException($submissionTranslation);
+        }
+
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -116,7 +125,15 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(), 
             null, 
             $condition)->as_array();
+
+        if(empty($submissions))
+        {
+            throw new ObjectNotExistException($submissionTranslation, $this->submission_id);
+        }
+
         $submission = $submissions[0]->get_content_object();
+
+
         
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
