@@ -67,7 +67,7 @@ class PackageTypeSettingsMenu extends HtmlMenu
         {
             if (! $has_settings)
             {
-                unset($item['url']);
+                $item['url'] = '#';
             }
             
             return $item;
