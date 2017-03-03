@@ -66,7 +66,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $settings = array();
         $settings[] = array('Chamilo\Core\Admin', 'site_name', $values['platform_name']);
         $settings[] = array('Chamilo\Core\Admin', 'platform_language', $values['platform_language']);
-        $settings[] = array('Chamilo\Core\Admin', 'version', '2.0');
+        $settings[] = array('Chamilo\Core\Admin', 'version', '1.0');
         $settings[] = array('Chamilo\Core\Admin', 'theme', 'Aqua');
 
         $settings[] = array('Chamilo\Core\Admin', 'institution', $values['organization_name']);
