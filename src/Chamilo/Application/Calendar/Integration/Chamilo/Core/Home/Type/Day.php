@@ -81,14 +81,20 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
             
             $calendarLegend = new Legend($dataProvider);
             $time = Request::get('time') ? intval(Request::get('time')) : time();
-            
+
+            $hourStep = (int) $this->getBlock()->getSetting(self::CONFIGURATION_HOUR_STEP, 1);
+            if(!is_integer($hourStep) || $hourStep < 1)
+            {
+                $hourStep = 1;
+            }
+
             return new MiniDayRenderer(
                 $dataProvider, 
                 $calendarLegend, 
                 $time, 
                 array(), 
                 $this->getLinkTarget(), 
-                $this->getBlock()->getSetting(self::CONFIGURATION_HOUR_STEP, 1), 
+                $hourStep,
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8), 
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17), 
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_HIDE, 17));
