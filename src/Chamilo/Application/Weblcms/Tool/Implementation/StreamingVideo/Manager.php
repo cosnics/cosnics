@@ -32,7 +32,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         
         $hogentTypes = array(
             'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa',
-            'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Video'
+            'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video'
         );
         
         foreach ($hogentTypes as $hogentType)
