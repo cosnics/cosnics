@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -99,6 +100,12 @@ class MoverComponent extends ItemComponent
         if ($form->validate())
         {
             $selected_node_id = $form->exportValue(self::PARAM_NEW_PARENT);
+
+            if(empty($selected_node_id))
+            {
+                throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
+            }
+
             $parent_node = $path->get_node($selected_node_id);
             $parent_id = $parent_node->get_content_object()->get_id();
 
