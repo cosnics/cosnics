@@ -59,9 +59,9 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             $buttonToolBar->addItem(
                 new Button('Read the installation guide', new BootstrapGlyph('book'), 'documentation/install.txt'));
             $buttonToolBar->addItem(
-                new Button('Visit chamilo.org', new BootstrapGlyph('globe'), 'http://www.chamilo.org/'));
+                new Button('Visit cosncis.org', new BootstrapGlyph('globe'), 'http://www.cosnics.org/'));
             $buttonToolBar->addItem(
-                new Button('Get support', new BootstrapGlyph('question-sign'), 'http://www.chamilo.org/forum/'));
+                new Button('Get support', new BootstrapGlyph('question-sign'), 'http://www.cosnics.org/'));
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
@@ -81,18 +81,18 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
         if ($phpVersion >= 5.4)
         {
-            $html[] = 'From the looks of it, Chamilo is currently not installed on your system.';
+            $html[] = 'From the looks of it, Cosnics is currently not installed on your system.';
             $html[] = '<br />';
             $html[] = '<br />';
             $html[] = 'Please check your database and/or configuration files if you are certain the platform was installed correctly.';
             $html[] = '<br />';
             $html[] = '<br />';
-            $html[] = 'If you\'re starting Chamilo for the first time, you may want to install the platform first by clicking the button below. Alternatively, you can read the installation guide, visit chamilo.org for more information or go to the community forum if you need support.';
+            $html[] = 'If you\'re starting Cosnics for the first time, you may want to install the platform first by clicking the button below. Alternatively, you can read the installation guide, visit chamilo.org for more information or go to the community forum if you need support.';
         }
         else
         {
             $html[] = '<div class="error-message" style="margin-bottom: 39px; margin-top: 30px;">';
-            $html[] = 'Your version of PHP is not recent enough to use the Chamilo software.';
+            $html[] = 'Your version of PHP is not recent enough to use the Cosnics software.';
             $html[] = '<br />';
             $html[] = '<a href="http://www.php.net">';
             $html[] = 'Please upgrade to PHP version 5.4 or higher';

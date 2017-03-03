@@ -19,6 +19,6 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
      */
     public function __construct($formValues)
     {
-        parent::__construct($formValues, Item::DISPLAY_ICON, false);
+        parent::__construct($formValues, Item::DISPLAY_BOTH, false);
     }
 }
