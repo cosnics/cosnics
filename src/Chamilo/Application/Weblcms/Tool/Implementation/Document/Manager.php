@@ -54,6 +54,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $allowed_types[] = $optional_type;
             }
         }
+
+        $hogentTypes = array(
+            'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Video'
+        );
+
+        foreach ($hogentTypes as $hogentType)
+        {
+            if (class_exists($hogentType))
+            {
+                $allowedTypes[] = $hogentType;
+            }
+        }
         
         return $allowed_types;
     }
