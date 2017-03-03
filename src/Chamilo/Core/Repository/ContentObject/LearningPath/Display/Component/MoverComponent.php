@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -28,7 +30,17 @@ class MoverComponent extends TabComponent
      */
     public function build()
     {
-        $selected_steps = $this->getRequest()->get(self::PARAM_STEP);
+        $selected_steps = $this->getRequest()->request->get(self::PARAM_STEP);
+        if(empty($selected_steps))
+        {
+            $selected_steps = $this->getRequest()->query->get(self::PARAM_STEP);
+        }
+
+        if(empty($selected_steps))
+        {
+            throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('Step'));
+        }
+
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);
@@ -41,7 +53,12 @@ class MoverComponent extends TabComponent
         foreach ($selected_steps as $selected_step)
         {
             $selected_node = $path->get_node($selected_step);
-            
+
+            if(empty($selected_node))
+            {
+                throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $selected_step);
+            }
+
             if ($this->canEditComplexContentObjectPathNode($selected_node->get_parent()))
             {
                 $available_nodes[] = $selected_node;
@@ -90,6 +107,12 @@ class MoverComponent extends TabComponent
         if ($form->validate())
         {
             $selected_node_id = $form->exportValue(self::PARAM_NEW_PARENT);
+
+            if(empty($selected_node_id))
+            {
+                throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
+            }
+
             $parent_node = $path->get_node($selected_node_id);
             $parent_id = $parent_node->get_content_object()->get_id();
             

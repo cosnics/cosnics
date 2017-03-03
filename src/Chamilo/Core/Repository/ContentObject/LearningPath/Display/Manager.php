@@ -91,7 +91,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function is_current_step_set()
     {
-        return ! is_null(Request::get(self::PARAM_STEP));
+        $currentStepFromRequest = $this->get_current_step_from_request();
+        return ! is_null($currentStepFromRequest);
     }
 
     /**
@@ -100,7 +101,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     private function get_current_step_from_request()
     {
-        return Request::get(self::PARAM_STEP);
+        $step = $this->getRequest()->request->get(self::PARAM_STEP);
+        if(empty($step))
+        {
+            $step = $this->getRequest()->query->get(self::PARAM_STEP);
+        }
+
+        return $step;
     }
 
     /**
