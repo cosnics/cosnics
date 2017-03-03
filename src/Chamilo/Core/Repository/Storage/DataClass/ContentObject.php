@@ -224,7 +224,14 @@ class ContentObject extends CompositeDataClass
 
     public function get_owner_fullname()
     {
-        return $this->get_owner()->get_fullname();
+        $owner = $this->get_owner();
+        
+        if($owner instanceof User)
+        {
+            return $owner->get_fullname();
+        }
+        
+        return Translation::getInstance()->getTranslation('UserUnknown', null, \Chamilo\Core\User\Manager::context());
     }
 
     /**
