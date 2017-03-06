@@ -81,7 +81,7 @@ abstract class ContentObjectDifference
      */
     public static function factory(&$object, &$version)
     {
-        $class = $object->package() . '\\' .
+        $class = $object->package() . '\\Common\\' .
              ClassnameUtilities::getInstance()->getPackageNameFromNamespace($object->package()) . 'Difference';
         return new $class($object, $version);
     }
