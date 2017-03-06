@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: content_object_difference.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -70,7 +71,13 @@ abstract class ContentObjectDifference
         $difference = new \Diff($version_string, $object_string);
         $renderer = new \Diff_Renderer_Html_SideBySide();
         
-        return $difference->Render($renderer);
+        $renderedString = $difference->Render($renderer);
+
+        $translator = Translation::getInstance();
+        $renderedString = str_replace('Old Version', $translator->getTranslation('OldVersion'), $renderedString);
+        $renderedString = str_replace('New Version', $translator->getTranslation('NewVersion'), $renderedString);
+
+        return $renderedString;
     }
 
     /**

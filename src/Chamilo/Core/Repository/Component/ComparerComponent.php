@@ -25,6 +25,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ComparerComponent extends Manager
 {
+    const PARAM_BASE_CONTENT_OBJECT_ID = 'base_content_object_id';
 
     /**
      * Runs this component and displays its output.
@@ -33,6 +34,10 @@ class ComparerComponent extends Manager
     {
         // $trail = BreadcrumbTrail :: getInstance();
         $object_ids = $this->getRequest()->request->get(self::PARAM_CONTENT_OBJECT_ID);
+        if(empty($object_ids))
+        {
+            $object_ids = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
+        }
 
         if ($object_ids)
         {
@@ -55,12 +60,12 @@ class ComparerComponent extends Manager
         $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
         $contentObjectVersion = DataManager::retrieve_by_id(ContentObject::class_name(), $version_id);
 
-        if(empty($contentObject))
+        if (!$contentObject instanceof ContentObject)
         {
             throw new ObjectNotExistException($contentObjectTranslation, $object_id);
         }
 
-        if(empty($contentObjectVersion))
+        if (!$contentObjectVersion instanceof ContentObject)
         {
             throw new ObjectNotExistException($contentObjectTranslation, $version_id);
         }
@@ -90,6 +95,7 @@ class ComparerComponent extends Manager
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = $this->renderComparedVersions($contentObject, $contentObjectVersion);
         $html[] = $contentObject->get_difference($version_id)->render();
         $html[] = $this->render_footer();
 
@@ -98,12 +104,95 @@ class ComparerComponent extends Manager
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $baseContentObject = $this->getBaseContentObject();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('BrowserComponent')
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
+                        self::PARAM_CONTENT_OBJECT_ID => $baseContentObject->getId()
+                    ),
+                    array(self::PARAM_BASE_CONTENT_OBJECT_ID)
+                ),
+                Translation::get('ViewContentObject', array('CONTENT_OBJECT' => $baseContentObject->get_title()))
             )
         );
+
         $breadcrumbtrail->add_help('repository_comparer');
+    }
+
+    public function get_additional_parameters($additionalParameters = array())
+    {
+        return array(
+            self::PARAM_BASE_CONTENT_OBJECT_ID, self::PARAM_CONTENT_OBJECT_ID, self::PARAM_COMPARE_OBJECT,
+            self::PARAM_COMPARE_VERSION
+        );
+    }
+
+    /**
+     * Renders the compared versions
+     */
+    protected function renderComparedVersions(ContentObject $contentObject, ContentObject $contentObjectVersion)
+    {
+        $html = array();
+
+        $html[] = '<table class="table table-bordered table-striped comparer-header-table">';
+        $html[] = '<thead>';
+        $html[] = '<tr>';
+        $html[] = '<th></th>';
+        $html[] = '<th>' . Translation::getInstance()->getTranslation('OldVersion') . '</th>';
+        $html[] = '<th>' . Translation::getInstance()->getTranslation('NewVersion') . '</th>';
+        $html[] = '</tr>';
+        $html[] = '</thead>';
+        $html[] = '<tbody>';
+        $html[] = '<tr>';
+        $html[] = '<th class="comparer-header-title">' . Translation::getInstance()->getTranslation('Title') . '</th>';
+        $html[] = '<td>' . $contentObject->get_title() . '</td>';
+        $html[] = '<td>' . $contentObjectVersion->get_title() . '</td>';
+        $html[] = '</tr>';
+
+        if($contentObject->get_comment() || $contentObjectVersion->get_comment())
+        {
+            $html[] = '<tr>';
+            $html[] = '<th class="comparer-header-title">' . Translation::getInstance()->getTranslation('VersionComment') . '</th>';
+            $html[] = '<td>' . $contentObject->get_comment() . '</td>';
+            $html[] = '<td>' . $contentObjectVersion->get_comment() . '</td>';
+            $html[] = '</tr>';
+        }
+
+        $html[] = '</tbody>';
+        $html[] = '</table>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns the base content object
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     *
+     * @throws NoObjectSelectedException
+     * @throws ObjectNotExistException
+     */
+    protected function getBaseContentObject()
+    {
+        $baseContentObjectId = $this->getRequest()->get(self::PARAM_BASE_CONTENT_OBJECT_ID);
+
+        $contentObjectTranslation = Translation::getInstance()->getTranslation('ContentObject');
+
+        if (empty($baseContentObjectId))
+        {
+            throw new NoObjectSelectedException($contentObjectTranslation);
+        }
+
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $baseContentObjectId);
+
+        if (!$contentObject instanceof ContentObject)
+        {
+            throw new ObjectNotExistException($contentObjectTranslation, $baseContentObjectId);
+        }
+
+        return $contentObject;
     }
 }

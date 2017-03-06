@@ -241,3 +241,11 @@ div.quota_statistics .data_table td.header {
 .DifferencesInline .ChangeReplace del {
 	background: #e99;
 }
+
+.comparer-header-table {
+	margin-bottom: 20px;
+}
+
+.comparer-header-title {
+	max-width: 50px;
+}
