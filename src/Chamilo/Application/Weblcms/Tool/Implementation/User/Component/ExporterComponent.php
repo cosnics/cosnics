@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
@@ -19,6 +20,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -108,7 +110,12 @@ class ExporterComponent extends Manager
      */
     protected function exportIndividualSubscribedUsers()
     {
-        $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course()->as_array();
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticColumnConditionVariable($this->get_course_id())
+        );
+
+        $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course($condition)->as_array();
 
         $users = array();
         foreach ($individualUsers as $individualUserRecord)
@@ -228,7 +235,7 @@ class ExporterComponent extends Manager
 
     /**
      * Creates a safe name from a possible unsafe name
-     * 
+     *
      * @param string $unsafeName
      *
      * @return string
