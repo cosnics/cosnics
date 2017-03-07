@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -653,7 +654,7 @@ abstract class HtmlTable extends \HTML_Table
 
         try { //invalid page number? set it to 0.
             $offset = $pager->getCurrentRangeOffset();
-        } catch (\Exception $exception) {
+        } catch (InvalidPageNumberException $exception) {
             $offset = 0;
         }
 
