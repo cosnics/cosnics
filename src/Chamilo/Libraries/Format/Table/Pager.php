@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Table
@@ -172,7 +174,7 @@ class Pager
             
             if ($calculatedRangeEnd > $this->getNumberOfItems())
             {
-                throw new \Exception('Invalid page number');
+                throw new InvalidPageNumberException();
             }
             
             $this->previousRangeEnd = $calculatedRangeEnd;
@@ -192,7 +194,11 @@ class Pager
         {
             if (! isset($this->currentRangeStart))
             {
-                $calculatedRangeStart = $this->getPreviousRangeEnd() + 1;
+                try {
+                    $calculatedRangeStart = $this->getPreviousRangeEnd() + 1;
+                } catch (InvalidPageNumberException $exception) {
+                    $calculatedRangeStart = 0;
+                }
                 
                 if ($calculatedRangeStart > $this->getNumberOfItems())
                 {
