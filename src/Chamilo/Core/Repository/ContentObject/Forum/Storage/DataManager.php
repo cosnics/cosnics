@@ -43,8 +43,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * This function retrieves a ForumSubscribe object based on its forum id and user id.
      * 
-     * @param $forum_id type The forum id.
-     * @param $user_id type The user id.
+     * @param int $forum_id
+     * @param int $user_id
      * @return ForumSubscribe
      *
      */
@@ -118,7 +118,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return boolean Returns whether the creation was succesfull.
      */
-    public function create_subscribe($user_id, $forum_id)
+    public static function create_subscribe($user_id, $forum_id)
     {
         $forum_subscribe = new ForumSubscribe();
         $forum_subscribe->set_forum_id($forum_id);

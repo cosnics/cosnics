@@ -112,14 +112,18 @@ class ApplicationFactory
     /**
      *
      * @param string $action
+     * @param bool $generateBreadcrumbs
      *
-     * @throws \Exception
-     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @return Application
      */
-    public function getComponent($action = null)
+    public function getComponent($action = null, $generateBreadcrumbs = true)
     {
         $component = $this->createComponent($action);
-        $component->get_breadcrumb_generator()->generate_breadcrumbs();
+
+        if($generateBreadcrumbs)
+        {
+            $component->get_breadcrumb_generator()->generate_breadcrumbs();
+        }
 
         return $component;
     }

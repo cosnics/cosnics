@@ -183,7 +183,7 @@ class ViewerComponent extends TabComponent
                     $integration_class_name::context(),
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
                 );
-                $component = $factory->getComponent();
+                $component = $factory->getComponent(null, false);
                 $component->get_node_tabs($primaryActions, $secondaryActions, $this->get_current_node());
             }
             catch (\Exception $exception)
