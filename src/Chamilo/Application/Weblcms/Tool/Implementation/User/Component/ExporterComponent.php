@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter\CourseUserExportExtender;
 use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
@@ -18,6 +19,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Exports the user list
@@ -29,7 +31,7 @@ class ExporterComponent extends Manager
 
     public function run()
     {
-        $users = $this->getUsersToExport();
+        $userExportParameters = $this->getUserExportParameters();
 
         $exporter = new UserExporter(
             new ExcelUserExportRenderer(),
@@ -39,12 +41,12 @@ class ExporterComponent extends Manager
             )
         );
 
-        $file_path = $exporter->export($users);
+        $file_path = $exporter->export($userExportParameters->getUsers());
 
         Filesystem::file_send_for_download(
             $file_path,
             true,
-            'export_users_' . $this->get_course_id() . '.xlsx',
+            $userExportParameters->getExportFilename(),
             'application/vnd.openxmlformats'
         );
 
@@ -54,21 +56,21 @@ class ExporterComponent extends Manager
     /**
      * Returns a list of users to export
      *
-     * @return User[]
+     * @return UserExportParameters
      */
-    protected function getUsersToExport()
+    protected function getUserExportParameters()
     {
         $tab = $this->getRequest()->get(self::PARAM_TAB);
 
         switch ($tab)
         {
             case UnsubscribeBrowserComponent::TAB_ALL:
-                return $this->retrieveAllUsers();
+                return $this->exportAllUsers();
             case UnsubscribeBrowserComponent::TAB_USERS:
-                return $this->retrieveIndividualSubscribedUsers();
+                return $this->exportIndividualSubscribedUsers();
             case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_SUBGROUPS:
             case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS:
-                return $this->retrievePlatformGroupUsers();
+                return $this->exportPlatformGroupUsers();
         }
 
         return array();
@@ -77,9 +79,9 @@ class ExporterComponent extends Manager
     /**
      * Retrieves all course users
      *
-     * @return User[]
+     * @return UserExportParameters
      */
-    protected function retrieveAllUsers()
+    protected function exportAllUsers()
     {
         $user_records = CourseDataManager::retrieve_all_course_users($this->get_course_id());
 
@@ -90,15 +92,21 @@ class ExporterComponent extends Manager
             $users[] = DataClass::factory(User::class_name(), $user_record);
         }
 
-        return $users;
+        $filename = Translation::getInstance()->getTranslation(
+            'ExportUsersFilename', array(
+                'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
+            )
+        );
+
+        return new UserExportParameters($users, $filename . '.xlsx');
     }
 
     /**
      * Retrieves all individually subscribed users
      *
-     * @return User[]
+     * @return UserExportParameters
      */
-    protected function retrieveIndividualSubscribedUsers()
+    protected function exportIndividualSubscribedUsers()
     {
         $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course()->as_array();
 
@@ -118,13 +126,22 @@ class ExporterComponent extends Manager
             $users[] = $user;
         }
 
-        return $users;
+        $filename = Translation::getInstance()->getTranslation(
+            'ExportDirectlySubscribedUsersFilename', array(
+                'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
+            )
+        );
+        
+        return new UserExportParameters($users, $filename . '.xlsx');
     }
 
     /**
      * Retrieves all users from a given platform group
+     *
+     * @return UserExportParameters
+     * @throws ObjectNotExistException
      */
-    protected function retrievePlatformGroupUsers()
+    protected function exportPlatformGroupUsers()
     {
         $groupTranslation = Translation::getInstance()->getTranslation('Group', null, 'Chamilo\Core\Group');
 
@@ -132,7 +149,7 @@ class ExporterComponent extends Manager
 
         if (empty($groupId))
         {
-            return $this->retrieveAllUsers();
+            return $this->exportAllUsers();
         }
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
@@ -142,11 +159,11 @@ class ExporterComponent extends Manager
             throw new ObjectNotExistException($groupTranslation, $groupId);
         }
 
-        $groupStatus = $this->getRequest()->get(self::PARAM_STATUS);
+        $groupStatus = $this->determineGroupStatus($group);
 
         $groupUsersIds = $group->get_users();
 
-        if(empty($groupUsersIds))
+        if (empty($groupUsersIds))
         {
             return array();
         }
@@ -165,6 +182,63 @@ class ExporterComponent extends Manager
             $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
         }
 
-        return $groupUsers;
+        $filename = Translation::getInstance()->getTranslation(
+            'ExportGroupUsersFilename', array(
+                'GROUP_NAME' => $this->createSafeName($group->get_name())
+            )
+        );
+
+        return new UserExportParameters($groupUsers, $filename . '.xlsx');
+    }
+
+    /**
+     * Determines the status for a group in the current course
+     *
+     * @param Group $group
+     *
+     * @return int
+     */
+    protected function determineGroupStatus($group)
+    {
+        $parentIds = array();
+
+        $parents = $group->get_ancestors(true);
+        while ($parent = $parents->next_result())
+        {
+            $parentIds[] = $parent->getId();
+        }
+
+        $condition = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $parentIds
+        );
+
+        $directlySubscribedGroups = CourseDataManager::retrieve_groups_directly_subscribed_to_course($condition);
+
+        while ($directlySubscribedGroup = $directlySubscribedGroups->next_result())
+        {
+            if ($directlySubscribedGroup[CourseEntityRelation::PROPERTY_STATUS] == CourseEntityRelation::STATUS_TEACHER)
+            {
+                return CourseEntityRelation::STATUS_TEACHER;
+            }
+        }
+
+        return CourseEntityRelation::STATUS_STUDENT;
+    }
+
+    /**
+     * Creates a safe name from a possible unsafe name
+     * 
+     * @param string $unsafeName
+     *
+     * @return string
+     */
+    protected function createSafeName($unsafeName)
+    {
+        $stringUtilities = StringUtilities::getInstance();
+        $string = $stringUtilities->createString($unsafeName);
+        $safeName = $string->toLowerCase()->toAscii()->underscored();
+
+        return (string) $safeName;
     }
 }

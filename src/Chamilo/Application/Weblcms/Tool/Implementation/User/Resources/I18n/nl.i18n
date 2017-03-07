@@ -371,3 +371,6 @@ FailedUsersCanOnlyBeRequested = "De volgende gebruikers werden niet ingeschreven
 RequestUsers = "Vraag deze gebruikers aan"
 SubscribeComponent = "Schrijf gebruikers in in deze cursus"
 SubscribeGroupsSearcherComponent = "Zoeken binnen alle beschikbare platformgroepen"
+ExportUsersFilename = "cursus_gebruikers_{COURSE_NAME}"
+ExportDirectlySubscribedUsersFilename = "individueel_ingeschreven_gebruikers_{COURSE_NAME}"
+ExportGroupUsersFilename = "groep_gebruikers_{GROUP_NAME}"
