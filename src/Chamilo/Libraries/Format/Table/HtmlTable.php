@@ -650,7 +650,13 @@ abstract class HtmlTable extends \HTML_Table
     public function getBodyHtml()
     {
         $pager = $this->getPager();
-        $offset = $pager->getCurrentRangeOffset();
+
+        try { //invalid page number? set it to 0.
+            $offset = $pager->getCurrentRangeOffset();
+        } catch (\Exception $exception) {
+            $offset = 0;
+        }
+
         $table_data = $this->getSourceData($offset);
         
         foreach ($table_data as $index => $row)
