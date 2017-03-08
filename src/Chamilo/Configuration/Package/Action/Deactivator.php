@@ -3,6 +3,7 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -22,13 +23,19 @@ abstract class Deactivator extends Action
 
     public function run()
     {
-        $registration = \Chamilo\Configuration\Storage\DataManager::retrieveRegistrationByContext(self::context());
+        $classNameUtilities = ClassnameUtilities::getInstance();
         
+        $registration = \Chamilo\Configuration\Storage\DataManager::retrieveRegistrationByContext(
+            $classNameUtilities->getNamespaceParent(
+                self::context()
+            )
+        );
+
         if ($registration->is_active())
         {
             $registration->set_status(Registration::STATUS_INACTIVE);
-            
-            if (! $registration->update())
+
+            if (!$registration->update())
             {
                 return $this->failed(Translation::get('DeactivationFailed'));
             }
@@ -36,7 +43,7 @@ abstract class Deactivator extends Action
             {
                 $this->add_message(self::TYPE_NORMAL, Translation::get('DeactivationSuccessful'));
             }
-            
+
             return $this->successful();
         }
         else
@@ -47,13 +54,14 @@ abstract class Deactivator extends Action
 
     /**
      * Creates an application-specific installer.
-     * 
+     *
      * @param $context string The namespace of the package for which we want to start the installer.
      * @param $values string The form values passed on by the wizard.
      */
     public static function factory($context)
     {
         $class = $context . '\Package\Deactivator';
+
         return new $class();
     }
 }
