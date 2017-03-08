@@ -85,8 +85,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $class = $publication[ContentObject::PROPERTY_TYPE];
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
-        
-        if (! $content_object instanceof Page && !$content_object instanceof Introduction)
+
+        if ($content_object instanceof File || $content_object instanceof Webpage)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -107,7 +107,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
-        if (! $content_object instanceof Page && !$content_object instanceof Introduction)
+        if ($content_object instanceof File || $content_object instanceof Webpage)
         {
             $buttonGroup->prependButton(
                 new Button(
