@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="learning_path_content_object_relation">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" />
+        <property name="learning_path_id" type="integer" unsigned="1" notnull="1" />
+        <property name="content_object_id" type="integer" unsigned="1" notnull="1" />
+        <property name="max_attempts" type="integer" notnull="1" unsigned="1" />
+        <property name="mastery_score" type="integer" length="3" unsigned="1" />
+        <property name="allow_hints" type="boolean" notnull="1" default="1" />
+        <property name="show_score" type="boolean" notnull="1" default="1" />
+        <property name="show_correction" type="boolean" notnull="1" default="1" />
+        <property name="show_solution" type="boolean" notnull="1" default="1" />
+        <property name="show_answer_feedback" type="integer" unsigned="1" notnull="1" length="1" default="7" />
+        <property name="feedback_location" type="integer" unsigned="1" notnull="1" length="1" default="3" />
+        <property name="step_blocked" type="boolean" notnull="1" default="0" />
+        <property name="display_order" type="integer" unsigned="1" notnull="1" />
+    </properties>
+    <index name="id" type="primary">
+        <indexproperty name="id" />
+    </index>
+    <index name="learning_path_id">
+        <indexproperty name="learning_path_id" />
+    </index>
+    <index name="content_object_id">
+        <indexproperty name="content_object_id" />
+    </index>
+</object>

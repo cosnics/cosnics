@@ -162,3 +162,26 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (146,'Chamilo\\Core\\Reporting','data_cell_font_family','Arial',0);
 INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (147,'Chamilo\\Core\\Reporting','data_cell_font_style','',0);
 INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`user_setting`) VALUES (148,'Chamilo\\Core\\Reporting','data_cell_font_size','10',0);
+
+/* Learning Path Refactoring */
+
+CREATE TABLE IF NOT EXISTS `repository_learning_path_content_object_relation` (
+  `id` int(10) unsigned NOT NULL,
+  `learning_path_id` int(10) unsigned NOT NULL,
+  `content_object_id` int(10) unsigned NOT NULL,
+  `max_attempts` int(10) unsigned NOT NULL,
+  `mastery_score` int(10) unsigned DEFAULT NULL,
+  `allow_hints` tinyint(1) NOT NULL DEFAULT '1',
+  `show_score` tinyint(1) NOT NULL DEFAULT '1',
+  `show_correction` tinyint(1) NOT NULL DEFAULT '1',
+  `show_solution` tinyint(1) NOT NULL DEFAULT '1',
+  `show_answer_feedback` int(10) unsigned NOT NULL DEFAULT '7',
+  `feedback_location` int(10) unsigned NOT NULL DEFAULT '3',
+  `step_blocked` tinyint(1) NOT NULL DEFAULT '0',
+  `display_order` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `repository_learning_path_content_object_relation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `learning_path_id` (`learning_path_id`),
+  ADD KEY `content_object_id` (`content_object_id`) USING BTREE;
