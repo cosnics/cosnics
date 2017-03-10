@@ -13,9 +13,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class QuickLanguageComponent extends Manager
 {
-
     private function isAllowedToChangeLanguage()
     {
+        Configuration::reset();
+
         return Configuration::getInstance()->get_setting(array(self::package(), 'allow_user_change_platform_language')) ==
              1 && Configuration::getInstance()->get_setting(
                 array(self::package(), 'allow_user_quick_change_platform_language')) == 1;
