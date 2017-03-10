@@ -65,12 +65,15 @@ class MoverComponent extends Manager
             $condition = new AndCondition($conditions);
             $categories = $this->get_parent()->retrieve_categories($condition);
             $newcategory = $categories->next_result();
-            
-            $newcategory->set_display_order($display_order);
-            
-            if ($category->update() && $newcategory->update())
+
+            if($newcategory)
             {
-                $sucess = true;
+                $newcategory->set_display_order($display_order);
+
+                if ($category->update() && $newcategory->update())
+                {
+                    $sucess = true;
+                }
             }
         }
         

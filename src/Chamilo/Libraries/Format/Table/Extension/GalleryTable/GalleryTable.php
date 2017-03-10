@@ -29,6 +29,11 @@ abstract class GalleryTable extends Table
     private $current_row;
 
     /**
+     * @var TableFormActions
+     */
+    protected $form_actions;
+
+    /**
      * **************************************************************************************************************
      * Inherited Rendering Functionality *
      * **************************************************************************************************************

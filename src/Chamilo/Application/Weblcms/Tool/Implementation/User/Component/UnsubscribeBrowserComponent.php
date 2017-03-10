@@ -419,7 +419,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                 
                 $param_export_subscriptions_overview = array();
                 $param_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_EXPORT;
-                
+                $param_export_subscriptions_overview[self::PARAM_TAB] = $this->current_tab;
+
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ExportUserList'), 

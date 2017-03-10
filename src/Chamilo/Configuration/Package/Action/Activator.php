@@ -3,6 +3,7 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -22,8 +23,14 @@ abstract class Activator extends Action
 
     public function run()
     {
-        $registration = \Chamilo\Configuration\Storage\DataManager::retrieveRegistrationByContext(self::context());
-        
+        $classNameUtilities = ClassnameUtilities::getInstance();
+
+        $registration = \Chamilo\Configuration\Storage\DataManager::retrieveRegistrationByContext(
+            $classNameUtilities->getNamespaceParent(
+                self::context()
+            )
+        );
+
         if (! $registration->is_active())
         {
             

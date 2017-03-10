@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -404,7 +405,7 @@ class BrowserComponent extends Manager implements TableSupport
                     
                     if (! $workspace)
                     {
-                        throw new \RuntimeException(
+                        throw new UserException(
                             Translation::getInstance()->getTranslation(
                                 'NoValidWorkspacesForUser', 
                                 null, 

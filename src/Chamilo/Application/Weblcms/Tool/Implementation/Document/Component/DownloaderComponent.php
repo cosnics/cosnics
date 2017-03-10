@@ -5,8 +5,11 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -51,6 +54,12 @@ class DownloaderComponent extends Manager
         }
 
         $document = $publication->get_content_object();
+
+        if(!$document instanceof File && !$document instanceof Webpage)
+        {
+            throw new UserException(Translation::getInstance()->getTranslation('OnlyFilesAndWebpagesCanBeDownloaded'));
+        }
+
         $document->send_as_download();
 
         return '';

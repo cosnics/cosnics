@@ -372,3 +372,6 @@ FailedUsersCanOnlyBeRequested = "The following users were not subscribed because
 RequestUsers = "Request these users"
 SubscribeComponent = "Subscribe users to this course"
 SubscribeGroupsSearcherComponent = "Search in all platform groups"
+ExportUsersFilename = "users_{COURSE_NAME}"
+ExportDirectlySubscribedUsersFilename = "individual_subscribed_users_{COURSE_NAME}"
+ExportGroupUsersFilename = "group_users_{GROUP_NAME}"
