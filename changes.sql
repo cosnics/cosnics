@@ -165,9 +165,9 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 
 /* Learning Path Refactoring */
 
-CREATE TABLE IF NOT EXISTS `repository_learning_path_content_object_relation` (
+CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `id` int(10) unsigned NOT NULL,
-  `learning_path_id` int(10) unsigned NOT NULL,
+  `parent_learning_path_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
   `max_attempts` int(10) unsigned NOT NULL,
   `mastery_score` int(10) unsigned DEFAULT NULL,
@@ -177,11 +177,11 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_content_object_relation` (
   `show_solution` tinyint(1) NOT NULL DEFAULT '1',
   `show_answer_feedback` int(10) unsigned NOT NULL DEFAULT '7',
   `feedback_location` int(10) unsigned NOT NULL DEFAULT '3',
-  `step_blocked` tinyint(1) NOT NULL DEFAULT '0',
+  `blocked` tinyint(1) NOT NULL DEFAULT '0',
   `display_order` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `repository_learning_path_content_object_relation`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `learning_path_id` (`learning_path_id`),
+  ADD KEY `parent_learning_path_id` (`parent_learning_path_id`),
   ADD KEY `content_object_id` (`content_object_id`) USING BTREE;

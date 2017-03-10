@@ -3,11 +3,11 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 /**
- * Service class to manage LearningPathContentObjectRelation classes
+ * Service class to manage LearningPathChild classes
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathContentObjectRelationService
+class LearningPathChildService
 {
         
 }

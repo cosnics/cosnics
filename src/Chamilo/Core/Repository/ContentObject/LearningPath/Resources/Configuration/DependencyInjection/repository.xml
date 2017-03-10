@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-                id="chamilo.core.repository.content_object.learning_path.storage.repository.learning_path_content_object_relation_repository"
-                class="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathContentObjectRelationRepository">
+                id="chamilo.core.repository.content_object.learning_path.storage.repository.learning_path_child_repository"
+                class="Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository">
             <argument
                     type="service"
                     id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />

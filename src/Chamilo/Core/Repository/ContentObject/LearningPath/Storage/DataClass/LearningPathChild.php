@@ -12,9 +12,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathContentObjectRelation extends DataClass implements DisplayOrderDataClassListenerSupport
+class LearningPathChild extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
+    const PROPERTY_PARENT_LEARNING_PATH_ID = 'parent_learning_path_id';
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_MAX_ATTEMPTS = 'max_attempts';
     const PROPERTY_MASTERY_SCORE = 'mastery_score';
@@ -24,11 +24,11 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
     const PROPERTY_SHOW_SOLUTION = 'show_solution';
     const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
     const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
-    const PROPERTY_STEP_BLOCKED = 'step_blocked';
+    const PROPERTY_BLOCKED = 'blocked';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
     /**
-     * LearningPathContentObjectRelation constructor.
+     * LearningPathChild constructor.
      *
      * @param array $default_properties
      * @param array $additional_properties
@@ -46,7 +46,7 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_LEARNING_PATH_ID,
+                self::PROPERTY_PARENT_LEARNING_PATH_ID,
                 self::PROPERTY_CONTENT_OBJECT_ID,
                 self::PROPERTY_MAX_ATTEMPTS,
                 self::PROPERTY_MASTERY_SCORE,
@@ -63,26 +63,26 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
     /**
      * @return int
      */
-    public function getLearningPathId()
+    public function getParentLearningPathId()
     {
         return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
-     * @param int $learningPathId
+     * @param int $parentLearningPathId
      *
      * @return $this
      */
-    public function setLearningPathId($learningPathId)
+    public function setParentLearningPathId($parentLearningPathId)
     {
-        if (empty($learningPathId) || !is_integer($learningPathId))
+        if (empty($parentLearningPathId) || !is_integer($parentLearningPathId))
         {
             throw new \InvalidArgumentException(
                 'The given learning path id must be a valid integer and must not be empty'
             );
         }
 
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $learningPathId);
+        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $parentLearningPathId);
 
         return $this;
     }
@@ -324,24 +324,24 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
     /**
      * @return bool
      */
-    public function isStepBlocked()
+    public function isBlocked()
     {
-        return $this->get_default_property(self::PROPERTY_STEP_BLOCKED);
+        return $this->get_default_property(self::PROPERTY_BLOCKED);
     }
 
     /**
-     * @param bool $stepBlocked
+     * @param bool $blocked
      *
      * @return $this
      */
-    public function setStepBlocked($stepBlocked = false)
+    public function setBlocked($blocked = false)
     {
-        if (!is_bool($stepBlocked))
+        if (!is_bool($blocked))
         {
-            throw new \InvalidArgumentException('The given step blocked must be a valid boolean');
+            throw new \InvalidArgumentException('The given blocked must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_STEP_BLOCKED, $stepBlocked);
+        $this->set_default_property(self::PROPERTY_BLOCKED, $blocked);
 
         return $this;
     }
@@ -351,7 +351,7 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
      */
     public function getDisplayOrder()
     {
-        return $this->get_default_property(self::PROPERTY_STEP_BLOCKED);
+        return $this->get_default_property(self::PROPERTY_BLOCKED);
     }
 
     /**
@@ -366,7 +366,7 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
             throw new \InvalidArgumentException('The given display order must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_STEP_BLOCKED, $displayOrder);
+        $this->set_default_property(self::PROPERTY_BLOCKED, $displayOrder);
 
         return $this;
     }
@@ -388,6 +388,6 @@ class LearningPathContentObjectRelation extends DataClass implements DisplayOrde
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID));
+        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_LEARNING_PATH_ID));
     }
 }

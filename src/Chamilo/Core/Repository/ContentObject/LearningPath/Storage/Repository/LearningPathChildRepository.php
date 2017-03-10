@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathContentObjectRelation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -11,11 +11,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Repository class to manage the data for the LearningPathContentObjectRelation
+ * Repository class to manage the data for the LearningPathChild
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathContentObjectRelationRepository
+class LearningPathChildRepository
 {
     /**
      * @var DataClassRepository
@@ -23,7 +23,7 @@ class LearningPathContentObjectRelationRepository
     protected $dataClassRepository;
 
     /**
-     * LearningPathContentObjectRelationRepository constructor.
+     * LearningPathChildRepository constructor.
      *
      * @param DataClassRepository $dataClassRepository
      */
@@ -33,25 +33,23 @@ class LearningPathContentObjectRelationRepository
     }
 
     /**
-     * Retrieves the LearningPathContentObjectRelations for a given learning path
+     * Retrieves the learning path children for a given learning path
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return LearningPathChild[]
      */
-    public function retrieveLearningPathContentObjectRelationsForLearningPath(LearningPath $learningPath)
+    public function retrieveLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathContentObjectRelation::class_name(),
-                LearningPathContentObjectRelation::PROPERTY_LEARNING_PATH_ID
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_ID
             ),
             new StaticConditionVariable($learningPath->getId())
         );
 
         return $this->dataClassRepository->retrieves(
-            LearningPathContentObjectRelation::class_name(),
-            new DataClassRetrievesParameters($condition)
+            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
         );
     }
 }

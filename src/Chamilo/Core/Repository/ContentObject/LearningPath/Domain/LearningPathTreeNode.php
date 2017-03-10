@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathContentObjectRelation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
@@ -25,9 +25,11 @@ class LearningPathTreeNode
     protected $learningPathTree;
 
     /**
-     * @var LearningPathContentObjectRelation
+     * The LearningPathChild data
+     *
+     * @var LearningPathChild
      */
-    protected $learningPathContentObjectRelation;
+    protected $learningPathChild;
 
     /**
      * @var ContentObject
@@ -70,8 +72,14 @@ class LearningPathTreeNode
      */
     public function __construct(LearningPathTree $learningPathTree, ContentObject $contentObject)
     {
-        $this->setLearningPathTree($learningPathTree);
-        $this->setContentObject($contentObject);
+        $this->learningPathTree = $learningPathTree;
+        $this->contentObject = $contentObject;
+
+        $this->parentNodes = array();
+        $this->childNodes = array();
+        $this->descendantNodes = array();
+
+        $learningPathTree->addLearningPathTreeNode($this);
     }
 
     /**
@@ -89,15 +97,10 @@ class LearningPathTreeNode
      */
     public function setStep($step)
     {
-        if (!is_integer($step))
+        if (isset($this->step))
         {
-            throw new \InvalidArgumentException('The given step should be valid integer');
-        }
-
-        if ($step < 1 || $step > $this->learningPathTree->getLastStepNumber())
-        {
-            throw new \RangeException(
-                'The given step should be between 1 and ' . $this->learningPathTree->getLastStepNumber()
+            throw new \RuntimeException(
+                'The given step is already set and synced with the learning path tree and should not be changed'
             );
         }
 
@@ -115,38 +118,6 @@ class LearningPathTreeNode
     }
 
     /**
-     * @param LearningPathTree $learningPathTree
-     *
-     * @return LearningPathTreeNode
-     */
-    public function setLearningPathTree(LearningPathTree $learningPathTree)
-    {
-        $this->learningPathTree = $learningPathTree;
-
-        return $this;
-    }
-
-    /**
-     * @return LearningPathContentObjectRelation
-     */
-    public function getLearningPathContentObjectRelation()
-    {
-        return $this->learningPathContentObjectRelation;
-    }
-
-    /**
-     * @param LearningPathContentObjectRelation $learningPathContentObjectRelation
-     *
-     * @return LearningPathTreeNode
-     */
-    public function setLearningPathContentObjectRelation($learningPathContentObjectRelation)
-    {
-        $this->learningPathContentObjectRelation = $learningPathContentObjectRelation;
-
-        return $this;
-    }
-
-    /**
      * @return ContentObject
      */
     public function getContentObject()
@@ -155,13 +126,21 @@ class LearningPathTreeNode
     }
 
     /**
-     * @param ContentObject $contentObject
+     * @return LearningPathChild
+     */
+    public function getLearningPathChild()
+    {
+        return $this->learningPathChild;
+    }
+
+    /**
+     * @param LearningPathChild $learningPathChild
      *
      * @return LearningPathTreeNode
      */
-    public function setContentObject($contentObject)
+    public function setLearningPathChild($learningPathChild)
     {
-        $this->contentObject = $contentObject;
+        $this->learningPathChild = $learningPathChild;
 
         return $this;
     }
@@ -175,18 +154,6 @@ class LearningPathTreeNode
     }
 
     /**
-     * @param LearningPathTreeNode[] $parentNodes
-     *
-     * @return LearningPathTreeNode
-     */
-    public function setParentNodes($parentNodes)
-    {
-        $this->parentNodes = $parentNodes;
-
-        return $this;
-    }
-
-    /**
      * @return LearningPathTreeNode[]
      */
     public function getChildNodes()
@@ -195,35 +162,11 @@ class LearningPathTreeNode
     }
 
     /**
-     * @param LearningPathTreeNode[] $childNodes
-     *
-     * @return LearningPathTreeNode
-     */
-    public function setChildNodes($childNodes)
-    {
-        $this->childNodes = $childNodes;
-
-        return $this;
-    }
-
-    /**
      * @return LearningPathTreeNode[]
      */
     public function getDescendantNodes()
     {
         return $this->descendantNodes;
-    }
-
-    /**
-     * @param LearningPathTreeNode[] $descendantNodes
-     *
-     * @return LearningPathTreeNode
-     */
-    public function setDescendantNodes($descendantNodes)
-    {
-        $this->descendantNodes = $descendantNodes;
-
-        return $this;
     }
 
     /**
@@ -259,17 +202,17 @@ class LearningPathTreeNode
 
         foreach ($selfAndDescendantNodes as $descendantNode)
         {
-            $descendantNode->addLearningPathTreeNodeToParents($learningPathTreeNode);
+            $descendantNode->addLearningPathTreeNodeToParentNodes($learningPathTreeNode);
 
-            foreach($learningPathTreeNode->getParentNodes() as $parentNode)
+            foreach ($learningPathTreeNode->getParentNodes() as $parentNode)
             {
-                $descendantNode->addLearningPathTreeNodeToParents($parentNode);
+                $descendantNode->addLearningPathTreeNodeToParentNodes($parentNode);
             }
         }
 
-        if($addSelfAsChild)
+        if ($addSelfAsChild)
         {
-            $learningPathTreeNode->addChild($this, false);
+            $learningPathTreeNode->addChildNode($this, false);
         }
 
         return $this;
@@ -285,24 +228,29 @@ class LearningPathTreeNode
      *
      * @return $this
      */
-    public function addChild(LearningPathTreeNode $learningPathTreeNode, $setSelfAsParent = true)
+    public function addChildNode(LearningPathTreeNode $learningPathTreeNode, $setSelfAsParent = true)
     {
-        $this->childNodes[] = $learningPathTreeNode;
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->childNodes))
+        {
+            return $this;
+        }
+
+        $this->childNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         $selfAndParentNodes = $this->getParentNodes();
         array_unshift($selfAndParentNodes, $this);
 
         foreach ($selfAndParentNodes as $parentNode)
         {
-            $parentNode->addDescendant($learningPathTreeNode);
+            $parentNode->addDescendantNode($learningPathTreeNode);
 
-            foreach($learningPathTreeNode->getDescendantNodes() as $descendantNode)
+            foreach ($learningPathTreeNode->getDescendantNodes() as $descendantNode)
             {
-                $parentNode->addDescendant($descendantNode);
+                $parentNode->addDescendantNode($descendantNode);
             }
         }
 
-        if($setSelfAsParent)
+        if ($setSelfAsParent)
         {
             $learningPathTreeNode->setParentNode($this, false);
         }
@@ -317,33 +265,33 @@ class LearningPathTreeNode
      *
      * @return $this
      */
-    public function addDescendant(LearningPathTreeNode $learningPathTreeNode)
+    public function addDescendantNode(LearningPathTreeNode $learningPathTreeNode)
     {
-        if(in_array($learningPathTreeNode, $this->descendantNodes))
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->descendantNodes))
         {
             return $this;
         }
 
-        $this->descendantNodes[] = $learningPathTreeNode;
+        $this->descendantNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         return $this;
     }
 
     /**
-     * Adds a
+     * Adds a LearningPathTreeNode to the list of parent nodes
      *
      * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return $this
      */
-    public function addLearningPathTreeNodeToParents(LearningPathTreeNode $learningPathTreeNode)
+    public function addLearningPathTreeNodeToParentNodes(LearningPathTreeNode $learningPathTreeNode)
     {
-        if(in_array($learningPathTreeNode, $this->parentNodes))
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->parentNodes))
         {
             return $this;
         }
 
-        $this->parentNodes[] = $learningPathTreeNode;
+        $this->parentNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         return $this;
     }

@@ -15,16 +15,6 @@ class LearningPathTree
     protected $learningPathTreeNodes;
 
     /**
-     * LearningPathTree constructor.
-     *
-     * @param LearningPathTreeNode[] $learningPathTreeNodes
-     */
-    public function __construct(array $learningPathTreeNodes)
-    {
-        $this->setLearningPathTreeNodes($learningPathTreeNodes);
-    }
-
-    /**
      * @return LearningPathTreeNode[]
      */
     public function getLearningPathTreeNodes()
@@ -41,14 +31,22 @@ class LearningPathTree
     }
 
     /**
-     * Adds a LearningPathTreeNode to the tree
+     * Adds a LearningPathTreeNode to the tree. This function is automatically called from the constructor of
+     * LearningPathTreeNode and should not be called by others. Adding the same node twice throws an exception
      *
      * @param LearningPathTreeNode $learningPathTreeNode
      */
     public function addLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
     {
+        if (in_array($learningPathTreeNode, $this->learningPathTreeNodes))
+        {
+            throw new \InvalidArgumentException(
+                'The given learning path three node is already added to the list of nodes'
+            );
+        }
+
         $nextStep = $this->getNextStep();
-        
+
         $this->learningPathTreeNodes[$nextStep] = $learningPathTreeNode;
         $learningPathTreeNode->setStep($nextStep);
     }
@@ -72,13 +70,6 @@ class LearningPathTree
             );
         }
 
-        if (!array_key_exists($step, $this->learningPathTreeNodes))
-        {
-            throw new \InvalidArgumentException(
-                'The system could not find a valid LearningPathThreeNode with the given step ' . $step
-            );
-        }
-
         return $this->learningPathTreeNodes[$step];
     }
 
@@ -99,9 +90,7 @@ class LearningPathTree
      */
     protected function getNextStep()
     {
-        return count($this->learningPathTreeNodes) + 1;
+        return $this->getLastStepNumber() + 1;
     }
-
-
 
 }
