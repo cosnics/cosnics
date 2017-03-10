@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -63,7 +64,7 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
             new Button(
                 Translation::get('AgreeAndContinue'), 
                 new BootstrapGlyph('chevron-right'), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS, self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
                 Button::DISPLAY_ICON_AND_LABEL, 
                 false, 
                 'btn-primary'));
