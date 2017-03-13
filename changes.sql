@@ -169,8 +169,8 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `id` int(10) unsigned NOT NULL,
   `parent_learning_path_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
-  `max_attempts` int(10) unsigned NOT NULL,
-  `mastery_score` int(10) unsigned DEFAULT NULL,
+  `max_attempts` int(10) unsigned NOT NULL DEFAULT '0',
+  `mastery_score` int(10) unsigned NOT NULL DEFAULT '0',
   `allow_hints` tinyint(1) NOT NULL DEFAULT '1',
   `show_score` tinyint(1) NOT NULL DEFAULT '1',
   `show_correction` tinyint(1) NOT NULL DEFAULT '1',
@@ -181,7 +181,10 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `display_order` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `repository_learning_path_content_object_relation`
+ALTER TABLE `repository_learning_path_child`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_learning_path_id` (`parent_learning_path_id`),
+  ADD KEY `learning_path_id` (`parent_learning_path_id`),
   ADD KEY `content_object_id` (`content_object_id`) USING BTREE;
+
+ALTER TABLE `repository_learning_path_child`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;

@@ -246,6 +246,17 @@ class ViewerComponent extends TabComponent
             );
 
             $buttonGroup->addButton($actionButton);
+
+            $folderSelector = new ActionSelector(
+                $this, $this->getUser()->getId(), array(LearningPath::class_name()), $parameters
+            );
+
+            $folderButton = $folderSelector->getActionButton(
+                $translator->getTranslation('CreateFolder', null, Manager::context()),
+                new BootstrapGlyph('plus')
+            );
+
+            $buttonGroup->addButton($folderButton);
         }
     }
 

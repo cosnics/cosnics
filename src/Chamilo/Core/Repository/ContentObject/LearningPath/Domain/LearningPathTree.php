@@ -84,6 +84,24 @@ class LearningPathTree
     }
 
     /**
+     * Returns the root node for the learning path
+     *
+     * @return LearningPathTreeNode
+     */
+    public function getRoot()
+    {
+        if (empty($this->learningPathTreeNodes))
+        {
+            throw new \RuntimeException(
+                'The learning path tree does not have a root node yet. Please use the ' .
+                'LearningPathTreeBuilder service to populate the learning path tree'
+            );
+        }
+
+        return $this->learningPathTreeNodes[0];
+    }
+
+    /**
      * Returns the next step number for a LearningPathTreeNode
      *
      * @return int

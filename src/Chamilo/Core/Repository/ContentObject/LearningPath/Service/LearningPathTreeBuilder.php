@@ -44,6 +44,8 @@ class LearningPathTreeBuilder
      * Builds an in memory tree for an entire learning path based on a given root
      *
      * @param LearningPath $learningPath
+     *
+     * @return LearningPathTree
      */
     public function buildLearningPathTree(LearningPath $learningPath)
     {
@@ -51,6 +53,8 @@ class LearningPathTreeBuilder
         $rootLearningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
 
         $this->addChildrenForLearningPath($learningPath, $learningPathTree, $rootLearningPathTreeNode);
+
+        return $learningPathTree;
     }
 
     /**
@@ -77,7 +81,7 @@ class LearningPathTreeBuilder
 
             if ($contentObject instanceof LearningPath)
             {
-                $this->addChildrenForLearningPath($learningPath, $learningPathTree, $learningPathTreeNode);
+                $this->addChildrenForLearningPath($contentObject, $learningPathTree, $learningPathTreeNode);
             }
         }
     }

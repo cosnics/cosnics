@@ -4,8 +4,8 @@
         <property name="id" type="integer" unsigned="1" notnull="1" />
         <property name="parent_learning_path_id" type="integer" unsigned="1" notnull="1" />
         <property name="content_object_id" type="integer" unsigned="1" notnull="1" />
-        <property name="max_attempts" type="integer" notnull="1" unsigned="1" />
-        <property name="mastery_score" type="integer" length="3" unsigned="1" />
+        <property name="max_attempts" type="integer" notnull="1" unsigned="1" default="0" />
+        <property name="mastery_score" type="integer" length="3" unsigned="1" default="0" />
         <property name="allow_hints" type="boolean" notnull="1" default="1" />
         <property name="show_score" type="boolean" notnull="1" default="1" />
         <property name="show_correction" type="boolean" notnull="1" default="1" />

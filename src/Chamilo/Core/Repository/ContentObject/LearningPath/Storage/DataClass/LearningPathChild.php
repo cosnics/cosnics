@@ -65,7 +65,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
      */
     public function getParentLearningPathId()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_PARENT_LEARNING_PATH_ID);
     }
 
     /**
@@ -82,7 +82,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
             );
         }
 
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $parentLearningPathId);
+        $this->set_default_property(self::PROPERTY_PARENT_LEARNING_PATH_ID, $parentLearningPathId);
 
         return $this;
     }

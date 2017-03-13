@@ -21,6 +21,11 @@
         </service>
 
         <service
+                id="chamilo.core.repository.workspace.repository.content_object_repository"
+                class="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository">
+        </service>
+
+        <service
                 id="chamilo.core.repository.service.content_object_template.synchronizer"
                 class="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer">
             <argument type="service" id="chamilo.core.repository.service.content_object_template.loader" />
