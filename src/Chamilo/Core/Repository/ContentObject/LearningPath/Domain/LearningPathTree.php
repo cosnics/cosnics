@@ -98,7 +98,7 @@ class LearningPathTree
             );
         }
 
-        return $this->learningPathTreeNodes[0];
+        return $this->learningPathTreeNodes[1];
     }
 
     /**

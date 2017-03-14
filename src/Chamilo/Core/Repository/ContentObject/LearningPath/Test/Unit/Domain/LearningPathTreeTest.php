@@ -102,4 +102,21 @@ class LearningPathTreeTest extends Test
 
         $learningPathTree->getLearningPathTreeNodeByStep(2);
     }
+
+    public function testGetRoot()
+    {
+        $learningPathTree = new LearningPathTree();
+        $node = new LearningPathTreeNode($learningPathTree, new LearningPath());
+
+        $this->assertEquals($node, $learningPathTree->getRoot());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetRootThrowsExceptionWithoutNodes()
+    {
+        $learningPathTree = new LearningPathTree();
+        $learningPathTree->getRoot();
+    }
 }

@@ -46,6 +46,11 @@ class LearningPathChildValidator
             return true;
         }
 
+        if(!$parentLearningPathTreeNode->getContentObject() instanceof LearningPath)
+        {
+            return false;
+        }
+
         $selfAndParentContentObjectIds = array();
 
         $selfAndParentContentObjectIds[] = $parentLearningPathTreeNode->getContentObject()->getId();
@@ -77,10 +82,12 @@ class LearningPathChildValidator
     {
         /** @var LearningPathTreeNode[] $learningPathTreeNodes */
         $learningPathTreeNodes = array();
-        $learningPathTreeNodes[] = $learningPathTreeNode;
+        $learningPathTreeNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
-        $learningPathTreeNodes = array_merge($learningPathTreeNodes, $learningPathTreeNode->getParentNodes());
-        $learningPathTreeNodes = array_merge($learningPathTreeNodes, $learningPathTreeNode->getChildNodes());
+        $learningPathTreeNodes += $learningPathTreeNode->getParentNodes();
+        $learningPathTreeNodes += $learningPathTreeNode->getChildNodes();
+
+        ksort($learningPathTreeNodes);
 
         $contentObjectIds = array();
 

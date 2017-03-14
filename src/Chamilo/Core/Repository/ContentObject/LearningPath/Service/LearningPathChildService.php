@@ -66,7 +66,7 @@ class LearningPathChildService
         $learningPathChild->setParentLearningPathId((int) $parentLearningPathTreeNode->getContentObject()->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
 
-        if (!$learningPathChild->create())
+        if (!$this->learningPathChildRepository->create($learningPathChild))
         {
             throw new \RuntimeException(
                 sprintf(
