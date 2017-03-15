@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Menu\BootstrapTreeMenu;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -14,7 +16,43 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 abstract class Menu extends BootstrapTreeMenu
 {
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
+     */
+    private $complexContentObjectPath;
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $complexContentObjectPath
+     * @param string $treeMenuUrl
+     * @param string $menuName
+     */
+    public function __construct(Application $application, ComplexContentObjectPath $complexContentObjectPath,
+        $treeMenuUrl, $menuName = 'bootstrap-tree-menu')
+    {
+        $this->complexContentObjectPath = $complexContentObjectPath;
+        
+        parent::__construct($application, $treeMenuUrl, $menuName);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComplexContentObjectPath()
+    {
+        return $this->complexContentObjectPath;
+    }
+
+    /**
+     * @param mixed $complexContentObjectPath
+     */
+    public function setComplexContentObjectPath($complexContentObjectPath)
+    {
+        $this->complexContentObjectPath = $complexContentObjectPath;
+    }
+    
     /**
      *
      * @see \Chamilo\Libraries\Format\Menu\BootstrapTreeMenu::getCurrentNodeId()

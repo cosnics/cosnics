@@ -49,6 +49,8 @@ class LearningPathTreeBuilder
      */
     public function buildLearningPathTree(LearningPath $learningPath)
     {
+        $this->learningPathChildRepository->clearLearningPathChildrenCache();
+        
         $learningPathTree = new LearningPathTree();
         $rootLearningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
 

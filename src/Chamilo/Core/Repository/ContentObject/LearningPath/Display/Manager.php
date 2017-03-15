@@ -307,6 +307,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
+     * Resets the LearningPathTree for the current learning path root
+     */
+    protected function recalculateLearningPathTree()
+    {
+        unset($this->learningPathTree);
+        return $this->getLearningPathTree();
+    }
+
+    /**
      * Returns the LearningPathTreeNode for the current step
      * 
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode

@@ -154,11 +154,27 @@ class LearningPathTreeNode
     }
 
     /**
+     * @return bool
+     */
+    public function hasParentNode()
+    {
+        return $this->parentNode instanceof LearningPathTreeNode;
+    }
+
+    /**
      * @return LearningPathTreeNode[]
      */
     public function getChildNodes()
     {
         return $this->childNodes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChildNodes()
+    {
+        return count($this->childNodes) > 0;
     }
 
     /**
@@ -294,6 +310,62 @@ class LearningPathTreeNode
         $this->parentNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         return $this;
+    }
+
+    /**
+     * Returns the next learning path tree node (if available)
+     *
+     * @return LearningPathTreeNode
+     */
+    public function getNextNode()
+    {
+        try
+        {
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() + 1);
+        }
+        catch(\Exception $ex)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the previous learning path tree node (if available)
+     *
+     * @return LearningPathTreeNode
+     */
+    public function getPreviousNode()
+    {
+        try
+        {
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() - 1);
+        }
+        catch(\Exception $ex)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the path to this node by a set of content object ids for the current node and his parents
+     *
+     * @return int[]
+     */
+    public function getPathAsContentObjectIds()
+    {
+        $contentObjectIds = array();
+
+        $currentNode = $this;
+
+        while($currentNode->hasParentNode())
+        {
+            $contentObjectIds[] = $currentNode->getContentObject()->getId();
+            $currentNode = $currentNode->getParentNode();
+        }
+
+        $contentObjectIds[] = $currentNode->getContentObject()->getId();
+
+        return $contentObjectIds;
     }
 
 }

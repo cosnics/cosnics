@@ -188,3 +188,9 @@ ALTER TABLE `repository_learning_path_child`
 
 ALTER TABLE `repository_learning_path_child`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+  
+DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Note\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
+DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Description\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
+DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Blog\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
+DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
+DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Announcement\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';

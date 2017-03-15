@@ -15,6 +15,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -42,19 +44,20 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
             throw new NotAllowedException();
         }
 
-        // if ($selected_template_id == $template->get_id())
-        // {
-        // $variable = 'AddFolder';
-        // }
-        // else
-        // {
-        // $variable = 'CreatorComponent';
-        // }
-        // BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
+        if ($this->isFolderCreateMode())
+        {
+            $variable = 'AddFolder';
+        }
+        else
+        {
+            $variable = 'CreatorComponent';
+        }
+
+        BreadcrumbTrail:: getInstance()->add(new Breadcrumb($this->get_url(), Translation:: get($variable)));
 
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
-            $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
+            $exclude = $this->detemine_excluded_content_object_ids();
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
@@ -116,24 +119,21 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 
             if (count($object_ids) > 0 && !$failures)
             {
-                $current_parents_content_object_ids = $this->get_current_node()->get_parents_content_object_ids(
-                    true,
-                    true
-                );
+                $parentContentObjectIds = $this->getCurrentLearningPathTreeNode()->getPathAsContentObjectIds();
 
                 if (count($object_ids) == 1)
                 {
-                    $current_parents_content_object_ids[] = $object_ids[0];
+                    $parentContentObjectIds[] = $object_ids[0];
                 }
 
-                $this->get_root_content_object()->get_complex_content_object_path()->reset();
+                $learningPathTree = $this->recalculateLearningPathTree();
 
-                $new_node = $this->get_root_content_object()->get_complex_content_object_path()
-                    ->follow_path_by_content_object_ids(
-                        $current_parents_content_object_ids
+                $learningPathTreeNode =
+                    $learningPathTree->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
+                        $parentContentObjectIds
                     );
 
-                $next_step = $new_node->get_id();
+                $next_step = $learningPathTreeNode->getStep();
             }
             else
             {
@@ -195,7 +195,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID, self::PARAM_CREATE_MODE,);
     }
 
     /**
@@ -204,6 +204,19 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function get_allowed_content_object_types()
     {
+        if ($this->isFolderCreateMode())
+        {
+            return array(LearningPath::class_name());
+        }
+
         return $this->get_root_content_object()->get_allowed_types();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFolderCreateMode()
+    {
+        return $this->getRequest()->get(self::PARAM_CREATE_MODE) == self::CREATE_MODE_FOLDER;
     }
 }

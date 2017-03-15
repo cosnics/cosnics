@@ -51,14 +51,7 @@ class LearningPathChildValidator
             return false;
         }
 
-        $selfAndParentContentObjectIds = array();
-
-        $selfAndParentContentObjectIds[] = $parentLearningPathTreeNode->getContentObject()->getId();
-
-        foreach($parentLearningPathTreeNode->getParentNodes() as $parentNode)
-        {
-            $selfAndParentContentObjectIds[] = $parentNode->getContentObject()->getId();
-        }
+        $selfAndParentContentObjectIds = $parentLearningPathTreeNode->getPathAsContentObjectIds();
 
         $childLearningPathTree = $this->learningPathTreeBuilder->buildLearningPathTree($childContentObject);
         $childTreeContentObjectIds = array();

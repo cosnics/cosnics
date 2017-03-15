@@ -25,12 +25,6 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
-     */
-    private $complexContentObjectPath;
-
-    /**
-     *
      * @var string
      */
     private $menuName;
@@ -44,15 +38,15 @@ abstract class BootstrapTreeMenu
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $complexContentObjectPath
      * @param string $treeMenuUrl
      * @param string $menuName
      */
-    public function __construct(Application $application, ComplexContentObjectPath $complexContentObjectPath, 
-        $treeMenuUrl, $menuName = 'bootstrap-tree-menu')
+    public function __construct(
+        Application $application,
+        $treeMenuUrl, $menuName = 'bootstrap-tree-menu'
+    )
     {
         $this->application = $application;
-        $this->complexContentObjectPath = $complexContentObjectPath;
         $this->treeMenuUrl = $treeMenuUrl;
         $this->menuName = $menuName;
     }
@@ -73,24 +67,6 @@ abstract class BootstrapTreeMenu
     public function setApplication(Application $application)
     {
         $this->application = $application;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
-     */
-    public function getComplexContentObjectPath()
-    {
-        return $this->complexContentObjectPath;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $complexContentObjectPath
-     */
-    public function setComplexContentObjectPath(ComplexContentObjectPath $complexContentObjectPath)
-    {
-        $this->complexContentObjectPath = $complexContentObjectPath;
     }
 
     /**
@@ -132,6 +108,7 @@ abstract class BootstrapTreeMenu
     /**
      *
      * @param int $nodeIdentifier
+     *
      * @return string
      */
     public function getNodeUrl($nodeIdentifier)
@@ -158,12 +135,12 @@ abstract class BootstrapTreeMenu
     public function render()
     {
         $currentNodeId = $this->getCurrentNodeId();
-        
+
         $html = array();
-        
+
         $html[] = '<div id="' . $this->getMenuName() . '">';
         $html[] = '</div>';
-        
+
         $html[] = "<script>
             $(function()
             {
@@ -195,15 +172,17 @@ abstract class BootstrapTreeMenu
                 });
             });
         </script>";
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js');
-        
+            'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js'
+        );
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css');
-        
+            'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css'
+        );
+
         return implode(PHP_EOL, $html);
     }
 }

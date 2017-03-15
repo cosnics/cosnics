@@ -54,6 +54,18 @@ class LearningPathChildRepository
         );
     }
 
+    /**
+     * Clears the learning path children cache
+     * 
+     * @return bool
+     */
+    public function clearLearningPathChildrenCache()
+    {
+        return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
+            LearningPathChild::class_name()
+        );
+    }
+
     /*****************************************************************************************************************
      * Fallback functionality for dataclass methods                                                                  *
      *****************************************************************************************************************/

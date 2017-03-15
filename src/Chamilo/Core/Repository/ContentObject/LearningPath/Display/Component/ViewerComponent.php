@@ -98,7 +98,7 @@ class ViewerComponent extends TabComponent
             $learning_path_item_attempt->update();
         }
 
-        $embedder = Embedder::factory($this, $this->get_current_node());
+        $embedder = Embedder::factory($this, $this->get_current_node(), $this->getCurrentLearningPathTreeNode());
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
 
@@ -247,6 +247,8 @@ class ViewerComponent extends TabComponent
 
             $buttonGroup->addButton($actionButton);
 
+            $parameters[CreatorComponent::PARAM_CREATE_MODE] = CreatorComponent::CREATE_MODE_FOLDER;
+
             $folderSelector = new ActionSelector(
                 $this, $this->getUser()->getId(), array(LearningPath::class_name()), $parameters
             );
@@ -366,67 +368,6 @@ class ViewerComponent extends TabComponent
         }
     }
 
-    // /**
-    // *
-    // * @param ButtonGroup $buttonGroup
-    // * @param Translation $translator
-    // */
-    // protected function addMoverButtons($buttonGroup, $translator)
-    // {
-    // $moveButton = new DropdownButton(
-    // $translator->getTranslation('Move', null, Manager :: context()),
-    // new BootstrapGlyph('random'));
-    //
-    // if (! $this->get_current_node()->is_root() &&
-    // $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()))
-    // {
-    // $moveButton->addSubButton(
-    // new SubButton(
-    // $translator->getTranslation('MoverComponent', null, Manager :: context()),
-    // new BootstrapGlyph('folder-open'),
-    // $this->get_url(
-    // array(
-    // self :: PARAM_ACTION => self :: ACTION_MOVE,
-    // self :: PARAM_STEP => $this->get_current_step()))));
-    // }
-    //
-    // if (! $this->get_current_node()->is_root() &&
-    // $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()) &&
-    // $this->get_current_node()->has_siblings())
-    // {
-    // if (! $this->get_current_node()->is_last_child())
-    // {
-    // $moveButton->addSubButton(
-    // new SubButton(
-    // $translator->getTranslation('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-    // new BootstrapGlyph('chevron-down'),
-    // $this->get_url(
-    // array(
-    // self :: PARAM_ACTION => self :: ACTION_SORT,
-    // self :: PARAM_SORT => self :: SORT_DOWN,
-    // self :: PARAM_STEP => $this->get_current_step()))));
-    // }
-    //
-    // if (! $this->get_current_node()->is_first_child())
-    // {
-    // $moveButton->addSubButton(
-    // new SubButton(
-    // $translator->getTranslation('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-    // new BootstrapGlyph('chevron-up'),
-    // $this->get_url(
-    // array(
-    // self :: PARAM_ACTION => self :: ACTION_SORT,
-    // self :: PARAM_SORT => self :: SORT_UP,
-    // self :: PARAM_STEP => $this->get_current_step()))));
-    // }
-    // }
-    //
-    // if ($moveButton->hasButtons())
-    // {
-    // $buttonGroup->addButton($moveButton);
-    // }
-    // }
-
     /**
      * Adds a move button where you can directly select a parent / position to which you want to move the selected
      * item
@@ -442,80 +383,6 @@ class ViewerComponent extends TabComponent
         {
             return;
         }
-        //
-        // $moveButton = new DropdownButton(
-        // $translator->getTranslation('Move', null, Manager:: context()),
-        // new BootstrapGlyph('random')
-        // );
-        //
-        // $descendants = $this->get_current_node()->get_descendants();
-        //
-        // /** @var ComplexContentObjectPath $path */
-        // $path = $this->get_complex_content_object_path();
-        // foreach ($path->get_nodes() as $node)
-        // {
-        //
-        // if ($node == $this->get_current_node() || in_array($node, $descendants))
-        // {
-        // continue;
-        // }
-        //
-        // $contentObject = $node->get_content_object();
-        //
-        // $margin = 15 * (count($node->get_parents()) - 1);
-        //
-        // if (!$node->is_root())
-        // {
-        // $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
-        // 'AfterContentObject',
-        // array('CONTENT_OBJECT' => $contentObject->get_title()),
-        // Manager:: context()
-        // ) . '</span>';
-        //
-        // $moveButton->addSubButton(
-        // new SubButton(
-        // $title,
-        // '',
-        // $this->get_url(
-        // array(
-        // self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
-        // self :: PARAM_PARENT_ID => $node->get_parent_id(),
-        // self :: PARAM_DISPLAY_ORDER => $node->get_complex_content_object_item()
-        // ->get_display_order() +
-        // 1,
-        // self :: PARAM_STEP => $this->get_current_step()
-        // )
-        // )
-        // )
-        // );
-        // }
-        //
-        // if ($contentObject instanceof LearningPath)
-        // {
-        // $margin += 15;
-        //
-        // $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
-        // 'FirstItemBelowContentObject',
-        // array('CONTENT_OBJECT' => $contentObject->get_title()),
-        // Manager:: context()
-        // ) . '</span>';
-        //
-        // $moveButton->addSubButton(
-        // new SubButton(
-        // $title,
-        // '',
-        // $this->get_url(
-        // array(
-        // self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
-        // self :: PARAM_PARENT_ID => $node->get_id(),
-        // self :: PARAM_DISPLAY_ORDER => 1,
-        // self :: PARAM_STEP => $this->get_current_step()
-        // )
-        // )
-        // )
-        // );
-        // }
-        // }
 
         $moveButton = new Button(
             $translator->getTranslation('Move', null, Manager::context()),

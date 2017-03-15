@@ -102,6 +102,54 @@ class LearningPathTree
     }
 
     /**
+     * Determines the step number for a given content object. The content object is identified with his id
+     * combined with every parent content object id to determine a unique path.
+     *
+     * @param array $parentContentObjectIds
+     *
+     * @return LearningPathTreeNode
+     */
+    public function getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
+        $parentContentObjectIds = array()
+    )
+    {
+        if ($this->getRoot()->getContentObject()->getId() != array_shift($parentContentObjectIds))
+        {
+            throw new \RuntimeException('The root id\'s for the current learning path are no longer matching');
+        }
+
+        $parentNode = $this->getRoot();
+
+        foreach ($parentContentObjectIds as $parentContentObjectId)
+        {
+            $childFound = false;
+
+            foreach ($parentNode->getChildNodes() as $childNode)
+            {
+                if ($childNode->getContentObject()->getId() == $parentContentObjectId)
+                {
+                    $parentNode = $childNode;
+                    $childFound = true;
+                    break;
+                }
+            }
+
+            if (!$childFound)
+            {
+                throw new \RuntimeException(
+                    sprintf(
+                        'The system could not find a valid path in the tree for learning path %s with path (%s)',
+                        $this->getRoot()->getContentObject()->getId(),
+                        explode(' ,', $parentContentObjectIds)
+                    )
+                );
+            }
+        }
+
+        return $parentNode;
+    }
+
+    /**
      * Returns the next step number for a LearningPathTreeNode
      *
      * @return int
@@ -110,5 +158,4 @@ class LearningPathTree
     {
         return $this->getLastStepNumber() + 1;
     }
-
 }
