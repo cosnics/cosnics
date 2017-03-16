@@ -47,7 +47,7 @@ class ViewerComponent extends TabComponent
     public function build()
     {
         $show_progress = Request::get(self::PARAM_SHOW_PROGRESS);
-        $learning_path = $this->get_parent()->get_root_content_object();
+        $learning_path = $this->get_root_content_object();
 
         $trail = BreadcrumbTrail::getInstance();
 
@@ -71,7 +71,7 @@ class ViewerComponent extends TabComponent
 
         $translator = new PrerequisitesTranslator($this->get_current_node());
 
-        if (!$this->canEditComplexContentObjectPathNode($this->get_current_node()) && !$translator->can_execute())
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) && !$translator->can_execute())
         {
             $html = array();
 
@@ -141,7 +141,7 @@ class ViewerComponent extends TabComponent
             $primaryActions = new ButtonGroup();
             $secondaryActions = new ButtonGroup();
 
-            $current_content_object = $this->get_current_node()->get_content_object();
+            $current_content_object = $this->getCurrentLearningPathTreeNode()->getContentObject();
 
             $this->addCreatorButtons($primaryActions, $translator);
             $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
@@ -172,7 +172,7 @@ class ViewerComponent extends TabComponent
      */
     public function addNodeSpecificButtons(ButtonGroup $primaryActions, ButtonGroup $secondaryActions)
     {
-        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $object_namespace = $this->getCurrentLearningPathTreeNode()->getContentObject()->package();
         $integration_class_name = $object_namespace . '\Integration\\' . self::package() . '\Manager';
 
         if (class_exists($integration_class_name))
@@ -214,21 +214,21 @@ class ViewerComponent extends TabComponent
      */
     protected function addCreatorButtons($buttonGroup, $translator)
     {
-        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
 
-            if ($this->get_current_content_object() instanceof LearningPath)
+            if ($this->getCurrentContentObject() instanceof LearningPath)
             {
                 $parameters[self::PARAM_STEP] = $this->get_current_step();
-                $parameters[self::PARAM_CONTENT_OBJECT_ID] = $this->get_current_content_object()->getId();
+                $parameters[self::PARAM_CONTENT_OBJECT_ID] = $this->getCurrentContentObject()->getId();
             }
             else
             {
-                $parameters[self::PARAM_STEP] = $this->get_current_node()->get_parent_id();
+                $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep();
                 $parameters[self::PARAM_CONTENT_OBJECT_ID] =
-                    $this->get_current_node()->get_parent()->get_content_object()->getId();
+                    $this->getCurrentLearningPathTreeNode()->getParentNode()->getContentObject()->getId();
             }
 
             $actionSelector = new ActionSelector(
@@ -270,7 +270,7 @@ class ViewerComponent extends TabComponent
      */
     protected function addUpdateButton($current_content_object, $buttonGroup, $translator)
     {
-        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
             $editImage = new FontAwesomeGlyph('pencil');
@@ -282,7 +282,7 @@ class ViewerComponent extends TabComponent
                 )
             );
 
-            if (!$this->get_current_node()->get_content_object() instanceof LearningPath)
+            if (!$this->getCurrentLearningPathTreeNode()->getContentObject() instanceof LearningPath)
             {
                 $editButton = new SplitDropdownButton($editTitle, $editImage, $editURL);
 
@@ -313,14 +313,14 @@ class ViewerComponent extends TabComponent
      *
      * @param ButtonGroup $buttonGroup
      * @param Translation $translator
-     * @param $currentContentObject
+     * @param ContentObject $currentContentObject
      */
     protected function addManageButton($buttonGroup, $translator, $currentContentObject)
     {
-        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
-            if ($this->get_current_content_object() instanceof LearningPath &&
-                count($this->get_current_node()->get_children()) > 1
+            if ($this->getCurrentContentObject() instanceof LearningPath &&
+                $this->getCurrentLearningPathTreeNode()->hasChildNodes()
             )
             {
                 $buttonGroup->addButton(
@@ -344,12 +344,12 @@ class ViewerComponent extends TabComponent
      *
      * @param ButtonGroup $buttonGroup
      * @param Translation $translator
-     * @param $currentContentObject
+     * @param ContentObject $currentContentObject
      */
     protected function addDeleteButton($buttonGroup, $translator, $currentContentObject)
     {
-        if (!$this->get_current_node()->is_root() &&
-            $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent())
+        if (!$this->getCurrentLearningPathTreeNode()->isRootNode() &&
+            $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
         )
         {
             $buttonGroup->addButton(
@@ -377,8 +377,8 @@ class ViewerComponent extends TabComponent
      */
     protected function addMoveButton(ButtonGroup $buttonGroup, Translation $translator)
     {
-        if ($this->get_current_node()->is_root() ||
-            !$this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent())
+        if ($this->getCurrentLearningPathTreeNode()->isRootNode() ||
+            !$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
         )
         {
             return;
@@ -400,6 +400,7 @@ class ViewerComponent extends TabComponent
      *
      * @param ButtonGroup $buttonGroup
      * @param Translation $translator
+     * @param ContentObject $currentContentObject
      */
     protected function addReportingButtons($buttonGroup, $translator, $currentContentObject)
     {
@@ -452,11 +453,11 @@ class ViewerComponent extends TabComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
-                    self::PARAM_CONTENT_OBJECT_ID => $this->get_current_content_object()->getId()
+                    self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ),
-            $this->get_complex_content_object_path(),
-            $this->get_current_node()
+            $this->getLearningPathTree(),
+            $this->getCurrentLearningPathTreeNode()
         );
 
         $html = array();

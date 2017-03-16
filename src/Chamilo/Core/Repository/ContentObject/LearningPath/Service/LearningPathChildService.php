@@ -78,4 +78,116 @@ class LearningPathChildService
 
         return $learningPathChild;
     }
+
+    /**
+     * Updates a content object for a given learning path child. Uses the LearningPathTree.
+     * Validates the content object to make sure that the system does not create a cycle.
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param ContentObject $newContentObject
+     */
+    public function updateContentObjectInLearningPathChild(
+        LearningPathTreeNode $learningPathTreeNode, ContentObject $newContentObject
+    )
+    {
+        if (!$this->learningPathChildValidator->canContentObjectBeAdded(
+            $learningPathTreeNode->getParentNode(), $newContentObject
+        )
+        )
+        {
+            throw new \RuntimeException(
+                'You are not allowed to add the given content object to the parent learning path'
+            );
+        }
+
+        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+        $learningPathChild->setContentObjectId((int) $newContentObject->getId());
+
+        if (!$this->learningPathChildRepository->update($learningPathChild))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not update the LearningPathChildObject for parent %s and child %s',
+                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                )
+            );
+        }
+
+        $this->learningPathChildRepository->updateParentLearningPathIds(
+            $learningPathTreeNode->getContentObject()->getId(), $newContentObject->getId()
+        );
+    }
+
+    /**
+     * Moves a content object from a learning path to a different learning path
+     *
+     * @param LearningPathTreeNode $selectedLearningPathTreeNode
+     * @param LearningPathTreeNode $parentLearningPathTreeNode
+     * @param int $newDisplayOrder
+     */
+    public function moveContentObjectToOtherLearningPath(
+        LearningPathTreeNode $selectedLearningPathTreeNode, LearningPathTreeNode $parentLearningPathTreeNode,
+        $newDisplayOrder = null
+    )
+    {
+        if (!$this->learningPathChildValidator->canContentObjectBeAdded(
+            $parentLearningPathTreeNode, $selectedLearningPathTreeNode->getContentObject()
+        )
+        )
+        {
+            throw new \RuntimeException(
+                'You are not allowed to add the given content object to the parent learning path'
+            );
+        }
+
+        $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
+
+        if($learningPathChild->getParentLearningPathId() != $parentLearningPathTreeNode->getContentObject()->getId())
+        {
+            $learningPathChild->setParentLearningPathId((int) $parentLearningPathTreeNode->getContentObject()->getId());
+        }
+
+        if(isset($newDisplayOrder) && $newDisplayOrder != $learningPathChild->getDisplayOrder())
+        {
+            $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
+        }
+
+        if (!$this->learningPathChildRepository->update($learningPathChild))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not update the LearningPathChildObject for parent %s and child %s',
+                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                )
+            );
+        }
+    }
+
+    /**
+     * Deletes a content object from a learning path. The relation between the learning path and the content object
+     * is defined by the learning path tree node
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     */
+    public function deleteContentObjectFromLearningPath(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+
+        if (!$learningPathChild)
+        {
+            throw new \InvalidArgumentException(
+                'The given learning path tree node does not have a valid learning path child object'
+            );
+        }
+
+        if (!$this->learningPathChildRepository->delete($learningPathChild))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not delete the LearningPathChildObject for parent %s and child %s',
+                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                )
+            );
+        }
+    }
 }

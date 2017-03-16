@@ -39,7 +39,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     {
         $this->validateAndFixCurrentStep();
 
-        if (!$this->canEditComplexContentObjectPathNode($this->get_current_node()))
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             throw new NotAllowedException();
         }

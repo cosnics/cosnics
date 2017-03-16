@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -46,42 +48,40 @@ class MoverComponent extends TabComponent
             $selected_steps = array($selected_steps);
         }
         
-        $path = $this->get_root_content_object()->get_complex_content_object_path();
-        
+        $path = $this->getLearningPathTree();
+
+        /** @var LearningPathTreeNode[] $available_nodes */
         $available_nodes = array();
         
         foreach ($selected_steps as $selected_step)
         {
-            $selected_node = $path->get_node($selected_step);
+            try
+            {
+                $selected_node = $path->getLearningPathTreeNodeByStep((int) $selected_step);
 
-            if(empty($selected_node))
+                if ($this->canEditComplexContentObjectPathNode($selected_node->getParentNode()))
+                {
+                    $available_nodes[] = $selected_node;
+                }
+            }
+            catch(\Exception $ex)
             {
                 throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $selected_step);
             }
-
-            if ($this->canEditComplexContentObjectPathNode($selected_node->get_parent()))
-            {
-                $available_nodes[] = $selected_node;
-            }
         }
-        
+
         if (count($available_nodes) == 0)
         {
-            $parameters = array(
-                self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
-                self::PARAM_STEP => $this->get_current_node()->get_parent()->get_id());
-            
-            $this->redirect(
+            throw new UserException(
                 Translation::get(
-                    'NoObjectsToMove', 
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
-                    Utilities::COMMON_LIBRARIES), 
-                true, 
-                $parameters);
+                    'NoObjectsToMove',
+                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                    Utilities::COMMON_LIBRARIES
+                )
+            );
         }
-        
-        $current_node = $this->get_current_node();
-        $path = $this->get_root_content_object()->get_complex_content_object_path();
+
+        $path = $this->getLearningPathTree();
         $parents = $this->get_possible_parents();
         
         $form = new FormValidator('move', 'post', $this->get_url());
@@ -113,65 +113,43 @@ class MoverComponent extends TabComponent
                 throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
             }
 
-            $parent_node = $path->get_node($selected_node_id);
-            $parent_id = $parent_node->get_content_object()->get_id();
-            
+            $parent_node = $path->getLearningPathTreeNodeByStep($selected_node_id);
+
             $failures = 0;
-            
+            $learningPathChildService = $this->getLearningPathChildService();
+            $new_node = null;
+
             foreach ($available_nodes as $available_node)
             {
-                $complex_content_object_item = $available_node->get_complex_content_object_item();
-                $old_parent_id = $complex_content_object_item->get_parent();
-                
-                $parent_node_content_object_ids_path = $parent_node->get_parents_content_object_ids(true, true);
-                $current_node_ids = array();
-                $current_node_ids[] = $available_node->get_hash();
-                
-                foreach ($available_node->get_descendants() as $descendant)
+                try
                 {
-                    $current_node_ids[] = $descendant->get_hash();
+                    $learningPathChildService->moveContentObjectToOtherLearningPath($available_node, $parent_node);
+
+                    $contentObjectIds = $parent_node->getPathAsContentObjectIds();
+                    $contentObjectIds[] = $available_node->getContentObject()->getId();
+
+                    $this->recalculateLearningPathTree();
+
+                    $new_node = $this->getLearningPathTree()
+                        ->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
+                            $contentObjectIds
+                        );
+
+                    Event::trigger(
+                        'Activity',
+                        \Chamilo\Core\Repository\Manager::context(),
+                        array(
+                            Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM,
+                            Activity::PROPERTY_USER_ID => $this->get_user_id(),
+                            Activity::PROPERTY_DATE => time(),
+                            Activity::PROPERTY_CONTENT_OBJECT_ID => $available_node->getContentObject()->getId(),
+                            Activity::PROPERTY_CONTENT => $available_node->getContentObject()->get_title()
+                        )
+                    );
                 }
-                
-                if ($old_parent_id != $parent_id)
+                catch(\Exception $ex)
                 {
-                    $complex_content_object_item->set_parent($parent_id);
-                    $complex_content_object_item->set_display_order(
-                        \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parent_id));
-                    if ($complex_content_object_item->update())
-                    {
-                        $new_content_object_ids_path = $parent_node_content_object_ids_path;
-                        $new_content_object_ids_path[] = $available_node->get_content_object()->get_id();
-                        
-                        $this->get_root_content_object()->get_complex_content_object_path()->reset();
-                        $new_node = $this->get_root_content_object()->get_complex_content_object_path()->follow_path_by_content_object_ids(
-                            $new_content_object_ids_path);
-                        
-                        $new_node_ids = array();
-                        $new_node_ids[] = $new_node->get_hash();
-                        
-                        foreach ($new_node->get_descendants() as $descendant)
-                        {
-                            $new_node_ids[] = $descendant->get_hash();
-                        }
-                        
-                        Event::trigger(
-                            'Activity', 
-                            \Chamilo\Core\Repository\Manager::context(), 
-                            array(
-                                Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM, 
-                                Activity::PROPERTY_USER_ID => $this->get_user_id(), 
-                                Activity::PROPERTY_DATE => time(), 
-                                Activity::PROPERTY_CONTENT_OBJECT_ID => $available_node->get_content_object()->get_id(), 
-                                Activity::PROPERTY_CONTENT => $available_node->get_content_object()->get_title()));
-                    }
-                    else
-                    {
-                        $failures ++;
-                    }
-                }
-                else
-                {
-                    $failures ++;
+                    $failures++;
                 }
             }
             
@@ -180,11 +158,11 @@ class MoverComponent extends TabComponent
             
             if ($failures > 0)
             {
-                $parameters[self::PARAM_STEP] = $this->get_current_node()->get_parent()->get_id();
+                $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep();
             }
             else
             {
-                $parameters[self::PARAM_STEP] = $new_node->get_id();
+                $parameters[self::PARAM_STEP] = $new_node->getStep();
             }
             
             $this->redirect(
@@ -197,7 +175,7 @@ class MoverComponent extends TabComponent
         }
         else
         {
-            $variable = $this->get_current_content_object() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
+            $variable = $this->getCurrentContentObject() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
             
             $trail = BreadcrumbTrail::getInstance();
             $trail->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
@@ -215,7 +193,8 @@ class MoverComponent extends TabComponent
     /**
      * Render the list of available nodes as HTML
      * 
-     * @param \core\repository\common\path\ComplexContentObjectPathNode[] $available_nodes
+     * @param LearningPathTreeNode[] $available_nodes
+     *
      * @return string
      */
     public function get_available_nodes($available_nodes)
@@ -228,7 +207,7 @@ class MoverComponent extends TabComponent
             
             foreach ($available_nodes as $available_node)
             {
-                $html[] = '<li>' . $available_node->get_content_object()->get_title();
+                $html[] = '<li>' . $available_node->getContentObject()->get_title();
             }
             
             $html[] = '</ul>';
@@ -248,19 +227,19 @@ class MoverComponent extends TabComponent
      */
     private function get_possible_parents()
     {
-        $path = $this->get_root_content_object()->get_complex_content_object_path();
-        $root = $path->get_root();
+        $path = $this->getLearningPathTree();
+        $root = $path->getRoot();
         
-        if ($root->get_id() == $this->get_current_node()->get_parent()->get_id())
+        if ($root->getStep() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep())
         {
-            $name = $root->get_content_object()->get_title() . ' (' . Translation::get('Current') . ')';
+            $name = $root->getContentObject()->get_title() . ' (' . Translation::get('Current') . ')';
         }
         else
         {
-            $name = $root->get_content_object()->get_title();
+            $name = $root->getContentObject()->get_title();
         }
         
-        if ($root->get_id() == $this->get_current_node()->get_id())
+        if ($root->getStep() == $this->getCurrentLearningPathTreeNode()->getStep())
         {
             $node_disabled = true;
         }
@@ -278,23 +257,23 @@ class MoverComponent extends TabComponent
     /**
      * Get the possible parents for the current node based on the children of a given node
      * 
-     * @param ComplexContentObjectPathNode $node
+     * @param LearningPathTreeNode $node
      * @param string[] $parents
      * @param int $level
      * @return string[]
      */
-    private function get_children_from_node(ComplexContentObjectPathNode $node, $node_disabled, $parents, $level = 1)
+    private function get_children_from_node(LearningPathTreeNode $node, $node_disabled, $parents, $level = 1)
     {
-        foreach ($node->get_children() as $child)
+        foreach ($node->getChildNodes() as $child)
         {
-            $content_object = $child->get_content_object();
+            $content_object = $child->getContentObject();
             
             if (! $content_object instanceof ComplexContentObjectSupport || ! $content_object instanceof LearningPath)
             {
                 continue;
             }
             
-            if ($child->get_id() == $this->get_current_node()->get_parent()->get_id())
+            if ($child->getStep() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep())
             {
                 $name = $content_object->get_title() . ' (' . Translation::get('Current') . ')';
             }
@@ -303,7 +282,7 @@ class MoverComponent extends TabComponent
                 $name = $content_object->get_title();
             }
             
-            if ($child->get_id() == $this->get_current_node()->get_id())
+            if ($child->getStep() == $this->getCurrentLearningPathTreeNode()->getStep())
             {
                 $child_node_disabled = true;
             }
@@ -313,7 +292,7 @@ class MoverComponent extends TabComponent
             }
             $name = str_repeat('--', $level) . ' ' . $name;
             
-            $parents[$child->get_id()] = array($name, $child_node_disabled);
+            $parents[$child->getStep()] = array($name, $child_node_disabled);
             
             $parents = $this->get_children_from_node($child, $child_node_disabled, $parents, $level + 1);
         }

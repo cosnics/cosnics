@@ -347,6 +347,16 @@ class LearningPathTreeNode
     }
 
     /**
+     * Returns whether or not the current node is a root node
+     *
+     * @return bool
+     */
+    public function isRootNode()
+    {
+        return $this->getLearningPathTree()->getRoot() == $this;
+    }
+
+    /**
      * Returns the path to this node by a set of content object ids for the current node and his parents
      *
      * @return int[]
@@ -359,11 +369,11 @@ class LearningPathTreeNode
 
         while($currentNode->hasParentNode())
         {
-            $contentObjectIds[] = $currentNode->getContentObject()->getId();
+            array_unshift($contentObjectIds, $currentNode->getContentObject()->getId());
             $currentNode = $currentNode->getParentNode();
         }
 
-        $contentObjectIds[] = $currentNode->getContentObject()->getId();
+        array_unshift($contentObjectIds, $currentNode->getContentObject()->getId());
 
         return $contentObjectIds;
     }

@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -22,30 +24,30 @@ class DirectMoverForm extends FormValidator
 
     /**
      *
-     * @var ComplexContentObjectPath
+     * @var LearningPathTree
      */
-    protected $complexContentObjectPath;
+    protected $learningPathTree;
 
     /**
      *
-     * @var ComplexContentObjectPathNode
+     * @var LearningPathTreeNode
      */
-    protected $currentNode;
+    protected $learningPathTreeNode;
 
     /**
      * DirectMoverForm constructor.
      * 
      * @param string $action
-     * @param ComplexContentObjectPath $complexContentObjectPath
-     * @param ComplexContentObjectPathNode $currentNode
+     * @param LearningPathTree $learningPathTree
+     * @param LearningPathTreeNode $learningPathTreeNode
      */
-    public function __construct($action, ComplexContentObjectPath $complexContentObjectPath, 
-        ComplexContentObjectPathNode $currentNode)
+    public function __construct($action, LearningPathTree $learningPathTree,
+        LearningPathTreeNode $learningPathTreeNode)
     {
         parent::__construct('direct_mover_form', 'post', $action);
         
-        $this->complexContentObjectPath = $complexContentObjectPath;
-        $this->currentNode = $currentNode;
+        $this->learningPathTree = $learningPathTree;
+        $this->learningPathTreeNode = $learningPathTreeNode;
         
         $this->buildForm();
     }
@@ -55,46 +57,45 @@ class DirectMoverForm extends FormValidator
      */
     protected function buildForm()
     {
-        $nodes = $this->complexContentObjectPath->get_nodes();
-        $descendants = $this->currentNode->get_descendants();
+        $nodes = $this->learningPathTree->getLearningPathTreeNodes();
+        $descendants = $this->learningPathTreeNode->getDescendantNodes();
         
         $parents = array();
         $positionsPerParent = array();
         
         foreach ($nodes as $node)
         {
-            if ($node == $this->currentNode || in_array($node, $descendants))
+            if ($node == $this->learningPathTreeNode || in_array($node, $descendants))
             {
                 continue;
             }
             
-            /** @var ComplexContentObjectPathNode $node */
-            $contentObject = $node->get_content_object();
+            $contentObject = $node->getContentObject();
             if ($contentObject instanceof LearningPath)
             {
-                $title = str_repeat('--', count($node->get_parents())) . ' ' . $contentObject->get_title();
-                $parents[$node->get_id()] = $title;
+                $title = str_repeat('--', count($node->getParentNodes())) . ' ' . $contentObject->get_title();
+                $parents[$node->getStep()] = $title;
                 
                 $displayOrder = 1;
                 
-                $positionsPerParent[$node->get_id()][] = array(
+                $positionsPerParent[$node->getStep()][] = array(
                     self::PARAM_TITLE => $this->getTranslation('FirstItem'), 
                     self::PARAM_DISPLAY_ORDER => $displayOrder);
                 
                 $displayOrder ++;
                 
-                $children = $node->get_children();
+                $children = $node->getChildNodes();
                 foreach ($children as $child)
                 {
-                    if ($child == $this->currentNode || in_array($child, $descendants))
+                    if ($child == $this->learningPathTreeNode || in_array($child, $descendants))
                     {
                         continue;
                     }
                     
-                    $positionsPerParent[$node->get_id()][] = array(
+                    $positionsPerParent[$node->getStep()][] = array(
                         self::PARAM_TITLE => $this->getTranslation(
                             'AfterContentObject', 
-                            array('CONTENT_OBJECT' => $child->get_content_object()->get_title())), 
+                            array('CONTENT_OBJECT' => $child->getContentObject()->get_title())),
                         self::PARAM_DISPLAY_ORDER => $displayOrder);
                     
                     $displayOrder ++;

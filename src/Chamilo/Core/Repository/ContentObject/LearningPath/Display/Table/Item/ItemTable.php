@@ -27,7 +27,10 @@ class ItemTable extends DataClassTable implements TableFormActionsSupport
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        if ($this->get_component()->canEditComplexContentObjectPathNode($this->get_component()->get_current_node()))
+        if ($this->get_component()->canEditLearningPathTreeNode(
+            $this->get_component()->getCurrentLearningPathTreeNode()
+        )
+        )
         {
             $actions->add_form_action(
                 new TableFormAction(

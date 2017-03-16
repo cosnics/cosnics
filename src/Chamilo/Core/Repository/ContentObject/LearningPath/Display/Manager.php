@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildValidator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
@@ -198,7 +199,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function validateCurrentNode()
     {
-        if ($this->get_current_node()->get_content_object()->getId() !=
+        if ($this->getCurrentLearningPathTreeNode()->getContentObject()->getId() !=
             $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID)
         )
         {
@@ -210,15 +211,17 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Helper function to detect the best possible node based on the current content object id
+     *
+     * @return LearningPathTreeNode
      */
     protected function detectBestPossibleNode()
     {
         $contentObjectId = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
-        $nodes = $this->get_complex_content_object_path()->get_nodes();
+        $nodes = $this->getLearningPathTree()->getLearningPathTreeNodes();
 
         foreach ($nodes as $node)
         {
-            if ($node->get_content_object()->getId() == $contentObjectId)
+            if ($node->getContentObject()->getId() == $contentObjectId)
             {
                 return $node;
             }
@@ -249,7 +252,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 );
             }
 
-            $this->current_step = $bestPossibleNode->get_id();
+            $this->current_step = $bestPossibleNode->getStep();
         }
     }
 
@@ -324,5 +327,35 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $learningPathTree = $this->getLearningPathTree();
         return $learningPathTree->getLearningPathTreeNodeByStep($this->get_current_step());
+    }
+
+    /**
+     * Returns the current content object
+     *
+     * @return ContentObject
+     */
+    protected function getCurrentContentObject()
+    {
+        return $this->getCurrentLearningPathTreeNode()->getContentObject();
+    }
+
+    /**
+     * Checks if a complex content object path node can be editted
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return bool
+     */
+    protected function canEditLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
+    {
+        /** @var LearningPathDisplaySupport $application */
+        $application = $this->get_application();
+
+        if($application->is_allowed_to_edit_content_object())
+        {
+            return true;
+        }
+
+        return $learningPathTreeNode->getContentObject()->get_owner_id() == $this->getUser()->getId();
     }
 }

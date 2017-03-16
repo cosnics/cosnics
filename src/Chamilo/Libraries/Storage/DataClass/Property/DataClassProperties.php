@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\Property;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *
@@ -38,7 +39,7 @@ class DataClassProperties implements Hashable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty $property
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty | ConditionVariable $property
      */
     public function add($property)
     {

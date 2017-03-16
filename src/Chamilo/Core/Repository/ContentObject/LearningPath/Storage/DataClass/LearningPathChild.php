@@ -55,7 +55,9 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
                 self::PROPERTY_SHOW_CORRECTION,
                 self::PROPERTY_SHOW_SOLUTION,
                 self::PROPERTY_SHOW_ANSWER_FEEDBACK,
-                self::PROPERTY_FEEDBACK_LOCATION
+                self::PROPERTY_FEEDBACK_LOCATION,
+                self::PROPERTY_BLOCKED,
+                self::PROPERTY_DISPLAY_ORDER
             )
         );
     }
@@ -351,7 +353,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
      */
     public function getDisplayOrder()
     {
-        return $this->get_default_property(self::PROPERTY_BLOCKED);
+        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -366,7 +368,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
             throw new \InvalidArgumentException('The given display order must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_BLOCKED, $displayOrder);
+        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
 
         return $this;
     }

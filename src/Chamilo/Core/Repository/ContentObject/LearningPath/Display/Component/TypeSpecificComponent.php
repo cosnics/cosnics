@@ -22,7 +22,7 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
     {
         $this->validateAndFixCurrentStep();
         
-        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $object_namespace = $this->getCurrentLearningPathTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .
              '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         

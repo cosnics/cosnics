@@ -397,7 +397,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if (count($properties->get()) > 0)
         {
             $queryBuilder = $this->getConnection()->createQueryBuilder();
-            $queryBuilder->update($dataClassName::get_table_name(), $this->get_alias($dataClassName::get_table_name()));
+            $queryBuilder->update($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
 
             foreach ($properties->get() as $dataClassProperty)
             {
