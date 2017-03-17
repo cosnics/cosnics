@@ -71,7 +71,7 @@
         return (str);
     }
     
-    function setObject(href, objectId, objectType, data)
+    function setObject(href, objectId, objectType, objectSecurityCode, data)
     {
         if (!CKEDITOR.dialog.exists(objectType + 'Dialog'))
         {
@@ -84,6 +84,7 @@
             
             object.on('setVars', function(event)
             {
+                object.setValueOf('info', 'security_code', objectSecurityCode);
                 object.setValueOf('info', 'source', objectId);
                 object.setValueOf('info', 'type', objectType);
             });

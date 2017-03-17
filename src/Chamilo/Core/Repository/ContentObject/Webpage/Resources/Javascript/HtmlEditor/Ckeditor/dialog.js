@@ -457,6 +457,20 @@ CKEDITOR.dialog
                                                 element.setAttribute('type', this.getValue());
                                             },
                                             validate : CKEDITOR.dialog.validate.notEmpty(editor.lang.image.urlMissing)
+                                        }, {
+                                            id : 'security_code',
+                                            type : 'text',
+                                            hidden : true,
+                                            required : true,
+                                            setup : function(element)
+                                            {
+                                                this.setValue(element.getAttribute('security_code'));
+                                            },
+                                            commit : function(element)
+                                            {
+                                                element.setAttribute('security_code', this.getValue());
+                                            },
+                                            validate : CKEDITOR.dialog.validate.notEmpty(editor.lang.image.urlMissing)
                                         } ]
                                     },
                                     {
