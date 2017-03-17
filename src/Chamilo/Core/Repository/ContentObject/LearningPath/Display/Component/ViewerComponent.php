@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTranslator;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
@@ -107,6 +108,15 @@ class ViewerComponent extends TabComponent
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();
         $html[] = $this->renderMovePanel();
+
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
+            $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()
+        )
+        {
+            $html[] = '<div class="alert alert-warning">' .
+                Translation::getInstance()->getTranslation('ThisStepIsRequired') . '</div>';
+        }
+
         $html[] = $embedder->run();
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
@@ -123,7 +133,7 @@ class ViewerComponent extends TabComponent
         $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->set_progress(
             $this->get_complex_content_object_path()->get_progress()
         );
-        
+
         $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->update();
     }
 
@@ -148,8 +158,8 @@ class ViewerComponent extends TabComponent
 
             $this->addUpdateButton($current_content_object, $primaryActions, $translator);
             $this->addDeleteButton($primaryActions, $translator, $current_content_object);
-            // $this->addMoverButtons($secondaryActions, $translator);
             $this->addMoveButton($secondaryActions, $translator);
+            $this->addBlockedStatusButton($secondaryActions, $translator, $this->getCurrentLearningPathTreeNode());
             $this->addManageButton($secondaryActions, $translator, $current_content_object);
 
             if ($this->get_action() != self::ACTION_REPORTING)
@@ -282,28 +292,7 @@ class ViewerComponent extends TabComponent
                 )
             );
 
-            if (!$this->getCurrentLearningPathTreeNode()->getContentObject() instanceof LearningPath)
-            {
-                $editButton = new SplitDropdownButton($editTitle, $editImage, $editURL);
-
-                $editButton->addSubButton(
-                    new SubButton(
-                        $translator->getTranslation('BuildPrerequisites', null, Manager::context()),
-                        new FontAwesomeGlyph('wrench'),
-                        $this->get_url(
-                            array(
-                                self::PARAM_ACTION => self::ACTION_BUILD_PREREQUISITES,
-                                self::PARAM_STEP => $this->get_current_step(),
-                                self::PARAM_CONTENT_OBJECT_ID => $current_content_object->getId()
-                            )
-                        )
-                    )
-                );
-            }
-            else
-            {
-                $editButton = new Button($editTitle, $editImage, $editURL);
-            }
+            $editButton = new Button($editTitle, $editImage, $editURL);
 
             $buttonGroup->addButton($editButton);
         }
@@ -391,6 +380,39 @@ class ViewerComponent extends TabComponent
             Button::DISPLAY_ICON_AND_LABEL,
             false,
             'mover-open'
+        );
+
+        $buttonGroup->addButton($moveButton);
+    }
+
+    /**
+     * Adds a button to block / unblock the status of the given learning path tree node
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param Translation $translator
+     * @param LearningPathTreeNode $learningPathTreeNode
+     */
+    protected function addBlockedStatusButton(
+        ButtonGroup $buttonGroup, Translation $translator, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $translationVariable = ($learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+            'MarkAsOptional' : 'MarkAsRequired';
+
+        $icon = ($learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+            'unlock' : 'ban';
+
+        $moveButton = new Button(
+            $translator->getTranslation($translationVariable, null, Manager::context()),
+            new FontAwesomeGlyph($icon),
+            $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
+                    self::PARAM_STEP => $learningPathTreeNode->getStep(),
+                    self::PARAM_CONTENT_OBJECT_ID => $learningPathTreeNode->getContentObject()->getId()
+                )
+            ),
+            Button::DISPLAY_ICON_AND_LABEL
         );
 
         $buttonGroup->addButton($moveButton);

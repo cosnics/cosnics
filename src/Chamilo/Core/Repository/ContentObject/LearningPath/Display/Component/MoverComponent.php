@@ -59,7 +59,7 @@ class MoverComponent extends TabComponent
             {
                 $selected_node = $path->getLearningPathTreeNodeByStep((int) $selected_step);
 
-                if ($this->canEditComplexContentObjectPathNode($selected_node->getParentNode()))
+                if ($this->canEditLearningPathTreeNode($selected_node->getParentNode()))
                 {
                     $available_nodes[] = $selected_node;
                 }
@@ -113,7 +113,7 @@ class MoverComponent extends TabComponent
                 throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
             }
 
-            $parent_node = $path->getLearningPathTreeNodeByStep($selected_node_id);
+            $parent_node = $path->getLearningPathTreeNodeByStep((int) $selected_node_id);
 
             $failures = 0;
             $learningPathChildService = $this->getLearningPathChildService();

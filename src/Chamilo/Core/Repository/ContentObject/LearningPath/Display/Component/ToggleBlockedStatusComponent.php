@@ -1,0 +1,54 @@
+<?php
+
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
+
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Libraries\Platform\Translation;
+
+/**
+ * Toggles the blocked status of a given step
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class ToggleBlockedStatusComponent extends Manager
+{
+    /**
+     * Runs this component and returns it's output
+     */
+    public function run()
+    {
+        $this->validateAndFixCurrentStep();
+
+        $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $learningPathChildService = $this->getLearningPathChildService();
+
+        try
+        {
+            $learningPathChildService->toggleContentObjectBlockedStatus($currentLearningPathTreeNode);
+            $success = true;
+        }
+        catch(\Exception $ex)
+        {
+            $success = false;
+        }
+
+        if($currentLearningPathTreeNode->getLearningPathChild()->isBlocked())
+        {
+            $translation = $success ? 'StepMarkedAsRequired' : 'StepNotMarkedAsRequired';
+        }
+        else
+        {
+            $translation = $success ? 'StepMarkedAsOptional' : 'StepNotMarkedAsOptional';
+        }
+
+        $this->redirect(
+            Translation::getInstance()->getTranslation($translation),
+            !$success,
+            array(
+                self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                self::PARAM_STEP => $this->get_current_step()
+            ),
+            array(self::PARAM_CONTENT_OBJECT_ID)
+        );
+    }
+}

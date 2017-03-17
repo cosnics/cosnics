@@ -2,11 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -26,8 +29,8 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
     /**
      * Renders a single cell
      * 
-     * @param RecordTableColumn $column
-     * @param \core\repository\common\path\ComplexContentObjectPathNode $node
+     * @param TableColumn $column
+     * @param LearningPathTreeNode $node
      *
      * @return String
      */
@@ -38,7 +41,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             return $this->get_actions($node);
         }
         
-        $content_object = $node->get_content_object();
+        $content_object = $node->getContentObject();
         
         switch ($column->get_name())
         {
@@ -52,13 +55,13 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     $content_object->get_modification_date());
         }
         
-        return $node->get_content_object()->get_default_property($column->get_name());
+        return $node->getContentObject()->get_default_property($column->get_name());
     }
 
     /**
      * Returns the actions toolbar
      * 
-     * @param \core\repository\common\path\ComplexContentObjectPathNode $node
+     * @param LearningPathTreeNode $node
      * @return string
      */
     public function get_actions($node)
@@ -76,7 +79,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
-                            Manager::PARAM_STEP => $node->get_id())), 
+                            Manager::PARAM_STEP => $node->getStep())),
                     ToolbarItem::DISPLAY_ICON));
         }
         else
@@ -91,9 +94,9 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     ToolbarItem::DISPLAY_ICON));
         }
         
-        if ($this->get_component()->canEditComplexContentObjectPathNode($node->get_parent()))
+        if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
         {
-            $variable = $node->get_content_object() instanceof Portfolio ? 'MoveFolder' : 'MoverComponent';
+            $variable = $node->getContentObject() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
             
             $toolbar->add_item(
                 new ToolbarItem(
@@ -102,13 +105,13 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                         'Chamilo\Core\Repository\ContentObject\LearningPath\Display', 
                         'Action/' . Manager::ACTION_MOVE), 
                     $this->get_component()->get_url(
-                        array(Manager::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_STEP => $node->get_id())), 
+                        array(Manager::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_STEP => $node->getStep())),
                     ToolbarItem::DISPLAY_ICON));
         }
         
-        if ($this->get_component()->canEditComplexContentObjectPathNode($node->get_parent()))
+        if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
         {
-            $variable = $node->get_content_object() instanceof Portfolio ? 'DeleteFolder' : 'DeleterComponent';
+            $variable = $node->getContentObject() instanceof LearningPath ? 'DeleteFolder' : 'DeleterComponent';
             
             $toolbar->add_item(
                 new ToolbarItem(
@@ -119,11 +122,21 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                            Manager::PARAM_STEP => $node->get_id())), 
+                            Manager::PARAM_STEP => $node->getStep())),
                     ToolbarItem::DISPLAY_ICON, 
                     true));
         }
         
         return $toolbar->as_html();
+    }
+
+    /**
+     * @param LearningPathTreeNode $data_class
+     *
+     * @return int
+     */
+    public function render_id_cell($data_class)
+    {
+        return $data_class->getStep();
     }
 }

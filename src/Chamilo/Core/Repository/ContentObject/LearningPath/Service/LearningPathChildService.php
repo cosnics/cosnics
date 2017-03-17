@@ -119,7 +119,8 @@ class LearningPathChildService
     }
 
     /**
-     * Moves a content object from a learning path to a different learning path
+     * Moves a content object from a learning path to a different learning path. The content object and the
+     * parent learning path is identified by the learning path tree
      *
      * @param LearningPathTreeNode $selectedLearningPathTreeNode
      * @param LearningPathTreeNode $parentLearningPathTreeNode
@@ -151,6 +152,35 @@ class LearningPathChildService
         {
             $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
         }
+
+        if (!$this->learningPathChildRepository->update($learningPathChild))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not update the LearningPathChildObject for parent %s and child %s',
+                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                )
+            );
+        }
+    }
+
+    /**
+     * Toggles the blocked status of a content object. The content object is identified by the learning path tree
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     */
+    public function toggleContentObjectBlockedStatus(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+
+        if (!$learningPathChild)
+        {
+            throw new \InvalidArgumentException(
+                'The given learning path tree node does not have a valid learning path child object'
+            );
+        }
+
+        $learningPathChild->setBlocked(!$learningPathChild->isBlocked());
 
         if (!$this->learningPathChildRepository->update($learningPathChild))
         {

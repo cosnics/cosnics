@@ -140,7 +140,7 @@ class LearningPathTree
                     sprintf(
                         'The system could not find a valid path in the tree for learning path %s with path (%s)',
                         $this->getRoot()->getContentObject()->getId(),
-                        explode(' ,', $parentContentObjectIds)
+                        implode(' ,', $parentContentObjectIds)
                     )
                 );
             }

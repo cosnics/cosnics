@@ -27,7 +27,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ACTIVITY = 'Activity';
     const ACTION_RIGHTS = 'Rights';
     const ACTION_MOVE = 'Mover';
-    const ACTION_SORT = 'Sorter';
     const ACTION_MANAGE = 'Manager';
     const ACTION_USER = 'User';
     const ACTION_BUILD_PREREQUISITES = 'PrerequisitesBuilder';
@@ -36,6 +35,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_REPORTING = 'Reporting';
     const ACTION_ATTEMPT = 'Attempt';
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
+    const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -323,7 +323,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * 
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
      */
-    protected function getCurrentLearningPathTreeNode()
+    public function getCurrentLearningPathTreeNode()
     {
         $learningPathTree = $this->getLearningPathTree();
         return $learningPathTree->getLearningPathTreeNodeByStep($this->get_current_step());
@@ -346,7 +346,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return bool
      */
-    protected function canEditLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
+    public function canEditLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
     {
         /** @var LearningPathDisplaySupport $application */
         $application = $this->get_application();

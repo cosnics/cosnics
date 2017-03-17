@@ -86,7 +86,7 @@ class DeleterComponent extends Manager
                 $success = false;
             }
 
-            $current_parents_content_object_ids = $available_node->getPathAsContentObjectIds();
+            $current_parents_content_object_ids = $available_node->getParentNode()->getPathAsContentObjectIds();
 
             if ($success)
             {

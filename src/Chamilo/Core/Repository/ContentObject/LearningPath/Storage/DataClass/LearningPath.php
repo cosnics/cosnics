@@ -102,7 +102,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
     {
         return Path::getInstance()->getStoragePath('scorm') . $this->get_owner_id() . '/' . $this->get_path() . '/';
     }
-    
+
     // TODO: This should take variable $attempt_data into account
     /**
      *
@@ -115,7 +115,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         {
             $this->complex_content_object_path = new ComplexContentObjectPath($this, $nodes_attempt_data);
         }
-        
+
         return $this->complex_content_object_path;
     }
 }
