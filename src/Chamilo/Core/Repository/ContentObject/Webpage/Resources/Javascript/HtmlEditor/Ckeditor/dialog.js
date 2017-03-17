@@ -284,6 +284,7 @@ CKEDITOR.dialog
                             'application' : 'Chamilo\\Core\\Repository\\Ajax',
                             'go' : 'rendition_implementation',
                             'content_object_id' : dialog.getValueOf('info', 'source'),
+                            'security_code' : dialog.getValueOf('info', 'security_code'),
                             'format' : 'html',
                             'view' : 'inline',
                             'parameters' : objectParameters

@@ -23,7 +23,7 @@ CKEDITOR.dialog.add( 'rss_feedDialog', function( editor )
 	    }
 	    return(str);
 	}
-    function getRendition(objectId, parameters)
+    function getRendition(objectId, parameters, securityCode)
     {
     	var ajaxUri = getPath('WEB_PATH') + 'index.php';
     	var rendition = '';
@@ -31,6 +31,7 @@ CKEDITOR.dialog.add( 'rss_feedDialog', function( editor )
     	    'application' : 'Chamilo\\Core\\Repository\\Ajax',
     	    'go' : 'rendition_implementation',
     	    'content_object_id' : objectId,
+			'security_code': securityCode,
     	    'format' : 'html',
     	    'view' : 'inline', 
     	    'parameters' : parameters
@@ -70,8 +71,9 @@ CKEDITOR.dialog.add( 'rss_feedDialog', function( editor )
     function updatePreview(dialog)
     {
     	var newObjectId = dialog.getValueOf('info', 'source');
+		var securityCode = dialog.getValueOf('info', 'security_code');
 
-    	var rendition = getRendition(newObjectId, getParameters(dialog));
+		var rendition = getRendition(newObjectId, getParameters(dialog), securityCode);
     	dialog.preview.setHtml(rendition + text);
     }
     
