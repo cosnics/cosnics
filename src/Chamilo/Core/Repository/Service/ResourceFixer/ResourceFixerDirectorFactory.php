@@ -45,7 +45,7 @@ class ResourceFixerDirectorFactory
     {
         $logger = new Logger('ResourceFixer');
         $logger->pushHandler(
-            new StreamHandler($this->configurablePathBuilder->getLogPath() . 'ResourceFixer.log', Logger::DEBUG)
+            new StreamHandler($this->configurablePathBuilder->getLogPath() . 'ResourceFixer.log', Logger::INFO)
         );
 
         $resourceFixerDirector = new ResourceFixerDirector($logger);
