@@ -284,6 +284,7 @@ CKEDITOR.dialog
                             'application' : 'Chamilo\\Core\\Repository\\Ajax',
                             'go' : 'rendition_implementation',
                             'content_object_id' : dialog.getValueOf('info', 'source'),
+                            'security_code': dialog.getValueOf('info', 'security_code'),
                             'format' : 'html',
                             'view' : 'inline',
                             'parameters' : objectParameters
@@ -455,6 +456,20 @@ CKEDITOR.dialog
                                             commit : function(element)
                                             {
                                                 element.setAttribute('type', this.getValue());
+                                            },
+                                            validate : CKEDITOR.dialog.validate.notEmpty(editor.lang.image.urlMissing)
+                                        }, {
+                                            id : 'security_code',
+                                            type : 'text',
+                                            hidden : true,
+                                            required : true,
+                                            setup : function(element)
+                                            {
+                                                this.setValue(element.getAttribute('type'));
+                                            },
+                                            commit : function(element)
+                                            {
+                                                element.setAttribute('security_code', this.getValue());
                                             },
                                             validate : CKEDITOR.dialog.validate.notEmpty(editor.lang.image.urlMissing)
                                         } ]

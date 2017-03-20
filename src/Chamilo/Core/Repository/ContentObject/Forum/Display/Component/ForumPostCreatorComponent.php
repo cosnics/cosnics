@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Component\ForumPostFormA
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Form\ForumPostForm;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -36,6 +37,12 @@ class ForumPostCreatorComponent extends ForumPostFormActionCreate
             $selected_post = DataManager::retrieve_forum_post_of_topic(
                 $this->get_complex_content_object_item()->get_ref(), 
                 $post_id);
+
+            if(!$selected_post instanceof ForumPost)
+            {
+                throw new ObjectNotExistException(Translation::getInstance()->getTranslation('ForumPost'), $post_id);
+            }
+
             $this->forumpost->set_title($selected_post->get_title());
         }
         else
