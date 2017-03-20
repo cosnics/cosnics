@@ -11,5 +11,13 @@
             <argument type="service" id="symfony.component.translation.translator" />
             <tag name="chamilo.libraries.console.command" />
         </service>
+
+        <service
+                id="chamilo.core.repository.console.command.resource_fixer_command"
+                class="Chamilo\Core\Repository\Console\Command\ResourceFixerCommand">
+            <argument type="service" id="chamilo.core.repository.service.resource_fixer.resource_fixer_director" />
+            <argument type="service" id="symfony.component.translation.translator" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
     </services>
 </container>
