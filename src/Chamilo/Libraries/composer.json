@@ -14,7 +14,6 @@
         "ensepar/html2pdf" : "=1.0.1",
         "phpoffice/phpexcel" : "1.8.*",
         "kigkonsult/icalcreator": "*",
-        "fastfeed/fastfeed": "=0.4.0",
         "simplepie/simplepie": "1.*",
         "sentry/sentry": "*",
         "google/recaptcha": "~1.1"
