@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This tool allows a user to publish peer assessments in a course.
- * 
+ *
  * @author Renaat De Muynck
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
@@ -37,7 +37,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     /**
      * Reference to the publication
-     * 
+     *
      * @var ContentObjectPublication
      */
     private $publication;
@@ -59,7 +59,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      * @param type $publication
      * @return type
      */
-    
+
     /**
      * gets publication
      */
@@ -69,10 +69,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         {
             $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
             $this->publication = WeblcmsDataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class_name(),
                 $publication_id);
         }
-        
+
         return $this->publication;
     }
 
@@ -94,12 +94,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $tracker = new PeerAssessmentGroupTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupTracker::class_name(), 
-                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID), 
+                PeerAssessmentGroupTracker::class_name(),
+                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publication_id));
-        
+
         return DataManager::retrieves(
-            PeerAssessmentGroupTracker::class_name(), 
+            PeerAssessmentGroupTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
     }
 
@@ -109,8 +109,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $tracker->remove(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentGroupTracker::class_name(), 
-                    PeerAssessmentGroupTracker::PROPERTY_ID), 
+                    PeerAssessmentGroupTracker::class_name(),
+                    PeerAssessmentGroupTracker::PROPERTY_ID),
                 new StaticConditionVariable($id)));
     }
 
@@ -119,22 +119,22 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $tracker = new PeerAssessmentGroupSubscriptionTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID), 
+                PeerAssessmentGroupSubscriptionTracker::class_name(),
+                PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id));
-        
+
         $items = DataManager::retrieves(
-            PeerAssessmentGroupSubscriptionTracker::class_name(), 
+            PeerAssessmentGroupSubscriptionTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         $users = array();
-        
+
         // loop through
         foreach ($items as $item)
         {
             $users[] = $this->get_user_info($item->get_user_id());
         }
-        
+
         return $users;
     }
 
@@ -146,28 +146,28 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_group($id)
     {
         $tracker = new PeerAssessmentGroupTracker();
-        
+
         if (! $id)
             return $tracker;
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupTracker::class_name(), 
-                PeerAssessmentGroupTracker::PROPERTY_ID), 
+                PeerAssessmentGroupTracker::class_name(),
+                PeerAssessmentGroupTracker::PROPERTY_ID),
             new StaticConditionVariable($id));
-        
+
         return DataManager::retrieve(
-            PeerAssessmentGroupTracker::class_name(), 
+            PeerAssessmentGroupTracker::class_name(),
             new DataClassRetrieveParameters($condition));
     }
 
     public function add_user_to_group($user_id, $group_id)
     {
         $tracker = new PeerAssessmentGroupSubscriptionTracker();
-        
+
         $tracker->set_user_id($user_id);
         $tracker->set_group_id($group_id);
-        
+
         if (! $this->user_is_enrolled_in_group($user_id))
         {
             return $tracker->create();
@@ -183,30 +183,30 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $tracker = new PeerAssessmentGroupSubscriptionTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID), 
+                PeerAssessmentGroupSubscriptionTracker::class_name(),
+                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
+
         $items = DataManager::retrieves(
-            PeerAssessmentGroupSubscriptionTracker::class_name(), 
+            PeerAssessmentGroupSubscriptionTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         $group_tracker = new PeerAssessmentGroupTracker();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupTracker::class_name(), 
-                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID), 
+                PeerAssessmentGroupTracker::class_name(),
+                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_publication_id()));
-        
+
         $groups = DataManager::retrieves(
-            PeerAssessmentGroupTracker::class_name(), 
+            PeerAssessmentGroupTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         // loop through
         foreach ($items as $item)
         {
-            
+
             foreach ($groups as $group)
             {
                 if ($group->get_id() == $item->get_group_id())
@@ -222,17 +222,17 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::context(), 
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => 'XmlCourseUserGroupFeed', 
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::context(),
+                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => 'XmlCourseUserGroupFeed',
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => Request::get(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE), 
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE),
                 'show_groups' => 1));
         return $redirect->getUrl();
     }
 
     /**
      * checks if user is already enrolled in any peer_assessment_group belonging to this publication
-     * 
+     *
      * @param int $user_id
      * @return bool
      */
@@ -240,42 +240,42 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         // get all peerassessmentgroups for this publication
         $publication_id = $this->get_publication_id();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupTracker::class_name(), 
-                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID), 
+                PeerAssessmentGroupTracker::class_name(),
+                PeerAssessmentGroupTracker::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publication_id));
         $groups = new PeerAssessmentGroupTracker();
-        
+
         $groups_array = DataManager::retrieves(
-            PeerAssessmentGroupTracker::class_name(), 
+            PeerAssessmentGroupTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         // get_all peerassessmentgroup subscriptions for user
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID), 
+                PeerAssessmentGroupSubscriptionTracker::class_name(),
+                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $users = new PeerAssessmentGroupSubscriptionTracker();
-        
+
         $user_subscription_array = DataManager::retrieves(
-            PeerAssessmentGroupSubscriptionTracker::class_name(), 
+            PeerAssessmentGroupSubscriptionTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         foreach ($user_subscription_array as $user_subscription)
         {
             $user_groups[] = $user_subscription->get_group_id();
         }
-        
+
         // return true if there is a match
         foreach ($groups_array as $group)
         {
             if (in_array($group->get_id(), $user_groups))
                 return true;
         }
-        
+
         return false;
     }
 
@@ -296,13 +296,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     array(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID), 
-                            new StaticConditionVariable($user_id)), 
+                                PeerAssessmentGroupSubscriptionTracker::class_name(),
+                                PeerAssessmentGroupSubscriptionTracker::PROPERTY_USER_ID),
+                            new StaticConditionVariable($user_id)),
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                                PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID), 
+                                PeerAssessmentGroupSubscriptionTracker::class_name(),
+                                PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID),
                             new StaticConditionVariable($group_id)))));
         }
         else
@@ -310,8 +310,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             return $tracker->remove(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentGroupSubscriptionTracker::class_name(), 
-                        PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID), 
+                        PeerAssessmentGroupSubscriptionTracker::class_name(),
+                        PeerAssessmentGroupSubscriptionTracker::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($group_id)));
         }
     }
@@ -323,12 +323,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $tracker = new PeerAssessmentAttemptTracker();
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentAttemptTracker::class_name(), 
-                    PeerAssessmentAttemptTracker::PROPERTY_PUBLICATION_ID), 
+                    PeerAssessmentAttemptTracker::class_name(),
+                    PeerAssessmentAttemptTracker::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($publication_id));
-            
+
             return DataManager::retrieves(
-                PeerAssessmentAttemptTracker::class_name(), 
+                PeerAssessmentAttemptTracker::class_name(),
                 new DataClassRetrievesParameters($condition))->as_array();
         }
         else
@@ -340,18 +340,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_attempt($id = null)
     {
         $tracker = new PeerAssessmentAttemptTracker();
-        
+
         if (! $id)
             return $tracker;
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentAttemptTracker::class_name(), 
-                PeerAssessmentAttemptTracker::PROPERTY_ID), 
+                PeerAssessmentAttemptTracker::class_name(),
+                PeerAssessmentAttemptTracker::PROPERTY_ID),
             new StaticConditionVariable($id));
-        
+
         return DataManager::retrieve(
-            PeerAssessmentAttemptTracker::class_name(), 
+            PeerAssessmentAttemptTracker::class_name(),
             new DataClassRetrieveParameters($condition));
     }
 
@@ -361,26 +361,26 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $tracker->remove(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentAttemptTracker::class_name(), 
-                    PeerAssessmentAttemptTracker::PROPERTY_ID), 
+                    PeerAssessmentAttemptTracker::class_name(),
+                    PeerAssessmentAttemptTracker::PROPERTY_ID),
                 new StaticConditionVariable($id)));
     }
 
     public function delete_user_attempt_statuses($attempt_id, $user_id)
     {
         $tracker = new PeerAssessmentAttemptStatusTracker();
-        
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentAttemptStatusTracker::class_name(), 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID), 
+                PeerAssessmentAttemptStatusTracker::class_name(),
+                PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID),
             new StaticConditionVariable($attempt_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentAttemptStatusTracker::class_name(), 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID), 
+                PeerAssessmentAttemptStatusTracker::class_name(),
+                PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
+
         return $tracker->remove(new AndCondition($conditions));
     }
 
@@ -390,34 +390,34 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $condition = new AndCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentAttemptStatusTracker::class_name(), 
-                    PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID), 
-                new StaticConditionVariable($attempt_id)), 
+                    PeerAssessmentAttemptStatusTracker::class_name(),
+                    PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID),
+                new StaticConditionVariable($attempt_id)),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentAttemptStatusTracker::class_name(), 
-                    PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID), 
+                    PeerAssessmentAttemptStatusTracker::class_name(),
+                    PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id)));
-        
+
         $items = DataManager::retrieves(
-            PeerAssessmentAttemptStatusTracker::class_name(), 
+            PeerAssessmentAttemptStatusTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         return count($items) > 0 ? $items[0] : new PeerAssessmentAttemptStatusTracker(
             array(
-                PeerAssessmentAttemptStatusTracker::PROPERTY_ID => null, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID => $attempt_id, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID => $user_id, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_FACTOR => null, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_PROGRESS => null, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_CLOSED => null, 
-                PeerAssessmentAttemptStatusTracker::PROPERTY_CREATED => time(), 
+                PeerAssessmentAttemptStatusTracker::PROPERTY_ID => null,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID => $attempt_id,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_USER_ID => $user_id,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_FACTOR => null,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_PROGRESS => null,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_CLOSED => null,
+                PeerAssessmentAttemptStatusTracker::PROPERTY_CREATED => time(),
                 PeerAssessmentAttemptStatusTracker::PROPERTY_MODIFIED => null));
     }
 
     /**
      * checks if scores are already given for an attempt or for entire publication
-     * 
+     *
      * @param int $attempt_id
      * @return boolean
      */
@@ -434,30 +434,30 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         foreach ($attempts as $attempt)
         {
             $status_object = new PeerAssessmentAttemptStatusTracker();
-            
+
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentAttemptStatusTracker::class_name(), 
-                    PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID), 
+                    PeerAssessmentAttemptStatusTracker::class_name(),
+                    PeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID),
                 new StaticConditionVariable($attempt->get_id()));
-            
+
             $statuses = DataManager::retrieves(
-                PeerAssessmentAttemptStatusTracker::class_name(), 
+                PeerAssessmentAttemptStatusTracker::class_name(),
                 new DataClassRetrievesParameters($condition))->as_array();
-            
+
             foreach ($statuses as $status)
             {
                 $tracker = new PeerAssessmentScoreTracker();
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentAttemptStatusTracker::class_name(), 
-                        PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID), 
+                        PeerAssessmentAttemptStatusTracker::class_name(),
+                        PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
                     new StaticConditionVariable($status->get_id()));
-                
+
                 $items = DataManager::retrieves(
-                    PeerAssessmentScoreTracker::class_name(), 
+                    PeerAssessmentScoreTracker::class_name(),
                     new DataClassRetrievesParameters($condition))->as_array();
-                
+
                 if (count($items) > 0)
                     return true;
             }
@@ -468,24 +468,24 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function delete_status_scores($status_id)
     {
         $tracker = new PeerAssessmentScoreTracker();
-        
+
         return $tracker->remove(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentScoreTracker::class_name(), 
-                    PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID), 
+                    PeerAssessmentScoreTracker::class_name(),
+                    PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
                 new StaticConditionVariable($status_id)));
     }
 
     public function delete_status_feedback($status_id)
     {
         $tracker = new PeerAssessmentFeedback();
-        
+
         return $tracker->remove(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentFeedback::class_name(), 
-                    PeerAssessmentFeedback::PROPERTY_ATTEMPT_STATUS_ID), 
+                    PeerAssessmentFeedback::class_name(),
+                    PeerAssessmentFeedback::PROPERTY_ATTEMPT_STATUS_ID),
                 new StaticConditionVariable($status_id)));
     }
 
@@ -494,27 +494,27 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         if (! isset($this->indicators))
         {
             $this->indicators = array();
-            
+
             $object = $this->get_root_content_object($this);
-            
+
             $children = RepositoryDataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
-                        ComplexContentObjectItem::PROPERTY_PARENT), 
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($object->get_id())));
-            
+
             while ($child = $children->next_result())
             {
                 // TODO check this ???
                 // $this->indicators[] = $child;
                 $this->indicators[] = RepositoryDataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
+                    ContentObject::class_name(),
                     $child->get_ref());
             }
         }
-        
+
         return $this->indicators;
     }
 
@@ -538,14 +538,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $tracker = new PeerAssessmentPublicationSettingTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentPublicationSettingTracker::class_name(), 
-                PeerAssessmentPublicationSettingTracker::PROPERTY_PUBLICATION_ID), 
+                PeerAssessmentPublicationSettingTracker::class_name(),
+                PeerAssessmentPublicationSettingTracker::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publication_id));
-        
+
         $items = DataManager::retrieves(
-            PeerAssessmentPublicationSettingTracker::class_name(), 
+            PeerAssessmentPublicationSettingTracker::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         return count($items) > 0 ? $items[0] : $tracker;
     }
 
@@ -572,7 +572,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     /**
      * checks if a pa group has scores
-     * 
+     *
      * @param int $group_id
      * @return boolean
      */
@@ -580,11 +580,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $publication_id = $this->get_publication_id();
         $attempts = $this->get_attempts($publication_id);
-        
+
         if (! is_null($group_id))
         {
             $users = $this->get_group_users($group_id);
-            
+
             // checks for groups that have already started to give scores
             // check status for each attempt if status is there
             foreach ($users as $user)
