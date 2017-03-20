@@ -49,7 +49,7 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $contentObject->update();
+                        $contentObject->update(true);
                     }
                 }
 
