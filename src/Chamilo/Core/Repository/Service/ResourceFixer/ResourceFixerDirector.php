@@ -44,17 +44,32 @@ class ResourceFixerDirector
 
     /**
      * Fixes the resources
+     *
+     * @param bool $forceUpdate
      */
-    public function fixResources()
+    public function fixResources($forceUpdate = false)
     {
         $timer = new Timer();
 
         $this->logger->addInfo('Starting fixing resources');
+
+        if ($forceUpdate)
+        {
+            $this->logger->addInfo('[WARNING] THIS FIXER IS RUNNING FOR REAL NOW, NO GOING BACK');
+        }
+        else
+        {
+            $this->logger->addInfo(
+                'This fixer is running in debug mode, everything is logged but the content is not updated. ' .
+                'Use the option --force / -f to force the update of the content'
+            );
+        }
+
         $timer->start();
 
-        foreach($this->resourceFixers as $resourceFixer)
+        foreach ($this->resourceFixers as $resourceFixer)
         {
-            $resourceFixer->fixResources();
+            $resourceFixer->fixResources($forceUpdate);
         }
 
         $timer->stop();

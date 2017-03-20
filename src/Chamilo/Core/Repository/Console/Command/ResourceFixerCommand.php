@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Console\Command;
 use Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -12,6 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ResourceFixerCommand extends Command
 {
+    const OPT_FORCE = 'force';
+    const OPT_FORCE_SHORT = 'f';
+
     /**
      * @var ResourceFixerDirector
      */
@@ -27,14 +31,14 @@ class ResourceFixerCommand extends Command
     /**
      * Constructor.
      *
-     * @param ResourceFixerDirector $contentObjectResourceFixer
+     * @param ResourceFixerDirector $resourceFixerDirector
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        ResourceFixerDirector $contentObjectResourceFixer, \Symfony\Component\Translation\Translator $translator
+        ResourceFixerDirector $resourceFixerDirector, \Symfony\Component\Translation\Translator $translator
     )
     {
-        $this->resourceFixerDirector = $contentObjectResourceFixer;
+        $this->resourceFixerDirector = $resourceFixerDirector;
         $this->translator = $translator;
 
         parent::__construct();
@@ -50,6 +54,10 @@ class ResourceFixerCommand extends Command
                 $this->translator->trans(
                     'ResourceFixerDescription', array(), 'Chamilo\Core\Repository'
                 )
+            )
+            ->addOption(
+                self::OPT_FORCE, self::OPT_FORCE_SHORT, InputOption::VALUE_NONE,
+                $this->translator->trans('ResourceFixerForceOption', array(), 'Chamilo\Core\Repository')
             );
     }
 
@@ -63,7 +71,7 @@ class ResourceFixerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->resourceFixerDirector->fixResources();
+        $this->resourceFixerDirector->fixResources($input->getOption(self::OPT_FORCE));
     }
 
 }
