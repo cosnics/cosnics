@@ -88,6 +88,10 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
             return parent::run();
         }
 
+        \Chamilo\Application\Weblcms\Storage\DataManager::log_course_module_access(
+            $this->get_course_id(), $this->get_user_id(), $publication->get_tool(), $publication->get_category_id()
+        );
+
         $context = Forum::package() . '\Display';
         $factory = new ApplicationFactory(
             $context,
