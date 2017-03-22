@@ -33,14 +33,14 @@ class ContentObjectTemplateSynchronizerCommand extends Command
     /**
      * ContentObjectTemplateSynchronizerCommand constructor.
      *
-     * @param ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizer
+     * @param ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizerDirector
      * @param Translator $translator
      */
     public function __construct(
-        ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizer, Translator $translator
+        ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizerDirector, Translator $translator
     )
     {
-        $this->contentObjectTemplateSynchronizer = $contentObjectTemplateSynchronizer;
+        $this->contentObjectTemplateSynchronizer = $contentObjectTemplateSynchronizerDirector;
         $this->translator = $translator;
 
         parent::__construct();

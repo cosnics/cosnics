@@ -80,6 +80,17 @@ class ContentObjectResourceRenderer
                     continue;
                 }
 
+//                $securityCode = $resource->getAttribute('security_code');
+//                if(!isset($securityCode) || empty($securityCode))
+//                {
+//                    continue;
+//                }
+//
+//                if($object->calculate_security_code() != $securityCode)
+//                {
+//                    continue;
+//                }
+
                 $securityCode = $resource->getAttribute('security_code');
                 if(isset($securityCode) && !empty($securityCode))
                 {

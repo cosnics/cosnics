@@ -44,7 +44,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         $html[] = '<div class="clearfix"></div>';
         
         $html[] = '<div style="margin-top: 20px; border: 1px solid grey;"><iframe border="0" style="border: 0;"
-                width="100%" height="500"  src="' . $url . '"></iframe></div>';
+                width="100%" height="600"  src="' . $url . '"></iframe></div>';
         
         return implode(PHP_EOL, $html);
     }

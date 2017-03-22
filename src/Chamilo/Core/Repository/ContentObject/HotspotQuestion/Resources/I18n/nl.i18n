@@ -30,3 +30,4 @@ InstructionsText = "Met deze vraag kun je nagaan of een deelnemer aan het assess
 RecalculateWeight = "Herbereken gewicht"
 RandomizeAnswers = "Randomiseer hotspots"
 FeedbackAnswer = "Enkel feedback bij fout antwoord"
+HotspotQuestionExecuteInformation = "Selecteer het antwoord dat je wenst te markeren door op de kleur van het antwoord te klikken. Vervolgens klik je ergens op de afbeelding om een markeerpunt te plaatsen. Om je markeerpunt te herstellen klik je op de herstel-knop die je in onderstaande tabel naast elk antwoord vindt."

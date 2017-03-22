@@ -33,7 +33,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     /**
      *
-     * @return multitype:AssessmentMultipleChoiceQuestionOption
+     * @return AssessmentMultipleChoiceQuestionOption[]
      */
     public function get_options()
     {
