@@ -121,6 +121,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             $html[] = '<input type="hidden" name="coordinates_' . $this->get_complex_content_object_question()->get_id() .
                  '_' . $i . '" value="' . $answer->get_hotspot_coordinates() . '" />';
+
+            $html[] = '<input type="hidden" name="hotspot_user_answers_' .
+                $this->get_complex_content_object_question()->get_id() . '_' . $i . '" value="' .
+                $user_answers[$i] . '" />';
+
             $html[] = '</tr>';
         }
         

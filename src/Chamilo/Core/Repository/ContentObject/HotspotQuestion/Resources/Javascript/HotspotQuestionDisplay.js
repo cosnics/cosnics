@@ -19,13 +19,13 @@ $(function() {
 		};
 
 		coordinates.X.push(posX);
-		coordinates.X.push(posX + 5);
+		coordinates.X.push(posX + 7);
 		coordinates.X.push(posX);
-		coordinates.X.push(posX - 5);
+		coordinates.X.push(posX - 7);
 
-		coordinates.Y.push(posY - 5);
+		coordinates.Y.push(posY - 7);
 		coordinates.Y.push(posY);
-		coordinates.Y.push(posY + 5);
+		coordinates.Y.push(posY + 7);
 		coordinates.Y.push(posY);
 
 		return coordinates;
@@ -175,6 +175,8 @@ $(function() {
 		// Bind clicks on the edit and reset buttons
 		$(document).on('click', '.colour_box', editPolygon);
 		$(document).on('click', '.reset_option', resetPolygon);
+
+		$('.hotspot_question_options .colour_box:first').trigger('click');
 
 		// Bind clicks on the image
 		$('.hotspot_image').click(getCoordinates);
