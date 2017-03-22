@@ -27,11 +27,11 @@ class LearningPathProgressFixerCommand extends Command
     /**
      * LearningPathProgressFixerCommand constructor.
      *
-     * @param LearningPathProgressFixer $learningPathProgressFixer
+     * @param LearningPathProgressFixer $learningPathProgressFixerDirector
      */
-    public function __construct(LearningPathProgressFixer $learningPathProgressFixer)
+    public function __construct(LearningPathProgressFixer $learningPathProgressFixerDirector)
     {
-        $this->learningPathProgressFixer = $learningPathProgressFixer;
+        $this->learningPathProgressFixer = $learningPathProgressFixerDirector;
 
         parent::__construct();
     }

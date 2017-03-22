@@ -169,8 +169,8 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 
                 echo '<leaf id="lo_' . $id . '"
 	classes="' . $value['classes'] . '"
-	title="' . htmlentities($value['title']) . '"
-	description="' . htmlentities($value['description']) . '" />' .
+	title="' . htmlspecialchars($value['title']) . '"
+	description="' . htmlspecialchars($value['description']) . '" />' .
                      "\n";
             }
             

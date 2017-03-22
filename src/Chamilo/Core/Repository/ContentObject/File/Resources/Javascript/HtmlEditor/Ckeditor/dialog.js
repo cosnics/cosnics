@@ -291,12 +291,13 @@ CKEDITOR.dialog
                     {
                         var objectParameters = dialog.objectNode && !isUpdate ? getOriginalParameters(dialog)
                                 : getCurrentParameters(dialog);
-                        
+
                         var ajaxUri = getPath('WEB_PATH') + 'index.php';
                         var parameters = {
                             'application' : 'Chamilo\\Core\\Repository\\Ajax',
                             'go' : 'rendition_implementation',
                             'content_object_id' : dialog.getValueOf('info', 'source'),
+                            'security_code': dialog.getValueOf('info', 'security_code'),
                             'format' : 'html',
                             'view' : 'inline',
                             'parameters' : objectParameters
@@ -489,7 +490,24 @@ CKEDITOR.dialog
                                                     },
                                                     validate : CKEDITOR.dialog.validate
                                                             .notEmpty(editor.lang.image.urlMissing)
-                                                } ]
+                                                },
+                                                {
+                                                    id : 'security_code',
+                                                    type : 'text',
+                                                    hidden : true,
+                                                    required : true,
+                                                    setup : function(element)
+                                                    {
+                                                        this.setValue(element.getAttribute('security_code'));
+                                                    },
+                                                    commit : function(element)
+                                                    {
+                                                        element.setAttribute('security_code', this.getValue());
+                                                    },
+                                                    validate : CKEDITOR.dialog.validate
+                                                        .notEmpty(editor.lang.image.urlMissing)
+                                                }
+                                        ]
                                     },
                                     {
                                         id : 'alt',

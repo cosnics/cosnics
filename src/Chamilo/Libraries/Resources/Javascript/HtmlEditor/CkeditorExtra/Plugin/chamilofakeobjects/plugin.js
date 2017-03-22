@@ -23,7 +23,7 @@
         return length2;
     }
 
-    function getFakeElementImageUrl(objectId)
+    function getFakeElementImageUrl(objectId, securityCode)
     {
         var ajaxUri = getPath('WEB_PATH') + 'index.php';
         var rendition = '';
@@ -31,6 +31,7 @@
             'application' : 'Chamilo\\Core\\Repository\\Ajax',
             'go' : 'rendition_implementation',
             'content_object_id' : objectId,
+            'security_code': securityCode,
             'format' : 'json',
             'view' : 'image',
             'parameters' : {
@@ -45,7 +46,9 @@
             async : false
         }).success(function(json)
         {
-            rendition = json.properties.rendition.url;
+            if(json['result_code'] == 200) {
+                rendition = json.properties.rendition.url;
+            }
         });
 
         return rendition;
@@ -95,7 +98,7 @@
             var height = cssLengthRegex.exec(realElement.getAttribute('height'));
         }
 
-        var fakeElementImageUrl = getFakeElementImageUrl(realElement.getAttribute('source'));
+        var fakeElementImageUrl = getFakeElementImageUrl(realElement.getAttribute('source'), realElement.getAttribute('security_code'));
 
         if (!fakeElementImageUrl)
         {
@@ -173,7 +176,7 @@
             var height = cssLengthRegex.exec(realElement.attributes.height);
         }
 
-        var fakeElementImageUrl = getFakeElementImageUrl(realElement.attributes.source);
+        var fakeElementImageUrl = getFakeElementImageUrl(realElement.attributes.source, realElement.attributes['security_code']);
 
         if (!fakeElementImageUrl)
         {

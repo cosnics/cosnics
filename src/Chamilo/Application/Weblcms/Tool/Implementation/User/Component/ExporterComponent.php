@@ -17,10 +17,14 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -85,7 +89,13 @@ class ExporterComponent extends Manager
      */
     protected function exportAllUsers()
     {
-        $user_records = CourseDataManager::retrieve_all_course_users($this->get_course_id());
+        $user_records = CourseDataManager::retrieve_all_course_users(
+            $this->get_course_id(), null, null, null, array(
+                new OrderBy(new StaticConditionVariable('subscription_status', false)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
+        );
 
         $users = array();
 
@@ -115,7 +125,17 @@ class ExporterComponent extends Manager
             new StaticColumnConditionVariable($this->get_course_id())
         );
 
-        $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course($condition)->as_array();
+        $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course(
+            $condition, null, null, array(
+                new OrderBy(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS
+                    )
+                ),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
+        )->as_array();
 
         $users = array();
         foreach ($individualUsers as $individualUserRecord)
@@ -138,7 +158,7 @@ class ExporterComponent extends Manager
                 'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
             )
         );
-        
+
         return new UserExportParameters($users, $filename . '.xlsx');
     }
 
@@ -178,7 +198,16 @@ class ExporterComponent extends Manager
         $condition =
             new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $groupUsersIds);
 
-        $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(User::class_name(), $condition)->as_array();
+        $orderBy = array(
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+        );
+
+        $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            User::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null, $orderBy
+            )
+        )->as_array();
 
         foreach ($groupUsers as $groupUser)
         {

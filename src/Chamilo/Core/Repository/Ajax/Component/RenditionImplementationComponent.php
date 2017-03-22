@@ -12,6 +12,9 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
     const PARAM_PARAMETERS = 'parameters';
+
+    const PARAM_SECURITY_CODE = 'security_code';
+
     const PROPERTY_RENDITION = 'rendition';
 
     /*
@@ -34,10 +37,20 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     {
         try
         {
+            /** @var ContentObject $object */
             $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
                 ContentObject:: class_name(),
                 $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID)
             );
+
+            $security_code = $this->getRequest()->get(self::PARAM_SECURITY_CODE);
+            if(isset($security_code) && !empty($security_code))
+            {
+                if($security_code != $object->calculate_security_code())
+                {
+                    JsonAjaxResult::bad_request('The given security code does not match');
+                }
+            }
 
             $display = ContentObjectRenditionImplementation:: factory(
                 $object,

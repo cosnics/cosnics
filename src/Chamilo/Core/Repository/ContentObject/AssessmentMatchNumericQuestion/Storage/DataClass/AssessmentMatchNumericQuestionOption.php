@@ -39,6 +39,13 @@ class AssessmentMatchNumericQuestionOption
         return $this->value;
     }
 
+    public function set_value($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
     public function get_tolerance()
     {
         return $this->tolerance;
