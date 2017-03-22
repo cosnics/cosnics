@@ -89,7 +89,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 {
                     $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
                     $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_TOLERANCE][$index] = $option->get_tolerance() ? $option->get_tolerance() : 0;
-                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 1;
+                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$index] = !is_null($option->get_score()) ? $option->get_score() : 1;
                     $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
                 }
                 
