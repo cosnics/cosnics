@@ -4,3 +4,7 @@ ul.tree-menu li div a.assessment_match_text_question, ul.tree-menu li div a.type
 	ul.tree-menu li div a.type_assessment_match_text_question_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
+
+.assessment_match_question_score_container {
+	margin-top: 10px;
+}

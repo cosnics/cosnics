@@ -11,7 +11,7 @@ $(function()
         
         rows = $('.table.table-assessment-question-form > tbody > tr');
         
-        if (rows.size() <= 2)
+        if (rows.size() <= 1)
         {
             $('.option-remove', rows).addClass('text-muted');
             $('.option-remove', rows).removeClass('text-danger');
@@ -94,32 +94,30 @@ $(function()
         fieldFeedback += renderHtmlEditor('feedback[' + numberOfOptions + ']', htmlEditorOptions);
         fieldFeedback += '</div>';
         
-        fieldScore = '<div class="option-score-field form-assessment-extra-container form-inline" data-element="score['
+        fieldScore = '<div class="option-score-field assessment_match_question_score_container form-inline" data-element="score['
                 + numberOfOptions + ']">';
         fieldScore += '<label>' + getTranslation('Score', null, translationContext) + ':</label> ';
         fieldScore += '<input size="2" class="input_numeric form-control" name="score[' + numberOfOptions
-                + ']" value="0" type="text">';
+                + ']" value="1" type="text">';
         fieldScore += '</div>';
         
-        fieldTolerance = '<div class="option-score-field form-assessment-extra-container form-inline" data-element="score['
+        fieldTolerance = '<div class="option-tolerance-field form-assessment-extra-container form-inline" data-element="score['
                 + numberOfOptions + ']">';
         fieldTolerance += '<label>' + getTranslation('Tolerance', null, translationContext) + ':</label> ';
         fieldTolerance += '<input size="2" class="input_numeric form-control" name="score[' + numberOfOptions
-                + ']" value="1" type="text">';
+                + ']" value="0" type="text">';
         fieldTolerance += '</div>';
         
         fieldActions = '<span data-option-id="' + numberOfOptions
-                + '" class="option-action option-feedback fa fa-comment text-primary"></span>';
-        fieldActions += '<br>';
+                + '" class="option-action option-feedback fa fa-comment text-primary"></span>&nbsp;&nbsp;';
         fieldActions += '<span data-option-id="' + numberOfOptions
-                + '" class="option-action option-score fa fa-percent text-primary"></span>';
-        fieldActions += '<br>';
+                + '" class="option-action option-tolerance fa fa-magnet text-primary"></span>&nbsp;&nbsp;';
         fieldActions += '<span data-option-id="' + numberOfOptions
                 + '" class="option-action option-remove fa fa-trash text-danger"></span>';
         
         tableRow = '<tr data-option-id="' + numberOfOptions + '">';
         tableRow += '<td class="table-cell-selection cell-stat-x3">' + fieldSelection + '</td>';
-        tableRow += '<td>' + fieldAnswer + fieldFeedback + fieldScore + fieldTolerance + '</td>';
+        tableRow += '<td>' + fieldAnswer + fieldScore + fieldFeedback + fieldTolerance + '</td>';
         tableRow += '<td class="table-cell-action cell-stat-x2 text-right">' + fieldActions + '</td>';
         tableRow += '</tr>';
         
