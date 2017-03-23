@@ -1,1 +1,18 @@
 @import url('../Aqua/Stylesheet.css');
+figure {
+    display: inline-block;
+}
+figcaption {
+    padding-top: 8px !important;
+}
+.image-captioned {
+    padding: 0px 0px 10px !important;
+    text-align: center;
+    border: solid 1px #ccc;
+    border-radius: 0px;
+    background: rgba(0,0,0,0.05);
+    display: inline-block;
+    color: #555555;
+    font-size: 12px;
+    font-weight: bold;
+}
