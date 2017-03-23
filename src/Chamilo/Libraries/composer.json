@@ -15,6 +15,7 @@
         "phpoffice/phpexcel" : "1.8.*",
         "kigkonsult/icalcreator": "*",
         "simplepie/simplepie": "1.*",
+        "ezyang/htmlpurifier": "4.9.2",
         "sentry/sentry": "*",
         "google/recaptcha": "~1.1"
     },
