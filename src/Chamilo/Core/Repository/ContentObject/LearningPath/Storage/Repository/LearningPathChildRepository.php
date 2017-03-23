@@ -47,7 +47,7 @@ class LearningPathChildRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_ID
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
             ),
             new StaticConditionVariable($learningPath->getId())
         );
@@ -56,6 +56,9 @@ class LearningPathChildRepository
             LearningPathChild::class_name(), new DataClassRetrievesParameters(
                 $condition, null, null,
                 new OrderBy(
+                    new PropertyConditionVariable(
+                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_SECTION_CONTENT_OBJECT_ID
+                    ),
                     new PropertyConditionVariable(
                         LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER
                     )
@@ -77,7 +80,7 @@ class LearningPathChildRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_ID
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
             ),
             new StaticConditionVariable($oldParentLearningPathId)
         );
@@ -87,7 +90,7 @@ class LearningPathChildRepository
         $updateProperties->add(
             new DataClassProperty(
                 new PropertyConditionVariable(
-                    LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_ID
+                    LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
                 ), new StaticConditionVariable($newParentLearningPathId)
             )
         );

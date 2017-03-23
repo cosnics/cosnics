@@ -45,7 +45,7 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
      */
     public function getCurrentNodeId()
     {
-        return $this->getApplication()->get_current_step() - 1;
+        return 999999999; //return $this->getApplication()->getCurrentLearningPathTreeNode()->getStep() - 1;
     }
 
     /**
@@ -84,7 +84,7 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
     protected function isSelectedItem(LearningPathTreeNode $node)
     {
         return $this->getApplication()->get_action() != Manager::ACTION_REPORTING &&
-            $this->getApplication()->get_current_step() == $node->getStep();
+            $this->getApplication()->getCurrentLearningPathChildId() == $node->getId();
     }
 
     /**
@@ -98,7 +98,7 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
         $progressItem = array();
         $progressItem['text'] = Translation::getInstance()->getTranslation('Progress');
         $progressItem['href'] = $application->get_url(
-            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_STEP => null)
+            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_CHILD_ID => null)
         );
         $progressItem['icon'] = 'type_statistics';
 
@@ -139,12 +139,11 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
         $application = $this->getApplication();
 
         $menuItem['text'] = $node->getContentObject()->get_title();
-        $menuItem['node-id'] = $node->getStep();
         $menuItem['icon'] = $this->getItemIcon($node);
 
         if ($application->get_parent()->is_allowed_to_view_content_object($node))
         {
-            $menuItem['href'] = $this->getNodeUrl($node->getStep());
+            $menuItem['href'] = $this->getNodeUrl($node->getId());
         }
         else
         {
@@ -156,8 +155,18 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
             $menuItem['state'] = array('selected' => true);
         }
 
+        if($node == $this->getApplication()->getCurrentLearningPathTreeNode())
+        {
+            $menuItem['state']['expanded'] = true;
+        }
+
         if ($node->hasChildNodes())
         {
+            if(in_array($this->getApplication()->getCurrentLearningPathTreeNode(), $node->getDescendantNodes()))
+            {
+                $menuItem['state']['expanded'] = true;
+            }
+
             $menuItem['nodes'] = array();
 
             $children = $node->getChildNodes();

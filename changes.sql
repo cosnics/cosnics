@@ -167,7 +167,8 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 
 CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `id` int(10) unsigned NOT NULL,
-  `parent_learning_path_id` int(10) unsigned NOT NULL,
+  `learning_path_id` int(10) unsigned NOT NULL,
+  `section_content_object_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
   `max_attempts` int(10) unsigned NOT NULL DEFAULT '0',
   `mastery_score` int(10) unsigned NOT NULL DEFAULT '0',
@@ -183,8 +184,9 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
 
 ALTER TABLE `repository_learning_path_child`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `learning_path_id` (`parent_learning_path_id`),
-  ADD KEY `content_object_id` (`content_object_id`) USING BTREE;
+  ADD KEY `learning_path_id` (`learning_path_id`),
+  ADD KEY `content_object_id` (`content_object_id`) USING BTREE,
+  ADD KEY `section_content_object_id` (`section_content_object_id`);
 
 ALTER TABLE `repository_learning_path_child`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;

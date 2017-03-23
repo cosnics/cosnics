@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 class LearningPathTreeNode
 {
     /**
-     * The identifier of this node by a step
+     * The step for this node
      *
      * @var int
      */
@@ -69,11 +69,15 @@ class LearningPathTreeNode
      *
      * @param LearningPathTree $learningPathTree
      * @param ContentObject $contentObject
+     * @param LearningPathChild $learningPathChild
      */
-    public function __construct(LearningPathTree $learningPathTree, ContentObject $contentObject)
+    public function __construct(
+        LearningPathTree $learningPathTree, ContentObject $contentObject, LearningPathChild $learningPathChild = null
+    )
     {
         $this->learningPathTree = $learningPathTree;
         $this->contentObject = $contentObject;
+        $this->learningPathChild = $learningPathChild;
 
         $this->parentNodes = array();
         $this->childNodes = array();
@@ -88,6 +92,21 @@ class LearningPathTreeNode
     public function getStep()
     {
         return $this->step;
+    }
+
+    /**
+     * Returns the unique identifier for this node
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        if ($this->learningPathChild instanceof LearningPathChild)
+        {
+            return $this->learningPathChild->getId();
+        }
+
+        return 0;
     }
 
     /**
@@ -246,12 +265,12 @@ class LearningPathTreeNode
      */
     public function addChildNode(LearningPathTreeNode $learningPathTreeNode, $setSelfAsParent = true)
     {
-        if (array_key_exists($learningPathTreeNode->getStep(), $this->childNodes))
+        if (array_key_exists($learningPathTreeNode->getId(), $this->childNodes))
         {
             return $this;
         }
 
-        $this->childNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
+        $this->childNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
 
         $selfAndParentNodes = $this->getParentNodes();
         array_unshift($selfAndParentNodes, $this);
@@ -283,12 +302,12 @@ class LearningPathTreeNode
      */
     public function addDescendantNode(LearningPathTreeNode $learningPathTreeNode)
     {
-        if (array_key_exists($learningPathTreeNode->getStep(), $this->descendantNodes))
+        if (array_key_exists($learningPathTreeNode->getId(), $this->descendantNodes))
         {
             return $this;
         }
 
-        $this->descendantNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
+        $this->descendantNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
 
         return $this;
     }
@@ -302,12 +321,12 @@ class LearningPathTreeNode
      */
     public function addLearningPathTreeNodeToParentNodes(LearningPathTreeNode $learningPathTreeNode)
     {
-        if (array_key_exists($learningPathTreeNode->getStep(), $this->parentNodes))
+        if (array_key_exists($learningPathTreeNode->getId(), $this->parentNodes))
         {
             return $this;
         }
 
-        $this->parentNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
+        $this->parentNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
 
         return $this;
     }
@@ -321,9 +340,9 @@ class LearningPathTreeNode
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() + 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() + 1);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return null;
         }
@@ -338,9 +357,9 @@ class LearningPathTreeNode
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() - 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() - 1);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return null;
         }
@@ -367,7 +386,7 @@ class LearningPathTreeNode
 
         $currentNode = $this;
 
-        while($currentNode->hasParentNode())
+        while ($currentNode->hasParentNode())
         {
             array_unshift($contentObjectIds, $currentNode->getContentObject()->getId());
             $currentNode = $currentNode->getParentNode();

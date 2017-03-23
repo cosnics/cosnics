@@ -2,7 +2,8 @@
 <object name="learning_path_child">
     <properties>
         <property name="id" type="integer" unsigned="1" notnull="1" />
-        <property name="parent_learning_path_id" type="integer" unsigned="1" notnull="1" />
+        <property name="learning_path_id" type="integer" unsigned="1" notnull="1" />
+        <property name="section_content_object_id" type="integer" unsigned="1" notnull="1" />
         <property name="content_object_id" type="integer" unsigned="1" notnull="1" />
         <property name="max_attempts" type="integer" notnull="1" unsigned="1" default="0" />
         <property name="mastery_score" type="integer" length="3" unsigned="1" default="0" />
@@ -18,8 +19,11 @@
     <index name="id" type="primary">
         <indexproperty name="id" />
     </index>
-    <index name="parent_learning_path_id">
-        <indexproperty name="parent_learning_path_id" />
+    <index name="learning_path_id">
+        <indexproperty name="learning_path_id" />
+    </index>
+    <index name="section_content_object_id">
+        <indexproperty name="section_content_object_id" />
     </index>
     <index name="content_object_id">
         <indexproperty name="content_object_id" />

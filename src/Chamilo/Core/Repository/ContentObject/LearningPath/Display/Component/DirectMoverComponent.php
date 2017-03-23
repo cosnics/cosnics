@@ -19,7 +19,7 @@ class DirectMoverComponent extends Manager
 
     function run()
     {
-        $this->validateAndFixCurrentStep();
+        $this->validateSelectedLearningPathChild();
 
         $currentNode = $this->getCurrentLearningPathTreeNode();
         if (!$this->canEditLearningPathTreeNode($currentNode))
@@ -41,7 +41,7 @@ class DirectMoverComponent extends Manager
 
         try
         {
-            $parentNode = $path->getLearningPathTreeNodeByStep((int) $parentId);
+            $parentNode = $path->getLearningPathTreeNodeById((int) $parentId);
         }
         catch (\Exception $ex)
         {
@@ -78,16 +78,6 @@ class DirectMoverComponent extends Manager
                     Activity::PROPERTY_CONTENT => $content_object->get_title()
                 )
             );
-
-            $contentObjectIds = $parentNode->getPathAsContentObjectIds();
-            $contentObjectIds[] = $currentNode->getContentObject()->getId();
-
-            $this->recalculateLearningPathTree();
-
-            $new_node = $this->getLearningPathTree()
-                ->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
-                    $contentObjectIds
-                );
         }
 
         $message = htmlentities(
@@ -99,16 +89,7 @@ class DirectMoverComponent extends Manager
         );
 
         $parameters = array();
-
-        if ($success)
-        {
-            $parameters[self::PARAM_STEP] = $new_node->getStep();
-        }
-        else
-        {
-            $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getStep();
-        }
-
+        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getId();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
         $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
@@ -116,6 +97,6 @@ class DirectMoverComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

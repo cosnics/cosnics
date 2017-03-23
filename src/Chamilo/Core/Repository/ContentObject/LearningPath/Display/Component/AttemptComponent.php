@@ -44,7 +44,7 @@ class AttemptComponent extends Manager
                     $message = Translation::get(
                         'ObjectNotDeleted', 
                         array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES));
-                    $parameters[self::PARAM_STEP] = $this->get_current_step();
+                    $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
                 }
                 else
                 {
@@ -55,11 +55,11 @@ class AttemptComponent extends Manager
                     
                     if (count($this->get_current_node()->get_data()) > 1)
                     {
-                        $parameters[self::PARAM_STEP] = $this->get_current_step();
+                        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
                     }
                     else
                     {
-                        $parameters[self::PARAM_STEP] = null;
+                        $parameters[self::PARAM_CHILD_ID] = null;
                     }
                 }
             }
@@ -85,7 +85,7 @@ class AttemptComponent extends Manager
                     Translation::get('LearningPathItemAttempts'), 
                     self::RESULT_TYPE_DELETED);
                 
-                $parameters[self::PARAM_STEP] = null;
+                $parameters[self::PARAM_CHILD_ID] = null;
             }
         }
         else
@@ -108,7 +108,7 @@ class AttemptComponent extends Manager
                     array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES));
             }
             
-            $parameters[self::PARAM_STEP] = null;
+            $parameters[self::PARAM_CHILD_ID] = null;
         }
         
         $this->redirect($message, $is_error, $parameters);

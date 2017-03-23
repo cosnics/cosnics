@@ -83,7 +83,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         foreach($parentNodes as $parentNode)
         {
             $parameters = $this->get_parameters();
-            $parameters[self::PARAM_STEP] = $parentNode->getStep();
+            $parameters[self::PARAM_CHILD_ID] = $parentNode->getId();
             $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
             $trail->add(
                 new Breadcrumb($this->get_url($parameters), $parentNode->getContentObject()->get_title())
@@ -215,7 +215,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $previous_url = $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self::PARAM_STEP => $previous_node->getStep()
+                        self::PARAM_CHILD_ID => $previous_node->getId()
                     )
                 );
 
@@ -251,7 +251,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $next_url = $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self::PARAM_STEP => $next_node->getStep()
+                        self::PARAM_CHILD_ID => $next_node->getId()
                     )
                 );
 

@@ -17,7 +17,7 @@ class ToggleBlockedStatusComponent extends Manager
      */
     public function run()
     {
-        $this->validateAndFixCurrentStep();
+        $this->validateSelectedLearningPathChild();
 
         $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
         $learningPathChildService = $this->getLearningPathChildService();
@@ -46,9 +46,14 @@ class ToggleBlockedStatusComponent extends Manager
             !$success,
             array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_STEP => $this->get_current_step()
+                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
             ),
             array(self::PARAM_CONTENT_OBJECT_ID)
         );
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_CHILD_ID);
     }
 }

@@ -110,6 +110,7 @@ class ViewerComponent extends TabComponent
         $html[] = $this->renderMovePanel();
 
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
+            $this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
             $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()
         )
         {
@@ -228,18 +229,7 @@ class ViewerComponent extends TabComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
-
-            if ($this->getCurrentContentObject() instanceof LearningPath)
-            {
-                $parameters[self::PARAM_STEP] = $this->get_current_step();
-                $parameters[self::PARAM_CONTENT_OBJECT_ID] = $this->getCurrentContentObject()->getId();
-            }
-            else
-            {
-                $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep();
-                $parameters[self::PARAM_CONTENT_OBJECT_ID] =
-                    $this->getCurrentLearningPathTreeNode()->getParentNode()->getContentObject()->getId();
-            }
+            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getId();
 
             $actionSelector = new ActionSelector(
                 $this,
@@ -287,8 +277,7 @@ class ViewerComponent extends TabComponent
             $editURL = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    self::PARAM_STEP => $this->get_current_step(),
-                    self::PARAM_CONTENT_OBJECT_ID => $current_content_object->getId()
+                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                 )
             );
 
@@ -308,9 +297,7 @@ class ViewerComponent extends TabComponent
     {
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
-            if ($this->getCurrentContentObject() instanceof LearningPath &&
-                $this->getCurrentLearningPathTreeNode()->hasChildNodes()
-            )
+            if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
             {
                 $buttonGroup->addButton(
                     new Button(
@@ -319,8 +306,7 @@ class ViewerComponent extends TabComponent
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_MANAGE,
-                                self::PARAM_STEP => $this->get_current_step(),
-                                self::PARAM_CONTENT_OBJECT_ID => $currentContentObject->getId()
+                                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                             )
                         )
                     )
@@ -348,8 +334,7 @@ class ViewerComponent extends TabComponent
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            self::PARAM_STEP => $this->get_current_step(),
-                            self::PARAM_CONTENT_OBJECT_ID => $currentContentObject->getId()
+                            self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                         )
                     )
                 )
@@ -396,10 +381,12 @@ class ViewerComponent extends TabComponent
         ButtonGroup $buttonGroup, Translation $translator, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $translationVariable = ($learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $translationVariable = ($learningPathTreeNode->getLearningPathChild() &&
+            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $icon = ($learningPathTreeNode->getLearningPathChild() &&
+            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
             'unlock' : 'ban';
 
         $moveButton = new Button(
@@ -408,8 +395,7 @@ class ViewerComponent extends TabComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
-                    self::PARAM_STEP => $learningPathTreeNode->getStep(),
-                    self::PARAM_CONTENT_OBJECT_ID => $learningPathTreeNode->getContentObject()->getId()
+                    self::PARAM_CHILD_ID => $learningPathTreeNode->getId()
                 )
             ),
             Button::DISPLAY_ICON_AND_LABEL
@@ -438,8 +424,7 @@ class ViewerComponent extends TabComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_ACTIVITY,
-                        self::PARAM_STEP => $this->get_current_step(),
-                        self::PARAM_CONTENT_OBJECT_ID => $currentContentObject->getId()
+                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                     )
                 )
             )
@@ -452,8 +437,7 @@ class ViewerComponent extends TabComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_REPORTING,
-                        self::PARAM_STEP => $this->get_current_step(),
-                        self::PARAM_CONTENT_OBJECT_ID => $currentContentObject->getId()
+                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                     )
                 )
             )
@@ -475,6 +459,7 @@ class ViewerComponent extends TabComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
+                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
                     self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ),

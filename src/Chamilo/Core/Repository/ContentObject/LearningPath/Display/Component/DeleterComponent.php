@@ -27,9 +27,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $this->validateCurrentNode();
-
-        $selected_steps = $this->getRequest()->get(self::PARAM_STEP);
+        $selected_steps = $this->getRequest()->get(self::PARAM_CHILD_ID);
         if (!is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);
@@ -44,7 +42,7 @@ class DeleterComponent extends Manager
         {
             try
             {
-                $selected_node = $learningPathTree->getLearningPathTreeNodeByStep((int) $selected_step);
+                $selected_node = $learningPathTree->getLearningPathTreeNodeById((int) $selected_step);
 
                 if ($this->canEditLearningPathTreeNode($selected_node->getParentNode()))
                 {
@@ -86,8 +84,6 @@ class DeleterComponent extends Manager
                 $success = false;
             }
 
-            $current_parents_content_object_ids = $available_node->getParentNode()->getPathAsContentObjectIds();
-
             if ($success)
             {
                 Event::trigger(
@@ -109,24 +105,19 @@ class DeleterComponent extends Manager
                 $failures ++;
             }
 
-            $this->recalculateLearningPathTree();
-
-            $new_node = $this->getLearningPathTree()
-                ->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
-                    $current_parents_content_object_ids
-                );
+            $new_node = $available_node->getParentNode();
         }
 
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        if ($failures > 0)
+        if (!$new_node)
         {
-            $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep();
+            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getId();
         }
         else
         {
-            $parameters[self::PARAM_STEP] = $new_node->getStep();
+            $parameters[self::PARAM_CHILD_ID] = $new_node->getId();
         }
 
         $this->redirect(
@@ -138,7 +129,7 @@ class DeleterComponent extends Manager
             $failures > 0,
             array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_STEP => $new_node->getStep()
+                self::PARAM_CHILD_ID => $new_node->getId()
             ),
             array(self::PARAM_CONTENT_OBJECT_ID)
         );
@@ -146,6 +137,6 @@ class DeleterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

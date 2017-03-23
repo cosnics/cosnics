@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Portfolio item table cell renderer
- * 
+ *
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -28,7 +28,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      * Renders a single cell
-     * 
+     *
      * @param TableColumn $column
      * @param LearningPathTreeNode $node
      *
@@ -40,93 +40,113 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
         {
             return $this->get_actions($node);
         }
-        
+
         $content_object = $node->getContentObject();
-        
+
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_CREATION_DATE :
                 return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
-                    $content_object->get_creation_date());
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                    $content_object->get_creation_date()
+                );
             case ContentObject::PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
-                    $content_object->get_modification_date());
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                    $content_object->get_modification_date()
+                );
         }
-        
+
         return $node->getContentObject()->get_default_property($column->get_name());
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param LearningPathTreeNode $node
+     *
      * @return string
      */
     public function get_actions($node)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-        
+
         if ($this->get_component()->get_parent()->is_allowed_to_view_content_object($node))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewerComponent'), 
+                    Translation::get('ViewerComponent'),
                     Theme::getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display', 
-                        'Action/' . Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT), 
+                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
+                        'Action/' . Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT
+                    ),
                     $this->get_component()->get_url(
                         array(
-                            Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
-                            Manager::PARAM_STEP => $node->getStep())),
-                    ToolbarItem::DISPLAY_ICON));
+                            Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                            Manager::PARAM_CHILD_ID => $node->getId()
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewNotAllowed'), 
+                    Translation::get('ViewNotAllowed'),
                     Theme::getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display', 
-                        'Action/' . Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT . 'Na'), 
-                    null, 
-                    ToolbarItem::DISPLAY_ICON));
+                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
+                        'Action/' . Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT . 'Na'
+                    ),
+                    null,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
-        
+
         if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
         {
             $variable = $node->getContentObject() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get($variable), 
+                    Translation::get($variable),
                     Theme::getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display', 
-                        'Action/' . Manager::ACTION_MOVE), 
+                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
+                        'Action/' . Manager::ACTION_MOVE
+                    ),
                     $this->get_component()->get_url(
-                        array(Manager::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_STEP => $node->getStep())),
-                    ToolbarItem::DISPLAY_ICON));
+                        array(Manager::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_CHILD_ID => $node->getId())
+                    ),
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
-        
+
         if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
         {
             $variable = $node->getContentObject() instanceof LearningPath ? 'DeleteFolder' : 'DeleterComponent';
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get($variable), 
+                    Translation::get($variable),
                     Theme::getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display', 
-                        'Action/' . Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), 
+                        'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
+                        'Action/' . Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM
+                    ),
                     $this->get_component()->get_url(
                         array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                            Manager::PARAM_STEP => $node->getStep())),
-                    ToolbarItem::DISPLAY_ICON, 
-                    true));
+                            Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
+                            Manager::PARAM_CHILD_ID => $node->getId()
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON,
+                    true
+                )
+            );
         }
-        
+
         return $toolbar->as_html();
     }
 
@@ -137,6 +157,6 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
      */
     public function render_id_cell($data_class)
     {
-        return $data_class->getStep();
+        return $data_class->getId();
     }
 }

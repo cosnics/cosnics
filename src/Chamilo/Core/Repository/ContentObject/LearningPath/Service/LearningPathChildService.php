@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -43,35 +44,30 @@ class LearningPathChildService
      * Adds a given content object to a learning path. Validates the content object to make sure that the
      * system does not create a cycle. Uses the LearningPathTree for calculations.
      *
+     * @param LearningPath $rootLearningPath
      * @param LearningPathTreeNode $parentLearningPathTreeNode
      * @param ContentObject $childContentObject
      *
      * @return LearningPathChild
      */
     public function addContentObjectToLearningPath(
-        LearningPathTreeNode $parentLearningPathTreeNode, ContentObject $childContentObject
+        LearningPath $rootLearningPath, LearningPathTreeNode $parentLearningPathTreeNode,
+        ContentObject $childContentObject
     )
     {
-        if (!$this->learningPathChildValidator->canContentObjectBeAdded(
-            $parentLearningPathTreeNode, $childContentObject
-        )
-        )
-        {
-            throw new \RuntimeException(
-                'You are not allowed to add the given content object to the parent learning path'
-            );
-        }
-
         $learningPathChild = new LearningPathChild();
-        $learningPathChild->setParentLearningPathId((int) $parentLearningPathTreeNode->getContentObject()->getId());
+
+        $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
+        $learningPathChild->setSectionContentObjectId((int) $parentLearningPathTreeNode->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
 
         if (!$this->learningPathChildRepository->create($learningPathChild))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not create a LearningPathChildObject for parent %s and child %s',
-                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                    'Could not create a LearningPathChildObject for learning path %s parent %s and child %s',
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getContentObjectId()
                 )
             );
         }
@@ -90,16 +86,6 @@ class LearningPathChildService
         LearningPathTreeNode $learningPathTreeNode, ContentObject $newContentObject
     )
     {
-        if (!$this->learningPathChildValidator->canContentObjectBeAdded(
-            $learningPathTreeNode->getParentNode(), $newContentObject
-        )
-        )
-        {
-            throw new \RuntimeException(
-                'You are not allowed to add the given content object to the parent learning path'
-            );
-        }
-
         $learningPathChild = $learningPathTreeNode->getLearningPathChild();
         $learningPathChild->setContentObjectId((int) $newContentObject->getId());
 
@@ -107,8 +93,9 @@ class LearningPathChildService
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for parent %s and child %s',
-                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getContentObjectId()
                 )
             );
         }
@@ -131,24 +118,16 @@ class LearningPathChildService
         $newDisplayOrder = null
     )
     {
-        if (!$this->learningPathChildValidator->canContentObjectBeAdded(
-            $parentLearningPathTreeNode, $selectedLearningPathTreeNode->getContentObject()
-        )
-        )
+        $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
+
+        if ($learningPathChild->getSectionContentObjectId() != $parentLearningPathTreeNode->getId())
         {
-            throw new \RuntimeException(
-                'You are not allowed to add the given content object to the parent learning path'
+            $learningPathChild->setSectionContentObjectId(
+                (int) $parentLearningPathTreeNode->getId()
             );
         }
 
-        $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
-
-        if($learningPathChild->getParentLearningPathId() != $parentLearningPathTreeNode->getContentObject()->getId())
-        {
-            $learningPathChild->setParentLearningPathId((int) $parentLearningPathTreeNode->getContentObject()->getId());
-        }
-
-        if(isset($newDisplayOrder) && $newDisplayOrder != $learningPathChild->getDisplayOrder())
+        if (isset($newDisplayOrder) && $newDisplayOrder != $learningPathChild->getDisplayOrder())
         {
             $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
         }
@@ -157,8 +136,9 @@ class LearningPathChildService
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for parent %s and child %s',
-                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getContentObjectId()
                 )
             );
         }
@@ -186,8 +166,9 @@ class LearningPathChildService
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for parent %s and child %s',
-                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getContentObjectId()
                 )
             );
         }
@@ -214,10 +195,17 @@ class LearningPathChildService
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not delete the LearningPathChildObject for parent %s and child %s',
-                    $learningPathChild->getParentLearningPathId(), $learningPathChild->getContentObjectId()
+                    'Could not delete the LearningPathChildObject for learning path %s parent %s and child %s',
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getContentObjectId()
                 )
             );
+        }
+
+        $childNodes = $learningPathTreeNode->getChildNodes();
+        foreach ($childNodes as $childNode)
+        {
+            $this->deleteContentObjectFromLearningPath($childNode);
         }
     }
 }

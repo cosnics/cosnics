@@ -71,14 +71,14 @@ class DirectMoverForm extends FormValidator
             }
             
             $contentObject = $node->getContentObject();
-            if ($contentObject instanceof LearningPath)
+//            if ($contentObject instanceof LearningPath)
             {
                 $title = str_repeat('--', count($node->getParentNodes())) . ' ' . $contentObject->get_title();
-                $parents[$node->getStep()] = $title;
+                $parents[$node->getId()] = $title;
                 
                 $displayOrder = 1;
                 
-                $positionsPerParent[$node->getStep()][] = array(
+                $positionsPerParent[$node->getId()][] = array(
                     self::PARAM_TITLE => $this->getTranslation('FirstItem'), 
                     self::PARAM_DISPLAY_ORDER => $displayOrder);
                 
@@ -92,7 +92,7 @@ class DirectMoverForm extends FormValidator
                         continue;
                     }
                     
-                    $positionsPerParent[$node->getStep()][] = array(
+                    $positionsPerParent[$node->getId()][] = array(
                         self::PARAM_TITLE => $this->getTranslation(
                             'AfterContentObject', 
                             array('CONTENT_OBJECT' => $child->getContentObject()->get_title())),

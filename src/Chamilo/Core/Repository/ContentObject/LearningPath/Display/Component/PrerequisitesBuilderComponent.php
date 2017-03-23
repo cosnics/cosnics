@@ -19,8 +19,8 @@ class PrerequisitesBuilderComponent extends TabComponent
 
     public function build()
     {
-        $this->validateAndFixCurrentStep();
-        
+        $this->validateSelectedLearningPathChild();
+
         if (! $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             throw new NotAllowedException();
@@ -71,6 +71,6 @@ class PrerequisitesBuilderComponent extends TabComponent
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

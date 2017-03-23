@@ -22,14 +22,14 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
-        
+        $this->validateSelectedLearningPathChild();
+
         $activity_table = new ActivityTable($this);
         
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
+                $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId())),
                 Translation::get('ActivityComponent')));
         
         $html = array();
@@ -50,6 +50,6 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

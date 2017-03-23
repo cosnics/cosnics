@@ -31,7 +31,7 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
+        $this->validateSelectedLearningPathChild();
 
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
@@ -46,7 +46,7 @@ class UpdaterComponent extends TabComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        self::PARAM_STEP => $this->get_current_step()
+                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                     )
                 )
             );
@@ -79,7 +79,7 @@ class UpdaterComponent extends TabComponent
                             $this->getCurrentLearningPathTreeNode(), $content_object->get_latest_version()
                         );
                     }
-                    catch(\Exception $ex)
+                    catch (\Exception $ex)
                     {
                         $succes = false;
                     }
@@ -114,7 +114,9 @@ class UpdaterComponent extends TabComponent
 
                 $trail = BreadcrumbTrail::getInstance();
                 $trail->add(
-                    new Breadcrumb($this->get_url(array(self::PARAM_STEP => $this->get_current_step())), $title)
+                    new Breadcrumb(
+                        $this->get_url(), $title
+                    )
                 );
 
                 $html = array();
@@ -138,6 +140,6 @@ class UpdaterComponent extends TabComponent
      */
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID);
     }
 }

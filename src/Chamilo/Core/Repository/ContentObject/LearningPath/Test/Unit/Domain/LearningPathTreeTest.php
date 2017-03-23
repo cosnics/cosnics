@@ -71,7 +71,7 @@ class LearningPathTreeTest extends Test
 
         $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
 
-        $this->assertEquals($learningPathTreeNode, $learningPathTree->getLearningPathTreeNodeByStep(1));
+        $this->assertEquals($learningPathTreeNode, $learningPathTree->getLearningPathTreeNodeById(1));
     }
 
     /**
@@ -80,7 +80,7 @@ class LearningPathTreeTest extends Test
     public function testGetLearningPathTreeNodeByStepWithInvalidStep()
     {
         $learningPathTree = new LearningPathTree();
-        $learningPathTree->getLearningPathTreeNodeByStep('test');
+        $learningPathTree->getLearningPathTreeNodeById('test');
     }
 
     /**
@@ -89,7 +89,7 @@ class LearningPathTreeTest extends Test
     public function testGetLearningPathTreeNodeByStepWithStepBelowOne()
     {
         $learningPathTree = new LearningPathTree();
-        $learningPathTree->getLearningPathTreeNodeByStep(0);
+        $learningPathTree->getLearningPathTreeNodeById(0);
     }
 
     /**
@@ -100,7 +100,7 @@ class LearningPathTreeTest extends Test
         $learningPathTree = new LearningPathTree();
         new LearningPathTreeNode($learningPathTree, new LearningPath());
 
-        $learningPathTree->getLearningPathTreeNodeByStep(2);
+        $learningPathTree->getLearningPathTreeNodeById(2);
     }
 
     public function testGetRoot()

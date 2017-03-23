@@ -45,32 +45,30 @@ class LearningPathTree
             );
         }
 
-        $nextStep = $this->getNextStep();
-
-        $this->learningPathTreeNodes[$nextStep] = $learningPathTreeNode;
-        $learningPathTreeNode->setStep($nextStep);
+        $learningPathTreeNode->setStep($this->getNextStep());
+        $this->learningPathTreeNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
     }
 
     /**
-     * @param int $step
+     * @param int $id
      *
      * @return LearningPathTreeNode
      */
-    public function getLearningPathTreeNodeByStep($step)
+    public function getLearningPathTreeNodeById($id)
     {
-        if (!is_integer($step))
+        if (!is_integer($id))
         {
-            throw new \InvalidArgumentException('The given step should be valid integer');
+            throw new \InvalidArgumentException('The given id should be valid integer');
         }
 
-        if ($step < 1 || $step > $this->getLastStepNumber())
+        if (!array_key_exists($id, $this->learningPathTreeNodes))
         {
-            throw new \RangeException(
-                'The given step should be between 1 and ' . $this->getLastStepNumber()
+            throw new \InvalidArgumentException(
+                sprintf('The learning path three node with id %s could not be found', $id)
             );
         }
 
-        return $this->learningPathTreeNodes[$step];
+        return $this->learningPathTreeNodes[$id];
     }
 
     /**
@@ -98,7 +96,7 @@ class LearningPathTree
             );
         }
 
-        return $this->learningPathTreeNodes[1];
+        return $this->learningPathTreeNodes[0];
     }
 
     /**

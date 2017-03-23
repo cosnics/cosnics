@@ -74,7 +74,7 @@ class ProgressBlock extends ReportingBlock
                 $reporting_url = $this->get_parent()->get_parent()->get_url(
                     array(
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING, 
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP => $node->get_id()));
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $node->getId()));
                 
                 $actions[] = Theme::getInstance()->getCommonImage(
                     'Action/Statistics', 
@@ -88,7 +88,7 @@ class ProgressBlock extends ReportingBlock
                     $delete_url = $this->get_parent()->get_parent()->get_url(
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT, 
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP => $node->get_id()));
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $node->getId()));
                     
                     $actions[] = Theme::getInstance()->getCommonImage(
                         'Action/Delete', 

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChild
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -48,6 +49,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
+    const PARAM_CHILD_ID = 'child_id';
 
     // Sorting
     const SORT_UP = 'Up';
@@ -92,6 +94,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return (int) $this->current_step;
+    }
+
+    /**
+     * Returns the currently selected learning path child id from the request
+     *
+     * @return int
+     */
+    public function getCurrentLearningPathChildId()
+    {
+        return (int) $this->getRequest()->get(self::PARAM_CHILD_ID, 0);
     }
 
     /**
@@ -191,68 +203,23 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN);
-    }
-
-    /**
-     * Helper function to validate the current node based on the given content object id
-     */
-    protected function validateCurrentNode()
-    {
-        if ($this->getCurrentLearningPathTreeNode()->getContentObject()->getId() !=
-            $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID)
-        )
-        {
-            throw new UserException(
-                Translation::getInstance()->getTranslation('StepNoLongerValid', null, Manager::context())
-            );
-        }
-    }
-
-    /**
-     * Helper function to detect the best possible node based on the current content object id
-     *
-     * @return LearningPathTreeNode
-     */
-    protected function detectBestPossibleNode()
-    {
-        $contentObjectId = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
-        $nodes = $this->getLearningPathTree()->getLearningPathTreeNodes();
-
-        foreach ($nodes as $node)
-        {
-            if ($node->getContentObject()->getId() == $contentObjectId)
-            {
-                return $node;
-            }
-        }
-
-        return null;
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 
     /**
      * Helper function to validate and possibly fix the current step when it became corrupt
      */
-    protected function validateAndFixCurrentStep()
+    protected function validateSelectedLearningPathChild()
     {
         try
         {
-            $this->validateCurrentNode();
+            $this->getCurrentLearningPathTreeNode();
         }
         catch (\Exception $ex)
         {
-            $bestPossibleNode = $this->detectBestPossibleNode();
-
-            if (!$bestPossibleNode)
-            {
-                throw new UserException(
-                    Translation::getInstance()->getTranslation(
-                        'CouldNotRetrieveSelectedNode', null, 'Chamilo\Core\Repository'
-                    )
-                );
-            }
-
-            $this->current_step = $bestPossibleNode->getStep();
+            throw new ObjectNotExistException(
+                Translation::getInstance()->getTranslation('Step'), $this->getCurrentLearningPathChildId()
+            );
         }
     }
 
@@ -305,7 +272,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->get_root_content_object()
             );
         }
-        
+
         return $this->learningPathTree;
     }
 
@@ -315,18 +282,20 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function recalculateLearningPathTree()
     {
         unset($this->learningPathTree);
+
         return $this->getLearningPathTree();
     }
 
     /**
      * Returns the LearningPathTreeNode for the current step
-     * 
+     *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
      */
     public function getCurrentLearningPathTreeNode()
     {
         $learningPathTree = $this->getLearningPathTree();
-        return $learningPathTree->getLearningPathTreeNodeByStep($this->get_current_step());
+
+        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
     }
 
     /**
@@ -351,7 +320,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         /** @var LearningPathDisplaySupport $application */
         $application = $this->get_application();
 
-        if($application->is_allowed_to_edit_content_object())
+        if ($application->is_allowed_to_edit_content_object())
         {
             return true;
         }

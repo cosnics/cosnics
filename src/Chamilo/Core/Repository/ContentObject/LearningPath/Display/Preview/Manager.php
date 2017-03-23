@@ -31,8 +31,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
             $embedded_content_object_id = $this->get_embedded_content_object_id();
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
             $this->set_parameter(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP)
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
+                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID)
             );
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -169,7 +169,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
 
             return $path->get_node(
                 Request::get(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
                     $path->get_root()->get_id()
                 )
             );

@@ -20,7 +20,7 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
+        $this->validateSelectedLearningPathChild();
         
         $object_namespace = $this->getCurrentLearningPathTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .
@@ -34,6 +34,6 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

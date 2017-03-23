@@ -32,10 +32,10 @@ class MoverComponent extends TabComponent
      */
     public function build()
     {
-        $selected_steps = $this->getRequest()->request->get(self::PARAM_STEP);
+        $selected_steps = $this->getRequest()->request->get(self::PARAM_CHILD_ID);
         if(empty($selected_steps))
         {
-            $selected_steps = $this->getRequest()->query->get(self::PARAM_STEP);
+            $selected_steps = $this->getRequest()->query->get(self::PARAM_CHILD_ID);
         }
 
         if(empty($selected_steps))
@@ -57,7 +57,7 @@ class MoverComponent extends TabComponent
         {
             try
             {
-                $selected_node = $path->getLearningPathTreeNodeByStep((int) $selected_step);
+                $selected_node = $path->getLearningPathTreeNodeById((int) $selected_step);
 
                 if ($this->canEditLearningPathTreeNode($selected_node->getParentNode()))
                 {
@@ -113,7 +113,7 @@ class MoverComponent extends TabComponent
                 throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
             }
 
-            $parent_node = $path->getLearningPathTreeNodeByStep((int) $selected_node_id);
+            $parent_node = $path->getLearningPathTreeNodeById((int) $selected_node_id);
 
             $failures = 0;
             $learningPathChildService = $this->getLearningPathChildService();
@@ -125,15 +125,7 @@ class MoverComponent extends TabComponent
                 {
                     $learningPathChildService->moveContentObjectToOtherLearningPath($available_node, $parent_node);
 
-                    $contentObjectIds = $parent_node->getPathAsContentObjectIds();
-                    $contentObjectIds[] = $available_node->getContentObject()->getId();
-
-                    $this->recalculateLearningPathTree();
-
-                    $new_node = $this->getLearningPathTree()
-                        ->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
-                            $contentObjectIds
-                        );
+                    $new_node = $available_node;
 
                     Event::trigger(
                         'Activity',
@@ -158,11 +150,11 @@ class MoverComponent extends TabComponent
             
             if ($failures > 0)
             {
-                $parameters[self::PARAM_STEP] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep();
+                $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getId();
             }
             else
             {
-                $parameters[self::PARAM_STEP] = $new_node->getStep();
+                $parameters[self::PARAM_CHILD_ID] = $new_node->getId();
             }
             
             $this->redirect(
@@ -230,7 +222,7 @@ class MoverComponent extends TabComponent
         $path = $this->getLearningPathTree();
         $root = $path->getRoot();
         
-        if ($root->getStep() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep())
+        if ($root->getId() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getId())
         {
             $name = $root->getContentObject()->get_title() . ' (' . Translation::get('Current') . ')';
         }
@@ -239,7 +231,7 @@ class MoverComponent extends TabComponent
             $name = $root->getContentObject()->get_title();
         }
         
-        if ($root->getStep() == $this->getCurrentLearningPathTreeNode()->getStep())
+        if ($root->getId() == $this->getCurrentLearningPathTreeNode()->getId())
         {
             $node_disabled = true;
         }
@@ -268,12 +260,7 @@ class MoverComponent extends TabComponent
         {
             $content_object = $child->getContentObject();
             
-            if (! $content_object instanceof ComplexContentObjectSupport || ! $content_object instanceof LearningPath)
-            {
-                continue;
-            }
-            
-            if ($child->getStep() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getStep())
+            if ($child->getId() == $this->getCurrentLearningPathTreeNode()->getParentNode()->getId())
             {
                 $name = $content_object->get_title() . ' (' . Translation::get('Current') . ')';
             }
@@ -282,7 +269,7 @@ class MoverComponent extends TabComponent
                 $name = $content_object->get_title();
             }
             
-            if ($child->getStep() == $this->getCurrentLearningPathTreeNode()->getStep())
+            if ($child->getId() == $this->getCurrentLearningPathTreeNode()->getId())
             {
                 $child_node_disabled = true;
             }
@@ -292,7 +279,7 @@ class MoverComponent extends TabComponent
             }
             $name = str_repeat('--', $level) . ' ' . $name;
             
-            $parents[$child->getStep()] = array($name, $child_node_disabled);
+            $parents[$child->getId()] = array($name, $child_node_disabled);
             
             $parents = $this->get_children_from_node($child, $child_node_disabled, $parents, $level + 1);
         }
@@ -306,6 +293,6 @@ class MoverComponent extends TabComponent
      */
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP);
+        return array(self::PARAM_CHILD_ID);
     }
 }

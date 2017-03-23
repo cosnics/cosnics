@@ -37,7 +37,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
+        $this->validateSelectedLearningPathChild();
 
         if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
@@ -93,9 +93,11 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 
                 try
                 {
-                    $learningPathChildService->addContentObjectToLearningPath(
-                        $this->getCurrentLearningPathTreeNode(), $object
+                    $learningPathChild = $learningPathChildService->addContentObjectToLearningPath(
+                        $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $object
                     );
+
+                    $nextStep = $learningPathChild->getId();
 
                     Event::trigger(
                         'Activity',
@@ -117,27 +119,9 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                 }
             }
 
-            if (count($object_ids) > 0 && !$failures)
+            if(!isset($nextStep))
             {
-                $parentContentObjectIds = $this->getCurrentLearningPathTreeNode()->getPathAsContentObjectIds();
-
-                if (count($object_ids) == 1)
-                {
-                    $parentContentObjectIds[] = $object_ids[0];
-                }
-
-                $learningPathTree = $this->recalculateLearningPathTree();
-
-                $learningPathTreeNode =
-                    $learningPathTree->getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
-                        $parentContentObjectIds
-                    );
-
-                $next_step = $learningPathTreeNode->getStep();
-            }
-            else
-            {
-                $next_step = $this->get_current_step();
+                $nextStep = $this->getCurrentLearningPathChildId();
             }
 
             if ($failures)
@@ -170,7 +154,9 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                     Utilities::COMMON_LIBRARIES
                 ),
                 ($failures ? true : false),
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_STEP => $next_step)
+                array(
+                    self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep
+                )
             );
         }
     }
@@ -195,7 +181,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID, self::PARAM_CREATE_MODE,);
+        return array(self::PARAM_CHILD_ID, self::PARAM_CREATE_MODE);
     }
 
     /**
