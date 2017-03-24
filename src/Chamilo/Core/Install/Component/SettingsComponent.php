@@ -77,7 +77,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     {
         if (! isset($this->settingsForm))
         {
-            $this->settingsForm = new SettingsForm($this, $this->get_url());
+            $this->settingsForm = new SettingsForm($this, $this->get_url(array(self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))));
         }
 
         return $this->settingsForm;
@@ -101,7 +101,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
             new Button(
                 Translation::get('Install'),
                 new BootstrapGlyph('ok'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM)),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM, self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
                 Button::DISPLAY_ICON_AND_LABEL,
                 false,
                 'btn-success'));

@@ -169,7 +169,7 @@
             <setting
                 name="allow_user_quick_change_platform_language"
                 field="toggle"
-                default="0">
+                default="1">
                 <options type="static">
                     <option
                         name="allow_user_quick_change_platform_language"

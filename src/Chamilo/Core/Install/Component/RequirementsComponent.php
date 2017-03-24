@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Support\Diagnoser;
 use Chamilo\Libraries\Support\DiagnoserCellRenderer;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -63,13 +64,13 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
             new Button(
                 Translation::get('Refresh', null, Utilities::COMMON_LIBRARIES), 
                 new BootstrapGlyph('refresh'), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS))));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS, self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)))));
         
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Next', null, Utilities::COMMON_LIBRARIES), 
                 new BootstrapGlyph('chevron-right'), 
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_LICENSE)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_LICENSE, self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
                 Button::DISPLAY_ICON_AND_LABEL, 
                 false, 
                 'btn-primary'));
