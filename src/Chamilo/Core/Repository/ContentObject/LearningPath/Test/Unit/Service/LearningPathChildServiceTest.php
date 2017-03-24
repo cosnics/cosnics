@@ -5,7 +5,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildValidator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
@@ -25,11 +24,6 @@ class LearningPathChildServiceTest extends Test
     protected $learningPathChildRepositoryMock;
 
     /**
-     * @var LearningPathChildValidator | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $learningPathChildValidatorMock;
-
-    /**
      * The subject under test
      *
      * @var LearningPathChildService
@@ -45,12 +39,8 @@ class LearningPathChildServiceTest extends Test
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->learningPathChildValidatorMock = $this->getMockBuilder(LearningPathChildValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->learningPathChildService =
-            new LearningPathChildService($this->learningPathChildRepositoryMock, $this->learningPathChildValidatorMock);
+            new LearningPathChildService($this->learningPathChildRepositoryMock);
     }
 
     /**
@@ -59,7 +49,6 @@ class LearningPathChildServiceTest extends Test
     protected function tearDown()
     {
         unset($this->learningPathChildRepositoryMock);
-        unset($this->learningPathChildValidatorMock);
         unset($this->learningPathChildService);
     }
 
@@ -130,10 +119,6 @@ class LearningPathChildServiceTest extends Test
         LearningPathTreeNode $parentLearningPathTreeNode, ContentObject $childContentObject, $returnValue = true
     )
     {
-        $this->learningPathChildValidatorMock->expects($this->once())
-            ->method('canContentObjectBeAdded')
-            ->with($parentLearningPathTreeNode, $childContentObject)
-            ->will($this->returnValue($returnValue));
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildValidator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -238,24 +237,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * Returns the LearningPathTreeBuilder service
      *
-     * @return LearningPathTreeBuilder
+     * @return LearningPathTreeBuilder | object
      */
     protected function getLearningPathTreeBuilder()
     {
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
-        );
-    }
-
-    /**
-     * Returns the LearningPathChildValidator service
-     *
-     * @return LearningPathChildValidator
-     */
-    protected function getLearningPathChildValidator()
-    {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_validator'
         );
     }
 

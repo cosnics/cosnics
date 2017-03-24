@@ -21,23 +21,13 @@ class LearningPathChildService
     protected $learningPathChildRepository;
 
     /**
-     * @var LearningPathChildValidator
-     */
-    protected $learningPathChildValidator;
-
-    /**
      * LearningPathChildService constructor.
      *
      * @param LearningPathChildRepository $learningPathChildRepository
-     * @param LearningPathChildValidator $learningPathChildValidator
      */
-    public function __construct(
-        LearningPathChildRepository $learningPathChildRepository,
-        LearningPathChildValidator $learningPathChildValidator
-    )
+    public function __construct(LearningPathChildRepository $learningPathChildRepository)
     {
         $this->learningPathChildRepository = $learningPathChildRepository;
-        $this->learningPathChildValidator = $learningPathChildValidator;
     }
 
     /**

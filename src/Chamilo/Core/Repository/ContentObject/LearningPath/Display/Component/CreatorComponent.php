@@ -168,11 +168,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     private function detemine_excluded_content_object_ids()
     {
-        $learningPathChildValidator = $this->getLearningPathChildValidator();
-
-        return $learningPathChildValidator->getContentObjectIdsThatCanNotBeAddedTo(
-            $this->getCurrentLearningPathTreeNode()
-        );
+        return array();
     }
 
     /**
