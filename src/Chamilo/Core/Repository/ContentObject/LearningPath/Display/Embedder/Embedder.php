@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -96,7 +96,7 @@ abstract class Embedder
     {
         $attempt_data = $this->get_node()->get_current_attempt();
 
-        $attempt_data->set_status(AbstractItemAttempt::STATUS_COMPLETED);
+        $attempt_data->set_status(LearningPathChildAttempt::STATUS_COMPLETED);
         $attempt_data->update();
 
         $this->get_node()->recalculateIsCompleted();

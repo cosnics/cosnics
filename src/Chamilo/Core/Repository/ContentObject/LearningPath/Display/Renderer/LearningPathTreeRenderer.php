@@ -134,11 +134,24 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
      *
      * @return \string[]
      */
-    public function getMenuItem(LearningPathTreeNode $node)
+    public function getMenuItem(LearningPathTreeNode $node, $counter = 1, $prefix = '')
     {
         $application = $this->getApplication();
 
-        $menuItem['text'] = $node->getContentObject()->get_title();
+        $title = $node->getContentObject()->get_title();
+
+        if($prefix)
+        {
+            $prefix = $prefix . '.' . $counter;
+        }
+        else
+        {
+            $prefix = $counter;
+        }
+
+        $title = $prefix . '. ' . $title;
+
+        $menuItem['text'] = $title;
         $menuItem['icon'] = $this->getItemIcon($node);
 
         if ($application->get_parent()->is_allowed_to_view_content_object($node))
@@ -171,9 +184,11 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
 
             $children = $node->getChildNodes();
 
+            $counter = 1;
             foreach ($children as $child)
             {
-                $menuItem['nodes'][] = $this->getMenuItem($child);
+                $menuItem['nodes'][] = $this->getMenuItem($child, $counter, $prefix);
+                $counter++;
             }
         }
 

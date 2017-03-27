@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -85,7 +85,7 @@ class ViewerComponent extends TabComponent
 
         $learning_path_item_attempt = $this->get_current_node()->get_current_attempt();
 
-        if (!$learning_path_item_attempt instanceof AbstractItemAttempt)
+        if (!$learning_path_item_attempt instanceof LearningPathChildAttempt)
         {
             $learning_path_item_attempt = $this->get_parent()->create_learning_path_item_tracker(
                 $this->learning_path_trackers[self::TRACKER_LEARNING_PATH],
@@ -195,7 +195,7 @@ class ViewerComponent extends TabComponent
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
                 );
                 $component = $factory->getComponent(null, false);
-                $component->get_node_tabs($primaryActions, $secondaryActions, $this->get_current_node());
+                $component->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentLearningPathTreeNode());
             }
             catch (\Exception $exception)
             {

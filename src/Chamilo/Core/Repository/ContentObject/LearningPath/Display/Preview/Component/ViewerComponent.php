@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\Assessme
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
@@ -119,7 +119,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $current_node = $this->get_current_node();
         $item_attempt = $current_node->get_current_attempt();
         
-        if (! $item_attempt instanceof AbstractItemAttempt)
+        if (! $item_attempt instanceof LearningPathChildAttempt)
         {
             return;
         }
@@ -134,11 +134,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
             
             if ($mastery_score)
             {
-                $status = ($total_score >= $mastery_score) ? AbstractItemAttempt::STATUS_PASSED : AbstractItemAttempt::STATUS_FAILED;
+                $status = ($total_score >= $mastery_score) ? LearningPathChildAttempt::STATUS_PASSED : LearningPathChildAttempt::STATUS_FAILED;
             }
             else
             {
-                $status = AbstractItemAttempt::STATUS_COMPLETED;
+                $status = LearningPathChildAttempt::STATUS_COMPLETED;
             }
             
             $item_attempt->set_status($status);
@@ -219,7 +219,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $attempt = PreviewStorage::getInstance()->retrieve_learning_path_attempt(
             $this->get_parent()->get_root_content_object()->get_id());
         
-        if (! $attempt instanceof AbstractAttempt)
+        if (! $attempt instanceof LearningPathAttempt)
         {
             $attempt = new DummyAttempt();
             $attempt->set_user_id($this->get_user_id());
@@ -281,7 +281,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $item_attempt->set_score(0);
         $item_attempt->set_min_score(0);
         $item_attempt->set_max_score(0);
-        $item_attempt->set_status(AbstractItemAttempt::STATUS_NOT_ATTEMPTED);
+        $item_attempt->set_status(LearningPathChildAttempt::STATUS_NOT_ATTEMPTED);
         $item_attempt->create();
         
         return $item_attempt;

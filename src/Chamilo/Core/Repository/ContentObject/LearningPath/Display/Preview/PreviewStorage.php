@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
@@ -121,10 +121,11 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractItemAttempt $item_attempt
+     * @param LearningPathChildAttempt $item_attempt
+     *
      * @return boolean
      */
-    public function create_learning_path_item_attempt(AbstractItemAttempt $item_attempt)
+    public function create_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
     {
         $attempts = $this->get_item_attempts();
         $attempts[$item_attempt->get_learning_path_attempt_id()][$item_attempt->get_learning_path_item_id()][$item_attempt->get_id()] = $item_attempt;
@@ -133,20 +134,20 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractItemAttempt $item_attempt
+     * @param LearningPathChildAttempt $item_attempt
      * @return boolean
      */
-    public function update_learning_path_item_attempt(AbstractItemAttempt $item_attempt)
+    public function update_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
     {
         return $this->create_learning_path_item_attempt($item_attempt);
     }
 
     /**
      *
-     * @param AbstractItemAttempt $item_attempt
+     * @param LearningPathChildAttempt $item_attempt
      * @return boolean
      */
-    public function delete_learning_path_item_attempt(AbstractItemAttempt $item_attempt)
+    public function delete_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
     {
         $attempts = $this->get_item_attempts();
         unset(
@@ -180,10 +181,11 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractAttempt $attempt
+     * @param LearningPathAttempt $attempt
+     *
      * @return \core\repository\content_object\learning_path\display\AbstractItemAttempt[]
      */
-    public function retrieve_learning_path_item_attempts(AbstractAttempt $attempt)
+    public function retrieve_learning_path_item_attempts(LearningPathAttempt $attempt)
     {
         $attempts = $this->get_item_attempts();
         return isset($attempts[$attempt->get_id()]) ? $attempts[$attempt->get_id()] : null;
@@ -206,10 +208,10 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractAttempt $attempt
+     * @param LearningPathAttempt $attempt
      * @return boolean
      */
-    public function create_learning_path_attempt(AbstractAttempt $attempt)
+    public function create_learning_path_attempt(LearningPathAttempt $attempt)
     {
         $attempts = $this->get_learning_path_attempts();
         $attempts[$attempt->get_content_object_id()] = $attempt;
@@ -218,20 +220,20 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractAttempt $attempt
+     * @param LearningPathAttempt $attempt
      * @return boolean
      */
-    public function update_learning_path_attempt(AbstractAttempt $attempt)
+    public function update_learning_path_attempt(LearningPathAttempt $attempt)
     {
         return $this->create_learning_path_attempt($attempt);
     }
 
     /**
      *
-     * @param AbstractAttempt $item_attempt
+     * @param LearningPathAttempt $item_attempt
      * @return boolean
      */
-    public function delete_learning_path_attempt(AbstractAttempt $attempt)
+    public function delete_learning_path_attempt(LearningPathAttempt $attempt)
     {
         $attempts = $this->get_learning_path_attempts();
         unset($attempts[$attempt->get_content_object_id()]);
@@ -265,10 +267,11 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractQuestionAttempt $question_attempt
+     * @param LearningPathQuestionAttempt $question_attempt
+     *
      * @return boolean
      */
-    public function create_learning_path_question_attempt(AbstractQuestionAttempt $question_attempt)
+    public function create_learning_path_question_attempt(LearningPathQuestionAttempt $question_attempt)
     {
         $attempts = $this->get_question_attempts();
         $attempts[$question_attempt->get_item_attempt_id()][$question_attempt->get_question_complex_id()] = $question_attempt;
@@ -277,20 +280,20 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractQuestionAttempt $question_attempt
+     * @param LearningPathQuestionAttempt $question_attempt
      * @return boolean
      */
-    public function update_learning_path_question_attempt(AbstractQuestionAttempt $question_attempt)
+    public function update_learning_path_question_attempt(LearningPathQuestionAttempt $question_attempt)
     {
         return $this->create_learning_path_question_attempt($question_attempt);
     }
 
     /**
      *
-     * @param AbstractQuestionAttempt $item_attempt
+     * @param LearningPathQuestionAttempt $item_attempt
      * @return boolean
      */
-    public function delete_learning_path_question_attempt(AbstractQuestionAttempt $question_attempt)
+    public function delete_learning_path_question_attempt(LearningPathQuestionAttempt $question_attempt)
     {
         $attempts = $this->get_question_attempts();
         unset($attempts[$question_attempt->get_item_attempt_id()][$question_attempt->get_question_complex_id()]);
@@ -299,10 +302,10 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractItemAttempt $attempt
+     * @param LearningPathChildAttempt $attempt
      * @return \core\repository\content_object\learning_path\display\DummyQuestionAttempt[]
      */
-    public function retrieve_learning_path_question_attempts(AbstractItemAttempt $attempt)
+    public function retrieve_learning_path_question_attempts(LearningPathChildAttempt $attempt)
     {
         $attempts = $this->get_question_attempts();
         return isset($attempts[$attempt->get_id()]) ? $attempts[$attempt->get_id()] : null;
@@ -310,11 +313,11 @@ class PreviewStorage
 
     /**
      *
-     * @param AbstractItemAttempt $attempt
+     * @param LearningPathChildAttempt $attempt
      * @param int $complex_question_id
      * @return \core\repository\content_object\learning_path\display\DummyQuestionAttempt
      */
-    public function retrieve_learning_path_question_attempt(AbstractItemAttempt $attempt, $complex_question_id)
+    public function retrieve_learning_path_question_attempt(LearningPathChildAttempt $attempt, $complex_question_id)
     {
         $attempts = $this->get_question_attempts();
         if (isset($attempts[$attempt->get_id()]))

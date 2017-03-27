@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractAttempt;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LearningPathAttempt extends AbstractAttempt
+class LearningPathAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt
 {
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -19,29 +20,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathChildRepository
+class LearningPathChildRepository extends CommonDataClassRepository
 {
-    /**
-     * @var DataClassRepository
-     */
-    protected $dataClassRepository;
-
-    /**
-     * LearningPathChildRepository constructor.
-     *
-     * @param DataClassRepository $dataClassRepository
-     */
-    public function __construct(DataClassRepository $dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
     /**
      * Retrieves the learning path children for a given learning path
      *
      * @param LearningPath $learningPath
      *
-     * @return LearningPathChild[]
+     * @return LearningPathChild[] | DataClassIterator
      */
     public function retrieveLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
@@ -108,39 +94,5 @@ class LearningPathChildRepository
         return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
             LearningPathChild::class_name()
         );
-    }
-
-    /*****************************************************************************************************************
-     * Fallback functionality for dataclass methods                                                                  *
-     *****************************************************************************************************************/
-
-    /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
-     */
-    public function create(DataClass $dataClass)
-    {
-        return $dataClass->create();
-    }
-
-    /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
-     */
-    public function update(DataClass $dataClass)
-    {
-        return $dataClass->update();
-    }
-
-    /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
-     */
-    public function delete(DataClass $dataClass)
-    {
-        return $dataClass->delete();
     }
 }

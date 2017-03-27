@@ -1,7 +1,9 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -13,49 +15,77 @@ abstract class Manager extends Application
 {
     // Parameters
     const PARAM_ACTION = 'type_action';
-    
+
     // Actions
     const ACTION_MASTERY = 'Mastery';
     const ACTION_CONFIGURE = 'Configurer';
     const ACTION_BUILDER = 'Builder';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_MASTERY;
 
-    public function get_node_tabs(ButtonGroup $primaryActions, ButtonGroup $secondaryActions, 
-        ComplexContentObjectPathNode $node)
+    public function get_node_tabs(
+        ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
+        LearningPathTreeNode $node
+    )
     {
-        if ($this->get_parent()->canEditComplexContentObjectPathNode($node))
+        if ($this->get_parent()->canEditLearningPathTreeNode($node))
         {
             $secondaryActions->addButton(
                 new Button(
-                    Translation::get('SetMasteryScore'), 
-                    new BootstrapGlyph('signal'), 
+                    Translation::get('SetMasteryScore'),
+                    new BootstrapGlyph('signal'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC, 
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $this->get_application()->get_current_content_object()->getId(), 
-                            self::PARAM_ACTION => self::ACTION_MASTERY))));
-            
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $node->getContentObject()->getId(),
+                            self::PARAM_ACTION => self::ACTION_MASTERY
+                        )
+                    )
+                )
+            );
+
             $secondaryActions->addButton(
                 new Button(
-                    Translation::get('ConfigureAssessment'), 
-                    new BootstrapGlyph('wrench'), 
+                    Translation::get('ConfigureAssessment'),
+                    new BootstrapGlyph('wrench'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC, 
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $this->get_application()->get_current_content_object()->getId(), 
-                            self::PARAM_ACTION => self::ACTION_CONFIGURE))));
-            
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $node->getContentObject()->getId(),
+                            self::PARAM_ACTION => self::ACTION_CONFIGURE
+                        )
+                    )
+                )
+            );
+
             $primaryActions->addButton(
                 new Button(
-                    Translation::get('BuilderComponent'), 
-                    new FontAwesomeGlyph('cubes'), 
+                    Translation::get('BuilderComponent'),
+                    new FontAwesomeGlyph('cubes'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC, 
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $this->get_application()->get_current_content_object()->getId(), 
-                            self::PARAM_ACTION => self::ACTION_BUILDER))));
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $node->getContentObject()->getId(),
+                            self::PARAM_ACTION => self::ACTION_BUILDER
+                        )
+                    )
+                )
+            );
         }
+    }
+
+    /**
+     * @return LearningPathTreeNode
+     */
+    public function getCurrentLearningPathTreeNode()
+    {
+        return $this->get_application()->getCurrentLearningPathTreeNode();
     }
 }

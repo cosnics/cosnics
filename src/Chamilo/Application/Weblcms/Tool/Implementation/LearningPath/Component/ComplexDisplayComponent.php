@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
@@ -14,10 +15,11 @@ use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -65,7 +67,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
-        if(empty($publication_id))
+        if (empty($publication_id))
         {
             throw new NoObjectSelectedException($contentObjectPublicationTranslation);
         }
@@ -377,12 +379,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         if ($mastery_score)
         {
-            $status = ($total_score >= $mastery_score) ? AbstractItemAttempt::STATUS_PASSED :
-                AbstractItemAttempt::STATUS_FAILED;
+            $status = ($total_score >= $mastery_score) ? LearningPathChildAttempt::STATUS_PASSED :
+                LearningPathChildAttempt::STATUS_FAILED;
         }
         else
         {
-            $status = AbstractItemAttempt::STATUS_COMPLETED;
+            $status = LearningPathChildAttempt::STATUS_COMPLETED;
         }
 
         $currentAttempt->set_status($status);
@@ -431,15 +433,62 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
     }
 
+    /**
+     * Returns the currently selected learning path child id from the request
+     *
+     * @return int
+     */
+    public function getCurrentLearningPathChildId()
+    {
+        return (int) $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
+        );
+    }
+
+    /**
+     * Returns the LearningPathTreeBuilder service
+     *
+     * @return LearningPathTreeBuilder | object
+     */
+    protected function getLearningPathTreeBuilder()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+        );
+    }
+
+    /**
+     * Returns the LearningPathTree for the current learning path root
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     */
+    protected function getLearningPathTree()
+    {
+        if (!isset($this->learningPathTree))
+        {
+            $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
+                $this->publication->get_content_object()
+            );
+        }
+
+        return $this->learningPathTree;
+    }
+
+    /**
+     * Returns the LearningPathTreeNode for the current step
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     */
+    public function getCurrentLearningPathTreeNode()
+    {
+        $learningPathTree = $this->getLearningPathTree();
+
+        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+    }
+
     public function get_assessment_configuration()
     {
-        $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
-        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $complex_content_object_item->get_ref()
-        );
-
-        return $learning_path_item->get_configuration();
+        return $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
     }
 
     public function get_assessment_parameters()
@@ -447,7 +496,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
             \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
         );
     }
 
@@ -643,7 +692,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function is_allowed_to_edit_content_object()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-        $this->publication->get_allow_collaboration();
+            $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()

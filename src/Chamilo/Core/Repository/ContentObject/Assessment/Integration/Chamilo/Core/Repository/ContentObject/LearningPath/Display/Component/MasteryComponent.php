@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -18,16 +19,13 @@ class MasteryComponent extends Manager
 
     public function run()
     {
-        $selected_complex_content_object_item = $this->get_application()->get_current_node()->get_complex_content_object_item();
-        $lp_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
-            $selected_complex_content_object_item->get_ref());
-        
-        $form = $this->get_form($this->get_url(), $lp_item);
+        $learningPathChild = $this->getCurrentLearningPathTreeNode()->getLearningPathChild();
+
+        $form = $this->get_form($this->get_url(), $learningPathChild);
         
         if ($form->validate())
         {
-            $succes = $this->set_mastery_score($lp_item, $form->exportValues());
+            $succes = $this->set_mastery_score($learningPathChild, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
             $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
         }
@@ -43,13 +41,7 @@ class MasteryComponent extends Manager
         }
     }
 
-    /**
-     *
-     * @param string $url
-     * @param \core\repository\content_object\learning_path_item\LearningPathItem $lp_item
-     * @return \libraries\format\FormValidator
-     */
-    public function get_form($url, $lp_item)
+    public function get_form($url, LearningPathChild $learningPathChild)
     {
         $form = new FormValidator('mastery_score', 'post', $url);
         
@@ -59,9 +51,9 @@ class MasteryComponent extends Manager
         
         $form->addElement('select', 'mastery_score', Translation::get('MasteryScore'), $values);
         
-        if ($lp_item->get_mastery_score())
+        if ($learningPathChild->getMasteryScore())
         {
-            $form->setDefaults(array('mastery_score' => $lp_item->get_mastery_score()));
+            $form->setDefaults(array('mastery_score' => $learningPathChild->getMasteryScore()));
         }
         
         $buttons[] = $form->createElement('style_submit_button', 'submit', Translation::get('SetMasteryScore'));
@@ -70,15 +62,9 @@ class MasteryComponent extends Manager
         return $form;
     }
 
-    /**
-     *
-     * @param \core\repository\content_object\learning_path_item\LearningPathItem $lp_item
-     * @param string[] $values
-     * @return boolean
-     */
-    public function set_mastery_score($lp_item, $values)
+    public function set_mastery_score(LearningPathChild $learningPathChild, $values)
     {
-        $lp_item->set_mastery_score($values['mastery_score']);
-        return $lp_item->update();
+        $learningPathChild->setMasteryScore((int) $values['mastery_score']);
+        return $learningPathChild->update();
     }
 }

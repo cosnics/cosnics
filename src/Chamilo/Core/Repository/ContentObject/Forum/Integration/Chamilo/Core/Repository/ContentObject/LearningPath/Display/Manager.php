@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -21,15 +22,19 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
 
+    /**
+     * @param ButtonGroup $primaryActions
+     * @param ButtonGroup $secondaryActions
+     * @param LearningPathTreeNode $node
+     */
     public function get_node_tabs(
         ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
-        ComplexContentObjectPathNode $node
+        LearningPathTreeNode $node
     )
     {
         $translator = Translation::getInstance();
 
-        /** @var ContentObject $contentObject */
-        $contentObject = $this->get_application()->get_current_content_object();
+        $contentObject = $node->getContentObject();
 
         $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
             $contentObject->getId(), $this->getUser()->getId()

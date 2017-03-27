@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractItemAttempt extends DataClass
+abstract class LearningPathChildAttempt extends DataClass
 {
     // Properties
     const PROPERTY_LEARNING_PATH_ATTEMPT_ID = 'learning_path_attempt_id';
