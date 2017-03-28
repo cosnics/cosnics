@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -137,12 +137,12 @@ class AssessmentRawResultsExporterComponent extends Manager
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt::class_name(), 
-                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ITEM_ID), 
+                LearningPathChildAttempt::class_name(),
+                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID),
             array_keys($this->complex_learning_path_item_assessment_mapper));
         
         $learning_path_item_attempts = WeblcmsTrackingDataManager::retrieves(
-            LearningPathItemAttempt::class_name(), 
+            LearningPathChildAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         $assessment_results = array();
@@ -151,7 +151,7 @@ class AssessmentRawResultsExporterComponent extends Manager
         {
             /**
              *
-             * @var LearningPathItemAttempt $learning_path_item_attempt
+             * @var LearningPathChildAttempt $learning_path_item_attempt
              */
             /**
              *
@@ -187,12 +187,12 @@ class AssessmentRawResultsExporterComponent extends Manager
      * Retrieves the question results from the learning path item attempt
      * 
      * @param AssessmentResult $assessment_result
-     * @param LearningPathItemAttempt $learning_path_item_attempt
+     * @param LearningPathChildAttempt $learning_path_item_attempt
      *
      * @return QuestionResult[]
      */
     protected function get_question_results_from_learning_path_item_attempt(AssessmentResult $assessment_result, 
-        LearningPathItemAttempt $learning_path_item_attempt)
+        LearningPathChildAttempt $learning_path_item_attempt)
     {
         $question_results = array();
         

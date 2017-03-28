@@ -196,3 +196,7 @@ DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repositor
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Blog\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Announcement\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
+
+ALTER TABLE `tracking_weblcms_learning_path_item_attempt` RENAME `tracking_weblcms_learning_path_child_attempt`;
+ALTER TABLE `tracking_weblcms_learning_path_attempt` ADD `publication_id` INT(10) UNSIGNED NOT NULL AFTER `learning_path_id`;
+

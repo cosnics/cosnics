@@ -145,4 +145,12 @@ abstract class LearningPathChildAttempt extends DataClass
     {
         $this->set_default_property(self::PROPERTY_MAX_SCORE, $max_score);
     }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->get_status() == self::STATUS_COMPLETED || $this->get_status() == self::STATUS_PASSED;
+    }
 }

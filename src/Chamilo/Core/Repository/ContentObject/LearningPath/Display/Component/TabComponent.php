@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -33,34 +34,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
         );
     }
 
-//    public function get_mastery_score_url($selected_complex_content_object_item)
-//    {
-//        $complex_content_object_item_id =
-//            ($this->get_complex_content_object_item()) ? ($this->get_complex_content_object_item()->get_id()) : null;
-//
-//        return $this->get_url(
-//            array(
-//                self::PARAM_ACTION => self::ACTION_SET_MASTERY_SCORE,
-//                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
-//                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item
-//            )
-//        );
-//    }
-//
-//    public function get_configuration_url($selected_complex_content_object_item)
-//    {
-//        $complex_content_object_item_id =
-//            ($this->get_complex_content_object_item()) ? ($this->get_complex_content_object_item()->get_id()) : null;
-//
-//        return $this->get_url(
-//            array(
-//                self::PARAM_ACTION => self::ACTION_CONFIGURE_FEEDBACK,
-//                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
-//                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item
-//            )
-//        );
-//    }
-
     public function run()
     {
         $learning_path = $this->get_parent()->get_root_content_object();
@@ -73,14 +46,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
         }
 
         $this->learning_path_menu = new LearningPathTreeRenderer(
-            $this->getLearningPathTree(), $this, $this->get_parent()->get_learning_path_tree_menu_url(),
-            'learning-path-menu'
+            $this->getLearningPathTree(), $this,
+            $this->getLearningPathTrackingService(),
+            $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
         );
 
-        $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
-
         $parentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
-        foreach($parentNodes as $parentNode)
+        foreach ($parentNodes as $parentNode)
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_CHILD_ID] = $parentNode->getId();
@@ -285,11 +257,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
     /**
      * Renders the progress bar for the learning path
      *
-     * @return array() HTML code of the progress bar
+     * @return string
      */
     private function get_progress_bar()
     {
-        $progress = $this->get_complex_content_object_path()->get_progress();
+        $progress = $this->getLearningPathTrackingService()->getLearningPathProgress(
+            $this->get_root_content_object(), $this->getUser()
+        );
 
         return $this->render_progress_bar($progress);
     }

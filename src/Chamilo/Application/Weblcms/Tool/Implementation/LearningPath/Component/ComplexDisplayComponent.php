@@ -3,22 +3,24 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -177,7 +179,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     /**
      *
-     * @see \application\weblcms\tool\Manager::render_header()
      */
     public function render_header()
     {
@@ -237,7 +238,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learning_path_tracker = new LearningPathAttempt();
             $learning_path_tracker->set_user_id($this->get_user_id());
             $learning_path_tracker->set_course_id($this->get_course_id());
-            $learning_path_tracker->set_learning_path_id($this->get_publication()->get_id());
+            $learning_path_tracker->set_publication_id($this->get_publication()->get_id());
             $learning_path_tracker->set_progress(0);
             $learning_path_tracker->create();
 
@@ -253,14 +254,14 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt::class_name(),
-                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+                LearningPathChildAttempt::class_name(),
+                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($learning_path_tracker->get_id())
         );
 
         $attempts = DataManager::retrieves(
-            LearningPathItemAttempt::class_name(),
+            LearningPathChildAttempt::class_name(),
             new DataClassRetrievesParameters($condition)
         );
 
@@ -310,7 +311,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function create_learning_path_item_tracker($learning_path_tracker, $current_complex_content_object_item)
     {
-        $item_attempt = new LearningPathItemAttempt();
+        $item_attempt = new LearningPathChildAttempt();
         $item_attempt->set_learning_path_attempt_id($learning_path_tracker->get_id());
         $item_attempt->set_learning_path_item_id($current_complex_content_object_item->get_id());
         $item_attempt->set_start_time(time());
@@ -318,7 +319,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $item_attempt->set_score(0);
         $item_attempt->set_min_score(0);
         $item_attempt->set_max_score(0);
-        $item_attempt->set_status(LearningPathItemAttempt::STATUS_NOT_ATTEMPTED);
+        $item_attempt->set_status(LearningPathChildAttempt::STATUS_NOT_ATTEMPTED);
         $item_attempt->create();
 
         return $item_attempt;
@@ -722,7 +723,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     /**
      *
-     * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::is_allowed_to_edit_learning_path_attempt_data()
      */
     public function is_allowed_to_edit_learning_path_attempt_data()
     {
@@ -731,11 +731,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     /**
      *
-     * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::retrieve_learning_path_item_attempt()
      */
     public function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return DataManager::retrieve_by_id(LearningPathItemAttempt::class_name(), $learning_path_item_attempt_id);
+        return DataManager::retrieve_by_id(LearningPathChildAttempt::class_name(), $learning_path_item_attempt_id);
     }
 
     /**
@@ -757,5 +756,29 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 )
             );
         }
+    }
+
+    /**
+     * Builds the LearningPathTrackingService
+     *
+     * @return LearningPathTrackingService
+     */
+    public function buildLearningPathTrackingService()
+    {
+        $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
+
+        return $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
+            new LearningPathTrackingParameters((int) $this->get_course_id(), (int) $this->publication->getId())
+        );
+    }
+
+    /**
+     * @return LearningPathTrackingServiceBuilder | object
+     */
+    protected function getLearningPathTrackingServiceBuilder()
+    {
+        return new LearningPathTrackingServiceBuilder(
+            $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository')
+        );
     }
 }

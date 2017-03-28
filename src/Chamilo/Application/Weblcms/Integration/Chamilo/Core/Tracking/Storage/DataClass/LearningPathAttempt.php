@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
@@ -14,20 +15,23 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LearningPathAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt
+class LearningPathAttempt
+    extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt
 {
     const PROPERTY_COURSE_ID = 'course_id';
-    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
+    const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
      *
      * @param string[] $extended_property_names
+     *
      * @return string[]
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         $extended_property_names[] = self::PROPERTY_COURSE_ID;
-        $extended_property_names[] = self::PROPERTY_LEARNING_PATH_ID;
+        $extended_property_names[] = self::PROPERTY_PUBLICATION_ID;
+
         return parent::get_default_property_names($extended_property_names);
     }
 
@@ -53,18 +57,18 @@ class LearningPathAttempt extends \Chamilo\Core\Repository\ContentObject\Learnin
      *
      * @return int
      */
-    public function get_learning_path_id()
+    public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
      *
-     * @param int $learning_path_id
+     * @param int $publication_id
      */
-    public function set_learning_path_id($learning_path_id)
+    public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learning_path_id);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -74,22 +78,25 @@ class LearningPathAttempt extends \Chamilo\Core\Repository\ContentObject\Learnin
     public function delete()
     {
         $succes = parent::delete();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt::class_name(), 
-                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
+                LearningPathChildAttempt::class_name(),
+                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+            ),
+            new StaticConditionVariable($this->getId())
+        );
+
         $trackers = DataManager::retrieves(
-            LearningPathItemAttempt::class_name(), 
-            new DataClassRetrievesParameters($condition));
-        
+            LearningPathChildAttempt::class_name(),
+            new DataClassRetrievesParameters($condition)
+        );
+
         while ($tracker = $trackers->next_result())
         {
             $succes &= $tracker->delete();
         }
-        
+
         return $succes;
     }
 }

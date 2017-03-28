@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Application\Weblcms\Service\Interfaces\PublicationServiceInterface;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
@@ -120,14 +120,14 @@ class LearningPathProgressFixer
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt::class_name(),
-                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+                LearningPathChildAttempt::class_name(),
+                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($learningPathAttempt->getId())
         );
 
         $learningPathItemAttemptResultSet = DataManager::retrieves(
-            LearningPathItemAttempt::class_name(),
+            LearningPathChildAttempt::class_name(),
             new DataClassRetrievesParameters($condition)
         );
 

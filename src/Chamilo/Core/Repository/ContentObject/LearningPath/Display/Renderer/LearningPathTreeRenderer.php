@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\BootstrapTreeMenu;
@@ -19,23 +21,37 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class LearningPathTreeRenderer extends BootstrapTreeMenu
 {
     /**
+     * @var LearningPath
+     */
+    protected $learningPath;
+
+    /**
      * @var LearningPathTree
      */
     protected $learningPathTree;
 
     /**
+     * @var LearningPathTrackingService
+     */
+    protected $learningPathTrackingService;
+
+    /**
      *
      * @param LearningPathTree $learningPathTree
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param LearningPathTrackingService $learningPathTrackingService
      * @param string $treeMenuUrl
      * @param string $menuName
      */
     public function __construct(
         LearningPathTree $learningPathTree, Application $application,
+        LearningPathTrackingService $learningPathTrackingService,
         $treeMenuUrl, $menuName = 'bootstrap-tree-menu'
     )
     {
         $this->learningPathTree = $learningPathTree;
+        $this->learningPath = $learningPathTree->getRoot()->getContentObject();
+        $this->learningPathTrackingService = $learningPathTrackingService;
 
         parent::__construct($application, $treeMenuUrl, $menuName);
     }
@@ -57,11 +73,14 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
     {
         if ($this->getApplication()->get_parent()->is_allowed_to_view_content_object($node))
         {
-//            if ($node->is_completed())
-//            {
-//                return 'type_completed';
-//            }
-//            else
+            if ($this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                $this->learningPath, $this->getApplication()->getUser(), $node
+            )
+            )
+            {
+                return 'type_completed';
+            }
+            else
             {
                 $objectType = (string) StringUtilities::getInstance()->createString(
                     ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
@@ -140,7 +159,7 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
 
         $title = $node->getContentObject()->get_title();
 
-        if($prefix)
+        if ($prefix)
         {
             $prefix = $prefix . '.' . $counter;
         }
@@ -168,14 +187,14 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
             $menuItem['state'] = array('selected' => true);
         }
 
-        if($node == $this->getApplication()->getCurrentLearningPathTreeNode())
+        if ($node == $this->getApplication()->getCurrentLearningPathTreeNode())
         {
             $menuItem['state']['expanded'] = true;
         }
 
         if ($node->hasChildNodes())
         {
-            if(in_array($this->getApplication()->getCurrentLearningPathTreeNode(), $node->getDescendantNodes()))
+            if (in_array($this->getApplication()->getCurrentLearningPathTreeNode(), $node->getDescendantNodes()))
             {
                 $menuItem['state']['expanded'] = true;
             }
@@ -188,7 +207,7 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
             foreach ($children as $child)
             {
                 $menuItem['nodes'][] = $this->getMenuItem($child, $counter, $prefix);
-                $counter++;
+                $counter ++;
             }
         }
 

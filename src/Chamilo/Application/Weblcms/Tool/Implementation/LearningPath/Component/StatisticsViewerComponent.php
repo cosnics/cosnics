@@ -248,12 +248,12 @@ class StatisticsViewerComponent extends Manager
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($learning_path_attempt->get_id()));
         
         $item_attempts = DataManager::retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($item_attempt = $item_attempts->next_result())
@@ -305,7 +305,7 @@ class StatisticsViewerComponent extends Manager
         }
         
         $item_attempt = DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
             $learning_path_item_attempt_id);
         $item_attempt->delete();
         
@@ -336,20 +336,20 @@ class StatisticsViewerComponent extends Manager
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ITEM_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID),
             new StaticConditionVariable($item_id));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($lp_attempt_id));
         
         $condition = new AndCondition($conditions);
         
         $item_attempts = DataManager::retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($item_attempt = $item_attempts->next_result())
@@ -429,7 +429,7 @@ class StatisticsViewerComponent extends Manager
     public function change_total_score($total_score)
     {
         $item_attempt = DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt::class_name(), 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name(),
             Request::get('details'));
         $item_attempt->set_score($total_score);
         $item_attempt->update();

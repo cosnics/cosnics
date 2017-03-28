@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
@@ -23,13 +25,191 @@ class LearningPathTrackingService
     protected $learningPathTrackingRepository;
 
     /**
+     * @var LearningPathTrackingParametersInterface
+     */
+    protected $learningPathTrackingParameters;
+
+    /**
+     * @var LearningPathAttempt[][]
+     */
+    protected $learningPathAttemptCache;
+
+    /**
+     * @var LearningPathChildAttempt[][]
+     */
+    protected $activeLearningPathChildAttemptCache;
+
+    /**
+     * @var LearningPathChildAttempt[][][]
+     */
+    protected $learningPathChildAttemptsForLearningPathAttemptCache;
+
+    /**
      * LearningPathTrackingService constructor.
      *
      * @param LearningPathTrackingRepository $learningPathTrackingRepository
+     * @param LearningPathTrackingParametersInterface $learningPathTrackingParameters
      */
-    public function __construct(LearningPathTrackingRepository $learningPathTrackingRepository)
+    public function __construct(
+        LearningPathTrackingRepository $learningPathTrackingRepository,
+        LearningPathTrackingParametersInterface $learningPathTrackingParameters
+    )
     {
         $this->learningPathTrackingRepository = $learningPathTrackingRepository;
+        $this->learningPathTrackingParameters = $learningPathTrackingParameters;
+    }
+
+    /**
+     * Tracks an attempt for a given user
+     *
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param User $user
+     */
+    public function trackAttemptForUser(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, User $user
+    )
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+
+        $this->getOrCreateActiveLearningPathChildAttempt(
+            $learningPathAttempt, $learningPathTreeNode
+        );
+    }
+
+    /**
+     * Change the status of a given learning path tree node
+     *
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param User $user
+     * @param string $newStatus
+     */
+    public function changeActiveAttemptStatus(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, User $user,
+        $newStatus = LearningPathChildAttempt::STATUS_COMPLETED
+    )
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $activeAttempt = $this->getOrCreateActiveLearningPathChildAttempt(
+            $learningPathAttempt, $learningPathTreeNode
+        );
+
+        $activeAttempt->set_status($newStatus);
+        $this->learningPathTrackingRepository->update($activeAttempt);
+
+        if ($activeAttempt->isFinished())
+        {
+            $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+        }
+    }
+
+    /**
+     * Calculates and stores the total time for the active attempt of the given learning path three node for a given
+     * user
+     *
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param User $user
+     */
+    public function setActiveAttemptTotalTime(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, User $user
+    )
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $activeAttempt = $this->getOrCreateActiveLearningPathChildAttempt(
+            $learningPathAttempt, $learningPathTreeNode
+        );
+
+        $activeAttempt->set_total_time($activeAttempt->get_total_time() + (time() - $activeAttempt->get_start_time()));
+        $this->learningPathTrackingRepository->update($activeAttempt);
+    }
+
+    /**
+     * Recalculates and updates the progress of the learning path tree
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTree $learningPathTree
+     */
+    public function recalculateLearningPathProgress(
+        LearningPath $learningPath, User $user, LearningPathTree $learningPathTree
+    )
+    {
+        $nodesCompleted = 0;
+
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+
+        foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
+        {
+            if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $learningPathTreeNode))
+            {
+                $nodesCompleted ++;
+            }
+        }
+
+        $progress = round(($nodesCompleted / count($learningPathTree->getLearningPathTreeNodes())) * 100);
+        $learningPathAttempt->set_progress($progress);
+
+        $this->learningPathTrackingRepository->update($learningPathAttempt);
+    }
+
+    /**
+     * Returns the progress for a given user in a given learning path
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     *
+     * @return int
+     */
+    public function getLearningPathProgress(LearningPath $learningPath, User $user)
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+
+        return $learningPathAttempt->get_progress();
+    }
+
+    /**
+     * Checks if a given learning path tree node is completed
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return bool
+     */
+    public function isLearningPathTreeNodeCompleted(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $learningPathChildAttempts = $this->getLearningPathChildAttempts($learningPathAttempt);
+
+        if ($learningPathTreeNode->hasChildNodes())
+        {
+            $completed = true;
+
+            foreach ($learningPathTreeNode->getChildNodes() as $childLearningPathTreeNode)
+            {
+                $completed &= $this->isLearningPathTreeNodeCompleted(
+                    $learningPath, $user, $childLearningPathTreeNode
+                );
+            }
+
+            return $completed;
+        }
+
+        $learningPathTreeNodeAttempts = $learningPathChildAttempts[$learningPathTreeNode->getId()];
+
+        foreach ($learningPathTreeNodeAttempts as $learningPathTreeNodeAttempt)
+        {
+            if ($learningPathTreeNodeAttempt->isFinished())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -40,15 +220,22 @@ class LearningPathTrackingService
      *
      * @return LearningPathAttempt
      */
-    public function getOrCreateLearningPathAttemptForUser(LearningPath $learningPath, User $user)
+    protected function getOrCreateLearningPathAttemptForUser(LearningPath $learningPath, User $user)
     {
-        $learningPathAttempt = $this->getLearningPathAttemptForUser($learningPath, $user);
-        if ($learningPathAttempt instanceof LearningPathAttempt)
+        if (!array_key_exists($learningPath->getId(), $this->learningPathAttemptCache) &&
+            !array_key_exists($user->getId(), $this->learningPathAttemptCache[$learningPath->getId()])
+        )
         {
-            return $learningPathAttempt;
+            $learningPathAttempt = $this->getLearningPathAttemptForUser($learningPath, $user);
+            if (!$learningPathAttempt instanceof LearningPathAttempt)
+            {
+                $learningPathAttempt = $this->createLearningPathAttemptForUser($learningPath, $user);
+            }
+
+            $this->learningPathAttemptCache[$learningPath->getId()][$user->getId()] = $learningPathAttempt;
         }
 
-        return $this->createLearningPathAttemptForUser($learningPath, $user);
+        return $this->learningPathAttemptCache[$learningPath->getId()][$user->getId()];
     }
 
     /**
@@ -59,7 +246,7 @@ class LearningPathTrackingService
      *
      * @return LearningPathAttempt
      */
-    public function getLearningPathAttemptForUser(LearningPath $learningPath, User $user)
+    protected function getLearningPathAttemptForUser(LearningPath $learningPath, User $user)
     {
         return $this->learningPathTrackingRepository->findLearningPathAttemptForUser($learningPath, $user);
     }
@@ -72,16 +259,15 @@ class LearningPathTrackingService
      *
      * @return LearningPathAttempt
      */
-    public function createLearningPathAttemptForUser(LearningPath $learningPath, User $user)
+    protected function createLearningPathAttemptForUser(LearningPath $learningPath, User $user)
     {
-        $learningPathAttempt = $this->createLearningPathAttemptInstance();
+        $learningPathAttempt = $this->learningPathTrackingParameters->createLearningPathAttemptInstance();
 
         $learningPathAttempt->setLearningPathId($learningPath->getId());
         $learningPathAttempt->set_user_id($user->getId());
         $learningPathAttempt->set_progress(0);
 
-        $learningPathAttempt->create();
-
+        $this->learningPathTrackingRepository->create($learningPathAttempt);
         $this->learningPathTrackingRepository->clearLearningPathAttemptCache();
 
         return $learningPathAttempt;
@@ -96,20 +282,38 @@ class LearningPathTrackingService
      *
      * @return LearningPathChildAttempt
      */
-    public function getOrCreateActiveLearningPathChildAttempt(
+    protected function getOrCreateActiveLearningPathChildAttempt(
         LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $activeLearningPathChildAttempt = $this->getActiveLearningPathChildAttempt(
-            $learningPathAttempt, $learningPathTreeNode
-        );
+        $learningPathAttemptId = $learningPathAttempt->getId();
+        $learningPathTreeNodeId = $learningPathTreeNode->getId();
 
-        if($activeLearningPathChildAttempt instanceof LearningPathChildAttempt)
+        if (!array_key_exists($learningPathAttemptId, $this->activeLearningPathChildAttemptCache) && !array_key_exists(
+                $learningPathTreeNodeId, $this->activeLearningPathChildAttemptCache[$learningPathAttemptId]
+            )
+        )
         {
-            return $activeLearningPathChildAttempt;
+            $activeLearningPathChildAttempt = $this->getActiveLearningPathChildAttempt(
+                $learningPathAttempt, $learningPathTreeNode
+            );
+
+            if ($activeLearningPathChildAttempt instanceof LearningPathChildAttempt)
+            {
+                $activeLearningPathChildAttempt->set_start_time(time());
+                $this->learningPathTrackingRepository->update($activeLearningPathChildAttempt);
+            }
+            else
+            {
+                $activeLearningPathChildAttempt =
+                    $this->createLearningPathChildAttempt($learningPathAttempt, $learningPathTreeNode);
+            }
+
+            $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$learningPathTreeNodeId] =
+                $activeLearningPathChildAttempt;
         }
 
-        return $this->createLearningPathChildAttempt($learningPathAttempt, $learningPathTreeNode);
+        return $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$learningPathTreeNodeId];
     }
 
     /**
@@ -120,7 +324,7 @@ class LearningPathTrackingService
      *
      * @return LearningPathChildAttempt
      */
-    public function getActiveLearningPathChildAttempt(
+    protected function getActiveLearningPathChildAttempt(
         LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
     )
     {
@@ -137,11 +341,11 @@ class LearningPathTrackingService
      *
      * @return LearningPathChildAttempt
      */
-    public function createLearningPathChildAttempt(
+    protected function createLearningPathChildAttempt(
         LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $learningPathChildAttempt = $this->createLearningPathChildAttemptInstance();
+        $learningPathChildAttempt = $this->learningPathTrackingParameters->createLearningPathChildAttemptInstance();
 
         $learningPathChildAttempt->set_learning_path_attempt_id($learningPathAttempt->getId());
         $learningPathChildAttempt->set_learning_path_item_id($learningPathTreeNode->getId());
@@ -151,7 +355,8 @@ class LearningPathTrackingService
         $learningPathChildAttempt->set_min_score(0);
         $learningPathChildAttempt->set_max_score(0);
         $learningPathChildAttempt->set_status(LearningPathChildAttempt::STATUS_NOT_ATTEMPTED);
-        $learningPathChildAttempt->create();
+
+        $this->learningPathTrackingRepository->create($learningPathChildAttempt);
 
         return $learningPathChildAttempt;
     }
@@ -163,19 +368,27 @@ class LearningPathTrackingService
      *
      * @return LearningPathChildAttempt[][]
      */
-    public function getLearningPathChildAttempts(LearningPathAttempt $learningPathAttempt)
+    protected function getLearningPathChildAttempts(LearningPathAttempt $learningPathAttempt)
     {
-        $learningPathChildAttempts =
-            $this->learningPathTrackingRepository->findLearningPathChildAttempts($learningPathAttempt);
-
-        $attempt_data = array();
-
-        foreach ($learningPathChildAttempts as $learningPathChildAttempt)
+        if (!array_key_exists(
+            $learningPathAttempt->getId(), $this->learningPathChildAttemptsForLearningPathAttemptCache
+        )
+        )
         {
-            $attempt_data[$learningPathChildAttempt->get_learning_path_item_id()][] = $learningPathChildAttempt;
+            $learningPathChildAttempts =
+                $this->learningPathTrackingRepository->findLearningPathChildAttempts($learningPathAttempt);
+
+            $attempt_data = array();
+
+            foreach ($learningPathChildAttempts as $learningPathChildAttempt)
+            {
+                $attempt_data[$learningPathChildAttempt->get_learning_path_item_id()][] = $learningPathChildAttempt;
+            }
+
+            $this->learningPathChildAttemptsForLearningPathAttemptCache[$learningPathAttempt->getId()] = $attempt_data;
         }
 
-        return $attempt_data;
+        return $this->learningPathChildAttemptsForLearningPathAttemptCache[$learningPathAttempt->getId()];
     }
 
     /**
@@ -185,7 +398,7 @@ class LearningPathTrackingService
      *
      * @return array
      */
-    public function getLearningPathQuestionAttempts(
+    protected function getLearningPathQuestionAttempts(
         LearningPathChildAttempt $learningPathItemAttempt
     )
     {
@@ -196,7 +409,7 @@ class LearningPathTrackingService
 
         foreach ($learningPathQuestionAttempts as $learningPathQuestionAttempt)
         {
-            $learningPathQuestionAttemptsPerQuestion[$learningPathQuestionAttempt->get_question_complex_id()] =
+            $learningPathQuestionAttemptsPerQuestion[$learningPathQuestionAttempt->get_question_complex_id()][] =
                 $learningPathQuestionAttempt;
         }
 
@@ -208,10 +421,14 @@ class LearningPathTrackingService
      *
      * @param LearningPathChildAttempt $learningPathChildAttempt
      * @param int $questionId
+     *
+     * @return LearningPathQuestionAttempt
      */
-    public function createLearningPathQuestionAttempt(LearningPathChildAttempt $learningPathChildAttempt, $questionId)
+    protected function createLearningPathQuestionAttempt(LearningPathChildAttempt $learningPathChildAttempt, $questionId
+    )
     {
-        $learningPathQuestionAttempt = $this->createLearningPathQuestionAttemptInstance();
+        $learningPathQuestionAttempt =
+            $this->learningPathTrackingParameters->createLearningPathQuestionAttemptInstance();
 
         $learningPathQuestionAttempt->set_item_attempt_id($learningPathChildAttempt->getId());
         $learningPathQuestionAttempt->set_question_complex_id($questionId);
@@ -220,42 +437,8 @@ class LearningPathTrackingService
         $learningPathQuestionAttempt->set_feedback('');
         $learningPathQuestionAttempt->set_hint(0);
 
-        $learningPathQuestionAttempt->create();
+        $this->learningPathTrackingRepository->create($learningPathQuestionAttempt);
+
+        return $learningPathQuestionAttempt;
     }
-
-    /**
-     * Creates a new instance of the LearningPathAttempt extension
-     *
-     * @return LearningPathAttempt
-     */
-    protected function createLearningPathAttemptInstance()
-    {
-        $learningPathAttempt = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt();
-
-        $learningPathAttempt->set_course_id($this->get_course_id());
-        $learningPathAttempt->set_learning_path_id($this->get_publication()->get_id());
-
-        return $learningPathAttempt;
-    }
-
-    /**
-     * Creates a new instance of the LearningPathChildAttempt extension
-     *
-     * @return LearningPathChildAttempt
-     */
-    protected function createLearningPathChildAttemptInstance()
-    {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt();
-    }
-
-    /**
-     * Creates a new instance of the LearningPathQuestionAttempt extension
-     *
-     * @return LearningPathQuestionAttempt
-     */
-    protected function createLearningPathQuestionAttemptInstance()
-    {
-        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt();
-    }
-
 }
