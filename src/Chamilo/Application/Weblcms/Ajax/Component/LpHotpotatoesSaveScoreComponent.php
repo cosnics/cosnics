@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -14,10 +14,10 @@ class LpHotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\
         $score = Request::post('score');
         
         $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            LearningPathItemAttempt::class_name(), 
+            LearningPathChildAttempt::class_name(),
             $id);
         
-        if ($attempt instanceof LearningPathItemAttempt)
+        if ($attempt instanceof LearningPathChildAttempt)
         {
             $attempt->set_score($score);
             $attempt->set_status('completed');

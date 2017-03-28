@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractQuestionAttempt;
-
 /**
  *
  * @package application\weblcms\integration\core\tracking
@@ -10,6 +8,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractQ
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LearningPathQuestionAttempt extends AbstractQuestionAttempt
+class LearningPathQuestionAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt
 {
 }

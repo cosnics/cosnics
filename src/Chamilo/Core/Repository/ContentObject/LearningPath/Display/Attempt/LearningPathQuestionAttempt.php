@@ -8,7 +8,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractQuestionAttempt extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt
+abstract class LearningPathQuestionAttempt extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt
 {
     const PROPERTY_ITEM_ATTEMPT_ID = 'item_attempt_id';
 

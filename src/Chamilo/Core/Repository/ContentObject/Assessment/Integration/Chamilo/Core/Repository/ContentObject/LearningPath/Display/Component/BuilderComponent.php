@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\C
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -20,15 +21,14 @@ class BuilderComponent extends Manager
 
     function run()
     {
-        /** @var ComplexContentObjectPathNode $complexContentObjectPathNode */
-        $complexContentObjectPathNode = $this->get_application()->get_current_node();
+        $learningPathTreeNode = $this->getCurrentLearningPathTreeNode();
         
-        if (! $this->get_application()->canEditComplexContentObjectPathNode($complexContentObjectPathNode))
+        if (! $this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
         {
             throw new NotAllowedException();
         }
         
-        $this->rootContentObject = $complexContentObjectPathNode->get_content_object();
+        $this->rootContentObject = $learningPathTreeNode->getContentObject();
         
         $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->rootContentObject->get_type(), 3) .
              '\Builder';

@@ -1,9 +1,13 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -21,15 +25,19 @@ abstract class Embedder
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var Application
      */
     private $application;
 
     /**
-     *
-     * @var \core\repository\content_object\learning_path\ComplexContentObjectPathNode
+     * @var LearningPathTrackingService
      */
-    private $node;
+    protected $learningPathTrackingService;
+
+    /**
+     * @var LearningPath
+     */
+    protected $learningPath;
 
     /**
      * @var LearningPathTreeNode
@@ -37,24 +45,28 @@ abstract class Embedder
     protected $learningPathTreeNode;
 
     /**
+     * Embedder constructor.
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application|\libraries\architecture\application\Application $application
-     * @param ComplexContentObjectPathNode|\core\repository\content_object\learning_path\ComplexContentObjectPathNode $node
+     * @param Application $application
+     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param LearningPath $learningPath
      * @param LearningPathTreeNode $learningPathTreeNode
      */
     public function __construct(
         \Chamilo\Libraries\Architecture\Application\Application $application,
-        ComplexContentObjectPathNode $node, LearningPathTreeNode $learningPathTreeNode
+        LearningPathTrackingService $learningPathTrackingService,
+        LearningPath $learningPath,
+        LearningPathTreeNode $learningPathTreeNode
     )
     {
         $this->application = $application;
-        $this->node = $node;
+        $this->learningPathTrackingService = $learningPathTrackingService;
+        $this->learningPath = $learningPath;
         $this->learningPathTreeNode = $learningPathTreeNode;
     }
 
     /**
-     *
-     * @return \libraries\architecture\application\Application
+     * @return Application
      */
     public function get_application()
     {
@@ -63,44 +75,13 @@ abstract class Embedder
 
     /**
      *
-     * @param \libraries\architecture\application\Application $application
-     */
-    public function set_application(\Chamilo\Libraries\Architecture\Application\Application $application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
-     * @return \core\repository\content_object\learning_path\ComplexContentObjectPathNode
-     */
-    public function get_node()
-    {
-        return $this->node;
-    }
-
-    /**
-     *
-     * @param \core\repository\content_object\learning_path\ComplexContentObjectPathNode $node
-     */
-    public function set_node($node)
-    {
-        $this->node = $node;
-    }
-
-    /**
-     *
      * @return string
      */
     public function track()
     {
-        $attempt_data = $this->get_node()->get_current_attempt();
-
-        $attempt_data->set_status(AbstractItemAttempt::STATUS_COMPLETED);
-        $attempt_data->update();
-
-        $this->get_node()->recalculateIsCompleted();
-        $this->get_application()->recalculateLearningPathProgress();
+        $this->learningPathTrackingService->changeActiveAttemptStatus(
+            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+        );
 
         // We need the second parent as the first one is just the display itself, since the embedder is a child of the
         // display execution wise and the required context is that of the display itself
@@ -108,7 +89,7 @@ abstract class Embedder
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax';
 
         $html[] = '<script type="text/javascript">';
-        $html[] = '    var trackerId = "' . $attempt_data->get_id() . '";';
+        $html[] = '    var trackerId = "' . $this->learningPathTreeNode->getId() . '";';
         $html[] = '    var trackerContext = ' . json_encode($namespace) . ';';
         $html[] = '</script>';
 
@@ -142,14 +123,17 @@ abstract class Embedder
 
     /**
      *
-     * @param \libraries\architecture\application\Application $application
-     * @param ComplexContentObjectPathNode $node
+     * @param Application $application
+     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return Embedder
      */
     static public function factory(
-        \Chamilo\Libraries\Architecture\Application\Application $application,
-        ComplexContentObjectPathNode $node,
+        Application $application,
+        LearningPathTrackingService $learningPathTrackingService,
+        LearningPath $learningPath,
         LearningPathTreeNode $learningPathTreeNode
     )
     {
@@ -157,7 +141,7 @@ abstract class Embedder
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         $class_name = $namespace . '\Embedder';
 
-        return new $class_name($application, $node, $learningPathTreeNode);
+        return new $class_name($application, $learningPathTrackingService, $learningPath, $learningPathTreeNode);
     }
 
     /**

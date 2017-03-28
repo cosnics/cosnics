@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractItemAttempt extends DataClass
+abstract class LearningPathChildAttempt extends DataClass
 {
     // Properties
     const PROPERTY_LEARNING_PATH_ATTEMPT_ID = 'learning_path_attempt_id';
@@ -144,5 +144,13 @@ abstract class AbstractItemAttempt extends DataClass
     public function set_max_score($max_score)
     {
         $this->set_default_property(self::PROPERTY_MAX_SCORE, $max_score);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->get_status() == self::STATUS_COMPLETED || $this->get_status() == self::STATUS_PASSED;
     }
 }

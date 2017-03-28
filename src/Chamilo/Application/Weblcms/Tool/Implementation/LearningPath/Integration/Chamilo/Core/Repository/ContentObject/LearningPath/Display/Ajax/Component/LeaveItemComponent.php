@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -32,10 +32,10 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     public function run()
     {
         $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            LearningPathItemAttempt::class_name(),
+            LearningPathChildAttempt::class_name(),
             $this->getPostDataValue(self::PARAM_TRACKER_ID));
 
-        if ($attempt instanceof LearningPathItemAttempt)
+        if ($attempt instanceof LearningPathChildAttempt)
         {
             $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
 

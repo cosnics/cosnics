@@ -10,8 +10,9 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractAttempt extends DataClass
+abstract class LearningPathAttempt extends DataClass
 {
+    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_PROGRESS = 'progress';
 
@@ -22,9 +23,26 @@ abstract class AbstractAttempt extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
+        $extended_property_names[] = self::PROPERTY_LEARNING_PATH_ID;
         $extended_property_names[] = self::PROPERTY_USER_ID;
         $extended_property_names[] = self::PROPERTY_PROGRESS;
         return parent::get_default_property_names($extended_property_names);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLearningPathId()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
+    }
+
+    /**
+     * @param int $learningPathId
+     */
+    public function setLearningPathId($learningPathId)
+    {
+        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
     }
 
     /**

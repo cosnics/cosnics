@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyAttempt extends AbstractAttempt
+class DummyAttempt extends LearningPathAttempt
 {
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 

@@ -1,7 +1,7 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -30,20 +30,12 @@ use Chamilo\Libraries\Platform\Translation;
 class ViewerComponent extends TabComponent
 {
 
-    private $learning_path_trackers;
-
-    private $learning_path_menu;
-
     /**
      * The button toolbar
      *
      * @var ButtonToolbar
      */
     protected $buttonToolbar;
-
-    private $navigation;
-    const TRACKER_LEARNING_PATH = 'tracker_learning_path';
-    const TRACKER_LEARNING_PATH_ITEM = 'tracker_learning_path_item';
 
     public function build()
     {
@@ -63,16 +55,13 @@ class ViewerComponent extends TabComponent
             return implode(PHP_EOL, $html);
         }
 
-        // Process some tracking
-        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH] =
-            $this->get_parent()->retrieve_learning_path_tracker();
+        $learningPathTrackingService = $this->getLearningPathTrackingService();
 
-        // // Get the currently displayed content object
-        $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
+        $learningPathTrackingService->trackAttemptForUser(
+            $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $this->getUser()
+        );
 
-        $translator = new PrerequisitesTranslator($this->get_current_node());
-
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) && !$translator->can_execute())
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             $html = array();
 
@@ -83,23 +72,10 @@ class ViewerComponent extends TabComponent
             return implode(PHP_EOL, $html);
         }
 
-        $learning_path_item_attempt = $this->get_current_node()->get_current_attempt();
-
-        if (!$learning_path_item_attempt instanceof AbstractItemAttempt)
-        {
-            $learning_path_item_attempt = $this->get_parent()->create_learning_path_item_tracker(
-                $this->learning_path_trackers[self::TRACKER_LEARNING_PATH],
-                $this->get_complex_content_object_item()
-            );
-            $this->get_current_node()->set_current_attempt($learning_path_item_attempt);
-        }
-        else
-        {
-            $learning_path_item_attempt->set_start_time(time());
-            $learning_path_item_attempt->update();
-        }
-
-        $embedder = Embedder::factory($this, $this->get_current_node(), $this->getCurrentLearningPathTreeNode());
+        $embedder = Embedder::factory(
+            $this, $this->getLearningPathTrackingService(), $this->get_root_content_object(),
+            $this->getCurrentLearningPathTreeNode()
+        );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
 
@@ -127,15 +103,6 @@ class ViewerComponent extends TabComponent
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function recalculateLearningPathProgress()
-    {
-        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->set_progress(
-            $this->get_complex_content_object_path()->get_progress()
-        );
-
-        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->update();
     }
 
     /**
@@ -195,7 +162,7 @@ class ViewerComponent extends TabComponent
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
                 );
                 $component = $factory->getComponent(null, false);
-                $component->get_node_tabs($primaryActions, $secondaryActions, $this->get_current_node());
+                $component->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentLearningPathTreeNode());
             }
             catch (\Exception $exception)
             {
@@ -213,7 +180,7 @@ class ViewerComponent extends TabComponent
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-        $selected_complex_content_object_item_id = $this->get_current_complex_content_object_item()->get_id();
+//        $selected_complex_content_object_item_id = $this->get_current_complex_content_object_item()->get_id();
 
         return parent::get_content_object_display_attachment_url($attachment, $selected_complex_content_object_item_id);
     }

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -43,7 +44,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     /**
      * @return string[]
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
@@ -420,5 +421,22 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     public function get_display_order_context_properties()
     {
         return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID));
+    }
+
+    /**
+     * Returns the assessment configuration
+     *
+     * @return Configuration
+     */
+    public function getAssessmentConfiguration()
+    {
+        return new Configuration(
+            $this->getAllowHints(),
+            $this->getShowScore(),
+            $this->getShowCorrection(),
+            $this->getShowSolution(),
+            $this->getShowAnswerFeedback(),
+            $this->getFeedbackLocation()
+        );
     }
 }

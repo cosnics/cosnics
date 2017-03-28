@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyItemAttempt extends AbstractItemAttempt
+class DummyItemAttempt extends LearningPathChildAttempt
 {
 
     /**
