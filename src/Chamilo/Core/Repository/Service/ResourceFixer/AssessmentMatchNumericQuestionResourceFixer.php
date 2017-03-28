@@ -72,7 +72,7 @@ class AssessmentMatchNumericQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentMatchNumericQuestion->update();
+                        $assessmentMatchNumericQuestion->update(false);
                     }
                 }
             }

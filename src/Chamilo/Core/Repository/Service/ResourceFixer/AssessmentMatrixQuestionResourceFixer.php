@@ -100,7 +100,7 @@ class AssessmentMatrixQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentMatrixQuestion->update();
+                        $assessmentMatrixQuestion->update(false);
                     }
                 }
             }

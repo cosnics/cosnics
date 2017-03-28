@@ -79,7 +79,7 @@ class HotspotQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $hotspotQuestion->update();
+                        $hotspotQuestion->update(false);
                     }
                 }
             }

@@ -71,7 +71,7 @@ class AssessmentMatchTextQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentMatchTextQuestion->update();
+                        $assessmentMatchTextQuestion->update(false);
                     }
                 }
             }

@@ -52,7 +52,7 @@ class AssessmentRatingQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentRatingQuestion->update();
+                        $assessmentRatingQuestion->update(false);
                     }
                 }
             }

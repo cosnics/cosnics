@@ -81,7 +81,7 @@ class AssessmentMultipleChoiceQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentMultipleChoiceQuestion->update();
+                        $assessmentMultipleChoiceQuestion->update(false);
                     }
                 }
             }

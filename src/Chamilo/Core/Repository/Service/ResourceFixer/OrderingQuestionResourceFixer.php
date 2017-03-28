@@ -89,7 +89,7 @@ class OrderingQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $orderingQuestion->update();
+                        $orderingQuestion->update(false);
                     }
                 }
             }

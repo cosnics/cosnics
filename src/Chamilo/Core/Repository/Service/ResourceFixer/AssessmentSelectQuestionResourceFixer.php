@@ -68,7 +68,7 @@ class AssessmentSelectQuestionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $assessmentSelectQuestion->update();
+                        $assessmentSelectQuestion->update(false);
                     }
                 }
             }
