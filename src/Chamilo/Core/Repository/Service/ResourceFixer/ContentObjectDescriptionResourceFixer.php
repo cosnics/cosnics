@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\Service\ResourceFixer;
 
+use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
+
 /**
  * Fixes the resource tags for the description fields of all content objects
  *
@@ -49,7 +51,14 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
 
                     if($forceUpdate)
                     {
-                        $contentObject->update(true);
+                        if($contentObject instanceof ForumTopic)
+                        {
+                            $contentObject->update(true);
+                        }
+                        else
+                        {
+                            $contentObject->update();
+                        }
                     }
                 }
 
