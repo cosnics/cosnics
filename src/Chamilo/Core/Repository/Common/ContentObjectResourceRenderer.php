@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Common;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Demo\Annotation\Deprecated;
 use DOMDocument;
 use DOMXPath;
 
@@ -21,6 +22,9 @@ class ContentObjectResourceRenderer
      */
     private $full_html;
 
+    /**
+     * @var DOMXPath $dom_xpath
+     */
     private $dom_xpath;
     private $dom_document;
 
@@ -80,7 +84,11 @@ class ContentObjectResourceRenderer
     {
         $placeholders = $this->dom_xpath->query('//img[@data-co-id]');
         foreach($placeholders as $placeholder) {
+            /**
+             * @var \DOMNode $placeholder
+             */
             $contentObjectId = $placeholder->getAttribute('data-co-id');
+
             $type = ContentObjectRendition::VIEW_INLINE;
 
             $parameters_list = $this->dom_xpath->query('@*', $placeholder);
@@ -116,6 +124,9 @@ class ContentObjectResourceRenderer
         }
     }
 
+    /**
+     * @Deprecated
+     */
     protected function processResources()
     {
         $resources = $this->dom_xpath->query('//resource');

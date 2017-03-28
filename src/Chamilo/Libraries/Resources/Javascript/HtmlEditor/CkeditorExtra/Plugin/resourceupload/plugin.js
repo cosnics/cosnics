@@ -58,12 +58,12 @@
                         width = upload.responseData.width || $img.naturalWidth,
                         height = upload.responseData.height || $img.naturalHeight;
                     // Set width and height to prevent blinking.
-                    this.replaceWith( '<img src="' + upload.url + '" ' +
+                    this.replaceWith( '<p><img src="' + upload.url + '" ' +
                         'data-co-id="' + upload.responseData['co-id'] + '"' +
                         'data-security-code="' + upload.responseData['security-code'] + '"' +
                         'data-type="'+upload.responseData['type']+'"' +
                         'width="' + width + '" ' +
-                        'height="' + height + '">' );
+                        'height="' + height + '"></p>' );
                 }
             } );
 
