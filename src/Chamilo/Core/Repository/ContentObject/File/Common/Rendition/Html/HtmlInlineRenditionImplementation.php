@@ -19,6 +19,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     const PARAM_MARGIN_HORIZONTAL = 'margin-horizontal';
     const PARAM_MARGIN_VERTICAL = 'margin-vertical';
     const PARAM_ALIGN = 'align';
+    const PARAM_CLASS = 'class';
     const PARAM_ALT = 'alt';
     const PARAM_STYLE = 'style';
 

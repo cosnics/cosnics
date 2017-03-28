@@ -94,7 +94,7 @@
                 if(!widgetDefinition.origUpcast) {
                     widgetDefinition.origUpcast = widgetDefinition.upcast;
                     widgetDefinition.upcast = function (element, data) { //from the saved/source html to the real html
-                        element = widgetDefinition.origUpcast(element,data);
+                        element = widgetDefinition.origUpcast.call(this, element, data);
 
                         if(!element) {
                             return;
@@ -107,14 +107,18 @@
 
                         var type =  imageElement.attributes['data-type'];
 
-                        if(type =='image') {
+                        if(type ==='image') { //only images get a live preview
                             imageElement.attributes.src = getResourceImageUrl(imageElement.attributes['data-co-id']);
                         } else {
                             imageElement.attributes.src = CKEDITOR.tools.transparentImageData;
                         }
 
-                        imageElement.attributes.class = 'cke_chamilo_' + imageElement.attributes['data-type'];
+                        if(!imageElement.attributes.class) {
+                            imageElement.attributes.class = '';
+                        }
 
+                        imageElement.attributes.class += ' cke_chamilo_' + imageElement.attributes['data-type'];
+                        
                         return element;
                     };
                 }
@@ -123,7 +127,7 @@
                     widgetDefinition.origDowncast = widgetDefinition.downcast;
                     widgetDefinition.downcast = function (element, data) { //from the real html to the saved/source html
 
-                        element = widgetDefinition.origDowncast(element, data);
+                        element = widgetDefinition.origDowncast.call(this, element, data);
                         if(!element) {
                             return;
                         }

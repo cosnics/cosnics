@@ -74,11 +74,16 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
             
             $url = $this->getDownloadUrl();
             $label = $object->get_filename() . ' (' . Filesystem::format_file_size($object->get_filesize()) . ')';
-            
+
+            if(!$parameters[self::PARAM_CLASS]) {
+                $parameters[self::PARAM_CLASS] = '';
+            }
+
             $html[] = '<img title="' . Translation::get('DownloadFile', array('LABEL' => $label)) . '" src="' . $url . '&display=1"
                         alt="' . $parameters[self::PARAM_ALT] . '"
                         title="' .
-                 htmlentities($parameters[self::PARAM_ALT]) . '"
+                        htmlentities($parameters[self::PARAM_ALT]) . '"
+                        class="' . $parameters[self::PARAM_CLASS] . '"
                         style="' . $styles_string . '">';
         }
         
