@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 
 /**
  * Service to manage the tracking of attempts in a learning path
@@ -105,6 +106,25 @@ class LearningPathTrackingService
     }
 
     /**
+     * Returns the identifier for the active LearningPathChildAttempt
+     *
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param User $user
+     *
+     * @return int
+     */
+    public function getActiveAttemptId(LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, User $user)
+    {
+        $learningPathAttempt = $this->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $activeAttempt = $this->getOrCreateActiveLearningPathChildAttempt(
+            $learningPathAttempt, $learningPathTreeNode
+        );
+
+        return $activeAttempt->getId();
+    }
+
+    /**
      * Calculates and stores the total time for the active attempt of the given learning path three node for a given
      * user
      *
@@ -121,8 +141,29 @@ class LearningPathTrackingService
             $learningPathAttempt, $learningPathTreeNode
         );
 
-        $activeAttempt->set_total_time($activeAttempt->get_total_time() + (time() - $activeAttempt->get_start_time()));
+        $activeAttempt->calculateAndSetTotalTime();
         $this->learningPathTrackingRepository->update($activeAttempt);
+    }
+
+    /**
+     * Sets the total time of a given attempt identified by the learning path child attempt id
+     *
+     * @param $learningPathChildAttemptId
+     *
+     * @throws ObjectNotExistException
+     */
+    public function setAttemptTotalTimeByLearningPathChildAttemptId($learningPathChildAttemptId)
+    {
+        $learningPathChildAttempt =
+            $this->learningPathTrackingRepository->findLearningPathChildAttemptById($learningPathChildAttemptId);
+
+        if(!$learningPathChildAttempt instanceof LearningPathChildAttempt)
+        {
+            throw new ObjectNotExistException('LearningPathAttempt');
+        }
+
+        $learningPathChildAttempt->calculateAndSetTotalTime();
+        $this->learningPathTrackingRepository->update($learningPathChildAttempt);
     }
 
     /**

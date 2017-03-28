@@ -153,4 +153,12 @@ abstract class LearningPathChildAttempt extends DataClass
     {
         return $this->get_status() == self::STATUS_COMPLETED || $this->get_status() == self::STATUS_PASSED;
     }
+
+    /**
+     * Calculates and sets the total time
+     */
+    public function calculateAndSetTotalTime()
+    {
+        $this->set_total_time($this->get_total_time() + (time() - $this->get_start_time()));
+    }
 }
