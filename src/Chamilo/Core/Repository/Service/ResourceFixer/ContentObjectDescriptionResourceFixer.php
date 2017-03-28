@@ -57,7 +57,7 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
                         }
                         else
                         {
-                            $contentObject->update();
+                            $contentObject->update(false);
                         }
                     }
                 }
