@@ -2,6 +2,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -17,40 +20,51 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     const PARAM_TRACKER_ID = 'tracker_id';
 
     /**
-     *
-     * @see \libraries\architecture\AjaxManager::required_parameters()
+     * @return array
      */
     public function getRequiredPostParameters()
     {
         return array(self::PARAM_TRACKER_ID);
     }
 
-    /**
-     *
-     * @see \libraries\architecture\AjaxManager::run()
-     */
     public function run()
     {
-        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            LearningPathChildAttempt::class_name(),
-            $this->getPostDataValue(self::PARAM_TRACKER_ID));
-
-        if ($attempt instanceof LearningPathChildAttempt)
+        try
         {
-            $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
+            $learningPathChildAttemptId = $this->getPostDataValue(self::PARAM_TRACKER_ID);
+            $learningPathTrackingService = $this->buildLearningPathTrackingService();
 
-            if ($attempt->update())
-            {
-                JsonAjaxResult::success();
-            }
-            else
-            {
-                JsonAjaxResult::bad_request();
-            }
+            $learningPathTrackingService->setAttemptTotalTimeByLearningPathChildAttemptId($learningPathChildAttemptId);
         }
-        else
+        catch(\Exception $ex)
         {
             JsonAjaxResult::bad_request();
         }
+
+        JsonAjaxResult::success();
+    }
+
+    /**
+     * Builds the LearningPathTrackingService
+     *
+     * @return LearningPathTrackingService
+     */
+    public function buildLearningPathTrackingService()
+    {
+        $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
+
+        return $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
+            new LearningPathTrackingParameters(1, 1)
+        );
+    }
+
+    /**
+     * @return LearningPathTrackingServiceBuilder | object
+     */
+    protected function getLearningPathTrackingServiceBuilder()
+    {
+        return new LearningPathTrackingServiceBuilder(
+            $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository')
+        );
     }
 }

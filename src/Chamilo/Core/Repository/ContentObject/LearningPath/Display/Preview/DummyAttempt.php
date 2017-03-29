@@ -50,7 +50,7 @@ class DummyAttempt extends LearningPathAttempt
      */
     public function update()
     {
-        return PreviewStorage::getInstance()->update_learning_path_attempt($this);
+        return true;
     }
 
     /**
@@ -59,8 +59,7 @@ class DummyAttempt extends LearningPathAttempt
      */
     public function create()
     {
-        $this->set_id(UUID::v4());
-        return PreviewStorage::getInstance()->create_learning_path_attempt($this);
+        return true;
     }
 
     /**
@@ -69,6 +68,6 @@ class DummyAttempt extends LearningPathAttempt
      */
     public function delete()
     {
-        return PreviewStorage::getInstance()->delete_learning_path_attempt($this);
+        return true;
     }
 }

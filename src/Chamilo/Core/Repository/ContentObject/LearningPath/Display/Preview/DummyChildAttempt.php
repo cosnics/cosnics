@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyItemAttempt extends LearningPathChildAttempt
+class DummyChildAttempt extends LearningPathChildAttempt
 {
 
     /**
@@ -20,7 +20,7 @@ class DummyItemAttempt extends LearningPathChildAttempt
      */
     public function update()
     {
-        return PreviewStorage::getInstance()->update_learning_path_item_attempt($this);
+        return true;
     }
 
     /**
@@ -29,8 +29,7 @@ class DummyItemAttempt extends LearningPathChildAttempt
      */
     public function create()
     {
-        $this->set_id(UUID::v4());
-        return PreviewStorage::getInstance()->create_learning_path_item_attempt($this);
+        return true;
     }
 
     /**
@@ -39,6 +38,6 @@ class DummyItemAttempt extends LearningPathChildAttempt
      */
     public function delete()
     {
-        return PreviewStorage::getInstance()->delete_learning_path_item_attempt($this);
+        return true;
     }
 }

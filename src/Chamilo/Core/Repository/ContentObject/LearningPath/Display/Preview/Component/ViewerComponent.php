@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
@@ -9,13 +10,17 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Preview\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -29,24 +34,33 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements 
-    GlossaryDisplaySupport, LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport, 
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements
+    GlossaryDisplaySupport, LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport,
     BlogDisplaySupport, WikiDisplaySupport
 {
 
+    /*
+     * The question attempts @var QuestionAttempt[]
+     */
+    private $question_attempts;
+
     function run()
     {
+        $this->buildLearningPathTrackingService();
+
         $className = $this->get_root_content_object()->package() . '\Display';
-        
+
         $factory = new ApplicationFactory(
-            $className, 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $className,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
+
         return $factory->run();
     }
 
     /**
      * Since this is a preview, no actual view event is triggered.
-     * 
+     *
      * @param $complex_topic_id
      */
     function forum_topic_viewed($complex_topic_id)
@@ -55,8 +69,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Since this is a preview, no views are logged and no count can be retrieved.
-     * 
+     *
      * @param $complex_topic_id
+     *
      * @return string
      */
     function forum_count_topic_views($complex_topic_id)
@@ -66,7 +81,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Returns whether or not the logged in user is a forum manager
-     * 
+     *
      * @param $user User
      *
      * @return boolean
@@ -94,57 +109,31 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Preview mode, so no actual saving done.
-     * 
+     *
      * @param $complex_question_id int
      * @param $answer mixed
      * @param $score int
      */
     function save_assessment_answer($complex_question_id, $answer, $score, $hint)
     {
-        $question_attempt = $this->get_assessment_question_attempt($complex_question_id);
-        $question_attempt->set_answer($answer);
-        $question_attempt->set_score($score);
-        $question_attempt->set_hint($hint);
-        
-        return $question_attempt->update();
+        $this->learningPathTrackingService->saveAnswerForQuestion(
+            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
+            $this->getCurrentLearningPathTreeNode(), $complex_question_id, $answer, $score, $hint
+        );
     }
 
     /**
      * Preview mode, so no actual total score will be saved.
-     * 
+     *
      * @param $total_score int
      */
     function save_assessment_result($total_score)
     {
-        $current_node = $this->get_current_node();
-        $item_attempt = $current_node->get_current_attempt();
-        
-        if (! $item_attempt instanceof LearningPathChildAttempt)
-        {
-            return;
-        }
-        else
-        {
-            $item_attempt->set_score($total_score);
-            $item_attempt->set_total_time($item_attempt->get_total_time() + (time() - $item_attempt->get_start_time()));
-            $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
-                $current_node->get_complex_content_object_item()->get_ref());
-            $mastery_score = $learning_path_item->get_mastery_score();
-            
-            if ($mastery_score)
-            {
-                $status = ($total_score >= $mastery_score) ? LearningPathChildAttempt::STATUS_PASSED : LearningPathChildAttempt::STATUS_FAILED;
-            }
-            else
-            {
-                $status = LearningPathChildAttempt::STATUS_COMPLETED;
-            }
-            
-            $item_attempt->set_status($status);
-            
-            return $item_attempt->update();
-        }
+        $this->learningPathTrackingService->saveAssessmentScore(
+            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
+            $this->getCurrentLearningPathTreeNode(),
+            $total_score
+        );
     }
 
     /**
@@ -152,25 +141,47 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function get_assessment_current_attempt_id()
     {
-        return $this->get_current_node()->get_current_attempt()->get_id();
+        return $this->get_parameter(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
+        );
     }
 
-    function get_assessment_question_attempts()
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
     {
-        return PreviewStorage::getInstance()->retrieve_learning_path_question_attempts(
-            $this->get_current_node()->get_current_attempt());
+        if (is_null($this->question_attempts))
+        {
+            $this->question_attempts = $this->retrieve_question_attempts();
+        }
+
+        return $this->question_attempts;
+    }
+
+    /**
+     * Retrieves the question attempts for the selected assessment attempt
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     */
+    protected function retrieve_question_attempts()
+    {
+        return $this->learningPathTrackingService->getQuestionAttempts(
+            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
+            $this->getCurrentLearningPathTreeNode()
+        );
     }
 
     function get_assessment_question_attempt($complex_question_id)
     {
-        return PreviewStorage::getInstance()->retrieve_learning_path_question_attempt(
-            $this->get_current_node()->get_current_attempt(), 
-            $complex_question_id);
+        return $this->question_attempts[$complex_question_id];
     }
 
     /**
      * Preview mode is launched in standalone mode, so there's nothing to go back to.
-     * 
+     *
      * @return void
      */
     function get_assessment_back_url()
@@ -179,7 +190,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Preview mode is launched in standalone mode, so there's nothing to continue to.
-     * 
+     *
      * @return void
      */
     function get_assessment_continue_url()
@@ -197,12 +208,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function get_assessment_configuration()
     {
-        $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
-        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
-            $complex_content_object_item->get_ref());
-        
-        return $learning_path_item->get_configuration();
+        return $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
     }
 
     function get_assessment_parameters()
@@ -216,18 +222,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_tracker()
     {
-        $attempt = PreviewStorage::getInstance()->retrieve_learning_path_attempt(
-            $this->get_parent()->get_root_content_object()->get_id());
-        
-        if (! $attempt instanceof LearningPathAttempt)
-        {
-            $attempt = new DummyAttempt();
-            $attempt->set_user_id($this->get_user_id());
-            $attempt->set_content_object_id($this->get_root_content_object()->get_id());
-            $attempt->set_progress(0);
-            $attempt->create();
-        }
-        return $attempt;
     }
 
     /**
@@ -236,7 +230,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_tracker_items($learning_path_tracker)
     {
-        return PreviewStorage::getInstance()->retrieve_learning_path_item_attempts($learning_path_tracker);
     }
 
     /**
@@ -245,7 +238,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return PreviewStorage::getInstance()->retrieve_learning_path_item_attempt($learning_path_item_attempt_id);
     }
 
     /**
@@ -257,12 +249,17 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Preview\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY;
-        $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] = LearningPathTreeRenderer::NODE_PLACEHOLDER;
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN);
-        
+        $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] =
+            $this->get_root_content_object()->get_id();
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
+            LearningPathTreeRenderer::NODE_PLACEHOLDER;
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] =
+            $this->getRequest()->query->get(
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
+            );
+
         $redirect = new Redirect($parameters);
+
         return $redirect->getUrl();
     }
 
@@ -272,24 +269,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function create_learning_path_item_tracker($learning_path_attempt, $current_complex_content_object_item)
     {
-        $item_attempt = new DummyItemAttempt();
-        
-        $item_attempt->set_learning_path_attempt_id($learning_path_attempt->get_id());
-        $item_attempt->set_learning_path_item_id($current_complex_content_object_item->get_id());
-        $item_attempt->set_start_time(time());
-        $item_attempt->set_total_time(0);
-        $item_attempt->set_score(0);
-        $item_attempt->set_min_score(0);
-        $item_attempt->set_max_score(0);
-        $item_attempt->set_status(LearningPathChildAttempt::STATUS_NOT_ATTEMPTED);
-        $item_attempt->create();
-        
-        return $item_attempt;
     }
 
     /**
      * Get the url of the assessment result
-     * 
+     *
      * @param $complex_content_object_id int
      * @param $details unknown_type
      */
@@ -305,34 +289,27 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $question_ids = array();
         $attempts = $this->get_assessment_question_attempts();
-        
+
         foreach ($attempts as $attempt)
         {
             $question_ids[] = $attempt->get_question_complex_id();
         }
-        
+
         return $question_ids;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\content_object\assessment\AssessmentDisplaySupport::register_question_ids()
+    /**
+     * Registers the question ids
+     *
+     * @param int[] $question_ids
      */
     public function register_question_ids($question_ids)
     {
-        $current_node = $this->get_current_node();
-        
-        foreach ($question_ids as $complex_question_id)
-        {
-            $attempt = new DummyQuestionAttempt();
-            $attempt->set_item_attempt_id($current_node->get_current_attempt()->get_id());
-            $attempt->set_question_complex_id($complex_question_id);
-            $attempt->set_answer('');
-            $attempt->set_score(0);
-            $attempt->set_feedback('');
-            $attempt->set_hint(0);
-            
-            $attempt->create();
-        }
+        $this->question_attempts = $this->learningPathTrackingService->registerQuestionAttempts(
+            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
+            $this->getCurrentLearningPathTreeNode(),
+            $question_ids
+        );
     }
 
     /**

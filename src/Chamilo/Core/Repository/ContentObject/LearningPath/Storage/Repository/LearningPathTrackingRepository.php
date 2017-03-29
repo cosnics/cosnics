@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class LearningPathTrackingRepository extends CommonDataClassRepository
+    implements LearningPathTrackingRepositoryInterface
 {
     /**
      * @var LearningPathTrackingParametersInterface
@@ -164,6 +165,20 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         return $this->dataClassRepository->retrieve(
             $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName(),
             new DataClassRetrieveParameters($condition)
+        );
+    }
+
+    /**
+     * Finds a LearningPathChildAttempt by a given ID
+     *
+     * @param int $learningPathChildAttemptId
+     *
+     * @return DataClass | LearningPathChildAttempt
+     */
+    public function findLearningPathChildAttemptById($learningPathChildAttemptId)
+    {
+        return $this->dataClassRepository->retrieveById(
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName(), $learningPathChildAttemptId
         );
     }
 
