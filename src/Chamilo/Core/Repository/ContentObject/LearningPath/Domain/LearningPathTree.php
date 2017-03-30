@@ -15,6 +15,11 @@ class LearningPathTree
     protected $learningPathTreeNodes;
 
     /**
+     * @var LearningPathTreeNode[]
+     */
+    protected $learningPathTreeNodesByStep;
+
+    /**
      * @return LearningPathTreeNode[]
      */
     public function getLearningPathTreeNodes()
@@ -47,6 +52,7 @@ class LearningPathTree
 
         $learningPathTreeNode->setStep($this->getNextStep());
         $this->learningPathTreeNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
+        $this->learningPathTreeNodesByStep[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
     }
 
     /**
@@ -100,51 +106,13 @@ class LearningPathTree
     }
 
     /**
-     * Determines the step number for a given content object. The content object is identified with his id
-     * combined with every parent content object id to determine a unique path.
+     * Returns the nodes that have a step number smaller than the given step number
      *
-     * @param array $parentContentObjectIds
-     *
-     * @return LearningPathTreeNode
+     * @return LearningPathTreeNode[]
      */
-    public function getLearningPathTreeNodeForContentObjectIdentifiedByParentContentObjects(
-        $parentContentObjectIds = array()
-    )
+    public function getNodesWithStepSmallerThan($stepNumber)
     {
-        if ($this->getRoot()->getContentObject()->getId() != array_shift($parentContentObjectIds))
-        {
-            throw new \RuntimeException('The root id\'s for the current learning path are no longer matching');
-        }
-
-        $parentNode = $this->getRoot();
-
-        foreach ($parentContentObjectIds as $parentContentObjectId)
-        {
-            $childFound = false;
-
-            foreach ($parentNode->getChildNodes() as $childNode)
-            {
-                if ($childNode->getContentObject()->getId() == $parentContentObjectId)
-                {
-                    $parentNode = $childNode;
-                    $childFound = true;
-                    break;
-                }
-            }
-
-            if (!$childFound)
-            {
-                throw new \RuntimeException(
-                    sprintf(
-                        'The system could not find a valid path in the tree for learning path %s with path (%s)',
-                        $this->getRoot()->getContentObject()->getId(),
-                        implode(' ,', $parentContentObjectIds)
-                    )
-                );
-            }
-        }
-
-        return $parentNode;
+        return array_slice($this->learningPathTreeNodesByStep, 0, $stepNumber - 1);
     }
 
     /**

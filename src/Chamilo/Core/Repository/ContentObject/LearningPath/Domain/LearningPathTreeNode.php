@@ -366,6 +366,16 @@ class LearningPathTreeNode
     }
 
     /**
+     * Returns the previous nodes for the current learning path tree node
+     *
+     * @return LearningPathTreeNode[]
+     */
+    public function getPreviousNodes()
+    {
+        return $this->getLearningPathTree()->getNodesWithStepSmallerThan($this->getStep());
+    }
+
+    /**
      * Returns whether or not the current node is a root node
      *
      * @return bool
@@ -374,27 +384,4 @@ class LearningPathTreeNode
     {
         return $this->getLearningPathTree()->getRoot() == $this;
     }
-
-    /**
-     * Returns the path to this node by a set of content object ids for the current node and his parents
-     *
-     * @return int[]
-     */
-    public function getPathAsContentObjectIds()
-    {
-        $contentObjectIds = array();
-
-        $currentNode = $this;
-
-        while ($currentNode->hasParentNode())
-        {
-            array_unshift($contentObjectIds, $currentNode->getContentObject()->getId());
-            $currentNode = $currentNode->getParentNode();
-        }
-
-        array_unshift($contentObjectIds, $currentNode->getContentObject()->getId());
-
-        return $contentObjectIds;
-    }
-
 }
