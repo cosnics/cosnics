@@ -420,7 +420,10 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID));
+        return array(
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID),
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_SECTION_CONTENT_OBJECT_ID)
+        );
     }
 
     /**

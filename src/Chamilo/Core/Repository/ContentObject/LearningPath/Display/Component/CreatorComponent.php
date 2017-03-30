@@ -106,9 +106,8 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
-                            Activity::PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()
-                                ->get_id(),
-                            Activity::PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
+                            Activity::PROPERTY_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId(),
+                            Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() .
                                 ' > ' . $object->get_title()
                         )
                     );

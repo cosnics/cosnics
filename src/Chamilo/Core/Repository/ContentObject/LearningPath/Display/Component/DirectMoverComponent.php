@@ -30,7 +30,7 @@ class DirectMoverComponent extends Manager
         $parentId = $this->getRequest()->get(self::PARAM_PARENT_ID);
         $displayOrder = $this->getRequest()->get(self::PARAM_DISPLAY_ORDER);
 
-        if (!$parentId || !$displayOrder)
+        if (!isset($parentId) || !isset($displayOrder))
         {
             throw new \RuntimeException(
                 'For the direct mover to work you need to specify a parent and a display order'

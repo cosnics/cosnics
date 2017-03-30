@@ -42,7 +42,8 @@ class LearningPathTrackingServiceBuilder
     )
     {
         $repository = new LearningPathTrackingRepository($this->dataClassRepository, $learningPathTrackingParameters);
+        $attemptService = new LearningPathAttemptService($repository, $learningPathTrackingParameters);
 
-        return new LearningPathTrackingService($repository, $learningPathTrackingParameters);
+        return new LearningPathTrackingService($attemptService, $repository);
     }
 }
