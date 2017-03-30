@@ -200,3 +200,9 @@ DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repositor
 ALTER TABLE `tracking_weblcms_learning_path_item_attempt` RENAME `tracking_weblcms_learning_path_child_attempt`;
 ALTER TABLE `tracking_weblcms_learning_path_attempt` ADD `publication_id` INT(10) UNSIGNED NOT NULL AFTER `learning_path_id`;
 
+ALTER TABLE `repository_learning_path`
+  DROP `control_mode`,
+  DROP `version`,
+  DROP `path`;
+
+ALTER TABLE `repository_learning_path` ADD `automatic_numbering` VARCHAR(15) NOT NULL DEFAULT 'none' AFTER `id`, ADD `enforce_default_traversing_order` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `automatic_numbering`;
