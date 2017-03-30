@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
@@ -44,12 +45,9 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
             );
 
             $security_code = $this->getRequest()->get(self::PARAM_SECURITY_CODE);
-            if(isset($security_code) && !empty($security_code))
+            if (!isset($security_code) || empty($security_code) || $security_code != $object->calculate_security_code())
             {
-                if($security_code != $object->calculate_security_code())
-                {
-                    JsonAjaxResult::bad_request('The given security code does not match');
-                }
+                JsonAjaxResult::bad_request('The given security code does not match');
             }
 
             $display = ContentObjectRenditionImplementation:: factory(
@@ -61,7 +59,7 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
 
             $rendition = $display->render($this->getPostDataValue(self :: PARAM_PARAMETERS));
         }
-        catch( \Exception $ex)
+        catch (\Exception $ex)
         {
             $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
         }
