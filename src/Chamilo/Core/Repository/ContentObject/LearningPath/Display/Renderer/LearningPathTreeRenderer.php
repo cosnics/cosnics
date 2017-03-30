@@ -159,16 +159,19 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
 
         $title = $node->getContentObject()->get_title();
 
-        if ($prefix)
+        if($this->learningPath->usesAutomaticNumbering())
         {
-            $prefix = $prefix . '.' . $counter;
-        }
-        else
-        {
-            $prefix = $counter;
-        }
+            if ($prefix)
+            {
+                $prefix = $prefix . '.' . $counter;
+            }
+            else
+            {
+                $prefix = $counter;
+            }
 
-        $title = $prefix . '. ' . $title;
+            $title = $prefix . '. ' . $title;
+        }
 
         $menuItem['text'] = $title;
         $menuItem['icon'] = $this->getItemIcon($node);
