@@ -61,7 +61,7 @@ CKEDITOR.editorConfig = function(config)
             + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
 
     config.image2_captionedClass = 'image-captioned';
-    config.image2_alignClasses = [ 'image-left', 'image-center', 'image-right' ];
+    config.image2_alignClasses = [ 'align-left', 'align-center', 'align-right' ];
 
     config.contentsCss = [
         web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/contents.css',
@@ -72,9 +72,12 @@ CKEDITOR.editorConfig = function(config)
     config.disableNativeSpellChecker = false;
     config.allowedContent = true;
     config.resize_dir = 'both';
+    config.enterMode = CKEDITOR.ENTER_DIV;
 
     // allow i tags to be empty (for font awesome)
     CKEDITOR.dtd.$removeEmpty['i'] = false;
+
+
 
     //fix for bootstrap skin
     CKEDITOR.skin.chameleon = function(){

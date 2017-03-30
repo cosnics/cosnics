@@ -84,6 +84,16 @@
         requires: 'image2',
 
         beforeInit: function (editor) {
+            editor.on("instanceReady", function(ev){
+                ev.editor.on("paste", function (ev) {
+                    var html=ev.data.dataValue;
+
+                    //On paste, replace p with DIV
+                    var re = new RegExp("(<p)([^>]*>.*?)(<\/p>)","gi") ;
+                    html = html.replace( re, "<DIV$2</DIV>" ) ;
+                    ev.data.dataValue = html;
+                })
+            });
             editor.on('widgetDefinition', function (event) {
                 var widgetDefinition = event.data;
 

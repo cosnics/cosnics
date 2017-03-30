@@ -16,3 +16,21 @@ figcaption {
     font-size: 12px;
     font-weight: bold;
 }
+
+.align-left {
+    float: left;
+    margin-right: 1.5em;
+}
+
+.align-right {
+    float: right;
+    margin-left: 1.5em;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-center > figure {
+    display: inline-block;
+}

@@ -26,6 +26,10 @@ class ContentObjectResourceRenderer
      * @var DOMXPath $dom_xpath
      */
     private $dom_xpath;
+
+    /**
+     * @var DOMDocument $dom_document
+     */
     private $dom_document;
 
     public function __construct($context, $description, $full_html = false)

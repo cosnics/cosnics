@@ -15,20 +15,20 @@ figcaption {
     font-weight: bold;
 }
 
-.image-left {
+.align-left {
     float: left;
     margin-right: 1.5em;
 }
 
-.image-right {
+.align-right {
     float: right;
     margin-left: 1.5em;
 }
 
-.image-center {
+.align-center {
     text-align: center;
 }
 
-.image-center > figure {
+.align-center > figure {
     display: inline-block;
 }
