@@ -62,7 +62,8 @@ class LearningPathTreeBuilder
 
         foreach ($learningPathChildren as $learningPathChild)
         {
-            $orderedLearningPathChildren[$learningPathChild->getSectionContentObjectId()][] = $learningPathChild;
+            $orderedLearningPathChildren[$learningPathChild->getSectionContentObjectId(
+            )][$learningPathChild->getDisplayOrder()] = $learningPathChild;
         }
 
         $this->addChildrenForSection(0, $orderedLearningPathChildren, $learningPathTree, $rootLearningPathTreeNode);
@@ -81,7 +82,10 @@ class LearningPathTreeBuilder
         LearningPathTreeNode $parentLearningPathTreeNode
     )
     {
-        foreach ($orderedLearningPathChildren[$sectionId] as $learningPathChild)
+        $learningPathChildrenForSection = $orderedLearningPathChildren[$sectionId];
+        ksort($learningPathChildrenForSection);
+
+        foreach ($learningPathChildrenForSection as $learningPathChild)
         {
             $contentObject = $this->contentObjectRepository->findById($learningPathChild->getContentObjectId());
 

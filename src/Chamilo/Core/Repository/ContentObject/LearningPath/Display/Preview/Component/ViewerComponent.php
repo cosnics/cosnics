@@ -153,12 +153,10 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     public function get_assessment_question_attempts()
     {
-        if (is_null($this->question_attempts))
-        {
-            $this->question_attempts = $this->retrieve_question_attempts();
-        }
-
-        return $this->question_attempts;
+        return $this->learningPathTrackingService->getQuestionAttempts(
+            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
+            $this->getCurrentLearningPathTreeNode()
+        );
     }
 
     /**

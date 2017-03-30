@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
@@ -224,6 +226,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     {
         $this->buildLearningPathTrackingService();
         $this->learningPathTrackingRepository->resetStorage();
+
+        return true;
     }
 
     /**
@@ -237,8 +241,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
         {
             $this->learningPathTrackingRepository = new LearningPathTrackingRepository();
 
-            $this->learningPathTrackingService = new LearningPathTrackingService(
+            $learningPathAttemptService = new LearningPathAttemptService(
                 $this->learningPathTrackingRepository, new LearningPathTrackingParameters()
+            );
+
+            $this->learningPathTrackingService = new LearningPathTrackingService(
+                $learningPathAttemptService, $this->learningPathTrackingRepository
             );
         }
 
