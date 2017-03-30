@@ -11,7 +11,7 @@ CKEDITOR.plugins.addExternal('resourceupload', web_path + 'Chamilo/Libraries/Res
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
-    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,embedsemantic,filebrowser,autoembed';
+    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed';
     config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function(config)
                     'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
-            [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Image', 'EmbedSemantic', 'EqnEditor',
+            [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Image', 'Embed', 'EqnEditor',
                     'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
