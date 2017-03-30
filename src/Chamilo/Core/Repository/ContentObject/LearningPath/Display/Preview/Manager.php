@@ -2,10 +2,12 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,6 +21,16 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implements PreviewResetSupport
 {
+
+    /**
+     * @var LearningPathTrackingService
+     */
+    protected $learningPathTrackingService;
+
+    /**
+     * @var LearningPathTrackingRepository
+     */
+    protected $learningPathTrackingRepository;
 
     /**
      *
@@ -153,43 +165,83 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     }
 
     /**
+     * Returns the currently selected learning path child id from the request
      *
-     * @return \core\repository\content_object\learning_path\ComplexContentObjectPathNode
+     * @return int
      */
-    public function get_current_node()
+    public function getCurrentLearningPathChildId()
     {
-        try
-        {
-            $root_content_object = parent::get_root_content_object();
-            $learning_path_item_attempt_data = $this->retrieve_learning_path_tracker_items(
-                $this->retrieve_learning_path_tracker()
-            );
-
-            $path = $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
-
-            return $path->get_node(
-                Request::get(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
-                    $path->get_root()->get_id()
-                )
-            );
-        }
-        catch (\Exception $ex)
-        {
-            throw new UserException(
-                Translation::getInstance()->getTranslation(
-                    'CouldNotRetrieveSelectedNode', null, 'Chamilo\Core\Repository'
-                )
-            );
-        }
+        return (int) $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
+        );
     }
 
     /**
+     * Returns the LearningPathTreeBuilder service
      *
-     * @see \core\repository\display\PreviewResetSupport::reset()
+     * @return LearningPathTreeBuilder | object
+     */
+    protected function getLearningPathTreeBuilder()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+        );
+    }
+
+    /**
+     * Returns the LearningPathTree for the current learning path root
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     */
+    protected function getLearningPathTree()
+    {
+        if (!isset($this->learningPathTree))
+        {
+            $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
+                parent::get_root_content_object()
+            );
+        }
+
+        return $this->learningPathTree;
+    }
+
+    /**
+     * Returns the LearningPathTreeNode for the current step
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     */
+    public function getCurrentLearningPathTreeNode()
+    {
+        $learningPathTree = $this->getLearningPathTree();
+
+        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+    }
+
+    /**
+     * Resets the storage for the preview
      */
     public function reset()
     {
-        return PreviewStorage::getInstance()->reset();
+        $this->buildLearningPathTrackingService();
+        $this->learningPathTrackingRepository->resetStorage();
+    }
+
+    /**
+     * Builds the LearningPathTrackingService
+     *
+     * @return LearningPathTrackingService
+     */
+    public function buildLearningPathTrackingService()
+    {
+        if (!isset($this->learningPathTrackingService))
+        {
+            $this->learningPathTrackingRepository = new LearningPathTrackingRepository();
+
+            $this->learningPathTrackingService = new LearningPathTrackingService(
+                $this->learningPathTrackingRepository, new LearningPathTrackingParameters()
+            );
+        }
+
+        return $this->learningPathTrackingService;
     }
 }

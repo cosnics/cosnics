@@ -83,13 +83,17 @@ abstract class Embedder
             $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
         );
 
+        $activeAttemptId = $this->learningPathTrackingService->getActiveAttemptId(
+            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+        );
+
         // We need the second parent as the first one is just the display itself, since the embedder is a child of the
         // display execution wise and the required context is that of the display itself
         $namespace = $this->get_application()->get_application()->package() .
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax';
 
         $html[] = '<script type="text/javascript">';
-        $html[] = '    var trackerId = "' . $this->learningPathTreeNode->getId() . '";';
+        $html[] = '    var trackerId = "' . $activeAttemptId . '";';
         $html[] = '    var trackerContext = ' . json_encode($namespace) . ';';
         $html[] = '</script>';
 

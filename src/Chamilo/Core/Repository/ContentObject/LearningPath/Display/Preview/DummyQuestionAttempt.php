@@ -20,7 +20,7 @@ class DummyQuestionAttempt extends LearningPathQuestionAttempt
      */
     public function update()
     {
-        return PreviewStorage::getInstance()->update_learning_path_question_attempt($this);
+        return true;
     }
 
     /**
@@ -29,8 +29,7 @@ class DummyQuestionAttempt extends LearningPathQuestionAttempt
      */
     public function create()
     {
-        $this->set_id(UUID::v4());
-        return PreviewStorage::getInstance()->create_learning_path_question_attempt($this);
+        return true;
     }
 
     /**
@@ -39,6 +38,6 @@ class DummyQuestionAttempt extends LearningPathQuestionAttempt
      */
     public function delete()
     {
-        return PreviewStorage::getInstance()->delete_learning_path_question_attempt($this);
+        return true;
     }
 }

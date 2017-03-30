@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Tracking Repository implementation
+ * Tracking parameters for the learning path tracking service and repository
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */

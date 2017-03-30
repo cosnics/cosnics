@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
@@ -35,7 +35,7 @@ class LeaveItemComponent extends \Chamilo\Core\Repository\ContentObject\Learning
         $attempt = PreviewStorage::getInstance()->retrieve_learning_path_item_attempt(
             $this->getPostDataValue(self::PARAM_TRACKER_ID));
         
-        if ($attempt instanceof DummyItemAttempt)
+        if ($attempt instanceof DummyChildAttempt)
         {
             $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
             
