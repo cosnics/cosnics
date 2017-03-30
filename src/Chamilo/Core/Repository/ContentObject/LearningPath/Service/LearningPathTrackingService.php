@@ -433,4 +433,82 @@ class LearningPathTrackingService
             );
         }
     }
+
+    /**
+     * Returns whether or not the given LearningPathTreeNode is blocked for the given user
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return bool
+     */
+    public function isCurrentLearningPathTreeNodeBlocked(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $learningPathAttempt =
+            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+
+        $learningPathChildAttempts =
+            $this->learningPathAttemptService->getLearningPathChildAttempts($learningPathAttempt);
+
+        $previousNodes = $learningPathTreeNode->getPreviousNodes();
+
+        foreach ($previousNodes as $previousNode)
+        {
+            if (
+                $learningPath->enforcesDefaultTraversingOrder() ||
+                (!$previousNode->isRootNode() && $previousNode->getLearningPathChild()->isBlocked())
+            )
+            {
+                if (count($learningPathChildAttempts[$previousNode->getId()]) == 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns a list of the nodes that are responsible that a step can not be taken
+     * 
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return array
+     */
+    public function getReponsibleNodesForBlockedLearningPathTreeNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $learningPathAttempt =
+            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+
+        $learningPathChildAttempts =
+            $this->learningPathAttemptService->getLearningPathChildAttempts($learningPathAttempt);
+
+        $previousNodes = $learningPathTreeNode->getPreviousNodes();
+
+        $blockedNodes = array();
+
+        foreach ($previousNodes as $previousNode)
+        {
+            if (
+                $learningPath->enforcesDefaultTraversingOrder() ||
+                (!$previousNode->isRootNode() && $previousNode->getLearningPathChild()->isBlocked())
+            )
+            {
+                if (count($learningPathChildAttempts[$previousNode->getId()]) == 0)
+                {
+                    $blockedNodes[] = $previousNode;
+                }
+            }
+        }
+
+        return $blockedNodes;
+    }
 }

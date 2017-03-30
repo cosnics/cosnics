@@ -61,7 +61,11 @@ class ViewerComponent extends TabComponent
             $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $this->getUser()
         );
 
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
+            $learningPathTrackingService->isCurrentLearningPathTreeNodeBlocked(
+                $learning_path, $this->getUser(), $this->getCurrentLearningPathTreeNode()
+            )
+        )
         {
             $html = array();
 
