@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function(config)
                     'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
-            [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Image', 'Embed', 'EqnEditor',
+            [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
                     'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
@@ -74,6 +74,7 @@ CKEDITOR.editorConfig = function(config)
     config.resize_dir = 'both';
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //@todo should be parameter
+    //iframe.ly/api/oembed?url={url}&callback={callback}&api_key=xxxx
 
     // allow i tags to be empty (for font awesome)
     CKEDITOR.dtd.$removeEmpty['i'] = false;

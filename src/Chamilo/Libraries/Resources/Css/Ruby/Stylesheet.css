@@ -34,3 +34,8 @@ figcaption {
 .align-center > figure {
     display: inline-block;
 }
+
+div[data-oembed-url] {
+    max-width: 100%;
+    max-height: 100%;
+}
