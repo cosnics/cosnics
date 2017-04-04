@@ -33,7 +33,32 @@ figcaption {
     display: inline-block;
 }
 
-div[data-oembed-url] {
-    max-width: 100%;
-    max-height: 100%;
+.embed-240p
+{
+    max-width: 426px;
+    margin:0 auto;
+}
+
+.embed-360p
+{
+    max-width: 640px;
+    margin:0 auto;
+}
+
+.embed-480p
+{
+    max-width: 854px;
+    margin:0 auto;
+}
+
+.embed-720p
+{
+    max-width: 1280px;
+    margin:0 auto;
+}
+
+.embed-1080p
+{
+    max-width: 1920px;
+    margin:0 auto;
 }

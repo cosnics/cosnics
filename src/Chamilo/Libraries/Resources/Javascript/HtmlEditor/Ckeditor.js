@@ -11,7 +11,7 @@ CKEDITOR.plugins.addExternal('resourceupload', web_path + 'Chamilo/Libraries/Res
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
-    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed';
+    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed,sourcedialog';
     config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
@@ -42,7 +42,7 @@ CKEDITOR.editorConfig = function(config)
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
             [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
-                    'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
+                    'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Sourcedialog' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
@@ -73,9 +73,9 @@ CKEDITOR.editorConfig = function(config)
     config.allowedContent = true;
     config.resize_dir = 'both';
     config.enterMode = CKEDITOR.ENTER_DIV;
-    config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //@todo should be parameter
-    //iframe.ly/api/oembed?url={url}&callback={callback}&api_key=xxxx
+    config.embed_provider = '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=c5df7c080ef5012895b07a&iframe=1&omit_script=1';
 
+    config.startupFocus = true;
     // allow i tags to be empty (for font awesome)
     CKEDITOR.dtd.$removeEmpty['i'] = false;
 

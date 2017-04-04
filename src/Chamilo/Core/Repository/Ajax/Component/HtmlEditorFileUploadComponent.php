@@ -35,7 +35,7 @@ class HtmlEditorFileUploadComponent extends Manager
             "filename" => $fileContentObject->get_filename(),
             "co-id" => $fileContentObject->getId(),
             "security-code" => $fileContentObject->calculate_security_code(),
-            "type" => 'image',
+            "type" => $fileContentObject->is_image() ? 'image': 'file',
             "url" => $thumbnailUrl
         );
 

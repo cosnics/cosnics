@@ -33,7 +33,7 @@
 
             // Handle images which are available in the dataTransfer.
             fileTools.addUploadWidget( editor, 'uploadimage', {
-                supportedTypes: /image\/(jpeg|png|gif|bmp)/,
+                //supportedTypes: /image\/(jpeg|png|gif|bmp)/,
 
                 uploadUrl: uploadUrl,
 
@@ -53,17 +53,30 @@
                 },
 
                 onUploaded: function( upload ) {
-                    // Width and height could be returned by server (#13519).
-                    var $img = this.parts.img.$,
-                        width = upload.responseData.width || $img.naturalWidth,
-                        height = upload.responseData.height || $img.naturalHeight;
-                    // Set width and height to prevent blinking.
-                    this.replaceWith( '<p><img src="' + upload.url + '" ' +
-                        'data-co-id="' + upload.responseData['co-id'] + '"' +
-                        'data-security-code="' + upload.responseData['security-code'] + '"' +
-                        'data-type="'+upload.responseData['type']+'"' +
-                        'width="' + width + '" ' +
-                        'height="' + height + '"></p>' );
+
+                    var response = upload.responseData;
+
+                    if(response['type'] === 'image') {
+                        // Width and height could be returned by server (#13519).
+                        var $img = this.parts.img.$,
+                            width = response.width || $img.naturalWidth,
+                            height = response.height || $img.naturalHeight;
+
+                        this.replaceWith( '<div><img src="' + upload.url + '" ' +
+                            'data-co-id="' + response['co-id'] + '"' +
+                            'data-security-code="' + response['security-code'] + '"' +
+                            'data-type="'+response['type']+'"' +
+                            'width="' + width + '" ' +
+                            'height="' + height + '"></div>' );
+                    }
+                    else {
+                        this.replaceWith( '<div ' +
+                            'data-co-id="' + response['co-id'] + '"' +
+                            'data-security-code="' + response['security-code'] + '"' +
+                            'data-type="'+response['type']+'"' +
+                            '"></div><br>' );
+                    }
+
                 }
             } );
 
