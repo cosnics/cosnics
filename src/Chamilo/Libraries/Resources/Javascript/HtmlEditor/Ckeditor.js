@@ -73,7 +73,6 @@ CKEDITOR.editorConfig = function(config)
     config.allowedContent = true;
     config.resize_dir = 'both';
     config.enterMode = CKEDITOR.ENTER_DIV;
-    config.embed_provider = '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=c5df7c080ef5012895b07a&iframe=1&omit_script=1';
 
     config.startupFocus = true;
     // allow i tags to be empty (for font awesome)

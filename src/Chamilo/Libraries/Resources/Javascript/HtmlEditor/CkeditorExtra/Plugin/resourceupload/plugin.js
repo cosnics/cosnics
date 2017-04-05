@@ -67,7 +67,7 @@
                             'data-security-code="' + response['security-code'] + '"' +
                             'data-type="'+response['type']+'"' +
                             'width="' + width + '" ' +
-                            'height="' + height + '"></div>' );
+                            'height="' + height + '"></div><br>' );
                     }
                     else {
                         this.replaceWith( '<div ' +

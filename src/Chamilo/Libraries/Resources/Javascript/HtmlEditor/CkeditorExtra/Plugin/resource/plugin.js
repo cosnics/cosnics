@@ -15,7 +15,30 @@
                     var re = new RegExp("(<p)([^>]*>.*?)(<\/p>)","gi") ;
                     html = html.replace( re, "<DIV$2</DIV>" ) ;
                     ev.data.dataValue = html;
-                })
+
+                    if(ev.data.dataTransfer.getData("data-co-id")){
+                        //ev.data.preventDefault(true);
+                        var coId = ev.data.dataTransfer.getData("data-co-id");
+                        var type = 'file';
+                        var securityCode = 'meh';
+
+                        var width = 200; //@todo drag parameter
+                        var height = 200;
+
+                        var attributes = 'data-co-id="' + coId + '"' +
+                            'data-security-code="' + securityCode + '"' +
+                            'data-type="'+type+'"' +
+                            'width="' + width + '" ' +
+                            'height="' + height + '"';
+
+                        if(type === 'image') {
+                            ev.data.dataValue = '<div><img ' + attributes + '></div><br>';
+                        }
+                        else {
+                            ev.data.dataValue = '<div ' + attributes + '></div><br>';
+                        }
+                    }
+                });
             });
 
             editor.on('pluginsLoaded', function( evt ) {
