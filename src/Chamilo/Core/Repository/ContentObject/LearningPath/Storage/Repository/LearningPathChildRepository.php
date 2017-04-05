@@ -43,7 +43,7 @@ class LearningPathChildRepository extends CommonDataClassRepository
                 $condition, null, null,
                 new OrderBy(
                     new PropertyConditionVariable(
-                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_SECTION_CONTENT_OBJECT_ID
+                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
                     ),
                     new PropertyConditionVariable(
                         LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER

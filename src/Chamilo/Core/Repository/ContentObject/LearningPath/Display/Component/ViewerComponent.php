@@ -5,9 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTranslator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -70,7 +70,29 @@ class ViewerComponent extends TabComponent
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = '<div class="error-message">' . Translation::get('NotYetAllowedToView') . '</div>';
+            $html[] = '<div class="alert alert-danger">';
+            $html[] = Translation::get('NotYetAllowedToView');
+
+            $responsibleNodes = $learningPathTrackingService->getResponsibleNodesForBlockedLearningPathTreeNode(
+                $learning_path, $this->getUser(), $this->getCurrentLearningPathTreeNode()
+            );
+
+            $html[] = '<br /><br />';
+            $html[] = '<ul>';
+
+            foreach($responsibleNodes as $responsibleNode)
+            {
+                $nodeUrl = $this->get_url(array(self::PARAM_CHILD_ID => $responsibleNode->getId()));
+
+                $html[] = '<li>';
+                $html[] = '<a href="' . $nodeUrl . '">';
+                $html[] = $responsibleNode->getContentObject()->get_title();
+                $html[] = '</a>';
+                $html[] = '</li>';
+            }
+
+            $html[] = '</ol>';
+            $html[] = '</div>';
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -184,9 +206,9 @@ class ViewerComponent extends TabComponent
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-//        $selected_complex_content_object_item_id = $this->get_current_complex_content_object_item()->get_id();
-
-        return parent::get_content_object_display_attachment_url($attachment, $selected_complex_content_object_item_id);
+        return parent::get_content_object_display_attachment_url(
+            $attachment, $this->getCurrentLearningPathTreeNode()->getId()
+        );
     }
 
     /**
@@ -221,7 +243,7 @@ class ViewerComponent extends TabComponent
             $parameters[CreatorComponent::PARAM_CREATE_MODE] = CreatorComponent::CREATE_MODE_FOLDER;
 
             $folderSelector = new ActionSelector(
-                $this, $this->getUser()->getId(), array(LearningPath::class_name()), $parameters
+                $this, $this->getUser()->getId(), array(Section::class_name()), $parameters
             );
 
             $folderButton = $folderSelector->getActionButton(

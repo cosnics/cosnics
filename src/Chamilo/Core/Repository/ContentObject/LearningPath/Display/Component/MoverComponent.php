@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -238,7 +239,7 @@ class MoverComponent extends TabComponent
             $node_disabled = false;
         }
 
-        $parents = array(1 => array($name, $node_disabled));
+        $parents = array($root->getId() => array($name, $node_disabled));
         $parents = $this->get_children_from_node($root, $selectedNodes, $node_disabled, $parents);
 
         return $parents;
@@ -260,6 +261,11 @@ class MoverComponent extends TabComponent
         foreach ($node->getChildNodes() as $child)
         {
             $content_object = $child->getContentObject();
+
+            if(!$content_object instanceof Section)
+            {
+                continue;
+            }
 
             if (in_array($child, $selectedNodes))
             {

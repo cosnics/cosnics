@@ -1,0 +1,6 @@
+ul.tree-menu li div a.section, ul.tree-menu li div a.type_section, ul.tree-menu li div a.type_section_default,
+	.treeview .list-group .list-group-item .icon.node-icon.type_section,
+	.treeview .list-group .list-group-item .icon.node-icon.type_section_default
+	{
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}

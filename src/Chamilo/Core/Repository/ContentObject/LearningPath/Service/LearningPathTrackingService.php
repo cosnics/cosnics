@@ -479,9 +479,9 @@ class LearningPathTrackingService
      * @param User $user
      * @param LearningPathTreeNode $learningPathTreeNode
      *
-     * @return array
+     * @return LearningPathTreeNode[]
      */
-    public function getReponsibleNodesForBlockedLearningPathTreeNode(
+    public function getResponsibleNodesForBlockedLearningPathTreeNode(
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {

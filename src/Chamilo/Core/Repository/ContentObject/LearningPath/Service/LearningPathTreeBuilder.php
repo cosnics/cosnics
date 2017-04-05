@@ -62,8 +62,8 @@ class LearningPathTreeBuilder
 
         foreach ($learningPathChildren as $learningPathChild)
         {
-            $orderedLearningPathChildren[$learningPathChild->getSectionContentObjectId(
-            )][$learningPathChild->getDisplayOrder()] = $learningPathChild;
+            $orderedLearningPathChildren[$learningPathChild->getParentLearningPathChildId()]
+            [$learningPathChild->getDisplayOrder()] = $learningPathChild;
         }
 
         $this->addChildrenForSection(0, $orderedLearningPathChildren, $learningPathTree, $rootLearningPathTreeNode);
@@ -72,17 +72,17 @@ class LearningPathTreeBuilder
     }
 
     /**
-     * @param int $sectionId
+     * @param int $parentLearningPathChildId
      * @param LearningPathChild[][] $orderedLearningPathChildren
      * @param LearningPathTree $learningPathTree
      * @param LearningPathTreeNode $parentLearningPathTreeNode
      */
     protected function addChildrenForSection(
-        $sectionId = 0, $orderedLearningPathChildren = array(), LearningPathTree $learningPathTree,
+        $parentLearningPathChildId = 0, $orderedLearningPathChildren = array(), LearningPathTree $learningPathTree,
         LearningPathTreeNode $parentLearningPathTreeNode
     )
     {
-        $learningPathChildrenForSection = $orderedLearningPathChildren[$sectionId];
+        $learningPathChildrenForSection = $orderedLearningPathChildren[$parentLearningPathChildId];
         ksort($learningPathChildrenForSection);
 
         foreach ($learningPathChildrenForSection as $learningPathChild)

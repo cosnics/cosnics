@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\learning_path\display
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+MasteryComponent = "Set the mastery score"
+SetMasteryScore = "Set the mastery score"
+MasteryScore = "Mastery score"
+MasteryScoreSet = "Mastery score set"
+NoMasteryScore = No mastery score"

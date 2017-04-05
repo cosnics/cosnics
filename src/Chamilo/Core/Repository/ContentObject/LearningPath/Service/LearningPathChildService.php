@@ -48,7 +48,7 @@ class LearningPathChildService
         $learningPathChild = new LearningPathChild();
 
         $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
-        $learningPathChild->setSectionContentObjectId((int) $parentLearningPathTreeNode->getId());
+        $learningPathChild->setParentLearningPathChildId((int) $parentLearningPathTreeNode->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
 
         if (!$this->learningPathChildRepository->create($learningPathChild))
@@ -56,7 +56,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not create a LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -84,7 +84,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -110,9 +110,9 @@ class LearningPathChildService
     {
         $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
 
-        if ($learningPathChild->getSectionContentObjectId() != $parentLearningPathTreeNode->getId())
+        if ($learningPathChild->getParentLearningPathChildId() != $parentLearningPathTreeNode->getId())
         {
-            $learningPathChild->setSectionContentObjectId(
+            $learningPathChild->setParentLearningPathChildId(
                 (int) $parentLearningPathTreeNode->getId()
             );
         }
@@ -127,7 +127,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -157,7 +157,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -186,7 +186,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not delete the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );

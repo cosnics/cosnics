@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
@@ -14,6 +14,6 @@ class ComplexLearningPath extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(LearningPath::class_name(), LearningPathItem::class_name());
+        return array(Section::class_name());
     }
 }
