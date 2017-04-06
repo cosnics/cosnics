@@ -31,12 +31,7 @@ class LearningPathChildRepository extends CommonDataClassRepository
      */
     public function retrieveLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
-            ),
-            new StaticConditionVariable($learningPath->getId())
-        );
+        $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
             LearningPathChild::class_name(), new DataClassRetrievesParameters(
@@ -54,37 +49,6 @@ class LearningPathChildRepository extends CommonDataClassRepository
     }
 
     /**
-     * Updates every parent learning path id in the LearningPathChild table from the given old id to the
-     * given new id
-     *
-     * @param int $oldParentLearningPathId
-     * @param int $newParentLearningPathId
-     *
-     * @return bool
-     */
-    public function updateParentLearningPathIds($oldParentLearningPathId, $newParentLearningPathId)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
-            ),
-            new StaticConditionVariable($oldParentLearningPathId)
-        );
-
-        $updateProperties = new DataClassProperties();
-
-        $updateProperties->add(
-            new DataClassProperty(
-                new PropertyConditionVariable(
-                    LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
-                ), new StaticConditionVariable($newParentLearningPathId)
-            )
-        );
-
-        return $this->dataClassRepository->updates(LearningPathChild::class_name(), $updateProperties, $condition);
-    }
-
-    /**
      * Clears the learning path children cache
      *
      * @return bool
@@ -93,6 +57,36 @@ class LearningPathChildRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
             LearningPathChild::class_name()
+        );
+    }
+
+    /**
+     * Deletes every child object that belongs to a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return bool
+     */
+    public function deleteChildrenFromLearningPath(LearningPath $learningPath)
+    {
+        $condition = $this->getConditionForLearningPath($learningPath);
+        return $this->dataClassRepository->deletes(LearningPathChild::class_name(), $condition);
+    }
+
+    /**
+     * Builds and returns the condition for the LearningPathChild objects of a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return EqualityCondition
+     */
+    protected function getConditionForLearningPath(LearningPath $learningPath)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
+            ),
+            new StaticConditionVariable($learningPath->getId())
         );
     }
 }

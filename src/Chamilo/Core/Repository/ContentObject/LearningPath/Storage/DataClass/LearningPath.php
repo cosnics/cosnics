@@ -5,10 +5,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -111,6 +113,33 @@ class LearningPath extends ContentObject
     public function enforcesDefaultTraversingOrder()
     {
         return (bool) $this->get_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+    }
+
+    /**
+     * Delete a Forum Topic and all its posts.
+     *
+     * @return boolean Returns whether the delete was succesfull.
+     */
+    public function delete($only_version)
+    {
+        if ($only_version)
+        {
+            $this->getLearningPathChildService()->emptyLearningPath($this);
+        }
+
+        return parent::delete($only_version);
+    }
+
+    /**
+     * @return object | LearningPathChildService
+     */
+    protected function getLearningPathChildService()
+    {
+        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $serviceContainer->get(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
+        );
     }
 
     /**

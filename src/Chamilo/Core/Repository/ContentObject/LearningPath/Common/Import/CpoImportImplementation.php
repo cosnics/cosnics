@@ -41,7 +41,7 @@ class CpoImportImplementation extends ImportImplementation
 
             $learningPathChild = new LearningPathChild($properties);
             $learningPathChild->setLearningPathId((int) $contentObject->getId());
-            $learningPathChildren[$childNode->getAttribute('id')] = $learningPathChild;
+            $learningPathChildren[] = $learningPathChild;
         }
 
         $this->importLearningPathChildren($learningPathChildren);
@@ -74,7 +74,7 @@ class CpoImportImplementation extends ImportImplementation
     )
     {
         $learningPathChildren = $orderedLearningPathChildren[$oldParentId];
-        foreach ($learningPathChildren as $oldLearningPathChildId => $learningPathChild)
+        foreach ($learningPathChildren as $learningPathChild)
         {
             $newContentObjectId =
                 $this->get_controller()->get_content_object_id_cache_id($learningPathChild->getContentObjectId());
@@ -99,6 +99,9 @@ class CpoImportImplementation extends ImportImplementation
                 }
             }
 
+            $oldLearningPathChildId = $learningPathChild->getId();
+
+            $learningPathChild->setId(null);
             $learningPathChild->setContentObjectId((int) $newContentObjectId);
 
             $learningPathChild->setParentLearningPathChildId(
@@ -125,7 +128,7 @@ class CpoImportImplementation extends ImportImplementation
     {
         $orderedLearningPathChildren = array();
 
-        foreach ($learningPathChildren as $learningPathChildId => $learningPathChild)
+        foreach ($learningPathChildren as $learningPathChild)
         {
             $orderedLearningPathChildren[$learningPathChild->getParentLearningPathChildId()]
                 [$learningPathChild->getDisplayOrder()] = $learningPathChild;

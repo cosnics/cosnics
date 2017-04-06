@@ -101,10 +101,6 @@ class LearningPathChildService
                 )
             );
         }
-
-        $this->learningPathChildRepository->updateParentLearningPathIds(
-            $learningPathTreeNode->getContentObject()->getId(), $newContentObject->getId()
-        );
     }
 
     /**
@@ -208,6 +204,19 @@ class LearningPathChildService
         foreach ($childNodes as $childNode)
         {
             $this->deleteContentObjectFromLearningPath($childNode);
+        }
+    }
+
+    /**
+     * Empties the given learning path by removing all the children
+     *
+     * @param LearningPath $learningPath
+     */
+    public function emptyLearningPath(LearningPath $learningPath)
+    {
+        if(!$this->learningPathChildRepository->deleteChildrenFromLearningPath($learningPath))
+        {
+            throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
         }
     }
 }
