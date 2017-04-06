@@ -31,6 +31,18 @@ class LearningPathChildService
     }
 
     /**
+     * Returns the LearningPathChild objects that belong to a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return LearningPathChild[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function getLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    {
+        return $this->learningPathChildRepository->retrieveLearningPathChildrenForLearningPath($learningPath);
+    }
+
+    /**
      * Adds a given content object to a learning path. Validates the content object to make sure that the
      * system does not create a cycle. Uses the LearningPathTree for calculations.
      *
