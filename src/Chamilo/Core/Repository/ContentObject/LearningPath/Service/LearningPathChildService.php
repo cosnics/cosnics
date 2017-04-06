@@ -39,7 +39,19 @@ class LearningPathChildService
      */
     public function getLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
-        return $this->learningPathChildRepository->retrieveLearningPathChildrenForLearningPath($learningPath);
+        return $this->learningPathChildRepository->findLearningPathChildrenForLearningPath($learningPath);
+    }
+
+    /**
+     * Returns the LearningPathChild objects that belong to a given content object ids (not as parent)
+     *
+     * @param int[] $contentObjectIds
+     *
+     * @return LearningPathChild[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function getLearningPathChildrenByContentObjects($contentObjectIds)
+    {
+        return $this->learningPathChildRepository->findLearningPathChildrenByContentObjects($contentObjectIds);
     }
 
     /**

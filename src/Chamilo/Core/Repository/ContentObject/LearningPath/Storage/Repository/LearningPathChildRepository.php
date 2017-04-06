@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -29,7 +31,7 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @return LearningPathChild[] | DataClassIterator
      */
-    public function retrieveLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    public function findLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
@@ -45,6 +47,27 @@ class LearningPathChildRepository extends CommonDataClassRepository
                     )
                 )
             )
+        );
+    }
+
+    /**
+     * Retrieves the learning path children for a given learning path
+     *
+     * @param int[] $contentObjectIds
+     *
+     * @return LearningPathChild[] | DataClassIterator
+     */
+    public function findLearningPathChildrenByContentObjects($contentObjectIds)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_CONTENT_OBJECT_ID
+            ),
+            $contentObjectIds
+        );
+
+        return $this->dataClassRepository->retrieves(
+            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
         );
     }
 

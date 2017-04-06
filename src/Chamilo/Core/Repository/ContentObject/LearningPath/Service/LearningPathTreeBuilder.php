@@ -56,7 +56,7 @@ class LearningPathTreeBuilder
         $rootLearningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
 
         $learningPathChildren = $this->learningPathChildRepository
-            ->retrieveLearningPathChildrenForLearningPath($learningPath);
+            ->findLearningPathChildrenForLearningPath($learningPath);
 
         $orderedLearningPathChildren = array();
 
