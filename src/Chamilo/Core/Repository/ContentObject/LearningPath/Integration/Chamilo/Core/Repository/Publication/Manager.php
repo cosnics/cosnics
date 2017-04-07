@@ -25,6 +25,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -197,9 +198,15 @@ class Manager implements PublicationInterface
     }
 
     /**
-     * @return LearningPathPublicationService
+     * @return LearningPathPublicationService | object
      */
     protected static function getLearningPathPublicationService()
     {
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $dependencyInjectionContainer->get(
+            'chamilo.core.repository.content_object.learning_path.integration.' .
+            'chamilo.core.repository.publication.service.learning_path_publication_service'
+        );
     }
 }

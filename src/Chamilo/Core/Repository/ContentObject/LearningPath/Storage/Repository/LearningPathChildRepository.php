@@ -4,11 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -69,6 +65,18 @@ class LearningPathChildRepository extends CommonDataClassRepository
         return $this->dataClassRepository->retrieves(
             LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
         );
+    }
+
+    /**
+     * Retrieves a learning path child by a given identifier
+     *
+     * @param int $learningPathChildId
+     *
+     * @return LearningPathChild | DataClass
+     */
+    public function findLearningPathChild($learningPathChildId)
+    {
+        return $this->dataClassRepository->retrieveById(LearningPathChild::class_name(), $learningPathChildId);
     }
 
     /**

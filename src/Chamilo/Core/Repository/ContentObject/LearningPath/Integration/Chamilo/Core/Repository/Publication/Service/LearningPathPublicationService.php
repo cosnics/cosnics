@@ -2,9 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 
@@ -27,17 +33,30 @@ class LearningPathPublicationService
     protected $learningPathTreeBuilder;
 
     /**
+     * @var ContentObjectRepository
+     */
+    protected $contentObjectRepository;
+
+    /**
+     * @var LearningPathTree[]
+     */
+    protected $learningPathTreeCache;
+
+    /**
      * LearningPathPublicationService constructor.
      *
      * @param LearningPathChildService $learningPathChildService
      * @param LearningPathTreeBuilder $learningPathTreeBuilder
+     * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        LearningPathChildService $learningPathChildService, LearningPathTreeBuilder $learningPathTreeBuilder
+        LearningPathChildService $learningPathChildService, LearningPathTreeBuilder $learningPathTreeBuilder,
+        ContentObjectRepository $contentObjectRepository
     )
     {
         $this->learningPathChildService = $learningPathChildService;
         $this->learningPathTreeBuilder = $learningPathTreeBuilder;
+        $this->contentObjectRepository = $contentObjectRepository;
     }
 
     /**
@@ -60,6 +79,28 @@ class LearningPathPublicationService
      */
     public function deleteContentObjectPublicationsByObjectId($contentObjectId)
     {
+        $learningPathChildren =
+            $this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId));
+
+        foreach ($learningPathChildren as $learningPathChild)
+        {
+            $learningPathTree = $this->getLearningPathTreeForLearningPathChild($learningPathChild);
+            foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
+            {
+                if ($learningPathTreeNode->getContentObject()->getId() != $contentObjectId)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    $this->learningPathChildService->deleteContentObjectFromLearningPath($learningPathTreeNode);
+                }
+                catch (\Exception $ex)
+                {
+                }
+            }
+        }
     }
 
     /**
@@ -69,6 +110,8 @@ class LearningPathPublicationService
      */
     public function deleteContentObjectPublicationsByLearningPathChildId($learningPathChildId)
     {
+        $learningPathTreeNode = $this->getLearningPathTreeNodeByLearningPathChildId($learningPathChildId);
+        $this->learningPathChildService->deleteContentObjectFromLearningPath($learningPathTreeNode);
     }
 
     /**
@@ -79,6 +122,14 @@ class LearningPathPublicationService
      */
     public function updateContentObjectIdInLearningPathChild($learningPathChildId, $newContentObjectId)
     {
+        $learningPathTreeNode = $this->getLearningPathTreeNodeByLearningPathChildId($learningPathChildId);
+
+        $newContentObject = new ContentObject();
+        $newContentObject->setId($newContentObjectId);
+
+        $this->learningPathChildService->updateContentObjectInLearningPathChild(
+            $learningPathTreeNode, $newContentObject
+        );
     }
 
     /**
@@ -90,6 +141,9 @@ class LearningPathPublicationService
      */
     public function getContentObjectPublicationAttributesForLearningPathChild($learningPathChildId)
     {
+        $learningPathChild = $this->learningPathChildService->getLearningPathChildById($learningPathChildId);
+
+        return $this->getAttributesForLearningPathChild($learningPathChild);
     }
 
     /**
@@ -107,7 +161,17 @@ class LearningPathPublicationService
         $contentObjectId, $condition = null, $count = null, $offset = null, $order_properties = null
     )
     {
+        $learningPathChildren =
+            $this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId));
 
+        $attributes = array();
+
+        foreach ($learningPathChildren as $learningPathChild)
+        {
+            $attributes[] = $this->getAttributesForLearningPathChild($learningPathChild);
+        }
+
+        return $attributes;
     }
 
     /**
@@ -137,6 +201,7 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForContentObject($contentObjectId, $condition = null)
     {
+        return count($this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId)));
     }
 
     /**
@@ -149,6 +214,92 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForUser($userId, $condition = null)
     {
+    }
+
+    /**
+     * Returns a learning path tree node by a given learning path child identifier
+     *
+     * @param int $learningPathChildId
+     *
+     * @return LearningPathTreeNode
+     */
+    protected function getLearningPathTreeNodeByLearningPathChildId($learningPathChildId)
+    {
+        $learningPathChild = $this->learningPathChildService->getLearningPathChildById($learningPathChildId);
+
+        $learningPathTree = $this->getLearningPathTreeForLearningPathChild($learningPathChild);
+        $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $learningPathChildId);
+
+        return $learningPathTreeNode;
+    }
+
+    /**
+     * Builds the learning path tree that belongs to a given learning path child
+     *
+     * @param LearningPathChild $learningPathChild
+     *
+     * @return LearningPathTree
+     */
+    protected function getLearningPathTreeForLearningPathChild(LearningPathChild $learningPathChild)
+    {
+        if (!array_key_exists($learningPathChild->getLearningPathId(), $this->learningPathTreeCache))
+        {
+            $learningPath = $this->getLearningPathByLearningPathChild($learningPathChild);
+
+            $this->learningPathTreeCache[$learningPathChild->getLearningPathId()] =
+                $this->learningPathTreeBuilder->buildLearningPathTree($learningPath);
+        }
+
+        return $this->learningPathTreeCache[$learningPathChild->getLearningPathId()];
+    }
+
+    /**
+     * Returns the learning path for the given learning path child
+     *
+     * @param LearningPathChild $learningPathChild
+     *
+     * @return LearningPath
+     */
+    protected function getLearningPathByLearningPathChild(LearningPathChild $learningPathChild)
+    {
+        $learningPath = $this->contentObjectRepository->findById($learningPathChild->getLearningPathId());
+
+        if (!$learningPath instanceof LearningPath)
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'The given learning path child with id %s is found in a learning path that doesn\'t exist',
+                    $learningPathChild->getId()
+                )
+            );
+        }
+
+        return $learningPath;
+    }
+
+    /**
+     * Builds the publication attributes for the given learning path child
+     *
+     * @param LearningPathChild $learningPathChild
+     *
+     * @return Attributes
+     */
+    protected function getAttributesForLearningPathChild(LearningPathChild $learningPathChild)
+    {
+        $learningPath = $this->getLearningPathByLearningPathChild($learningPathChild);
+        $contentObject = $this->contentObjectRepository->findById($learningPathChild->getContentObjectId());
+
+        $attributes = new Attributes();
+        $attributes->setId($learningPathChild->getId());
+        $attributes->set_application('Chamilo\Core\Repository\ContentObject\LearningPath');
+        $attributes->set_publisher_id($learningPath->get_owner_id());
+        $attributes->set_date($contentObject->get_creation_date());
+        $attributes->set_location($learningPath->get_title());
+        $attributes->set_url(null);
+        $attributes->set_title($contentObject->get_title());
+        $attributes->set_content_object_id($learningPathChild->getContentObjectId());
+
+        return $attributes;
     }
 
 }

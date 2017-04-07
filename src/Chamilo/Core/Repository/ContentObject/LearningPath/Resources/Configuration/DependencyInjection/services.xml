@@ -22,5 +22,18 @@
                     id="chamilo.core.repository.content_object.learning_path.storage.repository.learning_path_child_repository" />
         </service>
 
+        <service
+                id="chamilo.core.repository.content_object.learning_path.integration.chamilo.core.repository.publication.service.learning_path_publication_service"
+                class="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathPublicationService">
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.content_object.learning_path.service.learning_path_child_service" />
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder" />
+            <argument type="service"
+                      id="chamilo.core.repository.workspace.repository.content_object_repository" />
+        </service>
+
     </services>
 </container>

@@ -55,6 +55,26 @@ class LearningPathChildService
     }
 
     /**
+     * Returns a LearningPathChild by a given identifier
+     *
+     * @param int $learningPathChildId
+     *
+     * @return LearningPathChild
+     */
+    public function getLearningPathChildById($learningPathChildId)
+    {
+        $learningPathChild = $this->learningPathChildRepository->findLearningPathChild($learningPathChildId);
+        if (!$learningPathChild)
+        {
+            throw new \RuntimeException(
+                sprintf('The given learning path child with id %s could not be found', $learningPathChildId)
+            );
+        }
+
+        return $learningPathChild;
+    }
+
+    /**
      * Adds a given content object to a learning path. Validates the content object to make sure that the
      * system does not create a cycle. Uses the LearningPathTree for calculations.
      *
