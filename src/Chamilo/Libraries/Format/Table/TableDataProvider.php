@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**

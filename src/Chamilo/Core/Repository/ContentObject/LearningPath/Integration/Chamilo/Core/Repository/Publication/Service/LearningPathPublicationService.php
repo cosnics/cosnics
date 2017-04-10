@@ -150,16 +150,10 @@ class LearningPathPublicationService
      * Returns the ContentObject publication attributes for a given content object (identified by id)
      *
      * @param int $contentObjectId
-     * @param Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param OrderBy[] $order_properties
      *
      * @return Attributes[]
      */
-    public function getContentObjectPublicationAttributesForContentObject(
-        $contentObjectId, $condition = null, $count = null, $offset = null, $order_properties = null
-    )
+    public function getContentObjectPublicationAttributesForContentObject($contentObjectId)
     {
         $learningPathChildren =
             $this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId));
@@ -178,28 +172,22 @@ class LearningPathPublicationService
      * Returns the ContentObject publication attributes for a given user (identified by id)
      *
      * @param int $userId
-     * @param Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param OrderBy[] $order_properties
      *
      * @return Attributes[]
      */
-    public function getContentObjectPublicationAttributesForUser(
-        $userId, $condition = null, $count = null, $offset = null, $order_properties = null
-    )
+    public function getContentObjectPublicationAttributesForUser($userId)
     {
+        return array();
     }
 
     /**
      * Counts the ContentObject publication attributes for a given content object (identified by id)
      *
      * @param int $contentObjectId
-     * @param Condition $condition
      *
      * @return int
      */
-    public function countContentObjectPublicationAttributesForContentObject($contentObjectId, $condition = null)
+    public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
     {
         return count($this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId)));
     }
@@ -208,12 +196,12 @@ class LearningPathPublicationService
      * Counts the ContentObject publication attributes for a given user (identified by id)
      *
      * @param int $userId
-     * @param Condition $condition
      *
      * @return int
      */
-    public function countContentObjectPublicationAttributesForUser($userId, $condition = null)
+    public function countContentObjectPublicationAttributesForUser($userId)
     {
+        return 0;
     }
 
     /**

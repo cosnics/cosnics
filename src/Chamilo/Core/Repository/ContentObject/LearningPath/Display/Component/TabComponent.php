@@ -171,7 +171,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html = array();
 
-        if ($this->get_action() != self::ACTION_REPORTING || $this->is_current_step_set())
+        if ($this->get_action() != self::ACTION_REPORTING || $this->isCurrentLearningPathChildIdSet())
         {
 
             $html[] = '<div class="navbar-learning-path">';

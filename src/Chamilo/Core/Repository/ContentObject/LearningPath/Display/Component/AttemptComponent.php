@@ -29,7 +29,7 @@ class AttemptComponent extends Manager
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
         
-        if ($this->is_current_step_set())
+        if ($this->isCurrentLearningPathChildIdSet())
         {
             $item_attempt_id = Request::get(self::PARAM_ITEM_ATTEMPT_ID);
             

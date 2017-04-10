@@ -27,18 +27,18 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer imp
      * Renders a single cell
      * 
      * @param TableColumn $column
-     * @param string[] $row
+     * @param string[] $learningPathTreeNode
      *
      * @return String
      */
-    public function render_cell($column, $row)
+    public function render_cell($column, $learningPathTreeNode)
     {
         if ($column->get_name() == 'target_entities')
         {
-            return $this->renderTargetEntities($row['target_entities']);
+            return $this->renderTargetEntities($learningPathTreeNode['target_entities']);
         }
         
-        return parent::render_cell($column, $row);
+        return parent::render_cell($column, $learningPathTreeNode);
     }
 
     /**

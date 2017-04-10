@@ -1,8 +1,13 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,116 +30,161 @@ class ProgressBlock extends ReportingBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        
+
         $reporting_data->set_rows(
             array(
-                Translation::get('Type'), 
-                Translation::get('Title'), 
-                Translation::get('Status'), 
-                Translation::get('Score'), 
-                Translation::get('Time'), 
-                Translation::get('Action')));
-        
-        $path = $this->get_parent()->get_parent()->get_complex_content_object_path();
-        
+                Translation::get('Type'),
+                Translation::get('Title'),
+                Translation::get('Status'),
+                Translation::get('Score'),
+                Translation::get('Time'),
+                Translation::get('Action')
+            )
+        );
+
+        /** @var LearningPathTree $learningPathTree */
+        $learningPathTree = $this->get_parent()->get_parent()->getLearningPathTree();
+
+        /** @var LearningPathTrackingService $learningPathTrackingService */
+        $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
+
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
+
+        /** @var User $user */
+        $user = $this->get_parent()->get_parent()->getUser();
+
         $counter = 1;
         $total_time = 0;
         $attempt_count = 0;
-        
-        foreach ($path->get_nodes() as $node)
+
+        foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
         {
-            $content_object = $node->get_content_object();
+            $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
+                $learningPath, $user, $learningPathTreeNode
+            );
+
+            $content_object = $learningPathTreeNode->getContentObject();
             $category = $counter;
             $reporting_data->add_category($category);
-            
+
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Type'), 
-                $content_object->get_icon_image());
-            
+                $category,
+                Translation::get('Type'),
+                $content_object->get_icon_image()
+            );
+
             $reporting_data->add_data_category_row($category, Translation::get('Title'), $content_object->get_title());
-            
-            $status = $node->is_completed() ? Translation::get('Completed') : Translation::get('Incomplete');
-            
+
+            $status = $learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                $learningPath, $user, $learningPathTreeNode
+            ) ?
+                Translation::get('Completed') : Translation::get('Incomplete');
+
             $reporting_data->add_data_category_row($category, Translation::get('Status'), $status);
-            
+
+            $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
+                $learningPath, $user, $learningPathTreeNode
+            );
+
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Score'), 
-                $node->get_average_score() . '%');
+                $category,
+                Translation::get('Score'),
+                !is_null($averageScore) ? $averageScore . '%' : null
+            );
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Time'), 
-                DatetimeUtilities::format_seconds_to_hours($node->get_total_time()));
-            
+                $category,
+                Translation::get('Time'),
+                DatetimeUtilities::format_seconds_to_hours($totalTimeSpent)
+            );
+
             $actions = array();
-            
-            if (count($node->get_data()) > 0)
+
+            if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
+                $learningPath, $user, $learningPathTreeNode
+            )
+            )
             {
                 $reporting_url = $this->get_parent()->get_parent()->get_url(
                     array(
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING, 
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $node->getId()));
-                
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId(
+                        )
+                    )
+                );
+
                 $actions[] = Theme::getInstance()->getCommonImage(
-                    'Action/Statistics', 
-                    'png', 
-                    Translation::get('Details'), 
-                    $reporting_url, 
-                    ToolbarItem::DISPLAY_ICON);
-                
+                    'Action/Statistics',
+                    'png',
+                    Translation::get('Details'),
+                    $reporting_url,
+                    ToolbarItem::DISPLAY_ICON
+                );
+
                 if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
                 {
                     $delete_url = $this->get_parent()->get_parent()->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT, 
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $node->getId()));
-                    
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId(
+                            )
+                        )
+                    );
+
                     $actions[] = Theme::getInstance()->getCommonImage(
-                        'Action/Delete', 
-                        'png', 
-                        Translation::get('DeleteAttempt'), 
-                        $delete_url, 
-                        ToolbarItem::DISPLAY_ICON);
+                        'Action/Delete',
+                        'png',
+                        Translation::get('DeleteAttempt'),
+                        $delete_url,
+                        ToolbarItem::DISPLAY_ICON
+                    );
                 }
             }
-            
+
             $reporting_data->add_data_category_row($category, Translation::get('Action'), implode(PHP_EOL, $actions));
-            
-            $attempt_count += count($node->get_data());
-            $total_time += $node->get_total_time();
+
+            $attempt_count += $learningPathTrackingService->countLearningPathTreeNodeAttempts(
+                $learningPath, $user, $learningPathTreeNode
+            );
+
+            $total_time += $totalTimeSpent;
             $counter ++;
         }
-        
+
         $category_name = '-';
         $reporting_data->add_category($category_name);
         $reporting_data->add_data_category_row($category_name, Translation::get('Title'), '');
         $reporting_data->add_data_category_row(
-            $category_name, 
-            Translation::get('Status'), 
-            '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>');
+            $category_name,
+            Translation::get('Status'),
+            '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>'
+        );
         $reporting_data->add_data_category_row($category_name, Translation::get('Score'), '');
         $reporting_data->add_data_category_row(
-            $category_name, 
-            Translation::get('Time'), 
-            '<span style="font-weight: bold;">' . DatetimeUtilities::format_seconds_to_hours($total_time) . '</span>');
-        
+            $category_name,
+            Translation::get('Time'),
+            '<span style="font-weight: bold;">' . DatetimeUtilities::format_seconds_to_hours($total_time) . '</span>'
+        );
+
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data() && $attempt_count > 0)
         {
             $delete_url = $this->get_parent()->get_parent()->get_url(
                 array(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT));
-            
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT
+                )
+            );
+
             $action = Theme::getInstance()->getCommonImage(
-                'Action/Delete', 
-                'png', 
-                Translation::get('DeleteAllAttempts'), 
-                $delete_url, 
-                ToolbarItem::DISPLAY_ICON);
-            
+                'Action/Delete',
+                'png',
+                Translation::get('DeleteAllAttempts'),
+                $delete_url,
+                ToolbarItem::DISPLAY_ICON
+            );
+
             $reporting_data->add_data_category_row($category_name, Translation::get('Action'), $action);
         }
-        
+
         return $reporting_data;
     }
 

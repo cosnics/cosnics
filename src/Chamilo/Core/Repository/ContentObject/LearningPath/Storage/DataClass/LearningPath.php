@@ -18,7 +18,7 @@ use Chamilo\Libraries\File\Path;
  *
  * @package repository.lib.content_object.learning_path
  */
-class LearningPath extends ContentObject
+class LearningPath extends ContentObject implements ComplexContentObjectSupport
 {
     const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
     const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';

@@ -88,11 +88,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return boolean
      */
-    public function is_current_step_set()
+    public function isCurrentLearningPathChildIdSet()
     {
-        $currentStepFromRequest = $this->get_current_step_from_request();
+        $currentLearningPathChildId = $this->getRequest()->get(self::PARAM_CHILD_ID);
 
-        return !is_null($currentStepFromRequest);
+        return !is_null($currentLearningPathChildId);
     }
 
     /**
@@ -174,7 +174,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
      */
-    protected function getLearningPathTree()
+    public function getLearningPathTree()
     {
         if (!isset($this->learningPathTree))
         {

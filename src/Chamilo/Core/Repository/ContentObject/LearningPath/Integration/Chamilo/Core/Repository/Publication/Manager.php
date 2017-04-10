@@ -2,38 +2,13 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Course\Storage\DataClass\Course;
-use Chamilo\Core\Repository\ContentObject\LearningPath\CourseSettingsConnector;
-use Chamilo\Core\Repository\ContentObject\LearningPath\CourseSettingsController;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathPublicationService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Rights\CourseManagementRights;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ContentObjectPublicationMailer;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\CourseSetting;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\CourseTool;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CourseRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\PublicationRepository;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
 {
@@ -73,13 +48,13 @@ class Manager implements PublicationInterface
         if ($type == self::ATTRIBUTES_TYPE_OBJECT)
         {
             return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForContentObject(
-                $object_id, $condition, $count, $offset, $order_properties
+                $object_id
             );
         }
         else
         {
             return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForUser(
-                $object_id, $condition, $count, $offset, $order_properties
+                $object_id
             );
         }
     }
@@ -102,13 +77,13 @@ class Manager implements PublicationInterface
         if ($attributes_type == self::ATTRIBUTES_TYPE_OBJECT)
         {
             return self::getLearningPathPublicationService()->countContentObjectPublicationAttributesForContentObject(
-                $identifier, $condition
+                $identifier
             );
         }
         else
         {
             return self::getLearningPathPublicationService()->countContentObjectPublicationAttributesForUser(
-                $identifier, $condition
+                $identifier
             );
         }
     }
