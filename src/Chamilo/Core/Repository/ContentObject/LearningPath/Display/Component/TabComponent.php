@@ -51,12 +51,17 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
         );
 
-        $parentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
-        foreach ($parentNodes as $parentNode)
+        $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
+        $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
+
+        $breadcrumbsAction = $this->get_action() == self::ACTION_REPORTING ? self::ACTION_REPORTING :
+            self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+        foreach ($parentAndCurrentNodes as $parentNode)
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_CHILD_ID] = $parentNode->getId();
-            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+            $parameters[self::PARAM_ACTION] = $breadcrumbsAction;
             $trail->add(
                 new Breadcrumb($this->get_url($parameters), $parentNode->getContentObject()->get_title())
             );

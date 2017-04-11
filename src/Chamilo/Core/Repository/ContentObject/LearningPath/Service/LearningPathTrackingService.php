@@ -191,15 +191,39 @@ class LearningPathTrackingService
      *
      * @param LearningPath $learningPath
      * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return int
      */
-    public function getLearningPathProgress(LearningPath $learningPath, User $user)
+    public function getLearningPathProgress(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode = null
+    )
     {
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        if(is_null($learningPathTreeNode) || $learningPathTreeNode->isRootNode())
+        {
+            $learningPathAttempt =
+                $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
 
-        return $learningPathAttempt->get_progress();
+            return $learningPathAttempt->get_progress();
+        }
+
+        $descendantNodes = $learningPathTreeNode->getDescendantNodes();
+        if(empty($descendantNodes))
+        {
+            return 100;
+        }
+
+        $completedCount = 0;
+
+        foreach($descendantNodes as $descendantNode)
+        {
+            if($this->isLearningPathTreeNodeCompleted($learningPath, $user, $descendantNode))
+            {
+                $completedCount++;
+            }
+        }
+
+        return (int) round(($completedCount / count($descendantNodes) * 100));
     }
 
     /**
@@ -429,7 +453,7 @@ class LearningPathTrackingService
         if (!$learningPathTreeNode->getContentObject() instanceof Assessment)
         {
             throw new \RuntimeException(
-                'The given LearningPathTreeNode is not that of an assessment, could not save the score'
+                'The given LearningPathTreeNode is not connected to an assessment'
             );
         }
     }
@@ -586,17 +610,25 @@ class LearningPathTrackingService
             $totalTime += $learningPathAttempt->get_total_time();
         }
 
+        if ($learningPathTreeNode->hasChildNodes())
+        {
+            foreach ($learningPathTreeNode->getChildNodes() as $childNode)
+            {
+                $totalTime += $this->getTotalTimeSpentInLearningPathTreeNode($learningPath, $user, $childNode);
+            }
+        }
+
         return $totalTime;
     }
 
     /**
-     * Returns the average score in the given LearningPathTreeNode
+     * Returns the average score of the given user  in the given LearningPathTreeNode
      *
      * @param LearningPath $learningPath
      * @param User $user
      * @param LearningPathTreeNode $learningPathTreeNode
      *
-     * @return int
+     * @return float
      */
     public function getAverageScoreInLearningPathTreeNode(
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
@@ -615,7 +647,7 @@ class LearningPathTrackingService
 
         $learningPathAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
 
-        if(count($learningPathAttempts) == 0)
+        if (count($learningPathAttempts) == 0)
         {
             return 0;
         }
@@ -625,6 +657,83 @@ class LearningPathTrackingService
             $totalScore += $learningPathAttempt->get_score();
         }
 
-        return (int) $totalScore / count($learningPathAttempts);
+        return round($totalScore / count($learningPathAttempts), 2);
+    }
+
+    /**
+     * Returns the maximum score of the given user in the given LearningPathTreeNode
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return int
+     */
+    public function getMaximumScoreInLearningPathTreeNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
+
+        $maximumScore = 0;
+
+        $learningPathAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
+
+        foreach ($learningPathAttempts as $learningPathAttempt)
+        {
+            $maximumScore = $maximumScore < $learningPathAttempt->get_score() ?
+                $learningPathAttempt->get_score() : $maximumScore;
+        }
+
+        return $maximumScore;
+    }
+
+    /**
+     * Returns the minimum score of the given user in the given LearningPathTreeNode
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return int
+     */
+    public function getMinimumScoreInLearningPathTreeNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
+
+        $minimumScore = null;
+
+        $learningPathAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
+
+        foreach ($learningPathAttempts as $learningPathAttempt)
+        {
+            $minimumScore = is_null($minimumScore) || $minimumScore > $learningPathAttempt->get_score() ?
+                $learningPathAttempt->get_score() : $minimumScore;
+        }
+
+        return $minimumScore;
+    }
+
+    /**
+     * Returns the score for the last attempt of the given user in the given LearningPathTreeNode
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return string
+     */
+    public function getLastAttemptScoreForLearningPathTreeNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
+        $learningPathAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
+
+        $learningPathAttempt = array_pop($learningPathAttempts);
+
+        return $learningPathAttempt->get_score();
     }
 }
