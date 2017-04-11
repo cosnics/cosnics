@@ -108,21 +108,21 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
 
         $actions = array();
 
+        $reporting_url = $this->getReportingUrl($learningPathTreeNode);
+
+        $actions[] = Theme::getInstance()->getCommonImage(
+            'Action/Statistics',
+            'png',
+            Translation::get('Details'),
+            $reporting_url,
+            ToolbarItem::DISPLAY_ICON
+        );
+
         if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
             $learningPath, $user, $learningPathTreeNode
         )
         )
         {
-            $reporting_url = $this->getReportingUrl($learningPathTreeNode);
-
-            $actions[] = Theme::getInstance()->getCommonImage(
-                'Action/Statistics',
-                'png',
-                Translation::get('Details'),
-                $reporting_url,
-                ToolbarItem::DISPLAY_ICON
-            );
-
             if ($this->get_component()->is_allowed_to_edit_attempt_data())
             {
                 $delete_url = $this->get_component()->get_url(

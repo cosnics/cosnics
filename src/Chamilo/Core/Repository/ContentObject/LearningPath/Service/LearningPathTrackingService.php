@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
@@ -199,7 +200,7 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode = null
     )
     {
-        if(is_null($learningPathTreeNode) || $learningPathTreeNode->isRootNode())
+        if (is_null($learningPathTreeNode) || $learningPathTreeNode->isRootNode())
         {
             $learningPathAttempt =
                 $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
@@ -208,18 +209,18 @@ class LearningPathTrackingService
         }
 
         $descendantNodes = $learningPathTreeNode->getDescendantNodes();
-        if(empty($descendantNodes))
+        if (empty($descendantNodes))
         {
             return 100;
         }
 
         $completedCount = 0;
 
-        foreach($descendantNodes as $descendantNode)
+        foreach ($descendantNodes as $descendantNode)
         {
-            if($this->isLearningPathTreeNodeCompleted($learningPath, $user, $descendantNode))
+            if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $descendantNode))
             {
-                $completedCount++;
+                $completedCount ++;
             }
         }
 
@@ -441,6 +442,73 @@ class LearningPathTrackingService
         }
 
         return $questionAttemptPerQuestion;
+    }
+
+    /**
+     * Deletes the learning path child attempt by a given id. Verifies that this identifier belongs to the attempts
+     * for the given learning path and user
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param int $itemAttemptId
+     */
+    public function deleteLearningPathChildAttemptById(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $itemAttemptId
+    )
+    {
+        $learningPathTreeNodeAttempts = $this->getLearningPathTreeNodeAttempts(
+            $learningPath, $user, $learningPathTreeNode
+        );
+
+        foreach ($learningPathTreeNodeAttempts as $learningPathTreeNodeAttempt)
+        {
+            if ($learningPathTreeNodeAttempt->getId() == $itemAttemptId)
+            {
+                $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
+            }
+        }
+
+        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+    }
+
+    /**
+     * Deletes the learning path child attempts for a given LearningPathTreeNode.
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     */
+    public function deleteLearningPathChildAttemptsForLearningPathTreeNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $learningPathTreeNodeAttempts = $this->getLearningPathTreeNodeAttempts(
+            $learningPath, $user, $learningPathTreeNode
+        );
+
+        foreach ($learningPathTreeNodeAttempts as $learningPathTreeNodeAttempt)
+        {
+            $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
+        }
+
+        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+    }
+
+    /**
+     * Deletes the learning path attempt for the given user
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     */
+    public function deleteLearningPathAttempt(LearningPath $learningPath, User $user)
+    {
+        $learningPathAttempt = $this->learningPathAttemptService->getLearningPathAttemptForUser($learningPath, $user);
+
+        if($learningPathAttempt instanceof LearningPathAttempt)
+        {
+            $this->learningPathAttemptService->deleteLearningPathAttempt($learningPathAttempt);
+        }
     }
 
     /**

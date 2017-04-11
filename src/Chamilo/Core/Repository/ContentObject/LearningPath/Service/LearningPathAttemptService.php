@@ -309,4 +309,24 @@ class LearningPathAttemptService
 
         return $learningPathQuestionAttempt;
     }
+
+    /**
+     * Deletes a LearningPathChildAttempt
+     *
+     * @param LearningPathChildAttempt $learningPathChildAttempt
+     */
+    public function deleteLearningPathChildAttempt(LearningPathChildAttempt $learningPathChildAttempt)
+    {
+        $this->learningPathTrackingRepository->delete($learningPathChildAttempt);
+    }
+
+    /**
+     * Deletes a LearningPathAttempt
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     */
+    public function deleteLearningPathAttempt(LearningPathAttempt $learningPathAttempt)
+    {
+        $this->learningPathTrackingRepository->delete($learningPathAttempt);
+    }
 }
