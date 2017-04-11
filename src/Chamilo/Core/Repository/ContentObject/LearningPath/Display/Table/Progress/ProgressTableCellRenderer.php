@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
@@ -26,15 +27,15 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param LearningPathTreeNode $learningPathChildAttempt
      *
      * @return String
      */
-    public function render_cell($column, $learningPathTreeNode)
+    public function render_cell($column, $learningPathChildAttempt)
     {
         $translator = Translation::getInstance();
 
-        $content_object = $learningPathTreeNode->getContentObject();
+        $content_object = $learningPathChildAttempt->getContentObject();
 
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_component()->get_root_content_object();
@@ -50,27 +51,28 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             case 'type':
                 return $content_object->get_icon_image();
             case 'title':
-                return '<a href="' . $this->getReportingUrl($learningPathTreeNode) . '">' .
+                return '<a href="' . $this->getReportingUrl($learningPathChildAttempt) . '">' .
                     $content_object->get_title() . '</a>';
             case 'status':
                 return $learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                    $learningPath, $user, $learningPathTreeNode
+                    $learningPath, $user, $learningPathChildAttempt
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
+                $progressBarRenderer = new ProgressBarRenderer();
                 $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                    $learningPath, $user, $learningPathTreeNode
+                        $learningPath, $user, $learningPathChildAttempt
                 );
 
-                return !is_null($averageScore) ? $averageScore . '%' : null;
+                return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
             case 'time':
                 $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
-                    $learningPath, $user, $learningPathTreeNode
+                    $learningPath, $user, $learningPathChildAttempt
                 );
 
                 return DatetimeUtilities::format_seconds_to_hours($totalTimeSpent);
         }
 
-        return parent::render_cell($column, $learningPathTreeNode);
+        return parent::render_cell($column, $learningPathChildAttempt);
     }
 
     /**

@@ -5,6 +5,11 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt\ChildAttemptTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress\ProgressTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -80,47 +85,57 @@ class ReportingComponent extends TabComponent implements TableSupport
 
         if ($this->getCurrentContentObject() instanceof Assessment)
         {
+            $progressBarRenderer = new ProgressBarRenderer();
+
             $html[] = '<tr>';
             $html[] = '<td width="25%"><strong>AverageScore</strong></td>';
             $html[] = '<td>';
 
-            $html[] = $trackingService->getAverageScoreInLearningPathTreeNode(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+            $html[] = $progressBarRenderer->render(
+                (int) $trackingService->getAverageScoreInLearningPathTreeNode(
+                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                )
             );
 
-            $html[] = '%</td>';
+            $html[] = '</td>';
             $html[] = '</tr>';
             $html[] = '<tr>';
             $html[] = '<td width="25%"><strong>MaximumScore</strong></td>';
             $html[] = '<td>';
 
-            $html[] = $trackingService->getMaximumScoreInLearningPathTreeNode(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+            $html[] = $progressBarRenderer->render(
+                $trackingService->getMaximumScoreInLearningPathTreeNode(
+                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                )
             );
 
-            $html[] = '%</td>';
+            $html[] = '</td>';
             $html[] = '</tr>';
 
             $html[] = '<tr>';
             $html[] = '<td width="25%"><strong>MinimumScore</strong></td>';
             $html[] = '<td>';
 
-            $html[] = $trackingService->getMinimumScoreInLearningPathTreeNode(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+            $html[] = $progressBarRenderer->render(
+                $trackingService->getMinimumScoreInLearningPathTreeNode(
+                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                )
             );
 
-            $html[] = '%</td>';
+            $html[] = '</td>';
             $html[] = '</tr>';
 
             $html[] = '<tr>';
             $html[] = '<td width="25%"><strong>LastScore</strong></td>';
             $html[] = '<td>';
 
-            $html[] = $trackingService->getLastAttemptScoreForLearningPathTreeNode(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+            $html[] = $progressBarRenderer->render(
+                $trackingService->getLastAttemptScoreForLearningPathTreeNode(
+                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                )
             );
 
-            $html[] = '%</td>';
+            $html[] = '</td>';
             $html[] = '</tr>';
         }
 
@@ -147,15 +162,14 @@ class ReportingComponent extends TabComponent implements TableSupport
             $html[] = '</div>';
             $html[] = '<div class="panel-body">';
 
-            $html[] = '<canvas id="myChart" width="270" height="135"></canvas>';
+            $html[] = '<canvas id="myChart" width="270" height="135" style="margin: auto;"></canvas>';
             $html[] = '<script>';
             $html[] = 'var ctx = document.getElementById("myChart");';
             $html[] = 'var myChart = new Chart(ctx, {';
             $html[] = '    type: "doughnut",';
             $html[] = '    data: {';
-            $html[] = '            labels: ["' . $completedLabel . '", "' . $notCompletedLabel . '"],';
+            $html[] = '        labels: ["' . $completedLabel . '", "' . $notCompletedLabel . '"],';
             $html[] = '        datasets: [{';
-            $html[] = '                label: "# of Votes",';
             $html[] = '            data: [' . $progress . ',' . $notCompleted . '],';
             $html[] = '            backgroundColor: [';
             $html[] = '                    "#36A2EB",';
@@ -172,7 +186,9 @@ class ReportingComponent extends TabComponent implements TableSupport
             $html[] = '         legend: {';
             $html[] = '             onClick: null';
             $html[] = '         },';
+            $html[] = '         responsive: false,';
             $html[] = '         animation: { animateScale: true },';
+            $html[] = '         legend: { position: "right" },';
             $html[] = '         tooltips: {';
             $html[] = '             callbacks: {';
             $html[] = '                 label: function(tooltipItem, data) {';
@@ -218,7 +234,90 @@ class ReportingComponent extends TabComponent implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
 
+        if ($currentLearningPathTreeNode->getContentObject() instanceof Assessment)
+        {
+            $html[] = $this->renderScoreChart(
+                $trackingService, $translator, $this->get_root_content_object(), $this->getUser(),
+                $currentLearningPathTreeNode
+            );
+        }
+
         $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders the scores for every attempt in a chart
+     *
+     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param Translation $translator
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return string
+     */
+    protected function renderScoreChart(
+        LearningPathTrackingService $learningPathTrackingService, Translation $translator,
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $labels = $scores = [];
+
+        $learningPathChildAttempts = $learningPathTrackingService->getLearningPathTreeNodeAttempts(
+            $learningPath, $user, $learningPathTreeNode
+        );
+
+        foreach ($learningPathChildAttempts as $learningPathChildAttempt)
+        {
+            $labels[] = DatetimeUtilities::format_locale_date(null, $learningPathChildAttempt->get_start_time());
+            $scores[] = (int) $learningPathChildAttempt->get_score();
+        }
+
+        $html = array();
+
+        $html[] = '<div class="panel panel-default">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Scores') . '</h5>';
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<canvas id="scoreChart" style="margin: auto;"></canvas>';
+        $html[] = '<script>';
+        $html[] = 'var ctx = document.getElementById("scoreChart");';
+        $html[] = 'var myChart = new Chart(ctx, {';
+        $html[] = '    type: "line",';
+        $html[] = '    data: {';
+        $html[] = '        labels: ["' . implode('" , "', $labels) . '"],';
+        $html[] = '        datasets: [{';
+        $html[] = '            data: [' . implode(', ', $scores) . '],';
+        $html[] = '            backgroundColor: "rgba(75,192,192,0.4)",';
+        $html[] = '            borderColor: "rgba(75,192,192,1)",';
+        $html[] = '            label: "' . $translator->getTranslation('Scores') . '",';
+        $html[] = '            pointRadius: 5,';
+        $html[] = '            fill: false';
+        $html[] = '        }]';
+        $html[] = '    },';
+        $html[] = '    options: {';
+        $html[] = '         legend: {';
+        $html[] = '             onClick: null';
+        $html[] = '         },';
+        $html[] = '         tooltips: {';
+        $html[] = '             callbacks: {';
+        $html[] = '                 label: function(tooltipItem, data) {';
+        $html[] = '                     var value = data.datasets[0].data[tooltipItem.index];';
+        $html[] = '                     var label = data.labels[tooltipItem.index];';
+        $html[] = '                     return " " + label + ": " + value + "%"';
+        $html[] = '                 }';
+        $html[] = '             }';
+        $html[] = '         }';
+        $html[] = '    }';
+        $html[] = '});';
+        $html[] = '</script>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

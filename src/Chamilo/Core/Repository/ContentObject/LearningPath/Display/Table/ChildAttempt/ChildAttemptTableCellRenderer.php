@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Child
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
@@ -24,29 +25,34 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathChildAttempt $learningPathTreeNode
+     * @param LearningPathChildAttempt $learningPathChildAttempt
      *
      * @return String
      */
-    public function render_cell($column, $learningPathTreeNode)
+    public function render_cell($column, $learningPathChildAttempt)
     {
         $translator = Translation::getInstance();
 
         switch ($column->get_name())
         {
             case 'last_start_time':
-                return DatetimeUtilities::format_locale_date(null, $learningPathTreeNode->get_start_time());
+                return DatetimeUtilities::format_locale_date(null, $learningPathChildAttempt->get_start_time());
             case 'status':
                 return $translator->getTranslation(
-                    $learningPathTreeNode->isFinished() ? 'Completed' : 'Incomplete'
+                    $learningPathChildAttempt->isFinished() ? 'Completed' : 'Incomplete'
                 );
             case 'score':
-                return $learningPathTreeNode->get_score() . '%';
+                $progressBarRenderer = new ProgressBarRenderer();
+
+                return $progressBarRenderer->render(
+                    (int) $learningPathChildAttempt->get_score(), ProgressBarRenderer::MODE_SUCCESS
+                );
+
             case 'time':
-                return DatetimeUtilities::format_seconds_to_hours($learningPathTreeNode->get_total_time());
+                return DatetimeUtilities::format_seconds_to_hours($learningPathChildAttempt->get_total_time());
         }
 
-        return parent::render_cell($column, $learningPathTreeNode);
+        return parent::render_cell($column, $learningPathChildAttempt);
     }
 
     /**

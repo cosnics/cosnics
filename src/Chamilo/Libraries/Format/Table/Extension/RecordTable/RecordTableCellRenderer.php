@@ -24,18 +24,18 @@ abstract class RecordTableCellRenderer extends TableCellRenderer
      * Renders a single cell
      * 
      * @param RecordTableColumn $column
-     * @param string[] $learningPathTreeNode
+     * @param string[] $learningPathChildAttempt
      *
      * @return String
      */
-    public function render_cell($column, $learningPathTreeNode)
+    public function render_cell($column, $learningPathChildAttempt)
     {
         if ($column instanceof ActionsTableColumn)
         {
-            return parent::render_cell($column, $learningPathTreeNode);
+            return parent::render_cell($column, $learningPathChildAttempt);
         }
         
-        return $learningPathTreeNode[$column->get_name()];
+        return $learningPathChildAttempt[$column->get_name()];
     }
 
     /**

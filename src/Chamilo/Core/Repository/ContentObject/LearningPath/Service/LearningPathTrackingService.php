@@ -654,7 +654,7 @@ class LearningPathTrackingService
 
         foreach ($learningPathAttempts as $learningPathAttempt)
         {
-            $totalScore += $learningPathAttempt->get_score();
+            $totalScore += (int) $learningPathAttempt->get_score();
         }
 
         return round($totalScore / count($learningPathAttempts), 2);
@@ -682,7 +682,7 @@ class LearningPathTrackingService
         foreach ($learningPathAttempts as $learningPathAttempt)
         {
             $maximumScore = $maximumScore < $learningPathAttempt->get_score() ?
-                $learningPathAttempt->get_score() : $maximumScore;
+                (int) $learningPathAttempt->get_score() : $maximumScore;
         }
 
         return $maximumScore;
@@ -710,7 +710,7 @@ class LearningPathTrackingService
         foreach ($learningPathAttempts as $learningPathAttempt)
         {
             $minimumScore = is_null($minimumScore) || $minimumScore > $learningPathAttempt->get_score() ?
-                $learningPathAttempt->get_score() : $minimumScore;
+                (int) $learningPathAttempt->get_score() : $minimumScore;
         }
 
         return $minimumScore;
@@ -734,6 +734,6 @@ class LearningPathTrackingService
 
         $learningPathAttempt = array_pop($learningPathAttempts);
 
-        return $learningPathAttempt->get_score();
+        return (int) $learningPathAttempt->get_score();
     }
 }
