@@ -23,6 +23,10 @@
         </service>
 
         <service
+            id="chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service"
+            class="Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService" />
+
+        <service
                 id="chamilo.core.repository.content_object.learning_path.integration.chamilo.core.repository.publication.service.learning_path_publication_service"
                 class="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathPublicationService">
             <argument

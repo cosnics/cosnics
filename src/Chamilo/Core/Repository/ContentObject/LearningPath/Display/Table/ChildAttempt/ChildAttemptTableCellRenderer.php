@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
@@ -79,6 +80,8 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     {
         if ($this->get_component()->is_allowed_to_edit_attempt_data())
         {
+            $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
             $delete_url = $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT,
@@ -87,15 +90,19 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
                 )
             );
 
-            $action = Theme::getInstance()->getCommonImage(
-                'Action/Delete',
-                'png',
-                Translation::get('DeleteAttempt'),
-                $delete_url,
-                ToolbarItem::DISPLAY_ICON
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('DeleteAttempt'),
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                    $delete_url,
+                    ToolbarItem::DISPLAY_ICON,
+                    true
+                )
             );
 
-            return $action;
+            return $toolbar->render();
         }
+
+        return null;
     }
 }

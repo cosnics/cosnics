@@ -82,7 +82,7 @@ abstract class TableColumn
                 $context = ClassnameUtilities::getInstance()->getNamespaceFromClassname($called_class);
                 $index ++;
             }
-            while ($context == Utilities::COMMON_LIBRARIES);
+            while ($context == __NAMESPACE__);
             
             $title = Translation::get(
                 (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), 

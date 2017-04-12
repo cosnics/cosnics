@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -36,22 +37,29 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
     protected $learningPathTrackingService;
 
     /**
-     *
+     * @var AutomaticNumberingService
+     */
+    protected $automaticNumberingService;
+
+    /**
      * @param LearningPathTree $learningPathTree
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param LearningPathTrackingService $learningPathTrackingService
+     * @param AutomaticNumberingService $automaticNumberingService
      * @param string $treeMenuUrl
      * @param string $menuName
      */
     public function __construct(
         LearningPathTree $learningPathTree, Application $application,
         LearningPathTrackingService $learningPathTrackingService,
+        AutomaticNumberingService $automaticNumberingService,
         $treeMenuUrl, $menuName = 'bootstrap-tree-menu'
     )
     {
         $this->learningPathTree = $learningPathTree;
         $this->learningPath = $learningPathTree->getRoot()->getContentObject();
         $this->learningPathTrackingService = $learningPathTrackingService;
+        $this->automaticNumberingService = $automaticNumberingService;
 
         parent::__construct($application, $treeMenuUrl, $menuName);
     }
@@ -152,25 +160,12 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
      *
      * @return \string[]
      */
-    public function getMenuItem(LearningPathTreeNode $node, $counter = 1, $prefix = '')
+    public function getMenuItem(LearningPathTreeNode $node)
     {
         $application = $this->getApplication();
 
         $title = $node->getContentObject()->get_title();
-
-        if($this->learningPath->usesAutomaticNumbering())
-        {
-            if ($prefix)
-            {
-                $prefix = $prefix . '.' . $counter;
-            }
-            else
-            {
-                $prefix = $counter;
-            }
-
-            $title = $prefix . '. ' . $title;
-        }
+        $title = $this->automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($node);
 
         $menuItem['text'] = $title;
         $menuItem['icon'] = $this->getItemIcon($node);
@@ -204,12 +199,9 @@ class LearningPathTreeRenderer extends BootstrapTreeMenu
             $menuItem['nodes'] = array();
 
             $children = $node->getChildNodes();
-
-            $counter = 1;
             foreach ($children as $child)
             {
-                $menuItem['nodes'][] = $this->getMenuItem($child, $counter, $prefix);
-                $counter ++;
+                $menuItem['nodes'][] = $this->getMenuItem($child);
             }
         }
 

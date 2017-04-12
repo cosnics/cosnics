@@ -32,6 +32,7 @@ class ReportingComponent extends TabComponent implements TableSupport
         $translator = Translation::getInstance();
         $trackingService = $this->getLearningPathTrackingService();
         $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $automaticNumberingService = $this->getAutomaticNumberingService();
 
         $html[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">';
         $html[] = '</script>';
@@ -42,7 +43,8 @@ class ReportingComponent extends TabComponent implements TableSupport
         foreach ($currentLearningPathTreeNode->getParentNodes() as $parentNode)
         {
             $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
-            $parentTitles[] = '<a href="' . $url . '">' . $parentNode->getContentObject()->get_title() . '</a>';
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+            $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
         }
 
         $class = $currentLearningPathTreeNode->hasChildNodes() ? 'col-sm-8' : 'col-sm-12';
@@ -54,24 +56,30 @@ class ReportingComponent extends TabComponent implements TableSupport
         $html[] = '</div>';
         $html[] = '<table class="table table-bordered">';
         $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>Title</strong></td>';
-        $html[] = '<td>' . $this->getCurrentContentObject()->get_title() . '</td>';
+        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('Title') . '</strong></td>';
+        $html[] = '<td>';
+
+        $html[] = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
+            $currentLearningPathTreeNode
+        );
+
+        $html[] = '</td>';
         $html[] = '</tr>';
 
         if (!$currentLearningPathTreeNode->isRootNode())
         {
             $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>Parents</strong></td>';
+            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('Parents') . '</strong></td>';
             $html[] = '<td>' . implode(' >> ', $parentTitles) . '</td>';
             $html[] = '</tr>';
         }
 
         $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>User</strong></td>';
+        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('User') . '</strong></td>';
         $html[] = '<td>' . $this->getUser()->get_fullname() . '</td>';
         $html[] = '</tr>';
         $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>TotalTime</strong></td>';
+        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('TotalTime') . '</strong></td>';
         $html[] = '<td>';
 
         $html[] = DatetimeUtilities::format_seconds_to_hours(
@@ -88,7 +96,7 @@ class ReportingComponent extends TabComponent implements TableSupport
             $progressBarRenderer = new ProgressBarRenderer();
 
             $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>AverageScore</strong></td>';
+            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('AverageScore') . '</strong></td>';
             $html[] = '<td>';
 
             $html[] = $progressBarRenderer->render(
@@ -100,7 +108,7 @@ class ReportingComponent extends TabComponent implements TableSupport
             $html[] = '</td>';
             $html[] = '</tr>';
             $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>MaximumScore</strong></td>';
+            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('MaximumScore') . '</strong></td>';
             $html[] = '<td>';
 
             $html[] = $progressBarRenderer->render(
@@ -113,7 +121,7 @@ class ReportingComponent extends TabComponent implements TableSupport
             $html[] = '</tr>';
 
             $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>MinimumScore</strong></td>';
+            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('MinimumScore') . '</strong></td>';
             $html[] = '<td>';
 
             $html[] = $progressBarRenderer->render(
@@ -126,7 +134,7 @@ class ReportingComponent extends TabComponent implements TableSupport
             $html[] = '</tr>';
 
             $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>LastScore</strong></td>';
+            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('LastScore') . '</strong></td>';
             $html[] = '<td>';
 
             $html[] = $progressBarRenderer->render(

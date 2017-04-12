@@ -4,10 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progr
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
@@ -27,52 +29,49 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathTreeNode $learningPathChildAttempt
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return String
      */
-    public function render_cell($column, $learningPathChildAttempt)
+    public function render_cell($column, $learningPathTreeNode)
     {
         $translator = Translation::getInstance();
 
-        $content_object = $learningPathChildAttempt->getContentObject();
+        $content_object = $learningPathTreeNode->getContentObject();
 
-        /** @var LearningPath $learningPath */
-        $learningPath = $this->get_component()->get_root_content_object();
-
-        /** @var User $user */
-        $user = $this->get_component()->getUser();
-
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();
+        $learningPath = $this->getLearningPath();
+        $user = $this->getUser();
+        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $automaticNumberingService = $this->getAutomaticNumberingService();
 
         switch ($column->get_name())
         {
             case 'type':
                 return $content_object->get_icon_image();
             case 'title':
-                return '<a href="' . $this->getReportingUrl($learningPathChildAttempt) . '">' .
-                    $content_object->get_title() . '</a>';
+                return '<a href="' . $this->getReportingUrl($learningPathTreeNode) . '">' .
+                    $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($learningPathTreeNode) .
+                    '</a>';
             case 'status':
                 return $learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                    $learningPath, $user, $learningPathChildAttempt
+                    $learningPath, $user, $learningPathTreeNode
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
                 $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                        $learningPath, $user, $learningPathChildAttempt
+                        $learningPath, $user, $learningPathTreeNode
                 );
 
                 return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
             case 'time':
                 $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
-                    $learningPath, $user, $learningPathChildAttempt
+                    $learningPath, $user, $learningPathTreeNode
                 );
 
                 return DatetimeUtilities::format_seconds_to_hours($totalTimeSpent);
         }
 
-        return parent::render_cell($column, $learningPathChildAttempt);
+        return parent::render_cell($column, $learningPathTreeNode);
     }
 
     /**
@@ -97,25 +96,19 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      */
     public function get_actions($learningPathTreeNode)
     {
-        /** @var LearningPath $learningPath */
-        $learningPath = $this->get_component()->get_root_content_object();
+        $learningPath = $this->getLearningPath();
+        $user = $this->getUser();
+        $learningPathTrackingService = $this->getLearningPathTrackingService();
 
-        /** @var User $user */
-        $user = $this->get_component()->getUser();
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();
-
-        $actions = array();
-
-        $reporting_url = $this->getReportingUrl($learningPathTreeNode);
-
-        $actions[] = Theme::getInstance()->getCommonImage(
-            'Action/Statistics',
-            'png',
-            Translation::get('Details'),
-            $reporting_url,
-            ToolbarItem::DISPLAY_ICON
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::get('Details'),
+                Theme::getInstance()->getCommonImagePath('Action/Statistics'),
+                $this->getReportingUrl($learningPathTreeNode),
+                ToolbarItem::DISPLAY_ICON
+            )
         );
 
         if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
@@ -132,17 +125,19 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
                     )
                 );
 
-                $actions[] = Theme::getInstance()->getCommonImage(
-                    'Action/Delete',
-                    'png',
-                    Translation::get('DeleteAttempt'),
-                    $delete_url,
-                    ToolbarItem::DISPLAY_ICON
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation::get('DeleteAttempt'),
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                        $delete_url,
+                        ToolbarItem::DISPLAY_ICON,
+                        true
+                    )
                 );
             }
         }
 
-        return implode(PHP_EOL, $actions);
+        return $toolbar->render();
     }
 
     /**
@@ -160,5 +155,37 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
                 Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
             )
         );
+    }
+
+    /**
+     * @return LearningPath
+     */
+    protected function getLearningPath()
+    {
+        return $this->get_component()->get_root_content_object();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        return $this->get_component()->getUser();
+    }
+
+    /**
+     * @return LearningPathTrackingService
+     */
+    protected function getLearningPathTrackingService()
+    {
+        return $this->get_component()->getLearningPathTrackingService();
+    }
+
+    /**
+     * @return AutomaticNumberingService
+     */
+    protected function getAutomaticNumberingService()
+    {
+        return $this->get_component()->getAutomaticNumberingService();
     }
 }

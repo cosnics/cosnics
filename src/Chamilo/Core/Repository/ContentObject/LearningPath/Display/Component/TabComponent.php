@@ -48,6 +48,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $this->learning_path_menu = new LearningPathTreeRenderer(
             $this->getLearningPathTree(), $this,
             $this->getLearningPathTrackingService(),
+            $this->getAutomaticNumberingService(),
             $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
         );
 
@@ -57,14 +58,17 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $breadcrumbsAction = $this->get_action() == self::ACTION_REPORTING ? self::ACTION_REPORTING :
             self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
+        $automaticNumberingService = $this->getAutomaticNumberingService();
+
         foreach ($parentAndCurrentNodes as $parentNode)
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_CHILD_ID] = $parentNode->getId();
             $parameters[self::PARAM_ACTION] = $breadcrumbsAction;
-            $trail->add(
-                new Breadcrumb($this->get_url($parameters), $parentNode->getContentObject()->get_title())
-            );
+
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+
+            $trail->add(new Breadcrumb($this->get_url($parameters), $title));
         }
 
         return $this->build();
@@ -120,6 +124,16 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html[] = $this->learning_path_menu->render();
         $html[] = '</div>';
+
+        $action = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? self::ACTION_REPORTING :
+            self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+        $title = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? 'Reporting' : 'Viewer';
+
+        $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => $action)) . '" class="btn btn-default">';
+        $html[] = Translation::getInstance()->getTranslation($title);
+        $html[] = '</a>';
+
         $html[] = '</div>';
 
         // Content

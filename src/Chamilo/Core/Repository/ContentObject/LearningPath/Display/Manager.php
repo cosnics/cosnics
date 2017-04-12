@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
@@ -233,11 +235,21 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getLearningPathTrackingService()
     {
-        if(!isset($this->learningPathTrackingService))
+        if (!isset($this->learningPathTrackingService))
         {
             $this->learningPathTrackingService = $this->get_application()->buildLearningPathTrackingService();
         }
 
         return $this->learningPathTrackingService;
+    }
+
+    /**
+     * @return AutomaticNumberingService
+     */
+    public function getAutomaticNumberingService()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service'
+        );
     }
 }
