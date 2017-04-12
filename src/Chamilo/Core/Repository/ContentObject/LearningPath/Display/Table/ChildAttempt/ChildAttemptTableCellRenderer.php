@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
@@ -78,10 +79,30 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
      */
     public function get_actions($learningPathChildAttempt)
     {
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        if($this->getCurrentLearningPathTreeNode()->getContentObject() instanceof Assessment)
+        {
+            $assessmentResultViewerUrl = $this->get_component()->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentLearningPathTreeNode()->getId(),
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
+                )
+            );
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('ViewAssessmentResult'),
+                    Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                    $assessmentResultViewerUrl,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
         if ($this->get_component()->is_allowed_to_edit_attempt_data())
         {
-            $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
             $delete_url = $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT,
@@ -104,5 +125,13 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
         }
 
         return null;
+    }
+
+    /**
+     * @return LearningPathTreeNode
+     */
+    protected function getCurrentLearningPathTreeNode()
+    {
+        return $this->get_component()->getCurrentLearningPathTreeNode();
     }
 }

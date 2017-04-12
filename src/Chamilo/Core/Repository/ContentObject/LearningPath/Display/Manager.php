@@ -24,6 +24,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
+    const PARAM_ACTION = 'learning_path_action';
+
     // Actions
     const ACTION_FEEDBACK = 'Feedback';
     const ACTION_BOOKMARK = 'Bookmarker';
@@ -39,6 +41,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ATTEMPT = 'Attempt';
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
+    const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';
 
     // Parameters
     const PARAM_STEP = 'step';

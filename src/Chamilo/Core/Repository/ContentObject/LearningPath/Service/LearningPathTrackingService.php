@@ -359,7 +359,53 @@ class LearningPathTrackingService
 
         $activeAttempt->set_score($assessmentScore);
         $activeAttempt->calculateAndSetTotalTime();
+        $activeAttempt->set_status($this->determineStatusForAssessmentByScore($learningPathTreeNode, $assessmentScore));
 
+        $this->learningPathTrackingRepository->update($activeAttempt);
+        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+    }
+
+    /**
+     * Changes the assessment score for the given LearningPath, User, LearningPathTreeNode and
+     * LearningPathChildAttemptId
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param null $learningPathChildAttemptId
+     * @param int $newScore
+     */
+    public function changeAssessmentScore(
+        LearningPath $learningPath, User $user,
+        LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId, $newScore = 0
+    )
+    {
+        $learningPathChildAttempt = $this->getLearningPathChildAttemptById(
+            $learningPath, $user, $learningPathTreeNode, $learningPathChildAttemptId
+        );
+
+        $learningPathChildAttempt->set_score($newScore);
+
+        $learningPathChildAttempt->set_status(
+            $this->determineStatusForAssessmentByScore($learningPathTreeNode, $newScore)
+        );
+
+        $this->learningPathTrackingRepository->update($learningPathChildAttempt);
+        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+    }
+
+    /**
+     * Determines the status for a given assessment LearningPathTreeNode based on the given score
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param int $assessmentScore
+     *
+     * @return string
+     */
+    protected function determineStatusForAssessmentByScore(
+        LearningPathTreeNode $learningPathTreeNode, $assessmentScore = 0
+    )
+    {
         $masteryScore = $learningPathTreeNode->getLearningPathChild()->getMasteryScore();
         if ($masteryScore > 0)
         {
@@ -371,34 +417,46 @@ class LearningPathTrackingService
             $status = LearningPathChildAttempt::STATUS_COMPLETED;
         }
 
-        $activeAttempt->set_status($status);
-
-        $this->learningPathTrackingRepository->update($activeAttempt);
-        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
+        return $status;
     }
 
     /**
      * Returns the question attempts for a given LearningPath, User and LearningPathTreeNode
+     * using the given attempt (by id) or the active attempt
      *
      * @param LearningPath $learningPath
      * @param User $user
      * @param LearningPathTreeNode $learningPathTreeNode
+     * @param int $learningPathChildAttemptId
      *
      * @return LearningPathQuestionAttempt[]
      */
     public function getQuestionAttempts(
-        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode,
+        $learningPathChildAttemptId = null
     )
     {
         $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
 
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
-        $activeAttempt = $this->learningPathAttemptService->getOrCreateActiveLearningPathChildAttempt(
-            $learningPathAttempt, $learningPathTreeNode
+        if (is_null($learningPathChildAttemptId))
+        {
+            $learningPathAttempt =
+                $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+            $learningPathChildAttempt = $this->learningPathAttemptService->getOrCreateActiveLearningPathChildAttempt(
+                $learningPathAttempt, $learningPathTreeNode
+            );
+        }
+        else
+        {
+            $learningPathChildAttempt = $this->getLearningPathChildAttemptById(
+                $learningPath, $user, $learningPathTreeNode, $learningPathChildAttemptId
+            );
+        }
+
+        $questionAttempts = $this->learningPathAttemptService->getLearningPathQuestionAttempts(
+            $learningPathChildAttempt
         );
 
-        $questionAttempts = $this->learningPathAttemptService->getLearningPathQuestionAttempts($activeAttempt);
         $questionAttemptPerQuestion = array();
 
         foreach ($questionAttempts as $questionAttempt)
@@ -445,16 +503,18 @@ class LearningPathTrackingService
     }
 
     /**
-     * Deletes the learning path child attempt by a given id. Verifies that this identifier belongs to the attempts
-     * for the given learning path and user
+     * Returns a LearningPathChildAttempt by a given id, validating that it belongs to the attempt of the given user
+     * and learning path tree node
      *
      * @param LearningPath $learningPath
      * @param User $user
      * @param LearningPathTreeNode $learningPathTreeNode
-     * @param int $itemAttemptId
+     * @param $learningPathChildAttemptId
+     *
+     * @return LearningPathChildAttempt
      */
-    public function deleteLearningPathChildAttemptById(
-        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $itemAttemptId
+    public function getLearningPathChildAttemptById(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId
     )
     {
         $learningPathTreeNodeAttempts = $this->getLearningPathTreeNodeAttempts(
@@ -463,12 +523,33 @@ class LearningPathTrackingService
 
         foreach ($learningPathTreeNodeAttempts as $learningPathTreeNodeAttempt)
         {
-            if ($learningPathTreeNodeAttempt->getId() == $itemAttemptId)
+            if ($learningPathTreeNodeAttempt->getId() == $learningPathChildAttemptId)
             {
-                $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
+                return $learningPathTreeNodeAttempt;
             }
         }
 
+        throw new \RuntimeException('Could not find the LearningPathChildAttempt by id ' . $learningPathChildAttemptId);
+    }
+
+    /**
+     * Deletes the learning path child attempt by a given id. Verifies that this identifier belongs to the attempts
+     * for the given learning path and user
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param int $learningPathChildAttemptId
+     */
+    public function deleteLearningPathChildAttemptById(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId
+    )
+    {
+        $learningPathTreeNodeAttempt = $this->getLearningPathChildAttemptById(
+            $learningPath, $user, $learningPathTreeNode, $learningPathChildAttemptId
+        );
+
+        $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
         $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
     }
 
@@ -505,7 +586,7 @@ class LearningPathTrackingService
     {
         $learningPathAttempt = $this->learningPathAttemptService->getLearningPathAttemptForUser($learningPath, $user);
 
-        if($learningPathAttempt instanceof LearningPathAttempt)
+        if ($learningPathAttempt instanceof LearningPathAttempt)
         {
             $this->learningPathAttemptService->deleteLearningPathAttempt($learningPathAttempt);
         }
