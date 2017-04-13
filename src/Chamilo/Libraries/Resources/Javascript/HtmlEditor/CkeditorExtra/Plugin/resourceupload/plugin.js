@@ -56,24 +56,26 @@
 
                     var response = upload.responseData;
 
+                    //resize = true??
                     if(response['type'] === 'image') {
                         // Width and height could be returned by server (#13519).
                         var $img = this.parts.img.$,
                             width = response.width || $img.naturalWidth,
                             height = response.height || $img.naturalHeight;
 
-                        this.replaceWith( '<div><img src="' + upload.url + '" ' +
+                        this.replaceWith( '<img src="' + upload.url + '" ' +
                             'data-co-id="' + response['co-id'] + '"' +
                             'data-security-code="' + response['security-code'] + '"' +
                             'data-type="'+response['type']+'"' +
                             'width="' + width + '" ' +
-                            'height="' + height + '"></div><br>' );
+                            'height="' + height + '"><br>' );
                     }
                     else {
                         this.replaceWith( '<div ' +
                             'data-co-id="' + response['co-id'] + '"' +
                             'data-security-code="' + response['security-code'] + '"' +
                             'data-type="'+response['type']+'"' +
+                            'class="align-center"' +
                             '"></div><br>' );
                     }
 
