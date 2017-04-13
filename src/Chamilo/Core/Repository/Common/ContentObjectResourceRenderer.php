@@ -86,7 +86,7 @@ class ContentObjectResourceRenderer
 
     protected function processContentObjectPlaceholders()
     {
-        $placeholders = $this->dom_xpath->query('//img[@data-co-id]');
+        $placeholders = $this->dom_xpath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
         foreach($placeholders as $placeholder) {
             /**
              * @var \DOMNode $placeholder

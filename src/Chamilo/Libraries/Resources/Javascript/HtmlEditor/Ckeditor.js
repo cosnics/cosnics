@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function(config)
             [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote' ],
             [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
             [ 'Link', 'Unlink', 'Anchor' ],
-            [ 'Chamilo', 'Image', 'oembed', 'EqnEditor', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
+            [ 'Chamilo', 'Image', 'Embed', 'EqnEditor', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
                     'PageBreak' ], '/', [ 'Styles', 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
             [ 'Maximize', 'ShowBlocks', '-', 'About' ] ];
 
@@ -42,7 +42,7 @@ CKEDITOR.editorConfig = function(config)
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
             [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
-                    'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Sourcedialog' ] ];
+                    'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
@@ -69,19 +69,35 @@ CKEDITOR.editorConfig = function(config)
         web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme()
     ];
 
+    config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //free. Default is iframely.
+
     config.disableNativeSpellChecker = false;
     config.allowedContent = true;
     config.resize_dir = 'both';
-    config.enterMode = CKEDITOR.ENTER_DIV;
+    //config.enterMode = CKEDITOR.ENTER_DIV;
 
     config.startupFocus = true;
     // allow i tags to be empty (for font awesome)
     CKEDITOR.dtd.$removeEmpty['i'] = false;
 
-
-
     //fix for bootstrap skin
     CKEDITOR.skin.chameleon = function(){
         return '';
     };
+
+    CKEDITOR.stylesSet.add( 'default', [
+        // Adding space after the style name is an intended workaround. For now, there
+        // is no option to create two styles with the same name for different widget types. See #16664.
+        { name: '240p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-240p' }, group: 'size' },
+        { name: '360p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-360p' }, group: 'size' },
+        { name: '480p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-480p' }, group: 'size' },
+        { name: '720p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-720p' }, group: 'size' },
+        { name: '1080p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-1080p' }, group: 'size' },
+
+        { name: '240p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-240p' }, group: 'size' },
+        { name: '360p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-360p' }, group: 'size' },
+        { name: '480p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-480p' }, group: 'size' },
+        { name: '720p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-720p' }, group: 'size' },
+        { name: '1080p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-1080p' }, group: 'size' }
+    ]);
 };
