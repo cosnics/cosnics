@@ -28,6 +28,8 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
     const PROPERTY_BLOCKED = 'blocked';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
+    const PROPERTY_USER_ID = 'user_id';
+    const PROPERTY_ADDED_DATE = 'added_date';
 
     /**
      * LearningPathChild constructor.
@@ -60,7 +62,9 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
                 self::PROPERTY_SHOW_ANSWER_FEEDBACK,
                 self::PROPERTY_FEEDBACK_LOCATION,
                 self::PROPERTY_BLOCKED,
-                self::PROPERTY_DISPLAY_ORDER
+                self::PROPERTY_DISPLAY_ORDER,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_ADDED_DATE
             )
         );
     }
@@ -399,6 +403,56 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
         }
 
         $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return $this
+     */
+    public function setUserId($userId)
+    {
+        if (!is_integer($userId))
+        {
+            throw new \InvalidArgumentException('The given user id must be a valid integer');
+        }
+
+        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAddedDate()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_ADDED_DATE);
+    }
+
+    /**
+     * @param int $addedDate
+     *
+     * @return $this
+     */
+    public function setAddedDate($addedDate)
+    {
+        if (!is_integer($addedDate))
+        {
+            throw new \InvalidArgumentException('The given added date must be a valid integer');
+        }
+
+        $this->set_default_property(self::PROPERTY_ADDED_DATE, $addedDate);
 
         return $this;
     }

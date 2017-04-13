@@ -177,7 +177,16 @@ class LearningPathPublicationService
      */
     public function getContentObjectPublicationAttributesForUser($userId)
     {
-        return array();
+        $learningPathChildren = $this->learningPathChildService->getLearningPathChildrenByUserId((int) $userId);
+
+        $attributes = array();
+
+        foreach ($learningPathChildren as $learningPathChild)
+        {
+            $attributes[] = $this->getAttributesForLearningPathChild($learningPathChild);
+        }
+
+        return $attributes;
     }
 
     /**
@@ -201,7 +210,7 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForUser($userId)
     {
-        return 0;
+        return count($this->learningPathChildService->getLearningPathChildrenByUserId((int) $userId));
     }
 
     /**

@@ -6,7 +6,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Service class to manage LearningPathChild classes
@@ -55,6 +57,23 @@ class LearningPathChildService
     }
 
     /**
+     * Returns the LearningPathChild objects that belong to a given user
+     *
+     * @param int $userId
+     *
+     * @return LearningPathChild[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function getLearningPathChildrenByUserId($userId)
+    {
+        if(!is_int($userId) || $userId <= 0)
+        {
+            throw new \InvalidArgumentException('The given user id must be a valid integer and must be bigger than 0');
+        }
+
+        return $this->learningPathChildRepository->findLearningPathChildrenByUserId($userId);
+    }
+
+    /**
      * Returns a LearningPathChild by a given identifier
      *
      * @param int $learningPathChildId
@@ -79,21 +98,29 @@ class LearningPathChildService
      * system does not create a cycle. Uses the LearningPathTree for calculations.
      *
      * @param LearningPath $rootLearningPath
-     * @param LearningPathTreeNode $parentLearningPathTreeNode
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
      * @param ContentObject $childContentObject
+     *
+     * @param User $user
      *
      * @return LearningPathChild
      */
     public function addContentObjectToLearningPath(
-        LearningPath $rootLearningPath, LearningPathTreeNode $parentLearningPathTreeNode,
-        ContentObject $childContentObject
+        LearningPath $rootLearningPath, LearningPathTreeNode $currentLearningPathTreeNode,
+        ContentObject $childContentObject, User $user
     )
     {
+        $parentLearningPathTreeNode = $currentLearningPathTreeNode->getContentObject() instanceof Section ||
+            $currentLearningPathTreeNode->isRootNode() ?
+            $currentLearningPathTreeNode : $currentLearningPathTreeNode->getParentNode();
+
         $learningPathChild = new LearningPathChild();
 
         $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
         $learningPathChild->setParentLearningPathChildId((int) $parentLearningPathTreeNode->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
+        $learningPathChild->setUserId((int) $user->getId());
+        $learningPathChild->setAddedDate(time());
 
         if (!$this->learningPathChildRepository->create($learningPathChild))
         {
@@ -246,7 +273,7 @@ class LearningPathChildService
      */
     public function emptyLearningPath(LearningPath $learningPath)
     {
-        if(!$this->learningPathChildRepository->deleteChildrenFromLearningPath($learningPath))
+        if (!$this->learningPathChildRepository->deleteChildrenFromLearningPath($learningPath))
         {
             throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
         }
