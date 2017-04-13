@@ -47,7 +47,10 @@ class MasteryComponent extends Manager
         
         $values = array();
         for ($i = 0; $i <= 100; $i ++)
-            $values[$i] = $i;
+        {
+            $value = $i == 0 ? Translation::getInstance()->getTranslation('NoMasteryScore') : $i . '%';
+            $values[$i] = $value;
+        }
         
         $form->addElement('select', 'mastery_score', Translation::get('MasteryScore'), $values);
         

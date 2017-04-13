@@ -238,6 +238,28 @@ class LearningPathAttemptService
     }
 
     /**
+     * Returns the LearningPathChildAttempt objects for a given learning path tree node
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return LearningPathChildAttempt[]
+     */
+    public function getLearningPathChildAttemptsForLearningPathTreeNode(
+        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $learningPathChildAttempts = $this->getLearningPathChildAttempts($learningPathAttempt);
+
+        if(array_key_exists($learningPathTreeNode->getId(), $learningPathChildAttempts))
+        {
+            return $learningPathChildAttempts[$learningPathTreeNode->getId()];
+        }
+
+        return array();
+    }
+
+    /**
      * Returns the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
      *
      * @param LearningPathChildAttempt $learningPathItemAttempt
@@ -286,5 +308,25 @@ class LearningPathAttemptService
         $this->learningPathTrackingRepository->create($learningPathQuestionAttempt);
 
         return $learningPathQuestionAttempt;
+    }
+
+    /**
+     * Deletes a LearningPathChildAttempt
+     *
+     * @param LearningPathChildAttempt $learningPathChildAttempt
+     */
+    public function deleteLearningPathChildAttempt(LearningPathChildAttempt $learningPathChildAttempt)
+    {
+        $this->learningPathTrackingRepository->delete($learningPathChildAttempt);
+    }
+
+    /**
+     * Deletes a LearningPathAttempt
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     */
+    public function deleteLearningPathAttempt(LearningPathAttempt $learningPathAttempt)
+    {
+        $this->learningPathTrackingRepository->delete($learningPathAttempt);
     }
 }

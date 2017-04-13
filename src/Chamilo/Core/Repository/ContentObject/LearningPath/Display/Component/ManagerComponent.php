@@ -22,7 +22,8 @@ class ManagerComponent extends TabComponent implements TableSupport
      */
     public function build()
     {
-        if (! $this->get_parent()->is_allowed_to_view_content_object($this->get_current_node()))
+        $currentNode = $this->getCurrentLearningPathTreeNode();
+        if (!$this->canEditLearningPathTreeNode($currentNode))
         {
             throw new NotAllowedException();
         }

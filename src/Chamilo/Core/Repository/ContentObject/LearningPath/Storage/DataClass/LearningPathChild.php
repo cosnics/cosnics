@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class LearningPathChild extends DataClass implements DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
-    const PROPERTY_SECTION_CONTENT_OBJECT_ID = 'section_content_object_id';
+    const PROPERTY_PARENT_LEARNING_PATH_CHILD_ID = 'parent_learning_path_child_id';
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_MAX_ATTEMPTS = 'max_attempts';
     const PROPERTY_MASTERY_SCORE = 'mastery_score';
@@ -49,7 +49,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
         return parent::get_default_property_names(
             array(
                 self::PROPERTY_LEARNING_PATH_ID,
-                self::PROPERTY_SECTION_CONTENT_OBJECT_ID,
+                self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID,
                 self::PROPERTY_CONTENT_OBJECT_ID,
                 self::PROPERTY_MAX_ATTEMPTS,
                 self::PROPERTY_MASTERY_SCORE,
@@ -95,26 +95,26 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     /**
      * @return int
      */
-    public function getSectionContentObjectId()
+    public function getParentLearningPathChildId()
     {
-        return $this->get_default_property(self::PROPERTY_SECTION_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID);
     }
 
     /**
-     * @param int $sectionContentObjectId
+     * @param int $parentLearningPathChildId
      *
      * @return $this
      */
-    public function setSectionContentObjectId($sectionContentObjectId)
+    public function setParentLearningPathChildId($parentLearningPathChildId)
     {
-        if (!is_integer($sectionContentObjectId))
+        if (!is_integer($parentLearningPathChildId))
         {
             throw new \InvalidArgumentException(
-                'The given section content object id must be a valid integer'
+                'The given parent learning path child id must be a valid integer'
             );
         }
 
-        $this->set_default_property(self::PROPERTY_SECTION_CONTENT_OBJECT_ID, $sectionContentObjectId);
+        $this->set_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentLearningPathChildId);
 
         return $this;
     }
@@ -193,7 +193,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
             throw new \InvalidArgumentException('The given mastery score must be a valid integer');
         }
 
-        if($masteryScore < 0 || $masteryScore > 100)
+        if ($masteryScore < 0 || $masteryScore > 100)
         {
             throw new \RangeException('The given mastery score must be between 0 and 100');
         }
@@ -422,7 +422,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     {
         return array(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_SECTION_CONTENT_OBJECT_ID)
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID)
         );
     }
 

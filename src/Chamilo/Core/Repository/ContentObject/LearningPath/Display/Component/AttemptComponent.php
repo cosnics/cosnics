@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Component to list activity on a portfolio item
- * 
+ *
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -21,96 +22,88 @@ class AttemptComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed_to_edit_attempt_data())
+        if (!$this->is_allowed_to_edit_attempt_data())
         {
             throw new NotAllowedException();
         }
-        
+
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
-        
-        if ($this->is_current_step_set())
+
+        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $learningPath = $this->get_root_content_object();
+        $user = $this->getUser();
+        $learningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+
+        if ($this->isCurrentLearningPathChildIdSet())
         {
-            $item_attempt_id = Request::get(self::PARAM_ITEM_ATTEMPT_ID);
-            
-            if (isset($item_attempt_id))
+            $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
+
+            try
             {
-                // Delete the given item attempt for the given step
-                $item_attempt = $this->get_application()->retrieve_learning_path_item_attempt($item_attempt_id);
-                
-                if (! $item_attempt->delete())
+                $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
+
+                if (isset($item_attempt_id))
                 {
-                    $is_error = true;
-                    $message = Translation::get(
-                        'ObjectNotDeleted', 
-                        array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES));
-                    $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
+                    $learningPathTrackingService->deleteLearningPathChildAttemptById(
+                        $learningPath, $user, $learningPathTreeNode, (int) $item_attempt_id
+                    );
                 }
                 else
                 {
-                    $is_error = false;
-                    $message = Translation::get(
-                        'ObjectDeleted', 
-                        array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES));
-                    
-                    if (count($this->get_current_node()->get_data()) > 1)
+                    $learningPathTrackingService->deleteLearningPathChildAttemptsForLearningPathTreeNode(
+                        $learningPath, $user, $learningPathTreeNode
+                    );
+
+                    if(!$learningPathTreeNode->isRootNode())
                     {
-                        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
-                    }
-                    else
-                    {
-                        $parameters[self::PARAM_CHILD_ID] = null;
+                        $parameters[self::PARAM_CHILD_ID] = $learningPathTreeNode->getParentNode()->getId();
                     }
                 }
+
+                $is_error = false;
+
+                $message = Translation::get(
+                    'ObjectDeleted',
+                    array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                );
             }
-            else
+            catch (\Exception $ex)
             {
-                // Delete all item attempts for the given step
-                $current_node = $this->get_current_node();
-                $error_count = 0;
-                
-                foreach ($current_node->get_data() as $attempt)
-                {
-                    if (! $attempt->delete())
-                    {
-                        $error_count ++;
-                    }
-                }
-                
-                $is_error = $error_count > 0 ? true : false;
-                $message = $this->get_general_result(
-                    $error_count, 
-                    count($current_node->get_data()), 
-                    Translation::get('LearningPathItemAttempt'), 
-                    Translation::get('LearningPathItemAttempts'), 
-                    self::RESULT_TYPE_DELETED);
-                
-                $parameters[self::PARAM_CHILD_ID] = null;
+                $is_error = true;
+
+                $message = Translation::get(
+                    'ObjectNotDeleted',
+                    array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                );
             }
         }
         else
         {
-            // Delete the entire learning path attempt
-            $attempt = $this->get_application()->retrieve_learning_path_tracker();
-            
-            if (! $attempt->delete())
+            try
+            {
+                $learningPathTrackingService->deleteLearningPathAttempt($learningPath, $user);
+
+                $is_error = false;
+
+                $message = Translation::get(
+                    'ObjectDeleted',
+                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES)
+                );
+            }
+            catch (\Exception $ex)
             {
                 $is_error = true;
+
                 $message = Translation::get(
-                    'ObjectNotDeleted', 
-                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES));
+                    'ObjectNotDeleted',
+                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES)
+                );
             }
-            else
-            {
-                $is_error = false;
-                $message = Translation::get(
-                    'ObjectDeleted', 
-                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES));
-            }
-            
+
             $parameters[self::PARAM_CHILD_ID] = null;
         }
-        
+
         $this->redirect($message, $is_error, $parameters);
     }
 }

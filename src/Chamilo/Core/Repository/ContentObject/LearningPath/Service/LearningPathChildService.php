@@ -31,6 +31,50 @@ class LearningPathChildService
     }
 
     /**
+     * Returns the LearningPathChild objects that belong to a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return LearningPathChild[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function getLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    {
+        return $this->learningPathChildRepository->findLearningPathChildrenForLearningPath($learningPath);
+    }
+
+    /**
+     * Returns the LearningPathChild objects that belong to a given content object ids (not as parent)
+     *
+     * @param int[] $contentObjectIds
+     *
+     * @return LearningPathChild[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function getLearningPathChildrenByContentObjects($contentObjectIds)
+    {
+        return $this->learningPathChildRepository->findLearningPathChildrenByContentObjects($contentObjectIds);
+    }
+
+    /**
+     * Returns a LearningPathChild by a given identifier
+     *
+     * @param int $learningPathChildId
+     *
+     * @return LearningPathChild
+     */
+    public function getLearningPathChildById($learningPathChildId)
+    {
+        $learningPathChild = $this->learningPathChildRepository->findLearningPathChild($learningPathChildId);
+        if (!$learningPathChild)
+        {
+            throw new \RuntimeException(
+                sprintf('The given learning path child with id %s could not be found', $learningPathChildId)
+            );
+        }
+
+        return $learningPathChild;
+    }
+
+    /**
      * Adds a given content object to a learning path. Validates the content object to make sure that the
      * system does not create a cycle. Uses the LearningPathTree for calculations.
      *
@@ -48,7 +92,7 @@ class LearningPathChildService
         $learningPathChild = new LearningPathChild();
 
         $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
-        $learningPathChild->setSectionContentObjectId((int) $parentLearningPathTreeNode->getId());
+        $learningPathChild->setParentLearningPathChildId((int) $parentLearningPathTreeNode->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
 
         if (!$this->learningPathChildRepository->create($learningPathChild))
@@ -56,7 +100,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not create a LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -84,15 +128,11 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
         }
-
-        $this->learningPathChildRepository->updateParentLearningPathIds(
-            $learningPathTreeNode->getContentObject()->getId(), $newContentObject->getId()
-        );
     }
 
     /**
@@ -110,9 +150,9 @@ class LearningPathChildService
     {
         $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
 
-        if ($learningPathChild->getSectionContentObjectId() != $parentLearningPathTreeNode->getId())
+        if ($learningPathChild->getParentLearningPathChildId() != $parentLearningPathTreeNode->getId())
         {
-            $learningPathChild->setSectionContentObjectId(
+            $learningPathChild->setParentLearningPathChildId(
                 (int) $parentLearningPathTreeNode->getId()
             );
         }
@@ -127,7 +167,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -157,7 +197,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -186,7 +226,7 @@ class LearningPathChildService
             throw new \RuntimeException(
                 sprintf(
                     'Could not delete the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getSectionContentObjectId(),
+                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
             );
@@ -196,6 +236,19 @@ class LearningPathChildService
         foreach ($childNodes as $childNode)
         {
             $this->deleteContentObjectFromLearningPath($childNode);
+        }
+    }
+
+    /**
+     * Empties the given learning path by removing all the children
+     *
+     * @param LearningPath $learningPath
+     */
+    public function emptyLearningPath(LearningPath $learningPath)
+    {
+        if(!$this->learningPathChildRepository->deleteChildrenFromLearningPath($learningPath))
+        {
+            throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
         }
     }
 }

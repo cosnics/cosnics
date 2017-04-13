@@ -1,14 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ComplexLearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
-use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\ComplexLearningPathItem;
-use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -93,8 +88,10 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 
                 try
                 {
+                    $parentNode = $this->getCurrentLearningPathTreeNode();
+
                     $learningPathChild = $learningPathChildService->addContentObjectToLearningPath(
-                        $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $object
+                        $this->get_root_content_object(), $parentNode, $object
                     );
 
                     $nextStep = $learningPathChild->getId();
@@ -171,8 +168,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     }
 
     /**
-     *
-     * @see \libraries\SubManager::get_additional_parameters()
+     * @return array
      */
     public function get_additional_parameters()
     {
@@ -180,14 +176,13 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     }
 
     /**
-     *
-     * @see \core\repository\viewer\ViewerInterface::get_allowed_content_object_types()
+     * @return array
      */
     public function get_allowed_content_object_types()
     {
         if ($this->isFolderCreateMode())
         {
-            return array(LearningPath::class_name());
+            return array(Section::class_name());
         }
 
         return $this->get_root_content_object()->get_allowed_types();

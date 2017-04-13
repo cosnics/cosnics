@@ -239,6 +239,20 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication->getId();
         $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] =
             $this->get_root_content_object()->getId();
+
+        $reportingActions = array(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+        );
+
+        $action = in_array(
+            $this->getRequest()->get(
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
+            ), $reportingActions
+        ) ? \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING :
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] = $action;
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
             LearningPathTreeRenderer::NODE_PLACEHOLDER;
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] =

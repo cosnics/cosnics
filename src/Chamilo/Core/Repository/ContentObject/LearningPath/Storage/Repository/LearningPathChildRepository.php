@@ -5,12 +5,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -29,21 +27,16 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @return LearningPathChild[] | DataClassIterator
      */
-    public function retrieveLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    public function findLearningPathChildrenForLearningPath(LearningPath $learningPath)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
-            ),
-            new StaticConditionVariable($learningPath->getId())
-        );
+        $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
             LearningPathChild::class_name(), new DataClassRetrievesParameters(
                 $condition, null, null,
                 new OrderBy(
                     new PropertyConditionVariable(
-                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_SECTION_CONTENT_OBJECT_ID
+                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
                     ),
                     new PropertyConditionVariable(
                         LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER
@@ -54,34 +47,36 @@ class LearningPathChildRepository extends CommonDataClassRepository
     }
 
     /**
-     * Updates every parent learning path id in the LearningPathChild table from the given old id to the
-     * given new id
+     * Retrieves the learning path children for a given learning path
      *
-     * @param int $oldParentLearningPathId
-     * @param int $newParentLearningPathId
+     * @param int[] $contentObjectIds
      *
-     * @return bool
+     * @return LearningPathChild[] | DataClassIterator
      */
-    public function updateParentLearningPathIds($oldParentLearningPathId, $newParentLearningPathId)
+    public function findLearningPathChildrenByContentObjects($contentObjectIds)
     {
-        $condition = new EqualityCondition(
+        $condition = new InCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_CONTENT_OBJECT_ID
             ),
-            new StaticConditionVariable($oldParentLearningPathId)
+            $contentObjectIds
         );
 
-        $updateProperties = new DataClassProperties();
-
-        $updateProperties->add(
-            new DataClassProperty(
-                new PropertyConditionVariable(
-                    LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
-                ), new StaticConditionVariable($newParentLearningPathId)
-            )
+        return $this->dataClassRepository->retrieves(
+            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
         );
+    }
 
-        return $this->dataClassRepository->updates(LearningPathChild::class_name(), $updateProperties, $condition);
+    /**
+     * Retrieves a learning path child by a given identifier
+     *
+     * @param int $learningPathChildId
+     *
+     * @return LearningPathChild | DataClass
+     */
+    public function findLearningPathChild($learningPathChildId)
+    {
+        return $this->dataClassRepository->retrieveById(LearningPathChild::class_name(), $learningPathChildId);
     }
 
     /**
@@ -93,6 +88,36 @@ class LearningPathChildRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
             LearningPathChild::class_name()
+        );
+    }
+
+    /**
+     * Deletes every child object that belongs to a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return bool
+     */
+    public function deleteChildrenFromLearningPath(LearningPath $learningPath)
+    {
+        $condition = $this->getConditionForLearningPath($learningPath);
+        return $this->dataClassRepository->deletes(LearningPathChild::class_name(), $condition);
+    }
+
+    /**
+     * Builds and returns the condition for the LearningPathChild objects of a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return EqualityCondition
+     */
+    protected function getConditionForLearningPath(LearningPath $learningPath)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
+            ),
+            new StaticConditionVariable($learningPath->getId())
         );
     }
 }

@@ -237,12 +237,14 @@ class LearningPathTreeNode
 
         foreach ($selfAndDescendantNodes as $descendantNode)
         {
-            $descendantNode->addLearningPathTreeNodeToParentNodes($learningPathTreeNode);
+            $parentNodes = $learningPathTreeNode->getParentNodes();
 
-            foreach ($learningPathTreeNode->getParentNodes() as $parentNode)
+            foreach ($parentNodes as $parentNode)
             {
                 $descendantNode->addLearningPathTreeNodeToParentNodes($parentNode);
             }
+
+            $descendantNode->addLearningPathTreeNodeToParentNodes($learningPathTreeNode);
         }
 
         if ($addSelfAsChild)
@@ -265,12 +267,12 @@ class LearningPathTreeNode
      */
     public function addChildNode(LearningPathTreeNode $learningPathTreeNode, $setSelfAsParent = true)
     {
-        if (array_key_exists($learningPathTreeNode->getId(), $this->childNodes))
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->childNodes))
         {
             return $this;
         }
 
-        $this->childNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
+        $this->childNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         $selfAndParentNodes = $this->getParentNodes();
         array_unshift($selfAndParentNodes, $this);
@@ -302,12 +304,12 @@ class LearningPathTreeNode
      */
     public function addDescendantNode(LearningPathTreeNode $learningPathTreeNode)
     {
-        if (array_key_exists($learningPathTreeNode->getId(), $this->descendantNodes))
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->descendantNodes))
         {
             return $this;
         }
 
-        $this->descendantNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
+        $this->descendantNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         return $this;
     }
@@ -321,12 +323,12 @@ class LearningPathTreeNode
      */
     public function addLearningPathTreeNodeToParentNodes(LearningPathTreeNode $learningPathTreeNode)
     {
-        if (array_key_exists($learningPathTreeNode->getId(), $this->parentNodes))
+        if (array_key_exists($learningPathTreeNode->getStep(), $this->parentNodes))
         {
             return $this;
         }
 
-        $this->parentNodes[$learningPathTreeNode->getId()] = $learningPathTreeNode;
+        $this->parentNodes[$learningPathTreeNode->getStep()] = $learningPathTreeNode;
 
         return $this;
     }
@@ -340,7 +342,7 @@ class LearningPathTreeNode
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() + 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() + 1);
         }
         catch (\Exception $ex)
         {
@@ -357,7 +359,7 @@ class LearningPathTreeNode
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() - 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() - 1);
         }
         catch (\Exception $ex)
         {
@@ -382,6 +384,6 @@ class LearningPathTreeNode
      */
     public function isRootNode()
     {
-        return $this->getLearningPathTree()->getRoot() == $this;
+        return $this->getLearningPathTree()->getRoot() === $this;
     }
 }

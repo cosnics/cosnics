@@ -56,6 +56,8 @@ class LearningPathTree
     }
 
     /**
+     * Returns a LearningPathTreeNode by a given identifier
+     *
      * @param int $id
      *
      * @return LearningPathTreeNode
@@ -75,6 +77,31 @@ class LearningPathTree
         }
 
         return $this->learningPathTreeNodes[$id];
+    }
+
+    /**
+     * Returns a LearningPathTreeNode by a given step number
+     * (only for internal use between LearningPathTree and LearningPathTreeNode)
+     *
+     * @param int $step
+     *
+     * @return LearningPathTreeNode
+     */
+    public function getLearningPathTreeNodeByStep($step)
+    {
+        if (!is_integer($step))
+        {
+            throw new \InvalidArgumentException('The given step should be valid integer');
+        }
+
+        if (!array_key_exists($step, $this->learningPathTreeNodesByStep))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The learning path three node with step %s could not be found', $step)
+            );
+        }
+
+        return $this->learningPathTreeNodesByStep[$step];
     }
 
     /**

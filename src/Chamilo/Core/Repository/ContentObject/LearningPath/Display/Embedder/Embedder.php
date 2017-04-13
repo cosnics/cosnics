@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -144,6 +145,13 @@ abstract class Embedder
         $namespace = $learningPathTreeNode->getContentObject()->package() .
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         $class_name = $namespace . '\Embedder';
+
+        if (!class_exists($class_name))
+        {
+            return new ContentObjectEmbedder(
+                $application, $learningPathTrackingService, $learningPath, $learningPathTreeNode
+            );
+        }
 
         return new $class_name($application, $learningPathTrackingService, $learningPath, $learningPathTreeNode);
     }

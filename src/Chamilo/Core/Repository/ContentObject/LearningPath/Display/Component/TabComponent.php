@@ -48,18 +48,21 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $this->learning_path_menu = new LearningPathTreeRenderer(
             $this->getLearningPathTree(), $this,
             $this->getLearningPathTrackingService(),
+            $this->getAutomaticNumberingService(),
             $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
         );
 
-        $parentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
-        foreach ($parentNodes as $parentNode)
+        $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
+        $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
+
+        $automaticNumberingService = $this->getAutomaticNumberingService();
+
+        foreach ($parentAndCurrentNodes as $parentNode)
         {
-            $parameters = $this->get_parameters();
-            $parameters[self::PARAM_CHILD_ID] = $parentNode->getId();
-            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-            $trail->add(
-                new Breadcrumb($this->get_url($parameters), $parentNode->getContentObject()->get_title())
-            );
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+            $url = $this->getLearningPathTreeNodeNavigationUrl($parentNode);
+
+            $trail->add(new Breadcrumb($url, $title));
         }
 
         return $this->build();
@@ -115,6 +118,16 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html[] = $this->learning_path_menu->render();
         $html[] = '</div>';
+
+        $action = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? self::ACTION_REPORTING :
+            self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+        $title = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? 'Reporting' : 'Viewer';
+
+        $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => $action)) . '" class="btn btn-default">';
+        $html[] = Translation::getInstance()->getTranslation($title);
+        $html[] = '</a>';
+
         $html[] = '</div>';
 
         // Content
@@ -171,85 +184,68 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html = array();
 
-        if ($this->get_action() != self::ACTION_REPORTING || $this->is_current_step_set())
+        $html[] = '<div class="navbar-learning-path">';
+
+        $html[] = '<div class="navbar-learning-path-actions">';
+        $html[] = '<span class="learning-path-action-menu">';
+
+        $previous_node = $currentLearningPathTreeNode->getPreviousNode();
+
+        if ($previous_node instanceof LearningPathTreeNode)
         {
+            $previous_url = $this->getLearningPathTreeNodeNavigationUrl($previous_node);
+            $label = Translation::get('Previous');
 
-            $html[] = '<div class="navbar-learning-path">';
-
-            $html[] = '<div class="navbar-learning-path-actions">';
-            $html[] = '<span class="learning-path-action-menu">';
-
-            $previous_node = $currentLearningPathTreeNode->getPreviousNode();
-
-            if ($previous_node instanceof LearningPathTreeNode)
-            {
-
-                $previous_url = $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self::PARAM_CHILD_ID => $previous_node->getId()
-                    )
-                );
-
-                $label = Translation::get('Previous');
-
-                $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url .
-                    '"><span class="glyphicon glyphicon-arrow-left" alt="' . $label . '" title="' . $label .
-                    '"></span></a>';
-            }
-            else
-            {
-                $label = Translation::get('PreviousNa');
-
-                $html[] =
-                    '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' . $label .
-                    '"></span>';
-            }
-
-            $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
-
-            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
-                ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
-            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-hide' .
-                ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
-            $html[] = '&nbsp;';
-            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
-            $html[] = '</span>';
-
-            $next_node = $currentLearningPathTreeNode->getNextNode();
-
-            if ($next_node instanceof LearningPathTreeNode)
-            {
-                $next_url = $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self::PARAM_CHILD_ID => $next_node->getId()
-                    )
-                );
-
-                $label = Translation::get('Next');
-
-                $html[] = '<a id="learning-path-navigate-right" href="' . $next_url .
-                    '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
-                    '"></span></a>';
-            }
-            else
-            {
-                $label = Translation::get('NextNa');
-
-                $html[] =
-                    '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label . '" title="' . $label .
-                    '"></span>';
-            }
-
-            $html[] = '</div>';
-
-            $html[] = '<div class="navbar-learning-path-progress">';
-            $html[] = $this->get_progress_bar();
-            $html[] = '</div>';
-
-            $html[] = '</div>';
+            $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url .
+                '"><span class="glyphicon glyphicon-arrow-left" alt="' . $label . '" title="' . $label .
+                '"></span></a>';
         }
+        else
+        {
+            $label = Translation::get('PreviousNa');
+
+            $html[] =
+                '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' . $label .
+                '"></span>';
+        }
+
+        $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
+
+        $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
+            ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
+        $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-hide' .
+            ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
+        $html[] = '&nbsp;';
+        $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
+        $html[] = '</span>';
+
+        $next_node = $currentLearningPathTreeNode->getNextNode();
+
+        if ($next_node instanceof LearningPathTreeNode)
+        {
+            $next_url = $this->getLearningPathTreeNodeNavigationUrl($next_node);
+            $label = Translation::get('Next');
+
+            $html[] = '<a id="learning-path-navigate-right" href="' . $next_url .
+                '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
+                '"></span></a>';
+        }
+        else
+        {
+            $label = Translation::get('NextNa');
+
+            $html[] =
+                '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label . '" title="' . $label .
+                '"></span>';
+        }
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="navbar-learning-path-progress">';
+        $html[] = $this->get_progress_bar();
+        $html[] = '</div>';
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

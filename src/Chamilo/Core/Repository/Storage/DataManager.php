@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Storage;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -755,7 +755,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $count_wrapper_items = self::count_active_content_objects(
                 $wrapper_type, 
                 new EqualityCondition(
-                    new PropertyConditionVariable($wrapper_type, LearningPathItem::PROPERTY_REFERENCE), 
+                    new PropertyConditionVariable($wrapper_type, PortfolioItem::PROPERTY_REFERENCE),
                     new StaticConditionVariable($object->get_id())));
             
             if ($count_wrapper_items > 0)

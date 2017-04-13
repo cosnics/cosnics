@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -71,7 +72,7 @@ class DirectMoverForm extends FormValidator
             }
             
             $contentObject = $node->getContentObject();
-//            if ($contentObject instanceof LearningPath)
+            if ($contentObject instanceof Section || $node->isRootNode())
             {
                 $title = str_repeat('--', count($node->getParentNodes())) . ' ' . $contentObject->get_title();
                 $parents[$node->getId()] = $title;

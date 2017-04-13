@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
@@ -22,6 +24,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
+    const PARAM_ACTION = 'learning_path_action';
+
     // Actions
     const ACTION_FEEDBACK = 'Feedback';
     const ACTION_BOOKMARK = 'Bookmarker';
@@ -37,6 +41,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ATTEMPT = 'Attempt';
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
+    const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -88,26 +93,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return boolean
      */
-    public function is_current_step_set()
+    public function isCurrentLearningPathChildIdSet()
     {
-        $currentStepFromRequest = $this->get_current_step_from_request();
+        $currentLearningPathChildId = $this->getRequest()->get(self::PARAM_CHILD_ID);
 
-        return !is_null($currentStepFromRequest);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    private function get_current_step_from_request()
-    {
-        $step = $this->getRequest()->request->get(self::PARAM_STEP);
-        if (empty($step))
-        {
-            $step = $this->getRequest()->query->get(self::PARAM_STEP);
-        }
-
-        return $step;
+        return !is_null($currentLearningPathChildId);
     }
 
     /**
@@ -174,7 +164,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
      */
-    protected function getLearningPathTree()
+    public function getLearningPathTree()
     {
         if (!isset($this->learningPathTree))
         {
@@ -233,11 +223,43 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getLearningPathTrackingService()
     {
-        if(!isset($this->learningPathTrackingService))
+        if (!isset($this->learningPathTrackingService))
         {
             $this->learningPathTrackingService = $this->get_application()->buildLearningPathTrackingService();
         }
 
         return $this->learningPathTrackingService;
+    }
+
+    /**
+     * @return AutomaticNumberingService | object
+     */
+    public function getAutomaticNumberingService()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service'
+        );
+    }
+
+    /**
+     * Returns the navigation url for a given LearningPathTreeNode either to the reporting component
+     * or to the viewer component
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return string
+     */
+    public function getLearningPathTreeNodeNavigationUrl(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $reportingActions = array(
+            self::ACTION_REPORTING, self::ACTION_VIEW_ASSESSMENT_RESULT
+        );
+
+        $action = (in_array($this->get_action(), $reportingActions)) ? self::ACTION_REPORTING :
+            self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+        return $this->get_url(
+            array(self::PARAM_ACTION => $action, self::PARAM_CHILD_ID => $learningPathTreeNode->getId())
+        );
     }
 }
