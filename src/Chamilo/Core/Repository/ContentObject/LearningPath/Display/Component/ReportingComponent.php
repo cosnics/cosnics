@@ -7,10 +7,12 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt\ChildAttemptTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress\ProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -36,185 +38,29 @@ class ReportingComponent extends TabComponent implements TableSupport
         $trackingService = $this->getLearningPathTrackingService();
         $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
         $automaticNumberingService = $this->getAutomaticNumberingService();
+        $panelRenderer = new PanelRenderer();
 
         $html[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">';
         $html[] = '</script>';
 
         $html[] = '<div class="row">';
 
-        $parentTitles = array();
-        foreach ($currentLearningPathTreeNode->getParentNodes() as $parentNode)
-        {
-            $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
-            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
-            $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
-        }
-
         $class = $currentLearningPathTreeNode->hasChildNodes() ? 'col-sm-8' : 'col-sm-12';
 
         $html[] = '<div class="' . $class . '">';
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Information') . '</h5>';
-        $html[] = '</div>';
-        $html[] = '<table class="table table-bordered">';
-        $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('Title') . '</strong></td>';
-        $html[] = '<td>';
 
-        $html[] = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
-            $currentLearningPathTreeNode
+        $html[] = $this->renderInformationPanel(
+            $currentLearningPathTreeNode, $automaticNumberingService, $translator, $trackingService, $panelRenderer
         );
 
-        $html[] = '</td>';
-        $html[] = '</tr>';
-
-        if (!$currentLearningPathTreeNode->isRootNode())
-        {
-            $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('Parents') . '</strong></td>';
-            $html[] = '<td>' . implode(' >> ', $parentTitles) . '</td>';
-            $html[] = '</tr>';
-        }
-
-        $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('User') . '</strong></td>';
-        $html[] = '<td>' . $this->getUser()->get_fullname() . '</td>';
-        $html[] = '</tr>';
-        $html[] = '<tr>';
-        $html[] = '<td width="25%"><strong>' . $translator->getTranslation('TotalTime') . '</strong></td>';
-        $html[] = '<td>';
-
-        $html[] = DatetimeUtilities::format_seconds_to_hours(
-            $trackingService->getTotalTimeSpentInLearningPathTreeNode(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-            )
-        );
-
-        $html[] = '</td>';
-        $html[] = '</tr>';
-
-        if ($this->getCurrentContentObject() instanceof Assessment)
-        {
-            $progressBarRenderer = new ProgressBarRenderer();
-
-            $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('AverageScore') . '</strong></td>';
-            $html[] = '<td>';
-
-            $html[] = $progressBarRenderer->render(
-                (int) $trackingService->getAverageScoreInLearningPathTreeNode(
-                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-                )
-            );
-
-            $html[] = '</td>';
-            $html[] = '</tr>';
-            $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('MaximumScore') . '</strong></td>';
-            $html[] = '<td>';
-
-            $html[] = $progressBarRenderer->render(
-                $trackingService->getMaximumScoreInLearningPathTreeNode(
-                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-                )
-            );
-
-            $html[] = '</td>';
-            $html[] = '</tr>';
-
-            $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('MinimumScore') . '</strong></td>';
-            $html[] = '<td>';
-
-            $html[] = $progressBarRenderer->render(
-                $trackingService->getMinimumScoreInLearningPathTreeNode(
-                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-                )
-            );
-
-            $html[] = '</td>';
-            $html[] = '</tr>';
-
-            $html[] = '<tr>';
-            $html[] = '<td width="25%"><strong>' . $translator->getTranslation('LastScore') . '</strong></td>';
-            $html[] = '<td>';
-
-            $html[] = $progressBarRenderer->render(
-                $trackingService->getLastAttemptScoreForLearningPathTreeNode(
-                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-                )
-            );
-
-            $html[] = '</td>';
-            $html[] = '</tr>';
-        }
-
-        $html[] = '</table>';
-        $html[] = '</div>';
         $html[] = '</div>';
 
         if ($currentLearningPathTreeNode->hasChildNodes())
         {
-            $completedLabel = $translator->getTranslation('Completed');
-            $notCompletedLabel = $translator->getTranslation('NotCompleted');
-
-            $progress = $trackingService->getLearningPathProgress(
-                $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
-            );
-
-            $notCompleted = 100 - $progress;
-
             $html[] = '<div class="col-sm-4">';
 
-            $html[] = '<div class="panel panel-default">';
-            $html[] = '<div class="panel-heading">';
-            $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Progress') . '</h5>';
-            $html[] = '</div>';
-            $html[] = '<div class="panel-body">';
+            $this->renderProgress($translator, $trackingService, $currentLearningPathTreeNode, $panelRenderer);
 
-            $html[] = '<canvas id="myChart" width="270" height="135" style="margin: auto;"></canvas>';
-            $html[] = '<script>';
-            $html[] = 'var ctx = document.getElementById("myChart");';
-            $html[] = 'var myChart = new Chart(ctx, {';
-            $html[] = '    type: "doughnut",';
-            $html[] = '    data: {';
-            $html[] = '        labels: ["' . $completedLabel . '", "' . $notCompletedLabel . '"],';
-            $html[] = '        datasets: [{';
-            $html[] = '            data: [' . $progress . ',' . $notCompleted . '],';
-            $html[] = '            backgroundColor: [';
-            $html[] = '                    "#36A2EB",';
-            $html[] = '                    "#FF6384",';
-            $html[] = '                ],';
-            $html[] = '            hoverBackgroundColor: [';
-            $html[] = '                    "#36A2EB",';
-            $html[] = '                    "#FF6384",';
-            $html[] = '                ],';
-            $html[] = '            borderWidth: 1';
-            $html[] = '        }]';
-            $html[] = '    },';
-            $html[] = '    options: {';
-            $html[] = '         legend: {';
-            $html[] = '             onClick: null';
-            $html[] = '         },';
-            $html[] = '         responsive: false,';
-            $html[] = '         animation: { animateScale: true },';
-            $html[] = '         legend: { position: "right" },';
-            $html[] = '         tooltips: {';
-            $html[] = '             callbacks: {';
-            $html[] = '                 label: function(tooltipItem, data) {';
-            $html[] = '                     var value = data.datasets[0].data[tooltipItem.index];';
-            $html[] = '                     var label = data.labels[tooltipItem.index];';
-            $html[] = '                     return " " + label + ": " + value + "%"';
-            $html[] = '                 }';
-            $html[] = '             }';
-            $html[] = '         }';
-            $html[] = '    }';
-            $html[] = '});';
-            $html[] = '</script>';
-
-            $html[] = '</div>';
-            $html[] = '</div>';
             $html[] = '</div>';
         }
 
@@ -223,32 +69,16 @@ class ReportingComponent extends TabComponent implements TableSupport
         if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
         {
             $table = new ProgressTable($this);
-
-            $html[] = '<div class="panel panel-default">';
-            $html[] = '<div class="panel-heading">';
-            $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Children') . '</h5>';
-            $html[] = '</div>';
-            $html[] = '<div class="panel-body">';
-            $html[] = $table->as_html();
-            $html[] = '</div>';
-            $html[] = '</div>';
+            $html[] = $panelRenderer->render($translator->getTranslation('Children'), $table->as_html());
         }
 
         $table = new ChildAttemptTable($this);
-
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Attempts') . '</h5>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-        $html[] = $table->as_html();
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $html[] = $panelRenderer->render($translator->getTranslation('Attempts'), $table->as_html());
 
         if ($currentLearningPathTreeNode->getContentObject() instanceof Assessment)
         {
             $html[] = $this->renderScoreChart(
-                $trackingService, $translator, $this->get_root_content_object(), $this->getUser(),
+                $trackingService, $translator, $panelRenderer, $this->get_root_content_object(), $this->getUser(),
                 $currentLearningPathTreeNode
             );
         }
@@ -263,10 +93,160 @@ class ReportingComponent extends TabComponent implements TableSupport
     }
 
     /**
+     * Renders the information panel
+     *
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param AutomaticNumberingService $automaticNumberingService
+     * @param Translation $translator
+     * @param LearningPathTrackingService $trackingService
+     * @param PanelRenderer $panelRenderer
+     *
+     * @return string
+     */
+    protected function renderInformationPanel(
+        LearningPathTreeNode $currentLearningPathTreeNode, AutomaticNumberingService $automaticNumberingService,
+        Translation $translator, LearningPathTrackingService $trackingService, PanelRenderer $panelRenderer
+    )
+    {
+        $parentTitles = array();
+        foreach ($currentLearningPathTreeNode->getParentNodes() as $parentNode)
+        {
+            $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+            $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
+        }
+
+        $informationValues = [];
+
+        $informationValues[$translator->getTranslation('Title')] =
+            $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
+                $currentLearningPathTreeNode
+            );
+
+        if (!$currentLearningPathTreeNode->isRootNode())
+        {
+            $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
+        }
+
+        $informationValues[$translator->getTranslation('User')] = $this->getUser()->get_fullname();
+
+        $informationValues[$translator->getTranslation('TotalTime')] =
+            DatetimeUtilities::format_seconds_to_hours(
+                $trackingService->getTotalTimeSpentInLearningPathTreeNode(
+                    $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                )
+            );
+
+        if ($this->getCurrentContentObject() instanceof Assessment)
+        {
+            $progressBarRenderer = new ProgressBarRenderer();
+
+            $informationValues[$translator->getTranslation('AverageScore')] =
+                $progressBarRenderer->render(
+                    (int) $trackingService->getAverageScoreInLearningPathTreeNode(
+                        $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                    )
+                );
+
+            $informationValues[$translator->getTranslation('MaximumScore')] =
+                $progressBarRenderer->render(
+                    $trackingService->getMaximumScoreInLearningPathTreeNode(
+                        $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                    )
+                );
+
+            $informationValues[$translator->getTranslation('MinimumScore')] =
+                $progressBarRenderer->render(
+                    $trackingService->getMinimumScoreInLearningPathTreeNode(
+                        $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                    )
+                );
+
+            $informationValues[$translator->getTranslation('LastScore')] =
+                $progressBarRenderer->render(
+                    $trackingService->getLastAttemptScoreForLearningPathTreeNode(
+                        $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+                    )
+                );
+        }
+
+        return $panelRenderer->renderTablePanel($translator->getTranslation('Information'), $informationValues);
+    }
+
+    /**
+     * Renders the progress doughnut chart
+     *
+     * @param Translation $translator
+     * @param LearningPathTrackingService $trackingService
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param PanelRenderer $panelRenderer
+     */
+    protected function renderProgress(
+        Translation $translator, LearningPathTrackingService $trackingService,
+        LearningPathTreeNode $currentLearningPathTreeNode, PanelRenderer $panelRenderer
+    )
+    {
+        $completedLabel = $translator->getTranslation('Completed');
+        $notCompletedLabel = $translator->getTranslation('NotCompleted');
+
+        $progress = $trackingService->getLearningPathProgress(
+            $this->get_root_content_object(), $this->getUser(), $currentLearningPathTreeNode
+        );
+
+        $notCompleted = 100 - $progress;
+
+        $panelHtml = array();
+        $panelHtml[] = '<canvas id="myChart" width="270" height="135" style="margin: auto;"></canvas>';
+        $panelHtml[] = '<script>';
+        $panelHtml[] = 'var ctx = document.getElementById("myChart");';
+        $panelHtml[] = 'var myChart = new Chart(ctx, {';
+        $panelHtml[] = '    type: "doughnut",';
+        $panelHtml[] = '    data: {';
+        $panelHtml[] = '        labels: ["' . $completedLabel . '", "' . $notCompletedLabel . '"],';
+        $panelHtml[] = '        datasets: [{';
+        $panelHtml[] = '            data: [' . $progress . ',' . $notCompleted . '],';
+        $panelHtml[] = '            backgroundColor: [';
+        $panelHtml[] = '                    "#36A2EB",';
+        $panelHtml[] = '                    "#FF6384",';
+        $panelHtml[] = '                ],';
+        $panelHtml[] = '            hoverBackgroundColor: [';
+        $panelHtml[] = '                    "#36A2EB",';
+        $panelHtml[] = '                    "#FF6384",';
+        $panelHtml[] = '                ],';
+        $panelHtml[] = '            borderWidth: 1';
+        $panelHtml[] = '        }]';
+        $panelHtml[] = '    },';
+        $panelHtml[] = '    options: {';
+        $panelHtml[] = '         legend: {';
+        $panelHtml[] = '             onClick: null';
+        $panelHtml[] = '         },';
+        $panelHtml[] = '         responsive: false,';
+        $panelHtml[] = '         animation: { animateScale: true },';
+        $panelHtml[] = '         legend: { position: "right" },';
+        $panelHtml[] = '         tooltips: {';
+        $panelHtml[] = '             callbacks: {';
+        $panelHtml[] = '                 label: function(tooltipItem, data) {';
+        $panelHtml[] = '                     var value = data.datasets[0].data[tooltipItem.index];';
+        $panelHtml[] = '                     var label = data.labels[tooltipItem.index];';
+        $panelHtml[] = '                     return " " + label + ": " + value + "%"';
+        $panelHtml[] = '                 }';
+        $panelHtml[] = '             }';
+        $panelHtml[] = '         }';
+        $panelHtml[] = '    }';
+        $panelHtml[] = '});';
+        $panelHtml[] = '</script>';
+
+        $panelRenderer->render(
+            $translator->getTranslation('Progress'), implode(PHP_EOL, $panelHtml)
+        );
+    }
+
+    /**
      * Renders the scores for every attempt in a chart
      *
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param Translation $translator
+     * @param PanelRenderer $panelRenderer
      * @param LearningPath $learningPath
      * @param User $user
      * @param LearningPathTreeNode $learningPathTreeNode
@@ -274,7 +254,7 @@ class ReportingComponent extends TabComponent implements TableSupport
      * @return string
      */
     protected function renderScoreChart(
-        LearningPathTrackingService $learningPathTrackingService, Translation $translator,
+        LearningPathTrackingService $learningPathTrackingService, Translation $translator, PanelRenderer $panelRenderer,
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
@@ -291,12 +271,6 @@ class ReportingComponent extends TabComponent implements TableSupport
         }
 
         $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h5 class="panel-title">' . $translator->getTranslation('Scores') . '</h5>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
 
         $html[] = '<canvas id="scoreChart" style="margin: auto;"></canvas>';
         $html[] = '<script>';
@@ -331,10 +305,7 @@ class ReportingComponent extends TabComponent implements TableSupport
         $html[] = '});';
         $html[] = '</script>';
 
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $panelRenderer->render($translator->getTranslation('Scores'), implode(PHP_EOL, $html));
     }
 
     /**
