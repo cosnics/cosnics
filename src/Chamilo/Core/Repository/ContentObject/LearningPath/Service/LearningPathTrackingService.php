@@ -395,6 +395,42 @@ class LearningPathTrackingService
     }
 
     /**
+     * Changes the score and feedback for a given question in a given LearningPathChildAttempt identifier by ID
+     * for a given LearningPath, User and LearningPathTreeNode
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param int $learningPathChildAttemptId
+     * @param int $questionIdentifier
+     * @param int $score
+     * @param string $feedback
+     */
+    public function changeQuestionScoreAndFeedback(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId,
+        $questionIdentifier, $score = 0, $feedback = ''
+    )
+    {
+        $learningPathQuestionAttempts = $this->getQuestionAttempts(
+            $learningPath, $user, $learningPathTreeNode, $learningPathChildAttemptId
+        );
+
+        $learningPathQuestionAttempt = $learningPathQuestionAttempts[$questionIdentifier];
+
+        if (!$learningPathQuestionAttempt instanceof LearningPathQuestionAttempt)
+        {
+            throw new \RuntimeException(
+                sprintf('The given LearningPathQuestionAttempt for the question %s is not found', $questionIdentifier)
+            );
+        }
+
+        $learningPathQuestionAttempt->set_score($score);
+        $learningPathQuestionAttempt->set_feedback($feedback);
+
+        $this->learningPathTrackingRepository->update($learningPathQuestionAttempt);
+    }
+
+    /**
      * Determines the status for a given assessment LearningPathTreeNode based on the given score
      *
      * @param LearningPathTreeNode $learningPathTreeNode

@@ -17,6 +17,10 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class ProgressTableDataProvider extends TableDataProvider
 {
+    /**
+     * @var array
+     */
+    protected $data;
 
     /**
      * Returns the data as a resultset
@@ -30,10 +34,7 @@ class ProgressTableDataProvider extends TableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        /** @var LearningPathTreeNode $learningPathTreeNode */
-        $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
-
-        return new ArrayResultSet(array_values($learningPathTreeNode->getChildNodes()));
+        return new ArrayResultSet(array_slice($this->getAllData(), $offset, $count));
     }
 
     /**
@@ -45,6 +46,24 @@ class ProgressTableDataProvider extends TableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->retrieve_data($condition)->size();
+        return count($this->getAllData());
+    }
+
+    /**
+     * Retrieves, caches and returns the data
+     *
+     * @return array
+     */
+    protected function getAllData()
+    {
+        if (!isset($this->data))
+        {
+            /** @var LearningPathTreeNode $learningPathTreeNode */
+            $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
+
+            $this->data = array_values($learningPathTreeNode->getChildNodes());
+        }
+
+        return $this->data;
     }
 }

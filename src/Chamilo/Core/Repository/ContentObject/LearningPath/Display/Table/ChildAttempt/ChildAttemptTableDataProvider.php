@@ -19,6 +19,10 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class ChildAttemptTableDataProvider extends TableDataProvider
 {
+    /**
+     * @var array
+     */
+    protected $data;
 
     /**
      * Returns the data as a resultset
@@ -32,24 +36,7 @@ class ChildAttemptTableDataProvider extends TableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
-
-        /** @var LearningPath $learningPath */
-        $learningPath = $this->get_component()->get_root_content_object();
-
-        /** @var User $user */
-        $user = $this->get_component()->getUser();
-
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();
-
-        return new ArrayResultSet(
-            array_values(
-                $learningPathTrackingService->getLearningPathTreeNodeAttempts(
-                    $learningPath, $user, $learningPathTreeNode
-                )
-            )
-        );
+        return new ArrayResultSet(array_slice($this->getAllData(), $offset, $count));
     }
 
     /**
@@ -61,6 +48,36 @@ class ChildAttemptTableDataProvider extends TableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->retrieve_data($condition)->size();
+        return count($this->getAllData());
+    }
+
+    /**
+     * Retrieves, caches and returns the data
+     *
+     * @return array
+     */
+    protected function getAllData()
+    {
+        if (!isset($this->data))
+        {
+            $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
+
+            /** @var LearningPath $learningPath */
+            $learningPath = $this->get_component()->get_root_content_object();
+
+            /** @var User $user */
+            $user = $this->get_component()->getUser();
+
+            /** @var LearningPathTrackingService $learningPathTrackingService */
+            $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();
+
+            $this->data = array_values(
+                $learningPathTrackingService->getLearningPathTreeNodeAttempts(
+                    $learningPath, $user, $learningPathTreeNode
+                )
+            );
+        }
+
+        return $this->data;
     }
 }

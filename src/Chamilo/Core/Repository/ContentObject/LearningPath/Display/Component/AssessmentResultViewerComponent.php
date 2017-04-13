@@ -66,7 +66,10 @@ class AssessmentResultViewerComponent extends TabComponent
      */
     public function change_answer_data($question_cid, $score, $feedback)
     {
-
+        $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
+            $this->get_root_content_object(), $this->getUser(), $this->getCurrentLearningPathTreeNode(),
+            $this->getLearningPathChildAttemptId(), $question_cid, $score, $feedback
+        );
     }
 
     /**

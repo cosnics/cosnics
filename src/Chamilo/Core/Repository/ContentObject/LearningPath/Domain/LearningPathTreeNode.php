@@ -337,14 +337,12 @@ class LearningPathTreeNode
      * Returns the next learning path tree node (if available)
      *
      * @return LearningPathTreeNode
-     *
-     * TODO: BROKEN
      */
     public function getNextNode()
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() + 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() + 1);
         }
         catch (\Exception $ex)
         {
@@ -356,14 +354,12 @@ class LearningPathTreeNode
      * Returns the previous learning path tree node (if available)
      *
      * @return LearningPathTreeNode
-     *
-     * TODO: BROKEN
      */
     public function getPreviousNode()
     {
         try
         {
-            return $this->getLearningPathTree()->getLearningPathTreeNodeById($this->getStep() - 1);
+            return $this->getLearningPathTree()->getLearningPathTreeNodeByStep($this->getStep() - 1);
         }
         catch (\Exception $ex)
         {
