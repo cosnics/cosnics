@@ -166,7 +166,7 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 /* Learning Path Refactoring */
 
 CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `learning_path_id` int(10) unsigned NOT NULL,
   `parent_learning_path_child_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
@@ -179,18 +179,18 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `show_answer_feedback` int(10) unsigned NOT NULL DEFAULT '7',
   `feedback_location` int(10) unsigned NOT NULL DEFAULT '3',
   `blocked` tinyint(1) NOT NULL DEFAULT '0',
-  `display_order` int(10) unsigned NOT NULL
+  `display_order` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `added_date` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `repository_learning_path_child`
   ADD PRIMARY KEY (`id`),
   ADD KEY `learning_path_id` (`learning_path_id`),
   ADD KEY `content_object_id` (`content_object_id`) USING BTREE,
-  ADD KEY `parent_learning_path_child_id` (`parent_learning_path_child_id`);
+  ADD KEY `section_content_object_id` (`parent_learning_path_child_id`),
+  ADD KEY `user_id` (`user_id`);
 
-ALTER TABLE `repository_learning_path_child`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
-  
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Note\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Description\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Blog\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';

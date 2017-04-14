@@ -91,7 +91,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                     $parentNode = $this->getCurrentLearningPathTreeNode();
 
                     $learningPathChild = $learningPathChildService->addContentObjectToLearningPath(
-                        $this->get_root_content_object(), $parentNode, $object
+                        $this->get_root_content_object(), $parentNode, $object, $this->getUser()
                     );
 
                     $nextStep = $learningPathChild->getId();

@@ -47,7 +47,7 @@ class LearningPathChildRepository extends CommonDataClassRepository
     }
 
     /**
-     * Retrieves the learning path children for a given learning path
+     * Retrieves the learning path children for given ContentObject's identified by id
      *
      * @param int[] $contentObjectIds
      *
@@ -60,6 +60,27 @@ class LearningPathChildRepository extends CommonDataClassRepository
                 LearningPathChild::class_name(), LearningPathChild::PROPERTY_CONTENT_OBJECT_ID
             ),
             $contentObjectIds
+        );
+
+        return $this->dataClassRepository->retrieves(
+            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * Retrieves the learning path children for a given userId
+     *
+     * @param int $userId
+     *
+     * @return LearningPathChild[] | DataClassIterator
+     */
+    public function findLearningPathChildrenByUserId($userId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathChild::class_name(), LearningPathChild::PROPERTY_USER_ID
+            ),
+            new StaticConditionVariable($userId)
         );
 
         return $this->dataClassRepository->retrieves(
