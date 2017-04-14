@@ -7,12 +7,13 @@ CKEDITOR.plugins.addExternal( 'chamilo', web_path + 'Chamilo/Libraries/Resources
 CKEDITOR.plugins.addExternal( 'chamilofakeobjects', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/chamilofakeobjects/');
 CKEDITOR.plugins.addExternal('resource', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resource/');
 CKEDITOR.plugins.addExternal('resourceupload', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resourceupload/');
+CKEDITOR.plugins.addExternal('quickquestion', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/quickquestion/');
 
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
-    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed,sourcedialog';
-    config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects";
+    config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed';
+    config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
             + 'anchor,link,image,flash,'
@@ -42,7 +43,7 @@ CKEDITOR.editorConfig = function(config)
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
             [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
-                    'Smiley', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
+                    'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
@@ -100,4 +101,19 @@ CKEDITOR.editorConfig = function(config)
         { name: '720p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-720p' }, group: 'size' },
         { name: '1080p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-1080p' }, group: 'size' }
     ]);
+
+    config.autosave = {
+        SaveKey: null, // fix to force unique savekey (even for page with multiple instances)
+        // Save Content on Destroy - Setting to Save content on editor destroy (Default is false) ...
+        saveOnDestroy : true,
+
+        // Setting to set the Save button to inform the plugin when the content is saved by the user and doesn't need to be stored temporary ...
+        saveDetectionSelectors : 'button[type="submit"]',
+
+        // Notification Type - Setting to set the if you want to show the "Auto Saved" message, and if yes you can show as Notification or as Message in the Status bar (Default is "notification")
+        messageType : "no",
+
+        // Delay
+        delay : 15 //@todo: check performance with large pages
+    };
 };
