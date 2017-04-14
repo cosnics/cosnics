@@ -1,2 +1,4 @@
 Manager = "Manager"
 WhoisOnline = "Who is online"
+SubscriptionStatus = "Subscription status"
+SubscriptionType = "Subscription type"

@@ -6,3 +6,5 @@
 TypeName = "Startpagina"
 ToolVisibilityChanged = "Zichtbaarheid van tool gewijzigd"
 BrowserComponent = "Startpagina"
+PublicationRemovedFromHomepage = "Publicatie met succes verwijderd"
+PublicationNotRemovedFromHomepage = "Publicatie is niet verwijderd"
