@@ -245,12 +245,26 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
         );
 
-        $action = in_array(
+        if (
+        in_array(
             $this->getRequest()->get(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
             ), $reportingActions
-        ) ? \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING :
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+        )
+        )
+        {
+            $action = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
+
+            $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
+                $this->getRequest()->get(
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID
+                );
+        }
+        else
+        {
+            $action =
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+        }
 
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] = $action;
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =

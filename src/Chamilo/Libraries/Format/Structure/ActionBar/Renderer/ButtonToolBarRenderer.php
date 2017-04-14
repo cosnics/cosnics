@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 

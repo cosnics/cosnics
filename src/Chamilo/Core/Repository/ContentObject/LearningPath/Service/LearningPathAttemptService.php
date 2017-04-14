@@ -68,7 +68,7 @@ class LearningPathAttemptService
      */
     public function getOrCreateLearningPathAttemptForUser(LearningPath $learningPath, User $user)
     {
-        if (!array_key_exists($learningPath->getId(), $this->learningPathAttemptCache) &&
+        if (!array_key_exists($learningPath->getId(), $this->learningPathAttemptCache) ||
             !array_key_exists($user->getId(), $this->learningPathAttemptCache[$learningPath->getId()])
         )
         {
@@ -135,7 +135,7 @@ class LearningPathAttemptService
         $learningPathAttemptId = $learningPathAttempt->getId();
         $learningPathTreeNodeId = $learningPathTreeNode->getId();
 
-        if (!array_key_exists($learningPathAttemptId, $this->activeLearningPathChildAttemptCache) && !array_key_exists(
+        if (!array_key_exists($learningPathAttemptId, $this->activeLearningPathChildAttemptCache) || !array_key_exists(
                 $learningPathTreeNodeId, $this->activeLearningPathChildAttemptCache[$learningPathAttemptId]
             )
         )

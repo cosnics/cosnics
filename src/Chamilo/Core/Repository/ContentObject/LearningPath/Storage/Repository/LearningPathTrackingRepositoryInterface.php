@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -89,4 +90,30 @@ interface LearningPathTrackingRepositoryInterface
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathItemAttempt);
+
+    /**
+     * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
+     * Joined with users for searching and sorting
+     *
+     * @param LearningPath $learningPath
+     * @param Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findLearningPathAttemptsWithUser(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    );
+
+    /**
+     * Counts the learning path attempts joined with users for searching
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null);
 }

@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Service to manage the tracking of attempts in a learning path
@@ -898,6 +899,11 @@ class LearningPathTrackingService
                 (int) $learningPathAttempt->get_score() : $minimumScore;
         }
 
+        if(is_null($minimumScore))
+        {
+            $minimumScore = 0;
+        }
+
         return $minimumScore;
     }
 
@@ -915,10 +921,49 @@ class LearningPathTrackingService
     )
     {
         $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
-        $learningPathAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
+        $learningPathChildAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
 
-        $learningPathAttempt = array_pop($learningPathAttempts);
+        $learningPathChildAttempt = array_pop($learningPathChildAttempts);
 
-        return (int) $learningPathAttempt->get_score();
+        if(!$learningPathChildAttempt instanceof LearningPathChildAttempt)
+        {
+            return 0;
+        }
+
+        return (int) $learningPathChildAttempt->get_score();
+    }
+
+    /**
+     * Counts the learning path attempts joined with users for searching
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countLearningPathAttemptsWithUsers(LearningPath $learningPath, Condition $condition = null)
+    {
+        return $this->learningPathTrackingRepository->countLearningPathAttemptsWithUser($learningPath, $condition);
+    }
+
+    /**
+     * Returns the LearningPathAttempt objects for a given LearningPath with a given condition, offset,
+     * count and orderBy Joined with users for searching and sorting
+     *
+     * @param LearningPath $learningPath
+     * @param Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getLearningPathAttemptsWithUser(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        return $this->learningPathTrackingRepository->findLearningPathAttemptsWithUser(
+            $learningPath, $condition, $offset, $count, $orderBy
+        );
     }
 }

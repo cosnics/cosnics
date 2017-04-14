@@ -42,6 +42,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
     const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';
+    const ACTION_VIEW_USER_PROGRESS = 'UserProgress';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -55,6 +56,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_DISPLAY_ORDER = 'display_order';
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
     const PARAM_CHILD_ID = 'child_id';
+    const PARAM_REPORTING_USER_ID = 'reporting_user';
 
     // Sorting
     const SORT_UP = 'Up';

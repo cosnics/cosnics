@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssessmentResultViewerComponent extends TabComponent
+class AssessmentResultViewerComponent extends BaseReportingComponent
 {
     /**
      * @return string
@@ -30,6 +30,17 @@ class AssessmentResultViewerComponent extends TabComponent
     }
 
     /**
+     * @return string
+     */
+    public function render_header()
+    {
+        $html = [parent::render_header()];
+        $html[] = $this->renderCommonFunctionality();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
      * Retrieves the results for the assessment attempt.
      *
      * @return array The assessment attempt results
@@ -38,7 +49,7 @@ class AssessmentResultViewerComponent extends TabComponent
     {
         $trackingService = $this->getLearningPathTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
-            $this->get_root_content_object(), $this->getUser(), $this->getCurrentLearningPathTreeNode(),
+            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId()
         );
 
@@ -67,7 +78,7 @@ class AssessmentResultViewerComponent extends TabComponent
     public function change_answer_data($question_cid, $score, $feedback)
     {
         $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
-            $this->get_root_content_object(), $this->getUser(), $this->getCurrentLearningPathTreeNode(),
+            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId(), $question_cid, $score, $feedback
         );
     }
@@ -78,7 +89,7 @@ class AssessmentResultViewerComponent extends TabComponent
     public function change_total_score($score)
     {
         $this->learningPathTrackingService->changeAssessmentScore(
-            $this->get_root_content_object(), $this->getUser(), $this->getCurrentLearningPathTreeNode(),
+            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId(), $score
         );
     }
@@ -109,7 +120,9 @@ class AssessmentResultViewerComponent extends TabComponent
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN, self::PARAM_ITEM_ATTEMPT_ID);
+        $parameters = parent::get_additional_parameters();
+        $parameters[] = self::PARAM_ITEM_ATTEMPT_ID;
+        return $parameters;
     }
 
     /**
