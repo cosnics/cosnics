@@ -174,6 +174,8 @@ class LearningPathTrackingService
         $learningPathAttempt =
             $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
 
+        $this->learningPathAttemptService->clearLearningPathChildAttemptCache($learningPathAttempt);
+
         foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
         {
             if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $learningPathTreeNode))

@@ -53,6 +53,11 @@ interface LearningPathTrackingRepositoryInterface
     public function clearLearningPathAttemptCache();
 
     /**
+     * Clears the cache for the LearningPathAttempt data class
+     */
+    public function clearLearningPathChildAttemptCache();
+
+    /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPathAttempt $learningPathAttempt

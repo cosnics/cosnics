@@ -203,8 +203,21 @@ class LearningPathAttemptService
         $learningPathChildAttempt->set_status(LearningPathChildAttempt::STATUS_NOT_ATTEMPTED);
 
         $this->learningPathTrackingRepository->create($learningPathChildAttempt);
+        $this->clearLearningPathChildAttemptCache($learningPathAttempt);
 
         return $learningPathChildAttempt;
+    }
+
+    /**
+     * Clears the LearningPathChildAttempt cache for the given LearningPathAttempt
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     */
+    public function clearLearningPathChildAttemptCache(LearningPathAttempt $learningPathAttempt)
+    {
+        $this->learningPathTrackingRepository->clearLearningPathChildAttemptCache();
+
+        unset($this->learningPathChildAttemptsForLearningPathAttemptCache[$learningPathAttempt->getId()]);
     }
 
     /**

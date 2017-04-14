@@ -108,6 +108,17 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     }
 
     /**
+     * Clears the cache for the LearningPathAttempt data class
+     */
+    public function clearLearningPathChildAttemptCache()
+    {
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncate($learningPathChildAttemptClassName);
+    }
+
+    /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPathAttempt $learningPathAttempt
