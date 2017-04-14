@@ -166,7 +166,7 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 /* Learning Path Refactoring */
 
 CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `learning_path_id` int(10) unsigned NOT NULL,
   `parent_learning_path_child_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
@@ -191,6 +191,8 @@ ALTER TABLE `repository_learning_path_child`
   ADD KEY `section_content_object_id` (`parent_learning_path_child_id`),
   ADD KEY `user_id` (`user_id`);
 
+ALTER TABLE `repository_learning_path_child` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Note\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Description\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Blog\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
@@ -207,5 +209,5 @@ ALTER TABLE `repository_learning_path`
 
 ALTER TABLE `repository_learning_path` ADD `automatic_numbering` VARCHAR(15) NOT NULL DEFAULT 'none' AFTER `id`, ADD `enforce_default_traversing_order` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `automatic_numbering`;
 
-DELETE FROM `configuration_registration` WHERE `context` LIKE '%LearningPathItem%'
-DELETE FROM `configuration_registration` WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath'
+DELETE FROM `configuration_registration` WHERE `context` LIKE '%LearningPathItem%';
+DELETE FROM `configuration_registration` WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
