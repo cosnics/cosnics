@@ -89,7 +89,7 @@ class LearningPathMigrationService
     )
     {
         $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
-        foreach ($complexContentObjectItems as $complexContentObjectItem)
+        while($complexContentObjectItem = $complexContentObjectItems->next_result())
         {
             /** @var ComplexLearningPathItem $complexContentObjectItem */
 
