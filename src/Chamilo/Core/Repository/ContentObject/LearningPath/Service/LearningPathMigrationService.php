@@ -161,14 +161,14 @@ class LearningPathMigrationService
 
         if ($learningPathItem instanceof $learningPathItem)
         {
-            $learningPathChild->setMaxAttempts($learningPathItem->get_max_attempts());
-            $learningPathChild->setMasteryScore($learningPathItem->get_mastery_score());
-            $learningPathChild->setAllowHints($learningPathItem->get_allow_hints());
-            $learningPathChild->setShowScore($learningPathItem->get_show_score());
-            $learningPathChild->setShowCorrection($learningPathItem->get_show_correction());
-            $learningPathChild->setShowSolution($learningPathItem->get_show_solution());
-            $learningPathChild->setShowAnswerFeedback($learningPathItem->get_show_answer_feedback());
-            $learningPathChild->setFeedbackLocation($learningPathItem->get_feedback_location());
+            $learningPathChild->setMaxAttempts((int) $learningPathItem->get_max_attempts());
+            $learningPathChild->setMasteryScore((int) $learningPathItem->get_mastery_score());
+            $learningPathChild->setAllowHints((bool) $learningPathItem->get_allow_hints());
+            $learningPathChild->setShowScore((bool) $learningPathItem->get_show_score());
+            $learningPathChild->setShowCorrection((bool) $learningPathItem->get_show_correction());
+            $learningPathChild->setShowSolution((bool) $learningPathItem->get_show_solution());
+            $learningPathChild->setShowAnswerFeedback((bool) $learningPathItem->get_show_answer_feedback());
+            $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
         if(!$this->learningPathTrackingRepository->create($learningPathChild))
