@@ -66,7 +66,7 @@ class ChildAttemptTableDataProvider extends TableDataProvider
             $learningPath = $this->get_component()->get_root_content_object();
 
             /** @var User $user */
-            $user = $this->get_component()->getUser();
+            $user = $this->get_component()->getReportingUser();
 
             /** @var LearningPathTrackingService $learningPathTrackingService */
             $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();

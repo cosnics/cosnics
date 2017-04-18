@@ -14,6 +14,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Learni
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -368,5 +370,45 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
         $this->setInStorage(DummyQuestionAttempt::class, $questionAttempts);
 
         return true;
+    }
+
+    /**
+     * Clears the cache for the LearningPathAttempt data class
+     */
+    public function clearLearningPathChildAttemptCache()
+    {
+
+    }
+
+    /**
+     * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
+     * Joined with users for searching and sorting
+     *
+     * @param LearningPath $learningPath
+     * @param Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findLearningPathAttemptsWithUser(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        return new RecordIterator(DummyAttempt::class_name(), array());
+    }
+
+    /**
+     * Counts the learning path attempts joined with users for searching
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null)
+    {
+        return 0;
     }
 }

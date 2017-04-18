@@ -29,15 +29,15 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param LearningPathTreeNode $record
      *
      * @return String
      */
-    public function render_cell($column, $learningPathTreeNode)
+    public function render_cell($column, $record)
     {
         $translator = Translation::getInstance();
 
-        $content_object = $learningPathTreeNode->getContentObject();
+        $content_object = $record->getContentObject();
 
         $learningPath = $this->getLearningPath();
         $user = $this->getUser();
@@ -49,29 +49,29 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             case 'type':
                 return $content_object->get_icon_image();
             case 'title':
-                return '<a href="' . $this->getReportingUrl($learningPathTreeNode) . '">' .
-                    $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($learningPathTreeNode) .
+                return '<a href="' . $this->getReportingUrl($record) . '">' .
+                    $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($record) .
                     '</a>';
             case 'status':
                 return $learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                    $learningPath, $user, $learningPathTreeNode
+                    $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
                 $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                        $learningPath, $user, $learningPathTreeNode
+                        $learningPath, $user, $record
                 );
 
                 return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
             case 'time':
                 $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
-                    $learningPath, $user, $learningPathTreeNode
+                    $learningPath, $user, $record
                 );
 
                 return DatetimeUtilities::format_seconds_to_hours($totalTimeSpent);
         }
 
-        return parent::render_cell($column, $learningPathTreeNode);
+        return parent::render_cell($column, $record);
     }
 
     /**
@@ -90,11 +90,11 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     /**
      * Returns the actions toolbar
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param LearningPathTreeNode $record
      *
      * @return String
      */
-    public function get_actions($learningPathTreeNode)
+    public function get_actions($record)
     {
         $learningPath = $this->getLearningPath();
         $user = $this->getUser();
@@ -106,13 +106,13 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             new ToolbarItem(
                 Translation::get('Details'),
                 Theme::getInstance()->getCommonImagePath('Action/Statistics'),
-                $this->getReportingUrl($learningPathTreeNode),
+                $this->getReportingUrl($record),
                 ToolbarItem::DISPLAY_ICON
             )
         );
 
         if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
-            $learningPath, $user, $learningPathTreeNode
+            $learningPath, $user, $record
         )
         )
         {
@@ -121,7 +121,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
                 $delete_url = $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT,
-                        Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+                        Manager::PARAM_CHILD_ID => $record->getId()
                     )
                 );
 
@@ -170,7 +170,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      */
     protected function getUser()
     {
-        return $this->get_component()->getUser();
+        return $this->get_component()->getReportingUser();
     }
 
     /**

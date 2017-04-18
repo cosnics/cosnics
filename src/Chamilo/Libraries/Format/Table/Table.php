@@ -12,6 +12,9 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * This class represents a table with the use of a column model, a data provider and a cell renderer Refactoring from
@@ -258,9 +261,17 @@ abstract class Table
         
         $table_data = array();
         
-        if ($result_set)
+        if ($result_set instanceof ResultSet)
         {
             while ($result = $result_set->next_result())
+            {
+                $this->handle_result($table_data, $result);
+            }
+        }
+
+        if($result_set instanceof DataClassIterator)
+        {
+            foreach($result_set as $result)
             {
                 $this->handle_result($table_data, $result);
             }
