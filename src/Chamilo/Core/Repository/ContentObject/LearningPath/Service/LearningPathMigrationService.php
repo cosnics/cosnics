@@ -135,12 +135,14 @@ class LearningPathMigrationService
      * Creates a LearningPathChild for a given LearningPath, ContentObject and parent LearningPathChild
      *
      * @param LearningPath $learningPath
+     * @param ComplexContentObjectItem $complexContentObjectItem
      * @param ContentObject $contentObject
-     * @param LearningPathChild|null $parentLearningPathChild
-     *
-     * @param LearningPathItem|null $learningPathItem
+     * @param LearningPathChild $parentLearningPathChild
+     * @param LearningPathItem $learningPathItem
      *
      * @return LearningPathChild
+     *
+     * @throws \Exception
      */
     protected function createLearningPathChildForContentObject(
         LearningPath $learningPath, ComplexContentObjectItem $complexContentObjectItem, ContentObject $contentObject,
@@ -169,7 +171,12 @@ class LearningPathMigrationService
             $learningPathChild->setFeedbackLocation($learningPathItem->get_feedback_location());
         }
 
-        $this->learningPathTrackingRepository->create($learningPathChild);
+        if(!$this->learningPathTrackingRepository->create($learningPathChild))
+        {
+            throw new \Exception('Could not create a new learning path child');
+        }
+
+        echo "Create LearningPathChild " . $learningPathChild->getId();
 
 //        $this->changeTrackingToLearningPathChildId($complexContentObjectItem, $learningPathChild);
 
@@ -182,6 +189,8 @@ class LearningPathMigrationService
      * @param LearningPath $learningPath
      *
      * @return Section
+     *
+     * @throws \Exception
      */
     protected function getOrCreateSectionForLearningPath(LearningPath $learningPath)
     {
@@ -194,7 +203,12 @@ class LearningPathMigrationService
             $section->set_creation_date($learningPath->get_creation_date());
             $section->set_owner_id($learningPath->get_owner_id());
 
-            $section->create();
+            if(!$section->create())
+            {
+                throw new \Exception('Could not create a new section');
+            }
+
+            echo "Create Section " . $section->getId();
 
             $this->sectionFromLearningPathCache[$learningPath->getId()] = $section;
         }
