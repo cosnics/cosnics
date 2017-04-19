@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * Migrates old learning paths to the new learning path structure
  *
  * TODO: FIX TRACKING
+ * TODO: FIX PREREQUISITES
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -92,7 +93,7 @@ class LearningPathMigrationService
         $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
         while ($complexContentObjectItem = $complexContentObjectItems->next_result())
         {
-            /** @var ComplexLearningPathItem $complexContentObjectItem */
+            /** @var ComplexContentObjectItem $complexContentObjectItem */
 
             try
             {
@@ -102,7 +103,7 @@ class LearningPathMigrationService
             {
                 continue;
             }
-echo(get_class($childContentObject) . PHP_EOL);
+
             if ($childContentObject instanceof LearningPath)
             {
                 /** @var LearningPath $childContentObject */
@@ -143,14 +144,14 @@ echo(get_class($childContentObject) . PHP_EOL);
                 );
             }
 
-            if (!empty($complexContentObjectItem->get_prerequisites()))
-            {
-                if (!$learningPath->enforcesDefaultTraversingOrder())
-                {
-                    $learningPath->setEnforceDefaultTraversingOrder(true);
-                    $learningPath->update();
-                }
-            }
+//            if (!empty($complexContentObjectItem->get_prerequisites()))
+//            {
+//                if (!$learningPath->enforcesDefaultTraversingOrder())
+//                {
+//                    $learningPath->setEnforceDefaultTraversingOrder(true);
+//                    $learningPath->update();
+//                }
+//            }
         }
     }
 
@@ -194,12 +195,12 @@ echo(get_class($childContentObject) . PHP_EOL);
             $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
-//        if (!$this->learningPathTrackingRepository->create($learningPathChild))
-//        {
-//            throw new \Exception('Could not create a new learning path child');
-//        }
-//
-//        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
+        if (!$this->learningPathTrackingRepository->create($learningPathChild))
+        {
+            throw new \Exception('Could not create a new learning path child');
+        }
+
+        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
 
 //        $this->changeTrackingToLearningPathChildId($complexContentObjectItem, $learningPathChild);
 
@@ -257,7 +258,7 @@ echo(get_class($childContentObject) . PHP_EOL);
         );
 
         return $this->contentObjectRepository->findAll(
-            ComplexLearningPathItem::class_name(), new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters(
                 $condition, null, null, array(
                     new OrderBy(
                         new PropertyConditionVariable(
