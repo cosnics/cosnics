@@ -90,7 +90,7 @@ class LearningPathMigrationService
     )
     {
         $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
-        while($complexContentObjectItem = $complexContentObjectItems->next_result())
+        while ($complexContentObjectItem = $complexContentObjectItems->next_result())
         {
             /** @var ComplexLearningPathItem $complexContentObjectItem */
 
@@ -98,7 +98,7 @@ class LearningPathMigrationService
             {
                 $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
                 continue;
             }
@@ -114,13 +114,23 @@ class LearningPathMigrationService
             }
             else
             {
+                if (!$childContentObject instanceof LearningPathItem)
+                {
+                    echo(
+                        'The given complex content object item does not reference a learning path item ' .
+                        $complexContentObjectItem->getId()
+                    );
+
+                    continue;
+                }
+
                 /** @var LearningPathItem $childContentObject */
 
                 try
                 {
                     $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
                 }
-                catch(\Exception $ex)
+                catch (\Exception $ex)
                 {
                     continue;
                 }
@@ -136,9 +146,9 @@ class LearningPathMigrationService
                 $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $learningPathChild);
             }
 
-            if(!empty($complexContentObjectItem->get_prerequisites()))
+            if (!empty($complexContentObjectItem->get_prerequisites()))
             {
-                if(!$learningPath->enforcesDefaultTraversingOrder())
+                if (!$learningPath->enforcesDefaultTraversingOrder())
                 {
                     $learningPath->setEnforceDefaultTraversingOrder(true);
                     $learningPath->update();
@@ -187,7 +197,7 @@ class LearningPathMigrationService
             $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
-        if(!$this->learningPathTrackingRepository->create($learningPathChild))
+        if (!$this->learningPathTrackingRepository->create($learningPathChild))
         {
             throw new \Exception('Could not create a new learning path child');
         }
@@ -219,7 +229,7 @@ class LearningPathMigrationService
             $section->set_creation_date($learningPath->get_creation_date());
             $section->set_owner_id($learningPath->get_owner_id());
 
-            if(!$section->create())
+            if (!$section->create())
             {
                 throw new \Exception('Could not create a new section');
             }
