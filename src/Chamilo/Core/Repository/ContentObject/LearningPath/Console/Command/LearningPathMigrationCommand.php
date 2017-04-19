@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathMigrationTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathMigrationService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
@@ -44,7 +44,8 @@ class LearningPathMigrationCommand extends ChamiloCommand
      * @param DataClassRepository $dataClassRepository
      */
     public function __construct(
-        Translator $translator, LearningPathService $learningPathService, ContentObjectRepository $contentObjectRepository,
+        Translator $translator, LearningPathService $learningPathService,
+        ContentObjectRepository $contentObjectRepository,
         DataClassRepository $dataClassRepository
     )
     {
@@ -78,8 +79,9 @@ class LearningPathMigrationCommand extends ChamiloCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $learningPathTrackingRepository =
-            new LearningPathTrackingRepository($this->dataClassRepository, new LearningPathTrackingParameters(1, 1));
+        $learningPathTrackingRepository = new LearningPathTrackingRepository(
+            $this->dataClassRepository, new LearningPathMigrationTrackingParameters()
+        );
 
         $learningPathMigrationService = new LearningPathMigrationService(
             $this->learningPathService, $learningPathTrackingRepository, $this->contentObjectRepository

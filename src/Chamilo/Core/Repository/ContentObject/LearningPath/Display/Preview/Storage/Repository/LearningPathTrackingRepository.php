@@ -128,6 +128,37 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
+     * Finds all the LearningPathChildAttempt objects for a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | LearningPathChildAttempt[]
+     */
+    public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath)
+    {
+        $allChildAttempts = array();
+
+        $attempts = $this->getFromStorage(DummyAttempt::class);
+        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
+
+        $learningPathAttempts = $attempts[$learningPath->getId()];
+
+        foreach($learningPathAttempts as $learningPathAttempt)
+        {
+            /** @var LearningPathAttempt $learningPathAttempt */
+
+            $learningPathAttemptChildAttempts = $childAttempts[$learningPathAttempt->getId()];
+
+            if(is_array($learningPathAttemptChildAttempts))
+            {
+                $allChildAttempts += $learningPathAttemptChildAttempts;
+            }
+        }
+
+        return $allChildAttempts;
+    }
+
+    /**
      * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt

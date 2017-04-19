@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ComplexLearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
@@ -12,17 +11,18 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Migrates old learning paths to the new learning path structure
- *
- * TODO: FIX TRACKING
- * TODO: FIX PREREQUISITES
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -51,6 +51,13 @@ class LearningPathMigrationService
     protected $sectionFromLearningPathCache;
 
     /**
+     * The ComplexContentObjectItemsMapping for the given learning path
+     *
+     * @var array
+     */
+    protected $complexContentObjectItemsMappingForLearningPath;
+
+    /**
      * LearningPathMigrationService constructor.
      *
      * @param LearningPathService $learningPathService
@@ -75,7 +82,19 @@ class LearningPathMigrationService
         $learningPaths = $this->learningPathService->getLearningPaths();
         foreach ($learningPaths as $learningPath)
         {
+            $this->complexContentObjectItemsMappingForLearningPath = array();
+
             $this->migrateLearningPath($learningPath, $learningPath->getId());
+
+            if ($this->hasLearningPathPrerequisites())
+            {
+                $learningPath->setEnforceDefaultTraversingOrder(true);
+                $learningPath->update();
+
+                echo 'Learning Path Prerequisites ' . $learningPath->getId() . PHP_EOL;
+            }
+
+            $this->fixLearningPathTracking($learningPath);
         }
     }
 
@@ -138,20 +157,14 @@ class LearningPathMigrationService
                     continue;
                 }
 
-                $this->createLearningPathChildForContentObject(
+                $learningPathChild = $this->createLearningPathChildForContentObject(
                     $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild,
                     $childContentObject
                 );
             }
 
-//            if (!empty($complexContentObjectItem->get_prerequisites()))
-//            {
-//                if (!$learningPath->enforcesDefaultTraversingOrder())
-//                {
-//                    $learningPath->setEnforceDefaultTraversingOrder(true);
-//                    $learningPath->update();
-//                }
-//            }
+            $this->complexContentObjectItemsMappingForLearningPath[$complexContentObjectItem->getId()] =
+                $learningPathChild->getId();
         }
     }
 
@@ -183,7 +196,7 @@ class LearningPathMigrationService
         $learningPathChild->setUserId((int) $contentObject->get_owner_id());
         $learningPathChild->setAddedDate(time());
 
-        if ($learningPathItem instanceof $learningPathItem)
+        if ($learningPathItem && $learningPathItem instanceof $learningPathItem)
         {
             $learningPathChild->setMaxAttempts((int) $learningPathItem->get_max_attempts());
             $learningPathChild->setMasteryScore((int) $learningPathItem->get_mastery_score());
@@ -202,8 +215,6 @@ class LearningPathMigrationService
 
         echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
 
-//        $this->changeTrackingToLearningPathChildId($complexContentObjectItem, $learningPathChild);
-
         return $learningPathChild;
     }
 
@@ -216,7 +227,9 @@ class LearningPathMigrationService
      *
      * @throws \Exception
      */
-    protected function getOrCreateSectionForLearningPath(LearningPath $learningPath)
+    protected function getOrCreateSectionForLearningPath(
+        LearningPath $learningPath
+    )
     {
         if (!array_key_exists($learningPath->getId(), $this->sectionFromLearningPathCache))
         {
@@ -247,7 +260,9 @@ class LearningPathMigrationService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    protected function getComplexContentObjectItemsForParent($parentId)
+    protected function getComplexContentObjectItemsForParent(
+        $parentId
+    )
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -272,19 +287,63 @@ class LearningPathMigrationService
     }
 
     /**
+     * Checks if the learning path has prerequisites, uses the mapping from ComplexContentObjectItem classes
+     *
+     * @return bool
+     */
+    protected function hasLearningPathPrerequisites()
+    {
+        $conditions = array();
+
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    ComplexLearningPathItem::class_name(), ComplexLearningPathItem::PROPERTY_PREREQUISITES
+                ),
+                null
+            )
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                ComplexLearningPathItem::class_name(), ComplexLearningPathItem::PROPERTY_ID
+            ),
+            array_keys($this->complexContentObjectItemsMappingForLearningPath)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->contentObjectRepository->countAll(
+                ComplexLearningPathItem::class_name(), new DataClassCountParameters($condition)
+            ) > 0;
+    }
+
+    /**
      * Change the tracking tables to match the new identifiers from the
      * ComplexContentObject identifiers to the LearningPathChild identifers
      *
-     * @param ComplexContentObjectItem $complexContentObjectItem
-     * @param LearningPathChild $learningPathChild
+     * @param LearningPath $learningPath
      */
-    protected function changeTrackingToLearningPathChildId(
-        ComplexContentObjectItem $complexContentObjectItem, LearningPathChild $learningPathChild
-    )
+    protected function fixLearningPathTracking(LearningPath $learningPath)
     {
-        $this->learningPathTrackingRepository->changeLearningPathChildIdInLearningPathChildAttempts(
-            $complexContentObjectItem->getId(), $learningPathChild->getId()
-        );
-    }
+        $learningPathChildAttempts =
+            $this->learningPathTrackingRepository->findLearningPathChildAttemptsForLearningPath($learningPath);
 
+        foreach($learningPathChildAttempts as $learningPathChildAttempt)
+        {
+            $newLearningPathItemId =
+                $this->complexContentObjectItemsMappingForLearningPath[$learningPathChildAttempt->get_learning_path_item_id()];
+
+            if(!$newLearningPathItemId)
+            {
+                echo 'New learning path item id not found for id ' .
+                    $learningPathChildAttempt->get_learning_path_item_id() . PHP_EOL;
+
+                continue;
+            }
+
+            $learningPathChildAttempt->set_learning_path_item_id($newLearningPathItemId);
+            $learningPathChildAttempt->update();
+        }
+    }
 }

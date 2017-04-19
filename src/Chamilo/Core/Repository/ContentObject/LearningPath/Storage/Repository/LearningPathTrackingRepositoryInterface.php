@@ -67,6 +67,15 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathChildAttempts(LearningPathAttempt $learningPathAttempt);
 
     /**
+     * Finds all the LearningPathChildAttempt objects for a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | LearningPathChildAttempt[]
+     */
+    public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath);
+
+    /**
      * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
