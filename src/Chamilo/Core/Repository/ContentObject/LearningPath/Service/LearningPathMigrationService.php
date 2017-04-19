@@ -167,7 +167,7 @@ class LearningPathMigrationService
             $learningPathChild->setShowScore((bool) $learningPathItem->get_show_score());
             $learningPathChild->setShowCorrection((bool) $learningPathItem->get_show_correction());
             $learningPathChild->setShowSolution((bool) $learningPathItem->get_show_solution());
-            $learningPathChild->setShowAnswerFeedback((bool) $learningPathItem->get_show_answer_feedback());
+            $learningPathChild->setShowAnswerFeedback((int) $learningPathItem->get_show_answer_feedback());
             $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
