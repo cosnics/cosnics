@@ -69,6 +69,8 @@ class LearningPathMigrationService
         ContentObjectRepository $contentObjectRepository
     )
     {
+        ini_set('memory_limit', -1);
+
         $this->learningPathService = $learningPathService;
         $this->learningPathTrackingRepository = $learningPathTrackingRepository;
         $this->contentObjectRepository = $contentObjectRepository;
