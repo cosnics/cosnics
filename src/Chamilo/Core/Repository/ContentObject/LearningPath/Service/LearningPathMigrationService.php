@@ -345,6 +345,8 @@ class LearningPathMigrationService
             $learningPathChildAttempt->set_learning_path_item_id($newLearningPathItemId);
             $learningPathChildAttempt->update();
         }
+
+        $this->learningPathTrackingRepository->clearLearningPathChildAttemptCache();
     }
 }
 
