@@ -347,3 +347,17 @@ class LearningPathMigrationService
         }
     }
 }
+
+/**
+ * RESTORE
+ *
+DELETE FROM `repository_content_object` WHERE `id` >= 2698805 ORDER BY `id`  ASC;
+
+TRUNCATE repository_learning_path_child;
+
+TRUNCATE tracking_weblcms_learning_path_child_attempt;
+
+INSERT INTO tracking_weblcms_learning_path_child_attempt
+SELECT * FROM tracking_weblcms_learning_path_child_attempt_backup;
+ *
+ */

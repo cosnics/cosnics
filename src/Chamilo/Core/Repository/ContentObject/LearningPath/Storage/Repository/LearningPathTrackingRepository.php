@@ -161,7 +161,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $joins = new Joins();
         $joins->add(
             new Join(
-                LearningPathAttempt::class_name(),
+                $learningPathAttemptClassName,
                 new EqualityCondition(
                     new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
                     new PropertyConditionVariable(
