@@ -8,9 +8,11 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -277,6 +279,50 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $parameters = new DataClassCountParameters($condition, $joins);
 
         return $this->dataClassRepository->count($learningPathAttemptClassName, $parameters);
+    }
+
+    /**
+     * Changes the identifier for the parent LearningPathChild from the old to the new id
+     *
+     * @param int $oldId
+     * @param int $newId
+     *
+     * @return bool
+     */
+    public function changeLearningPathChildIdInLearningPathChildAttempts($oldId, $newId)
+    {
+        if (!is_integer($oldId) || $oldId < 0)
+        {
+            throw new \InvalidArgumentException('The given oldId must be a valid integer and bigger than 0');
+        }
+
+        if (!is_integer($newId) || $newId < 0)
+        {
+            throw new \InvalidArgumentException('The given newId must be a valid integer and bigger than 0');
+        }
+
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                $learningPathChildAttemptClassName, LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
+            ),
+            new StaticConditionVariable($oldId)
+        );
+
+        $properties = new DataClassProperties();
+
+        $properties->add(
+            new DataClassProperty(
+                new PropertyConditionVariable(
+                    $learningPathChildAttemptClassName, LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
+                ),
+                new StaticConditionVariable($newId)
+            )
+        );
+
+        return $this->dataClassRepository->updates($learningPathChildAttemptClassName, $properties, $condition);
     }
 
     /**
