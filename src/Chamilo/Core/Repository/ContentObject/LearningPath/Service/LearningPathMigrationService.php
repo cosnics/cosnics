@@ -103,7 +103,7 @@ class LearningPathMigrationService
                 continue;
             }
 
-            if ($complexContentObjectItem->get_type() == ComplexLearningPath::class_name())
+            if ($childContentObject instanceof LearningPath)
             {
                 /** @var LearningPath $childContentObject */
 
