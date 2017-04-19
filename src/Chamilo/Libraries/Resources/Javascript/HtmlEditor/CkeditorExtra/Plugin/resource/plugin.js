@@ -63,7 +63,7 @@
         init: function( editor ) {
 
             /**
-             * Command for the resource button
+             * Command for the resource button: open repo viewer
              */
             editor.addCommand( 'insertResource', {
                 exec: function( editor ) {
@@ -137,55 +137,6 @@
                     return new CKEDITOR.htmlParser.element( 'div', attributes );
                 }
             }, true );
-
-
-            /**
-             * Command for changing the style in context menu
-             * @todo refactor
-             */
-
-            editor.addMenuGroup('basicstyles', 1);
-
-            editor.getStylesSet(function(styleSet) {
-                var style = new CKEDITOR.style(styleSet[6]);
-                editor.addCommand('bald', new CKEDITOR.styleCommand(style));
-            });
-
-
-            editor.addMenuItems( {
-                'large': {
-                    label: 'Large size',
-                    command: 'toggleLargeStyle',
-                    group: 'basicstyles'
-                },
-                'medium': {
-                    label: 'Medium size',
-                    command: 'bald',
-                    group: 'basicstyles'
-                },
-                'small': {
-                    label: 'Small size',
-                    command: 'toggleLargeStyle',
-                    group: 'basicstyles'
-                }
-            } );
-            editor.contextMenu.addListener( function( element, selection, path ) {
-                if(element.hasClass('cke_widget_resource')) {
-                    if(element.findOne('.embed-360p')) {
-                        editor.getCommand('bald').setState(CKEDITOR.TRISTATE_ON);
-                        return {
-                            'medium': CKEDITOR.TRISTATE_ON
-                        }
-                    }
-                    else {
-                        editor.getCommand('bald').setState(CKEDITOR.TRISTATE_OFF);
-                        return {
-                            'medium': CKEDITOR.TRISTATE_OFF
-                        }
-                    }
-                }
-
-            } );
 
             // Register the definition as 'embed' widget.
             editor.widgets.add( 'resource', widgetDefinition );

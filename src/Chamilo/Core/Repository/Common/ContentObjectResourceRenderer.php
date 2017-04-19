@@ -122,9 +122,13 @@ class ContentObjectResourceRenderer
 
             $fragment = $this->dom_document->importNode($fragment, true);
 
-            $placeholder->parentNode->insertBefore($fragment, $placeholder);
-            $placeholder->parentNode->removeChild($placeholder);
-
+            if($placeholder->tagName == 'div') {
+                $placeholder->appendChild($fragment);
+            }
+            else {
+                $placeholder->parentNode->insertBefore($fragment, $placeholder);
+                $placeholder->parentNode->removeChild($placeholder);
+            }
         }
     }
 

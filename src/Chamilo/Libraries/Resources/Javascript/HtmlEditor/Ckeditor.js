@@ -7,13 +7,14 @@ CKEDITOR.plugins.addExternal( 'chamilo', web_path + 'Chamilo/Libraries/Resources
 CKEDITOR.plugins.addExternal( 'chamilofakeobjects', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/chamilofakeobjects/');
 CKEDITOR.plugins.addExternal('resource', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resource/');
 CKEDITOR.plugins.addExternal('resourceupload', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resourceupload/');
+CKEDITOR.plugins.addExternal('resourcestylecontextmenu', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resourcestylecontextmenu/');
 CKEDITOR.plugins.addExternal('quickquestion', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/quickquestion/');
 
 CKEDITOR.editorConfig = function(config)
 {
     config.uiColor = '#F5F5F5';
     config.plugins = 'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,eqneditor,widget,embed,filebrowser,autoembed';
-    config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion";
+    config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion,resourcestylecontextmenu";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
             + 'anchor,link,image,flash,'
@@ -89,17 +90,13 @@ CKEDITOR.editorConfig = function(config)
     CKEDITOR.stylesSet.add( 'default', [
         // Adding space after the style name is an intended workaround. For now, there
         // is no option to create two styles with the same name for different widget types. See #16664.
-        { name: '240p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-240p' }, group: 'size' },
-        { name: '360p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-360p' }, group: 'size' },
-        { name: '480p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-480p' }, group: 'size' },
-        { name: '720p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-720p' }, group: 'size' },
-        { name: '1080p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-1080p' }, group: 'size' },
+        { name: 'small ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-240p' }, cm_order: 1 }, //groups give issues with the stylescombo plugin
+        { name: 'medium ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-360p' }, cm_order: 2},
+        { name: 'large ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-720p' }, cm_order: 3},
 
-        { name: '240p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-240p' }, group: 'size' },
-        { name: '360p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-360p' }, group: 'size' },
-        { name: '480p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-480p' }, group: 'size' },
-        { name: '720p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-720p' }, group: 'size' },
-        { name: '1080p', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-1080p' }, group: 'size' }
+        { name: 'small', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-240p' }, cm_order: 1},
+        { name: 'medium', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-360p' }, cm_order: 2 },
+        { name: 'large', type: 'widget', widget: 'resource', attributes: { 'class': 'embed-720p' }, cm_order: 3 }
     ]);
 
     config.autosave = {
