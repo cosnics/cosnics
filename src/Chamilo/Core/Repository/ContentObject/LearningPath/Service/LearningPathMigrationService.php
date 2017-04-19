@@ -93,7 +93,14 @@ class LearningPathMigrationService
         {
             /** @var ComplexLearningPathItem $complexContentObjectItem */
 
-            $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
+            try
+            {
+                $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
+            }
+            catch(\Exception $ex)
+            {
+                continue;
+            }
 
             if ($complexContentObjectItem->get_type() == LearningPath::class_name())
             {
@@ -108,7 +115,15 @@ class LearningPathMigrationService
             {
                 /** @var LearningPathItem $childContentObject */
 
-                $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
+                try
+                {
+                    $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
+                }
+                catch(\Exception $ex)
+                {
+                    continue;
+                }
+
                 $learningPathChild = $this->createLearningPathChildForContentObject(
                     $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild,
                     $childContentObject
@@ -176,7 +191,7 @@ class LearningPathMigrationService
             throw new \Exception('Could not create a new learning path child');
         }
 
-        echo "Create LearningPathChild " . $learningPathChild->getId();
+        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
 
 //        $this->changeTrackingToLearningPathChildId($complexContentObjectItem, $learningPathChild);
 
@@ -208,7 +223,7 @@ class LearningPathMigrationService
                 throw new \Exception('Could not create a new section');
             }
 
-            echo "Create Section " . $section->getId();
+            echo "Create Section " . $section->getId() . PHP_EOL;
 
             $this->sectionFromLearningPathCache[$learningPath->getId()] = $section;
         }
