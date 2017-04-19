@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ComplexLearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
@@ -102,7 +103,7 @@ class LearningPathMigrationService
                 continue;
             }
 
-            if ($complexContentObjectItem->get_type() == LearningPath::class_name())
+            if ($complexContentObjectItem->get_type() == ComplexLearningPath::class_name())
             {
                 /** @var LearningPath $childContentObject */
 
