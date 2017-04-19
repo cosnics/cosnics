@@ -33,7 +33,6 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         
         $html = array();
 
-        $html[] = '<div class="' . $parameters['class'] . '">';
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $url . '" target="_blank">';
         $html[] = '<input type="button" class="btn btn-default" value="' . Translation::getInstance()->getTranslation(
@@ -46,8 +45,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         
         $html[] = '<div style="margin-top: 20px; border: 1px solid grey;"><iframe border="0" style="border: 0;"
                 width="100%" height="500"  src="' . $url . '"></iframe></div>';
-        $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

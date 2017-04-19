@@ -78,7 +78,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         
         if ($this->canBeDisplayed())
         {
-            $html[] = '<div class="office-viewer-container ' . $parameters['class'] . '">';
+            $html[] = '<div class="office-viewer-container">';
             
             $html[] = '<div class="office-viewer-content">';
             $html[] = '<div class="alert alert-info office-viewer-sidebar center-block">';
