@@ -102,7 +102,7 @@ class LearningPathMigrationService
             {
                 continue;
             }
-
+echo(get_class($childContentObject) . PHP_EOL);
             if ($childContentObject instanceof LearningPath)
             {
                 /** @var LearningPath $childContentObject */
@@ -111,6 +111,8 @@ class LearningPathMigrationService
                 $learningPathChild = $this->createLearningPathChildForContentObject(
                     $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild
                 );
+
+                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $learningPathChild);
             }
             else
             {
@@ -135,15 +137,10 @@ class LearningPathMigrationService
                     continue;
                 }
 
-                $learningPathChild = $this->createLearningPathChildForContentObject(
+                $this->createLearningPathChildForContentObject(
                     $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild,
                     $childContentObject
                 );
-            }
-
-            if ($complexContentObjectItem->get_type() == LearningPath::class_name())
-            {
-                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $learningPathChild);
             }
 
             if (!empty($complexContentObjectItem->get_prerequisites()))
@@ -197,12 +194,12 @@ class LearningPathMigrationService
             $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
-        if (!$this->learningPathTrackingRepository->create($learningPathChild))
-        {
-            throw new \Exception('Could not create a new learning path child');
-        }
-
-        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
+//        if (!$this->learningPathTrackingRepository->create($learningPathChild))
+//        {
+//            throw new \Exception('Could not create a new learning path child');
+//        }
+//
+//        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
 
 //        $this->changeTrackingToLearningPathChildId($complexContentObjectItem, $learningPathChild);
 
