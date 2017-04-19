@@ -338,8 +338,8 @@ class LearningPathMigrationService
 
             if(!$newLearningPathItemId)
             {
-                echo 'New learning path item id not found for id ' .
-                    $learningPathChildAttempt->get_learning_path_item_id() . PHP_EOL;
+//                echo 'New learning path item id not found for id ' .
+//                    $learningPathChildAttempt->get_learning_path_item_id() . PHP_EOL;
 
                 continue;
             }
