@@ -968,4 +968,38 @@ class LearningPathTrackingService
             $learningPath, $condition, $offset, $count, $orderBy
         );
     }
+
+    /**
+     * Counts the learning path attempts joined with users for searching
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
+    {
+        return $this->learningPathTrackingRepository->countTargetUsersWithLearningPathAttempts($learningPath, $condition);
+    }
+
+    /**
+     * Returns the LearningPathAttempt objects for a given LearningPath with a given condition, offset,
+     * count and orderBy Joined with users for searching and sorting
+     *
+     * @param LearningPath $learningPath
+     * @param Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        return $this->learningPathTrackingRepository->findTargetUsersWithLearningPathAttempts(
+            $learningPath, $condition, $offset, $count, $orderBy
+        );
+    }
 }

@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAtte
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -75,5 +77,17 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     public function createLearningPathQuestionAttemptInstance()
     {
         return new DummyQuestionAttempt();
+    }
+
+    /**
+     * Returns the user ids for whom the learning path was targeted
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \int[]
+     */
+    public function getLearningPathTargetUserIds(LearningPath $learningPath)
+    {
+        return array(Session::get_user_id());
     }
 }

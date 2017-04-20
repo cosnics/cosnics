@@ -280,14 +280,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
 
-        $properties = new DataClassProperties();
-
-        $properties->add(new PropertiesConditionVariable($learningPathAttemptClassName));
-        $properties->add(new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, 'user_id'));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
-
+        $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
         $joins = $this->getJoinsForLearningPathAttemptsWithUser();
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath, $condition);
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $orderBy, $joins);
@@ -322,23 +315,142 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     protected function getJoinsForLearningPathAttemptsWithUser()
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
-
         $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                User::class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        $learningPathAttemptClassName, LearningPathAttempt::PROPERTY_USER_ID
-                    )
-                )
-            )
-        );
+        $joins->add(new Join(User::class_name(), $this->getConditionForLearningPathAttemptWithUser()));
 
         return $joins;
+    }
+
+    /**
+     * Returns the properties needed to retrieve the data for learning path attempts with users
+     *
+     * @return DataClassProperties
+     */
+    protected function getPropertiesForLearningPathAttemptsWithUser()
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertiesConditionVariable($learningPathAttemptClassName));
+        $properties->add(new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, 'user_id'));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+
+        return $properties;
+    }
+
+    /**
+     * Finds the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
+        $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->records(
+            User::class_name(), new RecordRetrievesParameters(
+                $properties, $condition, $count, $offset, $orderBy, $joins
+            )
+        );
+    }
+
+    /**
+     * Counts the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
+    {
+        $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->count(
+            User::class_name(), new DataClassCountParameters($condition, $joins)
+        );
+    }
+
+    /**
+     * Returns the joins object needed to left join the User class with the LearningPathAttempt for a given
+     * learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return Joins
+     */
+    protected function getJoinsForTargetUsersWithLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $joinConditions = array();
+        $joinConditions[] = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
+        $joinConditions[] = $this->getConditionForLearningPathAttemptWithUser();
+        $joinCondition = new AndCondition($joinConditions);
+
+        $joins = new Joins();
+        $joins->add(new Join($learningPathAttemptClassName, $joinCondition, Join::TYPE_LEFT));
+
+        return $joins;
+    }
+
+    /**
+     * Returns the conditions needed for the target users for a learning path
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return Condition
+     */
+    protected function getConditionForTargetUsersForLearningPath(
+        LearningPath $learningPath, Condition $condition = null
+    )
+    {
+        $targetUserIds = $this->learningPathTrackingParameters->getLearningPathTargetUserIds($learningPath);
+
+        $conditions = array();
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $targetUserIds
+        );
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * Returns the condition to join the LearningPathAttempt class with the User class
+     *
+     * @return EqualityCondition
+     */
+    protected function getConditionForLearningPathAttemptWithUser()
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        return new EqualityCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+            new PropertyConditionVariable(
+                $learningPathAttemptClassName, LearningPathAttempt::PROPERTY_USER_ID
+            )
+        );
     }
 
     /**

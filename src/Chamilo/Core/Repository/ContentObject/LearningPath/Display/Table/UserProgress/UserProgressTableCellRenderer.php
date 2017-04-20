@@ -37,6 +37,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         switch ($column->get_name())
         {
             case 'progress':
+                if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
+                {
+                    return null;
+                }
+
                 $progressBarRenderer = new ProgressBarRenderer();
                 return $progressBarRenderer->render((int) $record[LearningPathAttempt::PROPERTY_PROGRESS]);
         }
@@ -53,6 +58,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
      */
     public function get_actions($record)
     {
+        if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
+        {
+            return null;
+        }
+
         $learningPath = $this->getLearningPath();
         $user = $this->getUser();
         $learningPathTrackingService = $this->getLearningPathTrackingService();

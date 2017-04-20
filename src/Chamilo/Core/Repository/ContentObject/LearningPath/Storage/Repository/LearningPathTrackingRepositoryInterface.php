@@ -130,4 +130,29 @@ interface LearningPathTrackingRepositoryInterface
      * @return int
      */
     public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null);
+
+    /**
+     * Finds the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    );
+
+    /**
+     * Counts the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null);
 }

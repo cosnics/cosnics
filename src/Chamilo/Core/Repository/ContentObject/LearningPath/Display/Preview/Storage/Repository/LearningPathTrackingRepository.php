@@ -442,4 +442,35 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     {
         return 0;
     }
+
+    /**
+     * Finds the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        return new RecordIterator(User::class_name(), array());
+    }
+
+    /**
+     * Counts the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
+    {
+        return 0;
+    }
 }

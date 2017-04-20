@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -40,6 +41,14 @@ class UserProgressComponent extends Manager implements TableSupport
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserAttempts'),
+            $this->getButtonToolbarRenderer()->render() . $table->as_html()
+        );
+
+        $table = new TargetUserProgressTable($this);
+        $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsers'),
             $this->getButtonToolbarRenderer()->render() . $table->as_html()
         );
 
