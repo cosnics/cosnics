@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AttemptComponent extends Manager
+class DeleteAttemptComponent extends BaseReportingComponent
 {
 
     /**
@@ -28,15 +28,16 @@ class AttemptComponent extends Manager
         }
 
         $parameters = array();
-        $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
 
         $learningPathTrackingService = $this->getLearningPathTrackingService();
         $learningPath = $this->get_root_content_object();
-        $user = $this->getUser();
+        $user = $this->getReportingUser();
         $learningPathTreeNode = $this->getCurrentLearningPathTreeNode();
 
         if ($this->isCurrentLearningPathChildIdSet())
         {
+            $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
+
             $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
 
             try
@@ -102,8 +103,13 @@ class AttemptComponent extends Manager
             }
 
             $parameters[self::PARAM_CHILD_ID] = null;
+            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_USER_PROGRESS;
         }
 
         $this->redirect($message, $is_error, $parameters);
+    }
+
+    function build()
+    {
     }
 }
