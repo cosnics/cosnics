@@ -35,6 +35,7 @@ class UserProgressComponent extends Manager implements TableSupport
 
         $html = array();
         $html[] = $this->render_header();
+        $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
         $table = new UserProgressTable($this);
         $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
@@ -58,11 +59,63 @@ class UserProgressComponent extends Manager implements TableSupport
     }
 
     /**
+     * Renders the statistics for the target users
+     *
+     * @param PanelRenderer $panelRenderer
+     * @param Translation $translator
+     *
+     * @return array
+     */
+    protected function renderTargetStatistics(PanelRenderer $panelRenderer, Translation $translator)
+    {
+        $html = array();
+
+        $trackingService = $this->getLearningPathTrackingService();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsers'),
+            $trackingService->countTargetUsers($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithoutAttempts'),
+            $trackingService->countTargetUsersWithoutLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithFullAttempts'),
+            $trackingService->countTargetUsersWithFullLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithPartialAttempts'),
+            $trackingService->countTargetUsersWithPartialLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
      * @return ButtonToolBarRenderer
      */
     protected function getButtonToolbarRenderer()
     {
-        if(!isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -88,4 +141,5 @@ class UserProgressComponent extends Manager implements TableSupport
             )
         );
     }
+
 }

@@ -1002,4 +1002,52 @@ class LearningPathTrackingService
             $learningPath, $condition, $offset, $count, $orderBy
         );
     }
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->countTargetUsersWithoutLearningPathAttempts($learningPath);
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->countTargetUsersWithFullLearningPathAttempts($learningPath);
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->countTargetUsersWithPartialLearningPathAttempts($learningPath);
+    }
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->countTargetUsers($learningPath);
+    }
 }

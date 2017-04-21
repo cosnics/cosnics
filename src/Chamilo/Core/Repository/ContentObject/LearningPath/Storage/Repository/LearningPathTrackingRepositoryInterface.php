@@ -155,4 +155,40 @@ interface LearningPathTrackingRepositoryInterface
      * @return int
      */
     public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null);
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath);
 }

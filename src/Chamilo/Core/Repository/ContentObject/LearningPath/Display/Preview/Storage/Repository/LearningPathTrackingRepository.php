@@ -473,4 +473,52 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     {
         return 0;
     }
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath)
+    {
+        return 0;
+    }
 }

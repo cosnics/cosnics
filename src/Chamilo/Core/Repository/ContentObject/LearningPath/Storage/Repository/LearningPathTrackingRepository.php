@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -372,6 +373,103 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         return $this->dataClassRepository->count(
             User::class_name(), new DataClassCountParameters($condition, $joins)
         );
+    }
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $conditions = array();
+        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID), null
+        );
+
+        $condition = new AndCondition($conditions);
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->count(
+            User::class_name(), new DataClassCountParameters($condition, $joins)
+        );
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $conditions = array();
+        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+            new StaticConditionVariable(100)
+        );
+
+        $condition = new AndCondition($conditions);
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->count(
+            User::class_name(), new DataClassCountParameters($condition, $joins)
+        );
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $conditions = array();
+        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+            ComparisonCondition::GREATER_THAN_OR_EQUAL,
+            new StaticConditionVariable(0)
+        );
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+            ComparisonCondition::LESS_THAN,
+            new StaticConditionVariable(100)
+        );
+
+        $condition = new AndCondition($conditions);
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->count(
+            User::class_name(), new DataClassCountParameters($condition, $joins)
+        );
+    }
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath)
+    {
+        return count($this->learningPathTrackingParameters->getLearningPathTargetUserIds($learningPath));
     }
 
     /**

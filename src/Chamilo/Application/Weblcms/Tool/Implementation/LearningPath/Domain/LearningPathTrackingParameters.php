@@ -32,6 +32,11 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     protected $publicationId;
 
     /**
+     * @var int[]
+     */
+    protected $targetUserIds;
+
+    /**
      * LearningPathTrackingParameters constructor.
      *
      * @param int $courseId
@@ -174,6 +179,11 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        return DataManager::getPublicationTargetUserIds($this->publicationId, $this->courseId);
+        if(!isset($this->targetUserIds))
+        {
+            $this->targetUserIds = DataManager::getPublicationTargetUserIds($this->publicationId, $this->courseId);
+        }
+
+        return $this->targetUserIds;
     }
 }
