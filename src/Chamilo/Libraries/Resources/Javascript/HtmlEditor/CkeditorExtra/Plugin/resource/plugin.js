@@ -7,34 +7,44 @@
 
         beforeInit: function (editor) {
 
+            /**
+             * Prevent drag & drop outside ck editor
+             */
+            window.addEventListener("dragover",function(e){
+                e = e || event;
+                e.preventDefault();
+            },false);
+            window.addEventListener("drop",function(e){
+                e = e || event;
+                e.preventDefault();
+            },false);
+
             editor.on("instanceReady", function(ev){
                 ev.editor.on("paste", function (ev) {
                     //drag & drop
                     if(ev.data.dataTransfer.getData("data-co-id")){ //@todo: needs review!
                         //ev.data.preventDefault(true);
                         var coId = ev.data.dataTransfer.getData("data-co-id");
-                        var type = 'file';
-                        var securityCode = 'meh';
-
+                        var type = ev.data.dataTransfer.getData("data-type");
+                        var securityCode = ev.data.dataTransfer.getData("data-security-code");
 
                         var html = '';
-                        //resize = true??
+
                         if(type === 'image') {
                             var url = ''; //todo make html generation uniform
                             html += '<img src="' + url + '" ' +
-                                'data-co-id="' + coId + '"' +
-                                'data-security-code="' + securityCode + '"' +
-                                'data-type="' + type + '"' +
-                                + '"><br>';
+                                'data-co-id="' + coId + '" ' +
+                                'data-security-code="' + securityCode + '" ' +
+                                'data-type="' + type + '" ' +
+                                '><br>';
                         }
                         else {
                             html += '<div ' +
-                                'data-co-id="' + coId + '"' +
-                                'data-security-code="' + securityCode + '"' +
+                                'data-co-id="' + coId + '" ' +
+                                'data-security-code="' + securityCode + '" ' +
                                 'data-type="'+type+'"' +
-                                '"></div><br>';
+                                '></div><br>';
                         }
-
                         ev.data.dataValue = html;
                     }
                 });

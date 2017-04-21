@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -52,7 +53,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
-            $exclude = $this->detemine_excluded_content_object_ids();
+            $exclude = $this->determine_excluded_content_object_ids();
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
@@ -162,7 +163,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      *
      * @return int[]
      */
-    private function detemine_excluded_content_object_ids()
+    private function determine_excluded_content_object_ids()
     {
         return array();
     }
@@ -194,5 +195,26 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     public function isFolderCreateMode()
     {
         return $this->getRequest()->get(self::PARAM_CREATE_MODE) == self::CREATE_MODE_FOLDER;
+    }
+
+    /**
+     * @return string
+     */
+    public function render_header()
+    {
+        $html = array();
+        $html[] = parent::render_header();
+        //for now we inject the repo drag panel here...
+
+        $repoDragPanelPath = Path::getInstance()->getResourcesPath(
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath"
+            ) . '/Templates/RepoDragPanel.html';
+        $repoDragPanel = file_get_contents($repoDragPanelPath);
+
+        if($repoDragPanel) {
+            $html[] = $repoDragPanel;
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

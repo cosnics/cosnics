@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -141,5 +142,26 @@ class UpdaterComponent extends TabComponent
     public function get_additional_parameters()
     {
         return array(self::PARAM_CHILD_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function render_header()
+    {
+        $html = array();
+        $html[] = parent::render_header();
+        //for now we inject the repo drag panel here...
+
+        $repoDragPanelPath = Path::getInstance()->getResourcesPath(
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath"
+            ) . '/Templates/RepoDragPanel.html';
+        $repoDragPanel = file_get_contents($repoDragPanelPath);
+
+        if($repoDragPanel) {
+            $html[] = $repoDragPanel;
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

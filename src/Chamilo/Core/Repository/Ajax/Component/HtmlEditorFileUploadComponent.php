@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +36,9 @@ class HtmlEditorFileUploadComponent extends Manager
             "filename" => $fileContentObject->get_filename(),
             "co-id" => $fileContentObject->getId(),
             "security-code" => $fileContentObject->calculate_security_code(),
-            "type" => $fileContentObject->is_image() ? 'image': 'file',
+            "type" => $fileContentObject->is_image() ?
+                'image':
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace($fileContentObject->get_type(), true),
             "url" => $thumbnailUrl
         );
 

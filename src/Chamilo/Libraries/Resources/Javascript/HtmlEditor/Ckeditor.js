@@ -43,7 +43,7 @@ CKEDITOR.editorConfig = function(config)
                     'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
-            [ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
+            [ 'Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'EqnEditor',
                     'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
