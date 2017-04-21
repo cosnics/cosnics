@@ -105,7 +105,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
         {
             $delete_url = $this->get_component()->get_url(
                 array(
-                    Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT,
+                    Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
                     Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentLearningPathTreeNode()->getId(),
                     Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
                 )

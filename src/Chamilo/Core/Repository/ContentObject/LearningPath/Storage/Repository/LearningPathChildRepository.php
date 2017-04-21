@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -43,6 +44,20 @@ class LearningPathChildRepository extends CommonDataClassRepository
                     )
                 )
             )
+        );
+    }
+
+    /**
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    {
+        $condition = $this->getConditionForLearningPath($learningPath);
+
+        return $this->dataClassRepository->count(
+            LearningPathChild::class_name(), new DataClassCountParameters($condition)
         );
     }
 

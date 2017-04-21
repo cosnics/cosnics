@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -34,6 +35,7 @@ class UserProgressComponent extends Manager implements TableSupport
 
         $html = array();
         $html[] = $this->render_header();
+        $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
         $table = new UserProgressTable($this);
         $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
@@ -43,7 +45,67 @@ class UserProgressComponent extends Manager implements TableSupport
             $this->getButtonToolbarRenderer()->render() . $table->as_html()
         );
 
+        $table = new TargetUserProgressTable($this);
+        $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsers'),
+            $this->getButtonToolbarRenderer()->render() . $table->as_html()
+        );
+
         $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders the statistics for the target users
+     *
+     * @param PanelRenderer $panelRenderer
+     * @param Translation $translator
+     *
+     * @return array
+     */
+    protected function renderTargetStatistics(PanelRenderer $panelRenderer, Translation $translator)
+    {
+        $html = array();
+
+        $trackingService = $this->getLearningPathTrackingService();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsers'),
+            $trackingService->countTargetUsers($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithoutAttempts'),
+            $trackingService->countTargetUsersWithoutLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithFullAttempts'),
+            $trackingService->countTargetUsersWithFullLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-3">';
+
+        $html[] = $panelRenderer->render(
+            $translator->getTranslation('TargetUsersWithPartialAttempts'),
+            $trackingService->countTargetUsersWithPartialLearningPathAttempts($this->get_root_content_object())
+        );
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -53,7 +115,7 @@ class UserProgressComponent extends Manager implements TableSupport
      */
     protected function getButtonToolbarRenderer()
     {
-        if(!isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -79,4 +141,5 @@ class UserProgressComponent extends Manager implements TableSupport
             )
         );
     }
+
 }

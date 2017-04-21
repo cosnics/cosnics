@@ -67,6 +67,15 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathChildAttempts(LearningPathAttempt $learningPathAttempt);
 
     /**
+     * Finds all the LearningPathChildAttempt objects for a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | LearningPathChildAttempt[]
+     */
+    public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath);
+
+    /**
      * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
@@ -90,11 +99,11 @@ interface LearningPathTrackingRepositoryInterface
     /**
      * Finds the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
      *
-     * @param LearningPathChildAttempt $learningPathItemAttempt
+     * @param LearningPathChildAttempt $learningPathChildAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathItemAttempt);
+    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathChildAttempt);
 
     /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
@@ -121,4 +130,65 @@ interface LearningPathTrackingRepositoryInterface
      * @return int
      */
     public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null);
+
+    /**
+     * Finds the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    );
+
+    /**
+     * Counts the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null);
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath);
 }

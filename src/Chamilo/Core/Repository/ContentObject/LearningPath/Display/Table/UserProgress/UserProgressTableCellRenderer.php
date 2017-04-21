@@ -37,6 +37,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         switch ($column->get_name())
         {
             case 'progress':
+                if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
+                {
+                    return null;
+                }
+
                 $progressBarRenderer = new ProgressBarRenderer();
                 return $progressBarRenderer->render((int) $record[LearningPathAttempt::PROPERTY_PROGRESS]);
         }
@@ -53,6 +58,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
      */
     public function get_actions($record)
     {
+        if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
+        {
+            return null;
+        }
+
         $learningPath = $this->getLearningPath();
         $user = $this->getUser();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
@@ -85,8 +95,10 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
             {
                 $delete_url = $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT
-                    )
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
+                        Manager::PARAM_REPORTING_USER_ID => $record['user_id']
+                    ),
+                    array(Manager::PARAM_CHILD_ID)
                 );
 
                 $toolbar->add_item(

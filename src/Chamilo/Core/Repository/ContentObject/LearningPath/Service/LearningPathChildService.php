@@ -278,4 +278,16 @@ class LearningPathChildService
             throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
         }
     }
+
+    /**
+     * Checks whether or not the given learning path is empty
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return bool
+     */
+    public function isLearningPathEmpty(LearningPath $learningPath)
+    {
+        return $this->learningPathChildRepository->countLearningPathChildrenForLearningPath($learningPath) == 0;
+    }
 }

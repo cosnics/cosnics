@@ -5,7 +5,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -28,6 +30,11 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
      * @var int
      */
     protected $publicationId;
+
+    /**
+     * @var int[]
+     */
+    protected $targetUserIds;
 
     /**
      * LearningPathTrackingParameters constructor.
@@ -161,5 +168,22 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     public function createLearningPathQuestionAttemptInstance()
     {
         return new LearningPathQuestionAttempt();
+    }
+
+    /**
+     * Returns the user ids for whom the learning path was targeted
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \int[]
+     */
+    public function getLearningPathTargetUserIds(LearningPath $learningPath)
+    {
+        if(!isset($this->targetUserIds))
+        {
+            $this->targetUserIds = DataManager::getPublicationTargetUserIds($this->publicationId, $this->courseId);
+        }
+
+        return $this->targetUserIds;
     }
 }

@@ -202,6 +202,12 @@ DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repositor
 ALTER TABLE `tracking_weblcms_learning_path_item_attempt` RENAME `tracking_weblcms_learning_path_child_attempt`;
 ALTER TABLE `tracking_weblcms_learning_path_attempt` ADD `publication_id` INT(10) UNSIGNED NOT NULL AFTER `learning_path_id`;
 
+UPDATE `tracking_weblcms_learning_path_attempt` SET publication_id = learning_path_id;
+
+UPDATE `tracking_weblcms_learning_path_attempt` AS ATT
+JOIN weblcms_content_object_publication PUB on PUB.id = ATT.publication_id
+SET ATT.learning_path_id = PUB.content_object_id;
+
 ALTER TABLE `repository_learning_path`
   DROP `control_mode`,
   DROP `version`,
@@ -211,3 +217,7 @@ ALTER TABLE `repository_learning_path` ADD `automatic_numbering` VARCHAR(15) NOT
 
 DELETE FROM `configuration_registration` WHERE `context` LIKE '%LearningPathItem%';
 DELETE FROM `configuration_registration` WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
+
+/**
+Section content object install! (lynx package manager)
+ */

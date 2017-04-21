@@ -128,6 +128,37 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
+     * Finds all the LearningPathChildAttempt objects for a given LearningPath
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | LearningPathChildAttempt[]
+     */
+    public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath)
+    {
+        $allChildAttempts = array();
+
+        $attempts = $this->getFromStorage(DummyAttempt::class);
+        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
+
+        $learningPathAttempts = $attempts[$learningPath->getId()];
+
+        foreach($learningPathAttempts as $learningPathAttempt)
+        {
+            /** @var LearningPathAttempt $learningPathAttempt */
+
+            $learningPathAttemptChildAttempts = $childAttempts[$learningPathAttempt->getId()];
+
+            if(is_array($learningPathAttemptChildAttempts))
+            {
+                $allChildAttempts += $learningPathAttemptChildAttempts;
+            }
+        }
+
+        return $allChildAttempts;
+    }
+
+    /**
      * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
@@ -408,6 +439,85 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
      * @return int
      */
     public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null)
+    {
+        return 0;
+    }
+
+    /**
+     * Finds the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithLearningPathAttempts(
+        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+    )
+    {
+        return new RecordIterator(User::class_name(), array());
+    }
+
+    /**
+     * Counts the targeted users (left) joined with the learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        return 0;
+    }
+
+    /**
+     * Counts the total number of target users for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return int
+     */
+    public function countTargetUsers(LearningPath $learningPath)
     {
         return 0;
     }
