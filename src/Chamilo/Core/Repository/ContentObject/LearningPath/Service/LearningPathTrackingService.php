@@ -208,7 +208,7 @@ class LearningPathTrackingService
             $learningPathAttempt =
                 $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
 
-            return $learningPathAttempt->get_progress();
+            return (int) $learningPathAttempt->get_progress();
         }
 
         $descendantNodes = $learningPathTreeNode->getDescendantNodes();

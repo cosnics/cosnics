@@ -595,29 +595,11 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         if (!isset($this->learningPathTrackingService))
         {
-            $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
-
-            $this->learningPathTrackingService = $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
-                new LearningPathTrackingParameters((int) $this->get_course_id(), (int) $this->publication->getId())
+            $this->learningPathTrackingService = $this->createLearningPathTrackingServiceForPublicationAndCourse(
+                (int) $this->publication->getId(), (int) $this->get_course_id()
             );
         }
 
         return $this->learningPathTrackingService;
-    }
-
-    /**
-     * @return LearningPathTrackingServiceBuilder | object
-     */
-    protected function getLearningPathTrackingServiceBuilder()
-    {
-        return new LearningPathTrackingServiceBuilder($this->getDataClassRepository());
-    }
-
-    /**
-     * @return object | DataClassRepository
-     */
-    protected function getDataClassRepository()
-    {
-        return $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
     }
 }
