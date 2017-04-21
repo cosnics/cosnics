@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -103,7 +105,7 @@ class AssessmentResultsExportController
      * Initializes this class
      * 
      * @param Assessment[] | Hotpotatoes[] $assessments
-     * @param AssessmentResult $assessment_results
+     * @param AssessmentResult[] $assessment_results
      * @param string[] $additional_column_headers
      */
     public function __construct($assessments, $assessment_results, $additional_column_headers = array())
@@ -305,7 +307,10 @@ class AssessmentResultsExportController
         $question = $complex_question->get_ref_object();
         
         $start_time = DatetimeUtilities::format_locale_date(null, $assessment_result->get_start_time());
-        $end_time = DateTimeUtilities::format_locale_date(null, $assessment_result->get_end_time());
+
+        $end_time = is_null($assessment_result->get_end_time()) ? '-' :
+            DateTimeUtilities::format_locale_date(null, $assessment_result->get_end_time());
+
         $total_time = DateTimeUtilities::convert_seconds_to_hours($assessment_result->get_total_time());
         
         $this->add_data_to_current_row(self::COLUMN_OFFICIAL_CODE, $official_code);

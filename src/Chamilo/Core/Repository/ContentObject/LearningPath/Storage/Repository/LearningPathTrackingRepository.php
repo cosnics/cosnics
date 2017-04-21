@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -152,25 +153,13 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath)
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
         $learningPathChildAttemptClassName =
             $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
 
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
 
         $joins = new Joins();
-        $joins->add(
-            new Join(
-                $learningPathAttemptClassName,
-                new EqualityCondition(
-                    new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
-                    )
-
-                )
-            )
-        );
+        $joins->add($this->getJoinForLearningPathAttemptWithLearningPathChildAttempt());
 
         $parameters = new DataClassRetrievesParameters($condition, null, null, array(), $joins);
 
@@ -242,18 +231,18 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     /**
      * Finds the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
      *
-     * @param LearningPathChildAttempt $learningPathItemAttempt
+     * @param LearningPathChildAttempt $learningPathChildAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathItemAttempt)
+    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathChildAttempt)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName(),
                 LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
             ),
-            new StaticConditionVariable($learningPathItemAttempt->getId())
+            new StaticConditionVariable($learningPathChildAttempt->getId())
         );
 
         return $this->dataClassRepository->retrieves(
@@ -485,4 +474,150 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
         return $condition;
     }
+
+    /**
+     * Retrieves all the LearningPathAttempt objects with the LearningPathChildAttempt objects and
+     * LearningPathQuestionAttempt objects for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return RecordIterator
+     */
+    public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
+        LearningPath $learningPath
+    )
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        $learningPathQuestionAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName();
+
+        $properties = new DataClassProperties();
+
+        $properties->add(
+            new FixedPropertyConditionVariable(
+                $learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID, 'learning_path_attempt_id'
+            )
+        );
+
+        $learningPathAttemptProperties = array(
+            LearningPathAttempt::PROPERTY_USER_ID, LearningPathAttempt::PROPERTY_LEARNING_PATH_ID,
+            LearningPathAttempt::PROPERTY_PROGRESS
+        );
+
+        foreach ($learningPathAttemptProperties as $learningPathAttemptProperty)
+        {
+            $properties->add(
+                new PropertyConditionVariable($learningPathAttemptClassName, $learningPathAttemptProperty)
+            );
+        }
+
+        $properties->add(
+            new FixedPropertyConditionVariable(
+                $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_ID,
+                'learning_path_child_attempt_id'
+            )
+        );
+
+        $learningPathChildAttemptProperties = array(
+            LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID, LearningPathChildAttempt::PROPERTY_START_TIME,
+            LearningPathChildAttempt::PROPERTY_TOTAL_TIME, LearningPathChildAttempt::PROPERTY_SCORE,
+            LearningPathChildAttempt::PROPERTY_STATUS
+        );
+
+        foreach ($learningPathChildAttemptProperties as $learningPathChildAttemptProperty)
+        {
+            $properties->add(
+                new PropertyConditionVariable($learningPathChildAttemptClassName, $learningPathChildAttemptProperty)
+            );
+        }
+
+        $properties->add(
+            new FixedPropertyConditionVariable(
+                $learningPathQuestionAttemptClassName, LearningPathQuestionAttempt::PROPERTY_ID,
+                'learning_path_question_attempt_id'
+            )
+        );
+
+        $learningPathQuestionAttemptProperties = array(
+            LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID, LearningPathQuestionAttempt::PROPERTY_ANSWER,
+            LearningPathQuestionAttempt::PROPERTY_FEEDBACK, LearningPathQuestionAttempt::PROPERTY_SCORE,
+            LearningPathQuestionAttempt::PROPERTY_HINT
+        );
+
+        foreach ($learningPathQuestionAttemptProperties as $learningPathQuestionAttemptProperty)
+        {
+            $properties->add(
+                new PropertyConditionVariable(
+                    $learningPathQuestionAttemptClassName, $learningPathQuestionAttemptProperty
+                )
+            );
+        }
+
+        $joins = new Joins();
+        $joins->add($this->getJoinForLearningPathAttemptWithLearningPathChildAttempt());
+        $joins->add($this->getJoinForLearningPathChildAttemptWithLearningPathQuestionAttempt());
+
+        $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
+
+        return $this->dataClassRepository->records(
+            $learningPathAttemptClassName,
+            new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins)
+        );
+    }
+
+    /**
+     * Builds a Join object between LearningPathAttempt and LearningPathChildAttempt
+     *
+     * @return Join
+     */
+    protected function getJoinForLearningPathAttemptWithLearningPathChildAttempt()
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        return new Join(
+            $learningPathChildAttemptClassName,
+            new EqualityCondition(
+                new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+                new PropertyConditionVariable(
+                    $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+                )
+
+            )
+        );
+    }
+
+    /**
+     * Builds a Join object between LearningPathChildAttempt and LearningPathQuestionAttempt
+     *
+     * @return Join
+     */
+    protected function getJoinForLearningPathChildAttemptWithLearningPathQuestionAttempt()
+    {
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        $learningPathQuestionAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName();
+
+        return new Join(
+            $learningPathQuestionAttemptClassName,
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_ID
+                ),
+                new PropertyConditionVariable(
+                    $learningPathQuestionAttemptClassName, LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+                )
+
+            )
+        );
+    }
+
 }

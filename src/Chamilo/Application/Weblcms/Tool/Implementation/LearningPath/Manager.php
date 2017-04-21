@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -77,8 +78,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_STATISTICS,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                                Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
                             )
                         ),
                         ToolbarItem::DISPLAY_ICON
@@ -133,8 +136,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_STATISTICS,
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                                Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
                             )
                         ),
                         SubButton::DISPLAY_LABEL
@@ -219,6 +224,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getService(
             'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
+        );
+    }
+
+    /**
+     * Returns the LearningPathTreeBuilder service
+     *
+     * @return LearningPathTreeBuilder | object
+     */
+    protected function getLearningPathTreeBuilder()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
         );
     }
 }

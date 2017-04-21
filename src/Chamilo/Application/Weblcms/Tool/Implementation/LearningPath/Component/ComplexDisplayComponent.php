@@ -309,18 +309,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
-     *
-     * @return LearningPathTreeBuilder | object
-     */
-    protected function getLearningPathTreeBuilder()
-    {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
-        );
-    }
-
-    /**
      * Returns the LearningPathTree for the current learning path root
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree

@@ -99,11 +99,11 @@ interface LearningPathTrackingRepositoryInterface
     /**
      * Finds the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
      *
-     * @param LearningPathChildAttempt $learningPathItemAttempt
+     * @param LearningPathChildAttempt $learningPathChildAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathItemAttempt);
+    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathChildAttempt);
 
     /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
