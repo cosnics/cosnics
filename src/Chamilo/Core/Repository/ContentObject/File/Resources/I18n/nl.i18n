@@ -76,3 +76,5 @@ PlaybackNotSupported ="Dit bestand kan op dit moment niet afgespeeld worden door
 OfficeViewerFullScreen = "Your document is now full screen"
 OfficeViewerExitFullScreen = "Exit Full Screen (Esc)"
 ShowInline = "Toon online preview (wanneer mogelijk)"
+FileType = "Bestandstype"
+SelectAType = "Selecteer een type"

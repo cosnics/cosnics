@@ -153,3 +153,4 @@ InstallerComponentInformation = "We're currently installing your platform. So ju
 AgreeAndContinue = "I agree"
 SelectedPackages = "Selected Packages"
 SettingsOverviewInformation = "Please verify your settings and package selections before continuing the installation."
+ChamiloInstallationTitle = "Cosnics installation"

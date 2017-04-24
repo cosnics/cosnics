@@ -1,2 +1,7 @@
 Manager = "Manager"
 WhoisOnline = "Wie is online"
+SubscriptionStatus = "Inschrijvingsstatus"
+SubscriptionType = "Inschrijvingstype"
+PublicationTitle = "Titel"
+ContentObjectDescription = "Beschrijving"
+NumberOfFeedbacks = "Aantal feedbacks"

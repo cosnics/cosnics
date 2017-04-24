@@ -42,7 +42,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         
         $languageItem = new LanguageCategoryItem();
-        $languageItem->set_display(Item::DISPLAY_TEXT);
+        $languageItem->set_display(Item::DISPLAY_BOTH);
         
         if (! $languageItem->create())
         {
