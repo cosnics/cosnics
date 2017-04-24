@@ -376,6 +376,30 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     }
 
     /**
+     * Finds the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
+
+        $condition = $this->getConditionForTargetUsersWithoutLearningPathAttempts(
+            $learningPath, $learningPathAttemptClassName
+        );
+
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->records(
+            User::class_name(), new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins)
+        );
+    }
+
+    /**
      * Counts the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
@@ -386,13 +410,10 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
 
-        $conditions = array();
-        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID), null
+        $condition = $this->getConditionForTargetUsersWithoutLearningPathAttempts(
+            $learningPath, $learningPathAttemptClassName
         );
 
-        $condition = new AndCondition($conditions);
         $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
 
         return $this->dataClassRepository->count(
@@ -427,6 +448,30 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     }
 
     /**
+     * Finds the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
+        $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
+
+        $condition = $this->getConditionForTargetUsersWithPartialLearningPathAttempts(
+            $learningPath, $learningPathAttemptClassName
+        );
+
+        $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
+
+        return $this->dataClassRepository->records(
+            User::class_name(), new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins)
+        );
+    }
+
+    /**
      * Counts the target users with attempts on a learning path that are not completed
      *
      * @param LearningPath $learningPath
@@ -437,22 +482,10 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
 
-        $conditions = array();
-        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
-            ComparisonCondition::GREATER_THAN_OR_EQUAL,
-            new StaticConditionVariable(0)
+        $condition = $this->getConditionForTargetUsersWithPartialLearningPathAttempts(
+            $learningPath, $learningPathAttemptClassName
         );
 
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
-            ComparisonCondition::LESS_THAN,
-            new StaticConditionVariable(100)
-        );
-
-        $condition = new AndCondition($conditions);
         $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
 
         return $this->dataClassRepository->count(
@@ -716,6 +749,61 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
             )
         );
+    }
+
+    /**
+     * Returns the condition needed for target users without learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param $learningPathAttemptClassName
+     *
+     * @return AndCondition
+     */
+    protected function getConditionForTargetUsersWithoutLearningPathAttempts(
+        LearningPath $learningPath, $learningPathAttemptClassName
+    )
+    {
+        $conditions = array();
+        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID), null
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $condition;
+    }
+
+    /**
+     * Returns the condition needed for target users with partial learning path attempts
+     *
+     * @param LearningPath $learningPath
+     * @param $learningPathAttemptClassName
+     *
+     * @return AndCondition
+     */
+    protected function getConditionForTargetUsersWithPartialLearningPathAttempts(
+        LearningPath $learningPath, $learningPathAttemptClassName
+    )
+    {
+        $conditions = array();
+        $conditions[] = $this->getConditionForTargetUsersForLearningPath($learningPath);
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+            ComparisonCondition::GREATER_THAN_OR_EQUAL,
+            new StaticConditionVariable(0)
+        );
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
+            ComparisonCondition::LESS_THAN,
+            new StaticConditionVariable(100)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $condition;
     }
 
 }
