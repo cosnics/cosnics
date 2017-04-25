@@ -404,6 +404,64 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
+     * Retrieves all the LearningPathAttempt objects with the LearningPathChildAttempt objects and
+     * LearningPathQuestionAttempt objects for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return RecordIterator
+     */
+    public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
+        LearningPath $learningPath
+    )
+    {
+        /** @var LearningPathAttempt[][] $attempts */
+        $attempts = $this->getFromStorage(DummyAttempt::class);
+
+        /** @var LearningPathChildAttempt[][] $childAttempts */
+        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
+
+        /** @var LearningPathQuestionAttempt[][] $questionAttempts */
+        $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
+
+        $learningPathAttempts = $attempts[$learningPath->getId()];
+
+        $allData = array();
+
+        foreach($learningPathAttempts as $userId => $learningPathAttempt)
+        {
+            $learningPathChildAttempts = $childAttempts[$learningPathAttempt->getId()];
+            foreach($learningPathChildAttempts as $childAttempt)
+            {
+                $childQuestionAttempts = $questionAttempts[$childAttempt->getId()];
+                foreach($childQuestionAttempts as $questionAttempt)
+                {
+                    $allData[]= array(
+                        'learning_path_attempt_id' => $learningPathAttempt->getId(),
+                        LearningPathAttempt::PROPERTY_USER_ID => $learningPathAttempt->get_user_id(),
+                        LearningPathAttempt::PROPERTY_LEARNING_PATH_ID => $learningPathAttempt->getLearningPathId(),
+                        LearningPathAttempt::PROPERTY_PROGRESS => $learningPathAttempt->get_progress(),
+                        'learning_path_child_attempt_id' => $childAttempt->getId(),
+                        LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID => $childAttempt->get_learning_path_item_id(),
+                        LearningPathChildAttempt::PROPERTY_START_TIME => $childAttempt->get_start_time(),
+                        LearningPathChildAttempt::PROPERTY_TOTAL_TIME => $childAttempt->get_total_time(),
+                        LearningPathChildAttempt::PROPERTY_SCORE => $childAttempt->get_score(),
+                        LearningPathChildAttempt::PROPERTY_STATUS => $childAttempt->get_status(),
+                        'learning_path_question_attempt_id' => $questionAttempt->getId(),
+                        LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(),
+                        LearningPathQuestionAttempt::PROPERTY_ANSWER => $questionAttempt->get_answer(),
+                        LearningPathQuestionAttempt::PROPERTY_FEEDBACK => $questionAttempt->get_feedback(),
+                        LearningPathQuestionAttempt::PROPERTY_SCORE => $questionAttempt->get_score(),
+                        LearningPathQuestionAttempt::PROPERTY_HINT => $questionAttempt->get_hint()
+                    );
+                }
+            }
+        }
+
+        return new RecordIterator(LearningPathAttempt::class_name(), $allData);
+    }
+
+    /**
      * Clears the cache for the LearningPathAttempt data class
      */
     public function clearLearningPathChildAttemptCache()
@@ -520,5 +578,29 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     public function countTargetUsers(LearningPath $learningPath)
     {
         return 0;
+    }
+
+    /**
+     * Finds the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        return new RecordIterator(User::class_name(), array());
+    }
+
+    /**
+     * Finds the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        return new RecordIterator(User::class_name(), array());
     }
 }

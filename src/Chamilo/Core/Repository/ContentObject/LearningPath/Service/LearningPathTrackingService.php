@@ -1008,6 +1008,18 @@ class LearningPathTrackingService
      *
      * @param LearningPath $learningPath
      *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->findTargetUsersWithoutLearningPathAttempts($learningPath);
+    }
+
+    /**
+     * Counts the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
      * @return int
      */
     public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
@@ -1025,6 +1037,18 @@ class LearningPathTrackingService
     public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
     {
         return $this->learningPathTrackingRepository->countTargetUsersWithFullLearningPathAttempts($learningPath);
+    }
+
+    /**
+     * Finds the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    {
+        return $this->learningPathTrackingRepository->findTargetUsersWithPartialLearningPathAttempts($learningPath);
     }
 
     /**

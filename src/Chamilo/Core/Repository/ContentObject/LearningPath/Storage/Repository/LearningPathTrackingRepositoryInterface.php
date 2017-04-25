@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -157,6 +158,15 @@ interface LearningPathTrackingRepositoryInterface
     public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null);
 
     /**
+     * Finds the target users without attempts on a learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+
+    /**
      * Counts the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
@@ -164,6 +174,15 @@ interface LearningPathTrackingRepositoryInterface
      * @return int
      */
     public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+
+    /**
+     * Finds the target users with attempts on a learning path that are not completed
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath);
 
     /**
      * Counts the target users with attempts on a learning path that are completed
@@ -191,4 +210,16 @@ interface LearningPathTrackingRepositoryInterface
      * @return int
      */
     public function countTargetUsers(LearningPath $learningPath);
+
+    /**
+     * Retrieves all the LearningPathAttempt objects with the LearningPathChildAttempt objects and
+     * LearningPathQuestionAttempt objects for a given learning path
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return RecordIterator
+     */
+    public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
+        LearningPath $learningPath
+    );
 }
