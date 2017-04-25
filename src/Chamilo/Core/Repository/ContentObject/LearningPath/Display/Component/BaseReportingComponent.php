@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class BaseReportingComponent extends TabComponent
+abstract class BaseReportingComponent extends BaseHtmlTreeComponent
 {
     /**
      * Renders common functionality

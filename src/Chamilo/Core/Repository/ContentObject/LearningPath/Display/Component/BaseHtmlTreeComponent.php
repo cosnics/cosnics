@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-abstract class TabComponent extends Manager implements DelegateComponent
+abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponent
 {
 
     private $learning_path_menu;
