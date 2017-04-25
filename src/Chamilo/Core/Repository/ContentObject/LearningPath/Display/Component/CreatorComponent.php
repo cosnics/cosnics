@@ -207,7 +207,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
         //for now we inject the repo drag panel here...
 
         $repoDragPanelPath = Path::getInstance()->getResourcesPath(
-                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath"
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
             ) . '/Templates/RepoDragPanel.html';
         $repoDragPanel = file_get_contents($repoDragPanelPath);
 

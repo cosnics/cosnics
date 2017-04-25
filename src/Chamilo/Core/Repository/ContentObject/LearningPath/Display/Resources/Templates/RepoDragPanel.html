@@ -1,0 +1,267 @@
+<style>
+    /*UI bootstrap css*/
+    .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+    .pagination {
+        margin: 7px 0;
+    }
+    /* End UI bootstrap css*/
+
+    .select-group {
+        margin-bottom: 10px;
+    }
+
+    #dragButton {
+        position: fixed;
+        top: 9%;
+        right: 0;
+        border-radius: 20px 0 0 20px;
+        z-index: 100000;
+        padding: 7px 10px 7px 13px;
+        color: #577ab7;
+    }
+
+    .cd-panel-container {
+        /*...*/
+        position: fixed;
+        width: 245px;
+        top: 9%;
+        right: 0;
+        z-index: 100000;
+        border: 1px solid lightgray;
+        padding: 10px;
+        background: #eee;
+        border-radius: 10px 00px 0px 10px;
+    }
+
+    .type-img {
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .content-object {
+        padding: 5px 10px;
+    }
+
+    .content-object-list {
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
+
+    .content-object-list li:nth-child(2n) {
+        background: #F3F3F3;
+    }
+
+    .content-object-list li:hover {
+        background: #FFFDE3;
+        border-left: 5px solid #DCDAC1;
+        margin-left: -5px;
+    }
+</style>
+
+<div ng-app="repoDragPanelApp" ng-cloak ng-controller="dragPanelCtrl" >
+<button id="dragButton" class="btn btn-default" ng-click="panelIsVisible=true" ng-hide="panelIsVisible">
+    <i class="fa fa-folder-open fa-spin" aria-hidden="true"></i>
+    Repository
+</button>
+<div class="cd-panel from-right" ng-show="panelIsVisible">
+    <div class="cd-panel-container" >
+        <div class="cd-panel-content">
+            <h4>Versleep om toe te voegen</h4>
+            <div class="input-group select-group" ng-hide="searchModus">
+                <select
+                        class="form-control drag-panel-select"
+                        ng-model="selectedCategory"
+                        ng-options="category.name for category in categories">
+                </select>
+                <span class="input-group-btn">
+                     <button class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </span>
+            </div>
+            <div ng-show="items.length == 0"
+                 uib-alert
+                 ng-class="'alert-warning'">Geen items beschikbaar</div>
+
+            <ul class="list-group content-object-list">
+                <li ng-repeat="co in filteredContentObjects as items " draggable="true" class="list-group-item content-object"
+                    ck-draggable
+                >
+                    <div uib-tooltip="{{co.title}}" tooltip-popup-delay="500">
+                    <img class="type-img"
+                         src="{{ co.icon }}"
+                    >{{ co.title | limitText:true:25:'...' }}
+                    </div>
+                </li>
+            </ul>
+            <div class="input-group select-group">
+                <input type="text" class="form-control" ng-model="searchQuery" ng-model-options="{ debounce: 300 }" placeholder="Zoek in repository"/>
+                <span class="input-group-btn">
+                     <button class="btn btn-default" ng-click="searchQuery=''"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                </span>
+            </div>
+
+        <div>
+            <ul
+                    uib-pagination
+                    boundary-links="true"
+                    total-items="totalItems"
+                    ng-model="currentPage"
+                    max-size="3"
+                    ng-change="pageChanged()"
+                    class="pagination-sm"
+                    previous-text="&lsaquo;"
+                    next-text="&rsaquo;"
+                    first-text="&laquo;"
+                    last-text="&raquo;">
+            </ul>
+        </div>
+            <div>
+
+            <a href="#0" class="cd-panel-close" ng-click="panelIsVisible=false">
+                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                Verberg
+            </a>
+            </div>
+        </div> <!-- cd-panel-content -->
+    </div> <!-- cd-panel-container -->
+</div> <!-- cd-panel -->
+</div>
+<script>
+    (function () {
+        var repoDragPanelApp = angular.module('repoDragPanelApp', ['ui.bootstrap', 'ngSanitize']);
+
+        repoDragPanelApp
+            .directive('ckDraggable', ['$document', function($document) {
+                return {
+                    link: function(scope, element, attr) {
+                        element.on('dragstart', function(event) {
+                            event.originalEvent.dataTransfer.setData("text/html", event.originalEvent.target.textContent );
+                            event.originalEvent.dataTransfer.setData("data-co-id", scope.co.id );
+                            event.originalEvent.dataTransfer.setData("data-security-code", scope.co.securityCode );
+                            event.originalEvent.dataTransfer.setData("data-type", scope.co.type );
+                        });
+                    }
+                };
+            }]);
+        repoDragPanelApp.filter('limitText', function () {
+            return function (value, wordwise, max, tail) {
+                if (!value) return '';
+
+                max = parseInt(max, 10);
+                if (!max) return value;
+                if (value.length <= max) return value;
+
+                value = value.substr(0, max);
+                if (wordwise) {
+                    var lastspace = value.lastIndexOf(' ');
+                    if (lastspace !== -1) {
+                        //Also remove . and , so its gives a cleaner result.
+                        if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
+                            lastspace = lastspace - 1;
+                        }
+                        value = value.substr(0, lastspace);
+                    }
+                }
+
+                return value + (tail || ' …');
+            };
+        });
+
+        repoDragPanelApp.controller(
+            'dragPanelCtrl',
+            ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+
+                $scope.contentObjects = [];
+                $scope.filteredContentObjects = [];
+                $scope.categories = [];
+                $scope.selectedCategory = null;
+                $scope.searchModus = false;
+
+                /**
+                 * pagination
+                 */
+                $scope.totalItems = 0;
+                $scope.currentPage = 0;
+
+                $scope.$watch("panelIsVisible", function(){
+                    if($scope.panelIsVisible) {
+                        $scope.fetchCategories();
+                    }
+                });
+
+                $scope.$watch("currentPage", function() {
+                    var begin = (($scope.currentPage - 1) * 10)
+                        , end = begin + 10;
+
+                    $scope.filteredContentObjects = $scope.contentObjects.slice(begin, end);
+                });
+
+                $scope.$watch("selectedCategory", function(){
+                    if($scope.selectedCategory) {
+                        $scope.fetchContentObjects($scope.selectedCategory.id);
+                    }
+                });
+
+                $scope.$watch("searchQuery", function(){
+                    console.log("change");
+                    if($scope.searchModus) {
+                        if($scope.searchQuery === '' ) {
+                            $scope.fetchContentObjects(0);
+                            $scope.searchModus = false;
+                        } else {
+                            $scope.fetchContentObjects($scope.selectedCategory.id, $scope.searchQuery);
+                        }
+                    } else {
+                        if($scope.searchQuery && $scope.searchQuery !== '' ) {
+                            $scope.fetchContentObjects($scope.selectedCategory.id, $scope.searchQuery);
+                            $scope.searchModus = true;
+                        }
+                    }
+
+                });
+
+                $scope.fetchContentObjects = function(categoryId, searchQuery) {
+                    $http.post(
+                        'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetContentObjects',
+                        $.param({'category_id': categoryId, 'search_query': searchQuery}),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                    ).then(function successCallback(response) {
+                            $scope.contentObjects = response.data;
+                            $scope.filteredContentObjects = $scope.contentObjects.slice(0, 10);
+                            $scope.totalItems = response.data.length;
+                            $scope.currentPage = 1;
+                        }, function errorCallback(response) {
+                            //@todo alert
+                        }
+                    );
+                };
+
+                $scope.fetchCategories = function() {
+                    $http.post(
+                        'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetCategories',
+                        null,
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                    ).then(function successCallback(response) {
+                        var categories = [];
+                        response.data.forEach(function(category){
+                            categories.push({
+                                "id": category.id,
+                                "name": category.name.replace(/&mdash;/g, '-').replace(/&nbsp;&nbsp;&nbsp;/g, '-')
+                            });
+                        });
+                        $scope.categories = categories;
+                        $scope.selectedCategory = $scope.categories[0];
+                        }, function errorCallback(response) {
+                            //@todo alert
+                        }
+                    );
+                };
+
+                $scope.refresh = function ()  {
+                    $scope.fetchContentObjects($scope.selectedCategory.id);
+                }
+            }]
+        );
+
+    })();
+</script>

@@ -45,12 +45,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
             return $this->display_error_page(Translation::get('NoObjectSelected'));
         }
 
-        $this->learning_path_menu = new LearningPathTreeRenderer(
+/*        $this->learning_path_menu = new LearningPathTreeRenderer(
             $this->getLearningPathTree(), $this,
             $this->getLearningPathTrackingService(),
             $this->getAutomaticNumberingService(),
             $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
         );
+*/
 
         $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
         $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
@@ -116,7 +117,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html[] = '<div class="learning-path-tree-menu">';
 
-        $html[] = $this->learning_path_menu->render();
+        $learningPathHtmlTreePath = Path::getInstance()->getResourcesPath(
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
+            ) . '/Templates/LearningPathHtmlTree.html';
+        $learningPathHtmlTree = file_get_contents($learningPathHtmlTreePath);
+
+        $html[] = $learningPathHtmlTree;
+
         $html[] = '</div>';
 
         $action = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? self::ACTION_REPORTING :

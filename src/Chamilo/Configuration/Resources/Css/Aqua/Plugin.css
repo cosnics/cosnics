@@ -8,6 +8,10 @@
 
 @import url('Bootstrap/css/bootstrap-toggle.min.css');
 
+@import url('Bootstrap/css/bootstrap-toggle.min.css');
+
+@import url('Plugin/Fancytree/skin-bootstrap/ui.fancytree.css');
+
 .ui-widget-content {
 	border: 0px;
 	background-image: none;
