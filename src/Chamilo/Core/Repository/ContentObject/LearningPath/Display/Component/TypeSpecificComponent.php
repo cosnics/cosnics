@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class TypeSpecificComponent extends TabComponent implements ApplicationSupport
+class TypeSpecificComponent extends BaseHtmlTreeComponent implements ApplicationSupport
 {
 
     /**

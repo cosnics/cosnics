@@ -22,7 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
     DelegateComponent
 {
     const PARAM_CREATE_MODE = 'CreateMode';
@@ -207,7 +207,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
         //for now we inject the repo drag panel here...
 
         $repoDragPanelPath = Path::getInstance()->getResourcesPath(
-                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath"
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
             ) . '/Templates/RepoDragPanel.html';
         $repoDragPanel = file_get_contents($repoDragPanelPath);
 

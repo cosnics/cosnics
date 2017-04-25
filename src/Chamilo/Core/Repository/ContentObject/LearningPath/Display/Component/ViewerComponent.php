@@ -27,7 +27,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
-class ViewerComponent extends TabComponent
+class ViewerComponent extends BaseHtmlTreeComponent
 {
 
     /**

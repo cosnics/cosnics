@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
-class AttachmentViewerComponent extends TabComponent
+class AttachmentViewerComponent extends BaseHtmlTreeComponent
 {
 
     public function build()

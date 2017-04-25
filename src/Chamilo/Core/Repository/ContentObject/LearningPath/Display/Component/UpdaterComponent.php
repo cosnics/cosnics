@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UpdaterComponent extends TabComponent
+class UpdaterComponent extends BaseHtmlTreeComponent
 {
 
     /**

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends TabComponent implements TableSupport, DelegateComponent
+class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, DelegateComponent
 {
 
     /**
