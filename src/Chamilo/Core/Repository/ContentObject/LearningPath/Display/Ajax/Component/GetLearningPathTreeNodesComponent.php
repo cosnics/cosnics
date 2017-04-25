@@ -1,8 +1,8 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;

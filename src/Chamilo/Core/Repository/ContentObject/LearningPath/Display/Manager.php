@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrack
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -80,6 +81,21 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @var LearningPathTrackingService
      */
     protected $learningPathTrackingService;
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+        if(!$this->get_application() instanceof LearningPathDisplaySupport)
+        {
+            throw new \RuntimeException(
+                'The LearningPath display application should only be run from ' .
+                'a parent that implements the LearningPathDisplaySupport'
+            );
+        }
+    }
 
     /**
      * Returns the currently selected learning path child id from the request
