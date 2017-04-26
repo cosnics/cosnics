@@ -1,15 +1,16 @@
 ul.tree-menu li div a.rss_feed, ul.tree-menu li div a.type_rss_feed, ul.tree-menu li div a.type_rss_feed_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_rss_feed,
-	.treeview .list-group .list-group-item .icon.node-icon.type_rss_feed_default
-	{
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.fancytree-custom-icon.type_rss_feed,
+.fancytree-custom-icon.type_rss_feed_default,
+.treeview .list-group .list-group-item .icon.node-icon.type_rss_feed,
+.treeview .list-group .list-group-item .icon.node-icon.type_rss_feed_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 .panel.panel-default.panel-rss-feed ul.list-group {
-	margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .panel.panel-default.panel-rss-feed ul.list-group li.list-group-item {
-	border-width: 0px;
-	border-top-width: 1px;
+    border-width: 0px;
+    border-top-width: 1px;
 }

@@ -1,56 +1,56 @@
-@import
-	url(../../../../../Implementation/Matterhorn/Resources/Javascript/Plugin/Projekktor/themes/maccaco/projekktor.style.css)
-	;
+@import url(../../../../../Implementation/Matterhorn/Resources/Javascript/Plugin/Projekktor/themes/maccaco/projekktor.style.css);
 
 ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
-	.treeview .list-group .list-group-item .icon.node-icon.type_matterhorn,
-	.treeview .list-group .list-group-item .icon.node-icon.type_matterhorn_default,
-	ul.tree-menu li div a.type_matterhorn_default {
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.fancytree-custom-icon.type_matterhorn,
+.fancytree-custom-icon.type_matterhorn_default,
+.treeview .list-group .list-group-item .icon.node-icon.type_matterhorn,
+.treeview .list-group .list-group-item .icon.node-icon.type_matterhorn_default,
+ul.tree-menu li div a.type_matterhorn_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 .timeline-segment-preview {
-	position: absolute;
-	display: none;
-	z-index: 1000;
-	border: 3px solid #E17009;
+    position: absolute;
+    display: none;
+    z-index: 1000;
+    border: 3px solid #E17009;
 }
 
 .matterhorn-video {
-	padding: 2px;
-	border: 7px solid gray;
-	background-color: black;
+    padding: 2px;
+    border: 7px solid gray;
+    background-color: black;
 }
 
 .matterhorn-audio {
-	padding: 2px;
-	border: 7px solid gray;
-	background-color: black;
+    padding: 2px;
+    border: 7px solid gray;
+    background-color: black;
 }
 
 .video-segment-table {
-	border-spacing: 0px;
-	width: 100%;
-	height: 20px;
-	background-color: black;
+    border-spacing: 0px;
+    width: 100%;
+    height: 20px;
+    background-color: black;
 }
 
 .video-segment-table-border {
-	border-left: 9px solid gray;
-	border-right: 9px solid gray;
-	border-bottom: 9px solid gray;
+    border-left: 9px solid gray;
+    border-right: 9px solid gray;
+    border-bottom: 9px solid gray;
 }
 
 .space {
-	height: 2px;
-	margin-top: 2px;
-	margin-bottom: 2px;
-	background-color: white;
+    height: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: white;
 }
 
 .segment-preview {
-	border: 1px solid black;
-	margin-right: 2px;
+    border: 1px solid black;
+    margin-right: 2px;
 }
 
 /*
@@ -58,10 +58,10 @@ ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
 	when scrolling occurs this element stays still.
 */
 .scrollable-segments { /* required settings */
-	position: relative;
-	overflow: hidden;
-	width: 784px;
-	height: 165px;
+    position: relative;
+    overflow: hidden;
+    width: 784px;
+    height: 165px;
 }
 
 /*
@@ -71,74 +71,74 @@ ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
 	not for this element.
 */
 .scrollable-segments .segment-items { /* this cannot be too large */
-	width: 20000em;
-	position: absolute;
-	clear: both;
+    width: 20000em;
+    position: absolute;
+    clear: both;
 }
 
 .segment-items div {
-	float: left;
-	width: 784px;
+    float: left;
+    width: 784px;
 }
 
 /* single scrollable item */
 .scrollable-segments img {
-	float: left;
-	margin: 20px 5px 20px 21px;
-	background-color: #fff;
-	padding: 2px;
-	border: 1px solid black;
-	width: 160px;
-	height: 120px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
+    float: left;
+    margin: 20px 5px 20px 21px;
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid black;
+    width: 160px;
+    height: 120px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 }
 
 .scrollable-segments {
-	float: left;
+    float: left;
 }
 
 /* prev, next, prevPage and nextPage buttons */
 a.scrollable-segments-browse {
-	background: url(../../Images/Aqua/Action/Scrollable.png) no-repeat;
-	display: block;
-	width: 30px;
-	height: 30px;
-	float: left;
-	margin: 70px 10px;
-	cursor: pointer;
-	font-size: 1px;
+    background: url(../../Images/Aqua/Action/Scrollable.png) no-repeat;
+    display: block;
+    width: 30px;
+    height: 30px;
+    float: left;
+    margin: 70px 10px;
+    cursor: pointer;
+    font-size: 1px;
 }
 
 /* right */
 a.scrollable-segments-right {
-	background-position: 0 -30px;
-	clear: right;
-	margin-right: 0px;
+    background-position: 0 -30px;
+    clear: right;
+    margin-right: 0px;
 }
 
 a.scrollable-segments-right:hover {
-	background-position: -30px -30px;
+    background-position: -30px -30px;
 }
 
 a.scrollable-segments-right:active {
-	background-position: -60px -30px;
+    background-position: -60px -30px;
 }
 
 /* left */
 a.scrollable-segments-left {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 
 a.scrollable-segments-left:hover {
-	background-position: -30px 0;
+    background-position: -30px 0;
 }
 
 a.scrollable-segments-left:active {
-	background-position: -60px 0;
+    background-position: -60px 0;
 }
 
 /* disabled navigational button */
 a.scrollable-segments-disabled {
-	visibility: hidden !important;
+    visibility: hidden !important;
 }

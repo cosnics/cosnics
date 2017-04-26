@@ -1,6 +1,7 @@
 ul.tree-menu li div a.office365_video, ul.tree-menu li div a.type_office365_video,
-	ul.tree-menu li div a.type_office365_video_default, .treeview .list-group .list-group-item .icon.node-icon.type_office365_video,
-	.treeview .list-group .list-group-item .icon.node-icon.type_office365_video_default
-	{
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.fancytree-custom-icon.type_office365_video,
+.fancytree-custom-icon.type_office365_video_default,
+ul.tree-menu li div a.type_office365_video_default, .treeview .list-group .list-group-item .icon.node-icon.type_office365_video,
+.treeview .list-group .list-group-item .icon.node-icon.type_office365_video_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }
