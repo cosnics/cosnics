@@ -1,3 +1,24 @@
+<style>
+    .ws-wrap {
+        white-space: normal;
+        height: auto;
+        width: 85%;
+    }
+
+    span.fancytree-node span.fancytree-expander:hover {
+        color: black;
+        opacity: 0.6;
+    }
+
+    .fancytree-custom-icon {
+        height: 16px;
+        width: 16px;
+    }
+    .fancytree-container {
+        border: none !important;
+    }
+
+</style>
 <script type="text/javascript">
     $(function () {
         // Create the tree inside the <div id="tree"> element.
@@ -8,7 +29,6 @@
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak ng-controller="learningPathHtmlTreeController">
     <div id="tree">
     </div>
-    <button class="btn btn-primary" onclick="addSection()">Nieuwe Sectie</button>
 </div>
 
 <script>
@@ -20,13 +40,14 @@
                 ['$scope', '$http', function ($scope, $http) {
 
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
-                    console.log(fetchTreeNodesAjaxUrl);
 
                     var tree = $("#tree").fancytree({
                         source: {
                             url: fetchTreeNodesAjaxUrl,
                             cache: false
                         },
+                        minExpandLevel: 2,
+                        selectMode: 1,
                         checkbox: false,
                         extensions: ["glyph", "dnd", "edit"],
                         glyph: {
@@ -50,10 +71,9 @@
                                 folderOpen: "glyphicon glyphicon-folder-open"
                             }
                         },
-                        activate: function (event, data) {
-                            // A node was activated: display its title:
-                            var node = data.node;
-                            $("#title").text(node.title)
+
+                        enhanceTitle: function(event, data) {
+                            data.$title.addClass("ws-wrap");
                         },
                         click: function (e, data) {
                             // data.node.toggleExpanded();
