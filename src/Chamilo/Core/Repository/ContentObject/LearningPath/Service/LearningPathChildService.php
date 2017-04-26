@@ -65,7 +65,7 @@ class LearningPathChildService
      */
     public function getLearningPathChildrenByUserId($userId)
     {
-        if(!is_int($userId) || $userId <= 0)
+        if (!is_int($userId) || $userId <= 0)
         {
             throw new \InvalidArgumentException('The given user id must be a valid integer and must be bigger than 0');
         }
@@ -111,7 +111,7 @@ class LearningPathChildService
     )
     {
         $parentLearningPathTreeNode = $currentLearningPathTreeNode->getContentObject() instanceof Section ||
-            $currentLearningPathTreeNode->isRootNode() ?
+        $currentLearningPathTreeNode->isRootNode() ?
             $currentLearningPathTreeNode : $currentLearningPathTreeNode->getParentNode();
 
         $learningPathChild = new LearningPathChild();
@@ -202,7 +202,7 @@ class LearningPathChildService
     }
 
     /**
-     * Toggles the blocked status of a content object. The content object is identified by the learning path tree
+     * Toggles the blocked status of a given ContentObject identified by a given LearningPathTreeNode
      *
      * @param LearningPathTreeNode $learningPathTreeNode
      */
@@ -227,6 +227,41 @@ class LearningPathChildService
                     $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
                     $learningPathChild->getContentObjectId()
                 )
+            );
+        }
+    }
+
+    /**
+     * Updates the title of a given ContentObject identified by a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param string $newTitle
+     */
+    public function updateContentObjectTitle(LearningPathTreeNode $learningPathTreeNode, $newTitle = null)
+    {
+        if (empty($newTitle) || !is_string($newTitle))
+        {
+            throw new \InvalidArgumentException('The given title should not be empty and should be a valid string');
+        }
+
+        $contentObject = $learningPathTreeNode->getContentObject();
+
+        if (!$contentObject instanceof ContentObject)
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'The given LearningPathTreeNode with id %s does not have a valid content object attached',
+                    $learningPathTreeNode->getId()
+                )
+            );
+        }
+
+        $contentObject->set_title($newTitle);
+
+        if(!$this->learningPathChildRepository->update($contentObject))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not update the Contentobject with id %S', $contentObject->getId())
             );
         }
     }

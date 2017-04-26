@@ -32,4 +32,12 @@ abstract class Manager extends AjaxManager
             );
         }
     }
+
+    /**
+     * @return AjaxComponent
+     */
+    public function get_application()
+    {
+        return parent::get_application();
+    }
 }
