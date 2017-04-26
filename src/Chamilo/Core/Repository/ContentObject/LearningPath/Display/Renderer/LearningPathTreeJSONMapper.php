@@ -151,7 +151,7 @@ class LearningPathTreeJSONMapper
 
         if ($this->isSelectedItem($node))
         {
-            $menuItem['selected'] = true;
+            $menuItem['active'] = true;
         }
 
         if ($node == $this->application->getCurrentLearningPathTreeNode())
