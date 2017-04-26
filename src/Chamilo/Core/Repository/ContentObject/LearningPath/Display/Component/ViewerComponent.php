@@ -144,25 +144,26 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
             $primaryActions = new ButtonGroup();
             $secondaryActions = new ButtonGroup();
+            $tertiaryActions = new ButtonGroup();
 
             $current_content_object = $this->getCurrentLearningPathTreeNode()->getContentObject();
 
             $this->addCreatorButtons($primaryActions, $translator);
             $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
 
-            $this->addUpdateButton($current_content_object, $primaryActions, $translator);
-            $this->addDeleteButton($primaryActions, $translator, $current_content_object);
-            $this->addMoveButton($secondaryActions, $translator);
+            $this->addManageContentObjectButton($current_content_object, $secondaryActions, $translator);
             $this->addBlockedStatusButton($secondaryActions, $translator, $this->getCurrentLearningPathTreeNode());
-            $this->addManageButton($secondaryActions, $translator, $current_content_object);
 
             if ($this->get_action() != self::ACTION_REPORTING)
             {
-                $this->addReportingButtons($secondaryActions, $translator, $current_content_object);
+                $this->addReportingButtons($tertiaryActions, $translator, $current_content_object);
             }
+
+            $this->addExtraButton($tertiaryActions, $translator, $current_content_object);
 
             $buttonToolbar->addButtonGroup($primaryActions);
             $buttonToolbar->addButtonGroup($secondaryActions);
+            $buttonToolbar->addButtonGroup($tertiaryActions);
 
             $this->buttonToolbar = $buttonToolbar;
         }
@@ -261,7 +262,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      * @param ButtonGroup $buttonGroup
      * @param Translation $translator
      */
-    protected function addUpdateButton($current_content_object, $buttonGroup, $translator)
+    protected function addManageContentObjectButton($current_content_object, $buttonGroup, $translator)
     {
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
@@ -274,54 +275,29 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 )
             );
 
-            $editButton = new Button($editTitle, $editImage, $editURL);
+            $editButton = new SplitDropdownButton($editTitle, $editImage, $editURL);
+
+            $this->addDeleteButton($editButton, $translator);
+            $this->addMoveButton($editButton, $translator);
 
             $buttonGroup->addButton($editButton);
         }
     }
 
     /**
+     * Adds the delete button
      *
-     * @param ButtonGroup $buttonGroup
+     * @param SplitDropdownButton $button
      * @param Translation $translator
-     * @param ContentObject $currentContentObject
      */
-    protected function addManageButton($buttonGroup, $translator, $currentContentObject)
-    {
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
-        {
-            if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
-            {
-                $buttonGroup->addButton(
-                    new Button(
-                        $translator->getTranslation('ManagerComponent', null, Manager::context()),
-                        new FontAwesomeGlyph('bars'),
-                        $this->get_url(
-                            array(
-                                self::PARAM_ACTION => self::ACTION_MANAGE,
-                                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
-                            )
-                        )
-                    )
-                );
-            }
-        }
-    }
-
-    /**
-     *
-     * @param ButtonGroup $buttonGroup
-     * @param Translation $translator
-     * @param ContentObject $currentContentObject
-     */
-    protected function addDeleteButton($buttonGroup, $translator, $currentContentObject)
+    protected function addDeleteButton($button, $translator)
     {
         if (!$this->getCurrentLearningPathTreeNode()->isRootNode() &&
             $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
         )
         {
-            $buttonGroup->addButton(
-                new Button(
+            $button->addSubButton(
+                new SubButton(
                     $translator->getTranslation('DeleterComponent', null, Manager::context()),
                     new BootstrapGlyph('remove'),
                     $this->get_url(
@@ -339,10 +315,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
      * Adds a move button where you can directly select a parent / position to which you want to move the selected
      * item
      *
-     * @param ButtonGroup $buttonGroup
+     * @param SplitDropdownButton $button
      * @param Translation $translator
      */
-    protected function addMoveButton(ButtonGroup $buttonGroup, Translation $translator)
+    protected function addMoveButton(SplitDropdownButton $button, Translation $translator)
     {
         if ($this->getCurrentLearningPathTreeNode()->isRootNode() ||
             !$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
@@ -351,7 +327,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             return;
         }
 
-        $moveButton = new Button(
+        $moveButton = new SubButton(
             $translator->getTranslation('Move', null, Manager::context()),
             new BootstrapGlyph('random'),
             '#',
@@ -360,7 +336,55 @@ class ViewerComponent extends BaseHtmlTreeComponent
             'mover-open'
         );
 
-        $buttonGroup->addButton($moveButton);
+        $button->addSubButton($moveButton);
+    }
+
+    /**
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param Translation $translator
+     * @param ContentObject $currentContentObject
+     */
+    protected function addExtraButton($buttonGroup, $translator, $currentContentObject)
+    {
+        $extraButton = new DropdownButton(
+            $translator->getTranslation('Extra', null, Manager::context()),
+            new BootstrapGlyph('cog')
+        );
+
+        $extraButton->addSubButton(
+            new SubButton(
+                $translator->getTranslation('ActivityComponent', null, Manager::context()),
+                new FontAwesomeGlyph('mouse-pointer'),
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_ACTIVITY,
+                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                    )
+                )
+            )
+        );
+
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
+            {
+                $extraButton->addSubButton(
+                    new SubButton(
+                        $translator->getTranslation('ManagerComponent', null, Manager::context()),
+                        new FontAwesomeGlyph('bars'),
+                        $this->get_url(
+                            array(
+                                self::PARAM_ACTION => self::ACTION_MANAGE,
+                                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                            )
+                        )
+                    )
+                );
+            }
+        }
+
+        $buttonGroup->addButton($extraButton);
     }
 
     /**
@@ -405,38 +429,34 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addReportingButtons($buttonGroup, $translator, $currentContentObject)
     {
-        $extraButton = new DropdownButton(
-            $translator->getTranslation('Extra', null, Manager::context()),
-            new BootstrapGlyph('cog')
+        $label = $translator->getTranslation('MyProgress', null, Manager::context());
+
+        $url = array(
+            self::PARAM_ACTION => self::ACTION_REPORTING,
+            self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
         );
 
-        $extraButton->addSubButton(
-            new SubButton(
-                $translator->getTranslation('ActivityComponent', null, Manager::context()),
-                new FontAwesomeGlyph('mouse-pointer'),
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_ACTIVITY,
-                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
-                    )
-                )
-            )
-        );
+        $icon = new FontAwesomeGlyph('pie-chart');
 
-        $extraButton->addSubButton(
-            new SubButton(
-                $translator->getTranslation('ReportingComponent', null, Manager::context()),
+        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            $buttonGroup->addButton(new Button($label, $icon, $url));
+        }
+        else
+        {
+            $splitDropDownButton = new SplitDropdownButton(
+                $translator->getTranslation('Reporting', null, Manager::context()),
                 new FontAwesomeGlyph('bar-chart'),
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_REPORTING,
-                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
-                    )
+                $url = array(
+                    self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
+                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
                 )
-            )
-        );
+            );
 
-        $buttonGroup->addButton($extraButton);
+            $splitDropDownButton->addSubButton(new SubButton($label, $icon, $url));
+            $buttonGroup->addButton($splitDropDownButton);
+        }
+
     }
 
     /**
