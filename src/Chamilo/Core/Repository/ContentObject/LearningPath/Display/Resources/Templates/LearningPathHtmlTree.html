@@ -1,101 +1,7 @@
 <script type="text/javascript">
     $(function () {
         // Create the tree inside the <div id="tree"> element.
-        var tree = $("#tree").fancytree({
-            source: {
-                url: "index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetLearningPathTreeNodes&LearningPathId=78",
-                cache: false
-            },
-            checkbox: false,
-            extensions: ["glyph", "dnd", "edit"],
-            glyph: {
-                map: {
-                    checkbox: "glyphicon glyphicon-unchecked",
-                    checkboxSelected: "glyphicon glyphicon-check",
-                    checkboxUnknown: "glyphicon glyphicon-share",
-                    dragHelper: "glyphicon glyphicon-play",
-                    dropMarker: "glyphicon glyphicon-arrow-right",
-                    error: "glyphicon glyphicon-warning-sign",
-                    expanderClosed: "glyphicon glyphicon-plus-sign",
-                    expanderLazy: "glyphicon glyphicon-plus-sign",
-                    expanderOpen: "glyphicon glyphicon-minus-sign",
-                    loading: "glyphicon glyphicon-refresh glyphicon-spin",
-                    nodata: "glyphicon glyphicon-info-sign",
-                    // Default node icons.
-                    // (Use tree.options.icon callback to define custom icons based on node data)
-                    doc: "glyphicon glyphicon-file",
-                    docOpen: "glyphicon glyphicon-file",
-                    folder: "glyphicon glyphicon-folder-close",
-                    folderOpen: "glyphicon glyphicon-folder-open"
-                }
-            },
-            activate: function (event, data) {
-                // A node was activated: display its title:
-                var node = data.node;
-                $("#title").text(node.title)
-            },
-            click: function (e, data) {
-                // data.node.toggleExpanded();
-            },
-            dnd: {
-                // Available options with their default:
-                autoExpandMS: 1000,   // Expand nodes after n milliseconds of hovering
-                draggable: null,      // Additional options passed to jQuery UI draggable
-                droppable: null,      // Additional options passed to jQuery UI droppable
-                dropMarkerOffsetX: -24,  // absolute position offset for .fancytree-drop-marker
-                                         // relatively to ..fancytree-title (icon/img near a node accepting drop)
-                dropMarkerInsertOffsetX: -16, // additional offset for drop-marker with hitMode = "before"/"after"
-                focusOnClick: false,  // Focus, although draggable cancels mousedown event (#270)
-                preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
-                preventVoidMoves: true,      // Prevent dropping nodes 'before self', etc.
-                smartRevert: true,    // set draggable.revert = true if drop was rejected
 
-                // Events that make tree nodes draggable
-                dragStart: function () {
-                    return true;
-                },      // Callback(sourceNode, data), return true to enable dnd
-                dragStop: null,       // Callback(sourceNode, data)
-                initHelper: null,     // Callback(sourceNode, data)
-                updateHelper: null,   // Callback(sourceNode, data)
-
-                // Events that make tree nodes accept draggables
-                dragEnter: function (node, data) {
-                    if (!node.isFolder()) {
-                        return ["before", "after"];
-                    }
-                    return true;
-                },      // Callback(targetNode, data)
-                dragExpand: null,     // Callback(targetNode, data), return false to prevent autoExpand
-                dragOver: null,       // Callback(targetNode, data)
-                dragDrop: function (node, data) {
-                    data.otherNode.moveTo(node, data.hitMode);
-                },       // Callback(targetNode, data)
-                dragLeave: null       // Callback(targetNode, data)
-            }
-
-        });
-
-        addChild = function () {
-            var node = $("#tree").fancytree("getActiveNode");
-            if (!node) {
-                alert("Please activate a parent node.");
-                return;
-            }
-            node.editCreateNode("child", "Node title");
-            node.setSelected(true);
-
-        };
-        addSection = function () {
-            var node = $("#tree").fancytree("getActiveNode");
-            if (!node) {
-                node = $("#tree").fancytree("getFirstChild");
-            }
-            node.editCreateNode("after", {
-                title: "Node title",
-                folder: true
-            });
-            node.setSelected(true)
-        }
     });
 </script>
 
@@ -112,6 +18,105 @@
         repoDragPanelApp.controller(
             'learningPathHtmlTreeController',
                 ['$scope', '$http', function ($scope, $http) {
+
+                //@todo bootstrap the url
+                    var fetchTreeNodesAjaxUrl = "index.php?go=CourseViewer&application=Chamilo%5CApplication%5CWeblcms&course=109&tool=LearningPath&browser=Table&tool_action=ComplexDisplay&publication=601019&learning_path_action=Ajax&LearningPathId=1099245";
+
+                    var tree = $("#tree").fancytree({
+                        source: {
+                            url: fetchTreeNodesAjaxUrl,
+                            cache: false
+                        },
+                        checkbox: false,
+                        extensions: ["glyph", "dnd", "edit"],
+                        glyph: {
+                            map: {
+                                checkbox: "glyphicon glyphicon-unchecked",
+                                checkboxSelected: "glyphicon glyphicon-check",
+                                checkboxUnknown: "glyphicon glyphicon-share",
+                                dragHelper: "glyphicon glyphicon-play",
+                                dropMarker: "glyphicon glyphicon-arrow-right",
+                                error: "glyphicon glyphicon-warning-sign",
+                                expanderClosed: "glyphicon glyphicon-plus-sign",
+                                expanderLazy: "glyphicon glyphicon-plus-sign",
+                                expanderOpen: "glyphicon glyphicon-minus-sign",
+                                loading: "glyphicon glyphicon-refresh glyphicon-spin",
+                                nodata: "glyphicon glyphicon-info-sign",
+                                // Default node icons.
+                                // (Use tree.options.icon callback to define custom icons based on node data)
+                                doc: "glyphicon glyphicon-file",
+                                docOpen: "glyphicon glyphicon-file",
+                                folder: "glyphicon glyphicon-folder-close",
+                                folderOpen: "glyphicon glyphicon-folder-open"
+                            }
+                        },
+                        activate: function (event, data) {
+                            // A node was activated: display its title:
+                            var node = data.node;
+                            $("#title").text(node.title)
+                        },
+                        click: function (e, data) {
+                            // data.node.toggleExpanded();
+                        },
+                        dnd: {
+                            // Available options with their default:
+                            autoExpandMS: 1000,   // Expand nodes after n milliseconds of hovering
+                            draggable: null,      // Additional options passed to jQuery UI draggable
+                            droppable: null,      // Additional options passed to jQuery UI droppable
+                            dropMarkerOffsetX: -24,  // absolute position offset for .fancytree-drop-marker
+                                                     // relatively to ..fancytree-title (icon/img near a node accepting drop)
+                            dropMarkerInsertOffsetX: -16, // additional offset for drop-marker with hitMode = "before"/"after"
+                            focusOnClick: false,  // Focus, although draggable cancels mousedown event (#270)
+                            preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
+                            preventVoidMoves: true,      // Prevent dropping nodes 'before self', etc.
+                            smartRevert: true,    // set draggable.revert = true if drop was rejected
+
+                            // Events that make tree nodes draggable
+                            dragStart: function () {
+                                return true;
+                            },      // Callback(sourceNode, data), return true to enable dnd
+                            dragStop: null,       // Callback(sourceNode, data)
+                            initHelper: null,     // Callback(sourceNode, data)
+                            updateHelper: null,   // Callback(sourceNode, data)
+
+                            // Events that make tree nodes accept draggables
+                            dragEnter: function (node, data) {
+                                if (!node.isFolder()) {
+                                    return ["before", "after"];
+                                }
+                                return true;
+                            },      // Callback(targetNode, data)
+                            dragExpand: null,     // Callback(targetNode, data), return false to prevent autoExpand
+                            dragOver: null,       // Callback(targetNode, data)
+                            dragDrop: function (node, data) {
+                                data.otherNode.moveTo(node, data.hitMode);
+                            },       // Callback(targetNode, data)
+                            dragLeave: null       // Callback(targetNode, data)
+                        }
+
+                    });
+
+                    addChild = function () {
+                        var node = $("#tree").fancytree("getActiveNode");
+                        if (!node) {
+                            alert("Please activate a parent node.");
+                            return;
+                        }
+                        node.editCreateNode("child", "Node title");
+                        node.setSelected(true);
+
+                    };
+                    addSection = function () {
+                        var node = $("#tree").fancytree("getActiveNode");
+                        if (!node) {
+                            node = $("#tree").fancytree("getFirstChild");
+                        }
+                        node.editCreateNode("after", {
+                            title: "Node title",
+                            folder: true
+                        });
+                        node.setSelected(true)
+                    }
 
             }]
         );
