@@ -14,7 +14,7 @@ use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
-use Chamilo\Libraries\Format\Response\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -363,7 +363,7 @@ class Kernel
 
         if (! $response instanceof Response)
         {
-            $response = new Response($this->getVersion(), $response);
+            $response = new \Chamilo\Libraries\Format\Response\Response($this->getVersion(), $response);
         }
 
         $response->send();
