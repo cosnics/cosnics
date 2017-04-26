@@ -22,7 +22,7 @@ class GetLearningPathTreeNodesComponent extends Manager
         try
         {
             $learningPathTree = $this->get_application()->getLearningPathTree();
-            $treeData = $this->getTreeDataForNode($learningPathTree->getRoot());
+            $treeData = array($this->getTreeNodesAsArray($learningPathTree->getRoot()));
 
             return new JsonResponse($treeData);
         }
@@ -39,7 +39,7 @@ class GetLearningPathTreeNodesComponent extends Manager
      *
      * @return array
      */
-    protected function getTreeDataForNode(LearningPathTreeNode $learningPathTreeNode)
+    protected function getTreeNodesAsArray(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->get_application()->getAutomaticNumberingService()
             ->getAutomaticNumberedTitleForLearningPathTreeNode(
@@ -58,7 +58,7 @@ class GetLearningPathTreeNodesComponent extends Manager
 
             foreach ($learningPathTreeNode->getChildNodes() as $childLearningPathTreeNode)
             {
-                $treeData[] = $this->getTreeDataForNode($childLearningPathTreeNode);
+                $treeData[] = $this->getTreeNodesAsArray($childLearningPathTreeNode);
             }
 
             $treeItem['children'] = $treeData;
