@@ -224,14 +224,22 @@ class ActionSelector
             $dropdownButton->addSubButtons($this->getExtraActions());
             $dropdownButton->addSubButton(new SubButtonDivider());
         }
-        
-        $dropdownButton->addSubButton(new SubButtonHeader(Translation::get('CreatorTitle')));
-        $dropdownButton->addSubButtons($this->getCreationOptions());
+
+        $typeSelector = $this->getTypeSelector();
+
+        if ($typeSelector->count_options() > 1)
+        {
+            $dropdownButton->addSubButton(new SubButtonHeader(Translation::get('CreatorTitle')));
+            $dropdownButton->addSubButtons($this->getCreationOptions());
+        }
         
         // Browser + Shared objects
         if ($this->getApplication()->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
         {
-            $dropdownButton->addSubButton(new SubButtonDivider());
+            if ($typeSelector->count_options() > 1)
+            {
+                $dropdownButton->addSubButton(new SubButtonDivider());
+            }
             
             $dropdownButton->addSubButtons($this->getExistingOptions());
             $dropdownButton->addSubButton(new SubButtonDivider());

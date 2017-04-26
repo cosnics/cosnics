@@ -880,7 +880,8 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Group.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_completed {
+.treeview .list-group .list-group-item .icon.node-icon.type_completed,
+.fancytree-custom-icon.type_completed {
 	background-image: url(../../Images/Aqua/Status/OkMini.png);
 	opacity: 1;
 }

@@ -1,128 +1,122 @@
 ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
-	.treeview .list-group .list-group-item .icon.node-icon.type_learning_path,
-	.treeview .list-group .list-group-item .icon.node-icon.type_learning_path_default,
-	ul.tree-menu li div a.type_learning_path_default {
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.treeview .list-group .list-group-item .icon.node-icon.type_learning_path,
+.fancytree-custom-icon.type_learning_path,
+.fancytree-custom-icon.type_learning_path_default,
+.treeview .list-group .list-group-item .icon.node-icon.type_learning_path_default,
+ul.tree-menu li div a.type_learning_path_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
+    width: 16px;
+    height: 16px;
 }
 
 .learning-path-display-full-screen {
-	background-color: white;
-	margin: 0px;
-	border: 0px solid white;
-	width: 0px;
-	height: 0px;
-	display: none;
+    background-color: white;
+    margin: 0px;
+    border: 0px solid white;
+    width: 0px;
+    height: 0px;
+    display: none;
 }
 
 .learning-path-content, .learning-path-tree-menu-container {
-	padding-bottom: 90px;
+    padding-bottom: 90px;
 }
 
 .learning-path-tree-menu-container h3 {
-	display: none;
+    display: none;
 }
 
-@media ( max-width : 768px) {
-	.learning-path-tree-menu-container {
-		padding-bottom: 15px;
-	}
-	.learning-path-tree-menu-container h3 {
-		display: block;
-		margin-top: 0px;
-	}
-	.learning-path-display .learning-path-tree-menu-container {
-		position: relative;
-		top: 0px;
-		bottom: 0px;
-		left: 0px;
-		right: 0px;
-		width: 100%;
-		padding-top: 15px;
-		z-index: 9999;
-		background-color: white;
-		padding-top: 15px;
-		display: none;
-	}
+@media ( max-width: 768px) {
+    .learning-path-tree-menu-container {
+        padding-bottom: 15px;
+    }
+
+    .learning-path-tree-menu-container h3 {
+        display: block;
+        margin-top: 0px;
+    }
+
+    .learning-path-display .learning-path-tree-menu-container {
+        position: relative;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 100%;
+        padding-top: 15px;
+        z-index: 9999;
+        background-color: white;
+        padding-top: 15px;
+        display: none;
+    }
 }
 
-.learning-path-display .learning-path-content.learning-path-content-full-screen
-	{
-	width: 100%;
+.learning-path-display .learning-path-content.learning-path-content-full-screen {
+    width: 100%;
 }
 
-.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden
-	{
-	display: none;
+.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden {
+    display: none;
 }
 
-.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-visible
-	{
-	display: block;
+.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-visible {
+    display: block;
 }
 
-.learning-path-display .learning-path-tree-menu-container .learning-path-tree-menu
-	{
-	overflow: auto;
+.learning-path-display .learning-path-tree-menu-container .learning-path-tree-menu {
+    overflow: auto;
 }
 
 .learning-path-display .navbar-learning-path {
-	padding: 0px;
-	position: fixed;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	width: 100%;
-	text-align: center;
-	z-index: 10000;
-	background-color: white;
-	border-top: 1px solid #dddddd;
+    padding: 0px;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    z-index: 10000;
+    background-color: white;
+    border-top: 1px solid #dddddd;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions
-	{
-	padding: 15px;
-	height: 65px;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions {
+    padding: 15px;
+    height: 65px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions a
-	{
-	height: 32px;
-	margin: 0 10px;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions a {
+    height: 32px;
+    margin: 0 10px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon
-	{
-	font-size: 32px;
-	line-height: 32px;
-	height: 32px;
-	overflow: hidden;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon {
+    font-size: 32px;
+    line-height: 32px;
+    height: 32px;
+    overflow: hidden;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled
-	{
-	opacity: 0.25;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled {
+    opacity: 0.25;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu
-	{
-	color: #337ab7;
-	cursor: pointer;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu {
+    color: #337ab7;
+    cursor: pointer;
 }
 
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:hover,
-	.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:focus
-	{
-	color: #23527c;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:focus {
+    color: #23527c;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-progress .progress
-	{
-	margin-bottom: 0px;
-	border-radius: 0px;
-	height: 10px;
+.learning-path-display .navbar-learning-path .navbar-learning-path-progress .progress {
+    margin-bottom: 0px;
+    border-radius: 0px;
+    height: 10px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen
-	{
-	display: none;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen {
+    display: none;
 }

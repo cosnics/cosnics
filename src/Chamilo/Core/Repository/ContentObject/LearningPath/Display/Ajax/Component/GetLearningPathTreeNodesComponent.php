@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +23,14 @@ class GetLearningPathTreeNodesComponent extends Manager
         try
         {
             $learningPathTree = $this->get_application()->getLearningPathTree();
-            $treeData = array($this->getTreeNodesAsArray($learningPathTree->getRoot()));
+            $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
+                $learningPathTree, $this->get_application(),
+                $this->get_application()->getLearningPathTrackingService(),
+                $this->get_application()->getAutomaticNumberingService(),
+                $this->get_application()->get_application()->get_learning_path_tree_menu_url()
+            );
+
+            $treeData = $learningPathTreeJSONMapper->getNodes();
 
             return new JsonResponse($treeData);
         }

@@ -1,6 +1,8 @@
 ul.tree-menu li div a.hotspot_question, ul.tree-menu li div a.type_hotspot_question,
-	.treeview .list-group .list-group-item .icon.node-icon.type_hotspot_question,
-	.treeview .list-group .list-group-item .icon.node-icon.type_hotspot_question_default,
-	ul.tree-menu li div a.type_hotspot_question_default {
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.treeview .list-group .list-group-item .icon.node-icon.type_hotspot_question,
+.treeview .list-group .list-group-item .icon.node-icon.type_hotspot_question_default,
+.fancytree-custom-icon.type_hotspot_question,
+.fancytree-custom-icon.type_hotspot_question_default,
+ul.tree-menu li div a.type_hotspot_question_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }
