@@ -19,8 +19,8 @@
             'learningPathHtmlTreeController',
                 ['$scope', '$http', function ($scope, $http) {
 
-                //@todo bootstrap the url
-                    var fetchTreeNodesAjaxUrl = "index.php?go=CourseViewer&application=Chamilo%5CApplication%5CWeblcms&course=109&tool=LearningPath&browser=Table&tool_action=ComplexDisplay&publication=601019&learning_path_action=Ajax&LearningPathId=1099245";
+                    var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
+                    console.log(fetchTreeNodesAjaxUrl);
 
                     var tree = $("#tree").fancytree({
                         source: {

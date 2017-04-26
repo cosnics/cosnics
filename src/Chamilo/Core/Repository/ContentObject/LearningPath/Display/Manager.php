@@ -44,6 +44,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
     const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';
     const ACTION_VIEW_USER_PROGRESS = 'UserProgress';
+    const ACTION_AJAX = 'Ajax';
 
     // Parameters
     const PARAM_STEP = 'step';

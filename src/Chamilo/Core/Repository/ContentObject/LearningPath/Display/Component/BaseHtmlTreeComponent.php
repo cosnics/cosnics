@@ -122,6 +122,12 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             ) . '/Templates/LearningPathHtmlTree.html';
         $learningPathHtmlTree = file_get_contents($learningPathHtmlTreePath);
 
+        $learningPathHtmlTree = str_replace(
+            "{{ fetchTreeNodesAjaxUrl }}",
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
+            $learningPathHtmlTree
+        );
+
         $html[] = $learningPathHtmlTree;
 
         $html[] = '</div>';
