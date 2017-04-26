@@ -159,7 +159,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return LearningPathChildService | object
      */
-    protected function getLearningPathChildService()
+    public function getLearningPathChildService()
     {
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
@@ -171,7 +171,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return LearningPathTreeBuilder | object
      */
-    protected function getLearningPathTreeBuilder()
+    public function getLearningPathTreeBuilder()
     {
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
