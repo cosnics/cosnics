@@ -218,6 +218,12 @@ ALTER TABLE `repository_learning_path` ADD `automatic_numbering` VARCHAR(15) NOT
 DELETE FROM `configuration_registration` WHERE `context` LIKE '%LearningPathItem%';
 DELETE FROM `configuration_registration` WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
 
+
+ALTER TABLE `configuration_registration` ADD `priority` INT(3) UNSIGNED NOT NULL DEFAULT '1';
+UPDATE configuration_registration SET priority = 20 WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\Assessment\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
+UPDATE configuration_registration SET priority = 50 WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\Page\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
+
+
 /**
 Section content object install! (lynx package manager)
  */
