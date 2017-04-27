@@ -157,17 +157,21 @@
                         enhanceTitle: function(event, data) {
                             data.$title.addClass("ws-wrap");
                         },
-
                         click: function(event, data) {
                             var node = data.node;
-                            if(event.button !== 2 && data.targetType === "title" ) {
+
+                            if(event.button !== 2 && data.targetType === 'title') {
                                 if(node.data.href){
                                     window.location.href=node.data.href;
                                 }
-                            } else { //do not activate on right click
-                                event.preventDefault();
-                                event.stopPropagation();
                             }
+
+                            if(event.button === 2) {
+                                return false;
+                            }
+                        },
+                        renderTitle: function(event, data) {
+                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title +'</span>';
                         },
                         dnd: {
                             // Available options with their default:

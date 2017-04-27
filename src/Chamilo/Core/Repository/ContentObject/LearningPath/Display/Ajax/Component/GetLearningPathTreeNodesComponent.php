@@ -24,10 +24,12 @@ class GetLearningPathTreeNodesComponent extends Manager
         {
             $learningPathTree = $this->get_application()->getLearningPathTree();
             $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-                $learningPathTree, $this->get_application(),
+                $learningPathTree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
-                $this->get_application()->get_application()->get_learning_path_tree_menu_url()
+                $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
+                $this->get_application()->getCurrentLearningPathTreeNode(),
+                $this->get_application()->get_application()->is_allowed_to_view_content_object()
             );
 
             $treeData = $learningPathTreeJSONMapper->getNodes();

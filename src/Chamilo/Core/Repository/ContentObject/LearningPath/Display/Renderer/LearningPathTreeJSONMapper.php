@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -19,11 +19,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class LearningPathTreeJSONMapper
 {
     const NODE_PLACEHOLDER = '__NODE__';
-
-    /**
-     * @var Application
-     */
-    protected $application;
 
     /**
      * @var LearningPath
@@ -51,25 +46,44 @@ class LearningPathTreeJSONMapper
     protected $treeMenuUrl;
 
     /**
+     * @var LearningPathTreeNode
+     */
+    protected $currentLearningPathTreeNode;
+
+    /**
+     * @var bool
+     */
+    protected $allowedToViewContentObject;
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * @param LearningPathTree $learningPathTree
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param User $user
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param AutomaticNumberingService $automaticNumberingService
      * @param string $treeMenuUrl
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param bool $allowedToViewContentObject
      */
     public function __construct(
-        LearningPathTree $learningPathTree, Application $application,
+        LearningPathTree $learningPathTree, User $user,
         LearningPathTrackingService $learningPathTrackingService,
         AutomaticNumberingService $automaticNumberingService,
-        $treeMenuUrl
+        $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode, $allowedToViewContentObject
     )
     {
         $this->learningPathTree = $learningPathTree;
-        $this->application = $application;
+        $this->user = $user;
         $this->learningPath = $learningPathTree->getRoot()->getContentObject();
         $this->learningPathTrackingService = $learningPathTrackingService;
         $this->automaticNumberingService = $automaticNumberingService;
         $this->treeMenuUrl = $treeMenuUrl;
+        $this->currentLearningPathTreeNode = $currentLearningPathTreeNode;
+        $this->allowedToViewContentObject = $allowedToViewContentObject;
     }
 
     /**
@@ -79,10 +93,10 @@ class LearningPathTreeJSONMapper
      */
     protected function getItemIcon(LearningPathTreeNode $node)
     {
-        if ($this->application->get_parent()->is_allowed_to_view_content_object($node))
+        if ($this->allowedToViewContentObject)
         {
             if ($this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                $this->learningPath, $this->application->getUser(), $node
+                $this->learningPath, $this->user, $node
             )
             )
             {
@@ -110,7 +124,7 @@ class LearningPathTreeJSONMapper
      */
     protected function isSelectedItem(LearningPathTreeNode $node)
     {
-        return $this->application->getCurrentLearningPathChildId() == $node->getId();
+        return $this->currentLearningPathTreeNode->getId() == $node->getId();
     }
 
     /**
@@ -132,15 +146,14 @@ class LearningPathTreeJSONMapper
      */
     protected function getMenuItem(LearningPathTreeNode $node)
     {
-        $application = $this->application;
-
-        $title = $this->automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($node);
+        $number = $this->automaticNumberingService->getAutomaticNumberingForLearningPathTreeNode($node);
 
         $menuItem['key'] = $node->getId();
-        $menuItem['title'] = $title;
+        $menuItem['title'] = $node->getContentObject()->get_title();
+        $menuItem['number'] = is_null($number) ? '' : $number;
         $menuItem['icon'] = $this->getItemIcon($node);
 
-        if ($application->get_parent()->is_allowed_to_view_content_object($node))
+        if ($this->allowedToViewContentObject)
         {
             $menuItem['href'] = $this->getNodeUrl($node->getId());
         }
@@ -154,14 +167,14 @@ class LearningPathTreeJSONMapper
             $menuItem['active'] = true;
         }
 
-        if ($node == $this->application->getCurrentLearningPathTreeNode())
+        if ($node === $this->currentLearningPathTreeNode)
         {
             $menuItem['expanded'] = true;
         }
 
         if ($node->hasChildNodes())
         {
-            if (in_array($this->application->getCurrentLearningPathTreeNode(), $node->getDescendantNodes()))
+            if (in_array($this->currentLearningPathTreeNode, $node->getDescendantNodes()))
             {
                 $menuItem['expanded'] = true;
             }
