@@ -40,6 +40,74 @@
 
 <script>
     (function () {
+
+            var initContextMenu = function(tree, selector, menu, actions) {
+                tree.$container.on("mousedown.contextMenu", function(event) {
+                    var node = $.ui.fancytree.getNode(event);
+
+                    if(node) {
+                        $.contextMenu("destroy", "." + selector);
+
+                        node.setFocus(true);
+
+                        $.contextMenu({
+                            selector: "." + selector,
+                            events: {
+                                show: function(options) {
+                                    options.prevKeyboard = tree.options.keyboard;
+                                    tree.options.keyboard = false;
+                                },
+                                hide: function(options) {
+                                    tree.options.keyboard = options.prevKeyboard;
+                                    node.setFocus(true);
+                                }
+                            },
+                            build: function($trigger, e) {
+                                node = $.ui.fancytree.getNode($trigger);
+
+                                var menuItems = { };
+                                if($.isFunction(menu)) {
+                                    menuItems = menu(node);
+                                } else if($.isPlainObject(menu)) {
+                                    menuItems = menu;
+                                }
+
+                                return {
+                                    callback: function(action, options) {
+                                        if($.isFunction(actions)) {
+                                            actions(node, action, options);
+                                        } else if($.isPlainObject(actions)) {
+                                            if(actions.hasOwnProperty(action) && $.isFunction(actions[action])) {
+                                                actions[action](node, options);
+                                            }
+                                        }
+                                    },
+                                    items: menuItems
+                                };
+                            }
+                        });
+                    }
+                });
+            };
+
+            $.ui.fancytree.registerExtension({
+                name: "myContextMenu",
+                version: "@VERSION",
+                contextMenu: {
+                    selector: "fancytree-title",
+                    menu: {},
+                    actions: {}
+                },
+                treeInit: function(ctx) {
+                    this._superApply(arguments);
+                    initContextMenu(ctx.tree,
+                        ctx.options.contextMenu.selector || "fancytree-title",
+                        ctx.options.contextMenu.menu,
+                        ctx.options.contextMenu.actions);
+                }
+            });
+
+
         var repoDragPanelApp = angular.module('learningPathHtmlTreeApp', ['ui.bootstrap', 'ngSanitize']);
 
         repoDragPanelApp.controller(
@@ -56,18 +124,12 @@
                         minExpandLevel: 2,
                         selectMode: 1,
                         checkbox: false,
-                        extensions: ["glyph", "dnd", "edit", "contextMenu"],
+                        extensions: ["glyph", "dnd", "edit", "myContextMenu"],
                         contextMenu: {
                             menu: {
                                 "edit": {"name": "Bewerk", "icon": "edit"},
                                 "delete": {"name": "Verwijder", "icon": "delete"},
                                 "move": {"name": "Verplaats", "icon": "move"}
-                            },
-                            actions: function (node, action, options) {
-                                console.log(node);
-                                console.log(action);
-                                $("#selected-action")
-                                    .text("Selected action '" + action + "' on node " + node + ".");
                             }
                         },
                         glyph: {
@@ -95,13 +157,14 @@
                         enhanceTitle: function(event, data) {
                             data.$title.addClass("ws-wrap");
                         },
+
                         click: function(event, data) {
                             var node = data.node;
-                            if(event.button !== 2 ) {
+                            if(event.button !== 2 && data.targetType === "title" ) {
                                 if(node.data.href){
                                     window.location.href=node.data.href;
                                 }
-                            } else {
+                            } else { //do not activate on right click
                                 event.preventDefault();
                                 event.stopPropagation();
                             }
