@@ -12,6 +12,8 @@
 
 @import url('Plugin/Fancytree/skin-bootstrap/ui.fancytree.css');
 
+@import url('Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
+
 .ui-widget-content {
 	border: 0px;
 	background-image: none;

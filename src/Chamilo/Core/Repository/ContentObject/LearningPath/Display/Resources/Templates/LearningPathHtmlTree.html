@@ -18,6 +18,7 @@
         height: 16px !important;
         width: 16px !important;
     }
+
     .fancytree-container {
         border: none !important;
         min-height: 100px;
@@ -33,95 +34,59 @@
         text-decoration: underline;
     }
 
-
+    .fa {
+        width: inherit;
+        text-align: inherit;
+    }
 </style>
-<link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.css" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.js">
-</script>
-<script src="http://wwwendt.de/tech/fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js"></script>
-
-<div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak ng-controller="learningPathHtmlTreeController">
+<div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
+     ng-controller="learningPathHtmlTreeController">
     <button class="btn btn-default">Pas aan</button>
-    <div id="tree">
+    <div id="tree" ng-mousedown="handleRightClick($event)"
+         oncontextmenu="return false">
     </div>
 </div>
 
 <script>
     (function () {
 
-            var initContextMenu = function(tree, selector, menu, actions) {
-                tree.$container.on("mousedown.contextMenu", function(event) {
-                    var node = $.ui.fancytree.getNode(event);
+            var repoDragPanelApp = angular.module('learningPathHtmlTreeApp', ['ui.bootstrap', 'ngSanitize']);
 
-                    if(node) {
-                        $.contextMenu("destroy", "." + selector);
+            repoDragPanelApp.controller(
+                'learningPathHtmlTreeController',
+                ['$scope', '$http', function ($scope, $http) {
 
-                        node.setFocus(true);
-
-                        $.contextMenu({
-                            selector: "." + selector,
-                            events: {
-                                show: function(options) {
-                                    options.prevKeyboard = tree.options.keyboard;
-                                    tree.options.keyboard = false;
+                    $.contextMenu({
+                        selector: ".fancytree-title",
+                        build: function ($triggerElement, e) {
+                            node = $.ui.fancytree.getNode($triggerElement);
+                            if (node) {
+                                node.setFocus(true);
+                            }
+                            return {
+                                callback: function (key, options) {
+                                    var m = "clicked: " + key;
+                                    window.console && console.log(m) || alert(m);
                                 },
-                                hide: function(options) {
-                                    tree.options.keyboard = options.prevKeyboard;
-                                    node.setFocus(true);
-                                }
-                            },
-                            build: function($trigger, e) {
-                                node = $.ui.fancytree.getNode($trigger);
-
-                                var menuItems = { };
-                                if($.isFunction(menu)) {
-                                    menuItems = menu(node);
-                                } else if($.isPlainObject(menu)) {
-                                    menuItems = menu;
-                                }
-
-                                return {
-                                    callback: function(action, options) {
-                                        if($.isFunction(actions)) {
-                                            actions(node, action, options);
-                                        } else if($.isPlainObject(actions)) {
-                                            if(actions.hasOwnProperty(action) && $.isFunction(actions[action])) {
-                                                actions[action](node, options);
-                                            }
+                                items: { //todo retrieve from node
+                                    "edit": {
+                                        name: "Bewerk", icon: "fa-edit", callback: function () {
+                                            window.location.href = node.data.href;
                                         }
                                     },
-                                    items: menuItems
-                                };
-                            }
-                        });
-                    }
-                });
-            };
-
-            $.ui.fancytree.registerExtension({
-                name: "myContextMenu",
-                version: "@VERSION",
-                contextMenu: {
-                    selector: "fancytree-title",
-                    menu: {},
-                    actions: {}
-                },
-                treeInit: function(ctx) {
-                    this._superApply(arguments);
-                    initContextMenu(ctx.tree,
-                        ctx.options.contextMenu.selector || "fancytree-title",
-                        ctx.options.contextMenu.menu,
-                        ctx.options.contextMenu.actions);
-                }
-            });
-
-
-        var repoDragPanelApp = angular.module('learningPathHtmlTreeApp', ['ui.bootstrap', 'ngSanitize']);
-
-        repoDragPanelApp.controller(
-            'learningPathHtmlTreeController',
-                ['$scope', '$http', function ($scope, $http) {
+                                    "move": {
+                                        name: "Verplaats", icon: "fa-random", callback: function () {
+                                            window.location.href = node.data.href;
+                                        }
+                                    },
+                                    "delete": {name: "Verwijder", icon: "fa-remove",  callback: function() {
+                                        window.location.href = node.data.href;
+                                    }
+                                    }
+                                }
+                            };
+                        }
+                    });
 
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
 
@@ -133,54 +98,25 @@
                         minExpandLevel: 2,
                         selectMode: 1,
                         checkbox: false,
-                        extensions: ["glyph", "dnd", "edit", "myContextMenu"],
-                        contextMenu: {
-                            menu: {
-                                "edit": {"name": "Bewerk", "icon": "edit"},
-                                "delete": {"name": "Verwijder", "icon": "delete"},
-                                "move": {"name": "Verplaats", "icon": "move"}
-                            }
-                        },
-                        glyph: {
-                            map: {
-                                checkbox: "glyphicon glyphicon-unchecked",
-                                checkboxSelected: "glyphicon glyphicon-check",
-                                checkboxUnknown: "glyphicon glyphicon-share",
-                                dragHelper: "glyphicon glyphicon-play",
-                                dropMarker: "glyphicon glyphicon-arrow-right",
-                                error: "glyphicon glyphicon-warning-sign",
-                                expanderClosed: "glyphicon glyphicon-chevron-right",
-                                expanderLazy: "glyphicon glyphicon-plus-sign",
-                                expanderOpen: "glyphicon glyphicon-chevron-down",
-                                loading: "glyphicon glyphicon-refresh glyphicon-spin",
-                                nodata: "glyphicon glyphicon-info-sign",
-                                // Default node icons.
-                                // (Use tree.options.icon callback to define custom icons based on node data)
-                                doc: "glyphicon glyphicon-file",
-                                docOpen: "glyphicon glyphicon-file",
-                                folder: "glyphicon glyphicon-folder-close",
-                                folderOpen: "glyphicon glyphicon-folder-open"
-                            }
-                        },
+                        extensions: ["dnd", "edit"],
                         toggleEffect: false,
-                        enhanceTitle: function(event, data) {
+                        enhanceTitle: function (event, data) {
                             data.$title.addClass("ws-wrap");
                         },
-                        click: function(event, data) {
+                        click: function (event, data) {
                             var node = data.node;
 
-                            if(event.button !== 2 && data.targetType === 'title') {
-                                if(node.data.href){
-                                    window.location.href=node.data.href;
+                            if (event.button !== 2 && data.targetType === 'title') {
+                                if (node.data.href) {
+                                    window.location.href = node.data.href;
                                 }
                             }
-
-                            if(event.button === 2) {
+                            if (event.button === 2) {
                                 return false;
                             }
                         },
-                        renderTitle: function(event, data) {
-                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title +'</span>';
+                        renderTitle: function (event, data) {
+                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
                         },
                         dnd: {
                             // Available options with their default:
@@ -242,10 +178,9 @@
                         node.setSelected(true)
                     }
 
-            }]
-        );
-    }
-    )();
+                }]
+            );
+        })();
 </script>
 
 
