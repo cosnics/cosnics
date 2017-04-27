@@ -15,14 +15,19 @@ class TypeSelector
     const PARAM_SELECTION = 'type_selection';
 
     /**
+     * @var TypeSelectorItemInterface[]
+     */
+    protected $typeSelectorItems;
+
+    /**
      *
-     * @var \core\repository\TypeSelectorCategory[]
+     * @var TypeSelectorCategory[]
      */
     private $categories;
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory[] $categories
+     * @param TypeSelectorCategory[] $categories
      */
     public function __construct($categories = array())
     {
@@ -40,7 +45,7 @@ class TypeSelector
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory $categories[]
+     * @param TypeSelectorCategory $categories[]
      */
     public function set_categories($categories)
     {
@@ -49,11 +54,55 @@ class TypeSelector
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory $category
+     * @param TypeSelectorCategory $category
      */
-    public function add_category($category)
+    public function add_category(TypeSelectorCategory $category)
     {
         $this->categories[$category->get_type()] = $category;
+        $this->typeSelectorItems[] = $category;
+    }
+
+    /**
+     * @param TypeSelectorOption $option
+     */
+    public function add_option(TypeSelectorOption $option)
+    {
+        $this->typeSelectorItems[] = $option;
+    }
+
+    /**
+     * @return TypeSelectorItemInterface[]
+     */
+    public function getTypeSelectorItems()
+    {
+        return $this->typeSelectorItems;
+    }
+
+    /**
+     * Returns all the type selector options as a flat list (even those nested within categories)
+     *
+     * @return TypeSelectorOption[]
+     */
+    public function getAllTypeSelectorOptions()
+    {
+        $typeSelectorOptions = array();
+
+        foreach($this->typeSelectorItems as $typeSelectorItem)
+        {
+            if($typeSelectorItem instanceof TypeSelectorOption)
+            {
+                $typeSelectorOptions[] = $typeSelectorItem;
+            }
+            elseif($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                foreach($typeSelectorItem->get_options() as $typeSelectorOption)
+                {
+                    $typeSelectorOptions[] = $typeSelectorOption;
+                }
+            }
+        }
+
+        return $typeSelectorOptions;
     }
 
     public function category_type_exists($category_type)
@@ -65,7 +114,7 @@ class TypeSelector
      *
      * @param string $type
      * @throws ObjectNotExistException
-     * @return \core\repository\TypeSelectorCategory
+     * @return TypeSelectorCategory
      */
     public function get_category_by_type($type)
     {
@@ -132,16 +181,23 @@ class TypeSelector
      */
     public function count()
     {
-        return count($this->get_categories());
+        return count($this->typeSelectorItems);
     }
 
     public function count_options()
     {
         $total = 0;
         
-        foreach ($this->get_categories() as $category)
+        foreach ($this->typeSelectorItems as $typeSelectorItem)
         {
-            $total += $category->count();
+            if($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                $total += $typeSelectorItem->count();
+            }
+            else
+            {
+                $total++;
+            }
         }
         
         return $total;

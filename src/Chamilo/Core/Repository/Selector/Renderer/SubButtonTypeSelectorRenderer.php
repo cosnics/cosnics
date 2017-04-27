@@ -61,17 +61,14 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
     public function render()
     {
         $subButtons = array();
-        
-        foreach ($this->get_type_selector()->get_categories() as $category)
+
+        foreach ($this->get_type_selector()->getAllTypeSelectorOptions() as $option)
         {
-            foreach ($category->get_options() as $option)
-            {
-                // If multiple categories add category header?
-                $subButtons[] = new SubButton(
-                    $option->get_label(), 
-                    $option->get_image_path(Theme::ICON_MINI), 
-                    $this->getContentObjectTypeUrl($option->get_template_registration_id()));
-            }
+            // If multiple categories add category header?
+            $subButtons[] = new SubButton(
+                $option->get_label(),
+                $option->get_image_path(Theme::ICON_MINI),
+                $this->getContentObjectTypeUrl($option->get_template_registration_id()));
         }
         
         return $subButtons;

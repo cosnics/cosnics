@@ -153,6 +153,10 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $registrations = $configuration->getIntegrationRegistrations(self::package());
         $types = array();
 
+        usort($registrations, function($registrationA, $registrationB) {
+           return $registrationA[Registration::PROPERTY_PRIORITY] < $registrationB[Registration::PROPERTY_PRIORITY];
+        });
+
         foreach ($registrations as $registration)
         {
             $type = $registration[Registration::PROPERTY_TYPE];
