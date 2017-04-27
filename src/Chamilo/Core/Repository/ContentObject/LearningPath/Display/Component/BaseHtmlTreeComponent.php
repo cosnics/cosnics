@@ -45,13 +45,13 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             return $this->display_error_page(Translation::get('NoObjectSelected'));
         }
 
-/*        $this->learning_path_menu = new LearningPathTreeRenderer(
-            $this->getLearningPathTree(), $this,
-            $this->getLearningPathTrackingService(),
-            $this->getAutomaticNumberingService(),
-            $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
-        );
-*/
+//        $this->learning_path_menu = new LearningPathTreeRenderer(
+//            $this->getLearningPathTree(), $this,
+//            $this->getLearningPathTrackingService(),
+//            $this->getAutomaticNumberingService(),
+//            $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
+//        );
+
 
         $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
         $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
@@ -128,6 +128,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $learningPathHtmlTree
         );
 
+//        $html[] = $this->learning_path_menu->render();
         $html[] = $learningPathHtmlTree;
 
         $html[] = '</div>';
