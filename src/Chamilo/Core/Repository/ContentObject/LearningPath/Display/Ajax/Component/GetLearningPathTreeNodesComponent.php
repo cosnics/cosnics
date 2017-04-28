@@ -5,7 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\NodeActionGenerator;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -27,6 +29,7 @@ class GetLearningPathTreeNodesComponent extends Manager
                 $learningPathTree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
+                new NodeActionGenerator(Translation::getInstance(), $this->get_application()->get_parameters()),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
                 $this->get_application()->getCurrentLearningPathTreeNode(),
                 $this->get_application()->get_application()->is_allowed_to_view_content_object()
