@@ -30,20 +30,28 @@
         font-size: 14px;
     }
 
-    span.fancytree-title:hover {
-        text-decoration: underline;
+    div.fancytree-edit-mode span.fancytree-title {
+        color: #b79b00;
+        font-size: 14px;
     }
+
+    /*span.fancytree-title:hover {
+        text-decoration: underline;
+    }*/
 
     .fa {
         width: inherit;
         text-align: inherit;
     }
+    .btn-drag {
+        width: 100%;
+    }
 </style>
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
-    <button class="btn btn-default">Pas aan</button>
-    <div id="tree" ng-mousedown="handleRightClick($event)"
-         oncontextmenu="return false">
+    <button class="btn btn-default btn-xs btn-drag" ng-click="dragEnabled=true" ng-hide="dragEnabled">Activeer Verslepen</button>
+    <button class="btn btn-warning btn-xs btn-drag" ng-click="dragEnabled=false" ng-show="dragEnabled">Stop met verslepen</button>
+    <div id="tree">
     </div>
 </div>
 
@@ -64,59 +72,101 @@
                                 node.setFocus(true);
                             }
                             return {
-                                callback: function (key, options) {
-                                    var m = "clicked: " + key;
-                                    window.console && console.log(m) || alert(m);
-                                },
-                                items: { //todo retrieve from node
-                                    "edit": {
+                                items: function () { //todo retrieve from node
+                                    var items = {};
+                                    items["addSection"] =
+                                        {
+                                            name: "Voeg sectie toe",
+                                            icon: "fa-plus",
+                                            callback: function () {
+                                                if(node.isFolder()) {
+                                                    node.editCreateNode("child", {
+                                                        title: "Pas titel aan...",
+                                                        folder: true
+                                                    });
+                                                }
+                                                else {
+                                                    node.editCreateNode("after", {
+                                                        title: "Pas titel aan...",
+                                                        folder: true
+                                                    });
+                                                }
+                                            }
+                                        };
+
+                                    items["addItem"] = {
+                                        name: "Voeg pagina toe",
+                                        icon: "fa-plus",
+                                        callback: function() {
+                                            if(node.isFolder()) {
+                                                node.editCreateNode("child", {
+                                                    title: "Pas titel aan...",
+                                                    folder: false
+                                                });
+                                            } else {
+                                                node.editCreateNode("after",{
+                                                    title: "Pas titel aan...",
+                                                    folder: false
+                                                });
+                                            }
+                                        }
+                                    };
+
+                                    items["editTitle"]= {
+                                        name: "Pas titel aan", icon: "fa-edit", callback: function () {
+                                            node.editStart()
+                                        }
+                                    };
+
+                                    items["edit"] = {
                                         name: "Bewerk", icon: "fa-edit", callback: function () {
                                             window.location.href = node.data.href;
                                         }
-                                    },
-                                    "move": {
+                                    };
+                                    items["move"]= {
                                         name: "Verplaats", icon: "fa-random", callback: function () {
                                             window.location.href = node.data.href;
                                         }
-                                    },
-                                    "delete": {name: "Verwijder", icon: "fa-remove",  callback: function() {
-                                        window.location.href = node.data.href;
-                                    }
-                                    }
-                                }
+                                    };
+                                    items["delete"]= {
+                                        name: "Verwijder", icon: "fa-remove", callback: function () {
+                                            window.location.href = node.data.href;
+                                        }
+                                    };
+
+                                    return items;
+                                }()
                             };
                         }
                     });
 
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
-
+                    $scope.dragEnabled = false;
                     var tree = $("#tree").fancytree({
                         source: {
                             url: fetchTreeNodesAjaxUrl,
                             cache: false
                         },
-                        minExpandLevel: 2,
-                        selectMode: 1,
-                        checkbox: false,
-                        extensions: ["dnd", "edit"],
-                        toggleEffect: false,
-                        enhanceTitle: function (event, data) {
-                            data.$title.addClass("ws-wrap");
-                        },
-                        click: function (event, data) {
-                            var node = data.node;
-
-                            if (event.button !== 2 && data.targetType === 'title') {
-                                if (node.data.href) {
-                                    window.location.href = node.data.href;
-                                }
+                        glyph: {
+                            map: {
+                                checkbox: "glyphicon glyphicon-unchecked",
+                                checkboxSelected: "glyphicon glyphicon-check",
+                                checkboxUnknown: "glyphicon glyphicon-share",
+                                dragHelper: "glyphicon glyphicon-play",
+                                dropMarker: "glyphicon glyphicon-arrow-right",
+                                error: "glyphicon glyphicon-warning-sign",
+                                expanderClosed: "glyphicon glyphicon-chevron-right",
+                                expanderLazy: "glyphicon glyphicon-plus-sign",
+                                expanderOpen: "glyphicon glyphicon-chevron-down",
+                                loading: "glyphicon glyphicon-refresh glyphicon-spin",
+                                nodata: "glyphicon glyphicon-info-sign",
+                                // Default node icons.
+                                // (Use tree.options.icon callback to define custom icons based on node data)
+                                doc: "glyphicon glyphicon-file",
+                                docOpen: "glyphicon glyphicon-file",
+                                folder: "glyphicon glyphicon-folder-close",
+                                folderOpen: "glyphicon glyphicon-folder-open"
                             }
-                            if (event.button === 2) {
-                                return false;
-                            }
-                        },
-                        renderTitle: function (event, data) {
-                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
                         },
                         dnd: {
                             // Available options with their default:
@@ -124,7 +174,7 @@
                             draggable: null,      // Additional options passed to jQuery UI draggable
                             droppable: null,      // Additional options passed to jQuery UI droppable
                             dropMarkerOffsetX: -24,  // absolute position offset for .fancytree-drop-marker
-                                                     // relatively to ..fancytree-title (icon/img near a node accepting drop)
+                            // relatively to ..fancytree-title (icon/img near a node accepting drop)
                             dropMarkerInsertOffsetX: -16, // additional offset for drop-marker with hitMode = "before"/"after"
                             focusOnClick: false,  // Focus, although draggable cancels mousedown event (#270)
                             preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
@@ -133,7 +183,7 @@
 
                             // Events that make tree nodes draggable
                             dragStart: function () {
-                                return true;
+                                return $scope.dragEnabled;
                             },      // Callback(sourceNode, data), return true to enable dnd
                             dragStop: null,       // Callback(sourceNode, data)
                             initHelper: null,     // Callback(sourceNode, data)
@@ -152,32 +202,32 @@
                                 data.otherNode.moveTo(node, data.hitMode);
                             },       // Callback(targetNode, data)
                             dragLeave: null       // Callback(targetNode, data)
+                        },
+                        minExpandLevel: 2,
+                        selectMode: 1,
+                        checkbox: false,
+                        extensions: ["dnd", "edit", "glyph"],
+                        toggleEffect: false,
+                        enhanceTitle: function (event, data) {
+                            data.$title.addClass("ws-wrap");
+                        },
+                        click: function (event, data) {
+                            var node = data.node;
+
+                            if (!$scope.dragEnabled && event.button !== 2 && data.targetType === 'title') {
+                                if (node.data.href) {
+                                    window.location.href = node.data.href;
+                                }
+                            }
+                            if (event.button === 2) {
+                                return false;
+                            }
+                        },
+                        renderTitle: function (event, data) {
+                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
                         }
 
                     });
-
-                    addChild = function () {
-                        var node = $("#tree").fancytree("getActiveNode");
-                        if (!node) {
-                            alert("Please activate a parent node.");
-                            return;
-                        }
-                        node.editCreateNode("child", "Node title");
-                        node.setSelected(true);
-
-                    };
-                    addSection = function () {
-                        var node = $("#tree").fancytree("getActiveNode");
-                        if (!node) {
-                            node = $("#tree").fancytree("getFirstChild");
-                        }
-                        node.editCreateNode("after", {
-                            title: "Node title",
-                            folder: true
-                        });
-                        node.setSelected(true)
-                    }
-
                 }]
             );
         })();
