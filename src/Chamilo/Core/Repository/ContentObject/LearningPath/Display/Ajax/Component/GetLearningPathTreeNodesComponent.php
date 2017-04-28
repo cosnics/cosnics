@@ -32,7 +32,10 @@ class GetLearningPathTreeNodesComponent extends Manager
                 new NodeActionGenerator(Translation::getInstance(), $this->get_application()->get_parameters()),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
                 $this->get_application()->getCurrentLearningPathTreeNode(),
-                $this->get_application()->get_application()->is_allowed_to_view_content_object()
+                $this->get_application()->get_application()->is_allowed_to_view_content_object(),
+                $this->get_application()->canEditLearningPathTreeNode(
+                    $this->get_application()->getCurrentLearningPathTreeNode()
+                )
             );
 
             $treeData = $learningPathTreeJSONMapper->getNodes();

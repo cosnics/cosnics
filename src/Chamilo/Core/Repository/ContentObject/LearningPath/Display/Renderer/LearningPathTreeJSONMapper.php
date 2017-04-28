@@ -68,6 +68,11 @@ class LearningPathTreeJSONMapper
     protected $user;
 
     /**
+     * @var bool
+     */
+    protected $allowedToEditLearningPathTree;
+
+    /**
      * @param LearningPathTree $learningPathTree
      * @param User $user
      * @param LearningPathTrackingService $learningPathTrackingService
@@ -82,7 +87,8 @@ class LearningPathTreeJSONMapper
         LearningPathTrackingService $learningPathTrackingService,
         AutomaticNumberingService $automaticNumberingService,
         NodeActionGenerator $nodeActionGenerator,
-        $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode, $allowedToViewContentObject
+        $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode,
+        $allowedToViewContentObject, $allowedToEditLearningPathTree = false
     )
     {
         $this->learningPathTree = $learningPathTree;
@@ -94,6 +100,7 @@ class LearningPathTreeJSONMapper
         $this->treeMenuUrl = $treeMenuUrl;
         $this->currentLearningPathTreeNode = $currentLearningPathTreeNode;
         $this->allowedToViewContentObject = $allowedToViewContentObject;
+        $this->allowedToEditLearningPathTree = $allowedToEditLearningPathTree;
     }
 
     /**
@@ -105,7 +112,8 @@ class LearningPathTreeJSONMapper
     {
         if ($this->allowedToViewContentObject)
         {
-            if ($this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+
+            if (!$this->allowedToEditLearningPathTree && $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
             )
             )
@@ -142,11 +150,11 @@ class LearningPathTreeJSONMapper
      */
     public function getNodes()
     {
-        $menu = array();
+        $nodeData = array();
 
-        $menu[] = $this->getMenuItem($this->learningPathTree->getRoot());
+        $nodeData[] = $this->getNodeDataForLearningPathTreeNode($this->learningPathTree->getRoot());
 
-        return $menu;
+        return $nodeData;
     }
 
     /**
@@ -154,62 +162,64 @@ class LearningPathTreeJSONMapper
      *
      * @return \string[]
      */
-    protected function getMenuItem(LearningPathTreeNode $node)
+    protected function getNodeDataForLearningPathTreeNode(LearningPathTreeNode $node)
     {
         $number = $this->automaticNumberingService->getAutomaticNumberingForLearningPathTreeNode($node);
 
-        $menuItem['key'] = $node->getId();
-        $menuItem['title'] = $node->getContentObject()->get_title();
-        $menuItem['number'] = is_null($number) ? '' : $number;
-        $menuItem['icon'] = $this->getItemIcon($node);
+        $nodeData = array();
+
+        $nodeData['key'] = $node->getId();
+        $nodeData['title'] = $node->getContentObject()->get_title();
+        $nodeData['number'] = is_null($number) ? '' : $number;
+        $nodeData['icon'] = $this->getItemIcon($node);
 
         if($node->getContentObject() instanceof LearningPath || $node->getContentObject() instanceof Section)
         {
-            $menuItem['folder'] = true;
+            $nodeData['folder'] = true;
         }
 
         if ($this->allowedToViewContentObject)
         {
-            $menuItem['href'] = $this->getNodeUrl($node->getId());
+            $nodeData['href'] = $this->getNodeUrl($node->getId());
         }
         else
         {
-            $menuItem['href'] = '#';
+            $nodeData['href'] = '#';
         }
 
         if ($this->isSelectedItem($node))
         {
-            $menuItem['active'] = true;
+            $nodeData['active'] = true;
         }
 
         if ($node === $this->currentLearningPathTreeNode)
         {
-            $menuItem['expanded'] = true;
+            $nodeData['expanded'] = true;
         }
 
         if ($node->hasChildNodes())
         {
             if (in_array($this->currentLearningPathTreeNode, $node->getDescendantNodes()))
             {
-                $menuItem['expanded'] = true;
+                $nodeData['expanded'] = true;
             }
 
-            $menuItem['children'] = array();
+            $nodeData['children'] = array();
 
             $children = $node->getChildNodes();
             foreach ($children as $child)
             {
-                $menuItem['children'][] = $this->getMenuItem($child);
+                $nodeData['children'][] = $this->getNodeDataForLearningPathTreeNode($child);
             }
         }
 
-        $actions = $this->nodeActionGenerator->generateNodeActions($node, true);
+        $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditLearningPathTree);
         foreach($actions as $action)
         {
-            $menuItem['actions'][$action->getName()] = $action->toArray();
+            $nodeData['actions'][$action->getName()] = $action->toArray();
         }
 
-        return $menuItem;
+        return $nodeData;
     }
 
     /**
