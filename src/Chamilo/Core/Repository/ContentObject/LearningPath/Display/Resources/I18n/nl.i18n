@@ -105,3 +105,4 @@ ViewReportingAsUser = "Je bent de rapportage momenteel aan het bekijken voor de 
 ReturnToUserList = "Keer terug naar de gebruikerslijst"
 Reporting = "Rapportage"
 MyProgress = "Mijn voortgang"
+CreateItem = "Voeg een nieuwe {ITEM} toe"

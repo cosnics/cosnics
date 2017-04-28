@@ -43,16 +43,23 @@ class TypeSelectorFactory
     protected $mode;
 
     /**
+     * @var bool
+     */
+    protected $defaultSorting;
+
+    /**
      *
      * @param string[] $contentObjectTypes
      * @param integer $userIdentifier
      * @param int $mode
+     * @param bool $defaultSorting
      */
-    public function __construct($contentObjectTypes = null, $userIdentifier = null, $mode = self::MODE_CATEGORIES)
+    public function __construct($contentObjectTypes = null, $userIdentifier = null, $mode = self::MODE_CATEGORIES, $defaultSorting = true)
     {
         $this->contentObjectTypes = $contentObjectTypes;
         $this->userIdentifier = $userIdentifier;
         $this->mode = $mode;
+        $this->defaultSorting = $defaultSorting;
     }
 
     /**
@@ -102,7 +109,8 @@ class TypeSelectorFactory
         return $typeSelectorCacheService->getForContentObjectTypesUserIdentifierAndMode(
             $this->getContentObjectTypes(),
             $this->getUserIdentifier(),
-            $this->mode
+            $this->mode,
+            $this->defaultSorting
         );
     }
 
@@ -176,8 +184,11 @@ class TypeSelectorFactory
                 }
             }
         }
-var_dump($typeSelector);
-        $typeSelector->sort();
+
+        if($this->defaultSorting)
+        {
+            $typeSelector->sort();
+        }
 
         return $typeSelector;
     }

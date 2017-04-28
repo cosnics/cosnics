@@ -79,6 +79,16 @@ class TypeSelector
     }
 
     /**
+     * Removes an item from the type selector by a given index
+     *
+     * @param int $index
+     */
+    public function removeTypeSelectorItemByIndex($index)
+    {
+        unset($this->typeSelectorItems[$index]);
+    }
+
+    /**
      * Returns all the type selector options as a flat list (even those nested within categories)
      *
      * @return TypeSelectorOption[]
@@ -135,10 +145,10 @@ class TypeSelector
     public function sort()
     {
         usort(
-            $this->categories, 
-            function ($category_a, $category_b)
+            $this->typeSelectorItems,
+            function ($itemA, $itemB)
             {
-                return strcmp($category_a->get_name(), $category_b->get_name());
+                return strcmp($itemA->get_name(), $itemB->get_name());
             });
         
         foreach ($this->categories as $category)
@@ -210,13 +220,23 @@ class TypeSelector
     public function get_unique_content_object_template_ids()
     {
         $types = array();
-        
-        foreach ($this->get_categories() as $category)
+
+        foreach ($this->typeSelectorItems as $typeSelectorItem)
         {
-            $types = array_merge($types, $category->get_unique_content_object_template_ids());
+            if($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                $types = array_merge($types, $typeSelectorItem->get_unique_content_object_template_ids());
+            }
+            elseif($typeSelectorItem instanceof TypeSelectorOption)
+            {
+                if (!in_array($typeSelectorItem->get_template_registration_id(), $types))
+                {
+                    $types[] = $typeSelectorItem->get_template_registration_id();
+                }
+            }
         }
-        
-        return array_unique($types);
+
+        return $types;
     }
 
     /**

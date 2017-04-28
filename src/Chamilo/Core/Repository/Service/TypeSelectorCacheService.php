@@ -20,6 +20,7 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     const PARAM_TYPES = 'types';
     const PARAM_USER_IDENTIFIER = 'user_identifier';
     const PARAM_MODE = 'mode';
+    const PARAM_DEFAULT_SORTING = 'default_sorting';
 
     /**
      *
@@ -84,13 +85,14 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     }
 
     public function getForContentObjectTypesUserIdentifierAndMode(
-        $contentObjectTypes, $userIdentifier = null, $mode = TypeSelectorFactory::MODE_CATEGORIES
+        $contentObjectTypes, $userIdentifier = null, $mode = TypeSelectorFactory::MODE_CATEGORIES,
+        $defaultSorting = true
     )
     {
         $parameterBag = new ParameterBag(
             array(
                 self::PARAM_TYPES => $contentObjectTypes, self::PARAM_USER_IDENTIFIER => $userIdentifier,
-                self::PARAM_MODE => $mode
+                self::PARAM_MODE => $mode, self::PARAM_DEFAULT_SORTING => $defaultSorting
             )
         );
 

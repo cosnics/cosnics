@@ -6,7 +6,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\NodeActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -56,6 +58,11 @@ class LearningPathTreeJSONMapper
     protected $allowedToViewContentObject;
 
     /**
+     * @var NodeActionGenerator
+     */
+    protected $nodeActionGenerator;
+
+    /**
      * @var User
      */
     protected $user;
@@ -65,6 +72,7 @@ class LearningPathTreeJSONMapper
      * @param User $user
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param AutomaticNumberingService $automaticNumberingService
+     * @param NodeActionGenerator $nodeActionGenerator
      * @param string $treeMenuUrl
      * @param LearningPathTreeNode $currentLearningPathTreeNode
      * @param bool $allowedToViewContentObject
@@ -73,6 +81,7 @@ class LearningPathTreeJSONMapper
         LearningPathTree $learningPathTree, User $user,
         LearningPathTrackingService $learningPathTrackingService,
         AutomaticNumberingService $automaticNumberingService,
+        NodeActionGenerator $nodeActionGenerator,
         $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode, $allowedToViewContentObject
     )
     {
@@ -81,6 +90,7 @@ class LearningPathTreeJSONMapper
         $this->learningPath = $learningPathTree->getRoot()->getContentObject();
         $this->learningPathTrackingService = $learningPathTrackingService;
         $this->automaticNumberingService = $automaticNumberingService;
+        $this->nodeActionGenerator = $nodeActionGenerator;
         $this->treeMenuUrl = $treeMenuUrl;
         $this->currentLearningPathTreeNode = $currentLearningPathTreeNode;
         $this->allowedToViewContentObject = $allowedToViewContentObject;
@@ -153,6 +163,11 @@ class LearningPathTreeJSONMapper
         $menuItem['number'] = is_null($number) ? '' : $number;
         $menuItem['icon'] = $this->getItemIcon($node);
 
+        if($node->getContentObject() instanceof LearningPath || $node->getContentObject() instanceof Section)
+        {
+            $menuItem['folder'] = true;
+        }
+
         if ($this->allowedToViewContentObject)
         {
             $menuItem['href'] = $this->getNodeUrl($node->getId());
@@ -186,6 +201,12 @@ class LearningPathTreeJSONMapper
             {
                 $menuItem['children'][] = $this->getMenuItem($child);
             }
+        }
+
+        $actions = $this->nodeActionGenerator->generateNodeActions($node, true);
+        foreach($actions as $action)
+        {
+            $menuItem['actions'][$action->getName()] = $action->toArray();
         }
 
         return $menuItem;

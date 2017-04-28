@@ -32,43 +32,43 @@ class ActionSelector
      *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private $application;
+    protected $application;
 
     /**
      *
      * @var integer
      */
-    private $userIdentifier;
+    protected $userIdentifier;
 
     /**
      *
      * @var string[]
      */
-    private $allowedContentObjectTypes;
+    protected $allowedContentObjectTypes;
 
     /**
      *
      * @var string[]
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      *
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
-    private $extraActions;
+    protected $extraActions;
 
     /**
      *
      * @var \Chamilo\Core\Repository\Selector\TypeSelector
      */
-    private $typeSelector;
+    protected $typeSelector;
 
     /**
      *
      * @var string
      */
-    private $classes;
+    protected $classes;
 
     /**
      *
@@ -255,32 +255,62 @@ class ActionSelector
         return $dropdownButton;
     }
 
+    /**
+     * Returns the dropdown button
+     *
+     * @param string $label
+     * @param mixed $image
+     *
+     * @return DropdownButton|SplitDropdownButton
+     */
     public function getDropdownButton($label, $image)
     {
         $typeSelector = $this->getTypeSelector();
 
         if ($typeSelector->count_options() == 1)
         {
-            $dropdownButton = new SplitDropdownButton(
-                $label,
-                $image,
-                $this->getSingleCreationOptionUrl(),
-                SplitDropdownButton::DISPLAY_ICON_AND_LABEL,
-                false,
-                $this->getClasses()
-            );
-        }
-        else
-        {
-            $dropdownButton = new DropdownButton(
-                $label,
-                $image,
-                SplitDropdownButton::DISPLAY_ICON_AND_LABEL,
-                $this->getClasses()
-            );
+            return $this->getSingleCreationOptionDropdownButton($label, $image);
         }
 
-        return $dropdownButton;
+        return $this->getMultipleCreationOptionsDropdownButton($label, $image);
+    }
+
+    /**
+     * Returns the dropdown button with the first creation option as default option
+     *
+     * @param $label
+     * @param $image
+     *
+     * @return SplitDropdownButton
+     */
+    protected function getSingleCreationOptionDropdownButton($label, $image)
+    {
+        return new SplitDropdownButton(
+            $label,
+            $image,
+            $this->getSingleCreationOptionUrl(),
+            SplitDropdownButton::DISPLAY_ICON_AND_LABEL,
+            false,
+            $this->getClasses()
+        );
+    }
+
+    /**
+     * Returns the dropdown button without a default option
+     *
+     * @param $label
+     * @param $image
+     *
+     * @return DropdownButton
+     */
+    protected function getMultipleCreationOptionsDropdownButton($label, $image)
+    {
+        return new DropdownButton(
+            $label,
+            $image,
+            SplitDropdownButton::DISPLAY_ICON_AND_LABEL,
+            $this->getClasses()
+        );
     }
 
     /**
@@ -301,7 +331,7 @@ class ActionSelector
         $typeSelector = $this->getTypeSelector();
 
         $templateIds = $typeSelector->get_unique_content_object_template_ids();
-        $templateId = array_pop($templateIds);
+        $templateId = array_shift($templateIds);
 
         return $this->getSubButtonTypeSelectorRenderer()->getContentObjectTypeUrl($templateId);
     }

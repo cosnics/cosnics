@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathActionSelector;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -12,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -225,17 +227,24 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
             $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getId();
 
-            $actionSelector = new ActionSelector(
+            $allowedTypes = $this->get_root_content_object()->get_allowed_types();
+
+            $actionSelector = new LearningPathActionSelector(
                 $this,
                 $this->getUser()->getId(),
-                $this->get_root_content_object()->get_allowed_types(),
+                $allowedTypes,
                 $parameters,
                 array(),
                 'btn-primary'
             );
 
+            /** @var ClassnameUtilities $classNameUtilities */
+            $classNameUtilities = $this->getService('chamilo.libraries.architecture.classname_utilities');
+            $firstItemContext = $classNameUtilities->getNamespaceParent(array_shift($allowedTypes), 3);
+            $itemTranslation = $translator->getTranslation('TypeName', null, $firstItemContext);
+
             $actionButton = $actionSelector->getActionButton(
-                $translator->getTranslation('CreatorComponent', null, Manager::context()),
+                $translator->getTranslation('CreateItem', array('ITEM' => lcfirst($itemTranslation)), Manager::context()),
                 new BootstrapGlyph('plus')
             );
 
