@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Selector\Renderer;
 
 use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
@@ -29,10 +30,12 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
      * @param \Chamilo\Core\Repository\Selector\TypeSelector $typeSelector
      * @param string[] $parameters
      */
-    public function __construct(Application $parent, TypeSelector $typeSelector, $parameters = array())
+    public function __construct(
+        Application $parent, TypeSelector $typeSelector, $parameters = array()
+    )
     {
         parent::__construct($parent, $typeSelector);
-        
+
         $this->parameters = $parameters;
     }
 
@@ -62,30 +65,34 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
     {
         $subButtons = array();
 
+        $firstItemExcluded = false;
+
         foreach ($this->get_type_selector()->getAllTypeSelectorOptions() as $option)
         {
             // If multiple categories add category header?
             $subButtons[] = new SubButton(
                 $option->get_label(),
                 $option->get_image_path(Theme::ICON_MINI),
-                $this->getContentObjectTypeUrl($option->get_template_registration_id()));
+                $this->getContentObjectTypeUrl($option->get_template_registration_id())
+            );
         }
-        
+
         return $subButtons;
     }
 
     /**
      *
      * @param integer $templateRegistrationIdentifier
+     *
      * @return string
      */
     public function getContentObjectTypeUrl($templateRegistrationIdentifier)
     {
         $objectTypeParameters = $this->getParameters();
         $objectTypeParameters[TypeSelector::PARAM_SELECTION] = $templateRegistrationIdentifier;
-        
+
         $url = new Redirect($objectTypeParameters);
-        
+
         return $url->getUrl();
     }
 }

@@ -163,6 +163,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
             $parentContext = $classNameUtilities->getNamespaceParent($type);
             $parentRegistration = $configuration->get_registration($parentContext);
 
+            if($parentContext == 'Chamilo\Core\Repository\ContentObject\Section')
+            {
+                continue;
+            }
+
             if ($parentRegistration[Registration::PROPERTY_TYPE] ==
                 \Chamilo\Core\Repository\Manager::context() . '\ContentObject'
             )
