@@ -64,6 +64,17 @@
                 'learningPathHtmlTreeController',
                 ['$scope', '$http', function ($scope, $http) {
 
+
+                    var extractContextMenuItemFromNodeAction = function(node, action) {
+                        return {
+                            name: node.data.actions[action].title,
+                            //icon: '-' + node.data.actions[action].image,
+                            callback: function () {
+                                window.location.href = node.data.actions[action].url;
+                            }
+                        }
+                    };
+
                     $.contextMenu({
                         selector: ".fancytree-title",
                         build: function ($triggerElement, e) {
@@ -74,6 +85,7 @@
                             return {
                                 items: function () { //todo retrieve from node
                                     var items = {};
+
                                     items["addSection"] =
                                         {
                                             name: "Voeg sectie toe",
@@ -111,28 +123,13 @@
                                             }
                                         }
                                     };
-
                                     items["editTitle"]= {
                                         name: "Pas titel aan", icon: "fa-edit", callback: function () {
                                             node.editStart()
                                         }
                                     };
-
-                                    items["edit"] = {
-                                        name: "Bewerk", icon: "fa-edit", callback: function () {
-                                            window.location.href = node.data.href;
-                                        }
-                                    };
-                                    items["move"]= {
-                                        name: "Verplaats", icon: "fa-random", callback: function () {
-                                            window.location.href = node.data.href;
-                                        }
-                                    };
-                                    items["delete"]= {
-                                        name: "Verwijder", icon: "fa-remove", callback: function () {
-                                            window.location.href = node.data.href;
-                                        }
-                                    };
+                                    items["edit"] = extractContextMenuItemFromNodeAction(node, "edit");
+                                    items["delete"]= extractContextMenuItemFromNodeAction(node, "delete");
 
                                     return items;
                                 }()
