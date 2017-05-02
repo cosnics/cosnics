@@ -38,19 +38,28 @@ class Action
     protected $image;
 
     /**
+     * Confirmation message. If empty there is no confirmation necessary
+     *
+     * @var string
+     */
+    protected $confirmationMessage;
+
+    /**
      * Action constructor.
      *
      * @param $name
-     * @param string $url
      * @param string $title
+     * @param string $url
      * @param string $image
+     * @param string $confirmationMessage
      */
-    public function __construct($name, $title, $url, $image = null)
+    public function __construct($name, $title, $url, $image = null, $confirmationMessage = null)
     {
         $this->name = $name;
         $this->url = $url;
         $this->title = $title;
         $this->image = $image;
+        $this->confirmationMessage = $confirmationMessage;
     }
 
     /**
@@ -118,6 +127,32 @@ class Action
     }
 
     /**
+     * @return string
+     */
+    public function getConfirmationMessage()
+    {
+        return $this->confirmationMessage;
+    }
+
+    /**
+     * @param string $confirmationMessage
+     */
+    public function setConfirmationMessage(string $confirmationMessage)
+    {
+        $this->confirmationMessage = $confirmationMessage;
+    }
+
+    /**
+     * Checks whether or not the action needs confirmation
+     *
+     * @return bool
+     */
+    public function needsConfirmation()
+    {
+        return !empty($this->getConfirmationMessage());
+    }
+
+    /**
      * Converts this object's properties to an array
      *
      * @return array
@@ -128,7 +163,9 @@ class Action
             'name' => $this->getName(),
             'title' => $this->getTitle(),
             'url' => $this->getUrl(),
-            'image' => $this->getImage()
+            'image' => $this->getImage(),
+            'confirm' => $this->needsConfirmation(),
+            'confirmation_message' => $this->getConfirmationMessage()
         );
     }
 }

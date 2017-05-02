@@ -893,3 +893,17 @@ ul.nav-wizard.publication-wizard {
 .text-muted-invisible {
 	color: #777777 !important;
 }
+
+/** Context Menu **/
+.context-menu-item {
+	padding: 7px 12px 7px 28px;
+}
+
+.context-menu-item.context-menu-separator {
+	padding: 0;
+}
+
+.context-menu-icon.context-menu-icon--fa::before {
+	color: #406e8e;
+	font-size: 14px;
+}

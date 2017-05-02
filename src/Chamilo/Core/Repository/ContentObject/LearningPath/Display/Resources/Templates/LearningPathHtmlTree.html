@@ -66,11 +66,23 @@
 
 
                     var extractContextMenuItemFromNodeAction = function(node, action) {
+                        if(node.data.actions[action] === undefined) return null;
+
+                        var nodeActionData = node.data.actions[action];
                         return {
-                            name: node.data.actions[action].title,
-                            //icon: '-' + node.data.actions[action].image,
+                            name: nodeActionData.title,
+                            icon: nodeActionData.image,
                             callback: function () {
-                                window.location.href = node.data.actions[action].url;
+                                if(nodeActionData.confirm)
+                                {
+                                    var result = confirm(nodeActionData.confirmation_message);
+                                    if(result === false)
+                                    {
+                                        return;
+                                    }
+                                }
+
+                                window.location.href = nodeActionData.url;
                             }
                         }
                     };
@@ -86,50 +98,54 @@
                                 items: function () { //todo retrieve from node
                                     var items = {};
 
-                                    items["addSection"] =
-                                        {
-                                            name: "Voeg sectie toe",
-                                            icon: "fa-plus",
-                                            callback: function () {
-                                                if(node.isFolder()) {
+                                    if(node.folder === true) {
+                                        items["addSection"] =
+                                            {
+                                                name: "Voeg sectie toe",
+                                                icon: "fa-plus",
+                                                callback: function () {
                                                     node.editCreateNode("child", {
                                                         title: "Pas titel aan...",
                                                         folder: true
                                                     });
                                                 }
-                                                else {
-                                                    node.editCreateNode("after", {
-                                                        title: "Pas titel aan...",
-                                                        folder: true
-                                                    });
-                                                }
-                                            }
-                                        };
+                                            };
 
-                                    items["addItem"] = {
-                                        name: "Voeg pagina toe",
-                                        icon: "fa-plus",
-                                        callback: function() {
-                                            if(node.isFolder()) {
+                                        items["addItem"] = {
+                                            name: "Voeg pagina toe",
+                                            icon: "fa-plus",
+                                            callback: function () {
                                                 node.editCreateNode("child", {
                                                     title: "Pas titel aan...",
                                                     folder: false
                                                 });
-                                            } else {
-                                                node.editCreateNode("after",{
-                                                    title: "Pas titel aan...",
-                                                    folder: false
-                                                });
                                             }
-                                        }
-                                    };
+                                        };
+
+                                        items['sep0'] = '-';
+
+                                    }
+
                                     items["editTitle"]= {
                                         name: "Pas titel aan", icon: "fa-edit", callback: function () {
                                             node.editStart()
                                         }
                                     };
-                                    items["edit"] = extractContextMenuItemFromNodeAction(node, "edit");
-                                    items["delete"]= extractContextMenuItemFromNodeAction(node, "delete");
+
+                                    var actions = ['edit', 'delete', 'move', '-', 'block', '-', 'reporting', 'progress', '-', 'activity', 'manage'];
+                                    var separatorCounter = 1;
+
+                                    actions.forEach(function(action) {
+                                        if(action === '-') {
+                                            items['sep' + separatorCounter] = '-';
+                                        }
+                                        else {
+                                            var item = extractContextMenuItemFromNodeAction(node, action);
+                                            if (item !== null) {
+                                                items[action] = item;
+                                            }
+                                        }
+                                    });
 
                                     return items;
                                 }()

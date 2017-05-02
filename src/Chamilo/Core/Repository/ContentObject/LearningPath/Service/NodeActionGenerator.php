@@ -50,13 +50,13 @@ class NodeActionGenerator
     {
         $actions = array();
 
-        if($canEditLearningPathTreeNode)
+        if ($canEditLearningPathTreeNode)
         {
             $actions[] = $this->getUpdateNodeAction($learningPathTreeNode);
             $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
             $actions[] = $this->getNodeReportingAction($learningPathTreeNode);
 
-            if(!$learningPathTreeNode->isRootNode())
+            if (!$learningPathTreeNode->isRootNode())
             {
                 $actions[] = $this->getDeleteNodeAction($learningPathTreeNode);
                 $actions[] = $this->getMoveNodeAction($learningPathTreeNode);
@@ -66,7 +66,7 @@ class NodeActionGenerator
         $actions[] = $this->getMyProgressNodeAction($learningPathTreeNode);
         $actions[] = $this->getNodeActivityAction($learningPathTreeNode);
 
-        if($learningPathTreeNode->hasChildNodes())
+        if ($learningPathTreeNode->hasChildNodes())
         {
             $actions[] = $this->getManageNodesAction($learningPathTreeNode);
         }
@@ -111,7 +111,9 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('delete', $title, $url, 'fa-times');
+        return new Action(
+            'delete', $title, $url, 'fa-times', $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries')
+        );
     }
 
     /**

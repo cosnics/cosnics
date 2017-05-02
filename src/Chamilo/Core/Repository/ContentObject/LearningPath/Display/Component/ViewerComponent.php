@@ -314,7 +314,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                             self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                         )
-                    )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL,
+                    true
                 )
             );
         }

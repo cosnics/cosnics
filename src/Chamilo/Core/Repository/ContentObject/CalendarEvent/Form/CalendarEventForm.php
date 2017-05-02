@@ -57,7 +57,7 @@ class CalendarEventForm extends ContentObjectForm
             'id="start_date" style="width:120px;"');
         $this->addGroup($start_date, CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent::PROPERTY_START_DATE);
-        
+
         $end_date = array();
         $end_date[] = $this->createElement(
             'text', 
@@ -66,7 +66,7 @@ class CalendarEventForm extends ContentObjectForm
             'id="end_date" style="width:120px;"');
         $this->addGroup($end_date, CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent::PROPERTY_END_DATE);
-        
+
         // frequency
         // no repeat
         $this->addElement(
