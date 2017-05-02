@@ -91,7 +91,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('edit', $title, $url, 'fa fa-pencil');
+        return new Action('edit', $title, $url, 'fa-pencil');
     }
 
     /**
@@ -111,7 +111,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('delete', $title, $url, 'glyphicon glyphicon-remove');
+        return new Action('delete', $title, $url, 'fa-times');
     }
 
     /**
@@ -131,7 +131,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('move', $title, $url, 'glyphicon glyphicon-random');
+        return new Action('move', $title, $url, 'fa-random');
     }
 
     /**
@@ -151,7 +151,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('activity', $title, $url, 'fa fa-mouse-pointer');
+        return new Action('activity', $title, $url, 'fa-mouse-pointer');
     }
 
     /**
@@ -171,7 +171,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('manage', $title, $url, 'fa fa-bars');
+        return new Action('manage', $title, $url, 'fa-bars');
     }
 
     /**
@@ -199,7 +199,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('block', $title, $url, 'fa fa-' . $icon);
+        return new Action('block', $title, $url, 'fa-' . $icon);
     }
 
     /**
@@ -219,7 +219,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('progress', $title, $url, 'fa fa-pie-chart');
+        return new Action('progress', $title, $url, 'fa-pie-chart');
     }
 
     /**
@@ -239,7 +239,7 @@ class NodeActionGenerator
             )
         );
 
-        return new Action('reporting', $title, $url, 'fa fa-bar-chart');
+        return new Action('reporting', $title, $url, 'fa-bar-chart');
     }
 
     /**

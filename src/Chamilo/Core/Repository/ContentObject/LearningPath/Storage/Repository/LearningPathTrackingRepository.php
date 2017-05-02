@@ -157,10 +157,13 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $learningPathChildAttemptClassName =
             $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
 
+        $learningPathAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
 
         $joins = new Joins();
-        $joins->add($this->getJoinForLearningPathAttemptWithLearningPathChildAttempt());
+        $joins->add($this->getJoinForLearningPathAttemptWithLearningPathChildAttempt($learningPathAttemptClassName));
 
         $parameters = new DataClassRetrievesParameters($condition, null, null, array(), $joins);
 
@@ -689,7 +692,11 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         }
 
         $joins = new Joins();
-        $joins->add($this->getJoinForLearningPathAttemptWithLearningPathChildAttempt());
+
+        $joins->add(
+            $this->getJoinForLearningPathAttemptWithLearningPathChildAttempt($learningPathChildAttemptClassName)
+        );
+
         $joins->add($this->getJoinForLearningPathChildAttemptWithLearningPathQuestionAttempt());
 
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
@@ -703,9 +710,11 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     /**
      * Builds a Join object between LearningPathAttempt and LearningPathChildAttempt
      *
+     * @param string $joinWithClass - The class to join with, depends on what the base class in the select is
+     *
      * @return Join
      */
-    protected function getJoinForLearningPathAttemptWithLearningPathChildAttempt()
+    protected function getJoinForLearningPathAttemptWithLearningPathChildAttempt($joinWithClass)
     {
         $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
 
@@ -713,7 +722,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
             $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
 
         return new Join(
-            $learningPathChildAttemptClassName,
+            $joinWithClass,
             new EqualityCondition(
                 new PropertyConditionVariable($learningPathAttemptClassName, LearningPathAttempt::PROPERTY_ID),
                 new PropertyConditionVariable(

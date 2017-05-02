@@ -25,6 +25,7 @@ class GetLearningPathTreeNodesComponent extends Manager
         try
         {
             $learningPathTree = $this->get_application()->getLearningPathTree();
+
             $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
                 $learningPathTree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
@@ -46,40 +47,7 @@ class GetLearningPathTreeNodesComponent extends Manager
         {
             JsonAjaxResult::general_error();
         }
-    }
 
-    /**
-     * Builds the data from a LearningPathTreeNode as an array
-     *
-     * @param LearningPathTreeNode $learningPathTreeNode
-     *
-     * @return array
-     */
-    protected function getTreeNodesAsArray(LearningPathTreeNode $learningPathTreeNode)
-    {
-        $title = $this->get_application()->getAutomaticNumberingService()
-            ->getAutomaticNumberedTitleForLearningPathTreeNode(
-                $learningPathTreeNode
-            );
-
-        $treeItem = array(
-            'key' => $learningPathTreeNode->getId(),
-            'title' => $title
-        );
-
-        if ($learningPathTreeNode->hasChildNodes())
-        {
-            $treeItem['folder'] = 'true';
-            $treeData = array();
-
-            foreach ($learningPathTreeNode->getChildNodes() as $childLearningPathTreeNode)
-            {
-                $treeData[] = $this->getTreeNodesAsArray($childLearningPathTreeNode);
-            }
-
-            $treeItem['children'] = $treeData;
-        }
-
-        return $treeItem;
+        return null;
     }
 }
