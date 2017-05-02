@@ -409,6 +409,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
         ButtonGroup $buttonGroup, Translation $translator, LearningPathTreeNode $learningPathTreeNode
     )
     {
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            return;
+        }
+
         $translationVariable = ($learningPathTreeNode->getLearningPathChild() &&
             $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';

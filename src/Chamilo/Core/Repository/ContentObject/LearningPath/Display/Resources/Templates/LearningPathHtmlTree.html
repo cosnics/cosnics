@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <style>
     .ws-wrap {
         white-space: normal;
@@ -49,8 +50,8 @@
 </style>
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
-    <button class="btn btn-default btn-xs btn-drag" ng-click="dragEnabled=true" ng-hide="dragEnabled">Activeer Verslepen</button>
-    <button class="btn btn-warning btn-xs btn-drag" ng-click="dragEnabled=false" ng-show="dragEnabled">Stop met verslepen</button>
+    <button class="btn btn-default btn-xs btn-drag" ng-click="dragEnabled=true" ng-hide="dragEnabled" ng-show="canEditLearningPathTree">Activeer Verslepen</button>
+    <button class="btn btn-warning btn-xs btn-drag" ng-click="dragEnabled=false" ng-show="dragEnabled" ng-show="canEditLearningPathTree">Stop met verslepen</button>
     <div id="tree">
     </div>
 </div>
@@ -64,7 +65,7 @@
                 'learningPathHtmlTreeController',
                 ['$scope', '$http', function ($scope, $http) {
 
-
+                    $scope.canEditLearningPathTree = {{ canEditLearningPathTree }};
                     var extractContextMenuItemFromNodeAction = function(node, action) {
                         if(node.data.actions[action] === undefined) return null;
 
@@ -89,6 +90,7 @@
 
                     $.contextMenu({
                         selector: ".fancytree-title",
+                        zIndex: 10001,
                         build: function ($triggerElement, e) {
                             node = $.ui.fancytree.getNode($triggerElement);
                             if (node) {
@@ -98,46 +100,52 @@
                                 items: function () { //todo retrieve from node
                                     var items = {};
 
-                                    if(node.folder === true) {
-                                        items["addSection"] =
-                                            {
-                                                name: "Voeg sectie toe",
+                                    if($scope.canEditLearningPathTree) {
+                                        if (node.folder === true) {
+                                            items["addSection"] =
+                                                {
+                                                    name: "Voeg sectie toe",
+                                                    icon: "fa-plus",
+                                                    callback: function () {
+                                                        node.editCreateNode("child", {
+                                                            title: "Pas titel aan...",
+                                                            folder: true
+                                                        });
+                                                    }
+                                                };
+
+                                            items["addItem"] = {
+                                                name: "Voeg pagina toe",
                                                 icon: "fa-plus",
                                                 callback: function () {
                                                     node.editCreateNode("child", {
                                                         title: "Pas titel aan...",
-                                                        folder: true
+                                                        folder: false
                                                     });
                                                 }
                                             };
 
-                                        items["addItem"] = {
-                                            name: "Voeg pagina toe",
-                                            icon: "fa-plus",
-                                            callback: function () {
-                                                node.editCreateNode("child", {
-                                                    title: "Pas titel aan...",
-                                                    folder: false
-                                                });
+                                            items['sep0'] = '-';
+
+                                        }
+
+                                        items["editTitle"] = {
+                                            name: "Pas titel aan", icon: "fa-edit", callback: function () {
+                                                node.editStart()
                                             }
                                         };
 
-                                        items['sep0'] = '-';
-
+                                        var actions = ['edit', 'delete', 'move', '-', 'block', '-', 'reporting', 'progress', '-', 'activity', 'manage'];
+                                    } else {
+                                        var actions = ['progress', 'activity'];
                                     }
 
-                                    items["editTitle"]= {
-                                        name: "Pas titel aan", icon: "fa-edit", callback: function () {
-                                            node.editStart()
-                                        }
-                                    };
-
-                                    var actions = ['edit', 'delete', 'move', '-', 'block', '-', 'reporting', 'progress', '-', 'activity', 'manage'];
                                     var separatorCounter = 1;
 
                                     actions.forEach(function(action) {
                                         if(action === '-') {
                                             items['sep' + separatorCounter] = '-';
+                                            separatorCounter++;
                                         }
                                         else {
                                             var item = extractContextMenuItemFromNodeAction(node, action);

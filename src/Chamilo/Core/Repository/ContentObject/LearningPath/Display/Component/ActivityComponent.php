@@ -48,6 +48,16 @@ class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, D
     {
     }
 
+    /**
+     * Backwards Compatibility for the generic ActivityTable
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
+    public function get_current_content_object()
+    {
+        return $this->getCurrentContentObject();
+    }
+
     public function get_additional_parameters()
     {
         return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);

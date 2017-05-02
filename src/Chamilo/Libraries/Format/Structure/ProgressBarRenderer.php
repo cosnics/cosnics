@@ -23,16 +23,18 @@ class ProgressBarRenderer
      *
      * @return string
      */
-    public function render($progress, $mode = self::MODE_DEFAULT)
+    public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150)
     {
         $this->validateProgress($progress);
         $this->validateMode($mode);
+
+        $maxWidth = is_integer($maxWidth) && $maxWidth > 0 ? $maxWidth . 'px' : '100%';
 
         $contextualClass = $mode == self::MODE_DEFAULT ? '' : 'progress-bar-' . $mode;
 
         $html = array();
 
-        $html[] = '<div class="progress" style="margin-bottom: 0; max-width: 150px;">';
+        $html[] = '<div class="progress" style="margin-bottom: 0; max-width: ' . $maxWidth . ';">';
         $html[] = '<div class="progress-bar ' . $contextualClass . '" role="progressbar" aria-valuenow="' . $progress;
         $html[] = '" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: ' . $progress . '%;">';
         $html[] = $progress . '%';

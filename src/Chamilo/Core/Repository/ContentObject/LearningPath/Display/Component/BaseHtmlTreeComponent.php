@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -52,7 +53,6 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 //            $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
 //        );
 
-
         $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
         $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
 
@@ -72,8 +72,6 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     abstract function build();
 
     /**
-     *
-     * @see \libraries\SubManager::render_header()
      */
     public function render_header()
     {
@@ -122,25 +120,36 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             ) . '/Templates/LearningPathHtmlTree.html';
         $learningPathHtmlTree = file_get_contents($learningPathHtmlTreePath);
 
-        $learningPathHtmlTree = str_replace(
-            "{{ fetchTreeNodesAjaxUrl }}",
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
-            $learningPathHtmlTree
+        $parameters = array(
+            'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
+            'canEditLearningPathTree' =>
+                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false'
         );
+
+        foreach($parameters as $parameter => $value)
+        {
+            $learningPathHtmlTree = str_replace('{{ ' . $parameter . ' }}', $value, $learningPathHtmlTree);
+        }
 
 //        $html[] = $this->learning_path_menu->render();
         $html[] = $learningPathHtmlTree;
 
         $html[] = '</div>';
 
-        $action = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? self::ACTION_REPORTING :
-            self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+        if($this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
+        {
+            $learningPathTrackingService = $this->getLearningPathTrackingService();
+            $progress =
+                $learningPathTrackingService->getLearningPathProgress(
+                    $this->get_root_content_object(), $this->getUser()
+                );
 
-        $title = $this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT ? 'Reporting' : 'Viewer';
+            $progressBarRenderer = new ProgressBarRenderer();
 
-        $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => $action)) . '" class="btn btn-default">';
-        $html[] = Translation::getInstance()->getTranslation($title);
-        $html[] = '</a>';
+            $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)) . '">';
+            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0);
+            $html[] = '</a>';
+        }
 
         $html[] = '</div>';
 

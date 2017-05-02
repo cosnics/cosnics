@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -17,6 +18,11 @@ class ToggleBlockedStatusComponent extends Manager
      */
     public function run()
     {
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            throw new NotAllowedException();
+        }
+
         $this->validateSelectedLearningPathChild();
 
         $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
