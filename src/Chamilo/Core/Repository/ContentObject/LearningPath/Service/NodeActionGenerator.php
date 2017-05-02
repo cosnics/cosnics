@@ -53,8 +53,22 @@ class NodeActionGenerator
         if($canEditLearningPathTreeNode)
         {
             $actions[] = $this->getUpdateNodeAction($learningPathTreeNode);
-            $actions[] = $this->getDeleteNodeAction($learningPathTreeNode);
-            $actions[] = $this->getMoveNodeAction($learningPathTreeNode);
+            $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
+            $actions[] = $this->getNodeReportingAction($learningPathTreeNode);
+
+            if(!$learningPathTreeNode->isRootNode())
+            {
+                $actions[] = $this->getDeleteNodeAction($learningPathTreeNode);
+                $actions[] = $this->getMoveNodeAction($learningPathTreeNode);
+            }
+        }
+
+        $actions[] = $this->getMyProgressNodeAction($learningPathTreeNode);
+        $actions[] = $this->getNodeActivityAction($learningPathTreeNode);
+
+        if($learningPathTreeNode->hasChildNodes())
+        {
+            $actions[] = $this->getManageNodesAction($learningPathTreeNode);
         }
 
         return $actions;
@@ -118,6 +132,114 @@ class NodeActionGenerator
         );
 
         return new Action('move', $title, $url, 'glyphicon glyphicon-random');
+    }
+
+    /**
+     * Returns the action to view the activity of a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getNodeActivityAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
+        $url = $this->getUrl(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY,
+                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+            )
+        );
+
+        return new Action('activity', $title, $url, 'fa fa-mouse-pointer');
+    }
+
+    /**
+     * Returns the action to view the activity of a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getManageNodesAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
+        $url = $this->getUrl(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_MANAGE,
+                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+            )
+        );
+
+        return new Action('manage', $title, $url, 'fa fa-bars');
+    }
+
+    /**
+     * Returns the action to block or unblock a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getBlockOrUnblockNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $translationVariable = ($learningPathTreeNode->getLearningPathChild() &&
+            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+            'MarkAsOptional' : 'MarkAsRequired';
+
+        $icon = ($learningPathTreeNode->getLearningPathChild() &&
+            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+            'unlock' : 'ban';
+
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $url = $this->getUrl(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS,
+                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+            )
+        );
+
+        return new Action('block', $title, $url, 'fa fa-' . $icon);
+    }
+
+    /**
+     * Returns the action to view the progress for a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getMyProgressNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
+        $url = $this->getUrl(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+            )
+        );
+
+        return new Action('progress', $title, $url, 'fa fa-pie-chart');
+    }
+
+    /**
+     * Returns the action to view the reporting for a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getNodeReportingAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $title = $this->translator->getTranslation('Reporting', null, Manager::context());
+        $url = $this->getUrl(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+            )
+        );
+
+        return new Action('reporting', $title, $url, 'fa fa-bar-chart');
     }
 
     /**
