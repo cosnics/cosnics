@@ -50,8 +50,8 @@
 </style>
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
-    <button class="btn btn-default btn-xs btn-drag" ng-click="dragEnabled=true" ng-show="!dragEnabled && canEditLearningPathTree && !inReportingMode">Activeer Verslepen</button>
-    <button class="btn btn-warning btn-xs btn-drag" ng-click="dragEnabled=false" ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode">Stop met verslepen</button>
+    <button class="btn btn-default btn-xs btn-drag" ng-click="enableDrag()" ng-show="!dragEnabled && canEditLearningPathTree && !inReportingMode">Activeer Verslepen</button>
+    <button class="btn btn-warning btn-xs btn-drag" ng-click="disableDrag()" ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode">Stop met verslepen</button>
     <div id="tree">
     </div>
 </div>
@@ -90,7 +90,7 @@
                         }
                     };
 
-		    var treeData = JSON.parse('{{ treeData }}');
+		            var treeData = JSON.parse('{{ treeData }}');
 
                     if(!$scope.inReportingMode) {
                         $.contextMenu({
@@ -170,7 +170,9 @@
                     }
 
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
+
                     $scope.dragEnabled = false;
+
                     var tree = $("#tree").fancytree({
                         source: treeData,
                         glyph: {
@@ -275,10 +277,30 @@
                             }
                         },
                         renderTitle: function (event, data) {
-                            return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
+                            console.log('render');
+                            if(data.node.data.number && !$scope.dragEnabled) {
+                                return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
+                            } else {
+                                return '<span class="fancytree-title">' + data.node.title + '</span>';
+                            }
+
                         }
 
                     });
+
+                    $scope.enableDrag = function() {
+                        $scope.dragEnabled = true;
+                        $("#tree").fancytree('getTree').reload(treeData);
+                    }
+
+                    $scope.disableDrag = function () {
+                        $scope.dragEnabled = false;
+                        $("#tree").fancytree('getTree').reload(
+                            $.ajax(
+                                fetchTreeNodesAjaxUrl
+                            )
+                        );
+                    }
                 }]
             );
         })();
