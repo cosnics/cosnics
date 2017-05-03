@@ -190,7 +190,7 @@
                         },
                         dnd: {
                             // Available options with their default:
-                            autoExpandMS: 1000,   // Expand nodes after n milliseconds of hovering
+                            autoExpandMS: 250,   // Expand nodes after n milliseconds of hovering
                             draggable: null,      // Additional options passed to jQuery UI draggable
                             droppable: null,      // Additional options passed to jQuery UI droppable
                             dropMarkerOffsetX: -24,  // absolute position offset for .fancytree-drop-marker
@@ -202,32 +202,52 @@
                             smartRevert: true,    // set draggable.revert = true if drop was rejected
 
                             // Events that make tree nodes draggable
-                            dragStart: function () {
-                                return $scope.dragEnabled;
-                            },      // Callback(sourceNode, data), return true to enable dnd
-                            dragStop: null,       // Callback(sourceNode, data)
+                            dragStart: function (node, data) {
+                                if(!$scope.dragEnabled) {
+                                    return false;
+                                }
+                                if(node.getParent().isRoot()) { //fancytree has an invisible root
+                                    return false; // do not drag the learning path root
+                                }
+                                return true;
+                            },
                             initHelper: null,     // Callback(sourceNode, data)
                             updateHelper: null,   // Callback(sourceNode, data)
 
                             // Events that make tree nodes accept draggables
                             dragEnter: function (node, data) {
+                                if(node.getParent().isRoot()) {
+                                    return [];
+                                }
                                 if (!node.isFolder()) {
                                     return ["before", "after"];
                                 }
                                 return true;
                             },      // Callback(targetNode, data)
-                            dragExpand: null,     // Callback(targetNode, data), return false to prevent autoExpand
-                            dragOver: null,       // Callback(targetNode, data)
-                            dragDrop: function (node, data) {
+                            dragExpand: function(node, data) {
+                                // return false to prevent auto-expanding data.node on hover
+                            },
+                            dragOver: function(node, data) {
+                            },
+                            dragLeave: function(node, data) {
+                            },
+                            dragStop: function(node, data) {
+                            },
+                            dragDrop: function(node, data) {
+                                // This function MUST be defined to enable dropping of items on the tree.
+                                // data.hitMode is 'before', 'after', or 'over'.
+                                // We could for example move the source to the new target:
                                 data.otherNode.moveTo(node, data.hitMode);
-                            },       // Callback(targetNode, data)
-                            dragLeave: null       // Callback(targetNode, data)
+                            }
                         },
                         minExpandLevel: 2,
                         selectMode: 1,
                         checkbox: false,
-                        extensions: ["dnd", "edit", "glyph"],
+                        extensions: ["dnd", "edit", "glyph", "persist"],
                         toggleEffect: false,
+                        persist: {
+                            store: "local" // 'cookie', 'local': use localStore, 'session': sessionStore
+                        },
                         enhanceTitle: function (event, data) {
                             data.$title.addClass("ws-wrap");
                         },
