@@ -79,8 +79,18 @@ class AutomaticNumberingService
         LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, $counter = 1, $prefix = ''
     )
     {
-        $automaticNumber = $prefix ? $prefix . '.' . $counter : $counter;
-        $this->automaticNumberingCache[$learningPath->getId()][$learningPathTreeNode->getId()] = $automaticNumber . '.';
+        if(!$learningPathTreeNode->isRootNode())
+        {
+            $automaticNumber = $prefix ? $prefix . '.' . $counter : $counter;
+            $automaticNumberString = $automaticNumber . '.';
+        }
+        else
+        {
+            $automaticNumber = null;
+            $automaticNumberString = '';
+        }
+
+        $this->automaticNumberingCache[$learningPath->getId()][$learningPathTreeNode->getId()] = $automaticNumberString;
 
         if ($learningPathTreeNode->hasChildNodes())
         {

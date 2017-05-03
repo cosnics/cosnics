@@ -131,19 +131,20 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $parameters = array(
             'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
-            'moveTreeNodeAjaxUrl' => $this->get_url(array(
-                self::PARAM_ACTION => self::ACTION_AJAX,
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+            'moveTreeNodeAjaxUrl' => $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
                     => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_MOVE_LEARNING_PATH_TREE_NODE_COMPONENT
                 )
             ),
             'canEditLearningPathTree' =>
                 $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
-            'inReportingMode' => $inReportingMode ? 'true': 'false',
-	        'treeData' => $this->getBootstrapTreeData()
+            'inReportingMode' => $inReportingMode ? 'true' : 'false',
+            'treeData' => $this->getBootstrapTreeData()
         );
 
-        foreach($parameters as $parameter => $value)
+        foreach ($parameters as $parameter => $value)
         {
             $learningPathHtmlTree = str_replace('{{ ' . $parameter . ' }}', $value, $learningPathHtmlTree);
         }
@@ -153,7 +154,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $html[] = '</div>';
 
-        if($this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
+        if ($this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
         {
             $learningPathTrackingService = $this->getLearningPathTrackingService();
             $progress =
@@ -163,7 +164,10 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
             $progressBarRenderer = new ProgressBarRenderer();
 
-            $html[] = '<a href="' . $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)) . '">';
+            $html[] = '<a href="' . $this->get_url(
+                    array(self::PARAM_ACTION => self::ACTION_REPORTING), array(self::PARAM_CHILD_ID)
+                ) . '">';
+
             $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0);
             $html[] = '</a>';
         }
