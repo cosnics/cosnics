@@ -120,10 +120,18 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             ) . '/Templates/LearningPathHtmlTree.html';
         $learningPathHtmlTree = file_get_contents($learningPathHtmlTreePath);
 
+        $reportingActions = array(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+        );
+
+        $inReportingMode = in_array($this->get_action(), $reportingActions);
+
         $parameters = array(
             'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
             'canEditLearningPathTree' =>
-                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false'
+                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
+            'inReportingMode' => $inReportingMode ? 'true': 'false'
         );
 
         foreach($parameters as $parameter => $value)
