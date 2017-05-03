@@ -47,11 +47,20 @@
     .btn-drag {
         width: 100%;
     }
+
+    .alert-drag {
+        padding: 1px 1px 1px 5px;
+        margin-bottom: 0px;
+        margin-top: 5px;
+    }
 </style>
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
     <button class="btn btn-default btn-xs btn-drag" ng-click="enableDrag()" ng-show="!dragEnabled && canEditLearningPathTree && !inReportingMode">Activeer Verslepen</button>
     <button class="btn btn-warning btn-xs btn-drag" ng-click="disableDrag()" ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode">Stop met verslepen</button>
+    <div ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode" class="alert {{dragStatusClass}} alert-drag">
+        <strong>Status:</strong> {{dragStatusMessage}}
+    </div>
     <div id="tree">
     </div>
 </div>
@@ -242,10 +251,35 @@
                             dragStop: function(node, data) {
                             },
                             dragDrop: function(node, data) {
-                                // This function MUST be defined to enable dropping of items on the tree.
-                                // data.hitMode is 'before', 'after', or 'over'.
-                                // We could for example move the source to the new target:
                                 data.otherNode.moveTo(node, data.hitMode);
+
+                                var displayOrder = data.otherNode.getIndex() + 1;
+                                var parentId = data.otherNode.getParent().key;
+
+                                $scope.dragStatusClass = 'alert-info';
+                                $scope.dragStatusMessage = "Bezig met opslaan..."; //@todo translations
+
+                                //persist
+                                $http.post(
+                                    '{{ moveTreeNodeAjaxUrl }}',
+                                    $.param({'parent_id': parentId, 'display_order': displayOrder}),
+                                    {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                ).then(function successCallback(response) {
+                                    if(response.data.result_code === 200) {
+                                        $scope.dragStatusClass = 'alert-success';
+                                        $scope.dragStatusMessage = "Wijziging opgeslaan";
+                                    } else {
+                                        $scope.dragStatusClass = 'alert-danger';
+                                        $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen.";
+                                    }
+                                    }, function errorCallback(response) {
+                                    $scope.dragStatusClass = 'alert-danger';
+                                    $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen";
+                                    }
+                                );
+                                console.log(data.otherNode.getIndex());
+                                console.log(data.otherNode.getParent());
+
                             }
                         },
                         minExpandLevel: 2,
@@ -260,7 +294,6 @@
                             data.$title.addClass("ws-wrap");
                         },
                         click: function (event, data) {
-                            console.log(data.targetType);
                             if((data.targetType === 'title' && !$(event.toElement).hasClass('fancytree-title')) || data.targetType === undefined) {
                                 return false; //if the click is on the left or on the icon, leave the node alone...
                             }
@@ -277,7 +310,6 @@
                             }
                         },
                         renderTitle: function (event, data) {
-                            console.log('render');
                             if(data.node.data.number && !$scope.dragEnabled) {
                                 return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
                             } else {
@@ -289,6 +321,8 @@
                     });
 
                     $scope.enableDrag = function() {
+                        $scope.dragStatusClass = 'alert-info';
+                        $scope.dragStatusMessage = "Alles ok"; //@todo translations
                         $scope.dragEnabled = true;
                         $("#tree").fancytree('getTree').reload(treeData);
                     }
