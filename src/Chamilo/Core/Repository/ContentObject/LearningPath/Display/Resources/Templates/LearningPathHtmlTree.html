@@ -88,6 +88,8 @@
                         }
                     };
 
+                    var treeData = JSON.parse('{{ treeData }}');
+
                     $.contextMenu({
                         selector: ".fancytree-title",
                         zIndex: 10001,
@@ -164,10 +166,7 @@
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
                     $scope.dragEnabled = false;
                     var tree = $("#tree").fancytree({
-                        source: {
-                            url: fetchTreeNodesAjaxUrl,
-                            cache: false
-                        },
+                        source: treeData,
                         glyph: {
                             map: {
                                 checkbox: "glyphicon glyphicon-unchecked",

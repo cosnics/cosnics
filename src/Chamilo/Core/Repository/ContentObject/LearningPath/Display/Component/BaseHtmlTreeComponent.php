@@ -3,8 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\NodeActionGenerator;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -123,7 +125,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $parameters = array(
             'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
             'canEditLearningPathTree' =>
-                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false'
+                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
+            'treeData' => $this->getBootstrapTreeData()
         );
 
         foreach($parameters as $parameter => $value)
@@ -308,5 +311,25 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function getBootstrapTreeData()
+    {
+        $learningPathTree = $this->getLearningPathTree();
+
+        $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
+            $learningPathTree, $this->getUser(),
+            $this->getLearningPathTrackingService(),
+            $this->getAutomaticNumberingService(),
+            new NodeActionGenerator(Translation::getInstance(), $this->get_parameters()),
+            $this->get_application()->get_learning_path_tree_menu_url(),
+            $this->getCurrentLearningPathTreeNode(),
+            $this->get_application()->is_allowed_to_view_content_object(),
+            $this->canEditLearningPathTreeNode(
+                $this->getCurrentLearningPathTreeNode()
+            )
+        );
+
+        return json_encode($learningPathTreeJSONMapper->getNodes());
     }
 }
