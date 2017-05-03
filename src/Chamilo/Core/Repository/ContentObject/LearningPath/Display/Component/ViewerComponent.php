@@ -411,7 +411,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
         ButtonGroup $buttonGroup, Translation $translator, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->get_root_content_object();
+
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode())
+            || $learningPath->enforcesDefaultTraversingOrder()
+        )
         {
             return;
         }
