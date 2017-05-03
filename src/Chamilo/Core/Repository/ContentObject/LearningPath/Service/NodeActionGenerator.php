@@ -236,7 +236,7 @@ class NodeActionGenerator
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
         $url = $this->getUrl(
             array(
-                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS,
                 Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
             )
         );

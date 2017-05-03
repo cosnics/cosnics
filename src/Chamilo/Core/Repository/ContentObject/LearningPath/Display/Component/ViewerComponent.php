@@ -82,7 +82,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = '<br /><br />';
             $html[] = '<ul>';
 
-            foreach($responsibleNodes as $responsibleNode)
+            foreach ($responsibleNodes as $responsibleNode)
             {
                 $nodeUrl = $this->get_url(array(self::PARAM_CHILD_ID => $responsibleNode->getId()));
 
@@ -244,7 +244,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $itemTranslation = $translator->getTranslation('TypeName', null, $firstItemContext);
 
             $actionButton = $actionSelector->getActionButton(
-                $translator->getTranslation('CreateItem', array('ITEM' => lcfirst($itemTranslation)), Manager::context()),
+                $translator->getTranslation(
+                    'CreateItem', array('ITEM' => lcfirst($itemTranslation)), Manager::context()
+                ),
                 new BootstrapGlyph('plus')
             );
 
@@ -447,14 +449,16 @@ class ViewerComponent extends BaseHtmlTreeComponent
     {
         $label = $translator->getTranslation('MyProgress', null, Manager::context());
 
-        $url = array(
-            self::PARAM_ACTION => self::ACTION_REPORTING,
-            self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+        $url = $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_REPORTING,
+                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+            )
         );
 
         $icon = new FontAwesomeGlyph('pie-chart');
 
-        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             $buttonGroup->addButton(new Button($label, $icon, $url));
         }
@@ -463,16 +467,17 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $splitDropDownButton = new SplitDropdownButton(
                 $translator->getTranslation('Reporting', null, Manager::context()),
                 new FontAwesomeGlyph('bar-chart'),
-                $url = array(
-                    self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
-                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
+                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
+                    )
                 )
             );
 
             $splitDropDownButton->addSubButton(new SubButton($label, $icon, $url));
             $buttonGroup->addButton($splitDropDownButton);
         }
-
     }
 
     /**
