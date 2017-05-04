@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Changes the title of a given LearningPathTreeNode
@@ -34,11 +35,11 @@ class UpdateLearningPathTreeNodeTitleComponent extends Manager
                 $learningPathTreeNode, $this->getRequestedPostDataValue(self::PARAM_NEW_TITLE)
             );
 
-            JsonAjaxResult::success();
+            return new JsonResponse(null, 200);
         }
         catch (\Exception $ex)
         {
-            JsonAjaxResult::general_error();
+            return new JsonResponse(null, 500);
         }
     }
 
