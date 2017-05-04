@@ -60,10 +60,10 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         Theme::getInstance()->getCommonImagePath('Action/Reporting'), 
                         $url, 
                         ToolbarItem::DISPLAY_ICON));
-                
+
                 switch ($tool_name)
                 {
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name(), true) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name()) :
                         $params = $this->get_parent()->get_parameters();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssignmentScoresTemplate::class_name();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
@@ -78,7 +78,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                                 ToolbarItem::DISPLAY_ICON));
                         
                         break;
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name()) :
                         $params = $this->get_parent()->get_parameters();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentScoresTemplate::class_name();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
@@ -93,7 +93,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                                 ToolbarItem::DISPLAY_ICON));
                         
                         break;
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name(), true) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name()) :
                         $params = $this->get_parent()->get_parameters();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = LearningPathProgressTemplate::class_name();
                         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
