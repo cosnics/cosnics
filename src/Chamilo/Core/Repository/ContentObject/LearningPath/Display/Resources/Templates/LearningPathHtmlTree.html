@@ -294,13 +294,13 @@
                             data.$title.addClass("ws-wrap");
                         },
                         click: function (event, data) {
-                            if((data.targetType === 'title' && !$(event.toElement).hasClass('fancytree-title')) || data.targetType === undefined) {
+                            if((data.targetType === 'title' && !$(event.originalEvent.target).hasClass('fancytree-title')) || data.targetType === undefined) {
                                 return false; //if the click is on the left or on the icon, leave the node alone...
                             }
 
                             var node = data.node;
 
-                            if (!$scope.dragEnabled && event.button !== 2 && $(event.toElement).hasClass('fancytree-title')) {
+                            if (!$scope.dragEnabled && event.button !== 2 && $(event.originalEvent.target).hasClass('fancytree-title')) {
                                 if (node.data.href) {
                                     window.location.href = node.data.href;
                                 }
