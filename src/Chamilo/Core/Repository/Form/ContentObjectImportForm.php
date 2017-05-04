@@ -87,15 +87,18 @@ abstract class ContentObjectImportForm extends FormValidator
             $this->get_categories(),
             array('id' => 'parent_id')
         );
-
-        $category_group[] = $this->createElement(
-            'image',
-            'add_category',
-            Theme::getInstance()->getCommonImagePath('Action/Add'),
-            array('id' => 'add_category', 'style' => 'display:none')
-        );
-
-        $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
+        
+        if(!$this->implementsDropZoneSupport())
+        {
+            $category_group[] = $this->createElement(
+                'image',
+                'add_category',
+                Theme::getInstance()->getCommonImagePath('Action/Add'),
+                array('id' => 'add_category', 'style' => 'display:none')
+            );
+            
+            $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
+        }
 
         $group = array();
         $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
@@ -160,5 +163,13 @@ abstract class ContentObjectImportForm extends FormValidator
         }
 
         return new $class($importFormParameters);
+    }
+    
+    /**
+     * @return boolean
+     */
+    protected function implementsDropZoneSupport()
+    {
+        return false;
     }
 }
