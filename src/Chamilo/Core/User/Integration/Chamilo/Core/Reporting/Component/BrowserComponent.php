@@ -18,6 +18,8 @@ class BrowserComponent extends Manager
         $html[] = $this->render_header();
         $html[] = $this->get_table();
         $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     function get_table()
@@ -29,7 +31,7 @@ class BrowserComponent extends Manager
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     private function get_table_data()

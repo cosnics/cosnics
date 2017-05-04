@@ -32,6 +32,7 @@ class ReportingComponent extends Manager implements DelegateComponent
         $factory = new ApplicationFactory(
             \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+
         return $factory->run();
     }
 }

@@ -3,6 +3,8 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Theme;
@@ -128,7 +130,16 @@ abstract class Chart extends Html
      */
     public function getFilePath($md5)
     {
-        $rootPath = Theme::getInstance()->getPathUtilities()->getTemporaryPath();
+        $rootPath = $this->getConfigurablePathBuilder()->getTemporaryPath();
         return $rootPath . $md5 . '.png';
+    }
+
+    /**
+     * @return object | ConfigurablePathBuilder
+     */
+    protected function getConfigurablePathBuilder()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $container->get('chamilo.libraries.file.configurable_path_builder');
     }
 }

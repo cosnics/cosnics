@@ -7,6 +7,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -29,7 +30,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
                         CourseEntityRelation::class_name(), 
                         CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)), 
-                array(), 
+                null,
                 new FunctionConditionVariable(
                     FunctionConditionVariable::DISTINCT, 
                     new PropertyConditionVariable(
