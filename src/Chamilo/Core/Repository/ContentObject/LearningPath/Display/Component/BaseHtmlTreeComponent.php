@@ -130,7 +130,9 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $inReportingMode = in_array($this->get_action(), $reportingActions);
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
+            'fetchTreeNodesAjaxUrl' => $this->get_url(
+                array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)
+            ),
             'moveTreeNodeAjaxUrl' => $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_AJAX,
