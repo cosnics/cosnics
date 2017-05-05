@@ -168,7 +168,7 @@ class LearningPathTrackingService
     public function recalculateLearningPathProgress(
         LearningPath $learningPath, User $user, LearningPathTree $learningPathTree
     )
-    {
+    { return;
         $nodesCompleted = 0;
 
         $learningPathAttempt =
