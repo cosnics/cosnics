@@ -221,7 +221,7 @@ class LearningPathChildService
             );
         }
 
-        if (isset($newDisplayOrder) && $newDisplayOrder != $learningPathChild->getDisplayOrder())
+        if (isset($newDisplayOrder))
         {
             $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
         }
