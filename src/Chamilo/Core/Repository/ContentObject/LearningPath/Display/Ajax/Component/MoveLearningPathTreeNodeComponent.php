@@ -16,6 +16,7 @@ class MoveLearningPathTreeNodeComponent extends Manager
 {
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
+    const PARAM_CHILD_ID = 'child_id';
 
     /**
      * Executes this component and returns its output
@@ -24,7 +25,11 @@ class MoveLearningPathTreeNodeComponent extends Manager
     {
         try
         {
-            $learningPathTreeNode = $this->get_application()->getCurrentLearningPathTreeNode();
+            $childId = $this->getRequestedPostDataValue(self::PARAM_CHILD_ID);
+
+            $learningPathThree = $this->get_application()->getLearningPathTree();
+            $learningPathTreeNode = $learningPathThree->getLearningPathTreeNodeById((int) $childId);
+
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
 
             if (!$this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
@@ -64,6 +69,6 @@ class MoveLearningPathTreeNodeComponent extends Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self::PARAM_PARENT_ID, self::PARAM_DISPLAY_ORDER);
+        return array(self::PARAM_PARENT_ID, self::PARAM_DISPLAY_ORDER, self::PARAM_CHILD_ID);
     }
 }
