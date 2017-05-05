@@ -170,7 +170,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
                     array(self::PARAM_ACTION => self::ACTION_REPORTING), array(self::PARAM_CHILD_ID)
                 ) . '">';
 
-            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0);
+            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0, true);
             $html[] = '</a>';
         }
 
