@@ -34,15 +34,15 @@ class LearningPathChildRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             LearningPathChild::class_name(), new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy(
-                    new PropertyConditionVariable(
-                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
-                    ),
-                    new PropertyConditionVariable(
-                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER
-                    )
-                )
+                $condition, null, null//,
+//                new OrderBy(
+//                    new PropertyConditionVariable(
+//                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
+//                    ),
+//                    new PropertyConditionVariable(
+//                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER
+//                    )
+//                )
             )
         );
     }

@@ -222,4 +222,13 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
         LearningPath $learningPath
     );
+
+    /**
+     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     *
+     * @return \string[]
+     */
+    public function getNumberOfCompletedNodesForLearningPathAttempt(LearningPathAttempt $learningPathAttempt);
 }

@@ -159,7 +159,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $learningPathTrackingService = $this->getLearningPathTrackingService();
             $progress =
                 $learningPathTrackingService->getLearningPathProgress(
-                    $this->get_root_content_object(), $this->getUser()
+                    $this->get_root_content_object(), $this->getUser(), $this->getLearningPathTree()->getRoot()
                 );
 
             $progressBarRenderer = new ProgressBarRenderer();
@@ -302,7 +302,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     private function get_progress_bar()
     {
         $progress = $this->getLearningPathTrackingService()->getLearningPathProgress(
-            $this->get_root_content_object(), $this->getUser()
+            $this->get_root_content_object(), $this->getUser(), $this->getLearningPathTree()->getRoot()
         );
 
         return $this->render_progress_bar($progress);

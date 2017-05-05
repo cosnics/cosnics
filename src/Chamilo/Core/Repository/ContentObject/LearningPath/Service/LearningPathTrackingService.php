@@ -169,6 +169,7 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTree $learningPathTree
     )
     {
+        return;
         $nodesCompleted = 0;
 
         $learningPathAttempt =
@@ -208,7 +209,14 @@ class LearningPathTrackingService
             $learningPathAttempt =
                 $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
 
-            return (int) $learningPathAttempt->get_progress();
+            $nodesCompleted = $this->learningPathTrackingRepository->getNumberOfCompletedNodesForLearningPathAttempt(
+                $learningPathAttempt
+            );
+
+            $learningPathTree = $learningPathTreeNode->getLearningPathTree();
+
+            $progress = (int) round(($nodesCompleted / count($learningPathTree->getLearningPathTreeNodes())) * 100);
+            return $progress > 100 ? 100 : $progress;
         }
 
         $descendantNodes = $learningPathTreeNode->getDescendantNodes();
@@ -901,7 +909,7 @@ class LearningPathTrackingService
                 (int) $learningPathAttempt->get_score() : $minimumScore;
         }
 
-        if(is_null($minimumScore))
+        if (is_null($minimumScore))
         {
             $minimumScore = 0;
         }
@@ -923,11 +931,12 @@ class LearningPathTrackingService
     )
     {
         $this->validateLearningPathTreeNodeIsAssessment($learningPathTreeNode);
-        $learningPathChildAttempts = $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
+        $learningPathChildAttempts =
+            $this->getLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode);
 
         $learningPathChildAttempt = array_pop($learningPathChildAttempts);
 
-        if(!$learningPathChildAttempt instanceof LearningPathChildAttempt)
+        if (!$learningPathChildAttempt instanceof LearningPathChildAttempt)
         {
             return 0;
         }
@@ -979,7 +988,9 @@ class LearningPathTrackingService
      */
     public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
     {
-        return $this->learningPathTrackingRepository->countTargetUsersWithLearningPathAttempts($learningPath, $condition);
+        return $this->learningPathTrackingRepository->countTargetUsersWithLearningPathAttempts(
+            $learningPath, $condition
+        );
     }
 
     /**

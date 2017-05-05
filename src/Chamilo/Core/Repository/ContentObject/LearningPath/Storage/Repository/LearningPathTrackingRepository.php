@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -28,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -705,6 +707,56 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
             $learningPathAttemptClassName,
             new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins)
         );
+    }
+
+    /**
+     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt
+     *
+     * @param LearningPathAttempt $learningPathAttempt
+     *
+     * @return \string[]
+     */
+    public function getNumberOfCompletedNodesForLearningPathAttempt(LearningPathAttempt $learningPathAttempt)
+    {
+        $learningPathChildAttemptClassName =
+            $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
+
+        $conditions = array();
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_STATUS
+            ),
+            array(LearningPathChildAttempt::STATUS_COMPLETED, LearningPathChildAttempt::STATUS_PASSED)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+            ),
+            new StaticConditionVariable($learningPathAttempt->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $properties = new DataClassProperties();
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                        $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                    )
+                ),
+                'nodes_completed'
+            )
+        );
+
+        $record = $this->dataClassRepository->record(
+            $learningPathChildAttemptClassName, new RecordRetrieveParameters($properties, $condition)
+        );
+
+        return (int) $record['nodes_completed'];
     }
 
     /**
