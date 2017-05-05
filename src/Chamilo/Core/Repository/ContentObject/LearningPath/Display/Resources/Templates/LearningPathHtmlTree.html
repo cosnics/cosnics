@@ -153,8 +153,11 @@
                                                                 {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                                             ).then(function successCallback(response) {
                                                                     node.setExpanded();
-                                                                    reloadTree(response.data.treeData);
-                                                                    $scope.isLoading = false;
+                                                                    reloadTree(response.data.treeData).then(function () {
+                                                                            $scope.isLoading = false;
+                                                                            $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                                                        }
+                                                                    );
                                                                 }, function errorCallback(response) {
                                                                     $scope.isLoading = false;
                                                                     $scope.showError = true;
@@ -180,7 +183,7 @@
 
                                             items["editTitle"] = {
                                                 name: "Pas titel aan", icon: "fa-edit", callback: function () {
-                                                    node.editStart()
+                                                    node.editStart();
                                                 }
                                             };
 
@@ -219,7 +222,7 @@
 
                     var reloadTree = function(treeData) {
                         $scope.treeData = treeData;
-                        $("#tree").fancytree('getTree').reload($scope.treeData);
+                        return $("#tree").fancytree('getTree').reload($scope.treeData);
 
                     }
                     var reloadTreeWithFreshData = function() {
@@ -228,9 +231,9 @@
                             {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                         ).then(function successCallback(response) {
                                 $scope.treeData = response.data;
-                                $("#tree").fancytree('getTree').reload($scope.treeData);
+                                return $("#tree").fancytree('getTree').reload($scope.treeData);
                             }, function errorCallback(response) {
-                                //@todo alert
+                                $scope.showError = true;
                             }
                         );
                     }
