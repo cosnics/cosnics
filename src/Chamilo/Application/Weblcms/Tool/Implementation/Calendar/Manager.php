@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\Calend
 
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
+    const ACTION_ICAL = 'ICal';
 
     public static function get_allowed_types()
     {
