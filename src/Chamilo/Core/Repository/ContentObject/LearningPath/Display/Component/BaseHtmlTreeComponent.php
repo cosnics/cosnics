@@ -130,7 +130,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $inReportingMode = in_array($this->get_action(), $reportingActions);
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
+            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)),
             'moveTreeNodeAjaxUrl' => $this->get_application()->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_AJAX,
@@ -168,7 +168,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
                     array(self::PARAM_ACTION => self::ACTION_REPORTING), array(self::PARAM_CHILD_ID)
                 ) . '">';
 
-            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0);
+            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0, true);
             $html[] = '</a>';
         }
 

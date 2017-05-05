@@ -59,6 +59,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
     const PARAM_CHILD_ID = 'child_id';
     const PARAM_REPORTING_USER_ID = 'reporting_user';
+    const PARAM_REPORTING_MODE = 'reporting_mode';
 
     // Sorting
     const SORT_UP = 'Up';

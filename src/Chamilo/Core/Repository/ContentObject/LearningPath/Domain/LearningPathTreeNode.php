@@ -72,7 +72,8 @@ class LearningPathTreeNode
      * @param LearningPathChild $learningPathChild
      */
     public function __construct(
-        LearningPathTree $learningPathTree, ContentObject $contentObject, LearningPathChild $learningPathChild = null
+        LearningPathTree $learningPathTree, ContentObject $contentObject = null,
+            LearningPathChild $learningPathChild = null
     )
     {
         $this->learningPathTree = $learningPathTree;
@@ -142,6 +143,18 @@ class LearningPathTreeNode
     public function getContentObject()
     {
         return $this->contentObject;
+    }
+
+    /**
+     * @param ContentObject $contentObject
+     *
+     * @return LearningPathTreeNode
+     */
+    public function setContentObject(ContentObject $contentObject)
+    {
+        $this->contentObject = $contentObject;
+        
+        return $this;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Moves the LearningPathTreeNode to a new parent and with a new display order
@@ -53,11 +54,11 @@ class MoveLearningPathTreeNodeComponent extends Manager
                 $learningPathTreeNode, $parentNode, $displayOrder
             );
 
-            JsonAjaxResult::success();
+            return new JsonResponse(null, 200);
         }
         catch (\Exception $ex)
         {
-            JsonAjaxResult::general_error();
+            return new JsonResponse(null, 500);
         }
     }
 

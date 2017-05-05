@@ -20,10 +20,12 @@ class ProgressBarRenderer
      *
      * @param int $progress - progress between 0 and 100
      * @param string $mode
+     * @param int $maxWidth
+     * @param bool $striped
      *
      * @return string
      */
-    public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150)
+    public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150, $striped = false)
     {
         $this->validateProgress($progress);
         $this->validateMode($mode);
@@ -31,6 +33,11 @@ class ProgressBarRenderer
         $maxWidth = is_integer($maxWidth) && $maxWidth > 0 ? $maxWidth . 'px' : '100%';
 
         $contextualClass = $mode == self::MODE_DEFAULT ? '' : 'progress-bar-' . $mode;
+
+        if($striped)
+        {
+            $contextualClass .= ' progress-bar-striped';
+        }
 
         $html = array();
 

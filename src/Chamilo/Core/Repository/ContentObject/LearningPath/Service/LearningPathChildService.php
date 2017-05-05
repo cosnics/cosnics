@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Learni
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Money\InvalidArgumentException;
 
 /**
  * Service class to manage LearningPathChild classes
@@ -137,6 +138,42 @@ class LearningPathChildService
     }
 
     /**
+     * Creates and adds a new content object with placeholder data
+     *
+     * @param string $contentObjectType
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param User $user
+     *
+     * @return LearningPathChild
+     */
+    public function createAndAddContentObjectToLearningPath(
+        $contentObjectType, LearningPath $learningPath, LearningPathTreeNode $currentLearningPathTreeNode, User $user
+    )
+    {
+        if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
+        {
+            throw new InvalidArgumentException(
+                sprintf('The given ContentObject type %s is not a valid content object', $contentObjectType)
+            );
+        }
+
+        /** @var ContentObject $contentObject */
+        $contentObject = new $contentObjectType();
+        $contentObject->set_title('placeholder');
+        $contentObject->set_owner_id($user->getId());
+
+        if (!$this->learningPathChildRepository->create($contentObject))
+        {
+            throw new \RuntimeException(sprintf('Could not create a new ContentObject of type %s', $contentObjectType));
+        }
+
+        return $this->addContentObjectToLearningPath(
+            $learningPath, $currentLearningPathTreeNode, $contentObject, $user
+        );
+    }
+
+    /**
      * Updates a content object for a given learning path child. Uses the LearningPathTree.
      * Validates the content object to make sure that the system does not create a cycle.
      *
@@ -184,7 +221,7 @@ class LearningPathChildService
             );
         }
 
-        if (isset($newDisplayOrder) && $newDisplayOrder != $learningPathChild->getDisplayOrder())
+        if (isset($newDisplayOrder))
         {
             $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
         }
@@ -258,7 +295,7 @@ class LearningPathChildService
 
         $contentObject->set_title($newTitle);
 
-        if(!$this->learningPathChildRepository->update($contentObject))
+        if (!$this->learningPathChildRepository->update($contentObject))
         {
             throw new \RuntimeException(
                 sprintf('Could not update the Contentobject with id %S', $contentObject->getId())
