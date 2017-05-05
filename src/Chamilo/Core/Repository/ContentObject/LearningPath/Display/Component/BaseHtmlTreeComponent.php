@@ -130,8 +130,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $inReportingMode = in_array($this->get_action(), $reportingActions);
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
-            'moveTreeNodeAjaxUrl' => $this->get_url(
+            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
+            'moveTreeNodeAjaxUrl' => $this->get_application()->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION

@@ -182,6 +182,19 @@
 
                     $scope.dragEnabled = false;
 
+                    var reloadTreeWithFreshData = function() {
+                        $http.get(
+                            fetchTreeNodesAjaxUrl,
+                            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                        ).then(function successCallback(response) {
+                                treeData = response.data;
+                                $("#tree").fancytree('getTree').reload(treeData);
+                            }, function errorCallback(response) {
+                                //@todo alert
+                            }
+                        );
+                    }
+
                     var tree = $("#tree").fancytree({
                         source: treeData,
                         glyph: {
@@ -255,6 +268,7 @@
 
                                 var displayOrder = data.otherNode.getIndex() + 1;
                                 var parentId = data.otherNode.getParent().key;
+                                var childId = data.otherNode.key;
 
                                 $scope.dragStatusClass = 'alert-info';
                                 $scope.dragStatusMessage = "Bezig met opslaan..."; //@todo translations
@@ -262,7 +276,7 @@
                                 //persist
                                 $http.post(
                                     '{{ moveTreeNodeAjaxUrl }}',
-                                    $.param({'parent_id': parentId, 'display_order': displayOrder}),
+                                    $.param({'child_id': childId, 'parent_id': parentId, 'display_order': displayOrder}),
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
                                     if(response.data.result_code === 200) {
@@ -277,9 +291,6 @@
                                     $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen";
                                     }
                                 );
-                                console.log(data.otherNode.getIndex());
-                                console.log(data.otherNode.getParent());
-
                             }
                         },
                         minExpandLevel: 2,
@@ -329,11 +340,7 @@
 
                     $scope.disableDrag = function () {
                         $scope.dragEnabled = false;
-                        $("#tree").fancytree('getTree').reload(
-                            $.ajax(
-                                fetchTreeNodesAjaxUrl
-                            )
-                        );
+                        reloadTreeWithFreshData();
                     }
                 }]
             );
