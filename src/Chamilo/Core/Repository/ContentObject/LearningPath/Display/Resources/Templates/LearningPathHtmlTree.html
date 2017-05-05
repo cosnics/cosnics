@@ -279,16 +279,12 @@
                                     $.param({'child_id': childId, 'parent_id': parentId, 'display_order': displayOrder}),
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
-                                    if(response.data.result_code === 200) {
                                         $scope.dragStatusClass = 'alert-success';
                                         $scope.dragStatusMessage = "Wijziging opgeslaan";
-                                    } else {
-                                        $scope.dragStatusClass = 'alert-danger';
-                                        $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen.";
-                                    }
                                     }, function errorCallback(response) {
-                                    $scope.dragStatusClass = 'alert-danger';
-                                    $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen";
+                                        $scope.dragStatusClass = 'alert-danger';
+                                        $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen";
+                                        reloadTreeWithFreshData(); //reset tree
                                     }
                                 );
                             }
