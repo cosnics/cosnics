@@ -13,7 +13,7 @@ ol.breadcrumb>li>a {
 }
 
 .btn-default span.glyphicon, .btn-default span.fa {
-	color: #8e4040;
+	color: rgb(60, 60, 59);
 }
 
 .btn-primary span.glyphicon, .btn-primary span.fa, .btn-success span.glyphicon,
