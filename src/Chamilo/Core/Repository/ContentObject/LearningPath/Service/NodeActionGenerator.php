@@ -26,6 +26,11 @@ class NodeActionGenerator
     protected $baseParameters;
 
     /**
+     * @var string[]
+     */
+    protected $urlCache;
+
+    /**
      * NodeActionGenerator constructor.
      *
      * @param Translation $translator
@@ -84,11 +89,9 @@ class NodeActionGenerator
     protected function getUpdateNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('edit', $title, $url, 'fa-pencil');
@@ -104,11 +107,9 @@ class NodeActionGenerator
     protected function getDeleteNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
+            $learningPathTreeNode->getId()
         );
 
         return new Action(
@@ -126,11 +127,9 @@ class NodeActionGenerator
     protected function getMoveNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('Move', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_MOVE,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_MOVE),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('move', $title, $url, 'fa-random');
@@ -146,11 +145,9 @@ class NodeActionGenerator
     protected function getNodeActivityAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('activity', $title, $url, 'fa-mouse-pointer');
@@ -166,11 +163,9 @@ class NodeActionGenerator
     protected function getManageNodesAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_MANAGE,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('manage', $title, $url, 'fa-bars');
@@ -194,11 +189,9 @@ class NodeActionGenerator
             'unlock' : 'ban';
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('block', $title, $url, 'fa-' . $icon);
@@ -214,11 +207,9 @@ class NodeActionGenerator
     protected function getMyProgressNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('progress', $title, $url, 'fa-pie-chart');
@@ -234,11 +225,9 @@ class NodeActionGenerator
     protected function getNodeReportingAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
-        $url = $this->getUrl(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
-            )
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
+            $learningPathTreeNode->getId()
         );
 
         return new Action('reporting', $title, $url, 'fa-bar-chart');
@@ -253,12 +242,34 @@ class NodeActionGenerator
      *
      * @return string
      */
-    public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
+    protected function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->baseParameters, $parameters) : $this->baseParameters);
 
         $redirect = new Redirect($parameters, $filter, $encode_entities);
 
         return $redirect->getUrl();
+    }
+
+    /**
+     * Returns a url for a given set of parameters and a given node. Caches the urls for faster access
+     *
+     * @param array $parameters
+     * @param int $learningPathTreeNodeId
+     *
+     * @return string
+     */
+    protected function getUrlForNode($parameters = array(), $learningPathTreeNodeId = 0)
+    {
+        $nodePlaceholder = '__NODE__';
+
+        $cacheKey = md5(serialize($parameters));
+        if(!array_key_exists($cacheKey, $this->urlCache))
+        {
+            $parameters[Manager::PARAM_CHILD_ID] = $nodePlaceholder;
+            $this->urlCache[$cacheKey] = $this->getUrl($parameters);
+        }
+
+        return str_replace($nodePlaceholder, $learningPathTreeNodeId, $this->urlCache[$cacheKey]);
     }
 }
