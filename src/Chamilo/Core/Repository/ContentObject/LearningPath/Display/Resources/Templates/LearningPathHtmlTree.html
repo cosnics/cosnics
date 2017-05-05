@@ -99,6 +99,7 @@
                     $scope.inReportingMode = {{ inReportingMode }};
                     $scope.isLoading = false;
                     $scope.showError = false;
+                    $scope.treeData = {{ treeData }};
 
                     var extractContextMenuItemFromNodeAction = function(node, action) {
                         if(node.data.actions[action] === undefined) return null;
@@ -122,8 +123,6 @@
                         }
                     };
 
-		            var treeData = {{ treeData }};
-
                     if(!$scope.inReportingMode) {
                         $.contextMenu({
                             selector: ".fancytree-title",
@@ -144,10 +143,23 @@
                                                         name: "Voeg sectie toe",
                                                         icon: "fa-plus",
                                                         callback: function () {
-                                                            node.editCreateNode("child", {
-                                                                title: "Pas titel aan...",
-                                                                folder: true
-                                                            });
+                                                            $scope.isLoading = true;
+                                                            $http.post(
+                                                                '{{ addTreeNodeAjaxUrl }}',
+                                                                $.param({
+                                                                    'parent_node_id': node.key,
+                                                                    'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section'
+                                                                }),
+                                                                {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                                            ).then(function successCallback(response) {
+                                                                    node.setExpanded();
+                                                                    reloadTree(response.data.treeData);
+                                                                    $scope.isLoading = false;
+                                                                }, function errorCallback(response) {
+                                                                    $scope.isLoading = false;
+                                                                    $scope.showError = true;
+                                                                }
+                                                            );
                                                         }
                                                     };
 
@@ -205,13 +217,18 @@
 
                     $scope.dragEnabled = false;
 
+                    var reloadTree = function(treeData) {
+                        $scope.treeData = treeData;
+                        $("#tree").fancytree('getTree').reload($scope.treeData);
+
+                    }
                     var reloadTreeWithFreshData = function() {
                         $http.get(
                             fetchTreeNodesAjaxUrl,
                             {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                         ).then(function successCallback(response) {
-                                treeData = response.data;
-                                $("#tree").fancytree('getTree').reload(treeData);
+                                $scope.treeData = response.data;
+                                $("#tree").fancytree('getTree').reload($scope.treeData);
                             }, function errorCallback(response) {
                                 //@todo alert
                             }
@@ -219,7 +236,7 @@
                     }
 
                     var tree = $("#tree").fancytree({
-                        source: treeData,
+                        source: $scope.treeData,
                         glyph: {
                             map: {
                                 checkbox: "glyphicon glyphicon-unchecked",
@@ -348,10 +365,8 @@
                     });
 
                     $scope.enableDrag = function() {
-                        $scope.dragStatusClass = 'alert-info';
-                        $scope.dragStatusMessage = "Alles ok"; //@todo translations
                         $scope.dragEnabled = true;
-                        $("#tree").fancytree('getTree').reload(treeData);
+                        reloadTree($scope.treeData);
                     }
 
                     $scope.disableDrag = function () {

@@ -204,6 +204,7 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode = null
     )
     {
+        return 0; //@todo refactor
         if (is_null($learningPathTreeNode) || $learningPathTreeNode->isRootNode())
         {
             $learningPathAttempt =

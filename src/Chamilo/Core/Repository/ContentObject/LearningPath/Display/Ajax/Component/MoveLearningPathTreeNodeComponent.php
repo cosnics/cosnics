@@ -27,8 +27,8 @@ class MoveLearningPathTreeNodeComponent extends Manager
         {
             $childId = $this->getRequestedPostDataValue(self::PARAM_CHILD_ID);
 
-            $learningPathThree = $this->get_application()->getLearningPathTree();
-            $learningPathTreeNode = $learningPathThree->getLearningPathTreeNodeById((int) $childId);
+            $learningPathTree = $this->get_application()->getLearningPathTree();
+            $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $childId);
 
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
 
