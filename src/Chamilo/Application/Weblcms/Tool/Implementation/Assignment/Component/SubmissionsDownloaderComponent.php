@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionCourseGroupBrowser\SubmissionCourseGroupsBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionGroupsBrowser\SubmissionGroupsBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser\SubmissionUsersBrowser\SubmissionUsersBrowserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmitterSubmissions\SubmitterGroupSubmissionsTable;
@@ -51,6 +52,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
             {
                 case SubmissionUsersBrowserTable::DEFAULT_NAME :
                 case SubmissionGroupsBrowserTable::DEFAULT_NAME :
+                case SubmissionCourseGroupsBrowserTable::DEFAULT_NAME:
                     $this->download_submissions_by_target($target_ids);
                     break;
                 case SubmitterUserSubmissionsTable::DEFAULT_NAME :

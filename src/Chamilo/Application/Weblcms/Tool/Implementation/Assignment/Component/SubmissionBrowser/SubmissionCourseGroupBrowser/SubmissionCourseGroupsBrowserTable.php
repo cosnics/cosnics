@@ -14,4 +14,5 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\Submiss
  */
 class SubmissionCourseGroupsBrowserTable extends SubmissionBrowserTable
 {
+    const DEFAULT_NAME = 'submission_course_groups_browser_table';
 }
