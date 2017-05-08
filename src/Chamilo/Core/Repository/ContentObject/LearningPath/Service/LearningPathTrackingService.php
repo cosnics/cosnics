@@ -32,6 +32,11 @@ class LearningPathTrackingService
     protected $learningPathTrackingRepository;
 
     /**
+     * @var int[]
+     */
+    protected $learningPathTreeNodesCompletedCache;
+
+    /**
      * LearningPathTrackingService constructor.
      *
      * @param LearningPathAttemptService $learningPathAttemptService
@@ -44,6 +49,7 @@ class LearningPathTrackingService
     {
         $this->learningPathAttemptService = $learningPathAttemptService;
         $this->learningPathTrackingRepository = $learningPathTrackingRepository;
+        $this->learningPathTreeNodesCompletedCache = array();
     }
 
     /**
@@ -86,11 +92,6 @@ class LearningPathTrackingService
 
         $activeAttempt->set_status($newStatus);
         $this->learningPathTrackingRepository->update($activeAttempt);
-
-        if ($activeAttempt->isFinished())
-        {
-            $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
-        }
     }
 
     /**
@@ -159,39 +160,6 @@ class LearningPathTrackingService
     }
 
     /**
-     * Recalculates and updates the progress of the learning path tree
-     *
-     * @param LearningPath $learningPath
-     * @param User $user
-     * @param LearningPathTree $learningPathTree
-     */
-    public function recalculateLearningPathProgress(
-        LearningPath $learningPath, User $user, LearningPathTree $learningPathTree
-    )
-    {
-        return;
-        $nodesCompleted = 0;
-
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
-
-        $this->learningPathAttemptService->clearLearningPathChildAttemptCache($learningPathAttempt);
-
-        foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
-        {
-            if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $learningPathTreeNode))
-            {
-                $nodesCompleted ++;
-            }
-        }
-
-        $progress = round(($nodesCompleted / count($learningPathTree->getLearningPathTreeNodes())) * 100);
-        $learningPathAttempt->set_progress($progress);
-
-        $this->learningPathTrackingRepository->update($learningPathAttempt);
-    }
-
-    /**
      * Returns the progress for a given user in a given learning path
      *
      * @param LearningPath $learningPath
@@ -204,38 +172,23 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode = null
     )
     {
-        if (is_null($learningPathTreeNode) || $learningPathTreeNode->isRootNode())
+        /** @var LearningPathTreeNode[] $nodes */
+        $nodes = array();
+        $nodes[] = $learningPathTreeNode;
+        $nodes = array_merge($nodes, $learningPathTreeNode->getDescendantNodes());
+
+        $nodesCompleted = 0;
+
+        foreach($nodes as $node)
         {
-            $learningPathAttempt =
-                $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
-
-            $nodesCompleted = $this->learningPathTrackingRepository->getNumberOfCompletedNodesForLearningPathAttempt(
-                $learningPathAttempt
-            );
-
-            $learningPathTree = $learningPathTreeNode->getLearningPathTree();
-
-            $progress = (int) round(($nodesCompleted / count($learningPathTree->getLearningPathTreeNodes())) * 100);
-            return $progress > 100 ? 100 : $progress;
-        }
-
-        $descendantNodes = $learningPathTreeNode->getDescendantNodes();
-        if (empty($descendantNodes))
-        {
-            return 100;
-        }
-
-        $completedCount = 0;
-
-        foreach ($descendantNodes as $descendantNode)
-        {
-            if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $descendantNode))
+            if($this->isLearningPathTreeNodeCompleted($learningPath, $user, $node))
             {
-                $completedCount ++;
+                $nodesCompleted++;
             }
         }
 
-        return (int) round(($completedCount / count($descendantNodes) * 100));
+        $progress = (int) round(($nodesCompleted / count($nodes)) * 100);
+        return $progress > 100 ? 100 : $progress;
     }
 
     /**
@@ -248,6 +201,28 @@ class LearningPathTrackingService
      * @return bool
      */
     public function isLearningPathTreeNodeCompleted(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        if(!array_key_exists($learningPathTreeNode->getId(), $this->learningPathTreeNodesCompletedCache))
+        {
+            $this->learningPathTreeNodesCompletedCache[$learningPathTreeNode->getId()] =
+                $this->calculateLearningPathTreeNodeCompleted($learningPath, $user, $learningPathTreeNode);
+        }
+
+        return $this->learningPathTreeNodesCompletedCache[$learningPathTreeNode->getId()];
+    }
+
+    /**
+     * Determines whether or not the learning path tree node is completed by checking the tracking and every subitem
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return bool
+     */
+    protected function calculateLearningPathTreeNodeCompleted(
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
@@ -373,7 +348,6 @@ class LearningPathTrackingService
         $activeAttempt->set_status($this->determineStatusForAssessmentByScore($learningPathTreeNode, $assessmentScore));
 
         $this->learningPathTrackingRepository->update($activeAttempt);
-        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
     }
 
     /**
@@ -402,7 +376,6 @@ class LearningPathTrackingService
         );
 
         $this->learningPathTrackingRepository->update($learningPathChildAttempt);
-        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
     }
 
     /**
@@ -597,7 +570,6 @@ class LearningPathTrackingService
         );
 
         $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
-        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
     }
 
     /**
@@ -619,8 +591,6 @@ class LearningPathTrackingService
         {
             $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
         }
-
-        $this->recalculateLearningPathProgress($learningPath, $user, $learningPathTreeNode->getLearningPathTree());
     }
 
     /**

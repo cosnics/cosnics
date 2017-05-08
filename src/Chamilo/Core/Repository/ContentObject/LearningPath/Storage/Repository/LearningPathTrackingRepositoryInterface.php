@@ -224,11 +224,15 @@ interface LearningPathTrackingRepositoryInterface
     );
 
     /**
-     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt
+     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt, optionally
+     * filtering them by the given LearningPathTreeNode id's
      *
      * @param LearningPathAttempt $learningPathAttempt
+     * @param int[] $learningPathTreeNodeIds
      *
-     * @return \string[]
+     * @return int
      */
-    public function getNumberOfCompletedNodesForLearningPathAttempt(LearningPathAttempt $learningPathAttempt);
+    public function getNumberOfCompletedNodesForLearningPathAttempt(
+        LearningPathAttempt $learningPathAttempt, $learningPathTreeNodeIds = array()
+    );
 }
