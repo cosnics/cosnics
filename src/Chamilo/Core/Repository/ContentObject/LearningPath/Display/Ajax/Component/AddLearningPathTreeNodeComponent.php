@@ -16,8 +16,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CreateAndAddContentObjectToLearningPathComponent extends Manager
+class AddLearningPathTreeNodeComponent extends Manager
 {
+    const PARAM_PARENT_NODE_ID = 'parent_node_id';
+    //the content object type
+    const PARAM_NODE_TYPE = 'node_type';
+
     /**
      * Runs this component and returns it's response
      */
@@ -25,10 +29,16 @@ class CreateAndAddContentObjectToLearningPathComponent extends Manager
     {
         try
         {
+            $parentNodeId = $this->getRequestedPostDataValue(self::PARAM_PARENT_NODE_ID);
+            $nodeType = $this->getRequestedPostDataValue(self::PARAM_NODE_TYPE);
+
+            $tree = $this->get_application()->getLearningPathTree();
+            $parentNode = $tree->getLearningPathTreeNodeById((int) $parentNodeId);
+
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
             $learningPathChild = $learningPathChildService->createAndAddContentObjectToLearningPath(
-                Section::class, $this->get_application()->get_root_content_object(),
-                $this->get_application()->getCurrentLearningPathTreeNode(), $this->getUser()
+                $nodeType, $this->get_application()->get_root_content_object(),
+                $parentNode, $this->getUser()
             );
 
             $learningPathTreeBuilder = $this->get_application()->getLearningPathTreeBuilder();
@@ -56,5 +66,15 @@ class CreateAndAddContentObjectToLearningPathComponent extends Manager
         {
             return new JsonResponse(null, 500);
         }
+    }
+
+    /**
+     * Returns the required post parameters
+     *
+     * @return string
+     */
+    public function getRequiredPostParameters()
+    {
+        return array(self::PARAM_PARENT_NODE_ID, self::PARAM_NODE_TYPE);
     }
 }

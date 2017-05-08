@@ -53,15 +53,36 @@
         margin-bottom: 0px;
         margin-top: 5px;
     }
+
+    .tree-disabled{
+        background: #e9e9e9;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0.5;
+    }
+    .tree-loading{
+        float: left;
+        height: 100%;
+        z-index: 20;
+        position: absolute;
+        top: 30%;
+        left: 45%;
+    }
 </style>
+
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
     <button class="btn btn-default btn-xs btn-drag" ng-click="enableDrag()" ng-show="!dragEnabled && canEditLearningPathTree && !inReportingMode">Activeer Verslepen</button>
     <button class="btn btn-warning btn-xs btn-drag" ng-click="disableDrag()" ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode">Stop met verslepen</button>
-    <div ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode" class="alert {{dragStatusClass}} alert-drag">
-        <strong>Status:</strong> {{dragStatusMessage}}
+    <div ng-show="showError" class="alert alert-danger alert-drag">
+        <strong>Status:</strong> Er ging iets mis, gelieve de pagina te herladen.
     </div>
-    <div id="tree">
+    <div class="tree-loading text-center" ng-show="isLoading">
+        <img border="0" src="http://localhost:8081/cosnics/web/Chamilo/Configuration/Resources/Images/Aqua/Action/LoadingHuge.gif">
+    </div>
+    <div id="tree" ng-class="{'tree-disabled': isLoading}">
     </div>
 </div>
 
@@ -76,6 +97,9 @@
 
                     $scope.canEditLearningPathTree = {{ canEditLearningPathTree }};
                     $scope.inReportingMode = {{ inReportingMode }};
+                    $scope.isLoading = false;
+                    $scope.showError = false;
+                    $scope.treeData = {{ treeData }};
 
                     var extractContextMenuItemFromNodeAction = function(node, action) {
                         if(node.data.actions[action] === undefined) return null;
@@ -99,8 +123,6 @@
                         }
                     };
 
-		            var treeData = {{ treeData }};
-
                     if(!$scope.inReportingMode) {
                         $.contextMenu({
                             selector: ".fancytree-title",
@@ -121,10 +143,26 @@
                                                         name: "Voeg sectie toe",
                                                         icon: "fa-plus",
                                                         callback: function () {
-                                                            node.editCreateNode("child", {
-                                                                title: "Pas titel aan...",
-                                                                folder: true
-                                                            });
+                                                            $scope.isLoading = true;
+                                                            $http.post(
+                                                                '{{ addTreeNodeAjaxUrl }}',
+                                                                $.param({
+                                                                    'parent_node_id': node.key,
+                                                                    'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section'
+                                                                }),
+                                                                {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                                            ).then(function successCallback(response) {
+                                                                    node.setExpanded();
+                                                                    reloadTree(response.data.treeData).then(function () {
+                                                                            $scope.isLoading = false;
+                                                                            $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                                                        }
+                                                                    );
+                                                                }, function errorCallback(response) {
+                                                                    $scope.isLoading = false;
+                                                                    $scope.showError = true;
+                                                                }
+                                                            );
                                                         }
                                                     };
 
@@ -132,10 +170,26 @@
                                                     name: "Voeg pagina toe",
                                                     icon: "fa-plus",
                                                     callback: function () {
-                                                        node.editCreateNode("child", {
-                                                            title: "Pas titel aan...",
-                                                            folder: false
-                                                        });
+                                                        $scope.isLoading = true; //@todo refactor when addItem context menu location is decided
+                                                        $http.post(
+                                                            '{{ addTreeNodeAjaxUrl }}',
+                                                            $.param({
+                                                                'parent_node_id': node.key,
+                                                                'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page'
+                                                            }),
+                                                            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                                        ).then(function successCallback(response) {
+                                                                node.setExpanded();
+                                                                reloadTree(response.data.treeData).then(function () {
+                                                                        $scope.isLoading = false;
+                                                                        $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                                                    }
+                                                                );
+                                                            }, function errorCallback(response) {
+                                                                $scope.isLoading = false;
+                                                                $scope.showError = true;
+                                                            }
+                                                        );
                                                     }
                                                 };
 
@@ -145,7 +199,7 @@
 
                                             items["editTitle"] = {
                                                 name: "Pas titel aan", icon: "fa-edit", callback: function () {
-                                                    node.editStart()
+                                                    node.editStart();
                                                 }
                                             };
 
@@ -182,21 +236,26 @@
 
                     $scope.dragEnabled = false;
 
+                    var reloadTree = function(treeData) {
+                        $scope.treeData = treeData;
+                        return $("#tree").fancytree('getTree').reload($scope.treeData);
+                    }
+
                     var reloadTreeWithFreshData = function() {
                         $http.get(
                             fetchTreeNodesAjaxUrl,
                             {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                         ).then(function successCallback(response) {
-                                treeData = response.data;
-                                $("#tree").fancytree('getTree').reload(treeData);
+                                $scope.treeData = response.data;
+                                return $("#tree").fancytree('getTree').reload($scope.treeData);
                             }, function errorCallback(response) {
-                                //@todo alert
+                                $scope.showError = true;
                             }
                         );
                     }
 
                     var tree = $("#tree").fancytree({
-                        source: treeData,
+                        source: $scope.treeData,
                         glyph: {
                             map: {
                                 checkbox: "glyphicon glyphicon-unchecked",
@@ -264,14 +323,12 @@
                             dragStop: function(node, data) {
                             },
                             dragDrop: function(node, data) {
+                                $scope.isLoading = true;
                                 data.otherNode.moveTo(node, data.hitMode);
 
                                 var displayOrder = data.otherNode.getIndex() + 1;
                                 var parentId = data.otherNode.getParent().key;
                                 var childId = data.otherNode.key;
-
-                                $scope.dragStatusClass = 'alert-info';
-                                $scope.dragStatusMessage = "Bezig met opslaan..."; //@todo translations
 
                                 //persist
                                 $http.post(
@@ -279,11 +336,10 @@
                                     $.param({'child_id': childId, 'parent_id': parentId, 'display_order': displayOrder}),
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
-                                        $scope.dragStatusClass = 'alert-success';
-                                        $scope.dragStatusMessage = "Wijziging opgeslaan";
+                                        $scope.isLoading = false;
                                     }, function errorCallback(response) {
-                                        $scope.dragStatusClass = 'alert-danger';
-                                        $scope.dragStatusMessage = "Fout bij opslaan. Gelieve de pagina te herladen";
+                                        $scope.isLoading = false;
+                                        $scope.showError = true;
                                         reloadTreeWithFreshData(); //reset tree
                                     }
                                 );
@@ -328,10 +384,8 @@
                     });
 
                     $scope.enableDrag = function() {
-                        $scope.dragStatusClass = 'alert-info';
-                        $scope.dragStatusMessage = "Alles ok"; //@todo translations
                         $scope.dragEnabled = true;
-                        $("#tree").fancytree('getTree').reload(treeData);
+                        reloadTree($scope.treeData);
                     }
 
                     $scope.disableDrag = function () {
