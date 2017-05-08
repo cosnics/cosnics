@@ -170,10 +170,26 @@
                                                     name: "Voeg pagina toe",
                                                     icon: "fa-plus",
                                                     callback: function () {
-                                                        node.editCreateNode("child", {
-                                                            title: "Pas titel aan...",
-                                                            folder: false
-                                                        });
+                                                        $scope.isLoading = true; //@todo refactor when addItem context menu location is decided
+                                                        $http.post(
+                                                            '{{ addTreeNodeAjaxUrl }}',
+                                                            $.param({
+                                                                'parent_node_id': node.key,
+                                                                'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page'
+                                                            }),
+                                                            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                                        ).then(function successCallback(response) {
+                                                                node.setExpanded();
+                                                                reloadTree(response.data.treeData).then(function () {
+                                                                        $scope.isLoading = false;
+                                                                        $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                                                    }
+                                                                );
+                                                            }, function errorCallback(response) {
+                                                                $scope.isLoading = false;
+                                                                $scope.showError = true;
+                                                            }
+                                                        );
                                                     }
                                                 };
 
@@ -223,8 +239,8 @@
                     var reloadTree = function(treeData) {
                         $scope.treeData = treeData;
                         return $("#tree").fancytree('getTree').reload($scope.treeData);
-
                     }
+
                     var reloadTreeWithFreshData = function() {
                         $http.get(
                             fetchTreeNodesAjaxUrl,
