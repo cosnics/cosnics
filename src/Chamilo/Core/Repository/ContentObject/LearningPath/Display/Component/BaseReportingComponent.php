@@ -3,6 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -21,12 +25,35 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
 
         $html = array();
 
+        $buttonToolbarRenderer = $this->getButtonToolbarRenderer($translator);
+        $html[] = $buttonToolbarRenderer->render();
+
         if ($this->getUser() !== $this->getReportingUser())
         {
             $html[] = $this->renderViewAsMessage($translator, $this->getReportingUser());
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param Translation $translator
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getButtonToolbarRenderer(Translation $translator)
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        $buttonToolbar->addItem(
+            new Button(
+                $translator->getTranslation('ReturnToLearningPath'),
+                new FontAwesomeGlyph('file'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
+            )
+        );
+
+        return new ButtonToolBarRenderer($buttonToolbar);
     }
 
     /**

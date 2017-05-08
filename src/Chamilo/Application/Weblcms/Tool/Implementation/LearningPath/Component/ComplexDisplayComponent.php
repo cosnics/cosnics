@@ -242,18 +242,20 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $reportingActions = array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
+        );
+
+        $requestedAction = $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
         );
 
         if (
-        in_array(
-            $this->getRequest()->get(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
-            ), $reportingActions
-        ) || $this->getRequest()->get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE)
+        in_array($requestedAction, $reportingActions)
+            || $this->getRequest()->get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE)
         )
         {
-            $action = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
+            $action = $requestedAction;
 
             $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
                 $this->getRequest()->get(

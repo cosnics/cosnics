@@ -124,7 +124,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $reportingActions = array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
         );
 
         $inReportingMode = in_array($this->get_action(), $reportingActions);
