@@ -1,11 +1,9 @@
 <?php
-namespace Chamilo\Application\Calendar\Component;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
-use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
-use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
@@ -23,12 +21,15 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
+    const PARAM_DOWNLOAD = 'download';
 
     /**
      *
      * @var \Chamilo\Application\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
+
+    private $publications;
 
     public function run()
     {
@@ -62,19 +63,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             }
             else
             {
-                $icalDownloadUrl = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => self::package(),
-                        self::PARAM_ACTION => Manager::ACTION_ICAL,
-                        self::PARAM_DOWNLOAD => 1));
+                $downloadParameters = $this->get_parameters();
+                $downloadParameters[self::PARAM_DOWNLOAD] = 1;
 
-                $icalExternalUrl = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => self::package(),
-                        self::PARAM_ACTION => Manager::ACTION_ICAL,
-                        User::PROPERTY_SECURITY_TOKEN => $this->getUser()->get_security_token()));
+                $icalDownloadUrl = new Redirect($downloadParameters);
 
-                $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getInternalSourceNames());
+                $externalParameters = $this->get_parameters();
+                $externalParameters[User::PROPERTY_SECURITY_TOKEN] = $this->getUser()->get_security_token();
+
+                $icalExternalUrl = new Redirect($externalParameters);
 
                 $html = array();
 
@@ -85,9 +82,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
                 $html[] = Display::normal_message(
                     Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
-
-                $html[] = Display::warning_message(
-                    Translation::get('ICalWarningMessage', array('INCLUDED_CALENDARS' => $includedCalendars)));
 
                 $html[] = $this->render_footer();
 
@@ -105,11 +99,12 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (! isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
+                $this->getPublicationService(),
+                $this->get_course(),
+                $this->get_tool_id(),
                 $this->get_user(),
                 $this->get_user(),
-                array(),
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                array());
         }
 
         return $this->calendarRendererProvider;
@@ -119,5 +114,26 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     {
         $icalRenderer = new ICalRenderer($this->getCalendarRendererProvider());
         $icalRenderer->renderAndSend();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Service\PublicationService
+     */
+    protected function getPublicationService()
+    {
+        return $this->getService('chamilo.application.weblcms.service.publication');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
+     */
+    public function get_publications()
+    {
+        return $this->getPublicationService()->getPublicationsForUser(
+            $this->getUser(),
+            $this->get_course(),
+            $this->get_tool_id());
     }
 }

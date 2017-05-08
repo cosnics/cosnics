@@ -1,11 +1,11 @@
 @import url('../Aqua/Stylesheet.css');
 
 .navbar.navbar-chamilo {
-	background-color: #C50C2E;
+	background-color: rgb(60, 60, 59);
 }
 
 .navbar.navbar-chamilo .container-fluid {
-	background-color: #C50C2E;
+	background-color: rgb(60, 60, 59);
 }
 
 .navbar-chamilo ul.navbar-nav li a:hover {
@@ -14,12 +14,12 @@
 
 .navbar-chamilo ul.navbar-nav li.active>a, .navbar-chamilo ul.navbar-nav li.active.dropdown.open>a,
 	.navbar-chamilo ul.navbar-nav li.active>a:hover {
-	color: #8e4040 !important;
+	color: rgb(60, 60, 59) !important;
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu li, .navbar-chamilo .navbar-nav .dropdown-menu li a,
 	.navbar-chamilo .navbar-nav .dropdown-menu li a:hover {
-	background: #8e4040;
+	background: rgb(60, 60, 59);
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu li a:hover, .navbar-chamilo .navbar-nav li.dropdown.open .dropdown-menu li a:hover
@@ -34,12 +34,12 @@
 }
 
 .navbar-chamilo ul li div.chamilo-menu-item-account {
-	background-color: #8e4040;
-	color: #d88e8e;
+	background-color: rgb(60, 60, 59);
+	color: white;
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
-	border: 1px solid #993a3a;
+	border: 1px solid white;
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit
@@ -48,10 +48,10 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-me
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
-	background-color: #8e4040;
+	background-color: rgb(60, 60, 59);
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a
 	{
-	background-color: #8e4040;
+	background-color: rgb(60, 60, 59);
 }

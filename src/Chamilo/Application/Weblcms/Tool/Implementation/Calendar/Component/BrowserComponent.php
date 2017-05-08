@@ -10,6 +10,9 @@ use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 
 class BrowserComponent extends Manager
 {
@@ -53,18 +56,18 @@ class BrowserComponent extends Manager
     {
         $defaultComponent = $this->getDefaultComponent();
         $defaultComponent->checkAuthorization();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $defaultComponent->renderToolHeader();
-        
+
         $html[] = '<div class="row">';
         $html[] = $this->renderCalendar();
         $html[] = '</div>';
-        
+
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -77,11 +80,11 @@ class BrowserComponent extends Manager
         if (! isset($this->defaultComponent))
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Application\Weblcms\Tool\Action\Manager::context(), 
+                \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $this->defaultComponent = $factory->getComponent();
         }
-        
+
         return $this->defaultComponent;
     }
 
@@ -89,14 +92,14 @@ class BrowserComponent extends Manager
     {
         $dataProvider = $this->getCalendarDataProvider();
         $calendarLegend = new Legend($dataProvider);
-        
+
         $rendererFactory = new ViewRendererFactory(
-            $this->getCurrentRendererType(), 
-            $dataProvider, 
-            $calendarLegend, 
+            $this->getCurrentRendererType(),
+            $dataProvider,
+            $calendarLegend,
             $this->getCurrentRendererTime());
         $renderer = $rendererFactory->getRenderer();
-        
+
         if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
              $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
         {
@@ -106,7 +109,7 @@ class BrowserComponent extends Manager
             $renderer->setHideOtherHours(
                 LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar'));
         }
-        
+
         return $renderer->render();
     }
 
@@ -117,11 +120,11 @@ class BrowserComponent extends Manager
     public function getCurrentRendererType()
     {
         $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
-        
+
         if (! $rendererType)
         {
             $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
-            
+
             if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
@@ -131,7 +134,7 @@ class BrowserComponent extends Manager
                 }
             }
         }
-        
+
         return $rendererType;
     }
 
@@ -145,7 +148,7 @@ class BrowserComponent extends Manager
         {
             $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
         }
-        
+
         return $this->currentTime;
     }
 
@@ -156,14 +159,27 @@ class BrowserComponent extends Manager
             $displayParameters = $this->getDefaultComponent()->get_parameters();
             $displayParameters[ViewRenderer::PARAM_TYPE] = $this->getCurrentRendererType();
             $displayParameters[ViewRenderer::PARAM_TIME] = $this->getCurrentRendererTime();
-            
+
             $this->calendarDataProvider = new CalendarRendererProvider(
-                $this->getDefaultComponent(), 
-                $this->get_user(), 
-                $this->get_user(), 
+                $this->getDefaultComponent(),
+                $this->get_user(),
+                $this->get_user(),
                 $displayParameters);
         }
-        
+
         return $this->calendarDataProvider;
+    }
+
+    public function get_tool_actions()
+    {
+        $toolActions = array();
+
+        $toolActions[] = new Button(
+            Translation::get('ICalExternal'),
+            new BootstrapGlyph('globe'),
+            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ICAL)),
+            Button::DISPLAY_ICON_AND_LABEL);
+
+        return $toolActions;
     }
 }
