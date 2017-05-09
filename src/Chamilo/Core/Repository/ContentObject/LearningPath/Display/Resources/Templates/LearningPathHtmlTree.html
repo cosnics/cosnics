@@ -123,6 +123,40 @@
                         }
                     };
 
+                    /**
+                     * Helper function: add new node server side and refresh tree
+                     * @param node
+                     * @param node_type
+                     */
+                    var addNodeToTree = function(node, node_type) {
+                        $scope.isLoading = true;
+                        var params = {
+                            'parent_node_id': node.key,
+                            'node_type': node_type
+                        };
+
+                        if(!node.folder) {
+                            params['display_order'] = node.getIndex() + 2;
+                        }
+
+                        $http.post(
+                            '{{ addTreeNodeAjaxUrl }}',
+                            $.param(params),
+                            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                        ).then(function successCallback(response) {
+                                node.setExpanded();
+                                reloadTree(response.data.treeData).then(function () {
+                                        $scope.isLoading = false;
+                                        $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                    }
+                                );
+                            }, function errorCallback(response) {
+                                $scope.isLoading = false;
+                                $scope.showError = true;
+                            }
+                        );
+                    }
+
                     if(!$scope.inReportingMode) {
                         $.contextMenu({
                             selector: ".fancytree-title",
@@ -137,65 +171,25 @@
                                         var items = {};
 
                                         if ($scope.canEditLearningPathTree) {
-                                            if (node.folder === true) {
-                                                items["addSection"] =
-                                                    {
-                                                        name: "Voeg sectie toe",
-                                                        icon: "fa-plus",
-                                                        callback: function () {
-                                                            $scope.isLoading = true;
-                                                            $http.post(
-                                                                '{{ addTreeNodeAjaxUrl }}',
-                                                                $.param({
-                                                                    'parent_node_id': node.key,
-                                                                    'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section'
-                                                                }),
-                                                                {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
-                                                            ).then(function successCallback(response) {
-                                                                    node.setExpanded();
-                                                                    reloadTree(response.data.treeData).then(function () {
-                                                                            $scope.isLoading = false;
-                                                                            $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
-                                                                        }
-                                                                    );
-                                                                }, function errorCallback(response) {
-                                                                    $scope.isLoading = false;
-                                                                    $scope.showError = true;
-                                                                }
-                                                            );
-                                                        }
-                                                    };
-
-                                                items["addItem"] = {
-                                                    name: "Voeg pagina toe",
+                                            items["addSection"] =
+                                                {
+                                                    name: "Voeg sectie toe",
                                                     icon: "fa-plus",
                                                     callback: function () {
-                                                        $scope.isLoading = true; //@todo refactor when addItem context menu location is decided
-                                                        $http.post(
-                                                            '{{ addTreeNodeAjaxUrl }}',
-                                                            $.param({
-                                                                'parent_node_id': node.key,
-                                                                'node_type': 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page'
-                                                            }),
-                                                            {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
-                                                        ).then(function successCallback(response) {
-                                                                node.setExpanded();
-                                                                reloadTree(response.data.treeData).then(function () {
-                                                                        $scope.isLoading = false;
-                                                                        $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
-                                                                    }
-                                                                );
-                                                            }, function errorCallback(response) {
-                                                                $scope.isLoading = false;
-                                                                $scope.showError = true;
-                                                            }
-                                                        );
+                                                        addNodeToTree(node, 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section');
                                                     }
                                                 };
 
-                                                items['sep0'] = '-';
+                                            items["addItem"] = {
+                                                name: "Voeg pagina toe",
+                                                icon: "fa-plus",
+                                                callback: function () {
+                                                    addNodeToTree(node, 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page');
+                                                }
+                                            };
 
-                                            }
+                                            items['sep0'] = '-';
+
 
                                             items["editTitle"] = {
                                                 name: "Pas titel aan", icon: "fa-edit", callback: function () {

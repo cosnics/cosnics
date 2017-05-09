@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AddLearningPathTreeNodeComponent extends Manager
 {
     const PARAM_PARENT_NODE_ID = 'parent_node_id';
-    //the content object type
-    const PARAM_NODE_TYPE = 'node_type';
+    const PARAM_NODE_TYPE = 'node_type'; //content object type.
+    const PARAM_DISPLAY_ORDER = 'display_order'; //optional
 
     /**
      * Runs this component and returns it's response
@@ -40,6 +40,12 @@ class AddLearningPathTreeNodeComponent extends Manager
                 $nodeType, $this->get_application()->get_root_content_object(),
                 $parentNode, $this->getUser()
             );
+
+            $displayOrder = $this->getRequest()->request->get(self::PARAM_DISPLAY_ORDER);
+            if(!empty($displayOrder)) {
+                $learningPathChild->setDisplayOrder((int) $displayOrder);
+                $learningPathChild->update();
+            }
 
             $learningPathTreeBuilder = $this->get_application()->getLearningPathTreeBuilder();
             $learningPathTree =
