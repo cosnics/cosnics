@@ -395,10 +395,11 @@
                                     $.param(params),
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
-                                        $scope.isLoading = false;
                                         if($scope.addingNewNode) { //when adding a new node and editing the title, we want a redirect to the edit page
                                             window.location.href = node.data.actions.edit.url;
                                             $scope.addingNewNode = false;
+                                        } else {
+                                            $scope.isLoading = false;
                                         }
                                     }, function errorCallback(response) {
                                         node.setTitle(data.orgTitle);
