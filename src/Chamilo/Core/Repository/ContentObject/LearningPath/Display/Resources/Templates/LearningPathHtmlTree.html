@@ -348,7 +348,8 @@
                         extensions: ["dnd", "edit", "glyph", "persist"],
                         toggleEffect: false,
                         persist: {
-                            store: "local" // 'cookie', 'local': use localStore, 'session': sessionStore
+                            store: "local", // 'cookie', 'local': use localStore, 'session': sessionStore
+                            types: 'expanded'
                         },
                         enhanceTitle: function (event, data) {
                             data.$title.addClass("ws-wrap");
