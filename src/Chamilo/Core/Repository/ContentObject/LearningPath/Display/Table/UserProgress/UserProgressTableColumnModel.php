@@ -25,6 +25,8 @@ class UserProgressTableColumnModel extends RecordTableColumnModel implements Tab
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
-        $this->add_column(new SortableStaticTableColumn('progress'));
+        $this->add_column(new StaticTableColumn('progress'));
+        $this->add_column(new SortableStaticTableColumn('completed'));
+        $this->add_column(new SortableStaticTableColumn('started'));
     }
 }

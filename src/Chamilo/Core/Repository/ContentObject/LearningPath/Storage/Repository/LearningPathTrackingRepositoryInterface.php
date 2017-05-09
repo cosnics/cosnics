@@ -111,15 +111,17 @@ interface LearningPathTrackingRepositoryInterface
      * Joined with users for searching and sorting
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
     public function findLearningPathAttemptsWithUser(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $learningPathChildIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     );
 
     /**
@@ -136,15 +138,17 @@ interface LearningPathTrackingRepositoryInterface
      * Finds the targeted users (left) joined with the learning path attempts
      *
      * @param LearningPath $learningPath
+     * @param array $learningPathChildIds
      * @param Condition $condition
      * @param int $offset
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
     public function findTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $learningPathChildIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     );
 
     /**
@@ -221,18 +225,5 @@ interface LearningPathTrackingRepositoryInterface
      */
     public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
         LearningPath $learningPath
-    );
-
-    /**
-     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt, optionally
-     * filtering them by the given LearningPathTreeNode id's
-     *
-     * @param LearningPathAttempt $learningPathAttempt
-     * @param int[] $learningPathTreeNodeIds
-     *
-     * @return int
-     */
-    public function getNumberOfCompletedNodesForLearningPathAttempt(
-        LearningPathAttempt $learningPathAttempt, $learningPathTreeNodeIds = array()
     );
 }
