@@ -34,6 +34,11 @@ class LearningPathAttemptService
     protected $learningPathAttemptCache;
 
     /**
+     * @var LearningPathAttempt[][]
+     */
+    protected $existingLearningPathAttemptCache;
+
+    /**
      * @var LearningPathChildAttempt[][]
      */
     protected $activeLearningPathChildAttemptCache;
@@ -94,7 +99,15 @@ class LearningPathAttemptService
      */
     public function getLearningPathAttemptForUser(LearningPath $learningPath, User $user)
     {
-        return $this->learningPathTrackingRepository->findLearningPathAttemptForUser($learningPath, $user);
+        if (!array_key_exists($learningPath->getId(), $this->existingLearningPathAttemptCache) ||
+            !array_key_exists($user->getId(), $this->existingLearningPathAttemptCache[$learningPath->getId()])
+        )
+        {
+            $this->existingLearningPathAttemptCache[$learningPath->getId()][$user->getId()] =
+                $this->learningPathTrackingRepository->findLearningPathAttemptForUser($learningPath, $user);
+        }
+
+        return $this->existingLearningPathAttemptCache[$learningPath->getId()][$user->getId()];
     }
 
     /**
