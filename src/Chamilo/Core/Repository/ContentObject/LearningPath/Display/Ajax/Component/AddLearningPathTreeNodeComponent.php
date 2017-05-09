@@ -48,19 +48,19 @@ class AddLearningPathTreeNodeComponent extends Manager
             }
 
             $learningPathTreeBuilder = $this->get_application()->getLearningPathTreeBuilder();
-            $learningPathTree =
+            $tree =
                 $learningPathTreeBuilder->buildLearningPathTree($this->get_application()->get_root_content_object());
 
             $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-                $learningPathTree, $this->getUser(),
+                $tree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
                 new NodeActionGenerator(Translation::getInstance(), $this->get_application()->get_parameters()),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
-                $this->get_application()->getCurrentLearningPathTreeNode(),
+                $tree->getLearningPathTreeNodeById((int) $learningPathChild->getId()),
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditLearningPathTreeNode(
-                    $this->get_application()->getCurrentLearningPathTreeNode()
+                    $tree->getLearningPathTreeNodeById((int) $learningPathChild->getId())
                 )
             );
 

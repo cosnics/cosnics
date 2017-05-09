@@ -147,6 +147,7 @@
                                 node.setExpanded();
                                 reloadTree(response.data.treeData).then(function () {
                                         $scope.isLoading = false;
+                                        $scope.addingNewNode = true;
                                         $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
                                     }
                                 );
@@ -193,6 +194,7 @@
 
                                             items["editTitle"] = {
                                                 name: "Pas titel aan", icon: "fa-edit", callback: function () {
+                                                    $scope.addingNewNode = false;
                                                     node.editStart();
                                                 }
                                             };
@@ -394,6 +396,10 @@
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
                                         $scope.isLoading = false;
+                                        if($scope.addingNewNode) { //when adding a new node and editing the title, we want a redirect to the edit page
+                                            window.location.href = node.data.actions.edit.url;
+                                            $scope.addingNewNode = false;
+                                        }
                                     }, function errorCallback(response) {
                                         node.setTitle(data.orgTitle);
                                         $scope.isLoading = false;

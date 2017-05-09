@@ -116,7 +116,7 @@ abstract class Application
     /**
      * Get the parent application
      *
-     * @return \libraries\architecture\application\Application
+     * @return Application
      * @deprecated User get_application() now
      */
     public function get_parent()
@@ -127,7 +127,7 @@ abstract class Application
     /**
      * Get the parent application
      *
-     * @return \libraries\architecture\application\Application
+     * @return Application
      */
     public function get_application()
     {
