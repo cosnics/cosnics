@@ -242,18 +242,20 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $reportingActions = array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
+        );
+
+        $requestedAction = $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
         );
 
         if (
-        in_array(
-            $this->getRequest()->get(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
-            ), $reportingActions
-        ) || $this->getRequest()->get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE)
+        in_array($requestedAction, $reportingActions)
+            || $this->getRequest()->get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE)
         )
         {
-            $action = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
+            $action = $requestedAction;
 
             $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
                 $this->getRequest()->get(
@@ -297,44 +299,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     }
 
     /**
-     * Returns the currently selected learning path child id from the request
-     *
-     * @return int
-     */
-    public function getCurrentLearningPathChildId()
-    {
-        return (int) $this->getRequest()->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
-        );
-    }
-
-    /**
-     * Returns the LearningPathTree for the current learning path root
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
-     */
-    protected function getLearningPathTree()
-    {
-        if (!isset($this->learningPathTree))
-        {
-            $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
-                $this->publication->get_content_object()
-            );
-        }
-
-        return $this->learningPathTree;
-    }
-
-    /**
      * Returns the LearningPathTreeNode for the current step
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
      */
     public function getCurrentLearningPathTreeNode()
     {
-        $learningPathTree = $this->getLearningPathTree();
-
-        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+        return parent::getCurrentLearningPathTreeNode($this->publication->getContentObject());
     }
 
     public function save_assessment_answer($complex_question_id, $answer, $score, $hint)

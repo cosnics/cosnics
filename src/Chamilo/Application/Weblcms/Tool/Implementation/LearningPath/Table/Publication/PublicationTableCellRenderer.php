@@ -93,7 +93,10 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         $learningPath = new LearningPath();
         $learningPath->setId($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
-        $progress = $learningPathTrackingService->getLearningPathProgress($learningPath, $user);
+        $progress = $learningPathTrackingService->getLearningPathProgress(
+            $learningPath, $user,
+                $this->get_component()->get_tool_browser()->get_parent()->getCurrentLearningPathTreeNode($learningPath)
+        );
 
         if (!is_null($progress))
         {

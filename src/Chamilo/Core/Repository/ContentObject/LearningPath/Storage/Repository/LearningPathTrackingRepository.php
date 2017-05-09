@@ -710,13 +710,17 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     }
 
     /**
-     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt
+     * Returns the number of unique completed LearningPathTreeNode's for the given LearningPathAttempt, optionally
+     * filtering them by the given LearningPathTreeNode id's
      *
      * @param LearningPathAttempt $learningPathAttempt
+     * @param int[] $learningPathTreeNodeIds
      *
-     * @return \string[]
+     * @return int
      */
-    public function getNumberOfCompletedNodesForLearningPathAttempt(LearningPathAttempt $learningPathAttempt)
+    public function getNumberOfCompletedNodesForLearningPathAttempt(
+        LearningPathAttempt $learningPathAttempt, $learningPathTreeNodeIds = array()
+    )
     {
         $learningPathChildAttemptClassName =
             $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName();
@@ -729,6 +733,16 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
             ),
             array(LearningPathChildAttempt::STATUS_COMPLETED, LearningPathChildAttempt::STATUS_PASSED)
         );
+
+        if(!empty($learningPathTreeNodeIds) && is_array($learningPathTreeNodeIds))
+        {
+            $conditions[] = new InCondition(
+                new PropertyConditionVariable(
+                    $learningPathChildAttemptClassName, LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                ),
+                $learningPathTreeNodeIds
+            );
+        }
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

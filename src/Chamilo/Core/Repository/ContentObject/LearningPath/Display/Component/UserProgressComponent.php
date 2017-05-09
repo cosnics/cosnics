@@ -18,39 +18,37 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserProgressComponent extends Manager implements TableSupport
+class UserProgressComponent extends BaseReportingComponent implements TableSupport
 {
     /**
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
 
-    /**
-     * @return string
-     */
-    function run()
+    function build()
     {
         $panelRenderer = new PanelRenderer();
         $translator = Translation::getInstance();
 
         $html = array();
         $html[] = $this->render_header();
+        $html[] = $this->renderCommonFunctionality();
         $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
         $table = new UserProgressTable($this);
-        $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
+        $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserAttempts'),
-            $this->getButtonToolbarRenderer()->render() . $table->as_html()
+            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
         );
 
         $table = new TargetUserProgressTable($this);
-        $table->setSearchForm($this->getButtonToolbarRenderer()->getSearchForm());
+        $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('TargetUsers'),
-            $this->getButtonToolbarRenderer()->render() . $table->as_html()
+            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
         );
 
         $html[] = $this->render_footer();
@@ -113,7 +111,7 @@ class UserProgressComponent extends Manager implements TableSupport
     /**
      * @return ButtonToolBarRenderer
      */
-    protected function getButtonToolbarRenderer()
+    protected function getSearchButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -133,7 +131,7 @@ class UserProgressComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        return $this->getButtonToolbarRenderer()->getConditions(
+        return $this->getSearchButtonToolbarRenderer()->getConditions(
             array(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
@@ -141,5 +139,4 @@ class UserProgressComponent extends Manager implements TableSupport
             )
         );
     }
-
 }

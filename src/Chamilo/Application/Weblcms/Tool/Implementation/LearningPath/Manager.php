@@ -50,6 +50,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const PARAM_LEARNING_PATH_ID = 'lpid';
     const PARAM_ATTEMPT_ID = 'attempt_id';
 
+    /**
+     * LearningPathTree cache
+     *
+     * @var LearningPathTree[]
+     */
+    protected $learningPathTree;
+
     public function get_available_browser_types()
     {
         $browser_types = array();
@@ -237,5 +244,49 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
         );
+    }
+
+    /**
+     * Returns the currently selected learning path child id from the request
+     *
+     * @return int
+     */
+    public function getCurrentLearningPathChildId()
+    {
+        return (int) $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
+        );
+    }
+
+    /**
+     * Returns the LearningPathTree for the current learning path root
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     */
+    protected function getLearningPathTree(LearningPath $learningPath)
+    {
+        if (!isset($this->learningPathTree[$learningPath->getId()]))
+        {
+            $this->learningPathTree[$learningPath->getId()] =
+                $this->getLearningPathTreeBuilder()->buildLearningPathTree($learningPath);
+        }
+
+        return $this->learningPathTree[$learningPath->getId()];
+    }
+
+    /**
+     * Returns the LearningPathTreeNode for the current step
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     */
+    public function getCurrentLearningPathTreeNode(LearningPath $learningPath)
+    {
+        $learningPathTree = $this->getLearningPathTree($learningPath);
+
+        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
     }
 }
