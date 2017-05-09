@@ -138,17 +138,15 @@ class LearningPathChildService
     }
 
     /**
-     * Creates and adds a new content object with placeholder data
-     *
      * @param string $contentObjectType
      * @param LearningPath $learningPath
      * @param LearningPathTreeNode $currentLearningPathTreeNode
      * @param User $user
-     *
+     * @param string $title
      * @return LearningPathChild
      */
     public function createAndAddContentObjectToLearningPath(
-        $contentObjectType, LearningPath $learningPath, LearningPathTreeNode $currentLearningPathTreeNode, User $user
+        $contentObjectType, LearningPath $learningPath, LearningPathTreeNode $currentLearningPathTreeNode, User $user, $title = '...'
     )
     {
         if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
@@ -160,7 +158,7 @@ class LearningPathChildService
 
         /** @var ContentObject $contentObject */
         $contentObject = new $contentObjectType();
-        $contentObject->set_title('placeholder');
+        $contentObject->set_title($title);
         $contentObject->set_owner_id($user->getId());
 
         if (!$this->learningPathChildRepository->create($contentObject))
