@@ -236,13 +236,16 @@
                     }
 
                     var reloadTreeWithFreshData = function() {
+                        $scope.isLoading = true;
                         $http.get(
                             fetchTreeNodesAjaxUrl,
                             {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                         ).then(function successCallback(response) {
+                                $scope.isLoading = false;
                                 $scope.treeData = response.data;
                                 return $("#tree").fancytree('getTree').reload($scope.treeData);
                             }, function errorCallback(response) {
+                                $scope.isLoading = false;
                                 $scope.showError = true;
                             }
                         );
@@ -373,13 +376,36 @@
                                 return '<span class="fancytree-title">' + data.node.title + '</span>';
                             }
 
+                        },
+                        edit: {
+                            save: function(event, data) {
+                                $scope.isLoading = true;
+                                var node = data.node;
+                                var params = {
+                                    'new_title': data.input.val(),
+                                    'child_id': node.key
+                                };
+
+                                $http.post(
+                                    "{{ updateTreeNodeTitleAjaxUrl }}",
+                                    $.param(params),
+                                    {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                ).then(function successCallback(response) {
+                                        $scope.isLoading = false;
+                                    }, function errorCallback(response) {
+                                        node.setTitle(data.orgTitle);
+                                        $scope.isLoading = false;
+                                        $scope.showError = true;
+                                    }
+                                );
+                            }
                         }
 
                     });
 
                     $scope.enableDrag = function() {
                         $scope.dragEnabled = true;
-                        reloadTree($scope.treeData);
+                        reloadTreeWithFreshData();
                     }
 
                     $scope.disableDrag = function () {

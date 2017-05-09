@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UpdateLearningPathTreeNodeTitleComponent extends Manager
 {
     const PARAM_NEW_TITLE = 'new_title';
+    const PARAM_CHILD_ID = 'child_id';
 
     /**
      * Executes this component and returns its output
@@ -23,7 +24,11 @@ class UpdateLearningPathTreeNodeTitleComponent extends Manager
     {
         try
         {
-            $learningPathTreeNode = $this->get_application()->getCurrentLearningPathTreeNode();
+            $childId = $this->getRequestedPostDataValue(self::PARAM_CHILD_ID);
+
+            $learningPathTree = $this->get_application()->getLearningPathTree();
+            $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $childId);
+
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
 
             if (!$this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
@@ -50,6 +55,6 @@ class UpdateLearningPathTreeNodeTitleComponent extends Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self::PARAM_NEW_TITLE);
+        return array(self::PARAM_NEW_TITLE, self::PARAM_CHILD_ID);
     }
 }

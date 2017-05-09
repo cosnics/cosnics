@@ -146,6 +146,13 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
                     => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_ADD_LEARNING_PATH_TREE_NODE
                 )
             ),
+            'updateTreeNodeTitleAjaxUrl' => $this->get_application()->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+                    => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE
+                )
+            ),
             'canEditLearningPathTree' =>
                 $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
             'inReportingMode' => $inReportingMode ? 'true' : 'false',
