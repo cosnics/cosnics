@@ -1027,6 +1027,7 @@ class LearningPathTrackingService
      */
     public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
     {
+        return 0;
         return $this->learningPathTrackingRepository->countTargetUsersWithoutLearningPathAttempts($learningPath);
     }
 
@@ -1068,6 +1069,7 @@ class LearningPathTrackingService
      */
     public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
     {
+        return 0;
         return $this->learningPathTrackingRepository->countTargetUsersWithPartialLearningPathAttempts($learningPath);
     }
 
