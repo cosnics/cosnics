@@ -165,46 +165,61 @@ interface LearningPathTrackingRepositoryInterface
      * Finds the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
-    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+    public function findTargetUsersWithoutLearningPathAttempts(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    );
 
     /**
      * Counts the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
      * @return int
      */
-    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath);
+    public function countTargetUsersWithoutLearningPathAttempts(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    );
 
     /**
      * Finds the target users with attempts on a learning path that are not completed
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
-    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath);
+    public function findTargetUsersWithPartialLearningPathAttempts(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    );
 
     /**
      * Counts the target users with attempts on a learning path that are completed
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
      * @return int
      */
-    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath);
+    public function countTargetUsersWithFullLearningPathAttempts(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    );
 
     /**
      * Counts the target users with attempts on a learning path that are not completed
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
      * @return int
      */
-    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath);
+    public function countTargetUsersWithPartialLearningPathAttempts(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    );
 
     /**
      * Counts the total number of target users for a given learning path

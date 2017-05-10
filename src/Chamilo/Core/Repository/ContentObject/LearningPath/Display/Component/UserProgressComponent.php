@@ -91,7 +91,9 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('TargetUsersWithFullAttempts'),
-            $trackingService->countTargetUsersWithFullLearningPathAttempts($this->get_root_content_object())
+            $trackingService->countTargetUsersWithFullLearningPathAttempts(
+                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+            )
         );
 
         $html[] = '</div>';

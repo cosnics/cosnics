@@ -533,8 +533,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
-        $queryBuilder->having(
-            $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->get_having()));
+        if($parameters->get_having() instanceof Condition)
+        {
+            $queryBuilder->having(
+                $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->get_having())
+            );
+        }
+
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
         if (! $statement instanceof \PDOException)

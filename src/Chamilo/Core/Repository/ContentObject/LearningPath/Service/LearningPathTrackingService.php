@@ -995,7 +995,7 @@ class LearningPathTrackingService
      */
     public function getTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode,
-            Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
         $learningPathChildIds = $learningPathTreeNode instanceof LearningPathTreeNode ?
@@ -1034,12 +1034,17 @@ class LearningPathTrackingService
      * Counts the target users with attempts on a learning path that are completed
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return int
      */
-    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    public function countTargetUsersWithFullLearningPathAttempts(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
     {
-        return $this->learningPathTrackingRepository->countTargetUsersWithFullLearningPathAttempts($learningPath);
+        return $this->learningPathTrackingRepository->countTargetUsersWithFullLearningPathAttempts(
+            $learningPath, $learningPathTreeNode->getLearningPathChildIdsFromSelfAndDescendants()
+        );
     }
 
     /**
