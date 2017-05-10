@@ -19,6 +19,7 @@ abstract class Manager extends AjaxManager
     const ACTION_MOVE_LEARNING_PATH_TREE_NODE = 'MoveLearningPathTreeNode';
     const ACTION_ADD_LEARNING_PATH_TREE_NODE = 'AddLearningPathTreeNode';
     const ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE = 'UpdateLearningPathTreeNodeTitle';
+    const ACTION_DELETE_LEARNING_PATH_TREE_NODE = 'DeleteLearningPathTreeNode';
 
     const DEFAULT_ACTION = self::ACTION_GET_LEARNING_PATH_TREE_NODES;
 

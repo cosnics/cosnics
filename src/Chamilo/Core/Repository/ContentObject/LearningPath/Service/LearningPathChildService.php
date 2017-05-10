@@ -306,6 +306,7 @@ class LearningPathChildService
      * is defined by the learning path tree node
      *
      * @param LearningPathTreeNode $learningPathTreeNode
+     * @todo move to learning path service
      */
     public function deleteContentObjectFromLearningPath(LearningPathTreeNode $learningPathTreeNode)
     {

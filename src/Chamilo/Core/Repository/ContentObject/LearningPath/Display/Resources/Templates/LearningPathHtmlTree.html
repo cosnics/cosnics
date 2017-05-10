@@ -74,8 +74,8 @@
 
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
-    <button class="btn btn-default btn-xs btn-drag" ng-click="enableDrag()" ng-show="!dragEnabled && canEditLearningPathTree && !inReportingMode">Activeer Verslepen</button>
-    <button class="btn btn-warning btn-xs btn-drag" ng-click="disableDrag()" ng-show="dragEnabled && canEditLearningPathTree && !inReportingMode">Stop met verslepen</button>
+    <button class="btn btn-default btn-xs btn-drag" ng-click="enableQuickEditStructure()" ng-show="!quickEditStructureEnabled && canEditLearningPathTree && !inReportingMode">Pas structuur snel aan</button>
+    <button class="btn btn-warning btn-xs btn-drag" ng-click="disableQuickEditStructure()" ng-show="quickEditStructureEnabled && canEditLearningPathTree && !inReportingMode">Stop met snel aanpassen van structuur</button>
     <div ng-show="showError" class="alert alert-danger alert-drag">
         <strong>Status:</strong> Er ging iets mis, gelieve de pagina te herladen.
     </div>
@@ -128,7 +128,7 @@
                      * @param node
                      * @param node_type
                      */
-                    var addNodeToTree = function(node, node_type) {
+                    var addNodeToTreeAndStartTitleEdit = function(node, node_type) {
                         $scope.isLoading = true;
                         var params = {
                             'parent_node_id': node.key,
@@ -158,7 +158,86 @@
                         );
                     }
 
-                    if(!$scope.inReportingMode) {
+                    var getContextMenuItems = function(node) {
+                            var items = {};
+                            if ($scope.canEditLearningPathTree && !$scope.inReportingMode) {
+                                items["addSection"] =
+                                    {
+                                        name: "Voeg sectie toe",
+                                        icon: "fa-plus",
+                                        callback: function () {
+                                            addNodeToTreeAndStartTitleEdit(node, 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section');
+                                        }
+                                    };
+
+                                items["addItem"] = {
+                                    name: "Voeg pagina toe",
+                                    icon: "fa-plus",
+                                    callback: function () {
+                                        addNodeToTreeAndStartTitleEdit(node, 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page');
+                                    }
+                                };
+
+                                items['sep0'] = '-';
+
+
+                                items["editTitle"] = {
+                                    name: "Pas titel aan", icon: "fa-edit", callback: function () {
+                                        $scope.addingNewNode = false;
+                                        node.editStart();
+                                    }
+                                };
+
+                                if($scope.quickEditStructureEnabled) {
+                                    items["quickDelete"] = {
+                                        name: "Verwijder", icon: "fa-remove", callback: function () {
+                                            confirm("Bent u zeker?");
+                                            var params = {
+                                                'node_id': node.key
+                                            };
+                                            $http.post(
+                                                '{{ deleteTreeNodeAjaxUrl }}',
+                                                $.param(params),
+                                                {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                                            ).then(function successCallback(response) {
+                                                node.remove();
+                                                $scope.isLoading = false;
+                                                }, function errorCallback(response) {
+                                                    $scope.isLoading = false;
+                                                    $scope.showError = true;
+                                                }
+                                            );
+                                        }
+                                    };
+                                    var actions = ['edit'];
+                                } else {
+                                    var actions = ['edit', 'delete', 'move', '-', 'block', '-', 'reporting',
+                                        'progress', '-', 'activity', 'manage'];
+                                }
+                            }
+                            else if (!$scope.inReportingMode) {
+                                var actions = ['progress', 'activity'];
+                            }
+
+                            var separatorCounter = 1;
+
+                            actions.forEach(function (action) {
+                                if (action === '-') {
+                                    items['sep' + separatorCounter] = '-';
+                                    separatorCounter++;
+                                }
+                                else {
+                                    var item = extractContextMenuItemFromNodeAction(node, action);
+                                    if (item !== null) {
+                                        items[action] = item;
+                                    }
+                                }
+                            });
+
+                            return items;
+                        };
+
+                    var buildContextMenu = function () {
                         $.contextMenu({
                             selector: ".fancytree-title",
                             zIndex: 10001,
@@ -168,69 +247,19 @@
                                     node.setFocus(true);
                                 }
                                 return {
-                                    items: function () { //todo retrieve from node
-                                        var items = {};
-
-                                        if ($scope.canEditLearningPathTree) {
-                                            items["addSection"] =
-                                                {
-                                                    name: "Voeg sectie toe",
-                                                    icon: "fa-plus",
-                                                    callback: function () {
-                                                        addNodeToTree(node, 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section');
-                                                    }
-                                                };
-
-                                            items["addItem"] = {
-                                                name: "Voeg pagina toe",
-                                                icon: "fa-plus",
-                                                callback: function () {
-                                                    addNodeToTree(node, 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page');
-                                                }
-                                            };
-
-                                            items['sep0'] = '-';
-
-
-                                            items["editTitle"] = {
-                                                name: "Pas titel aan", icon: "fa-edit", callback: function () {
-                                                    $scope.addingNewNode = false;
-                                                    node.editStart();
-                                                }
-                                            };
-
-                                            var actions = ['edit', 'delete', 'move', '-', 'block', '-', 'reporting',
-                                                'progress', '-', 'activity', 'manage'];
-                                        }
-                                        else {
-                                            var actions = ['progress', 'activity'];
-                                        }
-
-                                        var separatorCounter = 1;
-
-                                        actions.forEach(function (action) {
-                                            if (action === '-') {
-                                                items['sep' + separatorCounter] = '-';
-                                                separatorCounter++;
-                                            }
-                                            else {
-                                                var item = extractContextMenuItemFromNodeAction(node, action);
-                                                if (item !== null) {
-                                                    items[action] = item;
-                                                }
-                                            }
-                                        });
-
-                                        return items;
-                                    }()
+                                    items: getContextMenuItems(node)
                                 };
                             }
                         });
-                    }
+
+                    };
+
+                    buildContextMenu(); //@todo move to init code
+
 
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
 
-                    $scope.dragEnabled = false;
+                    $scope.quickEditStructureEnabled = false;
 
                     var reloadTree = function(treeData) {
                         $scope.treeData = treeData;
@@ -292,7 +321,7 @@
 
                             // Events that make tree nodes draggable
                             dragStart: function (node, data) {
-                                if(!$scope.dragEnabled) {
+                                if(!$scope.quickEditStructureEnabled) {
                                     return false;
                                 }
                                 if(node.getParent().isRoot()) { //fancytree has an invisible root
@@ -364,7 +393,7 @@
 
                             var node = data.node;
 
-                            if (!$scope.dragEnabled && event.button !== 2 && $(event.originalEvent.target).hasClass('fancytree-title')) {
+                            if (!$scope.quickEditStructureEnabled && event.button !== 2 && $(event.originalEvent.target).hasClass('fancytree-title')) {
                                 if (node.data.href) {
                                     window.location.href = node.data.href;
                                 }
@@ -374,7 +403,7 @@
                             }
                         },
                         renderTitle: function (event, data) {
-                            if(data.node.data.number && !$scope.dragEnabled) {
+                            if(data.node.data.number && !$scope.quickEditStructureEnabled) {
                                 return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
                             } else {
                                 return '<span class="fancytree-title">' + data.node.title + '</span>';
@@ -395,7 +424,7 @@
                                     $.param(params),
                                     {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                                 ).then(function successCallback(response) {
-                                        if($scope.addingNewNode) { //when adding a new node and editing the title, we want a redirect to the edit page
+                                        if($scope.addingNewNode && !$scope.quickEditStructureEnabled) { //when adding a new node and editing the title, we want a redirect to the edit page
                                             window.location.href = node.data.actions.edit.url;
                                             $scope.addingNewNode = false;
                                         } else {
@@ -412,13 +441,13 @@
 
                     });
 
-                    $scope.enableDrag = function() {
-                        $scope.dragEnabled = true;
+                    $scope.enableQuickEditStructure = function() {
+                        $scope.quickEditStructureEnabled = true;
                         reloadTreeWithFreshData();
                     }
 
-                    $scope.disableDrag = function () {
-                        $scope.dragEnabled = false;
+                    $scope.disableQuickEditStructure = function () {
+                        $scope.quickEditStructureEnabled = false;
                         reloadTreeWithFreshData();
                     }
                 }]
