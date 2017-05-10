@@ -37,13 +37,37 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         switch ($column->get_name())
         {
             case 'progress':
-                if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
-                {
-                    return null;
-                }
+                $learningPathTrackingService = $this->getLearningPathTrackingService();
+                $learningPath = $this->getLearningPath();
+                $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+
+                $user = new User();
+                $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
+
+                $progress = $learningPathTrackingService->getLearningPathProgress(
+                    $learningPath, $user, $currentLearningPathTreeNode
+                );
 
                 $progressBarRenderer = new ProgressBarRenderer();
-                return $progressBarRenderer->render((int) $record[LearningPathAttempt::PROPERTY_PROGRESS]);
+                return $progressBarRenderer->render($progress);
+            case 'completed':
+                $numberOfNodes = $record['nodes_completed'];
+                $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+
+                if($numberOfNodes >= count($currentLearningPathTreeNode->getDescendantNodes()) + 1)
+                {
+                    return Theme::getInstance()->getCommonImage('Status/OkMini');
+                }
+
+                return null;
+            case 'started':
+                $numberOfNodes = $record['nodes_completed'];
+                if($numberOfNodes > 0)
+                {
+                    return Theme::getInstance()->getCommonImage('Status/OkMini');
+                }
+
+                return null;
         }
 
         return parent::render_cell($column, $record);
@@ -58,14 +82,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
      */
     public function get_actions($record)
     {
-        if(is_null($record[LearningPathAttempt::PROPERTY_PROGRESS]))
-        {
-            return null;
-        }
-
         $learningPath = $this->getLearningPath();
-        $user = $this->getUser();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
+
+        $user = new User();
+        $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 

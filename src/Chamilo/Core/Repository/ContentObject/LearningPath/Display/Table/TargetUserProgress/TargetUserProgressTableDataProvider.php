@@ -27,8 +27,11 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
+        $this->cleanupOrderProperty($order_property);
+
         return $this->getLearningPathTrackingService()->getTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(), $condition, $offset, $count, $order_property
+            $this->getLearningPath(), $this->getCurrentLearningPathTreeNode(),
+            $condition, $offset, $count, $order_property
         );
     }
 

@@ -399,4 +399,23 @@ class LearningPathTreeNode
     {
         return $this->getLearningPathTree()->getRoot() === $this;
     }
+
+    /**
+     * Returns the identifiers for the LearningPathChild objects for this object and all of it's descendants
+     *
+     * @return int[]
+     */
+    public function getLearningPathChildIdsFromSelfAndDescendants()
+    {
+        $learningPathChildIds = array();
+
+        $learningPathChildIds[] = $this->getId();
+
+        foreach($this->getDescendantNodes() as $descendantNode)
+        {
+            $learningPathChildIds[] = $descendantNode->getId();
+        }
+
+        return $learningPathChildIds;
+    }
 }

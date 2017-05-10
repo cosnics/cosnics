@@ -32,7 +32,7 @@ class LearningPathTrackingService
     protected $learningPathTrackingRepository;
 
     /**
-     * @var int[]
+     * @var bool[]
      */
     protected $learningPathTreeNodesCompletedCache;
 
@@ -179,15 +179,16 @@ class LearningPathTrackingService
 
         $nodesCompleted = 0;
 
-        foreach($nodes as $node)
+        foreach ($nodes as $node)
         {
-            if($this->isLearningPathTreeNodeCompleted($learningPath, $user, $node))
+            if ($this->isLearningPathTreeNodeCompleted($learningPath, $user, $node))
             {
-                $nodesCompleted++;
+                $nodesCompleted ++;
             }
         }
 
         $progress = (int) round(($nodesCompleted / count($nodes)) * 100);
+
         return $progress > 100 ? 100 : $progress;
     }
 
@@ -204,13 +205,15 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        if(!array_key_exists($learningPathTreeNode->getId(), $this->learningPathTreeNodesCompletedCache))
+        $cacheKey = md5($learningPath->getId() . ':' . $user->getId() . ':' . $learningPathTreeNode->getId());
+
+        if (!array_key_exists($cacheKey, $this->learningPathTreeNodesCompletedCache))
         {
-            $this->learningPathTreeNodesCompletedCache[$learningPathTreeNode->getId()] =
+            $this->learningPathTreeNodesCompletedCache[$cacheKey] =
                 $this->calculateLearningPathTreeNodeCompleted($learningPath, $user, $learningPathTreeNode);
         }
 
-        return $this->learningPathTreeNodesCompletedCache[$learningPathTreeNode->getId()];
+        return $this->learningPathTreeNodesCompletedCache[$cacheKey];
     }
 
     /**
@@ -226,8 +229,13 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $learningPathAttempt = $this->learningPathAttemptService->getLearningPathAttemptForUser($learningPath, $user);
+
+        if (!$learningPathAttempt instanceof LearningPathAttempt)
+        {
+            return false;
+        }
+
         $learningPathChildAttempts =
             $this->learningPathAttemptService->getLearningPathChildAttempts($learningPathAttempt);
 
@@ -747,8 +755,12 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
+        $learningPathAttempt = $this->learningPathAttemptService->getLearningPathAttemptForUser($learningPath, $user);
+
+        if (!$learningPathAttempt instanceof LearningPathAttempt)
+        {
+            return array();
+        }
 
         return $this->learningPathAttemptService->getLearningPathChildAttemptsForLearningPathTreeNode(
             $learningPathAttempt, $learningPathTreeNode
@@ -932,6 +944,7 @@ class LearningPathTrackingService
      * count and orderBy Joined with users for searching and sorting
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode|null $learningPathTreeNode
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
@@ -940,11 +953,15 @@ class LearningPathTrackingService
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function getLearningPathAttemptsWithUser(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode = null, Condition $condition = null,
+        $offset = 0, $count = 0, $orderBy = array()
     )
     {
+        $learningPathChildIds = $learningPathTreeNode instanceof LearningPathTreeNode ?
+            $learningPathTreeNode->getLearningPathChildIdsFromSelfAndDescendants() : array();
+
         return $this->learningPathTrackingRepository->findLearningPathAttemptsWithUser(
-            $learningPath, $condition, $offset, $count, $orderBy
+            $learningPath, $learningPathChildIds, $condition, $offset, $count, $orderBy
         );
     }
 
@@ -968,6 +985,7 @@ class LearningPathTrackingService
      * count and orderBy Joined with users for searching and sorting
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
@@ -976,11 +994,15 @@ class LearningPathTrackingService
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function getTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode,
+            Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
+        $learningPathChildIds = $learningPathTreeNode instanceof LearningPathTreeNode ?
+            $learningPathTreeNode->getLearningPathChildIdsFromSelfAndDescendants() : array();
+
         return $this->learningPathTrackingRepository->findTargetUsersWithLearningPathAttempts(
-            $learningPath, $condition, $offset, $count, $orderBy
+            $learningPath, $learningPathChildIds, $condition, $offset, $count, $orderBy
         );
     }
 
