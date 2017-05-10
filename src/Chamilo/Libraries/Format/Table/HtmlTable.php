@@ -54,6 +54,18 @@ abstract class HtmlTable extends \HTML_Table
     private $orderDirection;
 
     /**
+     *
+     * @var integer
+     */
+    private $defaultOrderColumn;
+
+    /**
+     *
+     * @var integer
+     */
+    private $defaultOrderDirection;
+
+    /**
      * Number of items to display per page
      */
     private $numberOfItemsPerPage;
@@ -163,9 +175,12 @@ abstract class HtmlTable extends \HTML_Table
         $this->tableName = $tableName;
         $this->additionalParameters = array();
 
+        $this->defaultOrderColumn = $defaultOrderColumn;
+        $this->defaultOrderDirection = $defaultOrderDirection;
+
         $this->pageNumber = $this->determinePageNumber();
-        $this->orderColumn = $this->determineOrderColumn($defaultOrderColumn);
-        $this->orderDirection = $this->determineOrderDirection($defaultOrderDirection);
+        $this->orderColumn = $this->determineOrderColumn();
+        $this->orderDirection = $this->determineOrderDirection();
         $this->numberOfItemsPerPage = $this->determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage);
 
         $this->allowPageSelection = $allowPageSelection;
@@ -226,7 +241,7 @@ abstract class HtmlTable extends \HTML_Table
      *
      * @return integer
      */
-    protected function determineOrderColumn($defaultOrderColumn)
+    protected function determineOrderColumn()
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_COLUMN);
         $requestedOrderColumn = Request::get($variableName, array());
@@ -236,7 +251,7 @@ abstract class HtmlTable extends \HTML_Table
             $requestedOrderColumn = array($requestedOrderColumn);
         }
 
-        return ! empty($requestedOrderColumn) ? $requestedOrderColumn : array($defaultOrderColumn);
+        return ! empty($requestedOrderColumn) ? $requestedOrderColumn : array($this->getDefaultOrderColumn());
     }
 
     /**
@@ -245,7 +260,7 @@ abstract class HtmlTable extends \HTML_Table
      *
      * @return integer
      */
-    protected function determineOrderDirection($defaultOrderDirection)
+    protected function determineOrderDirection()
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_DIRECTION);
         $requestedOrderDirection = Request::get($variableName, array());
@@ -255,7 +270,7 @@ abstract class HtmlTable extends \HTML_Table
             $requestedOrderDirection = array($requestedOrderDirection);
         }
 
-        return ! empty($requestedOrderDirection) ? $requestedOrderDirection : array($defaultOrderDirection);
+        return ! empty($requestedOrderDirection) ? $requestedOrderDirection : array($this->getDefaultOrderDirection());
     }
 
     /**
@@ -856,11 +871,18 @@ abstract class HtmlTable extends \HTML_Table
             }
             else
             {
-                unset($currentOrderColumns[$selectedOrderColumnIndex]);
-                unset($currentOrderDirections[$selectedOrderColumnIndex]);
+                if ($selectedOrderColumn == $this->getDefaultOrderColumn() && count($currentOrderColumns) == 1)
+                {
+                    $currentOrderDirections[$selectedOrderColumnIndex] = SORT_ASC;
+                }
+                else
+                {
+                    unset($currentOrderColumns[$selectedOrderColumnIndex]);
+                    unset($currentOrderDirections[$selectedOrderColumnIndex]);
 
-                $currentOrderColumns = array_values($currentOrderColumns);
-                $currentOrderDirections = array_values($currentOrderDirections);
+                    $currentOrderColumns = array_values($currentOrderColumns);
+                    $currentOrderDirections = array_values($currentOrderDirections);
+                }
             }
         }
 
@@ -979,6 +1001,24 @@ abstract class HtmlTable extends \HTML_Table
     public function getOrderDirection()
     {
         return $this->orderDirection;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultOrderColumn()
+    {
+        return $this->defaultOrderColumn;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultOrderDirection()
+    {
+        return $this->defaultOrderDirection;
     }
 
     /**
