@@ -35,13 +35,13 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = $this->renderCommonFunctionality();
         $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
-        $table = new UserProgressTable($this);
+        /*$table = new UserProgressTable($this);
         $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserAttempts'),
             $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
-        );
+        );*/
 
         $table = new TargetUserProgressTable($this);
         $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
