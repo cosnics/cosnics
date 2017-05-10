@@ -236,7 +236,7 @@ abstract class HtmlTable extends \HTML_Table
             $requestedOrderColumn = array($requestedOrderColumn);
         }
 
-        return ! is_null($requestedOrderColumn) ? $requestedOrderColumn : $defaultOrderColumn;
+        return ! empty($requestedOrderColumn) ? $requestedOrderColumn : array($defaultOrderColumn);
     }
 
     /**
@@ -255,7 +255,7 @@ abstract class HtmlTable extends \HTML_Table
             $requestedOrderDirection = array($requestedOrderDirection);
         }
 
-        return $requestedOrderDirection ? $requestedOrderDirection : $defaultOrderDirection;
+        return ! empty($requestedOrderDirection) ? $requestedOrderDirection : array($defaultOrderDirection);
     }
 
     /**
@@ -782,11 +782,14 @@ abstract class HtmlTable extends \HTML_Table
         }
 
         // TODO: Make sure these parameters RETAIN the already selected sorting columns
+
+        $orderColumnQueryParameters = $this->determineOrderColumnQueryParameters($orderColumn);
+
         $queryParameters = $this->getQueryParameters(
             $this->getPageNumber(),
             $this->getNumberOfItemsPerPage(),
-            $orderColumn,
-            ($isOrderColumnAndAscending ? SORT_DESC : SORT_ASC));
+            $orderColumnQueryParameters[0],
+            $orderColumnQueryParameters[1]);
 
         if ($isSortable)
         {
@@ -824,6 +827,44 @@ abstract class HtmlTable extends \HTML_Table
         }
 
         return $link;
+    }
+
+    /**
+     *
+     * @param integer $selectedOrderColumn
+     * @return integer[][]
+     */
+    protected function determineOrderColumnQueryParameters($selectedOrderColumn)
+    {
+        $currentOrderColumns = $this->getOrderColumn();
+        $currentOrderDirections = $this->getOrderDirection();
+
+        if (! in_array($selectedOrderColumn, $currentOrderColumns))
+        {
+            $currentOrderColumns[] = $selectedOrderColumn;
+            $currentOrderDirections[] = SORT_ASC;
+        }
+        else
+        {
+            $selectedOrderColumnIndex = array_search($selectedOrderColumn, $currentOrderColumns);
+
+            // If the column was sorted ascending, now sort it descending. If it was sorted descending, remove the
+            // sorting for that column
+            if ($currentOrderDirections[$selectedOrderColumnIndex] == SORT_ASC)
+            {
+                $currentOrderDirections[$selectedOrderColumnIndex] = SORT_DESC;
+            }
+            else
+            {
+                unset($currentOrderColumns[$selectedOrderColumnIndex]);
+                unset($currentOrderDirections[$selectedOrderColumnIndex]);
+
+                $currentOrderColumns = array_values($currentOrderColumns);
+                $currentOrderDirections = array_values($currentOrderDirections);
+            }
+        }
+
+        return array($currentOrderColumns, $currentOrderDirections);
     }
 
     /**

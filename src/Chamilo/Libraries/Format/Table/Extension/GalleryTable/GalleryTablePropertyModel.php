@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 /**
  * This class represents a property model for a gallery table Refactoring from ObjectTable to split between a table
  * based on a record and based on an object
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class GalleryTablePropertyModel extends TableComponent
@@ -27,31 +27,31 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * Properties *
      * **************************************************************************************************************
      */
-    
+
     /**
      * The object table
-     * 
+     *
      * @var NewObjectTable
      */
     private $object_table;
 
     /**
      * The properties in the table.
-     * 
+     *
      * @var GalleryTableProperty[]
      */
     private $properties;
 
     /**
      * The property by which the table is currently sorted.
-     * 
+     *
      * @var int
      */
     private $order_property;
 
     /**
      * The direction in which the table is currently sorted.
-     * 
+     *
      * @var int
      */
     private $order_direction;
@@ -61,18 +61,18 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * Main Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param GalleryTable $table
      */
     public function __construct($table)
     {
         parent::__construct($table);
-        
+
         $this->initialize_properties();
-        
+
         $this->set_default_order_property(static::DEFAULT_ORDER_PROPERTY_INDEX);
         $this->set_default_order_direction(static::DEFAULT_ORDER_PROPERTY_DIRECTION);
     }
@@ -81,7 +81,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * Returns an ObjectTableOrder with the given order column index.
      * If the selected index is not sortable, the default
      * column index will be used. If the default column is not sortable then no order will be given
-     * 
+     *
      * @param $property_number int
      * @param $order_direction int
      *
@@ -90,23 +90,23 @@ abstract class GalleryTablePropertyModel extends TableComponent
     public function get_order_property($property_number, $order_direction)
     {
         $property = $this->get_property($property_number);
-        
+
         if ($property instanceof DataClassGalleryTableProperty)
         {
             return new OrderBy(
-                new PropertyConditionVariable($property->get_class_name(), $property->get_property()), 
+                new PropertyConditionVariable($property->get_class_name(), $property->get_property()),
                 $order_direction);
         }
         else
         {
             $default_property = $this->get_property($this->get_default_order_property());
-            
+
             if ($property_number != $default_property)
             {
                 return $this->get_order_property($default_property, $order_direction);
             }
         }
-        
+
         return null;
     }
 
@@ -115,10 +115,10 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * Getters and Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the properties
-     * 
+     *
      * @return \libraries\GalleryObjectTableProperty[]
      */
     public function get_properties()
@@ -128,7 +128,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Sets the properties
-     * 
+     *
      * @param \libraries\GalleryObjectTableProperty[] $properties
      */
     public function set_properties($properties)
@@ -138,7 +138,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Returns the index of the default property to order objects by
-     * 
+     *
      * @return int
      */
     public function get_default_order_property()
@@ -148,7 +148,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Sets the index of the default property to order objects by
-     * 
+     *
      * @param int $property_index
      */
     public function set_default_order_property($property_index)
@@ -158,7 +158,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Gets the default order direction.
-     * 
+     *
      * @return int - The direction. Either the PHP constant SORT_ASC or SORT_DESC.
      */
     public function get_default_order_direction()
@@ -168,7 +168,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Sets the default order direction.
-     * 
+     *
      * @param $direction int - The direction. Either the PHP constant SORT_ASC or SORT_DESC.
      */
     public function set_default_order_direction($direction)
@@ -181,10 +181,10 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * List Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the number of properties in the model.
-     * 
+     *
      * @return int
      */
     public function get_property_count()
@@ -194,7 +194,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Gets the property at the given index in the model.
-     * 
+     *
      * @param $index int
      *
      * @return \libraries\format\GalleryTableProperty
@@ -206,7 +206,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Adds the given property at the end of the table.
-     * 
+     *
      * @param $property \libraries\format\GalleryTableProperty
      */
     public function add_property($property)
@@ -216,13 +216,13 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
     /**
      * Delete a property at a given index
-     * 
+     *
      * @param $property_index int
      */
     public function delete_property($property_index)
     {
         unset($this->properties[$property_index]);
-        
+
         $this->properties = array_values($this->properties);
     }
 
@@ -231,7 +231,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * Abstract Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Initializes the properties for the table
      */

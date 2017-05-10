@@ -29,6 +29,7 @@ abstract class GalleryTable extends Table
     private $current_row;
 
     /**
+     *
      * @var TableFormActions
      */
     protected $form_actions;
@@ -44,16 +45,14 @@ abstract class GalleryTable extends Table
      */
     protected function constructTable()
     {
-        $count = $this->get_default_row_count();
-
         $this->table = new GalleryHTMLTable(
             $this->get_name(),
             array($this, 'countData'),
             array($this, 'getData'),
             array($this, 'get_property_model'),
-            0,
-            $count,
-            SORT_ASC,
+            $this->get_property_model()->get_default_order_property() + ($this->has_form_actions() ? 1 : 0),
+            $this->get_default_row_count(),
+            $this->get_property_model()->get_default_order_direction(),
             ! $this->prohibits_order_direction(),
             ! $this->prohibits_page_selection());
 
