@@ -267,9 +267,13 @@ abstract class Table
             // Calculates the order column on whether or not the table uses form actions (because sortable
             // table uses data arrays)
             $calculatedOrderColumn = $orderColumn - ($this->has_form_actions() ? 1 : 0);
-            $orderProperties[] = $orderProperty = $this->get_order_property(
-                $calculatedOrderColumn,
-                $orderDirections[$index]);
+
+            $orderProperty = $this->get_order_property($calculatedOrderColumn, $orderDirections[$index]);
+
+            if ($orderProperty)
+            {
+                $orderProperties[] = $orderProperty;
+            }
         }
 
         return $orderProperties;
