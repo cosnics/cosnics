@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
@@ -21,6 +22,9 @@ abstract class TableColumnModel extends TableComponent
      */
     const DEFAULT_ORDER_COLUMN_INDEX = 0;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
+
+    const ORDER_COLUMN = 1;
+    const ORDER_DIRECTION = 2;
 
     /**
      * **************************************************************************************************************
@@ -50,6 +54,14 @@ abstract class TableColumnModel extends TableComponent
     private $default_order_direction;
 
     /**
+     * The columns that are currently ordered, the index of the column is the key of the array, de direction is
+     * the value
+     *
+     * @var int[]
+     */
+    protected $currentOrderedColumns;
+
+    /**
      * **************************************************************************************************************
      * Constructor *
      * **************************************************************************************************************
@@ -73,6 +85,8 @@ abstract class TableColumnModel extends TableComponent
 
         $this->set_default_order_column(static::DEFAULT_ORDER_COLUMN_INDEX);
         $this->set_default_order_direction(static::DEFAULT_ORDER_COLUMN_DIRECTION);
+
+        $this->currentOrderedColumns = array();
     }
 
     /**
@@ -139,6 +153,39 @@ abstract class TableColumnModel extends TableComponent
     public function set_default_order_direction($direction)
     {
         $this->default_order_direction = $direction;
+    }
+
+    /**
+     * Returns the current ordered columns
+     *
+     * @return int[]
+     */
+    public function getCurrentOrderedColumns()
+    {
+        return $this->currentOrderedColumns;
+    }
+
+    /**
+     * Sets the current ordered columns
+     *
+     * @param array $currentOrderedColumns
+     */
+    public function setCurrentOrderedColumns($currentOrderedColumns = array())
+    {
+        $this->currentOrderedColumns = $currentOrderedColumns;
+    }
+
+    /**
+     * Adds a current ordered column to the list
+     *
+     * @param int $columnIndex
+     * @param int $orderDirection
+     */
+    public function addCurrentOrderedColumn($columnIndex, $orderDirection = SORT_ASC)
+    {
+        $this->currentOrderedColumns[] = array(
+            self::ORDER_COLUMN => $this->get_column($columnIndex), self::ORDER_DIRECTION => $orderDirection
+        );
     }
 
     /**
@@ -226,6 +273,7 @@ abstract class TableColumnModel extends TableComponent
      *
      * @param $column_number
      * @param $order_direction
+     *
      * @return ObjectTableOrder
      */
     public function get_column_object_table_order($column_number, $order_direction)
@@ -255,7 +303,7 @@ abstract class TableColumnModel extends TableComponent
     {
         $column = $this->get_column($column_number);
 
-        if (! $column instanceof TableColumn || ! $column->is_sortable())
+        if (!$column instanceof TableColumn || !$column->is_sortable())
         {
             if ($column_number != $this->get_default_order_column())
             {

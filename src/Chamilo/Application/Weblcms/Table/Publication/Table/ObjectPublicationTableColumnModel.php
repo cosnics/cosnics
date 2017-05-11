@@ -109,12 +109,17 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      */
     public function is_display_order_column()
     {
+        $orderedColumns = $this->getCurrentOrderedColumns();
+        $firstOrderedColumnData = array_shift($orderedColumns);
+
+        $firstOrderedColumn = $firstOrderedColumnData[self::ORDER_COLUMN];
+        $firstOrderedColumnOrder = $firstOrderedColumnData[self::ORDER_DIRECTION];
+
         $display_order_column_property = $this->get_display_order_column_property();
-        $current_column = $this->get_column($this->get_default_order_column());
-        
-        if ($current_column && $display_order_column_property)
+
+        if ($firstOrderedColumn && $display_order_column_property && $firstOrderedColumnOrder == SORT_ASC)
         {
-            $current_column_property = $current_column->get_name();
+            $current_column_property = $firstOrderedColumn->get_name();
             
             if ($current_column_property == $display_order_column_property)
             {

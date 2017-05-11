@@ -267,7 +267,6 @@ abstract class Table
             // Calculates the order column on whether or not the table uses form actions (because sortable
             // table uses data arrays)
             $calculatedOrderColumn = $orderColumn - ($this->has_form_actions() ? 1 : 0);
-
             $orderProperty = $this->get_order_property($calculatedOrderColumn, $orderDirections[$index]);
 
             if ($orderProperty)
@@ -306,10 +305,7 @@ abstract class Table
     protected function get_order_property($order_index, $order_direction)
     {
         $column_model = $this->get_column_model();
-
-        // Sets the default order column to the newly selected column
-        $column_model->set_default_order_column($order_index);
-
+        $column_model->addCurrentOrderedColumn($order_index, $order_direction);
         return $column_model->get_column_object_table_order($order_index, $order_direction);
     }
 
