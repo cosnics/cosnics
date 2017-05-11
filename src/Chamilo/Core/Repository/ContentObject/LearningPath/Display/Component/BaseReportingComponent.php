@@ -43,6 +43,18 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
      */
     protected function getButtonToolbarRenderer(Translation $translator)
     {
+        return new ButtonToolBarRenderer($this->getButtonToolbar($translator));
+    }
+
+    /**
+     * Builds and returns the button toolbar
+     *
+     * @param Translation $translator
+     *
+     * @return ButtonToolBar
+     */
+    protected function getButtonToolbar(Translation $translator)
+    {
         $buttonToolbar = new ButtonToolBar();
 
         $buttonToolbar->addItem(
@@ -53,7 +65,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
             )
         );
 
-        return new ButtonToolBarRenderer($buttonToolbar);
+        return $buttonToolbar;
     }
 
     /**
@@ -66,14 +78,10 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
      */
     protected function renderViewAsMessage(Translation $translator, User $user)
     {
-        $userListUrl = $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
-        );
 
         return '<div class="alert alert-info"><div class="pull-left" style="margin-top: 6px;">' .
             $translator->getTranslation('ViewReportingAsUser', array('USER' => $user->get_fullname())) . '</div>' .
-            ' <a class="btn btn-sm btn-default pull-right" href="' . $userListUrl . '">' .
-            $translator->getTranslation('ReturnToUserList') . '</a><div class="clearfix"></div></div>';
+            '<div class="clearfix"></div></div>';
     }
 
     /**

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  */
 class UserProgressTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 3;
 
     /**
      * Initializes the columns for the table
@@ -25,7 +26,7 @@ class UserProgressTableColumnModel extends RecordTableColumnModel implements Tab
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
-        $this->add_column(new StaticTableColumn('progress'));
+        $this->add_column(new SortableStaticTableColumn('progress'));
         $this->add_column(new SortableStaticTableColumn('completed'));
         $this->add_column(new SortableStaticTableColumn('started'));
     }

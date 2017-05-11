@@ -21,6 +21,10 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class LearningPathTrackingService
 {
+    const STATISTICS_COMPLETED = 0;
+    const STATISTICS_STARTED = 1;
+    const STATISTICS_NOT_STARTED = 2;
+
     /**
      * @var LearningPathAttemptService
      */
@@ -35,6 +39,11 @@ class LearningPathTrackingService
      * @var bool[]
      */
     protected $learningPathTreeNodesCompletedCache;
+
+    /**
+     * @var string[][][][]
+     */
+    protected $learningPathTreeNodeStatisticsCache;
 
     /**
      * LearningPathTrackingService constructor.
@@ -1010,25 +1019,34 @@ class LearningPathTrackingService
      * Counts the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    public function findTargetUsersWithoutLearningPathAttempts(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
     {
-        return $this->learningPathTrackingRepository->findTargetUsersWithoutLearningPathAttempts($learningPath);
+        $statistics = $this->getLearningPathStatisticsForLearningPathTreeNode($learningPath, $learningPathTreeNode);
+
+        return $statistics[self::STATISTICS_NOT_STARTED];
     }
 
     /**
      * Counts the target users without attempts on a learning path
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return int
      */
-    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
+    public function countTargetUsersWithoutLearningPathAttempts(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
     {
-        return 0;
-        return $this->learningPathTrackingRepository->countTargetUsersWithoutLearningPathAttempts($learningPath);
+        $statistics = $this->getLearningPathStatisticsForLearningPathTreeNode($learningPath, $learningPathTreeNode);
+
+        return count($statistics[self::STATISTICS_NOT_STARTED]);
     }
 
     /**
@@ -1043,34 +1061,87 @@ class LearningPathTrackingService
         LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        return $this->learningPathTrackingRepository->countTargetUsersWithFullLearningPathAttempts(
-            $learningPath, $learningPathTreeNode->getLearningPathChildIdsFromSelfAndDescendants()
-        );
+        $statistics = $this->getLearningPathStatisticsForLearningPathTreeNode($learningPath, $learningPathTreeNode);
+
+        return count($statistics[self::STATISTICS_COMPLETED]);
     }
 
     /**
      * Finds the target users with attempts on a learning path that are not completed
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    public function findTargetUsersWithPartialLearningPathAttempts(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
     {
-        return $this->learningPathTrackingRepository->findTargetUsersWithPartialLearningPathAttempts($learningPath);
+        $statistics = $this->getLearningPathStatisticsForLearningPathTreeNode($learningPath, $learningPathTreeNode);
+
+        return $statistics[self::STATISTICS_STARTED];
     }
 
     /**
      * Counts the target users with attempts on a learning path that are not completed
      *
      * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
      *
      * @return int
      */
-    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
+    public function countTargetUsersWithPartialLearningPathAttempts(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
     {
-        return 0;
-        return $this->learningPathTrackingRepository->countTargetUsersWithPartialLearningPathAttempts($learningPath);
+        $statistics = $this->getLearningPathStatisticsForLearningPathTreeNode($learningPath, $learningPathTreeNode);
+
+        return count($statistics[self::STATISTICS_STARTED]);
+    }
+
+    /**
+     * Retrieves and calculates the LearningPath statistics for a given LearningPathTreeNode
+     *
+     * @param LearningPath $learningPath
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return \string[][][]
+     */
+    protected function getLearningPathStatisticsForLearningPathTreeNode(
+        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode
+    )
+    {
+        $cacheKey = md5($learningPath->getId() . ':' . $learningPathTreeNode->getId());
+        if (!array_key_exists($cacheKey, $this->learningPathTreeNodeStatisticsCache))
+        {
+            $learningPathChildIds = $learningPathTreeNode->getLearningPathChildIdsFromSelfAndDescendants();
+
+            $usersWithCompletedNodesCount = $this->learningPathTrackingRepository->findUsersWithCompletedNodesCount(
+                $learningPath, $learningPathChildIds
+            );
+
+            foreach ($usersWithCompletedNodesCount as $userWithCompletedNodesCount)
+            {
+                if ($userWithCompletedNodesCount['nodes_completed'] == count($learningPathChildIds))
+                {
+                    $this->learningPathTreeNodeStatisticsCache[$cacheKey][self::STATISTICS_COMPLETED][] =
+                        $userWithCompletedNodesCount;
+                }
+                elseif ($userWithCompletedNodesCount['nodes_completed'] == 0)
+                {
+                    $this->learningPathTreeNodeStatisticsCache[$cacheKey][self::STATISTICS_NOT_STARTED][] =
+                        $userWithCompletedNodesCount;
+                }
+                else
+                {
+                    $this->learningPathTreeNodeStatisticsCache[$cacheKey][self::STATISTICS_STARTED][] =
+                        $userWithCompletedNodesCount;
+                }
+            }
+        }
+
+        return $this->learningPathTreeNodeStatisticsCache[$cacheKey];
     }
 
     /**

@@ -551,7 +551,7 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
      *
      * @return int
      */
-    public function countTargetUsersWithFullLearningPathAttempts(LearningPath $learningPath)
+    public function findUsersWithCompletedNodesCount(LearningPath $learningPath)
     {
         return 0;
     }

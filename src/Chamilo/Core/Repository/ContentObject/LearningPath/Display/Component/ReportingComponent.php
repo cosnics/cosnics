@@ -13,6 +13,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrack
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -33,14 +37,15 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      */
     public function build()
     {
-        $html = [parent::render_header()];
-
         $translator = Translation::getInstance();
         $trackingService = $this->getLearningPathTrackingService();
         $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
         $automaticNumberingService = $this->getAutomaticNumberingService();
         $panelRenderer = new PanelRenderer();
 
+        $this->addBreadcrumbs($translator);
+
+        $html = [parent::render_header()];
         $html[] = $this->renderCommonFunctionality();
 
         $html[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">';
@@ -93,6 +98,31 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Adds the breadcrumbs for this component
+     *
+     * @param Translation $translator
+     */
+    protected function addBreadcrumbs(Translation $translator)
+    {
+        $trail = BreadcrumbTrail::getInstance();
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(
+                    array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
+                ), $translator->getTranslation('UserProgressComponent')
+            )
+        );
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(),
+                $translator->getTranslation(
+                    'ReportingComponent', array('USER' => $this->getReportingUser()->get_fullname())
+                )
+            )
+        );
     }
 
     /**
@@ -183,7 +213,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      * @param LearningPathTrackingService $trackingService
      * @param LearningPathTreeNode $currentLearningPathTreeNode
      * @param PanelRenderer $panelRenderer
-     * 
+     *
      * @return string
      */
     protected function renderProgress(
@@ -311,6 +341,34 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = '</script>';
 
         return $panelRenderer->render($translator->getTranslation('Scores'), implode(PHP_EOL, $html));
+    }
+
+    /**
+     * Builds and returns the button toolbar for this component
+     *
+     * @param Translation $translator
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+     */
+    public function getButtonToolbar(Translation $translator)
+    {
+        $toolbar = parent::getButtonToolbar($translator);
+
+        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            $toolbar->prependItem(
+                new Button(
+                    $translator->getTranslation('ReturnToUserList'),
+                    new FontAwesomeGlyph('bar-chart'),
+                    $this->get_url(
+                        array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
+                        array(self::PARAM_REPORTING_USER_ID)
+                    )
+                )
+            );
+        }
+
+        return $toolbar;
     }
 
     /**

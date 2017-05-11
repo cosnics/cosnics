@@ -306,48 +306,6 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         }
 
         $html[] = '</div>';
-
-        $html[] = '<div class="navbar-learning-path-progress">';
-        $html[] = $this->get_progress_bar();
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Renders the progress bar for the learning path
-     *
-     * @return string
-     */
-    private function get_progress_bar()
-    {
-        $progress = $this->getLearningPathTrackingService()->getLearningPathProgress(
-            $this->get_root_content_object(), $this->getUser(), $this->getLearningPathTree()->getRoot()
-        );
-
-        return $this->render_progress_bar($progress);
-    }
-
-    /**
-     *
-     * @param integer $percent
-     * @param integer $step
-     *
-     * @return string
-     */
-    private function render_progress_bar($percent, $step = 2)
-    {
-        $displayPercent = round($percent);
-
-        $html[] = '<div class="progress">';
-        $html[] =
-            '<div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" aria-valuenow="' .
-            $displayPercent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent .
-            '%; min-width: 2em;">';
-        // $html[] = $displayPercent . '%';
-        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

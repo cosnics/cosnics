@@ -76,7 +76,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             throw new UserException(
                 Translation::get(
                     'NoObjectsToMove',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                    array('OBJECTS' => Translation::get('Steps')),
                     Utilities::COMMON_LIBRARIES
                 )
             );
@@ -162,7 +162,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             $this->redirect(
                 Translation::get(
                     $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                    array('OBJECTS' => Translation::get('Steps')),
                     Utilities::COMMON_LIBRARIES
                 ),
                 $failures > 0,

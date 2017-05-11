@@ -49,12 +49,13 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 );
 
                 $progressBarRenderer = new ProgressBarRenderer();
+
                 return $progressBarRenderer->render($progress);
             case 'completed':
                 $numberOfNodes = $record['nodes_completed'];
                 $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
 
-                if($numberOfNodes >= count($currentLearningPathTreeNode->getDescendantNodes()) + 1)
+                if ($numberOfNodes >= count($currentLearningPathTreeNode->getDescendantNodes()) + 1)
                 {
                     return Theme::getInstance()->getCommonImage('Status/OkMini');
                 }
@@ -62,12 +63,17 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 return null;
             case 'started':
                 $numberOfNodes = $record['nodes_completed'];
-                if($numberOfNodes > 0)
+                if ($numberOfNodes > 0)
                 {
                     return Theme::getInstance()->getCommonImage('Status/OkMini');
                 }
 
                 return null;
+
+            case User::PROPERTY_FIRSTNAME:
+            case User::PROPERTY_LASTNAME:
+                return '<a href="' . $this->getReportingUrl($record['user_id']) . '">' .
+                    parent::render_cell($column, $record) . '</a>';
         }
 
         return parent::render_cell($column, $record);
@@ -90,13 +96,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        $reportingUrl = $this->get_component()->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
-                Manager::PARAM_REPORTING_USER_ID => $record['user_id'],
-                Manager::PARAM_CHILD_ID => 0
-            )
-        );
+        $reportingUrl = $this->getReportingUrl($record['user_id']);
 
         $toolbar->add_item(
             new ToolbarItem(
@@ -135,6 +135,16 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         }
 
         return $toolbar->render();
+    }
+
+    protected function getReportingUrl($userId)
+    {
+        return $this->get_component()->get_url(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                Manager::PARAM_REPORTING_USER_ID => $userId
+            )
+        );
     }
 
     /**

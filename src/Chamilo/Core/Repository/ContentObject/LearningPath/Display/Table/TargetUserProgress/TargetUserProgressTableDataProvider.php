@@ -44,7 +44,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getLearningPathTrackingService()->countLearningPathAttemptsWithUsers(
+        return $this->getLearningPathTrackingService()->countTargetUsersWithLearningPathAttempts(
             $this->getLearningPath(), $condition
         );
     }

@@ -5,6 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -16,6 +19,8 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     function build()
     {
+        $this->addBreadcrumbs(Translation::getInstance());
+
         $this->getRequest()->query->set(
             \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
             \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
@@ -38,6 +43,42 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
         $html[] = $this->renderCommonFunctionality();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Adds the breadcrumbs for this component
+     *
+     * @param Translation $translator
+     */
+    protected function addBreadcrumbs(Translation $translator)
+    {
+        $trail = BreadcrumbTrail::getInstance();
+
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(
+                    array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
+                ), $translator->getTranslation('UserProgressComponent')
+            )
+        );
+
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)),
+                $translator->getTranslation(
+                    'ReportingComponent', array('USER' => $this->getReportingUser()->get_fullname())
+                )
+            )
+        );
+
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(),
+                $translator->getTranslation(
+                    'AssessmentResultViewerComponent', array('USER' => $this->getReportingUser()->get_fullname())
+                )
+            )
+        );
     }
 
     /**

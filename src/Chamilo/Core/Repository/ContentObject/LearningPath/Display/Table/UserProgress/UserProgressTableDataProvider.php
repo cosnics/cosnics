@@ -97,7 +97,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
         {
             $value = $firstOrderProperty->get_property()->get_value();
 
-            if (in_array($value, array('completed', 'started')))
+            if (in_array($value, array('progress', 'completed', 'started')))
             {
                 $firstOrderProperty->get_property()->set_value('nodes_completed');
                 $firstOrderProperty->set_direction(

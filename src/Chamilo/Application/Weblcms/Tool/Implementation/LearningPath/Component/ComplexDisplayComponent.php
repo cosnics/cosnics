@@ -255,7 +255,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             || $this->getRequest()->get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE)
         )
         {
-            $action = $requestedAction;
+            $action = $requestedAction == \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS ?
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS :
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
 
             $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
                 $this->getRequest()->get(

@@ -4,9 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Translation;
@@ -60,7 +58,7 @@ class DeleterComponent extends Manager
             throw new UserException(
                 Translation::get(
                     'NoObjectsToDelete',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                    array('OBJECTS' => Translation::get('Steps')),
                     Utilities::COMMON_LIBRARIES
                 )
             );
@@ -123,7 +121,7 @@ class DeleterComponent extends Manager
         $this->redirect(
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted',
-                array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                array('OBJECTS' => Translation::get('Steps')),
                 Utilities::COMMON_LIBRARIES
             ),
             $failures > 0,

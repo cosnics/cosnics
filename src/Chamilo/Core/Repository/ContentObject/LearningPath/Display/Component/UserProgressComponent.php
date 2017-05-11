@@ -5,9 +5,17 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,27 +35,43 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
     function build()
     {
+        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            throw new NotAllowedException();
+        }
+
         $panelRenderer = new PanelRenderer();
         $translator = Translation::getInstance();
+
+        $this->addBreadcrumbs($translator);
 
         $html = array();
         $html[] = $this->render_header();
         $html[] = $this->renderCommonFunctionality();
+
+        $html[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">';
+        $html[] = '</script>';
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-8">';
+
+        $html[] = $this->renderInformationPanel(
+            $this->getCurrentLearningPathTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
+        );
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-sm-4">';
+
         $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
-        /*$table = new UserProgressTable($this);
-        $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
-
-        $html[] = $panelRenderer->render(
-            $translator->getTranslation('UserAttempts'),
-            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
-        );*/
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         $table = new TargetUserProgressTable($this);
         $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
 
         $html[] = $panelRenderer->render(
-            $translator->getTranslation('TargetUsers'),
+            $translator->getTranslation('UserProgress'),
             $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
         );
 
@@ -57,57 +81,121 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
     }
 
     /**
+     * Adds the breadcrumbs for this component
+     *
+     * @param Translation $translator
+     */
+    protected function addBreadcrumbs(Translation $translator)
+    {
+        $trail = BreadcrumbTrail::getInstance();
+        $trail->add(new Breadcrumb($this->get_url(), $translator->getTranslation('UserProgressComponent')));
+    }
+
+    /**
+     * Renders the information panel
+     *
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param AutomaticNumberingService $automaticNumberingService
+     * @param Translation $translator
+     * @param PanelRenderer $panelRenderer
+     *
+     * @return string
+     */
+    protected function renderInformationPanel(
+        LearningPathTreeNode $currentLearningPathTreeNode, AutomaticNumberingService $automaticNumberingService,
+        Translation $translator, PanelRenderer $panelRenderer
+    )
+    {
+        $parentTitles = array();
+        foreach ($currentLearningPathTreeNode->getParentNodes() as $parentNode)
+        {
+            $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+            $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
+        }
+
+        $informationValues = [];
+
+        $informationValues[$translator->getTranslation('Title')] =
+            $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
+                $currentLearningPathTreeNode
+            );
+
+        if (!$currentLearningPathTreeNode->isRootNode())
+        {
+            $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
+        }
+
+        return $panelRenderer->renderTablePanel($translator->getTranslation('Information'), $informationValues);
+    }
+
+    /**
      * Renders the statistics for the target users
      *
      * @param PanelRenderer $panelRenderer
      * @param Translation $translator
      *
-     * @return array
+     * @return string
      */
     protected function renderTargetStatistics(PanelRenderer $panelRenderer, Translation $translator)
     {
-        $html = array();
-
         $trackingService = $this->getLearningPathTrackingService();
 
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-3">';
-
-        $html[] = $panelRenderer->render(
-            $translator->getTranslation('TargetUsers'),
-            $trackingService->countTargetUsers($this->get_root_content_object())
-        );
-
-        $html[] = '</div>';
-        $html[] = '<div class="col-sm-3">';
-
-        $html[] = $panelRenderer->render(
-            $translator->getTranslation('TargetUsersWithoutAttempts'),
-            $trackingService->countTargetUsersWithoutLearningPathAttempts($this->get_root_content_object())
-        );
-
-        $html[] = '</div>';
-        $html[] = '<div class="col-sm-3">';
-
-        $html[] = $panelRenderer->render(
+        $labels = [
             $translator->getTranslation('TargetUsersWithFullAttempts'),
+            $translator->getTranslation('TargetUsersWithPartialAttempts'),
+            $translator->getTranslation('TargetUsersWithoutAttempts')
+        ];
+
+        $data = [
             $trackingService->countTargetUsersWithFullLearningPathAttempts(
                 $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+            ),
+            $trackingService->countTargetUsersWithPartialLearningPathAttempts(
+                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+            ),
+            $trackingService->countTargetUsersWithoutLearningPathAttempts(
+                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
             )
+        ];
+
+        $panelHtml = array();
+        $panelHtml[] = '<canvas id="myChart" height="135" width="270" style="margin: auto;"></canvas>';
+        $panelHtml[] = '<script>';
+        $panelHtml[] = 'var ctx = document.getElementById("myChart");';
+        $panelHtml[] = 'var myChart = new Chart(ctx, {';
+        $panelHtml[] = '    type: "doughnut",';
+        $panelHtml[] = '    data: {';
+        $panelHtml[] = '        labels: ["' . implode('", "', $labels) . '"],';
+        $panelHtml[] = '        datasets: [{';
+        $panelHtml[] = '            data: [' . implode(', ', $data) . '],';
+        $panelHtml[] = '            backgroundColor: [';
+        $panelHtml[] = '                    "#5cb85c",';
+        $panelHtml[] = '                    "#36A2EB",';
+        $panelHtml[] = '                    "#FF6384",';
+        $panelHtml[] = '                ],';
+        $panelHtml[] = '            hoverBackgroundColor: [';
+        $panelHtml[] = '                    "#5cb85c",';
+        $panelHtml[] = '                    "#36A2EB",';
+        $panelHtml[] = '                    "#FF6384",';
+        $panelHtml[] = '                ],';
+        $panelHtml[] = '            borderWidth: 1';
+        $panelHtml[] = '        }]';
+        $panelHtml[] = '    },';
+        $panelHtml[] = '    options: {';
+        $panelHtml[] = '         legend: {';
+        $panelHtml[] = '             onClick: null';
+        $panelHtml[] = '         },';
+        $panelHtml[] = '         responsive: false,';
+        $panelHtml[] = '         animation: { animateScale: true },';
+        $panelHtml[] = '         legend: { position: "right" },';
+        $panelHtml[] = '    }';
+        $panelHtml[] = '});';
+        $panelHtml[] = '</script>';
+
+        return $panelRenderer->render(
+            $translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml)
         );
-
-        $html[] = '</div>';
-        $html[] = '<div class="col-sm-3">';
-
-        $html[] = $panelRenderer->render(
-            $translator->getTranslation('TargetUsersWithPartialAttempts'),
-            $trackingService->countTargetUsersWithPartialLearningPathAttempts($this->get_root_content_object())
-        );
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -122,6 +210,27 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    protected function getButtonToolbar(Translation $translator)
+    {
+        $toolbar = parent::getButtonToolbar($translator);
+
+        $buttonGroup = new ButtonGroup();
+
+        $buttonGroup->addButton(
+            new Button(
+                $translator->getTranslation('MailNotCompletedUsers'),
+                new FontAwesomeGlyph('envelope'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
+                Button::DISPLAY_ICON_AND_LABEL,
+                true
+            )
+        );
+
+        $toolbar->addItem($buttonGroup);
+
+        return $toolbar;
     }
 
     /**
