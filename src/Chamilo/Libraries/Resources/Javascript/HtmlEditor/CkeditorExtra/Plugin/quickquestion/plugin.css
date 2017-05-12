@@ -8,7 +8,7 @@
 }
 
 
-.a-question .an-answer {
+.a-question, .an-answer {
     box-shadow: 0 1px 1px #ddd inset;
     border: 1px solid #cccccc;
     border-radius: 5px;
@@ -16,10 +16,11 @@
 }
 
 .a-question {
-    margin: 0 8px;
+    margin: 8px;
     padding: 5px 8px;
 }
 
 .an-answer {
+    margin: 8px;
     padding: 6px;
 }
