@@ -89,11 +89,10 @@ class NodeActionGenerator
     protected function getUpdateNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
+            $learningPathTreeNode->getId()
+        );
 
         return new Action('edit', $title, $url, 'fa-pencil');
     }
@@ -108,11 +107,10 @@ class NodeActionGenerator
     protected function getDeleteNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
+            $learningPathTreeNode->getId()
+        );
 
         return new Action(
             'delete', $title, $url, 'fa-times', $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries')
@@ -129,11 +127,11 @@ class NodeActionGenerator
     protected function getMoveNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('Move', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_MOVE),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_MOVE),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('move', $title, $url, 'fa-random');
     }
 
@@ -147,11 +145,11 @@ class NodeActionGenerator
     protected function getNodeActivityAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('activity', $title, $url, 'fa-mouse-pointer');
     }
 
@@ -165,11 +163,11 @@ class NodeActionGenerator
     protected function getManageNodesAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('manage', $title, $url, 'fa-bars');
     }
 
@@ -191,11 +189,11 @@ class NodeActionGenerator
             'unlock' : 'ban';
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('block', $title, $url, 'fa-' . $icon);
     }
 
@@ -209,11 +207,11 @@ class NodeActionGenerator
     protected function getMyProgressNodeAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('progress', $title, $url, 'fa-pie-chart');
     }
 
@@ -227,11 +225,11 @@ class NodeActionGenerator
     protected function getNodeReportingAction(LearningPathTreeNode $learningPathTreeNode)
     {
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
-//        $url = $this->getUrlForNode(
-//            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
-//            $learningPathTreeNode->getId()
-//        );
-        $url = '';
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
+            $learningPathTreeNode->getId()
+        );
+
         return new Action('reporting', $title, $url, 'fa-bar-chart');
     }
 
@@ -266,7 +264,7 @@ class NodeActionGenerator
         $nodePlaceholder = '__NODE__';
 
         $cacheKey = md5(serialize($parameters));
-        if (!array_key_exists($cacheKey, $this->urlCache))
+        if(!array_key_exists($cacheKey, $this->urlCache))
         {
             $parameters[Manager::PARAM_CHILD_ID] = $nodePlaceholder;
             $this->urlCache[$cacheKey] = $this->getUrl($parameters);
