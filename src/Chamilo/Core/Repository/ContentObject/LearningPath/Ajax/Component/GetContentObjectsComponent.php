@@ -4,6 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -55,6 +58,12 @@ class GetContentObjectsComponent extends Manager
         $contentObjectsArray = array();
 
         while ($contentObject = $contentObjects->next_result()) {
+            if($contentObject instanceof LearningPathItem
+                || $contentObject instanceof PortfolioItem
+                || $contentObject instanceof LearningPath
+            ) {
+                continue; //@todo better way of fetching 'dragable content objects'
+            }
             if ($contentObject instanceof File && $contentObject->is_image()) {
                 $type = 'image';
             } else {
