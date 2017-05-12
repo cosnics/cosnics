@@ -49,7 +49,7 @@
     }
 
     .alert-drag {
-        padding: 1px 1px 1px 5px;
+        padding: 1px 1px 4px 5px;
         margin-bottom: 0px;
         margin-top: 5px;
     }
@@ -74,8 +74,10 @@
 
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
      ng-controller="learningPathHtmlTreeController">
-    <button class="btn btn-default btn-xs btn-drag" ng-click="enableQuickEditStructure()" ng-show="!quickEditStructureEnabled && canEditLearningPathTree && !inReportingMode">Pas structuur snel aan</button>
-    <button class="btn btn-warning btn-xs btn-drag" ng-click="disableQuickEditStructure()" ng-show="quickEditStructureEnabled && canEditLearningPathTree && !inReportingMode">Stop met snel aanpassen van structuur</button>
+    <div ng-show="quickEditStructureEnabled" class="alert alert-warning alert-drag">
+        <strong>Snel aanpassen: </strong>versleep, maak aan,...
+        <a href="#" ng-click="disableQuickEditStructure()" class="btn btn-default btn-xs pull-right">Stop</a>
+    </div>
     <div ng-show="showError" class="alert alert-danger alert-drag">
         <strong>Status:</strong> Er ging iets mis, gelieve de pagina te herladen.
     </div>
@@ -83,6 +85,11 @@
         <img border="0" src="http://localhost:8081/cosnics/web/Chamilo/Configuration/Resources/Images/Aqua/Action/LoadingHuge.gif">
     </div>
     <div id="tree" ng-class="{'tree-disabled': isLoading}">
+    </div>
+    <div ng-hide="treeData[0].children" class="alert alert-info">
+        Een leerpad bestaat uit verschillende stappen. Voeg bijvoorbeeld een <strong>pagina</strong> als stap toe, of een <strong>sectie</strong> (hoofdstuk) om andere stappen te groeperen.
+        <br>
+        U kan stappen toevoegen met de knoppen rechts, of via het menu dat verschijnt door rechts te klikken op de eerste stap hierboven.
     </div>
 </div>
 
@@ -177,9 +184,27 @@
                                         addNodeToTreeAndStartTitleEdit(node, 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page');
                                     }
                                 };
-
                                 items['sep0'] = '-';
 
+                                if($scope.quickEditStructureEnabled) {
+                                    items["editStructure"] = {
+                                        name: "Stop met snel aanpassen",
+                                        icon: "fa-random",
+                                        callback: function () {
+                                            $scope.disableQuickEditStructure();
+                                        }
+                                    }
+                                } else {
+                                    items["editStructure"] = {
+                                        name: "Pas structuur snel aan",
+                                        icon: "fa-random",
+                                        callback: function () {
+                                            $scope.enableQuickEditStructure();
+                                        }
+                                    }
+                                }
+
+                                items['sep1'] = '-';
 
                                 items["editTitle"] = {
                                     name: "Pas titel aan", icon: "fa-edit", callback: function () {
@@ -219,7 +244,7 @@
                                 var actions = ['progress', 'activity'];
                             }
 
-                            var separatorCounter = 1;
+                            var separatorCounter = 2;
 
                             actions.forEach(function (action) {
                                 if (action === '-') {
