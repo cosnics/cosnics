@@ -3,13 +3,11 @@ CKEDITOR.plugins.add('quickquestion', {
     icons: 'quickquestion',
 
     init: function (editor) {
+
+        var pluginDirectory = this.path;
+        editor.addContentsCss( pluginDirectory + 'plugin.css' );
+
         editor.widgets.add('quickquestion', {
-
-            init: function() {
-                var pluginDirectory = this.path;
-                editor.addContentsCss( pluginDirectory + 'plugin.css' );
-            },
-
             button: 'Ask a quick question',
 
             template: //@todo translation
