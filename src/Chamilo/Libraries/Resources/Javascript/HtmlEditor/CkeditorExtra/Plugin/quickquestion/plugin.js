@@ -1,9 +1,14 @@
-CKEDITOR.plugins.add( 'quickquestion', {
+CKEDITOR.plugins.add('quickquestion', {
     requires: 'widget',
     icons: 'quickquestion',
 
-    init: function( editor ) {
-        editor.widgets.add( 'quickquestion', {
+    init: function (editor) {
+        editor.widgets.add('quickquestion', {
+
+            init: function( editor ) {
+                var pluginDirectory = this.path;
+                editor.addContentsCss( pluginDirectory + 'plugin.css' );
+            },
 
             button: 'Ask a quick question',
 
@@ -15,7 +20,7 @@ CKEDITOR.plugins.add( 'quickquestion', {
             '</div>',
 
 
-        editables: {
+            editables: {
                 question: {
                     selector: '.a-question'
                 },
@@ -24,8 +29,8 @@ CKEDITOR.plugins.add( 'quickquestion', {
                 }
             },
 
-            upcast: function( element ) {
-                if(element.name == 'div' && element.hasClass( 'quick-question' )) {
+            upcast: function (element) {
+                if (element.name == 'div' && element.hasClass('quick-question')) {
                     element.children[1].attributes["style"] = "margin-bottom:5px; display: none"; //hide button
                     element.children[2].attributes["style"] = ""; //show answer
                     return true;
@@ -40,6 +45,6 @@ CKEDITOR.plugins.add( 'quickquestion', {
 
                 return element;
             }
-        } );
+        });
     }
-} );
+});
