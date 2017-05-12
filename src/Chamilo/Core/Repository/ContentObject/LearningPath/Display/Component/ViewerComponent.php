@@ -344,7 +344,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
             {
-                $button->addSubButton(new SubButtonDivider());
+                if(!$this->getCurrentLearningPathTreeNode()->isRootNode())
+                {
+                    $button->addSubButton(new SubButtonDivider());
+                }
+
                 $button->addSubButton(
                     new SubButton(
                         $translator->getTranslation('ManagerComponent', null, Manager::context()),
