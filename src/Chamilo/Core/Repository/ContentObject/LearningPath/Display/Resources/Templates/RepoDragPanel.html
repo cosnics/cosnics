@@ -14,7 +14,7 @@
         margin-bottom: 10px;
     }
 
-    #dragButton {
+    #drag-button {
         position: fixed;
         top: 9%;
         right: 0;
@@ -60,18 +60,27 @@
         border-left: 5px solid #DCDAC1;
         margin-left: -5px;
     }
+    .btn-close {
+        float: right;
+    }
 </style>
 
 <div id="repo-drag-panel">
     <div ng-cloak ng-controller="dragPanelCtrl">
-        <button id="dragButton" class="btn btn-default" ng-click="panelIsVisible=true" ng-hide="panelIsVisible">
+        <button id="drag-button" class="btn btn-default" ng-click="panelIsVisible=true" ng-hide="panelIsVisible">
             <i class="fa fa-folder-open fa-spin" aria-hidden="true"></i>
             Repository
         </button>
-        <div class="cd-panel from-right" ng-show="panelIsVisible">
+        <div class="cd-panel from-right repo-drag-panel-content" ng-show="panelIsVisible">
             <div class="cd-panel-container">
                 <div class="cd-panel-content">
+                    <div>
+                        <a href="#0" class="btn btn-default btn-sm btn-close" ng-click="panelIsVisible=false">
+                            <i class="fa fa-times fa-1x" aria-hidden="true"></i>
+                        </a>
+                    </div>
                     <h4>Versleep om toe te voegen</h4>
+
                     <div class="input-group select-group" ng-hide="searchModus">
                         <select
                                 class="form-control drag-panel-select"
@@ -123,13 +132,6 @@
                                 first-text="&laquo;"
                                 last-text="&raquo;">
                         </ul>
-                    </div>
-                    <div>
-
-                        <a href="#0" class="cd-panel-close" ng-click="panelIsVisible=false">
-                            <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
-                            Verberg
-                        </a>
                     </div>
                 </div> <!-- cd-panel-content -->
             </div> <!-- cd-panel-container -->
@@ -187,6 +189,7 @@
                 $scope.categories = [];
                 $scope.selectedCategory = null;
                 $scope.searchModus = false;
+
 
                 /**
                  * pagination
