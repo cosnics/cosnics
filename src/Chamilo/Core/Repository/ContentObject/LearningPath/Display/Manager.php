@@ -46,6 +46,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_VIEW_USER_PROGRESS = 'UserProgress';
     const ACTION_AJAX = 'Ajax';
     const ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS = 'UserIncompleteProgressMailer';
+    const ACTION_COPY_SECTIONS = 'SectionCopier';
 
     // Parameters
     const PARAM_STEP = 'step';

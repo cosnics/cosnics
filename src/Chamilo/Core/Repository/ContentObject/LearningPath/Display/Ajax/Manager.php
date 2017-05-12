@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class Manager
@@ -44,5 +46,26 @@ abstract class Manager extends AjaxManager
     public function get_application()
     {
         return parent::get_application();
+    }
+
+    /**
+     * Handles an exception
+     *
+     * @param $exception
+     *
+     * @return JsonResponse
+     */
+    protected function handleException($exception)
+    {
+        $this->getExceptionLogger()->logException($exception);
+        return new JsonResponse(null, 500);
+    }
+
+    /**
+     * @return ExceptionLoggerInterface | object
+     */
+    protected function getExceptionLogger()
+    {
+        return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
     }
 }
