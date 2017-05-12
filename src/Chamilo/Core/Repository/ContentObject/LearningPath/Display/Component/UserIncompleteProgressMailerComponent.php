@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserIncompleteProgressMailer extends Manager
+class UserIncompleteProgressMailerComponent extends Manager
 {
     /**
      * Runs this component and returns its output
@@ -24,6 +24,7 @@ class UserIncompleteProgressMailer extends Manager
             throw new NotAllowedException();
         }
 
-
+        $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $learningPathTrackingService = $this->getLearningPathTrackingService();
     }
 }
