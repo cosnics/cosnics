@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -58,8 +59,15 @@ class NodeActionGenerator
         if ($canEditLearningPathTreeNode)
         {
             $actions[] = $this->getUpdateNodeAction($learningPathTreeNode);
-            $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
             $actions[] = $this->getNodeReportingAction($learningPathTreeNode);
+
+            /** @var LearningPath $learningPath */
+            $learningPath = $learningPathTreeNode->getLearningPathTree()->getRoot()->getContentObject();
+
+            if(!$learningPath->enforcesDefaultTraversingOrder())
+            {
+                $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
+            }
 
             if (!$learningPathTreeNode->isRootNode())
             {
@@ -76,7 +84,27 @@ class NodeActionGenerator
             $actions[] = $this->getManageNodesAction($learningPathTreeNode);
         }
 
+        $actions[] = $this->getViewNodeAction($learningPathTreeNode);
+
         return $actions;
+    }
+
+    /**
+     * Returns the action to view a given LearningPathTreeNode
+     *
+     * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @return Action
+     */
+    protected function getViewNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    {
+        $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
+            $learningPathTreeNode->getId()
+        );
+
+        return new Action('view', $title, $url, 'fa-file');
     }
 
     /**

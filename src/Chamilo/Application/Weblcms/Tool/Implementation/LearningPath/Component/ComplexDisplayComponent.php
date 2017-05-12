@@ -477,7 +477,11 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_assessment_current_url()
     {
-        return $this->get_url(array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID => null));
+        $parameters = array();
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
+            $this->getCurrentLearningPathChildId();
+
+        return $this->get_url($parameters, array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID));
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS
@@ -514,7 +518,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function is_allowed_to_edit_learning_path_attempt_data()
     {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+        return $this->getUser()->is_platform_admin();
     }
 
     /**
