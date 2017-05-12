@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\Portfo
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -58,11 +59,12 @@ class GetContentObjectsComponent extends Manager
         $contentObjectsArray = array();
 
         while ($contentObject = $contentObjects->next_result()) {
-            if($contentObject instanceof LearningPathItem
-                || $contentObject instanceof PortfolioItem
-                || $contentObject instanceof LearningPath
-            ) {
-                continue; //@todo better way of fetching 'dragable content objects'
+            /**
+             * @var ContentObject $contentObject
+             */
+            if(!$contentObject instanceOf Includeable)
+            {
+                continue;
             }
             if ($contentObject instanceof File && $contentObject->is_image()) {
                 $type = 'image';
