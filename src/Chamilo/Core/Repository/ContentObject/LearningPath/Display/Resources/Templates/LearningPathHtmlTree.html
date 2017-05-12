@@ -281,7 +281,6 @@
 
                     buildContextMenu(); //@todo move to init code
 
-
                     var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
 
                     $scope.quickEditStructureEnabled = false;
@@ -293,8 +292,19 @@
 
                     var reloadTreeWithFreshData = function() {
                         $scope.isLoading = true;
-                        $http.get(
+                        var activeNode =  $("#tree").fancytree('getTree').getActiveNode();
+                        if(activeNode) {
+                            activeNodeId = activeNode.key;
+                        }
+                        else {
+                            activeNodeId = 0;
+                        }
+                        var params = {
+                            'active_child_id': activeNodeId
+                        };
+                        $http.post(
                             fetchTreeNodesAjaxUrl,
+                            $.param(params),
                             {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                         ).then(function successCallback(response) {
                                 $scope.isLoading = false;

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetLearningPathTreeNodesComponent extends Manager
 {
+    const PARAM_ACTIVE_CHILD_ID = 'active_child_id';
     /**
      * Executes this component and returns its output
      */
@@ -24,7 +25,10 @@ class GetLearningPathTreeNodesComponent extends Manager
     {
         try
         {
+            $activeChildId = $this->getRequestedPostDataValue(self::PARAM_ACTIVE_CHILD_ID);
+
             $learningPathTree = $this->get_application()->getLearningPathTree();
+            $activeChildNodeId = $learningPathTree->getLearningPathTreeNodeById((int) $activeChildId);
 
             $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
                 $learningPathTree, $this->getUser(),
@@ -32,7 +36,7 @@ class GetLearningPathTreeNodesComponent extends Manager
                 $this->get_application()->getAutomaticNumberingService(),
                 new NodeActionGenerator(Translation::getInstance(), $this->get_application()->get_parameters()),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
-                $this->get_application()->getCurrentLearningPathTreeNode(),
+                $activeChildNodeId,
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditLearningPathTreeNode(
                     $this->get_application()->getCurrentLearningPathTreeNode()
@@ -49,5 +53,15 @@ class GetLearningPathTreeNodesComponent extends Manager
         }
 
         return null;
+    }
+
+    /**
+     * Returns the required post parameters
+     *
+     * @return string
+     */
+    public function getRequiredPostParameters()
+    {
+        return array(self::PARAM_ACTIVE_CHILD_ID);
     }
 }
