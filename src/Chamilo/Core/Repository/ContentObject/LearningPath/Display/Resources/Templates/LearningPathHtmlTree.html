@@ -170,7 +170,7 @@
                             if ($scope.canEditLearningPathTree && !$scope.inReportingMode) {
                                 items["addSection"] =
                                     {
-                                        name: "Voeg sectie toe",
+                                        name: "Voeg nieuwe sectie toe",
                                         icon: "fa-plus",
                                         callback: function () {
                                             addNodeToTreeAndStartTitleEdit(node, 'Chamilo\\Core\\Repository\\ContentObject\\Section\\Storage\\DataClass\\Section');
@@ -178,7 +178,7 @@
                                     };
 
                                 items["addItem"] = {
-                                    name: "Voeg pagina toe",
+                                    name: "Voeg nieuwe pagina toe",
                                     icon: "fa-plus",
                                     callback: function () {
                                         addNodeToTreeAndStartTitleEdit(node, 'Chamilo\\Core\\Repository\\ContentObject\\Page\\Storage\\DataClass\\Page');
