@@ -885,9 +885,9 @@ abstract class ContentObjectPublicationListRenderer
         ++ $this->row_counter;
         $first_row = $this->row_counter == 1;
         $last_row = $this->row_counter == $this->get_publication_count();
-        $direction = $ascending ? 1 : - 1;
-        $true_up = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP * $direction;
-        $true_down = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN * $direction;
+        
+        $true_up = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP;
+        $true_down = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN;
         
         if ($show_move)
         {
