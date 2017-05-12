@@ -518,7 +518,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function is_allowed_to_edit_learning_path_attempt_data()
     {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+        return $this->getUser()->is_platform_admin();
     }
 
     /**
