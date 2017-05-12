@@ -243,18 +243,25 @@
                             else if (!$scope.inReportingMode) {
                                 var actions = ['progress', 'activity'];
                             }
+                            else if($scope.canEditLearningPathTree && $scope.inReportingMode)
+                            {
+                                var actions = ['view', '-', 'reporting', 'progress'];
+                            }
 
                             var separatorCounter = 2;
+                            var previousIsSeperator = true;
 
                             actions.forEach(function (action) {
-                                if (action === '-') {
+                                if (action === '-' && !previousIsSeperator) {
                                     items['sep' + separatorCounter] = '-';
                                     separatorCounter++;
+                                    previousIsSeperator = true;
                                 }
                                 else {
                                     var item = extractContextMenuItemFromNodeAction(node, action);
                                     if (item !== null) {
                                         items[action] = item;
+                                        previousIsSeperator = false;
                                     }
                                 }
                             });
