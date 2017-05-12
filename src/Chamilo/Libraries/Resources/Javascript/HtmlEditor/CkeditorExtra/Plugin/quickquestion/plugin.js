@@ -5,7 +5,7 @@ CKEDITOR.plugins.add('quickquestion', {
     init: function (editor) {
         editor.widgets.add('quickquestion', {
 
-            init: function( editor ) {
+            init: function() {
                 var pluginDirectory = this.path;
                 editor.addContentsCss( pluginDirectory + 'plugin.css' );
             },
