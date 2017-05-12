@@ -38,7 +38,7 @@ class DeleteLearningPathTreeNodeComponent extends Manager
         }
         catch (\Exception $ex)
         {
-            return new JsonResponse(null, 500);
+            return $this->handleException($ex);
         }
     }
 

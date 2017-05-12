@@ -49,10 +49,8 @@ class GetLearningPathTreeNodesComponent extends Manager
         }
         catch (\Exception $ex)
         {
-            JsonAjaxResult::general_error();
+            return $this->handleException($ex);
         }
-
-        return null;
     }
 
     /**

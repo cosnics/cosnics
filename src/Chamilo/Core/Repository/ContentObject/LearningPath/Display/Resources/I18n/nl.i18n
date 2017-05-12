@@ -117,3 +117,5 @@ MailNotCompletedUsers = "E-mail de gebruikers die deze stap nog niet afgewerkt h
 ReportingComponent = "Bekijk de individuele voortgang van {USER}"
 AssessmentResultViewerComponent = "Bekijk de resultaten van de oefening voor {USER}"
 ActivityComponent = "Toon bewerkgeschiedenis"
+CopyFromOtherLearningPaths = "Kopieër vanuit andere leerpaden"
+ThisStepIsRequired = "Deze stap is verplicht. De gebruikers kunnen de volgende stap niet bekijken zolang ze deze stap niet hebben afgewerkt."

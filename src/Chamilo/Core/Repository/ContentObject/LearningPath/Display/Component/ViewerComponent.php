@@ -115,8 +115,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = $this->renderMovePanel();
 
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
-            $this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
-            $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()
+            ($this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
+            $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()) ||
+            $this->get_root_content_object()->enforcesDefaultTraversingOrder()
         )
         {
             $html[] = '<div class="alert alert-warning">' .
@@ -260,6 +261,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $translator->getTranslation('CreateFolder', null, Manager::context()),
                 new BootstrapGlyph('plus')
             );
+
+            $folderButton->addSubButton(new SubButtonDivider());
+            $folderButton->addSubButton(new SubButton(
+                $translator->getTranslation('CopyFromOtherLearningPaths'),
+                new FontAwesomeGlyph('copy'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_COPY_SECTIONS))
+            ));
 
             $buttonGroup->addButton($folderButton);
         }
