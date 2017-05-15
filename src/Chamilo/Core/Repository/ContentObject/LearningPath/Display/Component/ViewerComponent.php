@@ -167,9 +167,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $tertiaryActions = new ButtonGroup();
 
             $this->addCreatorButtons($primaryActions, $translator);
-            $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
-
             $this->addManageContentObjectButton($secondaryActions, $translator);
+            $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
 
             if ($this->get_action() != self::ACTION_REPORTING)
             {

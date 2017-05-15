@@ -2,10 +2,13 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\NodeActionGenerator;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,7 +45,8 @@ class AddLearningPathTreeNodeComponent extends Manager
             );
 
             $displayOrder = $this->getRequest()->request->get(self::PARAM_DISPLAY_ORDER);
-            if(!empty($displayOrder)) {
+            if (!empty($displayOrder))
+            {
                 $learningPathChild->setDisplayOrder((int) $displayOrder);
                 $learningPathChild->update();
             }
@@ -51,11 +55,17 @@ class AddLearningPathTreeNodeComponent extends Manager
             $tree =
                 $learningPathTreeBuilder->buildLearningPathTree($this->get_application()->get_root_content_object());
 
+            $nodeActionGeneratorFactory =
+                new NodeActionGeneratorFactory(
+                    Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(),
+                    $this->get_application()->get_parameters()
+                );
+
             $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
                 $tree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
-                new NodeActionGenerator(Translation::getInstance(), $this->get_application()->get_parameters()),
+                $nodeActionGeneratorFactory->createNodeActionGenerator(),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
                 $tree->getLearningPathTreeNodeById((int) $learningPathChild->getId()),
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),

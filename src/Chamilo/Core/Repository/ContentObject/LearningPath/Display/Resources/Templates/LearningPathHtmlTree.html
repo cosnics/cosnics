@@ -160,6 +160,7 @@
                                         $scope.isLoading = false;
                                         $scope.addingNewNode = true;
                                         $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                        $('.fancytree-edit-input').select();
                                     }
                                 );
                             }, function errorCallback(response) {
@@ -214,6 +215,7 @@
                                     name: "Pas titel aan", icon: "fa-edit", callback: function () {
                                         $scope.addingNewNode = false;
                                         node.editStart();
+                                        $('.fancytree-edit-input').select();
                                     }
                                 };
 
@@ -240,8 +242,12 @@
                                     };
                                     var actions = ['edit'];
                                 } else {
-                                    var actions = ['edit', 'delete', 'move', 'manage', '-', 'block', '-', 'reporting',
-                                        'progress', 'activity'];
+                                    var actions = [
+                                        'edit', 'delete', 'move', 'manage', '-',
+                                        'buildAssessment', 'setAssessmentMasteryScore', 'configureAssessment',
+                                        'forumSubscribe', '-',
+                                        'block', '-', 'reporting', 'progress', 'activity'
+                                    ];
                                 }
                             }
                             else if (!$scope.inReportingMode) {
