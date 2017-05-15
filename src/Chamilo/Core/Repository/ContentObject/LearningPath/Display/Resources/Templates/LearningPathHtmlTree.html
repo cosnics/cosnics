@@ -70,6 +70,10 @@
         top: 30%;
         left: 45%;
     }
+
+    .context-menu-list {
+        box-sizing: content-box;
+    }
 </style>
 
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
@@ -247,6 +251,10 @@
                             {
                                 var actions = ['view', '-', 'reporting', 'progress'];
                             }
+                            else if($scope.inReportingMode)
+                            {
+                                var actions = ['view', 'progress'];
+                            }
 
                             var separatorCounter = 2;
                             var previousIsSeperator = true;
@@ -273,6 +281,7 @@
                         $.contextMenu({
                             selector: ".fancytree-title",
                             zIndex: 10001,
+                            minWidth: '202px',
                             build: function ($triggerElement, e) {
                                 node = $.ui.fancytree.getNode($triggerElement);
                                 if (node) {
@@ -283,7 +292,6 @@
                                 };
                             }
                         });
-
                     };
 
                     buildContextMenu(); //@todo move to init code

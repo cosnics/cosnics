@@ -83,13 +83,19 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = '<br /><br />';
             $html[] = '<ul>';
 
+            $automaticNumberingService = $this->getAutomaticNumberingService();
+
             foreach ($responsibleNodes as $responsibleNode)
             {
                 $nodeUrl = $this->get_url(array(self::PARAM_CHILD_ID => $responsibleNode->getId()));
 
                 $html[] = '<li>';
                 $html[] = '<a href="' . $nodeUrl . '">';
-                $html[] = $responsibleNode->getContentObject()->get_title();
+
+                $html[] = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
+                    $responsibleNode
+                );
+
                 $html[] = '</a>';
                 $html[] = '</li>';
             }
@@ -115,9 +121,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = $this->renderMovePanel();
 
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
-            ($this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
-            $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()) ||
-            $this->get_root_content_object()->enforcesDefaultTraversingOrder()
+            (
+                (
+                    $this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
+                    $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()
+                ) ||
+                $this->get_root_content_object()->enforcesDefaultTraversingOrder()
+            )
         )
         {
             $html[] = '<div class="alert alert-warning">' .
@@ -145,12 +155,16 @@ class ViewerComponent extends BaseHtmlTreeComponent
         if (!isset($this->buttonToolbar))
         {
             $buttonToolbar = new ButtonToolBar();
+            $this->buttonToolbar = $buttonToolbar;
+
+            if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+            {
+                return $this->buttonToolbar;
+            }
 
             $primaryActions = new ButtonGroup();
             $secondaryActions = new ButtonGroup();
             $tertiaryActions = new ButtonGroup();
-
-            $current_content_object = $this->getCurrentLearningPathTreeNode()->getContentObject();
 
             $this->addCreatorButtons($primaryActions, $translator);
             $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
@@ -166,7 +180,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $buttonToolbar->addButtonGroup($secondaryActions);
             $buttonToolbar->addButtonGroup($tertiaryActions);
 
-            $this->buttonToolbar = $buttonToolbar;
+
         }
 
         return $this->buttonToolbar;
@@ -263,11 +277,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
             );
 
             $folderButton->addSubButton(new SubButtonDivider());
-            $folderButton->addSubButton(new SubButton(
-                $translator->getTranslation('CopyFromOtherLearningPaths'),
-                new FontAwesomeGlyph('copy'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_COPY_SECTIONS))
-            ));
+            $folderButton->addSubButton(
+                new SubButton(
+                    $translator->getTranslation('CopyFromOtherLearningPaths'),
+                    new FontAwesomeGlyph('copy'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_COPY_SECTIONS))
+                )
+            );
 
             $buttonGroup->addButton($folderButton);
         }
@@ -344,7 +360,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
             {
-                if(!$this->getCurrentLearningPathTreeNode()->isRootNode())
+                if (!$this->getCurrentLearningPathTreeNode()->isRootNode())
                 {
                     $button->addSubButton(new SubButtonDivider());
                 }
@@ -473,7 +489,6 @@ class ViewerComponent extends BaseHtmlTreeComponent
             );
 
             $splitDropDownButton->addSubButton(new SubButton($label, $icon, $url));
-
         }
 
         $this->addActivityButton($splitDropDownButton, $translator);
