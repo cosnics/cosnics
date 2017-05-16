@@ -78,10 +78,28 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
      */
     protected function renderViewAsMessage(Translation $translator, User $user)
     {
+        $returnToUserListUrl = $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
+        );
 
-        return '<div class="alert alert-info"><div class="pull-left" style="margin-top: 6px;">' .
-            $translator->getTranslation('ViewReportingAsUser', array('USER' => $user->get_fullname())) . '</div>' .
-            '<div class="clearfix"></div></div>';
+        $returnToUserListTranslation = $translator->getTranslation('ReturnToUserList');
+
+        $html = array();
+
+        $html[] = '<div class="alert alert-info">';
+        $html[] = '<div class="pull-left" style="margin-top: 6px;">';
+        $html[] = $translator->getTranslation('ViewReportingAsUser', array('USER' => $user->get_fullname()));
+        $html[] = '</div>';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="' . $returnToUserListUrl . '" class="btn btn-default">';
+        $html[] = '<span class="inline-glyph fa fa-bar-chart"></span>';
+        $html[] = $returnToUserListTranslation;
+        $html[] = '</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
