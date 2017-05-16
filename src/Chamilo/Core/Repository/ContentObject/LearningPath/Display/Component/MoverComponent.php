@@ -258,23 +258,25 @@ class MoverComponent extends BaseHtmlTreeComponent
         LearningPathTreeNode $node, $selectedNodes, $node_disabled, $parents, $level = 1
     )
     {
+        $automaticNumberingService = $this->getAutomaticNumberingService();
+
         foreach ($node->getChildNodes() as $child)
         {
-            $content_object = $child->getContentObject();
-
-            if(!$content_object instanceof Section)
+            if(!$child->getContentObject() instanceof Section)
             {
                 continue;
             }
 
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($child);
+
             if (in_array($child, $selectedNodes))
             {
-                $name = $content_object->get_title() . ' (' . Translation::get('SelectedItem') . ')';
+                $name = $title . ' (' . Translation::get('SelectedItem') . ')';
                 $child_node_disabled = true;
             }
             else
             {
-                $name = $content_object->get_title();
+                $name = $title;
                 $child_node_disabled = $node_disabled;
             }
 
