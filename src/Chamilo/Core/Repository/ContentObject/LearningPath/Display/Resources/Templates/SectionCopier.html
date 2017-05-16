@@ -8,8 +8,46 @@
         margin-top: 25px;
     }
 
-    #content-object-search {
+    .list-group .list-group-item:nth-child(even) {
+        background-color: #eef5fa !important;
+    }
+
+    .list-group .list-group-item.selected {
+        background-color: #ffffe0 !important;
+    }
+
+    .form-row#content-object-selector-row {
+        margin-top: 20px;
+    }
+
+    .content-object-selector-sub-row {
         margin-bottom: 10px;
+    }
+
+    .content-object-selector-sub-row .content-object-selector-sub-col {
+        padding: 0;
+    }
+
+    #content-object-selector-list,
+    #content-object-selector-pagination {
+        margin: 0;
+    }
+
+    .content-object-selector-title-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .content-object-selector-title-container .content-object-selector-icon {
+        margin-top: 0;
+    }
+
+    .content-object-selector-title-container .content-object-selector-title {
+        margin-left: 5px;
+    }
+
+    .pager-info-panel {
+        padding: 5px 10px;
     }
 
 </style>
@@ -23,7 +61,7 @@
                 Selecteer uit
             </div>
             <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <select id="repository-source"  class="form-control">
+                <select id="repository-source" class="form-control">
                     <option value="repository">Mijn repository</option>
                     <option value="workspaces">Workspaces gedeeld met mij</option>
                 </select>
@@ -44,38 +82,65 @@
         </div>
 
         <!--<div class="form-row row">-->
-            <!--<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">-->
-                <!--Selecteer het gewenste leerpad-->
-            <!--</div>-->
-            <!--<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">-->
-                <!--<select id="content-object" class="form-control">-->
-                    <!--<option value="1">Testleerpad 1</option>-->
-                    <!--<option value="2">Testleerpad 2</option>-->
-                    <!--<option value="3">Testleerpad 3</option>-->
-                <!--</select>-->
-            <!--</div>-->
+        <!--<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">-->
+        <!--Selecteer het gewenste leerpad-->
+        <!--</div>-->
+        <!--<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">-->
+        <!--<select id="content-object" class="form-control">-->
+        <!--<option value="1">Testleerpad 1</option>-->
+        <!--<option value="2">Testleerpad 2</option>-->
+        <!--<option value="3">Testleerpad 3</option>-->
+        <!--</select>-->
+        <!--</div>-->
         <!--</div>-->
 
-        <div class="form-row row">
+        <div class="form-row row" id="content-object-selector-row">
             <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
                 Selecteer het gewenste leerpad
             </div>
             <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <input type="text" id="content-object-search" class="form-control" placeholder="Zoek hier" />
-                <div class="list-group">
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Testleerpad 1</h4>
-                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 1</p>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Testleerpad 2</h4>
-                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 2</p>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Testleerpad 3</h4>
-                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 3</p>
-                    </a>
+                <div class="content-object-selector-sub-row">
+                    <input type="text" id="content-object-selector-search" class="form-control"
+                           placeholder="Zoek hier"/>
                 </div>
+
+                <div class="content-object-selector-sub-row">
+                    <div class="list-group" id="content-object-selector-list">
+                        <a href="#" class="list-group-item" ng-repeat="learningPath in main.visibleLearningPaths"
+                           ng-click="main.selectLearningPath(learningPath)"
+                           ng-class="{'selected': learningPath.selected}">
+                            <div class="content-object-selector-title-container">
+                                <span class="fancytree-custom-icon type_learning_path content-object-selector-icon"></span>
+                                <span class="content-object-selector-title">{{ learningPath.title }}</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-object-selector-sub-row">
+                    <div class="content-object-selector-sub-col col-sm-8">
+                        <ul
+                                uib-pagination
+                                boundary-links="true"
+                                total-items="totalItems"
+                                ng-model="currentPage"
+                                max-size="3"
+                                ng-change="pageChanged()"
+                                id="content-object-selector-pagination"
+                                class="pagination-sm"
+                                previous-text="&lsaquo;"
+                                next-text="&rsaquo;"
+                                first-text="&laquo;"
+                                last-text="&raquo;">
+                        </ul>
+                    </div>
+                    <div class="content-object-selector-sub-col col-sm-4 pull-right">
+                        <div class="panel panel-default text-center pager-info-panel ng-binding">
+                            Page {{ currentPage }} / {{ totalPages }}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -91,10 +156,10 @@
             </div>
             <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                 <div class="element">
-                <div class="checkbox no-toggle-style">
-                    <input type="checkbox" id="copy-steps-below" />
-                    <label></label>
-                </div>
+                    <div class="checkbox no-toggle-style">
+                        <input type="checkbox" id="copy-steps-below"/>
+                        <label></label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,7 +182,8 @@
 <script>
     (function () {
 
-        var learningPathSectionCopierApp = angular.module('learningPathSectionCopierApp', ['ui.bootstrap', 'ngSanitize']);
+        var learningPathSectionCopierApp = angular.module(
+            'learningPathSectionCopierApp', ['ui.bootstrap', 'ngSanitize']);
 
         learningPathSectionCopierApp.controller(
             'MainController',
@@ -127,16 +193,39 @@
                 $scope.showError = false;
                 $scope.treeData = {{ treeData }};
 
+                $scope.totalItems = 5;
+                $scope.currentPage = 1;
+                $scope.totalPages = 1;
 
-                var reloadTree = function(treeData) {
+                this.learningPaths = Array.apply(null, new Array(100)).map(function (_, i) {
+                    var counter = i + 1;
+                    return {id: counter, title: 'Test Leerpad ' + counter};
+                });
+
+                this.visibleLearningPaths = this.learningPaths.slice(0, 10);
+
+                this.selectedLearningPath = null;
+
+                this.selectLearningPath = function (learningPath) {
+                    if (this.selectedLearningPath !== null) {
+                        this.selectedLearningPath.selected = false;
+                    }
+
+                    this.selectedLearningPath = learningPath;
+                    learningPath.selected = true;
+
+                    console.log(learningPath);
+                };
+
+                var reloadTree = function (treeData) {
                     $scope.treeData = treeData;
                     return $("#tree").fancytree('getTree').reload($scope.treeData);
                 };
 
-                var reloadTreeWithFreshData = function() {
+                var reloadTreeWithFreshData = function () {
                     $scope.isLoading = true;
-                    var activeNode =  $("#tree").fancytree('getTree').getActiveNode();
-                    if(activeNode) {
+                    var activeNode = $("#tree").fancytree('getTree').getActiveNode();
+                    if (activeNode) {
                         activeNodeId = activeNode.key;
                     }
                     else {
@@ -194,7 +283,8 @@
                         types: 'expanded'
                     },
                     renderTitle: function (event, data) {
-                        return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
+                        return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title +
+                            '</span>';
 
                     }
 
