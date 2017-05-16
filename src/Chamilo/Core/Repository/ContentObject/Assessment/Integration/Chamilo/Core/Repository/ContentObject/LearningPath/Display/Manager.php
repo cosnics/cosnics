@@ -7,6 +7,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
@@ -31,10 +33,24 @@ abstract class Manager extends Application
     {
         if ($this->get_parent()->canEditLearningPathTreeNode($node))
         {
-            $secondaryActions->addButton(
-                new Button(
+            $splitDropDownButton = new SplitDropdownButton(
+                Translation::get('BuilderComponent'),
+                new FontAwesomeGlyph('cubes'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                            $node->getContentObject()->getId(),
+                        self::PARAM_ACTION => self::ACTION_BUILDER
+                    )
+                )
+            );
+
+            $splitDropDownButton->addSubButton(
+                new SubButton(
                     Translation::get('SetMasteryScore'),
-                    new BootstrapGlyph('signal'),
+                    new FontAwesomeGlyph('signal'),
                     $this->get_url(
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
@@ -47,10 +63,10 @@ abstract class Manager extends Application
                 )
             );
 
-            $secondaryActions->addButton(
-                new Button(
+            $splitDropDownButton->addSubButton(
+                new SubButton(
                     Translation::get('ConfigureAssessment'),
-                    new BootstrapGlyph('wrench'),
+                    new FontAwesomeGlyph('wrench'),
                     $this->get_url(
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
@@ -63,21 +79,7 @@ abstract class Manager extends Application
                 )
             );
 
-            $primaryActions->addButton(
-                new Button(
-                    Translation::get('BuilderComponent'),
-                    new FontAwesomeGlyph('cubes'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                                $node->getContentObject()->getId(),
-                            self::PARAM_ACTION => self::ACTION_BUILDER
-                        )
-                    )
-                )
-            );
+            $secondaryActions->addButton($splitDropDownButton);
         }
     }
 

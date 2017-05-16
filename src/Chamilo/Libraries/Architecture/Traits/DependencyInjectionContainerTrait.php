@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\Traits;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,7 +68,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the request
      * 
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Request | object
      */
     public function getRequest()
     {
@@ -76,10 +77,19 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return AuthorizationCheckerInterface
+     * @return AuthorizationCheckerInterface | object
      */
     public function getAuthorizationChecker()
     {
         return $this->getService('chamilo.core.rights.structure.service.authorization_checker');
     }
+
+    /**
+     * @return PathBuilder | object
+     */
+    public function getPathBuilder()
+    {
+        return $this->getService('chamilo.libraries.file.path_builder');
+    }
+
 }

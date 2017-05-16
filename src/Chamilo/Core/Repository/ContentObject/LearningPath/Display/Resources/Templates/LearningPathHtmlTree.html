@@ -70,6 +70,10 @@
         top: 30%;
         left: 45%;
     }
+
+    .context-menu-list {
+        box-sizing: content-box;
+    }
 </style>
 
 <div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
@@ -156,6 +160,7 @@
                                         $scope.isLoading = false;
                                         $scope.addingNewNode = true;
                                         $("#tree").fancytree("getTree").getNodeByKey(response.data.nodeId).editStart();
+                                        $('.fancytree-edit-input').select();
                                     }
                                 );
                             }, function errorCallback(response) {
@@ -210,6 +215,7 @@
                                     name: "Pas titel aan", icon: "fa-edit", callback: function () {
                                         $scope.addingNewNode = false;
                                         node.editStart();
+                                        $('.fancytree-edit-input').select();
                                     }
                                 };
 
@@ -236,8 +242,12 @@
                                     };
                                     var actions = ['edit'];
                                 } else {
-                                    var actions = ['edit', 'delete', 'move', 'manage', '-', 'block', '-', 'reporting',
-                                        'progress', 'activity'];
+                                    var actions = [
+                                        'edit', 'delete', 'move', 'manage', '-',
+                                        'buildAssessment', 'setAssessmentMasteryScore', 'configureAssessment',
+                                        'forumSubscribe', '-',
+                                        'block', '-', 'reporting', 'progress', 'activity'
+                                    ];
                                 }
                             }
                             else if (!$scope.inReportingMode) {
@@ -246,6 +256,10 @@
                             else if($scope.canEditLearningPathTree && $scope.inReportingMode)
                             {
                                 var actions = ['view', '-', 'reporting', 'progress'];
+                            }
+                            else if($scope.inReportingMode)
+                            {
+                                var actions = ['view', 'progress'];
                             }
 
                             var separatorCounter = 2;
@@ -273,6 +287,7 @@
                         $.contextMenu({
                             selector: ".fancytree-title",
                             zIndex: 10001,
+                            minWidth: '202px',
                             build: function ($triggerElement, e) {
                                 node = $.ui.fancytree.getNode($triggerElement);
                                 if (node) {
@@ -283,7 +298,6 @@
                                 };
                             }
                         });
-
                     };
 
                     buildContextMenu(); //@todo move to init code

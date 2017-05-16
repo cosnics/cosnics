@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
@@ -14,39 +14,36 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NodeActionGenerator
+class NodeBaseActionGenerator extends NodeActionGenerator
 {
     /**
-     * @var Translation
+     * Node action generators for specific content object types
+     *
+     * @var NodeActionGenerator[]
      */
-    protected $translator;
-
-    /**
-     * @var array
-     */
-    protected $baseParameters;
-
-    /**
-     * @var string[]
-     */
-    protected $urlCache;
+    protected $contentObjectTypeNodeActionGenerators;
 
     /**
      * NodeActionGenerator constructor.
      *
      * @param Translation $translator
      * @param array $baseParameters
+     * @param NodeActionGenerator[] $contentObjectTypeNodeActionGenerators
      */
-    public function __construct(Translation $translator, array $baseParameters = array())
+    public function __construct(
+        Translation $translator, array $baseParameters = array(), $contentObjectTypeNodeActionGenerators = array()
+    )
     {
-        $this->translator = $translator;
-        $this->baseParameters = $baseParameters;
+        parent::__construct($translator, $baseParameters);
+
+        $this->contentObjectTypeNodeActionGenerators = $contentObjectTypeNodeActionGenerators;
     }
 
     /**
      * Generates the acions for a given LearningPathTreeNode
      *
      * @param LearningPathTreeNode $learningPathTreeNode
+     * @param bool $canEditLearningPathTreeNode
      *
      * @return array|Action[]
      */
@@ -64,7 +61,7 @@ class NodeActionGenerator
             /** @var LearningPath $learningPath */
             $learningPath = $learningPathTreeNode->getLearningPathTree()->getRoot()->getContentObject();
 
-            if(!$learningPath->enforcesDefaultTraversingOrder())
+            if (!$learningPath->enforcesDefaultTraversingOrder())
             {
                 $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
             }
@@ -85,6 +82,13 @@ class NodeActionGenerator
         }
 
         $actions[] = $this->getViewNodeAction($learningPathTreeNode);
+
+        $nodeSpecificActions = $this->getNodeSpecificActions($learningPathTreeNode, $canEditLearningPathTreeNode);
+
+        if (is_array($nodeSpecificActions) && !empty($nodeSpecificActions))
+        {
+            $actions = array_merge($actions, $nodeSpecificActions);
+        }
 
         return $actions;
     }
@@ -262,42 +266,25 @@ class NodeActionGenerator
     }
 
     /**
-     * Generates a URL for the given parameters and filters, includes the base parameters given in this service
+     * Generates the node specific actions for the given LearningPathTreeNode
      *
-     * @param array $parameters
-     * @param array $filter
-     * @param bool $encode_entities
+     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param bool $canEditLearningPathTreeNode
      *
-     * @return string
+     * @return array|Action[]
      */
-    protected function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
+    protected function getNodeSpecificActions(
+        LearningPathTreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+    )
     {
-        $parameters = (count($parameters) ? array_merge($this->baseParameters, $parameters) : $this->baseParameters);
-
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
-
-        return $redirect->getUrl();
-    }
-
-    /**
-     * Returns a url for a given set of parameters and a given node. Caches the urls for faster access
-     *
-     * @param array $parameters
-     * @param int $learningPathTreeNodeId
-     *
-     * @return string
-     */
-    protected function getUrlForNode($parameters = array(), $learningPathTreeNodeId = 0)
-    {
-        $nodePlaceholder = '__NODE__';
-
-        $cacheKey = md5(serialize($parameters));
-        if(!array_key_exists($cacheKey, $this->urlCache))
+        $contentObjectType = $learningPathTreeNode->getContentObject()->get_type();
+        if (array_key_exists($contentObjectType, $this->contentObjectTypeNodeActionGenerators))
         {
-            $parameters[Manager::PARAM_CHILD_ID] = $nodePlaceholder;
-            $this->urlCache[$cacheKey] = $this->getUrl($parameters);
+            return $this->contentObjectTypeNodeActionGenerators[$contentObjectType]->generateNodeActions(
+                $learningPathTreeNode, $canEditLearningPathTreeNode
+            );
         }
 
-        return str_replace($nodePlaceholder, $learningPathTreeNodeId, $this->urlCache[$cacheKey]);
+        return array();
     }
 }
