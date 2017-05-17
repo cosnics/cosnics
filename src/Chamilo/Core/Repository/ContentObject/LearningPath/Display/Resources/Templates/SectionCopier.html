@@ -1,0 +1,207 @@
+<style>
+    .form-category {
+        margin-bottom: 25px;
+        margin-top: 0;
+    }
+
+    .form-category:not(:first-child) {
+        margin-top: 25px;
+    }
+
+    #content-object-search {
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<div class="learning-path-section-copier" ng-controller="MainController as main">
+
+    <form>
+        <h4 class="form-category">Stap 1: Selecteer een leerpad</h4>
+        <div class="form-row row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                Selecteer uit
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <select id="repository-source"  class="form-control">
+                    <option value="repository">Mijn repository</option>
+                    <option value="workspaces">Workspaces gedeeld met mij</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                Selecteer de categorie
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <select id="category" class="form-control">
+                    <option value="1">Categorie 1</option>
+                    <option value="2">-- Categorie 2</option>
+                    <option value="3">-- Categorie 3</option>
+                </select>
+            </div>
+        </div>
+
+        <!--<div class="form-row row">-->
+            <!--<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">-->
+                <!--Selecteer het gewenste leerpad-->
+            <!--</div>-->
+            <!--<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">-->
+                <!--<select id="content-object" class="form-control">-->
+                    <!--<option value="1">Testleerpad 1</option>-->
+                    <!--<option value="2">Testleerpad 2</option>-->
+                    <!--<option value="3">Testleerpad 3</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="form-row row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                Selecteer het gewenste leerpad
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <input type="text" id="content-object-search" class="form-control" placeholder="Zoek hier" />
+                <div class="list-group">
+                    <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">Testleerpad 1</h4>
+                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 1</p>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">Testleerpad 2</h4>
+                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 2</p>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">Testleerpad 3</h4>
+                        <p class="list-group-item-text">Dit is de beschrijving van testleerpad 3</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
+
+        <div id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
+
+        <h4 class="form-category">Stap 3: Opties</h4>
+
+        <div class="form-row row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                Kopieer de onderliggende stappen (in plaats van ze te hergebruiken)
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="element">
+                <div class="checkbox no-toggle-style">
+                    <input type="checkbox" id="copy-steps-below" />
+                    <label></label>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-category">Stap 4: Kopieer</h4>
+
+        <div class="form-row row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <button type="submit" class="btn btn-primary">Kopieer de geselecteerde secties</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+<script>
+    (function () {
+
+        var learningPathSectionCopierApp = angular.module('learningPathSectionCopierApp', ['ui.bootstrap', 'ngSanitize']);
+
+        learningPathSectionCopierApp.controller(
+            'MainController',
+            ['$scope', '$http', function ($scope, $http) {
+
+                $scope.isLoading = false;
+                $scope.showError = false;
+                $scope.treeData = {{ treeData }};
+
+
+                var reloadTree = function(treeData) {
+                    $scope.treeData = treeData;
+                    return $("#tree").fancytree('getTree').reload($scope.treeData);
+                };
+
+                var reloadTreeWithFreshData = function() {
+                    $scope.isLoading = true;
+                    var activeNode =  $("#tree").fancytree('getTree').getActiveNode();
+                    if(activeNode) {
+                        activeNodeId = activeNode.key;
+                    }
+                    else {
+                        activeNodeId = 0;
+                    }
+                    var params = {
+                        'active_child_id': activeNodeId
+                    };
+                    $http.post(
+                        fetchTreeNodesAjaxUrl,
+                        $.param(params),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                    ).then(function successCallback(response) {
+                            $scope.isLoading = false;
+                            $scope.treeData = response.data;
+                            return $("#tree").fancytree('getTree').reload($scope.treeData);
+                        }, function errorCallback(response) {
+                            $scope.isLoading = false;
+                            $scope.showError = true;
+                        }
+                    );
+                };
+
+                var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
+
+                var tree = $("#sectionSelectorTree").fancytree({
+                    keyboard: false,
+                    source: $scope.treeData,
+                    glyph: {
+                        map: {
+                            checkbox: "glyphicon glyphicon-unchecked",
+                            checkboxSelected: "glyphicon glyphicon-check",
+                            checkboxUnknown: "glyphicon glyphicon-share",
+                            dragHelper: "glyphicon glyphicon-play",
+                            dropMarker: "glyphicon glyphicon-arrow-right",
+                            error: "glyphicon glyphicon-warning-sign",
+                            expanderClosed: "glyphicon glyphicon-chevron-right",
+                            expanderLazy: "glyphicon glyphicon-plus-sign",
+                            expanderOpen: "glyphicon glyphicon-chevron-down",
+                            loading: "glyphicon glyphicon-refresh glyphicon-spin",
+                            nodata: "glyphicon glyphicon-info-sign",
+                            doc: "glyphicon glyphicon-file",
+                            docOpen: "glyphicon glyphicon-file",
+                            folder: "glyphicon glyphicon-folder-close",
+                            folderOpen: "glyphicon glyphicon-folder-open"
+                        }
+                    },
+                    minExpandLevel: 2,
+                    selectMode: 1,
+                    checkbox: true,
+                    extensions: ["glyph", "persist"],
+                    toggleEffect: false,
+                    persist: {
+                        store: "local",
+                        types: 'expanded'
+                    },
+                    renderTitle: function (event, data) {
+                        return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
+
+                    }
+
+                });
+            }]
+        );
+    })();
+
+    angular.bootstrap($(".learning-path-section-copier"), ['learningPathSectionCopierApp']);
+</script>

@@ -120,3 +120,6 @@ ThisStepIsRequired = "This step is required, the students will not be able to vi
 IncompleteProgressMailSent = "Successfuly sent email to users with incomplete progress"
 IncompleteProgressMailNotSent = "Failed to send email to users with incomplete progress"
 IncompleteProgressMailTitle = "[Chamilo] Reminder: please complete the step '{STEP_NAME}' in the learning path '{LEARNING_PATH}'"
+SectionCopierComponent = "Copy a section from another learning path"
+SelectLearningObjectStep = "Step 1: select the learning path"
+SelectSectionStep = "Step 2: select the section you want to copy"

@@ -122,3 +122,6 @@ ThisStepIsRequired = "Deze stap is verplicht. De gebruikers kunnen de volgende s
 IncompleteProgressMailSent = "De e-mail naar gebruikers die deze stap nog niet afgewerkt hebben is verzonden"
 IncompleteProgressMailNotSent = "De e-mail naar gebruikers die deze stap nog niet afgewerkt hebben is niet verzonden"
 IncompleteProgressMailTitle = "[Chamilo] Herinnering: gelieve de stap '{STEP_NAME}' in het leerpad '{LEARNING_PATH}' af te werken"
+SectionCopierComponent = "Kopieer een sectie van een ander leerpad in dit leerpad"
+SelectLearningObjectStep = "Stap 1: selecteer een leerpad"
+SelectSectionStep = "Stap 2: selecteer de sectie die je wenst te kopiëren"
