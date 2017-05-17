@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -45,8 +46,9 @@ class GetContentObjectsComponent extends Manager
     }
 
     /**
-     * @param int    $categoryId
+     * @param int $categoryId
      * @param string $searchQuery
+     *
      * @return array
      */
     protected function getContentObjectsArray(int $categoryId, string $searchQuery = null)
@@ -54,25 +56,32 @@ class GetContentObjectsComponent extends Manager
 
         $contentObjects = DataManager::retrieve_active_content_objects(
             ContentObject::class_name(),
-            $this->getParameters($categoryId, $searchQuery));
+            $this->getParameters($categoryId, $searchQuery)
+        );
 
         $contentObjectsArray = array();
 
-        while ($contentObject = $contentObjects->next_result()) {
+        while ($contentObject = $contentObjects->next_result())
+        {
             /**
              * @var ContentObject $contentObject
              */
-            if(!$contentObject instanceOf Includeable)
+            if (!$this->validateContentObject($contentObject))
             {
                 continue;
             }
-            if ($contentObject instanceof File && $contentObject->is_image()) {
+
+            if ($contentObject instanceof File && $contentObject->is_image())
+            {
                 $type = 'image';
-            } else {
+            }
+            else
+            {
                 $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($contentObject->get_type(), true);
             }
 
-            array_push($contentObjectsArray,
+            array_push(
+                $contentObjectsArray,
                 array(
                     'id' => $contentObject->getId(),
                     'title' => $contentObject->get_title(),
@@ -84,48 +93,80 @@ class GetContentObjectsComponent extends Manager
         }
 
         return $contentObjectsArray;
-
     }
 
+    /**
+     * Validates the given content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    protected function validateContentObject(ContentObject $contentObject)
+    {
+        return ($contentObject instanceOf Includeable);
+    }
 
     /**
      * @param $categoryId
      * @param $searchQuery
+     *
      * @return DataClassRetrievesParameters
      */
-    protected function getParameters(int $categoryId, string $searchQuery  = null)
+    protected function getParameters(int $categoryId, string $searchQuery = null)
+    {
+        return new DataClassRetrievesParameters(
+            $this->getCondition($categoryId, $searchQuery),
+            null,
+            null,
+            new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObject::class_name(),
+                    ContentObject::PROPERTY_TITLE
+                )
+            )
+        );
+    }
+
+    /**
+     * Builds the condition for the retrieval of the content objects
+     *
+     * @param int $categoryId
+     * @param string $searchQuery
+     *
+     * @return Condition
+     */
+    protected function getCondition(int $categoryId, string $searchQuery): Condition
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getUser()->getId()));
+            new StaticConditionVariable($this->getUser()->getId())
+        );
 
-        if(empty($searchQuery)) {
+        if (empty($searchQuery))
+        {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($categoryId)
             );
-        } else {
+        }
+        else
+        {
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                '*' . $searchQuery . '*');
+                '*' . $searchQuery . '*'
+            );
         }
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
-
-        return new DataClassRetrievesParameters(
-            new AndCondition($conditions),
-            null,
-            null,
-            new OrderBy(new PropertyConditionVariable(
-                ContentObject::class_name(),
-                ContentObject::PROPERTY_TITLE
-                )
+                new StaticConditionVariable(ContentObject::STATE_RECYCLED)
             )
         );
+
+        return new AndCondition($conditions);
     }
 }
