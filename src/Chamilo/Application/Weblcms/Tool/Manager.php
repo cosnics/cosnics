@@ -490,7 +490,7 @@ abstract class Manager extends Application
                 $category_id = $publication->get_category_id();
                 $publication_id = $publication->get_id();
                 $publisher_id = $publication->get_publisher_id();
-                $hidden = $publication->is_hidden();
+                $hidden = !$publication->is_visible_for_target_users();
             }
             else
             {
@@ -498,6 +498,13 @@ abstract class Manager extends Application
                 $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
                 $publisher_id = $publication[ContentObjectPublication::PROPERTY_PUBLISHER_ID];
                 $hidden = $publication[ContentObjectPublication::PROPERTY_HIDDEN];
+
+                $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
+                $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
+                if(!empty($fromDate) && !empty($toDate))
+                {
+                    $hidden = $hidden || $fromDate > time() || $toDate < time();
+                }
             }
 
             if ($category_id != 0)
