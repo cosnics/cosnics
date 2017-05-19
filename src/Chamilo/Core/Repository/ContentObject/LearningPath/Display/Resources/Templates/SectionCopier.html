@@ -262,6 +262,13 @@
                     })
                 );
 
+                $scope.$watch(
+                    function() { return mainController.selectedWorkspace; },
+                    function() {
+                        mainController.fetchCategories();
+                    }
+                );
+
                 this.fetchWorkspaces = function() {
                     $http.post(
                         'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetWorkspacesWithCopyRight',
@@ -289,9 +296,14 @@
                 };
 
                 this.fetchCategories = function () {
+                    var parameters = {}; console.log(this);
+                    if(this.selectedWorkspace) {
+                        parameters = { 'workspace_id': this.selectedWorkspace.id };
+                    }
+
                     $http.post(
                         'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetCategories',
-                        null,
+                        $.param(parameters),
                         {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                     ).then(function successCallback(response) {
                             var categories = [];
