@@ -50,119 +50,131 @@
         padding: 5px 10px;
     }
 
+    #reset-selected-content-object {
+        color: #337ab7;
+
+    }
+
 </style>
 
 <div class="learning-path-section-copier" ng-controller="MainController as main">
 
     <form>
-        <h4 class="form-category">Stap 1: Selecteer een leerpad</h4>
-        <div class="form-row row">
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                Selecteer uit
-            </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <select id="repository-source" class="form-control">
-                    <option value="repository">Mijn repository</option>
-                    <option value="workspaces">Workspaces gedeeld met mij</option>
-                </select>
-            </div>
-        </div>
+            <h4 class="form-category">
+                Stap 1: Selecteer een leerpad
+                <span id="reset-selected-content-object" ng-show="main.selectedLearningPath !== null"
+                      class=" fa fa-chevron-down pull-right" ng-click="main.resetSelectedLearningPath()"></span>
+            </h4>
 
-        <div class="form-row row">
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                Selecteer de categorie
-            </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <select id="category" class="form-control">
-                    <option value="1">Categorie 1</option>
-                    <option value="2">-- Categorie 2</option>
-                    <option value="3">-- Categorie 3</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row row" id="content-object-selector-row">
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                Selecteer het gewenste leerpad
-            </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <div class="content-object-selector-sub-row">
-                    <input type="text" id="content-object-selector-search" class="form-control"
-                           placeholder="Zoek hier" ng-model="main.searchQuery"/>
+            <div id="content-object-selector-step" ng-show="main.selectedLearningPath === null">
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    Selecteer uit
                 </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <select id="repository-source" class="form-control">
+                        <option value="repository">Mijn repository</option>
+                        <option ng-repeat="workspace in main.workspaces" value="workspace.id">{{ workspace.name }}</option>
+                    </select>
+                </div>
+            </div>
 
-                <div class="content-object-selector-sub-row">
-                    <div class="list-group" id="content-object-selector-list">
-                        <a href="#" class="list-group-item" ng-repeat="learningPath in main.visibleLearningPaths"
-                           ng-click="main.selectLearningPath(learningPath)"
-                           ng-class="{'selected': learningPath.selected}">
-                            <div class="content-object-selector-title-container">
-                                <span class="fancytree-custom-icon type_learning_path content-object-selector-icon"></span>
-                                <span class="content-object-selector-title">{{ learningPath.title }}</span>
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    Selecteer de categorie
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <select id="category" class="form-control" ng-model="main.selectedCategory" ng-options="category.name for category in main.categories track by category.id">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row row" id="content-object-selector-row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    Selecteer het gewenste leerpad
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <div class="content-object-selector-sub-row">
+                        <input type="text" id="content-object-selector-search" class="form-control"
+                               placeholder="Zoek hier" ng-model="main.searchQuery"/>
+                    </div>
+
+                    <div class="content-object-selector-sub-row">
+                        <div class="list-group" id="content-object-selector-list">
+                            <a href="#" class="list-group-item" ng-repeat="learningPath in main.visibleLearningPaths"
+                               ng-click="main.selectLearningPath(learningPath)"
+                               ng-class="{'selected': learningPath.selected}">
+                                <div class="content-object-selector-title-container">
+                                    <span class="fancytree-custom-icon type_learning_path content-object-selector-icon"></span>
+                                    <span class="content-object-selector-title">{{ learningPath.title }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="content-object-selector-sub-row">
+                        <div class="content-object-selector-sub-col col-sm-8">
+                            <ul
+                                    uib-pagination
+                                    boundary-links="true"
+                                    total-items="main.pager.totalItems"
+                                    ng-model="main.pager.currentPage"
+                                    items-per-page="main.pager.itemsPerPage"
+                                    num-pages="main.pager.totalPages"
+                                    max-size="5"
+                                    ng-change="main.selectPage()"
+                                    id="content-object-selector-pagination"
+                                    class="pagination-sm"
+                                    previous-text="&lsaquo;"
+                                    next-text="&rsaquo;"
+                                    first-text="&laquo;"
+                                    last-text="&raquo;">
+                            </ul>
+                        </div>
+                        <div class="content-object-selector-sub-col col-sm-4 pull-right">
+                            <div class="panel panel-default text-center pager-info-panel ng-binding">
+                                Page {{ main.pager.currentPage }} / {{ main.pager.totalPages }}
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="content-object-selector-sub-row">
-                    <div class="content-object-selector-sub-col col-sm-8">
-                        <ul
-                                uib-pagination
-                                boundary-links="true"
-                                total-items="main.pager.totalItems"
-                                ng-model="main.pager.currentPage"
-                                items-per-page="main.pager.itemsPerPage"
-                                num-pages="main.pager.totalPages"
-                                max-size="5"
-                                ng-change="main.selectPage()"
-                                id="content-object-selector-pagination"
-                                class="pagination-sm"
-                                previous-text="&lsaquo;"
-                                next-text="&rsaquo;"
-                                first-text="&laquo;"
-                                last-text="&raquo;">
-                        </ul>
-                    </div>
-                    <div class="content-object-selector-sub-col col-sm-4 pull-right">
-                        <div class="panel panel-default text-center pager-info-panel ng-binding">
-                            Page {{ main.pager.currentPage }} / {{ main.pager.totalPages }}
+                </div>
+                <input type="hidden" id="selected-content-object" name="selected_content_object" value="{{ main.selectedLearningPath.id }}" />
+            </div>
+        </div>
+
+        <div class="properties-step" ng-show="main.selectedLearningPath !== null">
+            <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
+
+            <div id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
+            <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" value="{{ main.selectedLearningPathNodeIds }}" />
+
+            <h4 class="form-category">Stap 3: Opties</h4>
+
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    Kopieer de inhoud van de stappen (in plaats van deze te hergebruiken)
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <div class="element">
+                        <div class="checkbox no-toggle-style">
+                            <input type="checkbox" id="copy-steps-below" name="copy_instead_of_reuse"/>
+                            <label></label>
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
 
-        <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
+            <h4 class="form-category">Stap 4: Kopieer</h4>
 
-        <div id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
-
-        <h4 class="form-category">Stap 3: Opties</h4>
-
-        <div class="form-row row">
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                Kopieer de onderliggende stappen (in plaats van ze te hergebruiken)
-            </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <div class="element">
-                    <div class="checkbox no-toggle-style">
-                        <input type="checkbox" id="copy-steps-below"/>
-                        <label></label>
-                    </div>
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <button type="submit" class="btn btn-primary">Kopieer de geselecteerde secties</button>
                 </div>
             </div>
         </div>
-
-        <h4 class="form-category">Stap 4: Kopieer</h4>
-
-        <div class="form-row row">
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-            </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                <button type="submit" class="btn btn-primary">Kopieer de geselecteerde secties</button>
-            </div>
-        </div>
-
 
     </form>
 </div>
@@ -178,16 +190,18 @@
             'MainController',
             ['$scope', '$http', function ($scope, $http) {
 
-                $scope.isLoading = false;
-                $scope.showError = false;
-                $scope.treeData = {{ treeData }};
+                var mainController = this;
 
-                this.learningPaths = Array.apply(null, new Array(100)).map(function (_, i) {
-                    var counter = i + 1;
-                    return {id: counter, title: 'Test Leerpad ' + counter};
-                });
+                this.isLoading = false;
+                this.treeData = [];
 
-                this.originalLearningPaths = this.learningPaths;
+                this.workspaces = [];
+                this.selectedWorkspace = null;
+                this.originalLearningPaths = this.learningPaths = [];
+                this.selectedLearningPath = null;
+                this.selectedLearningPathNodeIds = null;
+                this.categories = [];
+                this.selectedCategory = null;
 
                 this.pager = {
                     itemsPerPage: 5,
@@ -198,12 +212,10 @@
                     getLastItemOffset: function() { return this.getFirstItemOffset() + this.itemsPerPage },
                     reset: function(learningPaths) {
                         this.currentPage = 1;
-                        this.totalItems = learningPaths.length;
+                        this.totalItems = learningPaths !== null ? learningPaths.length : 0;
                         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
                     }
                 };
-
-                this.selectedLearningPath = null;
 
                 this.selectLearningPath = function (learningPath) {
                     if (this.selectedLearningPath !== null) {
@@ -212,6 +224,16 @@
 
                     this.selectedLearningPath = learningPath;
                     learningPath.selected = true;
+
+                    this.fetchLearningPathTree(this.selectedLearningPath.id);
+                };
+
+                this.resetSelectedLearningPath = function() {
+                    this.selectedLearningPath.selected = false;
+                    this.selectedLearningPath = null;
+                    this.selectedLearningPathNodeIds = null;
+                    this.treeData = [];
+                    $("#sectionSelectorTree").fancytree('getTree').reload(this.treeData);
                 };
 
                 this.selectPage = function() {
@@ -227,7 +249,7 @@
                 $scope.$watch(
                     angular.bind(this, function() { return this.searchQuery; }),
                     angular.bind(this, function(searchQuery) {
-                        if(searchQuery.length > 0) {
+                        if(searchQuery !== null && searchQuery.length > 0) {
                             this.learningPaths = this.originalLearningPaths.filter(function(learningPath) {
                                return learningPath.title.indexOf(searchQuery) > -1;
                             });
@@ -240,60 +262,72 @@
                     })
                 );
 
-                var reloadTree = function (treeData) {
-                    $scope.treeData = treeData;
-                    return $("#tree").fancytree('getTree').reload($scope.treeData);
-                };
-
-                var reloadTreeWithFreshData = function () {
-                    $scope.isLoading = true;
-                    var activeNode = $("#tree").fancytree('getTree').getActiveNode();
-                    if (activeNode) {
-                        activeNodeId = activeNode.key;
-                    }
-                    else {
-                        activeNodeId = 0;
-                    }
-                    var params = {
-                        'active_child_id': activeNodeId
-                    };
+                this.fetchWorkspaces = function() {
                     $http.post(
-                        fetchTreeNodesAjaxUrl,
-                        $.param(params),
+                        'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetWorkspacesWithCopyRight',
+                        null,
                         {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                     ).then(function successCallback(response) {
-                            $scope.isLoading = false;
-                            $scope.treeData = response.data;
-                            return $("#tree").fancytree('getTree').reload($scope.treeData);
-                        }, function errorCallback(response) {
-                            $scope.isLoading = false;
-                            $scope.showError = true;
+                            this.workspaces = response.data;
+                        }.bind(this), function errorCallback(response) {
                         }
                     );
                 };
-
-                var fetchTreeNodesAjaxUrl = "{{ fetchTreeNodesAjaxUrl }}";
 
                 this.fetchLearningPaths = function (categoryId, searchQuery) {
                     $http.post(
                         'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetLearningPaths',
                         $.param({'category_id': categoryId, 'search_query': searchQuery}),
                         {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
-                    ).then(angular.bind(this, function successCallback(response) {
+                    ).then(function successCallback(response) {
                             this.originalLearningPaths = this.learningPaths = response.data;
-                            this.pager.reset();
+                            this.pager.reset(this.learningPaths);
                             this.selectPage();
-                        }, function errorCallback(response) {
-
+                        }.bind(this), function errorCallback(response) {
                         }
-                    ));
+                    );
                 };
 
+                this.fetchCategories = function () {
+                    $http.post(
+                        'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetCategories',
+                        null,
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                    ).then(function successCallback(response) {
+                            var categories = [];
+                            response.data.forEach(function (category) {
+                                categories.push({
+                                    "id": category.id,
+                                    "name": category.name.replace(/&mdash;/g, '-').replace(/&nbsp;&nbsp;&nbsp;/g, '-')
+                                });
+                            });
+                            this.categories = categories;
+                            this.selectedCategory = this.categories[0];
+                        }.bind(this), function errorCallback(response) {
+                        }
+                    );
+                };
+
+                this.fetchLearningPathTree = function(learningPathId) {
+                    $http.post(
+                        'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetLearningPathTree',
+                        $.param({ 'learning_path_id': learningPathId }),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                    ).then(function successCallback(response) {
+                            this.treeData = response.data;
+                            $("#sectionSelectorTree").fancytree('getTree').reload(this.treeData);
+                        }.bind(this), function errorCallback(response) {
+                        }
+                    );
+                };
+
+                this.fetchWorkspaces();
+                this.fetchCategories();
                 this.fetchLearningPaths(0);
 
                 var tree = $("#sectionSelectorTree").fancytree({
                     keyboard: false,
-                    source: $scope.treeData,
+                    source: this.treeData,
                     glyph: {
                         map: {
                             checkbox: "glyphicon glyphicon-unchecked",
@@ -313,8 +347,8 @@
                             folderOpen: "glyphicon glyphicon-folder-open"
                         }
                     },
-                    minExpandLevel: 2,
-                    selectMode: 1,
+                    minExpandLevel: 10,
+                    selectMode: 3,
                     checkbox: true,
                     extensions: ["glyph", "persist"],
                     toggleEffect: false,
@@ -326,6 +360,14 @@
                         return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title +
                             '</span>';
 
+                    },
+                    select: function(event, data) {
+                        var selKeys = $.map(data.tree.getSelectedNodes(true), function(node){
+                            return node.key;
+                        });
+
+                        mainController.selectedLearningPathNodeIds = JSON.stringify(selKeys);
+                        $scope.$digest();
                     }
 
                 });

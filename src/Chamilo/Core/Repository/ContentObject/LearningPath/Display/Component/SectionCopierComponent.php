@@ -71,7 +71,6 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         );
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX)),
             'treeData' => $this->getBootstrapTreeData()
         );
 

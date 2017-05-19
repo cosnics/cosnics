@@ -47,25 +47,4 @@ abstract class Manager extends AjaxManager
     {
         return parent::get_application();
     }
-
-    /**
-     * Handles an exception
-     *
-     * @param $exception
-     *
-     * @return JsonResponse
-     */
-    protected function handleException($exception)
-    {
-        $this->getExceptionLogger()->logException($exception);
-        return new JsonResponse(null, 500);
-    }
-
-    /**
-     * @return ExceptionLoggerInterface | object
-     */
-    protected function getExceptionLogger()
-    {
-        return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
-    }
 }

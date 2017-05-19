@@ -85,7 +85,7 @@ class LearningPathTreeJSONMapper
      */
     public function __construct(
         LearningPathTree $learningPathTree, User $user,
-        LearningPathTrackingService $learningPathTrackingService,
+        LearningPathTrackingService $learningPathTrackingService = null,
         AutomaticNumberingService $automaticNumberingService,
         NodeActionGenerator $nodeActionGenerator,
         $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode,
@@ -114,9 +114,10 @@ class LearningPathTreeJSONMapper
         if ($this->allowedToViewContentObject)
         {
 
-            if (!$this->allowedToEditLearningPathTree && $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                $this->learningPath, $this->user, $node
-            )
+            if (!$this->allowedToEditLearningPathTree && $this->learningPathTrackingService &&
+                $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                    $this->learningPath, $this->user, $node
+                )
             )
             {
                 return 'type_completed';
