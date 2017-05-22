@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableMultiColumnSortSupport;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
