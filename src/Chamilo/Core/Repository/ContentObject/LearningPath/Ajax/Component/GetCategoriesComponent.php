@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
@@ -46,28 +47,22 @@ class GetCategoriesComponent extends Manager
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
 
         $workspaceId = $this->getRequest()->get(self::PARAM_WORKSPACE_ID);
-        if (isset($workspaceId) && !empty($workspaceId))
-        {
-            $repository = $workspaceService->getWorkspaceByIdentifier($workspaceId);
-            if (!$repository instanceof Workspace)
-            {
-                throw new ObjectNotExistException(
-                    Translation::getInstance()->getTranslation('Workspace'), $workspaceId
-                );
-            }
+        $workspace = $workspaceService->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
 
-            $rightsService = RightsService::getInstance();
-            if(!$rightsService->canViewContentObjects($this->getUser(), $repository))
-            {
-                throw new NotAllowedException();
-            }
-        }
-        else
+        if (!$workspace instanceof WorkspaceInterface)
         {
-            $repository = $workspaceService->getPersonalWorkspaceForUser($this->getUser());
+            throw new ObjectNotExistException(
+                Translation::getInstance()->getTranslation('Workspace'), $workspaceId
+            );
         }
 
-        $categorymenu = new ContentObjectCategoryMenu($repository);
+        $rightsService = RightsService::getInstance();
+        if(!$rightsService->canViewContentObjects($this->getUser(), $workspace))
+        {
+            throw new NotAllowedException();
+        }
+
+        $categorymenu = new ContentObjectCategoryMenu($workspace);
         $renderer = new OptionsMenuRenderer();
         $categorymenu->render($renderer, 'sitemap');
 

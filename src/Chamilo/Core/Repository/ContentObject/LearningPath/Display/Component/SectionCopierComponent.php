@@ -6,8 +6,13 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,48 +24,82 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class SectionCopierComponent extends BaseHtmlTreeComponent
 {
+    const PARAM_SELECTED_CONTENT_OBJECT = 'selected_content_object';
+    const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
+    const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
 
+    /**
+     * Builds this component and returns it's response
+     *
+     * @return string
+     *
+     * @throws NotAllowedException
+     */
     function build()
     {
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
         {
             throw new NotAllowedException();
         }
 
+        $selectedContentObject = $this->getRequest()->get(self::PARAM_SELECTED_CONTENT_OBJECT);
+        $selectedLearningPathNodes = json_decode($this->getRequest()->get(self::PARAM_SELECTED_LEARNING_PATH_NODES));
+        $copyInsteadOfReuse = $this->getRequest()->get(self::PARAM_COPY_INSTEAD_OF_REUSE);
+
+        $translator = Translation::getInstance();
+
+        if (!empty($selectedContentObject) && !empty($selectedLearningPathNodes))
+        {
+            try
+            {
+                $contentObject = $this->getContentObjectRepository()->findById($selectedContentObject);
+                if (!$contentObject instanceof LearningPath)
+                {
+                    throw new ObjectNotExistException(
+                        $translator->getTranslation('LearningPath'), $selectedContentObject
+                    );
+                }
+
+                if(!$this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject))
+                {
+                    throw new NotAllowedException();
+                }
+
+                $this->getLearningPathService()
+                    ->copyNodesFromLearningPath(
+                        $this->getCurrentLearningPathTreeNode(), $contentObject,
+                        $selectedLearningPathNodes, (bool) $copyInsteadOfReuse
+                    );
+
+                $message = 'LearningPathNodesCopied';
+                $success = true;
+            }
+            catch (\Exception $ex)
+            {
+                $message = 'LearningPathNodesNotCopied';
+                $success = false;
+            }
+
+            $this->redirect(
+                Translation::getInstance()->getTranslation($message), !$success,
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
+            );
+        }
+
+        return $this->renderCopyForm();
+    }
+
+    /**
+     * Renders the form to select a content object and the nodes from the selected content object
+     *
+     * @return string
+     */
+    protected function renderCopyForm(): string
+    {
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
         $breadcrumbTrail->add(
             new Breadcrumb($this->get_url(), Translation::getInstance()->getTranslation('SectionCopierComponent'))
         );
-//
-//        if (!\Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
-//        {
-//            $this->getRequest()->request->set(
-//                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION,
-//                \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
-//            );
-//
-//            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-//
-//            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-//            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-//            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_BREADCRUMBS_DISABLED, true);
-//
-//            $factory = new ApplicationFactory(
-//                \Chamilo\Core\Repository\Viewer\Manager::context(),
-//                $applicationConfiguration
-//            );
-//
-//            return $factory->run();
-//        }
-//        else
-//        {
-//            $html = array();
-//
-//            $html[] = $this->render_header();
-//            $html[] = $this->render_footer();
-//
-//            return implode(PHP_EOL, $html);
-//        }
 
         $html = array();
 
@@ -71,7 +110,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         );
 
         $parameters = array(
-            'treeData' => $this->getBootstrapTreeData()
+            'FORM_URL' => $this->get_url()
         );
 
         foreach ($parameters as $parameter => $value)
@@ -85,67 +124,28 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         return implode(PHP_EOL, $html);
     }
 
-    protected function getBootstrapTreeData()
+    /**
+     * @return ContentObjectRepository | object
+     */
+    protected function getContentObjectRepository()
     {
-        $learningPathTree = $this->getLearningPathTree();
-
-        $nodeActionGeneratorFactory =
-            new NodeActionGeneratorFactory(
-                Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(),
-                $this->get_application()->get_parameters()
-            );
-
-        $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-            $learningPathTree, $this->getUser(),
-            $this->getLearningPathTrackingService(),
-            $this->getAutomaticNumberingService(),
-            $nodeActionGeneratorFactory->createNodeActionGenerator(),
-            $this->get_application()->get_learning_path_tree_menu_url(),
-            $this->getCurrentLearningPathTreeNode(),
-            $this->get_application()->is_allowed_to_view_content_object(),
-            $this->canEditLearningPathTreeNode(
-                $this->getCurrentLearningPathTreeNode()
-            )
-        );
-
-        return json_encode($learningPathTreeJSONMapper->getNodes());
+        return $this->getService('chamilo.core.repository.workspace.repository.content_object_repository');
     }
 
-//    /**
-//     * Overwrite render header to add the wizard
-//     *
-//     * @return string
-//     */
-//    public function render_header()
-//    {
-//        $translator = Translation::getInstance();
-//
-//        $html = array();
-//        $html[] = parent::render_header();
-//
-//        $wizardHeader = new WizardHeader();
-//        $wizardHeader->setStepTitles(
-//            array(
-//                $translator->getTranslation('SelectLearningObjectStep'),
-//                $translator->getTranslation('SelectSectionStep')
-//            )
-//        );
-//
-//        $selectedStepIndex = \Chamilo\Core\Repository\Viewer\Manager::any_object_selected() ? 1 : 0;
-//        $wizardHeader->setSelectedStepIndex($selectedStepIndex);
-//
-//        $wizardHeaderRenderer = new WizardHeaderRenderer($wizardHeader);
-//
-//        $html[] = $wizardHeaderRenderer->render();
-//
-//        return implode(PHP_EOL, $html);
-//    }
-//
-//    /**
-//     * @return array
-//     */
-//    public function get_allowed_content_object_types()
-//    {
-//        return array(LearningPath::class_name());
-//    }
+    /**
+     * @return RightsService
+     */
+    protected function getRightsService()
+    {
+        return RightsService::getInstance();
+    }
+
+    /**
+     * @return LearningPathService | object
+     */
+    protected function getLearningPathService()
+    {
+        return $this->getService('chamilo.core.repository.content_object.learning_path.service.learning_path_service');
+    }
+
 }

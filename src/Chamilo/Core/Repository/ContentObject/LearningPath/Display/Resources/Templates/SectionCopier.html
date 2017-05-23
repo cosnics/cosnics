@@ -51,20 +51,29 @@
     }
 
     #reset-selected-content-object {
-        color: #337ab7;
-
+        margin-bottom: 25px;
     }
 
 </style>
 
 <div class="learning-path-section-copier" ng-controller="MainController as main">
 
-    <form>
+    <form method="post" action="{{ FORM_URL }}">
             <h4 class="form-category">
                 Stap 1: Selecteer een leerpad
-                <span id="reset-selected-content-object" ng-show="main.selectedLearningPath !== null"
-                      class=" fa fa-chevron-down pull-right" ng-click="main.resetSelectedLearningPath()"></span>
             </h4>
+
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <button id="reset-selected-content-object" class="btn btn-primary"
+                            ng-click="main.resetSelectedLearningPath()" ng-show="main.selectedLearningPath !== null">
+                        Selecteer een ander leerpad
+                    </button>
+                </div>
+            </div>
+
 
             <div id="content-object-selector-step" ng-show="main.selectedLearningPath === null">
             <div class="form-row row">
@@ -146,8 +155,14 @@
         <div class="properties-step" ng-show="main.selectedLearningPath !== null">
             <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
 
-            <div id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
-            <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" value="{{ main.selectedLearningPathNodeIds }}" />
+            <div class="form-row row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                    <div id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
+                    <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" value="{{ main.selectedLearningPathNodeIds }}" />
+                </div>
+            </div>
 
             <h4 class="form-category">Stap 3: Opties</h4>
 
@@ -158,7 +173,7 @@
                 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="element">
                         <div class="checkbox no-toggle-style">
-                            <input type="checkbox" id="copy-steps-below" name="copy_instead_of_reuse"/>
+                            <input type="checkbox" value="1" id="copy-steps-below" name="copy_instead_of_reuse"/>
                             <label></label>
                         </div>
                     </div>
@@ -171,7 +186,7 @@
                 <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                    <button type="submit" class="btn btn-primary">Kopieer de geselecteerde secties</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="main.selectedLearningPathNodeIds == null">Kopieer de geselecteerde secties</button>
                 </div>
             </div>
         </div>
@@ -263,6 +278,7 @@
                     }
                 );
 
+                /** Don't work with scope.watch because the search query can be reset programmatically by the category **/
                 this.search = function() {
                     if (mainController.searchQuery === null) {
                         if (mainController.selectedCategory !== null) {
@@ -270,6 +286,7 @@
                         }
                     }
                     else {
+                        mainController.selectedCategory = null;
                         mainController.fetchLearningPaths(null, mainController.searchQuery);
                     }
                 };
@@ -390,7 +407,9 @@
                             return node.key;
                         });
 
-                        mainController.selectedLearningPathNodeIds = JSON.stringify(selKeys);
+                        mainController.selectedLearningPathNodeIds =
+                            selKeys.length === 0 ? null : JSON.stringify(selKeys);
+
                         $scope.$digest();
                     }
 
