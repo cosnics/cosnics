@@ -79,6 +79,8 @@ class Configuration
     /**
      *
      * @param string $type
+     *
+     * @return TemplateRegistration
      */
     public function get_registration_default_by_type($type)
     {

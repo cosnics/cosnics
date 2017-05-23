@@ -72,9 +72,9 @@
                     Selecteer uit
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                    <select id="repository-source" class="form-control">
-                        <option value="repository">Mijn repository</option>
-                        <option ng-repeat="workspace in main.workspaces" value="workspace.id">{{ workspace.name }}</option>
+                    <select id="repository-source" class="form-control" ng-model="main.selectedWorkspace">
+                        <option value="0">Mijn repository</option>
+                        <option ng-repeat="workspace in main.workspaces" ng-value="workspace.id">{{ workspace.name }}</option>
                     </select>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="content-object-selector-sub-row">
                         <input type="text" id="content-object-selector-search" class="form-control"
-                               placeholder="Zoek hier" ng-model="main.searchQuery"/>
+                               placeholder="Zoek hier" ng-model="main.searchQuery" ng-model-options="{ debounce: 500 }" ng-change="main.search()"/>
                     </div>
 
                     <div class="content-object-selector-sub-row">
@@ -196,12 +196,13 @@
                 this.treeData = [];
 
                 this.workspaces = [];
-                this.selectedWorkspace = null;
+                this.selectedWorkspace = 0;
                 this.originalLearningPaths = this.learningPaths = [];
                 this.selectedLearningPath = null;
                 this.selectedLearningPathNodeIds = null;
                 this.categories = [];
                 this.selectedCategory = null;
+                this.searchQuery = null;
 
                 this.pager = {
                     itemsPerPage: 5,
@@ -242,25 +243,7 @@
                     );
                 };
 
-                this.selectPage();
-
                 this.searchQuery = null;
-
-                $scope.$watch(
-                    angular.bind(this, function() { return this.searchQuery; }),
-                    angular.bind(this, function(searchQuery) {
-                        if(searchQuery !== null && searchQuery.length > 0) {
-                            this.learningPaths = this.originalLearningPaths.filter(function(learningPath) {
-                               return learningPath.title.indexOf(searchQuery) > -1;
-                            });
-                        } else {
-                            this.learningPaths = this.originalLearningPaths;
-                        }
-
-                        this.pager.reset(this.learningPaths);
-                        this.selectPage();
-                    })
-                );
 
                 $scope.$watch(
                     function() { return mainController.selectedWorkspace; },
@@ -268,6 +251,28 @@
                         mainController.fetchCategories();
                     }
                 );
+
+                $scope.$watch(
+                    function() { return mainController.selectedCategory; },
+                    function() {
+                        mainController.searchQuery = null;
+
+                        if(mainController.selectedCategory !== null) {
+                            mainController.fetchLearningPaths(mainController.selectedCategory.id);
+                        }
+                    }
+                );
+
+                this.search = function() {
+                    if (mainController.searchQuery === null) {
+                        if (mainController.selectedCategory !== null) {
+                            mainController.fetchLearningPaths(mainController.selectedCategory.id);
+                        }
+                    }
+                    else {
+                        mainController.fetchLearningPaths(null, mainController.searchQuery);
+                    }
+                };
 
                 this.fetchWorkspaces = function() {
                     $http.post(
@@ -282,9 +287,18 @@
                 };
 
                 this.fetchLearningPaths = function (categoryId, searchQuery) {
+                    var parameters = {'search_query': searchQuery};
+                    if(this.selectedWorkspace) {
+                        parameters.workspace_id = this.selectedWorkspace;
+                    }
+
+                    if(categoryId !== null) {
+                        parameters.category_id = categoryId;
+                    }
+
                     $http.post(
                         'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetLearningPaths',
-                        $.param({'category_id': categoryId, 'search_query': searchQuery}),
+                        $.param(parameters),
                         {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
                     ).then(function successCallback(response) {
                             this.originalLearningPaths = this.learningPaths = response.data;
@@ -296,9 +310,9 @@
                 };
 
                 this.fetchCategories = function () {
-                    var parameters = {}; console.log(this);
+                    var parameters = {};
                     if(this.selectedWorkspace) {
-                        parameters = { 'workspace_id': this.selectedWorkspace.id };
+                        parameters = { 'workspace_id': this.selectedWorkspace };
                     }
 
                     $http.post(
@@ -334,8 +348,6 @@
                 };
 
                 this.fetchWorkspaces();
-                this.fetchCategories();
-                this.fetchLearningPaths(0);
 
                 var tree = $("#sectionSelectorTree").fancytree({
                     keyboard: false,

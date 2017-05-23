@@ -105,7 +105,7 @@ class ContentObjectService
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
-        ConditionFilterRenderer $filterConditionRenderer, $offset, $count, $orderProperty)
+        ConditionFilterRenderer $filterConditionRenderer, $offset = null, $count = null, $orderProperty = array())
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
         

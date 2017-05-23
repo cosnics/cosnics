@@ -71,10 +71,14 @@ class FilterData
     /**
      * Clear all filter parameters from the session
      */
-    public function clear()
+    public function clear($updateSession = true)
     {
         $this->set_storage(array());
-        $this->update_session();
+
+        if($updateSession)
+        {
+            $this->update_session();
+        }
     }
 
     /**

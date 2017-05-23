@@ -7,8 +7,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
+use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -31,25 +33,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class GetLearningPathsComponent extends GetContentObjectsComponent
 {
     /**
-     * Builds the condition for the retrieval of the content objects
-     * 
+     * Returns the filter data for the given category, search query and workspace
+     *
      * @param int $categoryId
      * @param string $searchQuery
+     * @param WorkspaceInterface $workspace
      *
-     * @return Condition
+     * @return FilterData
      */
-    protected function getCondition(int $categoryId, string $searchQuery): Condition
+    protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
     {
-        $conditions = array();
-
-        $conditions[] = parent::getCondition($categoryId, $searchQuery);
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(LearningPath::class_name())
+        $templateRegistration = \Chamilo\Core\Repository\Configuration::getInstance()->get_registration_default_by_type(
+            LearningPath::package()
         );
 
-        return new AndCondition($conditions);
+        $filterData = parent::getFilterData($categoryId, $searchQuery, $workspace);
+        $filterData->set_filter_property(FilterData::FILTER_TYPE, $templateRegistration->getId());
+
+        return $filterData;
     }
 
     /**

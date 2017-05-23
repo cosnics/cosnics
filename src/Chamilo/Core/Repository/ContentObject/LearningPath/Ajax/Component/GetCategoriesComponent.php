@@ -46,7 +46,7 @@ class GetCategoriesComponent extends Manager
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
 
         $workspaceId = $this->getRequest()->get(self::PARAM_WORKSPACE_ID);
-        if (isset($workspaceId))
+        if (isset($workspaceId) && !empty($workspaceId))
         {
             $repository = $workspaceService->getWorkspaceByIdentifier($workspaceId);
             if (!$repository instanceof Workspace)
