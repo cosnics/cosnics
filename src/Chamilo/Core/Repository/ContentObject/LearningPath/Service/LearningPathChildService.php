@@ -123,6 +123,18 @@ class LearningPathChildService
         $learningPathChild->setUserId((int) $user->getId());
         $learningPathChild->setAddedDate(time());
 
+        $this->createLearningPathChild($learningPathChild);
+
+        return $learningPathChild;
+    }
+
+    /**
+     * Helper function to create the learning path child in the database
+     *
+     * @param LearningPathChild $learningPathChild
+     */
+    public function createLearningPathChild(LearningPathChild $learningPathChild)
+    {
         if (!$this->learningPathChildRepository->create($learningPathChild))
         {
             throw new \RuntimeException(
@@ -133,8 +145,6 @@ class LearningPathChildService
                 )
             );
         }
-
-        return $learningPathChild;
     }
 
     /**

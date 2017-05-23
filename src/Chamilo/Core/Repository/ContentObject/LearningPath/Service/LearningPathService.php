@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -43,6 +45,8 @@ class LearningPathService
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
+        $this->learningPathTreeBuilder = $learningPathTreeBuilder;
+        $this->learningPathChildService = $learningPathChildService;
     }
 
     /**
@@ -80,7 +84,7 @@ class LearningPathService
         $fromLearningPathTree = $this->learningPathTreeBuilder->buildLearningPathTree($fromLearningPath);
         foreach ($selectedNodeIds as $selectedNodeId)
         {
-            $selectedNode = $fromLearningPathTree->getLearningPathTreeNodeById($selectedNodeId);
+            $selectedNode = $fromLearningPathTree->getLearningPathTreeNodeById((int) $selectedNodeId);
             $this->copyNodeAndChildren($rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse);
         }
     }
@@ -99,15 +103,33 @@ class LearningPathService
         $copyInsteadOfReuse = false
     )
     {
-        $fromContentObject = $fromNode->getContentObject();
+        $contentObject = $fromNode->getContentObject();
 
-        $learningPathChild = $this->learningPathChildService->addContentObjectToLearningPath(
-            $rootLearningPath, $toNode, $fromContentObject, $user
-        );
+        if($copyInsteadOfReuse)
+        {
+            $contentObjectCopier = new ContentObjectCopier(
+                $user, array($contentObject->getId()), new PersonalWorkspace($contentObject->get_owner()),
+                $contentObject->get_owner_id(), new PersonalWorkspace($user), $user->getId(),
+                    $toNode->getContentObject()->get_parent_id()
+            );
 
-        $newNode = $toNode->addChildNode(
-            new LearningPathTreeNode($toNode->getLearningPathTree(), $fromContentObject, $learningPathChild)
-        );
+            $newContentObjectIdentifiers = $contentObjectCopier->run();
+            $contentObject = $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
+        }
+
+        $learningPathChild = $fromNode->getLearningPathChild();
+
+        $learningPathChild->setId(null);
+        $learningPathChild->setUserId((int) $user->getId());
+        $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
+        $learningPathChild->setParentLearningPathChildId((int) $toNode->getId());
+        $learningPathChild->setContentObjectId((int) $contentObject->getId());
+        $learningPathChild->setAddedDate(time());
+
+        $this->learningPathChildService->createLearningPathChild($learningPathChild);
+
+        $newNode = new LearningPathTreeNode($toNode->getLearningPathTree(), $contentObject, $learningPathChild);
+        $toNode->addChildNode($newNode);
 
         foreach ($fromNode->getChildNodes() as $childNode)
         {
