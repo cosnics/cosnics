@@ -127,7 +127,7 @@ class HtmlEditorFileUploadComponent extends Manager
      */
     protected function handleFileCreationFailed(\Exception $exception)
     {
-        //$this->getExceptionLogger()->logException($exception);
+        $this->getExceptionLogger()->logException($exception);
 
         $result = array(
             "uploaded" => 0,
