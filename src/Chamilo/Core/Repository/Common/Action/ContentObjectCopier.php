@@ -99,6 +99,9 @@ class ContentObjectCopier
         $this->targetCategory = $targetCategory;
     }
 
+    /**
+     * @return bool | array
+     */
     public function run()
     {
         if (! $this->contentObjectIdentifiers)

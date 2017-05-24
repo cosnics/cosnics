@@ -92,7 +92,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         
         if (isset($values[ConfigurationForm::PROPERTY_ANSWER_FEEDBACK_OPTION]))
         {
-            $learningPathChild->setShowAnswerFeedback($values[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK]);
+            $learningPathChild->setShowAnswerFeedback((int) $values[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK]);
         }
         else
         {

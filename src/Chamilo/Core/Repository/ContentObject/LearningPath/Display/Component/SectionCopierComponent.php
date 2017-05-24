@@ -67,7 +67,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
                 $this->getLearningPathService()
                     ->copyNodesFromLearningPath(
-                        $this->getCurrentLearningPathTreeNode(), $contentObject,
+                        $this->getCurrentLearningPathTreeNode(), $contentObject, $this->getUser(),
                         $selectedLearningPathNodes, (bool) $copyInsteadOfReuse
                     );
 
@@ -76,13 +76,14 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             }
             catch (\Exception $ex)
             {
+                var_dump($ex);
                 $message = 'LearningPathNodesNotCopied';
                 $success = false;
             }
 
             $this->redirect(
                 Translation::getInstance()->getTranslation($message), !$success,
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
             );
         }
 
