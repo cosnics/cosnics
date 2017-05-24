@@ -5,6 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -103,21 +106,108 @@ class LearningPathService
         $copyInsteadOfReuse = false
     )
     {
-        $contentObject = $fromNode->getContentObject();
+        $contentObject = $this->prepareContentObjectForCopy(
+            $fromNode, $user, $toNode->getContentObject()->get_parent_id(), $copyInsteadOfReuse
+        );
 
-        if($copyInsteadOfReuse)
+        $learningPathChild = $this->copyLearningPathChild($rootLearningPath, $toNode, $fromNode, $user, $contentObject);
+
+        $newNode = new LearningPathTreeNode($toNode->getLearningPathTree(), $contentObject, $learningPathChild);
+        $toNode->addChildNode($newNode);
+
+        foreach ($fromNode->getChildNodes() as $childNode)
         {
-            $contentObjectCopier = new ContentObjectCopier(
-                $user, array($contentObject->getId()), new PersonalWorkspace($contentObject->get_owner()),
-                $contentObject->get_owner_id(), new PersonalWorkspace($user), $user->getId(),
-                    $toNode->getContentObject()->get_parent_id()
-            );
+            $this->copyNodeAndChildren($rootLearningPath, $newNode, $childNode, $user, $copyInsteadOfReuse);
+        }
+    }
 
-            $newContentObjectIdentifiers = $contentObjectCopier->run();
-            $contentObject = $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
+    /**
+     * Prepares the content object for the copy action.
+     *
+     * If the content object is a root node (e.g. a Learning Path) the
+     * content object is always converted to a new Section.
+     *
+     * If the copy flag is set, the content object will be physically copied
+     *
+     * @param LearningPathTreeNode $fromNode
+     * @param User $user
+     * @param int $categoryId
+     * @param bool $copyInsteadOfReuse
+     *
+     * @return ContentObject
+     */
+    protected function prepareContentObjectForCopy(
+        LearningPathTreeNode $fromNode, User $user, $categoryId, $copyInsteadOfReuse = false
+    )
+    {
+        if ($fromNode->isRootNode())
+        {
+            $contentObject = new Section();
+
+            $contentObject->set_owner_id($user->getId());
+            $contentObject->set_title($fromNode->getContentObject()->get_title());
+            $contentObject->set_description($fromNode->getContentObject()->get_description());
+
+            $contentObject->create();
+
+            return $contentObject;
         }
 
-        $learningPathChild = $fromNode->getLearningPathChild();
+        if ($copyInsteadOfReuse)
+        {
+            return $this->copyContentObjectFromNode($fromNode, $user, $categoryId);
+        }
+
+        return $fromNode->getContentObject();
+    }
+
+    /**
+     * Copies a given content object
+     *
+     * @param LearningPathTreeNode $node
+     * @param User $user
+     * @param int $categoryId
+     *
+     * @return Section|ContentObject
+     */
+    protected function copyContentObjectFromNode(LearningPathTreeNode $node, User $user, $categoryId)
+    {
+        $contentObject = $node->getContentObject();
+
+        $contentObjectCopier = new ContentObjectCopier(
+            $user, array($contentObject->getId()), new PersonalWorkspace($contentObject->get_owner()),
+            $contentObject->get_owner_id(), new PersonalWorkspace($user), $user->getId(),
+            $categoryId
+        );
+
+        $newContentObjectIdentifiers = $contentObjectCopier->run();
+        return $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
+    }
+
+    /**
+     * Copies a learning path child from a given node to a new node
+     *
+     * @param LearningPath $rootLearningPath
+     * @param LearningPathTreeNode $toNode
+     * @param LearningPathTreeNode $fromNode
+     * @param User $user
+     * @param ContentObject $contentObject
+     *
+     * @return LearningPathChild
+     */
+    protected function copyLearningPathChild(
+        LearningPath $rootLearningPath, LearningPathTreeNode $toNode, LearningPathTreeNode $fromNode, User $user,
+        ContentObject $contentObject
+    ): LearningPathChild
+    {
+        if ($fromNode->isRootNode())
+        {
+            $learningPathChild = new LearningPathChild();
+        }
+        else
+        {
+            $learningPathChild = $fromNode->getLearningPathChild();
+        }
 
         $learningPathChild->setId(null);
         $learningPathChild->setUserId((int) $user->getId());
@@ -128,12 +218,6 @@ class LearningPathService
 
         $this->learningPathChildService->createLearningPathChild($learningPathChild);
 
-        $newNode = new LearningPathTreeNode($toNode->getLearningPathTree(), $contentObject, $learningPathChild);
-        $toNode->addChildNode($newNode);
-
-        foreach ($fromNode->getChildNodes() as $childNode)
-        {
-            $this->copyNodeAndChildren($rootLearningPath, $newNode, $childNode, $user, $copyInsteadOfReuse);
-        }
+        return $learningPathChild;
     }
 }
