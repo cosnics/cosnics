@@ -125,3 +125,6 @@ IncompleteProgressMailTitle = "[Chamilo] Herinnering: gelieve de stap '{STEP_NAM
 SectionCopierComponent = "Kopieer een sectie van een ander leerpad in dit leerpad"
 SelectLearningObjectStep = "Stap 1: selecteer een leerpad"
 SelectSectionStep = "Stap 2: selecteer de sectie die je wenst te kopiëren"
+LearningPathNodesCopied = "De stappen uit het leerpad zijn gekopieerd"
+LearningPathNodesNotCopied = "De stappen uit het leerpad konden niet gekopieerd worden"
+DeleteAttempt = "Verwijder poging(en)"

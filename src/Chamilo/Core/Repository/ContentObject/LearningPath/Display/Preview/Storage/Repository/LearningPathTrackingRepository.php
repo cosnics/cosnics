@@ -210,6 +210,18 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
+     * Finds a LearningPathAttempt by a given ID
+     *
+     * @param int $learningPathAttemptId
+     *
+     * @return DataClass | LearningPathAttempt
+     */
+    public function findLearningPathAttemptById($learningPathAttemptId)
+    {
+
+    }
+
+    /**
      * Finds the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
      *
      * @param LearningPathChildAttempt $learningPathChildAttempt

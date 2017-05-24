@@ -40,7 +40,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
         $content_object = $record->getContentObject();
 
         $learningPath = $this->getLearningPath();
-        $user = $this->getUser();
+        $user = $this->getReportingUser();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
         $automaticNumberingService = $this->getAutomaticNumberingService();
 
@@ -59,7 +59,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
                 $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                        $learningPath, $user, $record
+                    $learningPath, $user, $record
                 );
 
                 return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
@@ -97,7 +97,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     public function get_actions($record)
     {
         $learningPath = $this->getLearningPath();
-        $user = $this->getUser();
+        $reportingUser = $this->getReportingUser();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
@@ -112,11 +112,13 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
         );
 
         if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
-            $learningPath, $user, $record
+            $learningPath, $reportingUser, $record
         )
         )
         {
-            if ($this->get_component()->is_allowed_to_edit_attempt_data())
+            if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
+                $learningPathTrackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
+            )
             {
                 $delete_url = $this->get_component()->get_url(
                     array(
@@ -168,9 +170,17 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     /**
      * @return User
      */
-    protected function getUser()
+    protected function getReportingUser()
     {
         return $this->get_component()->getReportingUser();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        return $this->get_component()->getUser();
     }
 
     /**
