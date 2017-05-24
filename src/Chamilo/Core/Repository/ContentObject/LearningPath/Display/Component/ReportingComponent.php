@@ -343,33 +343,33 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         return $panelRenderer->render($translator->getTranslation('Scores'), implode(PHP_EOL, $html));
     }
 
-    /**
-     * Builds and returns the button toolbar for this component
-     *
-     * @param Translation $translator
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    public function getButtonToolbar(Translation $translator)
-    {
-        $toolbar = parent::getButtonToolbar($translator);
-
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
-        {
-            $toolbar->prependItem(
-                new Button(
-                    $translator->getTranslation('ReturnToUserList'),
-                    new FontAwesomeGlyph('bar-chart'),
-                    $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
-                        array(self::PARAM_REPORTING_USER_ID)
-                    )
-                )
-            );
-        }
-
-        return $toolbar;
-    }
+//    /**
+//     * Builds and returns the button toolbar for this component
+//     *
+//     * @param Translation $translator
+//     *
+//     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+//     */
+//    public function getButtonToolbar(Translation $translator)
+//    {
+//        $toolbar = parent::getButtonToolbar($translator);
+//
+//        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+//        {
+//            $toolbar->prependItem(
+//                new Button(
+//                    $translator->getTranslation('ReturnToUserList'),
+//                    new FontAwesomeGlyph('bar-chart'),
+//                    $this->get_url(
+//                        array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
+//                        array(self::PARAM_REPORTING_USER_ID)
+//                    )
+//                )
+//            );
+//        }
+//
+//        return $toolbar;
+//    }
 
     /**
      * Returns the condition

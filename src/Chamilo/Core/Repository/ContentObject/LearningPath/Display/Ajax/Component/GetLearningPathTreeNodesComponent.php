@@ -31,7 +31,7 @@ class GetLearningPathTreeNodesComponent extends Manager
             $activeChildId = $this->getRequestedPostDataValue(self::PARAM_ACTIVE_CHILD_ID);
 
             $learningPathTree = $this->get_application()->getLearningPathTree();
-            $activeChildNodeId = $learningPathTree->getLearningPathTreeNodeById((int) $activeChildId);
+            $activeChildNode = $learningPathTree->getLearningPathTreeNodeById((int) $activeChildId);
 
             $nodeActionGeneratorFactory =
                 new NodeActionGeneratorFactory(Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(), $this->get_application()->get_parameters());
@@ -42,7 +42,7 @@ class GetLearningPathTreeNodesComponent extends Manager
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
                 $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
-                $activeChildNodeId,
+                $activeChildNode,
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditLearningPathTreeNode(
                     $this->get_application()->getCurrentLearningPathTreeNode()

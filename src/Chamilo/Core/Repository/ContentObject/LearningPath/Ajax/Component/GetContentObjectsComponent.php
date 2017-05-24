@@ -4,33 +4,29 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
-use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class HtmlEditorFileUploadComponent
+ * Returns content objects as an array
  *
  * @author pjbro <pjbro@users.noreply.github.com>
- *
- * @todo move...
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GetContentObjectsComponent extends Manager
 {
     const PARAM_CATEGORY_ID = 'category_id';
+    const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_SEARCH_QUERY = 'search_query';
 
     /**
@@ -39,40 +35,58 @@ class GetContentObjectsComponent extends Manager
     function run()
     {
         $categoryId = $this->getRequest()->request->get(self::PARAM_CATEGORY_ID);
+        $workspaceId = $this->getRequest()->request->get(self::PARAM_WORKSPACE_ID);
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
-        $response = new JsonResponse($this->getContentObjectsArray($categoryId, $searchQuery));
+
+        $response = new JsonResponse($this->getContentObjectsArray($categoryId, $workspaceId, $searchQuery));
         $response->send();
     }
 
     /**
-     * @param int    $categoryId
+     * @param int $categoryId
+     * @param int $workspaceId
      * @param string $searchQuery
+     *
      * @return array
      */
-    protected function getContentObjectsArray(int $categoryId, string $searchQuery = null)
+    protected function getContentObjectsArray($categoryId = null, int $workspaceId = null, string $searchQuery = null)
     {
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $service = new ContentObjectService(new ContentObjectRepository());
 
-        $contentObjects = DataManager::retrieve_active_content_objects(
+        $workspace = $workspaceService->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
+
+        $filterData = $this->getFilterData($categoryId, $searchQuery, $workspace);
+        $filterConditionRenderer = new ConditionFilterRenderer($filterData, $workspace);
+
+        $contentObjects = $service->getContentObjectsByTypeForWorkspace(
             ContentObject::class_name(),
-            $this->getParameters($categoryId, $searchQuery));
+            $workspace, $filterConditionRenderer
+        );
 
         $contentObjectsArray = array();
 
-        while ($contentObject = $contentObjects->next_result()) {
+        while ($contentObject = $contentObjects->next_result())
+        {
             /**
              * @var ContentObject $contentObject
              */
-            if(!$contentObject instanceOf Includeable)
+            if (!$this->validateContentObject($contentObject))
             {
                 continue;
             }
-            if ($contentObject instanceof File && $contentObject->is_image()) {
+
+            if ($contentObject instanceof File && $contentObject->is_image())
+            {
                 $type = 'image';
-            } else {
+            }
+            else
+            {
                 $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($contentObject->get_type(), true);
             }
 
-            array_push($contentObjectsArray,
+            array_push(
+                $contentObjectsArray,
                 array(
                     'id' => $contentObject->getId(),
                     'title' => $contentObject->get_title(),
@@ -84,48 +98,41 @@ class GetContentObjectsComponent extends Manager
         }
 
         return $contentObjectsArray;
-
     }
 
+    /**
+     * Validates the given content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    protected function validateContentObject(ContentObject $contentObject)
+    {
+        return ($contentObject instanceOf Includeable);
+    }
 
     /**
-     * @param $categoryId
-     * @param $searchQuery
-     * @return DataClassRetrievesParameters
+     * Returns the filter data for the given category, search query and workspace
+     *
+     * @param int $categoryId
+     * @param string $searchQuery
+     * @param WorkspaceInterface $workspace
+     *
+     * @return FilterData
      */
-    protected function getParameters(int $categoryId, string $searchQuery  = null)
+    protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
     {
-        $conditions = array();
+        $filterData = new FilterData($workspace);
+        $filterData->clear(false);
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getUser()->getId()));
-
-        if(empty($searchQuery)) {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($categoryId)
-            );
-        } else {
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                '*' . $searchQuery . '*');
+        if (!is_null($categoryId))
+        {
+            $filterData->set_filter_property(FilterData::FILTER_CATEGORY, $categoryId);
         }
 
-        $conditions[] = new NotCondition(
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
+        $filterData->set_filter_property(FilterData::FILTER_TEXT, $searchQuery);
 
-        return new DataClassRetrievesParameters(
-            new AndCondition($conditions),
-            null,
-            null,
-            new OrderBy(new PropertyConditionVariable(
-                ContentObject::class_name(),
-                ContentObject::PROPERTY_TITLE
-                )
-            )
-        );
+        return $filterData;
     }
 }

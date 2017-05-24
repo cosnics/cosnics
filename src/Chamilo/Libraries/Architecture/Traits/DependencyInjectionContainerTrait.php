@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Traits;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -90,6 +91,14 @@ trait DependencyInjectionContainerTrait
     public function getPathBuilder()
     {
         return $this->getService('chamilo.libraries.file.path_builder');
+    }
+
+    /**
+     * @return ExceptionLoggerInterface | object
+     */
+    protected function getExceptionLogger()
+    {
+        return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
     }
 
 }

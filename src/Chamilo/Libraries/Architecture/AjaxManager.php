@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  *
@@ -121,6 +122,19 @@ abstract class AjaxManager extends Application
     public function setPostDataValue($name, $value)
     {
         $this->postDataValues[$name] = $value;
+    }
+
+    /**
+     * Handles an exception
+     *
+     * @param $exception
+     *
+     * @return JsonResponse
+     */
+    protected function handleException($exception)
+    {
+        $this->getExceptionLogger()->logException($exception);
+        return new JsonResponse(null, 500);
     }
 
     /**

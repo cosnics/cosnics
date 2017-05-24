@@ -87,7 +87,7 @@ class WorkspaceService
      */
     public function determineWorkspaceForUserByIdentifier(User $user, $identifier = null)
     {
-        if (! is_null($identifier))
+        if (! empty($identifier))
         {
             if (! is_numeric($identifier))
             {
