@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -81,7 +83,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        if($this->getCurrentLearningPathTreeNode()->getContentObject() instanceof Assessment)
+        if ($this->getCurrentLearningPathTreeNode()->getContentObject() instanceof Assessment)
         {
             $assessmentResultViewerUrl = $this->get_component()->get_url(
                 array(
@@ -101,7 +103,11 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
             );
         }
 
-        if ($this->get_component()->is_allowed_to_edit_attempt_data())
+        if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
+            $this->getLearningPathTrackingService()->canDeleteLearningPathAttemptData(
+                $this->getUser(), $this->getReportingUser()
+            )
+        )
         {
             $delete_url = $this->get_component()->get_url(
                 array(
@@ -133,5 +139,29 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     protected function getCurrentLearningPathTreeNode()
     {
         return $this->get_component()->getCurrentLearningPathTreeNode();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getReportingUser()
+    {
+        return $this->get_component()->getReportingUser();
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        return $this->get_component()->getUser();
+    }
+
+    /**
+     * @return LearningPathTrackingService
+     */
+    protected function getLearningPathTrackingService()
+    {
+        return $this->get_component()->getLearningPathTrackingService();
     }
 }

@@ -123,3 +123,6 @@ IncompleteProgressMailTitle = "[Chamilo] Reminder: please complete the step '{ST
 SectionCopierComponent = "Copy a section from another learning path"
 SelectLearningObjectStep = "Step 1: select the learning path"
 SelectSectionStep = "Step 2: select the section you want to copy"
+LearningPathNodesCopied = "Learning path steps copied"
+LearningPathNodesNotCopied = "Learning path steps not copied"
+DeleteAttempt = "Delete attempt(s)"

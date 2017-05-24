@@ -31,79 +31,44 @@ class DeleteAttemptComponent extends BaseReportingComponent
 
         $learningPathTrackingService = $this->getLearningPathTrackingService();
         $learningPath = $this->get_root_content_object();
-        $user = $this->getReportingUser();
+        $reportingUser = $this->getReportingUser();
         $learningPathTreeNode = $this->getCurrentLearningPathTreeNode();
 
-        if ($this->isCurrentLearningPathChildIdSet())
+        $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
+        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
+
+        $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
+
+        try
         {
-            $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
-
-            $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
-
-            try
+            if (isset($item_attempt_id))
             {
-                $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathChildId();
-
-                if (isset($item_attempt_id))
-                {
-                    $learningPathTrackingService->deleteLearningPathChildAttemptById(
-                        $learningPath, $user, $learningPathTreeNode, (int) $item_attempt_id
-                    );
-                }
-                else
-                {
-                    $learningPathTrackingService->deleteLearningPathChildAttemptsForLearningPathTreeNode(
-                        $learningPath, $user, $learningPathTreeNode
-                    );
-
-                    if(!$learningPathTreeNode->isRootNode())
-                    {
-                        $parameters[self::PARAM_CHILD_ID] = $learningPathTreeNode->getParentNode()->getId();
-                    }
-                }
-
-                $is_error = false;
-
-                $message = Translation::get(
-                    'ObjectDeleted',
-                    array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                $learningPathTrackingService->deleteLearningPathChildAttemptById(
+                    $learningPath, $this->getUser(), $reportingUser, $learningPathTreeNode, (int) $item_attempt_id
                 );
             }
-            catch (\Exception $ex)
+            else
             {
-                $is_error = true;
-
-                $message = Translation::get(
-                    'ObjectNotDeleted',
-                    array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                $learningPathTrackingService->deleteLearningPathChildAttemptsForLearningPathTreeNode(
+                    $learningPath, $this->getUser(), $reportingUser, $learningPathTreeNode
                 );
             }
+
+            $is_error = false;
+
+            $message = Translation::get(
+                'ObjectDeleted',
+                array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+            );
         }
-        else
+        catch (\Exception $ex)
         {
-            try
-            {
-                $learningPathTrackingService->deleteLearningPathAttempt($learningPath, $user);
+            $is_error = true;
 
-                $is_error = false;
-
-                $message = Translation::get(
-                    'ObjectDeleted',
-                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES)
-                );
-            }
-            catch (\Exception $ex)
-            {
-                $is_error = true;
-
-                $message = Translation::get(
-                    'ObjectNotDeleted',
-                    array('OBJECT' => Translation::get('LearningPathAttempt'), Utilities::COMMON_LIBRARIES)
-                );
-            }
-
-            $parameters[self::PARAM_CHILD_ID] = null;
-            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_USER_PROGRESS;
+            $message = Translation::get(
+                'ObjectNotDeleted',
+                array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+            );
         }
 
         $this->redirect($message, $is_error, $parameters);

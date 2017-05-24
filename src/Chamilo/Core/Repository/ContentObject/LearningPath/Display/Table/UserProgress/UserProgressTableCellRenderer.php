@@ -91,8 +91,8 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         $learningPath = $this->getLearningPath();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
 
-        $user = new User();
-        $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
+        $reportingUser = new User();
+        $reportingUser->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
@@ -108,18 +108,19 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         );
 
         if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
-            $learningPath, $user, $this->getCurrentLearningPathTreeNode()
+            $learningPath, $reportingUser, $this->getCurrentLearningPathTreeNode()
         )
         )
         {
-            if ($this->get_component()->is_allowed_to_edit_attempt_data())
+            if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
+                $learningPathTrackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
+            )
             {
                 $delete_url = $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
                         Manager::PARAM_REPORTING_USER_ID => $record['user_id']
-                    ),
-                    array(Manager::PARAM_CHILD_ID)
+                    )
                 );
 
                 $toolbar->add_item(

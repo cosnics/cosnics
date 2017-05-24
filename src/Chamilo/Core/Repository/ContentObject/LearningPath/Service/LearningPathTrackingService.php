@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -196,7 +197,7 @@ class LearningPathTrackingService
             }
         }
 
-        $progress = (int) round(($nodesCompleted / count($nodes)) * 100);
+        $progress = (int) floor(($nodesCompleted / count($nodes)) * 100);
 
         return $progress > 100 ? 100 : $progress;
     }
@@ -259,7 +260,10 @@ class LearningPathTrackingService
                 );
             }
 
-            return $completed;
+            if (!$completed)
+            {
+                return false;
+            }
         }
 
         /** @var LearningPathChildAttempt[] $learningPathTreeNodeAttempts */
@@ -575,15 +579,24 @@ class LearningPathTrackingService
      *
      * @param LearningPath $learningPath
      * @param User $user
+     * @param User $reportingUser
      * @param LearningPathTreeNode $learningPathTreeNode
      * @param int $learningPathChildAttemptId
+     *
+     * @throws NotAllowedException
      */
     public function deleteLearningPathChildAttemptById(
-        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId
+        LearningPath $learningPath, User $user, User $reportingUser,
+        LearningPathTreeNode $learningPathTreeNode, $learningPathChildAttemptId
     )
     {
+        if (!$this->canDeleteLearningPathAttemptData($user, $reportingUser))
+        {
+            throw new NotAllowedException();
+        }
+
         $learningPathTreeNodeAttempt = $this->getLearningPathChildAttemptById(
-            $learningPath, $user, $learningPathTreeNode, $learningPathChildAttemptId
+            $learningPath, $reportingUser, $learningPathTreeNode, $learningPathChildAttemptId
         );
 
         $this->learningPathAttemptService->deleteLearningPathChildAttempt($learningPathTreeNodeAttempt);
@@ -594,14 +607,22 @@ class LearningPathTrackingService
      *
      * @param LearningPath $learningPath
      * @param User $user
+     * @param User $reportingUser
      * @param LearningPathTreeNode $learningPathTreeNode
+     *
+     * @throws NotAllowedException
      */
     public function deleteLearningPathChildAttemptsForLearningPathTreeNode(
-        LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
+        LearningPath $learningPath, User $user, User $reportingUser, LearningPathTreeNode $learningPathTreeNode
     )
     {
+        if (!$this->canDeleteLearningPathAttemptData($user, $reportingUser))
+        {
+            throw new NotAllowedException();
+        }
+
         $learningPathTreeNodeAttempts = $this->getLearningPathTreeNodeAttempts(
-            $learningPath, $user, $learningPathTreeNode
+            $learningPath, $reportingUser, $learningPathTreeNode
         );
 
         foreach ($learningPathTreeNodeAttempts as $learningPathTreeNodeAttempt)
@@ -615,15 +636,38 @@ class LearningPathTrackingService
      *
      * @param LearningPath $learningPath
      * @param User $user
+     *
+     * @throws NotAllowedException
      */
     public function deleteLearningPathAttempt(LearningPath $learningPath, User $user)
     {
         $learningPathAttempt = $this->learningPathAttemptService->getLearningPathAttemptForUser($learningPath, $user);
 
+        $targetUser = new User();
+        $targetUser->setId($learningPathAttempt->get_user_id());
+
+        if (!$this->canDeleteLearningPathAttemptData($user, $targetUser))
+        {
+            throw new NotAllowedException();
+        }
+
         if ($learningPathAttempt instanceof LearningPathAttempt)
         {
             $this->learningPathAttemptService->deleteLearningPathAttempt($learningPathAttempt);
         }
+    }
+
+    /**
+     * Returns whether or not the given user can delete the attempt data for the given target user
+     *
+     * @param User $user
+     * @param User $targetUser
+     *
+     * @return bool
+     */
+    public function canDeleteLearningPathAttemptData(User $user, User $targetUser)
+    {
+        return $user->is_platform_admin() || $user->getId() == $targetUser->getId();
     }
 
     /**
