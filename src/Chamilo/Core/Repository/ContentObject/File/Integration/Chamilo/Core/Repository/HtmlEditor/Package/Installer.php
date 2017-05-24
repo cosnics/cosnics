@@ -1,5 +1,5 @@
 <?php
-namespace Hogent\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository\Package;
+namespace Hogent\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository\HtmlEditor\Package;
 
 /**
  * Class Installer

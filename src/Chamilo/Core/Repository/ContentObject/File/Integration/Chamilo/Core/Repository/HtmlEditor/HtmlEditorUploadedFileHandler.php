@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository;
+namespace Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository\HtmlEditor;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Service\UploadedFileHandler;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;

@@ -64,7 +64,7 @@ class HtmlEditorFileUploadComponent extends Manager
      */
     protected function handleUploadedFile(UploadedFile $uploadedFile)
     {
-        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations('Chamilo\Core\Repository\HtmlEditor');
 
         usort($registrations, function($registrationA, $registrationB) {
             return $registrationA[Registration::PROPERTY_PRIORITY] > $registrationB[Registration::PROPERTY_PRIORITY];

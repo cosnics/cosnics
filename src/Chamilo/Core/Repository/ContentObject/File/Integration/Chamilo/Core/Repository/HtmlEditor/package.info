@@ -3,7 +3,7 @@
     <package>
         <name>Repository</name>
         <code>Repository</code>
-        <context>Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository</context>
+        <context>Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Repository\HtmlEditor</context>
         <type>Chamilo\Core\Repository\ContentObject\File\Integration</type>
         <category />
         <authors />
