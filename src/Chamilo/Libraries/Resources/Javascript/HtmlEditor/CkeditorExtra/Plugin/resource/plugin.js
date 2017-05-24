@@ -1,6 +1,4 @@
 (function () {
-
-
     CKEDITOR.plugins.add( 'resource', {
         icons: 'resource',
         requires: 'image2',

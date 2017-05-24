@@ -41,14 +41,14 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
         parent::set_defaults();
         
         $application = Request::get('application');
-        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/Ckeditor.js';
+        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
         if (file_exists($app_sys_path))
         {
-            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/Ckeditor.js';
+            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
         else
         {
-            $path = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor.js';
+            $path = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
         
         $this->set_option(self::OPTION_CONFIGURATION, $path);
