@@ -2,12 +2,17 @@
 
 namespace Chamilo\Core\Repository\Ajax\Component;
 
+use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\DTO\HtmlEditorContentObjectPlaceholder;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -20,116 +25,71 @@ class HtmlEditorFileUploadComponent extends Manager
 
     function run()
     {
-
         $file = $this->getFile();
 
-        $this->handleNoFileUploaded($file);
+        if(!$file) {
+            $this->handleNoFileUploaded();
+            return;
+        }
 
-        $this->handleInvalidFile($file);
+        if(!$file->isValid()) {
+            $this->handleInvalidFile($file);
+            return;
+        }
 
-        $fileContentObject = $this->handleFileCreate($file);
+        try {
+            $contentObjectPlaceholder = $this->handleUploadedFile($file);
+        } catch (\Exception $exception) {
+            $this->handleFileCreationFailed($exception);
+            return;
+        }
 
-        $thumbnailUrl = $this->getThumbnailUrl($fileContentObject);
-
-        $result = array(
-            "uploaded" => 1,
-            "filename" => $fileContentObject->get_filename(),
-            "co-id" => $fileContentObject->getId(),
-            "security-code" => $fileContentObject->calculate_security_code(),
-            "type" => $fileContentObject->is_image() ?
-                'image':
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace($fileContentObject->get_type(), true),
-            "url" => $thumbnailUrl
-        );
-
-        $response = new JsonResponse($result);
-        $response->send();
+        $this->handleContentObjectCreationSuccess($contentObjectPlaceholder);
 
     }
 
 
     /**
-     *
-     * @throws \Exception
-     *
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @return mixed
      */
     public function getFile()
     {
-
-        $file = $this->getRequest()->files->get('upload');
-        if(empty($file)) {
-            $errorMessage = "File with key upload not found in request.";
-
-            throw new \Exception($errorMessage);
-        }
-
-        return $file;
+        return $this->getRequest()->files->get('upload');
     }
 
     /**
-     * @param $file
+     * @param UploadedFile $uploadedFile
+     * @return HtmlEditorContentObjectPlaceholder
+     * @throws \Exception
      */
-    protected function handleNoFileUploaded($file)
+    protected function handleUploadedFile(UploadedFile $uploadedFile)
     {
-        if (!$file) {
-            $result = array(
-                "uploaded" => 0,
-                "error" => array(
-                    "message" => Translation::getInstance()->getTranslation('NoFileUploaded', null, Utilities::COMMON_LIBRARIES)
-                )
-            );
-            $response = new JsonResponse($result);
-            $response->send();
-        }
-    }
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations('Chamilo\Core\Repository');
 
-    /**
-     * @param $file
-     */
-    protected function handleInvalidFile($file)
-    {
-        if (!$file->isValid()) {
-            $result = array(
-                "uploaded" => 0,
-                "error" => array(
-                    "message" => Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
-                )
-            );
-            $response = new JsonResponse($result);
-            $response->send();
-        }
-    }
+        usort($registrations, function($registrationA, $registrationB) {
+            return $registrationA[Registration::PROPERTY_PRIORITY] > $registrationB[Registration::PROPERTY_PRIORITY];
+        });
 
-    /**
-     * @param $file
-     * @return File
-     */
-    protected function handleFileCreate($file)
-    {
-        $fileContentObject = new File();
-        $title = substr($file->getClientOriginalName(), 0, -(strlen($file->getClientOriginalExtension()) + 1));
-
-        $fileContentObject->set_title($title);
-        $fileContentObject->set_description($file->getClientOriginalName());
-        $fileContentObject->set_owner_id($this->getUser()->getId());
-        $fileContentObject->set_parent_id(0);
-        $fileContentObject->set_filename($file->getClientOriginalName());
-
-        $fileContentObject->set_temporary_file_path($file->getRealPath());
-
-        if (!$fileContentObject->create()) {
-            $result = array(
-                "uploaded" => 0,
-                "error" => array(
-                    "message" => Translation::getInstance()->getTranslation('FileUploadFailed', null, Utilities::COMMON_LIBRARIES)
-                )
-            );
-            $response = new JsonResponse($result);
-            $response->send();
+        $uploadedFileHandler = null;
+        foreach ($registrations as $registration)
+        {
+            if (class_exists($registration[Registration::PROPERTY_CONTEXT] . '\HtmlEditorUploadedFileHandler'))
+            {
+                $className = $registration[Registration::PROPERTY_CONTEXT] . '\HtmlEditorUploadedFileHandler';
+                $uploadedFileHandlerCandidate = new $className;
+                if ($uploadedFileHandlerCandidate->canHandleUploadedFile($uploadedFile))
+                {
+                    $uploadedFileHandler = $uploadedFileHandlerCandidate;
+                }
+            }
         }
 
-        return $fileContentObject;
+        if (empty($uploadedFileHandler))
+        {
+            throw new \Exception('No Handler defined for uploaded file: ' . $uploadedFile->getFilename());
+        }
+
+        return $uploadedFileHandler->handle($uploadedFile, $this->getUser());
     }
 
     /**
@@ -152,5 +112,73 @@ class HtmlEditorFileUploadComponent extends Manager
         }
 
         return $rendition['url'];
+    }
+
+    /**
+     * @return RegistrationConsulter
+     */
+    protected function getRegistrationConsulter()
+    {
+        return $this->getContainer()->get("chamilo.configuration.service.registration_consulter");
+    }
+
+    /**
+     * @param \Exception $exception
+     */
+    protected function handleFileCreationFailed(\Exception $exception)
+    {
+        //$this->getExceptionLogger()->logException($exception);
+
+        $result = array(
+            "uploaded" => 0,
+            "error" => array(
+                "message" => Translation::getInstance()->getTranslation('FileCreationFailed', null, Utilities::COMMON_LIBRARIES)
+            )
+        );
+
+        $response = new JsonResponse($result);
+        $response->send();
+    }
+
+    /**
+     * @param HtmlEditorContentObjectPlaceholder $placeholder
+     */
+    protected function handleContentObjectCreationSuccess(HtmlEditorContentObjectPlaceholder $placeholder)
+    {
+        $result = $placeholder->asArray();
+        $result["uploaded"] = 1;
+
+        $response = new JsonResponse($result);
+        $response->send();
+    }
+
+    /**
+     *
+     */
+    protected function handleNoFileUploaded()
+    {
+        $result = array(
+            "uploaded" => 0,
+            "error" => array(
+                "message" => Translation::getInstance()->getTranslation('NoFileUploaded', null, Utilities::COMMON_LIBRARIES)
+            )
+        );
+        $response = new JsonResponse($result);
+        $response->send();
+    }
+
+    /**
+     * @param UploadedFile $file
+     */
+    protected function handleInvalidFile(UploadedFile $file)
+    {
+        $result = array(
+            "uploaded" => 0,
+            "error" => array(
+                "message" => Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
+            )
+        );
+        $response = new JsonResponse($result);
+        $response->send();
     }
 }
