@@ -53,9 +53,9 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $html[] = '<div class="row">';
 
-        $class = $currentLearningPathTreeNode->hasChildNodes() ? 'col-sm-8' : 'col-sm-12';
+        $class = $currentLearningPathTreeNode->hasChildNodes() ? 'col-lg-8' : 'col-lg-12';
 
-        $html[] = '<div class="' . $class . '">';
+        $html[] = '<div class="' . $class . ' col-md-12">';
 
         $html[] = $this->renderInformationPanel(
             $currentLearningPathTreeNode, $automaticNumberingService, $translator, $trackingService, $panelRenderer
@@ -65,7 +65,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         if ($currentLearningPathTreeNode->hasChildNodes())
         {
-            $html[] = '<div class="col-sm-4">';
+            $html[] = '<div class="col-lg-4 col-md-12">';
             $html[] =
                 $this->renderProgress($translator, $trackingService, $currentLearningPathTreeNode, $panelRenderer);
             $html[] = '</div>';
@@ -255,7 +255,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $panelHtml[] = '         legend: {';
         $panelHtml[] = '             onClick: null';
         $panelHtml[] = '         },';
-        $panelHtml[] = '         responsive: false,';
+        $panelHtml[] = '         responsive: true,';
         $panelHtml[] = '         animation: { animateScale: true },';
         $panelHtml[] = '         legend: { position: "right" },';
         $panelHtml[] = '         tooltips: {';

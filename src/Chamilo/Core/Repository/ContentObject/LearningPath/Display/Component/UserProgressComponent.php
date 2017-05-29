@@ -53,14 +53,14 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = '</script>';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-8">';
+        $html[] = '<div class="col-lg-8 col-md-12">';
 
         $html[] = $this->renderInformationPanel(
             $this->getCurrentLearningPathTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
         );
 
         $html[] = '</div>';
-        $html[] = '<div class="col-sm-4">';
+        $html[] = '<div class="col-lg-4 col-md-12">';
 
         $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
 
@@ -186,7 +186,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $panelHtml[] = '         legend: {';
         $panelHtml[] = '             onClick: null';
         $panelHtml[] = '         },';
-        $panelHtml[] = '         responsive: false,';
+        $panelHtml[] = '         responsive: true,';
         $panelHtml[] = '         animation: { animateScale: true },';
         $panelHtml[] = '         legend: { position: "right" },';
         $panelHtml[] = '    }';
@@ -218,9 +218,12 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $buttonGroup = new ButtonGroup();
 
+        $translationVariable = $this->getCurrentLearningPathTreeNode()->isRootNode() ?
+            'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
+
         $buttonGroup->addButton(
             new Button(
-                $translator->getTranslation('MailNotCompletedUsers'),
+                $translator->getTranslation($translationVariable),
                 new FontAwesomeGlyph('envelope'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
                 Button::DISPLAY_ICON_AND_LABEL,

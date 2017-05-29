@@ -41,6 +41,8 @@ class UserIncompleteProgressMailerComponent extends Manager
 
         $emailAddresses = array();
 
+        $emailAddresses[] = $this->getUser()->get_email();
+
         foreach ($usersNotYetStarted as $userNotYetStarted)
         {
             $emailAddresses[] = $userNotYetStarted[User::PROPERTY_EMAIL];
