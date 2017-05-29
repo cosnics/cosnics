@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetCategoriesComponent extends Manager
 {
-    const PARAM_WORKSPACE_ID = 'workspace_id';
-
     /**
      * @inheritdoc
      */
@@ -44,23 +42,7 @@ class GetCategoriesComponent extends Manager
      */
     protected function getCategories()
     {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-
-        $workspaceId = $this->getRequest()->get(self::PARAM_WORKSPACE_ID);
-        $workspace = $workspaceService->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
-
-        if (!$workspace instanceof WorkspaceInterface)
-        {
-            throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('Workspace'), $workspaceId
-            );
-        }
-
-        $rightsService = RightsService::getInstance();
-        if(!$rightsService->canViewContentObjects($this->getUser(), $workspace))
-        {
-            throw new NotAllowedException();
-        }
+        $workspace = $this->getWorkspaceFromRequest();
 
         $categorymenu = new ContentObjectCategoryMenu($workspace);
         $renderer = new OptionsMenuRenderer();

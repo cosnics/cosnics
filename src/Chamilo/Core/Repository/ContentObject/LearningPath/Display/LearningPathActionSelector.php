@@ -45,28 +45,28 @@ class LearningPathActionSelector extends ActionSelector
         return $this->typeSelector;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer
-     */
-    public function getSubButtonTypeSelectorRenderer()
-    {
-        if (!isset($this->subButtonTypeSelectorRenderer))
-        {
-            $typeSelector = $this->getTypeSelector();
-            $createParameters = $this->getParameters();
-            $createParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] =
-                \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR;
-
-            $typeSelector->removeTypeSelectorItemByIndex(0);
-
-            $this->subButtonTypeSelectorRenderer = new SubButtonTypeSelectorRenderer(
-                $this->getApplication(),
-                $typeSelector,
-                $createParameters
-            );
-        }
-
-        return $this->subButtonTypeSelectorRenderer;
-    }
+//    /**
+//     *
+//     * @return \Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer
+//     */
+//    public function getSubButtonTypeSelectorRenderer()
+//    {
+//        if (!isset($this->subButtonTypeSelectorRenderer))
+//        {
+//            $typeSelector = $this->getTypeSelector();
+//            $createParameters = $this->getParameters();
+//            $createParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] =
+//                \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR;
+//
+//            $typeSelector->removeTypeSelectorItemByIndex(0);
+//
+//            $this->subButtonTypeSelectorRenderer = new SubButtonTypeSelectorRenderer(
+//                $this->getApplication(),
+//                $typeSelector,
+//                $createParameters
+//            );
+//        }
+//
+//        return $this->subButtonTypeSelectorRenderer;
+//    }
 }

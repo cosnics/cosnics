@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -47,6 +48,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_AJAX = 'Ajax';
     const ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS = 'UserIncompleteProgressMailer';
     const ACTION_COPY_SECTIONS = 'SectionCopier';
+    const ACTION_SHOW_STUDENT_VIEW = 'ShowStudentView';
+    const ACTION_DISABLE_STUDENT_VIEW = 'DisableStudentView';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -62,6 +65,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_CHILD_ID = 'child_id';
     const PARAM_REPORTING_USER_ID = 'reporting_user';
     const PARAM_REPORTING_MODE = 'reporting_mode';
+    const PARAM_STUDENT_VIEW_SESSION = 'learning_path_student_view';
 
     // Sorting
     const SORT_UP = 'Up';
@@ -229,6 +233,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function canEditLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
     {
+        if($this->inStudentView())
+        {
+            return false;
+        }
+
         /** @var LearningPathDisplaySupport $application */
         $application = $this->get_application();
 
@@ -283,5 +292,26 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_url(
             array(self::PARAM_ACTION => $action, self::PARAM_CHILD_ID => $learningPathTreeNode->getId())
         );
+    }
+
+    /**
+     * Returns the session variable for the student view for the current learning path
+     *
+     * @return string
+     */
+    protected function getStudentViewSessionVariable()
+    {
+        return self::PARAM_STUDENT_VIEW_SESSION . '_' . $this->get_root_content_object()->getId();
+    }
+
+    /**
+     * Returns whether or not the user is currently in studentview
+     *
+     * @return bool
+     */
+    protected function inStudentView()
+    {
+        $studentViewSessionVariable = $this->getStudentViewSessionVariable();
+        return Session::get($studentViewSessionVariable) == 1;
     }
 }

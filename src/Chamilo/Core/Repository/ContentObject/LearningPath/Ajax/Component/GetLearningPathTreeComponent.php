@@ -91,22 +91,6 @@ class GetLearningPathTreeComponent extends Manager
     }
 
     /**
-     * @return ContentObjectRepository | object
-     */
-    protected function getContentObjectRepository()
-    {
-        return $this->getService('chamilo.core.repository.workspace.repository.content_object_repository');
-    }
-
-    /**
-     * @return RightsService
-     */
-    protected function getRightsService()
-    {
-        return RightsService::getInstance();
-    }
-
-    /**
      * Returns the LearningPathTreeBuilder service
      *
      * @return LearningPathTreeBuilder | object

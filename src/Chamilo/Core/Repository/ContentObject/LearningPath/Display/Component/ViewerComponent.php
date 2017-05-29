@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -42,20 +43,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
     public function build()
     {
-        $show_progress = Request::get(self::PARAM_SHOW_PROGRESS);
-        $learning_path = $this->get_root_content_object();
+        $translator = Translation::getInstance();
 
-        $trail = BreadcrumbTrail::getInstance();
+        $learning_path = $this->get_root_content_object();
 
         if (!$learning_path)
         {
-            $html = array();
-
-            $html[] = $this->render_header();
-            $html[] = $this->display_error_message(Translation::get('NoObjectSelected'));
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
+            throw new ObjectNotExistException($translator->getTranslation('LearningPath'));
         }
 
         $learningPathTrackingService = $this->getLearningPathTrackingService();
@@ -118,7 +112,26 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();
-        $html[] = $this->renderMovePanel();
+
+        if($this->inStudentView())
+        {
+            $disableStudentViewUrl = $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISABLE_STUDENT_VIEW));
+
+            $html[] = '<div class="alert alert-info">';
+            $html[] = '<div class="pull-left" style="margin-top: 6px;">';
+            $html[] = $translator->getTranslation('CurrentlyInStudentView');
+            $html[] = '</div>';
+            $html[] = '<a class="btn btn-default btn-sm pull-right" href="' . $disableStudentViewUrl . '">';
+            $html[] = $translator->getTranslation('DisableStudentView');
+            $html[] = '</a>';
+            $html[] = '<div class="clearfix"></div>';
+            $html[] = '</div>';
+        }
+
+        if($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        {
+            $html[] = $this->renderMovePanel();
+        }
 
         if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
             (
@@ -491,6 +504,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $this->addActivityButton($splitDropDownButton, $translator);
+        $this->addStudentViewButton($splitDropDownButton, $translator);
         $buttonGroup->addButton($splitDropDownButton);
     }
 
@@ -508,6 +522,28 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_ACTIVITY,
+                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                )
+            )
+        );
+
+        $button->addSubButton($extraButton);
+    }
+
+    /**
+     * Adds the activity button
+     *
+     * @param SplitDropdownButton $button
+     * @param Translation $translator
+     */
+    protected function addStudentViewButton(SplitDropdownButton $button, $translator)
+    {
+        $extraButton = new SubButton(
+            $translator->getTranslation('ShowStudentView', null, Manager::context()),
+            new FontAwesomeGlyph('user'),
+            $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_SHOW_STUDENT_VIEW,
                     self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
                 )
             )

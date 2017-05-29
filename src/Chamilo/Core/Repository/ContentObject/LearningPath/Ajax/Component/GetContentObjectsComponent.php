@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -26,7 +27,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class GetContentObjectsComponent extends Manager
 {
     const PARAM_CATEGORY_ID = 'category_id';
-    const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_SEARCH_QUERY = 'search_query';
 
     /**
@@ -35,26 +35,22 @@ class GetContentObjectsComponent extends Manager
     function run()
     {
         $categoryId = $this->getRequest()->request->get(self::PARAM_CATEGORY_ID);
-        $workspaceId = $this->getRequest()->request->get(self::PARAM_WORKSPACE_ID);
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
-        $response = new JsonResponse($this->getContentObjectsArray($categoryId, $workspaceId, $searchQuery));
+        $response = new JsonResponse($this->getContentObjectsArray($categoryId, $searchQuery));
         $response->send();
     }
 
     /**
      * @param int $categoryId
-     * @param int $workspaceId
      * @param string $searchQuery
      *
      * @return array
      */
-    protected function getContentObjectsArray($categoryId = null, int $workspaceId = null, string $searchQuery = null)
+    protected function getContentObjectsArray($categoryId = null, string $searchQuery = null)
     {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $workspace = $this->getWorkspaceFromRequest();
         $service = new ContentObjectService(new ContentObjectRepository());
-
-        $workspace = $workspaceService->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
 
         $filterData = $this->getFilterData($categoryId, $searchQuery, $workspace);
         $filterConditionRenderer = new ConditionFilterRenderer($filterData, $workspace);

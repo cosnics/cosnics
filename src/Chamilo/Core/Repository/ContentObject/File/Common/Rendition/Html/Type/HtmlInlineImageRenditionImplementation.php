@@ -57,11 +57,12 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
             {
                 $styles['width'] = $parameters[self::PARAM_WIDTH] . 'px;';
             }
-            
-            if ($parameters[self::PARAM_HEIGHT])
-            {
-                $styles['height'] = $parameters[self::PARAM_HEIGHT] . 'px;';
-            }
+
+            /** Never set height due to issues with responsive images **/
+//            if ($parameters[self::PARAM_HEIGHT])
+//            {
+//                $styles['height'] = $parameters[self::PARAM_HEIGHT] . 'px;';
+//            }
             
             $styles_string = '';
             
@@ -83,7 +84,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
                         alt="' . $parameters[self::PARAM_ALT] . '"
                         title="' .
                         htmlentities($parameters[self::PARAM_ALT]) . '"
-                        class="' . $parameters[self::PARAM_CLASS] . '"
+                        class="' . $parameters[self::PARAM_CLASS] . ' img-responsive"
                         style="' . $styles_string . '">';
         }
         
