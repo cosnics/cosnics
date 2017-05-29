@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
@@ -21,9 +22,9 @@ class Embedder extends ContentObjectEmbedder
      */
     public function run()
     {
-        $attempt_data = $this->get_node()->get_current_attempt();
-
-        // TODO: Make this implementation context-independent
+        $activeAttemptId = $this->learningPathTrackingService->getActiveAttemptId(
+            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+        );
 
         $redirect = new Redirect(
             array(
@@ -40,7 +41,7 @@ class Embedder extends ContentObjectEmbedder
         $link = $hotpotoatoes->add_javascript(
             $redirect->getUrl(),
             null,
-            $attempt_data->get_id()
+            $activeAttemptId
         );
 
         $html = array();
