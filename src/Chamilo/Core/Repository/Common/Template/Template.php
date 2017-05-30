@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Common\Template;
 
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -38,7 +39,7 @@ class Template
      * @param ContentObject $content_object
      * @param TemplateTranslation $translation
      */
-    public function __construct(TemplateConfiguration $configuration, ContentObject $content_object,
+    public function __construct(TemplateConfiguration $configuration, ContentObject $content_object, 
         TemplateTranslation $translation)
     {
         $this->set_configuration($configuration);

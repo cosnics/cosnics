@@ -22,7 +22,7 @@ class CommandLineInstaller implements InstallerObserver
     {
         $installer_config = new Configuration();
         $installer_config->load_config_file($this->config_file);
-
+        
         $installer_factory = new Factory();
         $this->installer = $installer_factory->build_installer($installer_config);
         $this->installer->add_observer($this);
@@ -37,71 +37,71 @@ class CommandLineInstaller implements InstallerObserver
             ob_flush();
             return;
         }
-
+        
         $reason = implode(", ", $result->get_messages());
         echo "Ko ({$reason})";
         ob_flush();
     }
 
-    public function beforeInstallation()
+    public function before_install()
     {
         echo "install started ...\n\n";
     }
 
-    public function beforePreProduction()
+    public function before_preprod()
     {
         echo "\tPRE-PRODUCTION\n";
     }
 
-    public function afterPreProductionDatabaseCreated(StepResult $result)
+    public function preprod_db_created(StepResult $result)
     {
         echo "\t\t DB created ... " . $this->check_result($result) . "\n";
     }
 
-    public function afterPreProductionConfigurationFileWritten(StepResult $result)
+    public function preprod_config_file_written(StepResult $result)
     {
         echo "\t\t Config File Written ... " . $this->check_result($result) . "\n";
     }
 
-    public function afterPreProduction()
+    public function after_preprod()
     {
         echo "\n";
         ob_flush();
     }
 
-    public function beforeFilesystemPrepared()
+    public function before_filesystem_prepared()
     {
         echo "\tFILE SYSTEM PREPARATION\n";
     }
 
-    public function afterFilesystemPrepared(StepResult $result)
+    public function after_filesystem_prepared(StepResult $result)
     {
         echo "\t\t File system prepared ... " . $this->check_result($result) . "\n";
     }
 
-    public function afterInstallation()
+    public function after_install()
     {
         echo "\n\nInstallation completed !\n";
         ob_flush();
     }
 
-    public function beforePackagesInstallation()
+    public function before_packages_install()
     {
         echo "\PACKAGES INSTALLATION\n";
     }
 
-    public function afterPackagesInstallation()
+    public function after_packages_install()
     {
         echo "\n";
         ob_flush();
     }
 
-    public function beforePackageInstallation($context)
+    public function before_package_install($context)
     {
         echo "\t\t Installing package {$context} ... ";
     }
 
-    public function afterPackageInstallation(StepResult $result)
+    public function after_package_install(StepResult $result)
     {
         echo $this->check_result($result) . "\n";
         ob_flush();

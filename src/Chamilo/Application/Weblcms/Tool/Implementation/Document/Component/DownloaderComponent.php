@@ -3,9 +3,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -26,19 +28,19 @@ class DownloaderComponent extends Manager
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $publication_id);
+            $publication_id
+        );
 
-        if (! $publication instanceof ContentObjectPublication)
+        if (!$publication instanceof ContentObjectPublication)
         {
             throw new ObjectNotExistException(
                 Translation::getInstance()->getTranslation(
-                    'ContentObjectPublication',
-                    null,
-                    'Chamilo\Application\Weblcms'),
-                $publication_id);
+                    'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
+                ), $publication_id
+            );
         }
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
@@ -46,12 +48,14 @@ class DownloaderComponent extends Manager
                 array(),
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                )
+            );
         }
 
         $document = $publication->get_content_object();
 
-        if (! $document instanceof File && ! $document instanceof Webpage)
+        if(!$document instanceof File && !$document instanceof Webpage)
         {
             throw new UserException(Translation::getInstance()->getTranslation('OnlyFilesAndWebpagesCanBeDownloaded'));
         }

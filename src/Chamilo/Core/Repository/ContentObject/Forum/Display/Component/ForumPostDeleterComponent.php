@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -23,15 +24,16 @@ class ForumPostDeleterComponent extends Manager
         $selected_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
         $delete_post = DataManager::retrieve_by_id(ForumPost::class_name(), $selected_post_id);
 
-        if (! $delete_post instanceof ForumPost)
+        if (!$delete_post instanceof ForumPost)
         {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('ForumPost', null, Manager::context()),
-                $selected_post_id);
+                Translation::getInstance()->getTranslation('ForumPost', null, Manager::context()), $selected_post_id
+            );
         }
 
         if ($delete_post->get_user_id() == $this->get_parent()->get_user_id() ||
-             $this->get_parent()->is_allowed(DELETE_RIGHT))
+            $this->get_parent()->is_allowed(DELETE_RIGHT)
+        )
         {
             $success = $delete_post->delete();
         }
@@ -53,7 +55,9 @@ class ForumPostDeleterComponent extends Manager
             Translation::get(
                 ($success ? 'ObjectDeleted' : 'ObjectNotdeleted'),
                 array('OBJECT' => Translation::get('ForumPost')),
-                Utilities::COMMON_LIBRARIES));
+                Utilities::COMMON_LIBRARIES
+            )
+        );
 
         $params = array();
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;

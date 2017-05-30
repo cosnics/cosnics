@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -37,12 +38,12 @@ class ParentChangerComponent extends Manager
             $ids = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
         }
 
-        if (! $user)
+        if (!$user)
         {
             throw new NotAllowedException();
         }
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
             $ids = array($ids);
         }
@@ -56,12 +57,14 @@ class ParentChangerComponent extends Manager
             $selected_category = $this->get_parent()->retrieve_categories(
                 new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                    new StaticConditionVariable($ids[0])),
+                    new StaticConditionVariable($ids[0])
+                ),
                 null,
                 null,
-                array())->next_result();
+                array()
+            )->next_result();
 
-            if (! $selected_category)
+            if (!$selected_category)
             {
                 throw new ObjectNotExistException(Translation::get('Category'), $ids[0]);
             }
@@ -79,10 +82,12 @@ class ParentChangerComponent extends Manager
                     $categories[] = $this->get_parent()->retrieve_categories(
                         new EqualityCondition(
                             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                            new StaticConditionVariable($id)),
+                            new StaticConditionVariable($id)
+                        ),
                         null,
                         null,
-                        array())->next_result();
+                        array()
+                    )->next_result();
                 }
             }
 
@@ -99,14 +104,16 @@ class ParentChangerComponent extends Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(),
-                        Translation::get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))));
+                        Translation::get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))
+                    )
+                );
             }
 
             if ($form->validate())
             {
                 $new_parent = $form->exportValue('category');
 
-                if (! $this->get_parent()->allowed_to_add_category($new_parent))
+                if (!$this->get_parent()->allowed_to_add_category($new_parent))
                 {
                     throw new NotAllowedException();
                 }
@@ -124,7 +131,8 @@ class ParentChangerComponent extends Manager
                 $this->redirect(
                     Translation::get($success ? 'CategoryMoved' : 'CategoryNotMoved'),
                     ($success ? false : true),
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $parent));
+                    array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $parent)
+                );
             }
             else
             {
@@ -168,7 +176,11 @@ class ParentChangerComponent extends Manager
             'select_category',
             'post',
             $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT)));
+                array(
+                    self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT
+                )
+            )
+        );
 
         foreach ($categories as $category)
         {
@@ -180,14 +192,17 @@ class ParentChangerComponent extends Manager
             Translation::get(
                 'ObjectSelected',
                 array('OBJECT' => Translation::get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
-                Utilities::COMMON_LIBRARIES),
-            implode('<br>', $category_names));
+                Utilities::COMMON_LIBRARIES
+            ),
+            implode('<br>', $category_names)
+        );
 
         $form->addElement(
             'select',
             'category',
             Translation::get('Category', null, Utilities::COMMON_LIBRARIES),
-            $this->tree);
+            $this->tree
+        );
         $form->addElement('submit', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
 
         return $form;
@@ -200,7 +215,8 @@ class ParentChangerComponent extends Manager
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id));
+            new StaticConditionVariable($parent_id)
+        );
 
         $categories = $this->get_parent()->retrieve_categories($condition, null, null, array());
 
@@ -228,7 +244,8 @@ class ParentChangerComponent extends Manager
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent));
+            new StaticConditionVariable($parent)
+        );
 
         $categories = $this->get_parent()->retrieve_categories(
             $condition,
@@ -236,7 +253,10 @@ class ParentChangerComponent extends Manager
             null,
             array(
                 new OrderBy(
-                    new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER))));
+                    new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER)
+                )
+            )
+        );
 
         $i = 1;
 

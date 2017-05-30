@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
+use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * $Id: forum_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -55,15 +56,17 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
         $this->publication = $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $this->publication_id);
+            $this->publication_id
+        );
 
-        if (! $this->publication instanceof ContentObjectPublication ||
-             ! $this->publication->getContentObject() instanceof Forum)
+        if (!$this->publication instanceof ContentObjectPublication ||
+            !$this->publication->getContentObject() instanceof Forum
+        )
         {
             throw new ObjectNotExistException($publicationTranslation, $this->publication_id);
         }
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
@@ -74,7 +77,8 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         {
             Request::set_get(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
-                \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM);
+                \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM
+            );
         }
 
         $this->root_content_object = $publication->get_content_object();
@@ -85,15 +89,14 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
 
         \Chamilo\Application\Weblcms\Storage\DataManager::log_course_module_access(
-            $this->get_course_id(),
-            $this->get_user_id(),
-            $publication->get_tool(),
-            $publication->get_category_id());
+            $this->get_course_id(), $this->get_user_id(), $publication->get_tool(), $publication->get_category_id()
+        );
 
         $context = Forum::package() . '\Display';
         $factory = new ApplicationFactory(
             $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
 
         return $factory->run();
     }
@@ -111,9 +114,12 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     public function forum_topic_viewed($complex_topic_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->publication_id;
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_USER_ID] =
+            $this->get_user_id();
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID] =
+            $this->publication_id;
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID] =
+            $complex_topic_id;
 
         Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
     }
@@ -122,19 +128,27 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->publication_id));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+                ),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID
+            ),
+            new StaticConditionVariable($this->publication_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
-            new StaticConditionVariable($complex_topic_id));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+                ),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID
+            ),
+            new StaticConditionVariable($complex_topic_id)
+        );
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-            new DataClassCountParameters($condition));
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+            ),
+            new DataClassCountParameters($condition)
+        );
     }
 
     /**
@@ -153,13 +167,13 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
             $is_forum_manager = ($course->get_titular_id() == $user->get_id());
 
-            if (! $is_forum_manager)
+            if (!$is_forum_manager)
             {
                 $is_forum_manager = $course->is_course_admin($user);
             }
         }
 
-        if (! $is_forum_manager)
+        if (!$is_forum_manager)
         {
             $is_forum_manager = $this->is_allowed(WeblcmsRights::ADD_RIGHT, $this->publication);
         }
@@ -171,7 +185,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     public function is_allowed_to_edit_content_object()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-             $this->publication->get_allow_collaboration();
+        $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()

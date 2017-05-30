@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
@@ -11,6 +12,7 @@ use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,6 +21,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -40,7 +43,9 @@ class ExporterComponent extends Manager
             new ExcelUserExportRenderer(),
             array(
                 new CourseUserExportExtender($this->get_course_id()),
-                new CourseGroupUserExportExtender($this->get_course_id())));
+                new CourseGroupUserExportExtender($this->get_course_id())
+            )
+        );
 
         $file_path = $exporter->export($userExportParameters->getUsers());
 
@@ -48,7 +53,8 @@ class ExporterComponent extends Manager
             $file_path,
             true,
             $userExportParameters->getExportFilename(),
-            'application/vnd.openxmlformats');
+            'application/vnd.openxmlformats'
+        );
 
         Filesystem::remove($file_path);
     }
@@ -64,12 +70,12 @@ class ExporterComponent extends Manager
 
         switch ($tab)
         {
-            case UnsubscribeBrowserComponent::TAB_ALL :
+            case UnsubscribeBrowserComponent::TAB_ALL:
                 return $this->exportAllUsers();
-            case UnsubscribeBrowserComponent::TAB_USERS :
+            case UnsubscribeBrowserComponent::TAB_USERS:
                 return $this->exportIndividualSubscribedUsers();
-            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_SUBGROUPS :
-            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS :
+            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_SUBGROUPS:
+            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS:
                 return $this->exportPlatformGroupUsers();
         }
 
@@ -84,14 +90,12 @@ class ExporterComponent extends Manager
     protected function exportAllUsers()
     {
         $user_records = CourseDataManager::retrieve_all_course_users(
-            $this->get_course_id(),
-            null,
-            null,
-            null,
-            array(
+            $this->get_course_id(), null, null, null, array(
                 new OrderBy(new StaticConditionVariable('subscription_status', false)),
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
+        );
 
         $users = array();
 
@@ -101,8 +105,10 @@ class ExporterComponent extends Manager
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportUsersFilename',
-            array('COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())));
+            'ExportUsersFilename', array(
+                'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
+            )
+        );
 
         return new UserExportParameters($users, $filename . '.xlsx');
     }
@@ -116,19 +122,20 @@ class ExporterComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticColumnConditionVariable($this->get_course_id()));
+            new StaticColumnConditionVariable($this->get_course_id())
+        );
 
         $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course(
-            $condition,
-            null,
-            null,
-            array(
+            $condition, null, null, array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(),
-                        CourseEntityRelation::PROPERTY_STATUS)),
+                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS
+                    )
+                ),
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))))->as_array();
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
+        )->as_array();
 
         $users = array();
         foreach ($individualUsers as $individualUserRecord)
@@ -138,7 +145,8 @@ class ExporterComponent extends Manager
 
             $user->set_optional_property(
                 CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS,
-                $individualUserRecord[CourseEntityRelation::PROPERTY_STATUS]);
+                $individualUserRecord[CourseEntityRelation::PROPERTY_STATUS]
+            );
 
             $user->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 1);
 
@@ -146,8 +154,10 @@ class ExporterComponent extends Manager
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportDirectlySubscribedUsersFilename',
-            array('COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())));
+            'ExportDirectlySubscribedUsersFilename', array(
+                'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
+            )
+        );
 
         return new UserExportParameters($users, $filename . '.xlsx');
     }
@@ -171,7 +181,7 @@ class ExporterComponent extends Manager
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
 
-        if (! $group instanceof Group)
+        if (!$group instanceof Group)
         {
             throw new ObjectNotExistException($groupTranslation, $groupId);
         }
@@ -185,28 +195,34 @@ class ExporterComponent extends Manager
             return array();
         }
 
-        $condition = new InCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-            $groupUsersIds);
+        $condition =
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $groupUsersIds);
 
         $orderBy = array(
             new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)));
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+        );
 
         $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(
-            User::class_name(),
-            new DataClassRetrievesParameters($condition, null, null, $orderBy))->as_array();
+            User::class_name(), new DataClassRetrievesParameters(
+                $condition, null, null, $orderBy
+            )
+        )->as_array();
 
         foreach ($groupUsers as $groupUser)
         {
-            $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS, $groupStatus);
+            $groupUser->set_optional_property(
+                CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS, $groupStatus
+            );
 
             $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportGroupUsersFilename',
-            array('GROUP_NAME' => $this->createSafeName($group->get_name())));
+            'ExportGroupUsersFilename', array(
+                'GROUP_NAME' => $this->createSafeName($group->get_name())
+            )
+        );
 
         return new UserExportParameters($groupUsers, $filename . '.xlsx');
     }
@@ -230,7 +246,8 @@ class ExporterComponent extends Manager
 
         $condition = new InCondition(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
-            $parentIds);
+            $parentIds
+        );
 
         $directlySubscribedGroups = CourseDataManager::retrieve_groups_directly_subscribed_to_course($condition);
 
