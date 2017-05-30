@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -73,8 +72,7 @@ class SubmissionDetailGeneralInfoSection
 
         // Group members
         if ($this->main_page->get_submitter_type() !=
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER
-        )
+             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)
         {
             $html[] = $this->get_group_members_html();
         }
@@ -131,8 +129,7 @@ class SubmissionDetailGeneralInfoSection
                 $submission,
                 ContentObjectRendition::FORMAT_HTML,
                 ContentObjectRendition::VIEW_DESCRIPTION,
-                $this
-            );
+                $this);
 
             $html[] = $rendition_implementation->render();
         }
@@ -199,8 +196,7 @@ class SubmissionDetailGeneralInfoSection
     {
         $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $this->main_page->get_submission_tracker()->get_user_id()
-        );
+            $this->main_page->get_submission_tracker()->get_user_id());
 
         switch ($this->main_page->get_submitter_type())
         {
@@ -221,11 +217,9 @@ class SubmissionDetailGeneralInfoSection
     private function get_group_members()
     {
         if ($this->main_page->get_submitter_type() ==
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP
-        )
+             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP)
         {
-            $group_members =
-                CourseGroupDataManager::retrieve_course_group_users($this->main_page->get_target_id())->as_array();
+            $group_members = CourseGroupDataManager::retrieve_course_group_users($this->main_page->get_target_id())->as_array();
         }
         else
         {
@@ -236,11 +230,7 @@ class SubmissionDetailGeneralInfoSection
                         new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
                         \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
                             Group::class_name(),
-                            $this->main_page->get_target_id()
-                        )->get_users()
-                    )
-                )
-            )->as_array();
+                            $this->main_page->get_target_id())->get_users())))->as_array();
         }
 
         $group_member_names = array();
@@ -259,20 +249,18 @@ class SubmissionDetailGeneralInfoSection
      * Formats a date.
      *
      * @param $date type the date to be formatted.
-     *
      * @return the formatted representation of the date.
      */
     private function format_date($date_submitted)
     {
         $formatted_date = DatetimeUtilities::format_locale_date(
             Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
-            $date_submitted
-        );
+            $date_submitted);
 
         if ($date_submitted > $this->main_page->get_assignment()->get_end_time())
         {
             return '<span style="color:red">' . $formatted_date . ' (' . $this->get_time_late($date_submitted) .
-            ')</span>';
+                 ')</span>';
         }
 
         return $formatted_date;
@@ -321,6 +309,7 @@ class SubmissionDetailGeneralInfoSection
     }
 
     /**
+     *
      * @param ContentObject $attachment
      *
      * @return string
@@ -329,8 +318,7 @@ class SubmissionDetailGeneralInfoSection
     {
         $parameters = array(
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW_ATTACHMENT,
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_OBJECT_ID => $attachment->get_id()
-        );
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_OBJECT_ID => $attachment->get_id());
 
         return $this->main_page->get_url($parameters);
     }

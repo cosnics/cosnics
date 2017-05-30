@@ -1,8 +1,5 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Domain;
-
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Export parameters for users
@@ -11,12 +8,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class UserExportParameters
 {
+
     /**
+     *
      * @var User[]
      */
     protected $users;
 
     /**
+     *
      * @var string
      */
     protected $exportFilename;
@@ -29,11 +29,11 @@ class UserExportParameters
      */
     public function __construct(array $users, $exportFilename)
     {
-        $this->setUsers($users)
-            ->setExportFilename($exportFilename);
+        $this->setUsers($users)->setExportFilename($exportFilename);
     }
 
     /**
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function getUsers()
@@ -42,13 +42,14 @@ class UserExportParameters
     }
 
     /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User[] $users
      *
      * @return UserExportParameters
      */
     protected function setUsers($users)
     {
-        if (!is_array($users))
+        if (! is_array($users))
         {
             throw new \InvalidArgumentException('The given users parameters should be a valid array');
         }
@@ -59,6 +60,7 @@ class UserExportParameters
     }
 
     /**
+     *
      * @return string
      */
     public function getExportFilename()
@@ -67,22 +69,21 @@ class UserExportParameters
     }
 
     /**
+     *
      * @param string $exportFilename
      *
      * @return UserExportParameters
      */
     protected function setExportFilename($exportFilename)
     {
-        if (empty($exportFilename) || !is_string($exportFilename))
+        if (empty($exportFilename) || ! is_string($exportFilename))
         {
             throw new \InvalidArgumentException(
-                'The given export filename should be a valid string and should not be empty'
-            );
+                'The given export filename should be a valid string and should not be empty');
         }
 
         $this->exportFilename = $exportFilename;
 
         return $this;
     }
-
 }

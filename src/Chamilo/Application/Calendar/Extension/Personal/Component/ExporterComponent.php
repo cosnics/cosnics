@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -28,18 +27,19 @@ class ExporterComponent extends Manager
     public function run()
     {
         $objectTranslation = Translation::getInstance()->getTranslation(
-            'PersonalCalendarPublication', null, Manager::context()
-        );
+            'PersonalCalendarPublication',
+            null,
+            Manager::context());
 
         $id = Request::get(self::PARAM_PUBLICATION_ID);
-        if (!$id)
+        if (! $id)
         {
             throw new NoObjectSelectedException($objectTranslation);
         }
 
         $calendar_event_publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
 
-        if (!$calendar_event_publication instanceof Publication)
+        if (! $calendar_event_publication instanceof Publication)
         {
             throw new ObjectNotExistException($objectTranslation, $id);
         }
@@ -48,8 +48,7 @@ class ExporterComponent extends Manager
             new PersonalWorkspace($calendar_event_publication->get_publication_publisher()),
             $this->getUser()->getId(),
             ContentObjectExport::FORMAT_ICAL,
-            array($calendar_event_publication->get_content_object_id())
-        );
+            array($calendar_event_publication->get_content_object_id()));
 
         $exporter = ContentObjectExportController::factory($parameters);
         $exporter->download();
