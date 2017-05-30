@@ -105,16 +105,16 @@ class CalendarRepository
         {
             $configuration = Configuration::getInstance();
             $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager::context();
-            
+
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
             $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
             $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
             $token = json_decode(LocalSetting::getInstance()->get('token', $configurationContext));
-            
+
             self::$instance = new static($clientId, $clientSecret, $tenantId, $tenantName, $token);
         }
-        
+
         return static::$instance;
     }
 
@@ -244,8 +244,8 @@ class CalendarRepository
     {
         $this->token = json_decode($token);
         return LocalSetting::getInstance()->create(
-            'token', 
-            $token, 
+            'token',
+            $token,
             \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
     }
 
@@ -261,15 +261,15 @@ class CalendarRepository
 
     /**
      *
-     * @return \GuzzleHttp\Client
+     * @return \Guzzle\Http\Client
      */
     public function getGuzzleHttpClient()
     {
         if (! isset($this->office365Client))
         {
-            $this->office365Client = new \GuzzleHttp\Client(['base_url' => self::CALENDAR_BASE_URL]);
+            $this->office365Client = new \Guzzle\Http\Client(['base_url' => self::CALENDAR_BASE_URL]);
         }
-        
+
         return $this->office365Client;
     }
 
@@ -280,12 +280,12 @@ class CalendarRepository
     private function refreshToken()
     {
         $client = $this->getGuzzleHttpClient();
-        
+
         $request = $client->createRequest('POST', self::AUTHENTICATION_BASE_URL . 'token');
         $postBody = $request->getBody();
-        
+
         $replyUri = new Redirect();
-        
+
         $postBody->setField('grant_type', 'refresh_token');
         $postBody->setField('client_id', $this->getClientId());
         $postBody->setField('scope', $this->getClientScope());
@@ -293,7 +293,7 @@ class CalendarRepository
         $postBody->setField('resource', 'https://outlook.office365.com/');
         $postBody->setField('client_secret', $this->getClientSecret());
         $postBody->setField('refresh_token', $this->getRefreshToken());
-        
+
         $response = $client->send($request);
         return $response->getBody()->getContents();
     }
@@ -318,9 +318,9 @@ class CalendarRepository
         {
             return true;
         }
-        
+
         $office365Client = $this->getGuzzleHttpClient();
-        
+
         if (isset($authenticationCode))
         {
             $token = $this->requestAccessToken($authenticationCode);
@@ -329,7 +329,7 @@ class CalendarRepository
         else
         {
             $replyUri = new Redirect();
-            
+
             $redirect = new Redirect();
             $redirect->writeHeader($this->createAuthUrl($replyUri));
         }
@@ -353,10 +353,10 @@ class CalendarRepository
     {
         $client = $this->getGuzzleHttpClient();
         $replyUri = new Redirect();
-        
+
         $request = $client->createRequest('POST', self::AUTHENTICATION_BASE_URL . 'token');
         $postBody = $request->getBody();
-        
+
         $postBody->setField('grant_type', 'authorization_code');
         $postBody->setField('client_id', $this->getClientId());
         $postBody->setField('scope', $this->getClientScope());
@@ -364,7 +364,7 @@ class CalendarRepository
         $postBody->setField('redirect_uri', $replyUri->getUrl());
         $postBody->setField('resource', 'https://outlook.office365.com/');
         $postBody->setField('client_secret', $this->getClientSecret());
-        
+
         $response = $client->send($request);
         return $response->getBody()->getContents();
     }
@@ -376,7 +376,7 @@ class CalendarRepository
     private function getReplyParameters()
     {
         return array(
-            Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager::context(), 
+            Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager::context(),
             \Chamilo\Application\Calendar\Extension\Office365\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager::ACTION_LOGIN);
     }
 
@@ -388,14 +388,14 @@ class CalendarRepository
     private function createAuthUrl(Redirect $replyUri)
     {
         $params = array(
-            'response_type' => 'code', 
-            'redirect_uri' => $replyUri->getUrl(), 
-            'state' => base64_encode(serialize($this->getReplyParameters())), 
-            'client_id' => $this->getClientId(), 
-            'response_mode' => 'query', 
-            'prompt' => 'login', 
+            'response_type' => 'code',
+            'redirect_uri' => $replyUri->getUrl(),
+            'state' => base64_encode(serialize($this->getReplyParameters())),
+            'client_id' => $this->getClientId(),
+            'response_mode' => 'query',
+            'prompt' => 'login',
             'scope' => $this->getClientScope());
-        
+
         return self::AUTHENTICATION_BASE_URL . 'authorize' . "?" . http_build_query($params, '', '&');
     }
 
@@ -412,22 +412,22 @@ class CalendarRepository
     {
         $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars');
         $result = $this->executeRequest($request);
-        
+
         $calendarItems = $result->value;
-        
+
         $availableCalendars = array();
-        
+
         foreach ($calendarItems as $calendarItem)
         {
             $availableCalendar = new AvailableCalendar();
-            
+
             $availableCalendar->setType(Manager::package());
             $availableCalendar->setIdentifier($calendarItem->Id);
             $availableCalendar->setName($calendarItem->Name);
-            
+
             $availableCalendars[] = $availableCalendar;
         }
-        
+
         return $availableCalendars;
     }
 
@@ -439,52 +439,52 @@ class CalendarRepository
     {
         $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars/' . $calendarIdentifier);
         $result = $this->executeRequest($request);
-        
+
         $availableCalendar = new AvailableCalendar();
-        
+
         $availableCalendar->setType(Manager::package());
         $availableCalendar->setIdentifier($result->Id);
         $availableCalendar->setName($result->Name);
-        
+
         return $availableCalendar;
     }
 
     /**
      *
-     * @param \GuzzleHttp\Message\Request $request
+     * @param \Guzzle\Http\Message\Request $request
      * @return \stdClass
      */
-    private function executeRequest(\GuzzleHttp\Message\Request $request)
+    private function executeRequest(\Guzzle\Http\Message\Request $request)
     {
         $lifetimeInMinutes = Configuration::getInstance()->get_setting(
             array('Chamilo\Libraries\Calendar', 'refresh_external'));
-        
+
         $parameterBag = new ParameterBag(
             array(
-                ParameterBag::PARAM_IDENTIFIER => md5(serialize($request)), 
-                RequestCacheService::PARAM_REQUEST => $request, 
+                ParameterBag::PARAM_IDENTIFIER => md5(serialize($request)),
+                RequestCacheService::PARAM_REQUEST => $request,
                 RequestCacheService::PARAM_LIFETIME => $lifetimeInMinutes * 60));
-        
+
         $cache = new RequestCacheService($this);
         return $cache->getForIdentifier($parameterBag);
     }
 
     /**
      *
-     * @param \GuzzleHttp\Message\Request $request
+     * @param \Guzzle\Http\Message\Request $request
      * @return \stdClass
      */
-    public function sendRequest(\GuzzleHttp\Message\Request $request)
+    public function sendRequest(\Guzzle\Http\Message\Request $request)
     {
         if ($this->hasAccessToken() && $this->isAccessTokenExpired())
         {
             $token = $this->refreshToken();
             $this->saveToken($token);
         }
-        
+
         $client = $this->getGuzzleHttpClient();
         $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
-        
+
         $response = $client->send($request);
         return json_decode($response->getBody()->getContents());
     }
@@ -499,16 +499,16 @@ class CalendarRepository
     public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
         $request = $this->getGuzzleHttpClient()->createRequest(
-            'GET', 
-            'me/calendars/' . $calendarIdentifier . '/calendarview', 
+            'GET',
+            'me/calendars/' . $calendarIdentifier . '/calendarview',
             [
                 'query' => [
-                    '$top' => 200, 
-                    'startDateTime' => date('c', $fromDate), 
+                    '$top' => 200,
+                    'startDateTime' => date('c', $fromDate),
                     'endDateTime' => date('c', $toDate)]]);
-        
+
         $result = $this->executeRequest($request);
-        
+
         return new ArrayResultSet($result->value);
     }
 }
