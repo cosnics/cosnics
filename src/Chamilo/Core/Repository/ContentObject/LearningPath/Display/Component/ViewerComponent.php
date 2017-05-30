@@ -408,7 +408,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $learningPath = $this->get_root_content_object();
 
         if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode())
-            || $learningPath->enforcesDefaultTraversingOrder()
+            || $learningPath->enforcesDefaultTraversingOrder() || $learningPathTreeNode->isRootNode()
         )
         {
             return;

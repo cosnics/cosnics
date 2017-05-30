@@ -120,3 +120,199 @@ ul.tree-menu li div a.type_learning_path_default {
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen {
     display: none;
 }
+
+/* Repo Drag Panel CSS */
+
+#repo-drag-panel .nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}
+
+#repo-drag-panel .pagination {
+    margin: 7px 0;
+}
+
+#repo-drag-panel .select-group {
+    margin-bottom: 10px;
+}
+
+#repo-drag-panel #drag-button {
+    position: fixed;
+    top: 9%;
+    right: 0;
+    border-radius: 20px 0 0 20px;
+    z-index: 100000;
+    padding: 7px 10px 7px 13px;
+    color: #577ab7;
+}
+
+#repo-drag-panel .cd-panel-container {
+    /*...*/
+    position: fixed;
+    width: 245px;
+    top: 9%;
+    right: 0;
+    z-index: 100000;
+    border: 1px solid lightgray;
+    padding: 10px;
+    background: #eee;
+    border-radius: 10px 00px 0px 10px;
+}
+
+#repo-drag-panel .type-img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+#repo-drag-panel .content-object {
+    padding: 5px 10px;
+}
+
+#repo-drag-panel .content-object-list {
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+#repo-drag-panel .content-object-list li:nth-child(2n) {
+    background: #F3F3F3;
+}
+
+#repo-drag-panel .content-object-list li:hover {
+    background: #FFFDE3;
+    border-left: 5px solid #DCDAC1;
+    margin-left: -5px;
+}
+#repo-drag-panel .btn-close {
+    float: right;
+}
+
+/** Learning Path HTML Tree CSS */
+
+.learning-path-html-tree .ws-wrap {
+    white-space: normal;
+    height: auto;
+    width: 83%;
+}
+
+.learning-path-html-tree span.fancytree-node span.fancytree-expander {
+    color: #428bca;
+}
+
+.learning-path-html-tree span.fancytree-node span.fancytree-expander:hover {
+    color: #428bca;
+    opacity: 0.6;
+}
+
+.learning-path-html-tree .fancytree-custom-icon {
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.learning-path-html-tree .fancytree-container {
+    border: none !important;
+    min-height: 100px;
+    overflow: auto;
+}
+
+.learning-path-html-tree span.fancytree-title {
+    color: #337ab7;
+    font-size: 14px;
+}
+
+.learning-path-html-tree div.fancytree-edit-mode span.fancytree-title {
+    color: #b79b00;
+    font-size: 14px;
+}
+
+.context-menu-icon--fa {
+    width: inherit;
+    text-align: inherit;
+}
+
+.learning-path-html-tree .btn-drag {
+    width: 100%;
+}
+
+.learning-path-html-tree .alert-drag {
+    padding: 1px 1px 4px 5px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.learning-path-html-tree .tree-disabled{
+    background: #e9e9e9;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+}
+
+.learning-path-html-tree .tree-loading{
+    float: left;
+    height: 100%;
+    z-index: 20;
+    position: absolute;
+    top: 30%;
+    left: 45%;
+}
+
+.context-menu-list {
+    box-sizing: content-box;
+}
+
+/** Learning Path Section Copier CSS **/
+
+.learning-path-section-copier .form-category {
+    margin-bottom: 25px;
+    margin-top: 0;
+}
+
+.learning-path-section-copier .form-category:not(:first-child) {
+    margin-top: 25px;
+}
+
+.learning-path-section-copier .list-group .list-group-item:nth-child(even) {
+    background-color: #eef5fa !important;
+}
+
+.learning-path-section-copier .list-group .list-group-item.selected {
+    background-color: #ffffe0 !important;
+}
+
+.learning-path-section-copier .form-row#content-object-selector-row {
+    margin-top: 20px;
+}
+
+.learning-path-section-copier .content-object-selector-sub-row {
+    margin-bottom: 10px;
+}
+
+.learning-path-section-copier .content-object-selector-sub-row .content-object-selector-sub-col {
+    padding: 0;
+}
+
+.learning-path-section-copier #content-object-selector-list,
+.learning-path-section-copier #content-object-selector-pagination {
+    margin: 0;
+}
+
+.learning-path-section-copier .content-object-selector-title-container {
+    display: flex;
+    align-items: center;
+}
+
+.learning-path-section-copier .content-object-selector-title-container .content-object-selector-icon {
+    margin-top: 0;
+}
+
+.learning-path-section-copier .content-object-selector-title-container .content-object-selector-title {
+    margin-left: 5px;
+}
+
+.learning-path-section-copier .pager-info-panel {
+    padding: 5px 10px;
+}
+
+.learning-path-section-copier #reset-selected-content-object {
+    margin-bottom: 25px;
+}

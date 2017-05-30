@@ -120,6 +120,18 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $html[] = '<div class="learning-path-tree-menu">';
 
+
+        $javascriptFiles = array(
+            'LearningPathTree/app.js', 'LearningPathTree/controller/LearningPathHtmlTreeController.js'
+        );
+
+        foreach ($javascriptFiles as $javascriptFile)
+        {
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
+            );
+        }
+
         $learningPathHtmlTreePath = Path::getInstance()->getResourcesPath(
                 "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
             ) . '/Templates/LearningPathHtmlTree.html';
@@ -132,6 +144,25 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         );
 
         $inReportingMode = in_array($this->get_action(), $reportingActions);
+
+        $translationVariables = array(
+            'AddNewPage', 'AddNewSection', 'StartStructureQuickEditMode', 'StopStructureQuickEditMode', 'EditTitle'
+        );
+
+        $commonTranslationVariables = array('Remove', 'Confirm');
+
+        $translator = Translation::getInstance();
+        $translations = array();
+
+        foreach($translationVariables as $translationVariable)
+        {
+            $translations[$translationVariable] = $translator->getTranslation($translationVariable);
+        }
+
+        foreach($commonTranslationVariables as $commonTranslationVariable)
+        {
+            $translations[$commonTranslationVariable] = $translator->getTranslation($commonTranslationVariable, null, Utilities::COMMON_LIBRARIES);
+        }
 
         $parameters = array(
             'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)),
@@ -166,7 +197,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             'canEditLearningPathTree' =>
                 $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
             'inReportingMode' => $inReportingMode ? 'true' : 'false',
-            'treeData' => $this->getBootstrapTreeData()
+            'treeData' => $this->getBootstrapTreeData(),
+            'translationsJSON' => json_encode($translations)
         );
 
         foreach ($parameters as $parameter => $value)

@@ -24,10 +24,19 @@
                 minInterval: (1000*60*60), // 1hr
                 dateFormat: 'dd-mm-yy', 
                 timeFormat: 'HH:mm',
-                start: {controlType: 'select'}, // start picker options
-                end: {controlType: 'select'} // end picker options                  
+                start: {
+                    controlType: 'select'
+                }, // start picker options
+                end: {
+                    controlType: 'select',
+                    onSelect: function (selectedDateTime){
+                        startDateTextBox.datetimepicker('option', 'maxDate', null);
+                    }
+                } // end picker options
             }
         );
+
+        startDateTextBox.datetimepicker('option', 'maxDate', null);
 
         $('.frequency').hide();
         $('.range').hide();

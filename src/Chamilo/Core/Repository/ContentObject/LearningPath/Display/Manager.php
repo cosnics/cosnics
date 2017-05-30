@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -313,5 +314,38 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $studentViewSessionVariable = $this->getStudentViewSessionVariable();
         return Session::get($studentViewSessionVariable) == 1;
+    }
+
+    /**
+     * @return string
+     */
+    protected function renderRepoDragPanel(): string
+    {
+        $html = array();
+
+        $javascriptFiles = array(
+            'Repository/app.js', 'Repository/service/RepositoryService.js',
+            'RepoDragPanel/app.js', 'RepoDragPanel/filter/limitText.js',
+            'RepoDragPanel/directive/ckDraggable.js', 'RepoDragPanel/controller/DragPanelController.js'
+        );
+
+        foreach ($javascriptFiles as $javascriptFile)
+        {
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
+            );
+        }
+
+        $repoDragPanelPath = $this->getPathBuilder()->getResourcesPath(
+                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
+            ) . '/Templates/RepoDragPanel.html';
+        $repoDragPanel = file_get_contents($repoDragPanelPath);
+
+        if ($repoDragPanel)
+        {
+            $html[] = $repoDragPanel;
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

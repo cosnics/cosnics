@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -10,7 +9,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -204,16 +202,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     {
         $html = array();
         $html[] = parent::render_header();
-        //for now we inject the repo drag panel here...
-
-        $repoDragPanelPath = Path::getInstance()->getResourcesPath(
-                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
-            ) . '/Templates/RepoDragPanel.html';
-        $repoDragPanel = file_get_contents($repoDragPanelPath);
-
-        if($repoDragPanel) {
-            $html[] = $repoDragPanel;
-        }
+        $html[] = $this->renderRepoDragPanel();
 
         return implode(PHP_EOL, $html);
     }

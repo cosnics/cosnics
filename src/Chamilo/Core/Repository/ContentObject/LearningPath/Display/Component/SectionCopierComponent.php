@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -76,7 +77,6 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             }
             catch (\Exception $ex)
             {
-                var_dump($ex);
                 $message = 'LearningPathNodesNotCopied';
                 $success = false;
             }
@@ -105,6 +105,19 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         $html = array();
 
         $html[] = $this->render_header();
+
+        $javascriptFiles = array(
+            'Repository/app.js', 'Repository/service/RepositoryService.js',
+            'LearningPathSectionCopier/app.js', 'LearningPathSectionCopier/service/LearningPathService.js',
+            'LearningPathSectionCopier/controller/MainController.js'
+        );
+
+        foreach ($javascriptFiles as $javascriptFile)
+        {
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
+            );
+        }
 
         $sectionCopierHtml = file_get_contents(
             $this->getPathBuilder()->getResourcesPath(Manager::context()) . 'Templates/SectionCopier.html'

@@ -145,17 +145,9 @@ class UpdaterComponent extends BaseHtmlTreeComponent
     public function render_header()
     {
         $html = array();
+
         $html[] = parent::render_header();
-        //for now we inject the repo drag panel here...
-
-        $repoDragPanelPath = Path::getInstance()->getResourcesPath(
-                "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
-            ) . '/Templates/RepoDragPanel.html';
-        $repoDragPanel = file_get_contents($repoDragPanelPath);
-
-        if($repoDragPanel) {
-            $html[] = $repoDragPanel;
-        }
+        $html[] = $this->renderRepoDragPanel();
 
         return implode(PHP_EOL, $html);
     }

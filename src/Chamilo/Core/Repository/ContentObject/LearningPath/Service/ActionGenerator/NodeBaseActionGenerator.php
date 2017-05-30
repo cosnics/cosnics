@@ -61,7 +61,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             /** @var LearningPath $learningPath */
             $learningPath = $learningPathTreeNode->getLearningPathTree()->getRoot()->getContentObject();
 
-            if (!$learningPath->enforcesDefaultTraversingOrder())
+            if (!$learningPath->enforcesDefaultTraversingOrder() && !$learningPathTreeNode->isRootNode())
             {
                 $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
             }

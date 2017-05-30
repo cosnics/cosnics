@@ -481,12 +481,12 @@ class CalendarEventForm extends ContentObjectForm
             $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = 10;
             
             // Remove start and end date from the defaults because it blocks the selection of the start date
-            // $defaults[CalendarEvent :: PROPERTY_START_DATE] = DatetimeUtilities :: format_locale_date(
-            // '%d-%m-%Y %H:%M',
-            // time());
-            // $defaults[CalendarEvent :: PROPERTY_END_DATE] = DatetimeUtilities :: format_locale_date(
-            // '%d-%m-%Y %H:%M',
-            // time() + 3600);
+             $defaults[CalendarEvent :: PROPERTY_START_DATE] = DatetimeUtilities :: format_locale_date(
+             '%d-%m-%Y %H:%M',
+             time());
+             $defaults[CalendarEvent :: PROPERTY_END_DATE] = DatetimeUtilities :: format_locale_date(
+             '%d-%m-%Y %H:%M',
+             time() + 3600);
         }
         
         parent::setDefaults($defaults);
