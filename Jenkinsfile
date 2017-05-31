@@ -1,32 +1,34 @@
-pipeline {
-    try {
-        agent any
+try {
+    pipeline {
+            agent any
 
-        stages {
-            stage('Run Composer') {
-                steps {
-                    echo 'Composer update'
-                    sh 'composer update'
+            stages {
+                stage('Run Composer') {
+                    steps {
+                        echo 'Composer update'
+                        sh 'composer update'
+                    }
                 }
-            }
-            stage('Deploy') {
-                steps {
-                    echo 'Deploying..'
+                stage('Deploy') {
+                    steps {
+                        echo 'Deploying..'
+                    }
                 }
-            }
-            stage('Test') {
-                steps {
-                    echo 'Deploying....'
+                stage('Test') {
+                    steps {
+                        echo 'Deploying....'
+                    }
                 }
             }
         }
-    } catch (e) {
+     } 
+     catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
     } finally {
         notifySlack(currentBuild.result)
     }
-}
+
 
 def notifySlack(String buildStatus = 'STARTED') {
         // Build status of null means success.
