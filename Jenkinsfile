@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage ('Checkout source') {
-            steps {
-               checkout scm                
-            }
-        }
-
         stage('Run Composer') {
             steps {
                 echo 'Composer update'
