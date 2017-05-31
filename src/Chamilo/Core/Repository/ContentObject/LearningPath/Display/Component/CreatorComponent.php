@@ -33,7 +33,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     {
         $this->validateSelectedLearningPathChild();
 
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditCurrentLearningPathTreeNode())
         {
             throw new NotAllowedException();
         }

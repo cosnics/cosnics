@@ -23,7 +23,7 @@ class UserIncompleteProgressMailerComponent extends Manager
      */
     function run()
     {
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditCurrentLearningPathTreeNode())
         {
             throw new NotAllowedException();
         }

@@ -29,7 +29,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
     {
         $this->validateSelectedLearningPathChild();
 
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if ($this->canEditCurrentLearningPathTreeNode())
         {
             $content_object = $this->getCurrentContentObject();
 

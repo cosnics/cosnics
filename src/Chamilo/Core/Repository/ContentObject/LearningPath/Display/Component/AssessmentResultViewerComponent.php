@@ -90,7 +90,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $trackingService = $this->getLearningPathTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
-            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId()
         );
 
@@ -119,7 +119,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_answer_data($question_cid, $score, $feedback)
     {
         $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
-            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId(), $question_cid, $score, $feedback
         );
     }
@@ -130,7 +130,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_total_score($score)
     {
         $this->learningPathTrackingService->changeAssessmentScore(
-            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
             $this->getLearningPathChildAttemptId(), $score
         );
     }
@@ -164,6 +164,11 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
         $parameters = parent::get_additional_parameters();
         $parameters[] = self::PARAM_ITEM_ATTEMPT_ID;
         return $parameters;
+    }
+
+    public function get_root_content_object()
+    {
+        return $this->getCurrentLearningPathTreeNode()->getContentObject();
     }
 
     /**

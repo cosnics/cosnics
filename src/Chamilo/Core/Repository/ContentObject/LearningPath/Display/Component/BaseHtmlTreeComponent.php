@@ -195,7 +195,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
                 )
             ),
             'canEditLearningPathTree' =>
-                $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) ? 'true' : 'false',
+                $this->canEditCurrentLearningPathTreeNode() ? 'true' : 'false',
             'inReportingMode' => $inReportingMode ? 'true' : 'false',
             'treeData' => $this->getBootstrapTreeData(),
             'translationsJSON' => json_encode($translations)
@@ -241,6 +241,21 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         }
 
         $html[] = '<div class="' . implode(' ', $classes) . '">';
+
+        if($this->inStudentView())
+        {
+            $disableStudentViewUrl = $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISABLE_STUDENT_VIEW));
+
+            $html[] = '<div class="alert alert-info">';
+            $html[] = '<div class="pull-left" style="margin-top: 6px;">';
+            $html[] = $translator->getTranslation('CurrentlyInStudentView');
+            $html[] = '</div>';
+            $html[] = '<a class="btn btn-default btn-sm pull-right" href="' . $disableStudentViewUrl . '">';
+            $html[] = $translator->getTranslation('DisableStudentView');
+            $html[] = '</a>';
+            $html[] = '<div class="clearfix"></div>';
+            $html[] = '</div>';
+        }
 
         return implode(PHP_EOL, $html);
     }

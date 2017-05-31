@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -92,6 +93,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected $learningPathTrackingService;
 
     /**
+     * @var LearningPath
+     */
+    protected $learningPath;
+
+    /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -104,6 +110,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 'a parent that implements the LearningPathDisplaySupport'
             );
         }
+
+        $this->learningPath = $this->get_application()->get_root_content_object();
     }
 
     /**
@@ -133,7 +141,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function is_allowed_to_edit_attempt_data()
     {
-        return $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
+        return $this->canEditCurrentLearningPathTreeNode() &&
+            $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
     }
 
     /**
@@ -196,7 +205,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         if (!isset($this->learningPathTree))
         {
             $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
-                $this->get_root_content_object()
+                $this->learningPath
             );
         }
 
@@ -226,7 +235,17 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * Checks if a complex content object path node can be editted
+     * Convenience method to check if the current selected tree node can be edited
+     *
+     * @return bool
+     */
+    public function canEditCurrentLearningPathTreeNode()
+    {
+        return $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode());
+    }
+
+    /**
+     * Checks if a complex content object path node can be edited
      *
      * @param LearningPathTreeNode $learningPathTreeNode
      *
@@ -302,7 +321,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function getStudentViewSessionVariable()
     {
-        return self::PARAM_STUDENT_VIEW_SESSION . '_' . $this->get_root_content_object()->getId();
+        return self::PARAM_STUDENT_VIEW_SESSION . '_' . $this->learningPath->getId();
     }
 
     /**

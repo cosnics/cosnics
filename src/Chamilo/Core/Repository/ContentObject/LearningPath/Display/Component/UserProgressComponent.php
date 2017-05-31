@@ -35,7 +35,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
     function build()
     {
-        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if(!$this->canEditCurrentLearningPathTreeNode())
         {
             throw new NotAllowedException();
         }

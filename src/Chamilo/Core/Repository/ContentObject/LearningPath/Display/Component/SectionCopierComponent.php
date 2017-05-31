@@ -38,7 +38,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     function build()
     {
-        if(!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if(!$this->canEditCurrentLearningPathTreeNode())
         {
             throw new NotAllowedException();
         }

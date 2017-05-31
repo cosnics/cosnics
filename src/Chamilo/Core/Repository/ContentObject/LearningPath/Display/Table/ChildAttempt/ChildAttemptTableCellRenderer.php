@@ -126,11 +126,9 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
                     true
                 )
             );
-
-            return $toolbar->render();
         }
 
-        return null;
+        return $toolbar->render();
     }
 
     /**

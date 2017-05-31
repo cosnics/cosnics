@@ -301,6 +301,11 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         foreach ($learningPathChildAttempts as $learningPathChildAttempt)
         {
+            if(!$learningPathChildAttempt->isFinished())
+            {
+                continue;
+            }
+
             $labels[] = DatetimeUtilities::format_locale_date(null, $learningPathChildAttempt->get_start_time());
             $scores[] = (int) $learningPathChildAttempt->get_score();
         }
@@ -354,7 +359,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 //    {
 //        $toolbar = parent::getButtonToolbar($translator);
 //
-//        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+//        if ($this->canEditCurrentLearningPathTreeNode())
 //        {
 //            $toolbar->prependItem(
 //                new Button(

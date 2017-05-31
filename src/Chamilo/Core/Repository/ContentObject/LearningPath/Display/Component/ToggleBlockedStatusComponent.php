@@ -18,7 +18,7 @@ class ToggleBlockedStatusComponent extends Manager
      */
     public function run()
     {
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditCurrentLearningPathTreeNode())
         {
             throw new NotAllowedException();
         }

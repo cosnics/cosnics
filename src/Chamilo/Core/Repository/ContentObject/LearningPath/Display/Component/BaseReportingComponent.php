@@ -110,7 +110,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
      */
     public function getReportingUser()
     {
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditCurrentLearningPathTreeNode())
         {
             return $this->getUser();
         }

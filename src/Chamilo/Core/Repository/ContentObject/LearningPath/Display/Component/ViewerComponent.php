@@ -58,7 +58,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $this->getUser()
         );
 
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
+        if (!$this->canEditCurrentLearningPathTreeNode() &&
             $learningPathTrackingService->isCurrentLearningPathTreeNodeBlocked(
                 $learning_path, $this->getUser(), $this->getCurrentLearningPathTreeNode()
             )
@@ -113,27 +113,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();
 
-        if($this->inStudentView())
-        {
-            $disableStudentViewUrl = $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISABLE_STUDENT_VIEW));
-
-            $html[] = '<div class="alert alert-info">';
-            $html[] = '<div class="pull-left" style="margin-top: 6px;">';
-            $html[] = $translator->getTranslation('CurrentlyInStudentView');
-            $html[] = '</div>';
-            $html[] = '<a class="btn btn-default btn-sm pull-right" href="' . $disableStudentViewUrl . '">';
-            $html[] = $translator->getTranslation('DisableStudentView');
-            $html[] = '</a>';
-            $html[] = '<div class="clearfix"></div>';
-            $html[] = '</div>';
-        }
-
-        if($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if($this->canEditCurrentLearningPathTreeNode())
         {
             $html[] = $this->renderMovePanel();
         }
 
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()) &&
+        if ($this->canEditCurrentLearningPathTreeNode() &&
             (
                 (
                     $this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
@@ -170,7 +155,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $buttonToolbar = new ButtonToolBar();
             $this->buttonToolbar = $buttonToolbar;
 
-            if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+            if (!$this->canEditCurrentLearningPathTreeNode())
             {
                 return $this->buttonToolbar;
             }
@@ -246,7 +231,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addCreatorButtons($buttonGroup, $translator)
     {
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if ($this->canEditCurrentLearningPathTreeNode())
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
@@ -309,7 +294,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addManageContentObjectButton($buttonGroup, $translator)
     {
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if ($this->canEditCurrentLearningPathTreeNode())
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
             $editImage = new FontAwesomeGlyph('pencil');
@@ -368,7 +353,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addManageButton($button, $translator)
     {
-        if ($this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if ($this->canEditCurrentLearningPathTreeNode())
         {
             if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
             {
@@ -407,7 +392,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_root_content_object();
 
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode())
+        if (!$this->canEditCurrentLearningPathTreeNode()
             || $learningPath->enforcesDefaultTraversingOrder() || $learningPathTreeNode->isRootNode()
         )
         {
@@ -483,7 +468,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $icon = new FontAwesomeGlyph('pie-chart');
 
-        if (!$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()))
+        if (!$this->canEditCurrentLearningPathTreeNode())
         {
             $splitDropDownButton = new SplitDropdownButton($label, $icon, $url);
         }

@@ -171,6 +171,11 @@ class Toolbar
      */
     public function render()
     {
+        if(!$this->has_items())
+        {
+            return null;
+        }
+
         $toolbar_data = $this->items;
         $type = $this->get_type();
         $class_names = $this->class_names;
