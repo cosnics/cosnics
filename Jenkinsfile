@@ -1,4 +1,5 @@
 try {
+    notifySlack()
     pipeline {
             agent any
 
