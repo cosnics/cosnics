@@ -199,6 +199,11 @@ class LearningPathTreeJSONMapper
             $nodeData['expanded'] = true;
         }
 
+        if(!$node->isRootNode() && $node->getLearningPathChild()->isBlocked())
+        {
+            $nodeData['step_blocked'] = true;
+        }
+
         if ($node->hasChildNodes())
         {
             if (in_array($this->currentLearningPathTreeNode, $node->getDescendantNodes()))

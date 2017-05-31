@@ -2,6 +2,7 @@
     CKEDITOR.plugins.add( 'resource', {
         icons: 'resource',
         requires: 'image2',
+        lang: ['en', 'nl'],
 
         beforeInit: function (editor) {
 
@@ -92,7 +93,7 @@
             });
 
             editor.ui.addButton( 'Resource', {
-                label: 'Insert Resource',
+                label: editor.lang.resource.insertResource,
                 command: 'insertResource',
                 toolbar: 'insert'
             });

@@ -5,6 +5,12 @@
     CKEDITOR.plugins.addExternal('resourceupload', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resourceupload/');
     CKEDITOR.plugins.addExternal('resourcestylecontextmenu', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/resourcestylecontextmenu/');
     CKEDITOR.plugins.addExternal('quickquestion', web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorExtra/Plugin/quickquestion/');
+console.log(CKEDITOR);
+    CKEDITOR.lang.nl.embedbase.button = 'Voeg externe media in';
+    CKEDITOR.lang.nl.eqneditor.edit = 'Wijzig vergelijking';
+    CKEDITOR.lang.nl.eqneditor.menu = 'Wiskunde';
+    CKEDITOR.lang.nl.eqneditor.title = 'CodeCogs vergelijkings-editor';
+    CKEDITOR.lang.nl.eqneditor.toolbar = 'Voeg nieuwe vergelijking';
 
     CKEDITOR.stylesSet.add( 'default', [
         // Adding space after the style name is an intended workaround. For now, there

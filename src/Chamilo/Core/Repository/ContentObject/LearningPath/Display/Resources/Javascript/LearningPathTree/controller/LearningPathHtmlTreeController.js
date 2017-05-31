@@ -371,7 +371,15 @@
                 },
                 renderTitle: function (event, data) {
                     if(data.node.data.number && !$scope.quickEditStructureEnabled) {
-                        return '<span class="fancytree-title">' + data.node.data.number + ' ' + data.node.title + '</span>';
+                        var title = data.node.title;
+
+                        if($scope.canEditLearningPathTree && !$scope.inReportingMode) {
+                            var stepBlocked = data.node.data.step_blocked;
+
+                            title += (stepBlocked === true) ? ' <span class="step-blocked"></span>' : '';
+                        }
+
+                        return '<span class="fancytree-title">' + data.node.data.number + ' ' + title + '</span>';
                     } else {
                         return '<span class="fancytree-title">' + data.node.title + '</span>';
                     }

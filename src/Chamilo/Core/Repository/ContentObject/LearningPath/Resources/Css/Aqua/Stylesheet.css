@@ -256,6 +256,13 @@ ul.tree-menu li div a.type_learning_path_default {
     left: 45%;
 }
 
+.learning-path-html-tree .step-blocked {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-image: url('../../../Display/Resources/Images/Aqua/StepBlocked.png');
+}
+
 .context-menu-list {
     box-sizing: content-box;
 }

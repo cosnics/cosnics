@@ -104,7 +104,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Details'),
+                Translation::get('Reporting'),
                 Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                 $this->getReportingUrl($record),
                 ToolbarItem::DISPLAY_ICON

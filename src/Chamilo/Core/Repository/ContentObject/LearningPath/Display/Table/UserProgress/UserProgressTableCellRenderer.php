@@ -100,7 +100,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Details'),
+                Translation::get('Reporting'),
                 Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                 $reportingUrl,
                 ToolbarItem::DISPLAY_ICON

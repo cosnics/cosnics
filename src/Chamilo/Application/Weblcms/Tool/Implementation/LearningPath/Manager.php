@@ -81,7 +81,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Statistics'),
+                        Translation::get('Reporting'),
                         Theme::getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(

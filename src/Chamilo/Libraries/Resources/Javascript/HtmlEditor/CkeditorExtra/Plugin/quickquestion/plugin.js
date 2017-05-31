@@ -1,6 +1,7 @@
 CKEDITOR.plugins.add('quickquestion', {
     requires: 'widget',
     icons: 'quickquestion',
+    lang: ['en', 'nl'],
 
     init: function (editor) {
 
@@ -8,13 +9,13 @@ CKEDITOR.plugins.add('quickquestion', {
         editor.addContentsCss( pluginDirectory + 'plugin.css' );
 
         editor.widgets.add('quickquestion', {
-            button: 'Ask a quick question',
+            button: editor.lang.quickquestion.insertQuickQuestion,
 
             template: //@todo translation
             '<div class="quick-question">' +
-            '<div class="a-question"><h4>Stel hier uw vraag.</h4></div>' +
-            '<button class="btn btn-primary" style="margin-bottom:5px; display: none" onclick="$(&quot;.an-answer&quot;).toggle()">Toon antwoord</button>' +
-            '<div class="an-answer">Geef hief uw antwoord</div>' +
+            '<div class="a-question"><h4>' + editor.lang.quickquestion.askQuestion + '</h4></div>' +
+            '<button class="btn btn-primary" style="margin-bottom:5px; display: none" onclick="$(&quot;.an-answer&quot;).toggle()">' + editor.lang.quickquestion.showAnswer + '</button>' +
+            '<div class="an-answer">' + editor.lang.quickquestion.addAnswer + '</div>' +
             '</div>',
 
 
