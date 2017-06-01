@@ -370,18 +370,20 @@
                     }
                 },
                 renderTitle: function (event, data) {
-                    if(data.node.data.number && !$scope.quickEditStructureEnabled) {
-                        var title = data.node.title;
+                    var title = data.node.title;
 
-                        if($scope.canEditLearningPathTree && !$scope.inReportingMode) {
-                            var stepBlocked = data.node.data.step_blocked;
+                    if($scope.canEditLearningPathTree && !$scope.inReportingMode) {
+                        var stepBlocked = data.node.data.step_blocked;
 
-                            title += (stepBlocked === true) ? ' <span class="step-blocked"></span>' : '';
+                        if(stepBlocked) {
+                            title +=  '<span class="tree-additional-icon step-blocked"></span>';
                         }
+                    }
 
+                    if(data.node.data.number && !$scope.quickEditStructureEnabled) {
                         return '<span class="fancytree-title">' + data.node.data.number + ' ' + title + '</span>';
                     } else {
-                        return '<span class="fancytree-title">' + data.node.title + '</span>';
+                        return '<span class="fancytree-title">' + title + '</span>';
                     }
 
                 },

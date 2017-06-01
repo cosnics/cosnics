@@ -486,15 +486,17 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
      * Joined with users for searching and sorting
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
     public function findLearningPathAttemptsWithUser(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $learningPathChildIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
         return new RecordIterator(DummyAttempt::class_name(), array());
@@ -517,15 +519,17 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
      * Finds the targeted users (left) joined with the learning path attempts
      *
      * @param LearningPath $learningPath
+     * @param array $learningPathChildIds
      * @param Condition $condition
      * @param int $offset
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
     public function findTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $learningPathChildIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
         return new RecordIterator(User::class_name(), array());
@@ -557,15 +561,18 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Counts the target users with attempts on a learning path that are completed
+     * Finds the target users with the completed nodes for a given learning path, limiting it by the given nodes
      *
      * @param LearningPath $learningPath
+     * @param int[] $learningPathChildIds
      *
-     * @return int
+     * @return RecordIterator
      */
-    public function findUsersWithCompletedNodesCount(LearningPath $learningPath)
+    public function findUsersWithCompletedNodesCount(
+        LearningPath $learningPath, $learningPathChildIds = array()
+    )
     {
-        return 0;
+        return new RecordIterator(User::class_name(), array());
     }
 
     /**

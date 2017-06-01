@@ -111,30 +111,22 @@ class LearningPathTreeJSONMapper
      */
     protected function getItemIcon(LearningPathTreeNode $node)
     {
-        if ($this->allowedToViewContentObject)
-        {
+        $objectType = (string) StringUtilities::getInstance()->createString(
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
+        )->underscored();
 
-            if (!$this->allowedToEditLearningPathTree && $this->learningPathTrackingService &&
-                $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                    $this->learningPath, $this->user, $node
-                )
+        $class = 'type_' . $objectType;
+
+        if ($this->learningPathTrackingService &&
+            $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                $this->learningPath, $this->user, $node
             )
-            {
-                return 'type_completed';
-            }
-            else
-            {
-                $objectType = (string) StringUtilities::getInstance()->createString(
-                    ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
-                )->underscored();
-
-                return 'type_' . $objectType;
-            }
-        }
-        else
+        )
         {
-            return 'disabled type_disabled';
+            $class .= ' type_completed';
         }
+
+        return $class;
     }
 
     /**
@@ -175,7 +167,7 @@ class LearningPathTreeJSONMapper
         $nodeData['number'] = is_null($number) ? '' : $number;
         $nodeData['icon'] = $this->getItemIcon($node);
 
-        if($node->getContentObject() instanceof LearningPath || $node->getContentObject() instanceof Section)
+        if ($node->getContentObject() instanceof LearningPath || $node->getContentObject() instanceof Section)
         {
             $nodeData['folder'] = true;
         }
@@ -199,9 +191,18 @@ class LearningPathTreeJSONMapper
             $nodeData['expanded'] = true;
         }
 
-        if(!$node->isRootNode() && $node->getLearningPathChild()->isBlocked())
+        if (!$node->isRootNode() && $node->getLearningPathChild()->isBlocked())
         {
             $nodeData['step_blocked'] = true;
+        }
+
+        if ($this->learningPathTrackingService &&
+            $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                $this->learningPath, $this->user, $node
+            )
+        )
+        {
+            $nodeData['completed'] = true;
         }
 
         if ($node->hasChildNodes())
@@ -221,7 +222,7 @@ class LearningPathTreeJSONMapper
         }
 
         $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditLearningPathTree);
-        foreach($actions as $action)
+        foreach ($actions as $action)
         {
             $nodeData['actions'][$action->getName()] = $action->toArray();
         }

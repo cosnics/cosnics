@@ -5,3 +5,11 @@ ul.tree-menu li div a.page, ul.tree-menu li div a.type_page, ul.tree-menu li div
 .treeview .list-group .list-group-item .icon.node-icon.type_page_default {
     background-image: url(../../Images/Aqua/Logo/16.png);
 }
+
+ul.tree-menu li div a.page.type_completed, ul.tree-menu li div a.type_page.type_completed, ul.tree-menu li div a.type_page_default.type_completed,
+.fancytree-custom-icon.type_page.type_completed,
+.fancytree-custom-icon.type_page_default.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_page.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_page_default.type_completed {
+    background-image: url(../../Images/Aqua/Logo/16Completed.png);
+}

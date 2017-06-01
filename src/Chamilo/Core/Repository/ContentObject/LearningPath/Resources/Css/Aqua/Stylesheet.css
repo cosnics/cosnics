@@ -9,6 +9,18 @@ ul.tree-menu li div a.type_learning_path_default {
     height: 16px;
 }
 
+ul.tree-menu li div a.learning_path.type_completed, ul.tree-menu li div a.type_learning_path.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_learning_path.type_completed,
+.fancytree-custom-icon.type_learning_path.type_completed,
+.fancytree-custom-icon.type_learning_path_default.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_learning_path_default.type_completed,
+ul.tree-menu li div a.type_learning_path_default.type_completed {
+    background-image: url(../../Images/Aqua/Logo/16Completed.png);
+    width: 16px;
+    height: 16px;
+}
+
+
 .learning-path-display-full-screen {
     background-color: white;
     margin: 0px;
@@ -256,11 +268,19 @@ ul.tree-menu li div a.type_learning_path_default {
     left: 45%;
 }
 
-.learning-path-html-tree .step-blocked {
+.learning-path-html-tree .tree-additional-icon {
     width: 16px;
     height: 16px;
     display: inline-block;
+    margin-left: 2px;
+}
+
+.learning-path-html-tree .tree-additional-icon.step-blocked {
     background-image: url('../../../Display/Resources/Images/Aqua/StepBlocked.png');
+}
+
+.learning-path-html-tree .tree-additional-icon.step-completed {
+    background: url('../../../Display/Resources/Images/Aqua/StepCompleted.png')
 }
 
 .context-menu-list {
