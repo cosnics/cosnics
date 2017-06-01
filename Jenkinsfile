@@ -13,16 +13,7 @@ try {
                 stage('Deploy') {
                     steps {
                         echo 'Deploying..'
-                        ansiblePlaybook(
-                            inventory: '/ansible/hosts',
-                            playbook: '/ansible/deploy.yml',
-                            colorized: true,
-                            extraVars: [
-                                hosts: 'test',
-                                remote_user: 'jenkins',
-                                project_root: '/cosnics/${env.BRANCH_NAME}',
-                                project_local_path: '${env.WORKSPACE}',
-                            ])
+                        sh 'ansible-playbook /ansible/deploy.yml -i hosts --extra-vars "hosts=test remote_user=jenkins project_root=/cosnics/${env.BRANCH_NAME} project_local_path=${env.WORKSPACE}/"'
                     }
                 }
                 stage('Test') {
