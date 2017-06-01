@@ -44,6 +44,8 @@ abstract class ResourceFixer
      */
     protected function fixResourcesInTextContent($textContent)
     {
+        $originalTextContent = $textContent;
+
         $domDocument = new \DOMDocument();
         $domDocument->loadHTML($textContent);
 
@@ -110,6 +112,32 @@ abstract class ResourceFixer
             $textContent = str_replace(
                 $originalResourceTagHTML, $fixedResourceTagHTML, $textContent
             );
+
+            // Content could not be replaced with DOMParser, fallback to REGEX
+            if ($originalTextContent == $textContent)
+            {
+                $textContent = preg_replace(
+                    '/<resource.*?source=[\'"]' . $objectId . '[\'"].*?>.*?<\/resource>/',
+                    $fixedResourceTagHTML, $textContent
+                );
+
+                if(empty($textContent))
+                {
+                    $this->logger->alert(sprintf(
+                        'Failed to replace resource for object ID %s and security code %s, regex returned empty result',
+                        $objectId, $object->calculate_security_code()
+                    ));
+
+                    $textContent = $originalTextContent;
+                }
+
+                $this->logger->info(
+                    sprintf(
+                        'Fallback to regex for object ID %s and security code %s', $objectId,
+                        $object->calculate_security_code()
+                    )
+                );
+            }
         }
 
         return $textContent;
