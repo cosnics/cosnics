@@ -4,10 +4,8 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -58,7 +56,7 @@ abstract class Chart extends Html
             $chart = array();
             $chart_description = array();
             $chart_data = array();
-            
+
             $chart_description['Position'] = 'Name';
             $chart_description['Values'] = array();
             $chart_description['Description'] = array();
@@ -68,14 +66,14 @@ abstract class Chart extends Html
                 $chart_description['Description']['Serie' . $row_id] = trim(
                     trim(trim(html_entity_decode(strip_tags($row_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0"));
             }
-            
+
             $chart[1] = $chart_description;
-            
+
             foreach ($reporting_data->get_categories() as $category_id => $category_name)
             {
                 $category_array = array();
                 $category_array['Name'] = trim(
-                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')), 
+                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')),
                     "\xC2\xA0");
                 foreach ($reporting_data->get_rows() as $row_id => $row_name)
                 {
@@ -83,7 +81,7 @@ abstract class Chart extends Html
                 }
                 $chart_data[] = $category_array;
             }
-            
+
             $chart[0] = $chart_data;
             return $chart;
         }
@@ -98,9 +96,9 @@ abstract class Chart extends Html
                 if ($key2 == "Name")
                 {
                     $value[$key2] = StringUtilities::getInstance()->truncate(
-                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 
-                        30, 
-                        false, 
+                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')),
+                        30,
+                        false,
                         '...');
                 }
             }
@@ -117,10 +115,10 @@ abstract class Chart extends Html
     {
         $graphUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::context(), 
-                Application::PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::ACTION_GRAPH, 
+                Application::PARAM_CONTEXT => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\Reporting\Viewer\Ajax\Manager::ACTION_GRAPH,
                 \Chamilo\Core\Reporting\Viewer\Ajax\Manager::PARAM_GRAPHMD5 => $md5));
-        
+
         return $graphUrl->getUrl();
     }
 
@@ -135,6 +133,7 @@ abstract class Chart extends Html
     }
 
     /**
+     *
      * @return object | ConfigurablePathBuilder
      */
     protected function getConfigurablePathBuilder()

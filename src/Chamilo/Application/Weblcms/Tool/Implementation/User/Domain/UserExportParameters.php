@@ -2,8 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Domain;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-
 /**
  * Export parameters for users
  *
