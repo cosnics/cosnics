@@ -13,11 +13,12 @@ try {
                 stage('Deploy') {
                     steps {
                         echo 'Deploying..'
+                        ansiblePlaybook colorized: true, extras: 'hosts=test remote_user=jenkins project_root=/cosnics/${env.BRANCH_NAME} project_local_path=${env.WORKSPACE}', installation: 'ansible', inventory: '/ansible/hosts', playbook: '/ansible/deploy.yml', sudoUser: null
                     }
                 }
                 stage('Test') {
                     steps {
-                        echo 'Deploying....'
+                        echo 'Testing...'
                     }
                 }
             }
