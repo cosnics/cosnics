@@ -1,0 +1,39 @@
+<div class="row form-row">
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+        Slaagcijfer
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+        <div id="slider">
+            <div id="custom-handle" class="ui-slider-handle"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function() {
+        var handle = $( "#custom-handle" );
+        var masteryScoreSelector = $('select[name="mastery_score"]');
+        var sliderSelector = $('#slider');
+
+        masteryScoreSelector.parents('.form-row').hide();
+
+        sliderSelector.slider({
+            orientation: 'horizontal',
+            range: "min",
+            max: 100,
+            change: function() {
+                var value = sliderSelector.slider('value');
+                masteryScoreSelector.val(value);
+                handle.text(value);
+            },
+            create: function() {
+                handle.text( $( this ).slider( "value" ));
+            },
+            slide: function( event, ui ) {
+                handle.text( ui.value );
+            }
+        });
+
+        sliderSelector.slider('value', masteryScoreSelector.val());
+    })();
+</script>
