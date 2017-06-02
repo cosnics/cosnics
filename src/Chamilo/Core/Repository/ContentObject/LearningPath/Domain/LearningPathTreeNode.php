@@ -418,4 +418,16 @@ class LearningPathTreeNode
 
         return $learningPathChildIds;
     }
+
+    /**
+     * Returns whether or not the current node (self) is a child of the given node (possibleParentNode)
+     *
+     * @param LearningPathTreeNode $possibleParentNode
+     *
+     * @return bool
+     */
+    public function isChildOf(LearningPathTreeNode $possibleParentNode)
+    {
+        return in_array($possibleParentNode, $this->getParentNodes());
+    }
 }

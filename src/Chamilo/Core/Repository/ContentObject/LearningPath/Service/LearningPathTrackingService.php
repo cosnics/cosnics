@@ -698,25 +698,13 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
-
-        $learningPathChildAttempts =
-            $this->learningPathAttemptService->getLearningPathChildAttempts($learningPathAttempt);
-
         $previousNodes = $learningPathTreeNode->getPreviousNodes();
 
         foreach ($previousNodes as $previousNode)
         {
-            if (
-                $learningPath->enforcesDefaultTraversingOrder() ||
-                (!$previousNode->isRootNode() && $previousNode->getLearningPathChild()->isBlocked())
-            )
+            if ($this->doesNodeBlockCurrentNode($learningPath, $user, $learningPathTreeNode, $previousNode))
             {
-                if (count($learningPathChildAttempts[$previousNode->getId()]) == 0)
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
@@ -736,31 +724,53 @@ class LearningPathTrackingService
         LearningPath $learningPath, User $user, LearningPathTreeNode $learningPathTreeNode
     )
     {
-        $learningPathAttempt =
-            $this->learningPathAttemptService->getOrCreateLearningPathAttemptForUser($learningPath, $user);
-
-        $learningPathChildAttempts =
-            $this->learningPathAttemptService->getLearningPathChildAttempts($learningPathAttempt);
-
         $previousNodes = $learningPathTreeNode->getPreviousNodes();
 
         $blockedNodes = array();
 
         foreach ($previousNodes as $previousNode)
         {
-            if (
-                $learningPath->enforcesDefaultTraversingOrder() ||
-                (!$previousNode->isRootNode() && $previousNode->getLearningPathChild()->isBlocked())
-            )
+            if ($this->doesNodeBlockCurrentNode($learningPath, $user, $learningPathTreeNode, $previousNode))
             {
-                if (count($learningPathChildAttempts[$previousNode->getId()]) == 0)
-                {
-                    $blockedNodes[] = $previousNode;
-                }
+                $blockedNodes[] = $previousNode;
             }
         }
 
         return $blockedNodes;
+    }
+
+    /**
+     * Helper function to check whether or not the
+     *
+     * @param LearningPath $learningPath
+     * @param User $user
+     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param LearningPathTreeNode $possibleBlockNode
+     *
+     * @return bool
+     */
+    protected function doesNodeBlockCurrentNode(
+        LearningPath $learningPath, User $user, LearningPathTreeNode $currentLearningPathTreeNode,
+        LearningPathTreeNode $possibleBlockNode
+    )
+    {
+        if ($currentLearningPathTreeNode->isChildOf($possibleBlockNode))
+        {
+            return false;
+        }
+
+        if (
+            $learningPath->enforcesDefaultTraversingOrder() ||
+            (!$possibleBlockNode->isRootNode() && $possibleBlockNode->getLearningPathChild()->isBlocked())
+        )
+        {
+            if (!$this->isLearningPathTreeNodeCompleted($learningPath, $user, $possibleBlockNode))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
