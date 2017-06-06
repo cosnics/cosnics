@@ -1,18 +1,26 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\LearningPath;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\LearningPathAttemptProgressTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -33,60 +41,70 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(Translation::get('Title'), Translation::get('Progress'), Translation::get('LearningPathDetails')));
+            array(Translation::get('Title'), Translation::get('Progress'), Translation::get('LearningPathDetails'))
+        );
         $course_id = $this->get_parent()->get_parent()->get_parent()->get_parameter(
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
+        );
         $user_id = $this->get_user_id();
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($course_id));
+            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course_id)
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_USER_ID), 
-            new StaticConditionVariable($user_id));
+            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
         $condition = new AndCondition($conditions);
-        
+
         $attempts = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            LearningPathAttempt::class_name(), 
-            new DataClassRetrievesParameters($condition));
-        
+            LearningPathAttempt::class_name(),
+            new DataClassRetrievesParameters($condition)
+        );
+
         while ($attempt = $attempts->next_result())
         {
-            $learning_paths[$attempt->get_learning_path_id()] = $attempt;
+            /** @var LearningPathAttempt $attempt */
+            $learning_paths[$attempt->get_publication_id()] = $attempt;
         }
-        
+
         // TODO: Using the content object name for the tool name is a bad idea ... a better solution should be found and
         // implemented
         $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name());
-        
+
         $params = array();
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $toolName;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        
-        $params_detail = $this->get_parent()->get_parameters();
-        $params_detail[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = null;
-        $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = LearningPathAttemptProgressTemplate::class_name();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+
         $img = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
-             Translation::get('Details') . '" />';
-        
+            Translation::get('Details') . '" />';
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable($toolName));
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_TOOL
+            ),
+            new StaticConditionVariable($toolName)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
-                ContentObjectPublication::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($course_id));
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_COURSE_ID
+            ),
+            new StaticConditionVariable($course_id)
+        );
         $condition = new AndCondition($conditions);
-        $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
-            $condition);
+        $publications_resultset =
+            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                $condition
+            );
         /*
          * $publications_arr = $publications_resultset->as_array();
          */
@@ -94,38 +112,61 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         while ($publication = $publications_resultset->next_result())
         {
             $progress = $url = $link = null;
-            if (! \Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
-                $user_id, 
-                $publication[ContentObjectPublication::PROPERTY_ID]))
+            if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
+                $user_id,
+                $publication[ContentObjectPublication::PROPERTY_ID]
+            )
+            )
             {
                 continue;
             }
             ++ $key;
-            
+
+            $trackingService = $this->createLearningPathTrackingServiceForPublicationAndCourse(
+                $publication[ContentObjectPublication::PROPERTY_ID],
+                $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
+            );
+
+            /** @var LearningPath $learning_path */
+            $learning_path = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+            );
+
+            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
+                $publication[ContentObjectPublication::PROPERTY_ID];
+
             if ($learning_paths[$publication[ContentObjectPublication::PROPERTY_ID]])
             {
-                $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
-                $params_detail[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::PARAM_ATTEMPT_ID] = $learning_paths[$publication[ContentObjectPublication::PROPERTY_ID]];
-                $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '">' . $img . '</a>';
+                $params_detail = $params;
+                $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
+                $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
+                    $this->get_user_id();
+
+                $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $img . '</a>';
+
+                $user = new User();
+                $user->setId($this->get_user_id());
+
+                $learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree($learning_path);
+
                 $progress = $this->get_progress_bar(
-                    $learning_paths[$publication[ContentObjectPublication::PROPERTY_ID]]->get_progress());
+                    $trackingService->getLearningPathProgress($learning_path, $user, $learningPathTree->getRoot())
+                );
             }
-            
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
-            $learning_path = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
-                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
-            
+
             $redirect = new Redirect($params);
-            $url = '<a href="' . $redirect->getUrl() . '">' . $learning_path->get_title() . '</a>';
-            
+            $url = '<a href="' . $redirect->getUrl() . '" target="_blank">' . $learning_path->get_title() . '</a>';
+
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation::get('Title'), $url);
             $reporting_data->add_data_category_row($key, Translation::get('Progress'), $progress);
             $reporting_data->add_data_category_row($key, Translation::get('LearningPathDetails'), $link);
         }
-        
+
         $reporting_data->hide_categories();
+
         return $reporting_data;
     }
 
@@ -137,5 +178,56 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     public function get_views()
     {
         return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+    }
+
+    /**
+     * Creates the LearningPathTrackingService for a given Publication and Course
+     *
+     * @param int $publicationId
+     * @param int $courseId
+     *
+     * @return LearningPathTrackingService
+     */
+    public function createLearningPathTrackingServiceForPublicationAndCourse($publicationId, $courseId)
+    {
+        $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
+
+        return $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
+            new LearningPathTrackingParameters((int) $courseId, (int) $publicationId)
+        );
+    }
+
+    /**
+     * @return LearningPathTrackingServiceBuilder | object
+     */
+    protected function getLearningPathTrackingServiceBuilder()
+    {
+        return new LearningPathTrackingServiceBuilder($this->getDataClassRepository());
+    }
+
+    /**
+     * Returns the LearningPathTreeBuilder service
+     *
+     * @return LearningPathTreeBuilder | object
+     */
+    protected function getLearningPathTreeBuilder()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+        );
+    }
+
+    /**
+     * @return object | DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get(
+            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
+        );
     }
 }

@@ -172,6 +172,10 @@ class ContentObject extends CompositeDataClass
 
     public static function type_string($context, $type_string = null)
     {
+        // For the Default template fall back to the default translation so each content object doesn't have to
+        // repeat a TypeNameDefault translation string
+        $type_string = $type_string == 'TypeNameDefault' ? 'TypeName' : $type_string;
+
         return Translation::get($type_string ? $type_string : 'TypeName', null, $context);
     }
 

@@ -122,7 +122,7 @@ class GetContentObjectsComponent extends Manager
         $filterData = new FilterData($workspace);
         $filterData->clear(false);
 
-        if (!is_null($categoryId))
+        if (!is_null($categoryId) && empty($searchQuery))
         {
             $filterData->set_filter_property(FilterData::FILTER_CATEGORY, $categoryId);
         }
