@@ -66,7 +66,7 @@ class DeleterComponent extends Manager
 
         $failures = 0;
 
-        $learningPathChildService = $this->getLearningPathChildService();
+        $treeNodeDataService = $this->getTreeNodeDataService();
 
         $new_node = null;
 
@@ -74,7 +74,7 @@ class DeleterComponent extends Manager
         {
             try
             {
-                $learningPathChildService->deleteContentObjectFromLearningPath($available_node);
+                $treeNodeDataService->deleteContentObjectFromLearningPath($available_node);
                 $success = true;
             }
             catch (\Exception $ex)

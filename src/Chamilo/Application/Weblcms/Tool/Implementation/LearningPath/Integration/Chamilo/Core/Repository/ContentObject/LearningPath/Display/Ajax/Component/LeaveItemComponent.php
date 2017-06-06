@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
@@ -31,10 +31,10 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     {
         try
         {
-            $learningPathChildAttemptId = $this->getPostDataValue(self::PARAM_TRACKER_ID);
+            $treeNodeDataAttemptId = $this->getPostDataValue(self::PARAM_TRACKER_ID);
             $learningPathTrackingService = $this->buildLearningPathTrackingService();
 
-            $learningPathTrackingService->setAttemptTotalTimeByLearningPathChildAttemptId($learningPathChildAttemptId);
+            $learningPathTrackingService->setAttemptTotalTimeByTreeNodeDataAttemptId($treeNodeDataAttemptId);
         }
         catch(\Exception $ex)
         {

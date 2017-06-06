@@ -31,7 +31,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
      */
     public function build()
     {
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
 
         if (!$this->canEditCurrentTreeNode())
         {
@@ -83,17 +83,17 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                     $object_id
                 );
 
-                $learningPathChildService = $this->getLearningPathChildService();
+                $treeNodeDataService = $this->getTreeNodeDataService();
 
                 try
                 {
                     $parentNode = $this->getCurrentTreeNode();
 
-                    $learningPathChild = $learningPathChildService->addContentObjectToLearningPath(
+                    $treeNodeData = $treeNodeDataService->addContentObjectToLearningPath(
                         $this->get_root_content_object(), $parentNode, $object, $this->getUser()
                     );
 
-                    $nextStep = $learningPathChild->getId();
+                    $nextStep = $treeNodeData->getId();
 
                     Event::trigger(
                         'Activity',
@@ -116,7 +116,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
 
             if(!isset($nextStep))
             {
-                $nextStep = $this->getCurrentLearningPathChildId();
+                $nextStep = $this->getCurrentTreeNodeDataId();
             }
 
             if ($failures)

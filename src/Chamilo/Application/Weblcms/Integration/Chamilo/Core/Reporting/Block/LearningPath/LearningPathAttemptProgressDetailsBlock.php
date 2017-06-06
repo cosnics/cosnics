@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\L
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component\StatisticsViewerComponent;
 use Chamilo\Core\Reporting\ReportingData;
@@ -195,12 +195,12 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChildAttempt::class_name(),
-                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
+                TreeNodeDataAttempt::class_name(),
+                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($learning_path_attempt->get_id()));
         
         $item_attempts = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            LearningPathChildAttempt::class_name(),
+            TreeNodeDataAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($item_attempt = $item_attempts->next_result())
@@ -221,7 +221,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
                 $lpi_attempt_data[$item_id]['time'] += $item_attempt->get_total_time();
             }
             
-            if ($item_attempt->get_status() == LearningPathChildAttempt::STATUS_COMPLETED)
+            if ($item_attempt->get_status() == TreeNodeDataAttempt::STATUS_COMPLETED)
             {
                 $lpi_attempt_data[$item_id]['completed'] = 1;
             }

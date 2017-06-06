@@ -64,7 +64,7 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_attribute($publication_id)
     {
-        return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForLearningPathChild(
+        return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForTreeNodeData(
             $publication_id
         );
     }
@@ -112,7 +112,7 @@ class Manager implements PublicationInterface
     {
         try
         {
-            self::getLearningPathPublicationService()->deleteContentObjectPublicationsByLearningPathChildId(
+            self::getLearningPathPublicationService()->deleteContentObjectPublicationsByTreeNodeDataId(
                 $publication_id
             );
 
@@ -133,7 +133,7 @@ class Manager implements PublicationInterface
     {
         try
         {
-            self::getLearningPathPublicationService()->updateContentObjectIdInLearningPathChild(
+            self::getLearningPathPublicationService()->updateContentObjectIdInTreeNodeData(
                 $publication_attributes->getId(), $publication_attributes->get_content_object_id()
             );
 

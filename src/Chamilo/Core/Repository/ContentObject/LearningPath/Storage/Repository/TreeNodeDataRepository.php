@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -15,35 +15,25 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * Repository class to manage the data for the LearningPathChild
+ * Repository class to manage the data for the TreeNodeData
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathChildRepository extends CommonDataClassRepository
+class TreeNodeDataRepository extends CommonDataClassRepository
 {
     /**
      * Retrieves the learning path children for a given learning path
      *
      * @param LearningPath $learningPath
      *
-     * @return LearningPathChild[] | DataClassIterator
+     * @return TreeNodeData[] | DataClassIterator
      */
-    public function findLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    public function findTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
-            LearningPathChild::class_name(), new DataClassRetrievesParameters(
-                $condition, null, null//,
-//                new OrderBy(
-//                    new PropertyConditionVariable(
-//                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID
-//                    ),
-//                    new PropertyConditionVariable(
-//                        LearningPathChild::class_name(), LearningPathChild::PROPERTY_DISPLAY_ORDER
-//                    )
-//                )
-            )
+            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition, null, null)
         );
     }
 
@@ -52,12 +42,12 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @return int
      */
-    public function countLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    public function countTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->count(
-            LearningPathChild::class_name(), new DataClassCountParameters($condition)
+            TreeNodeData::class_name(), new DataClassCountParameters($condition)
         );
     }
 
@@ -66,19 +56,19 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @param int[] $contentObjectIds
      *
-     * @return LearningPathChild[] | DataClassIterator
+     * @return TreeNodeData[] | DataClassIterator
      */
-    public function findLearningPathChildrenByContentObjects($contentObjectIds)
+    public function findTreeNodesDataByContentObjects($contentObjectIds)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_CONTENT_OBJECT_ID
+                TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID
             ),
             $contentObjectIds
         );
 
         return $this->dataClassRepository->retrieves(
-            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
+            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition)
         );
     }
 
@@ -87,32 +77,32 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @param int $userId
      *
-     * @return LearningPathChild[] | DataClassIterator
+     * @return TreeNodeData[] | DataClassIterator
      */
-    public function findLearningPathChildrenByUserId($userId)
+    public function findTreeNodesDataByUserId($userId)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_USER_ID
+                TreeNodeData::class_name(), TreeNodeData::PROPERTY_USER_ID
             ),
             new StaticConditionVariable($userId)
         );
 
         return $this->dataClassRepository->retrieves(
-            LearningPathChild::class_name(), new DataClassRetrievesParameters($condition)
+            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition)
         );
     }
 
     /**
      * Retrieves a learning path child by a given identifier
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      *
-     * @return LearningPathChild | DataClass
+     * @return TreeNodeData | DataClass
      */
-    public function findLearningPathChild($learningPathChildId)
+    public function findTreeNodeData($treeNodeDataId)
     {
-        return $this->dataClassRepository->retrieveById(LearningPathChild::class_name(), $learningPathChildId);
+        return $this->dataClassRepository->retrieveById(TreeNodeData::class_name(), $treeNodeDataId);
     }
 
     /**
@@ -120,10 +110,10 @@ class LearningPathChildRepository extends CommonDataClassRepository
      *
      * @return bool
      */
-    public function clearLearningPathChildrenCache()
+    public function clearTreeNodesDataCache()
     {
         return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
-            LearningPathChild::class_name()
+            TreeNodeData::class_name()
         );
     }
 
@@ -137,11 +127,11 @@ class LearningPathChildRepository extends CommonDataClassRepository
     public function deleteChildrenFromLearningPath(LearningPath $learningPath)
     {
         $condition = $this->getConditionForLearningPath($learningPath);
-        return $this->dataClassRepository->deletes(LearningPathChild::class_name(), $condition);
+        return $this->dataClassRepository->deletes(TreeNodeData::class_name(), $condition);
     }
 
     /**
-     * Builds and returns the condition for the LearningPathChild objects of a given LearningPath
+     * Builds and returns the condition for the TreeNodeData objects of a given LearningPath
      *
      * @param LearningPath $learningPath
      *
@@ -151,7 +141,7 @@ class LearningPathChildRepository extends CommonDataClassRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChild::class_name(), LearningPathChild::PROPERTY_LEARNING_PATH_ID
+                TreeNodeData::class_name(), TreeNodeData::PROPERTY_LEARNING_PATH_ID
             ),
             new StaticConditionVariable($learningPath->getId())
         );

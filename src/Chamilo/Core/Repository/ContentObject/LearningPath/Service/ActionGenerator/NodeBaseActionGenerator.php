@@ -212,12 +212,12 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getBlockOrUnblockNodeAction(TreeNode $treeNode)
     {
-        $translationVariable = ($treeNode->getLearningPathChild() &&
-            $treeNode->getLearningPathChild()->isBlocked()) ?
+        $translationVariable = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($treeNode->getLearningPathChild() &&
-            $treeNode->getLearningPathChild()->isBlocked()) ?
+        $icon = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->isBlocked()) ?
             'unlock' : 'ban';
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::context());

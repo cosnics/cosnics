@@ -20,6 +20,6 @@ class AttemptLearningPathItem extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt::class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt::class_name());
     }
 }

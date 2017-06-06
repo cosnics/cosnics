@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Domain;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Libraries\Architecture\Test\Test;
 
@@ -64,15 +64,15 @@ class TreeNodeTest extends Test
         $this->assertEquals($contentObject, $treeNode->getContentObject());
     }
 
-    public function testSetGetLearningPathChild()
+    public function testSetGetTreeNodeData()
     {
         $tree = new Tree();
         $treeNode = new TreeNode($tree, new LearningPath());
 
-        $learningPathChild = new LearningPathChild();
-        $treeNode->setLearningPathChild($learningPathChild);
+        $treeNodeData = new TreeNodeData();
+        $treeNode->setTreeNodeData($treeNodeData);
 
-        $this->assertEquals($learningPathChild, $treeNode->getLearningPathChild());
+        $this->assertEquals($treeNodeData, $treeNode->getTreeNodeData());
     }
 
     public function testSetParentNode()

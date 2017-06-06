@@ -18,7 +18,7 @@ abstract class CommonDataClassRepository
     protected $dataClassRepository;
 
     /**
-     * LearningPathChildRepository constructor.
+     * TreeNodeDataRepository constructor.
      *
      * @param DataClassRepository $dataClassRepository
      */

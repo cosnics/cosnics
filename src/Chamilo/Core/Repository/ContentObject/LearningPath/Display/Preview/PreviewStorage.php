@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Libraries\Platform\Session\Session;
 
@@ -121,11 +121,11 @@ class PreviewStorage
 
     /**
      *
-     * @param LearningPathChildAttempt $item_attempt
+     * @param TreeNodeDataAttempt $item_attempt
      *
      * @return boolean
      */
-    public function create_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
+    public function create_learning_path_item_attempt(TreeNodeDataAttempt $item_attempt)
     {
         $attempts = $this->get_item_attempts();
         $attempts[$item_attempt->get_learning_path_attempt_id()][$item_attempt->get_learning_path_item_id()][$item_attempt->get_id()] = $item_attempt;
@@ -134,20 +134,20 @@ class PreviewStorage
 
     /**
      *
-     * @param LearningPathChildAttempt $item_attempt
+     * @param TreeNodeDataAttempt $item_attempt
      * @return boolean
      */
-    public function update_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
+    public function update_learning_path_item_attempt(TreeNodeDataAttempt $item_attempt)
     {
         return $this->create_learning_path_item_attempt($item_attempt);
     }
 
     /**
      *
-     * @param LearningPathChildAttempt $item_attempt
+     * @param TreeNodeDataAttempt $item_attempt
      * @return boolean
      */
-    public function delete_learning_path_item_attempt(LearningPathChildAttempt $item_attempt)
+    public function delete_learning_path_item_attempt(TreeNodeDataAttempt $item_attempt)
     {
         $attempts = $this->get_item_attempts();
         unset(
@@ -302,10 +302,10 @@ class PreviewStorage
 
     /**
      *
-     * @param LearningPathChildAttempt $attempt
+     * @param TreeNodeDataAttempt $attempt
      * @return \core\repository\content_object\learning_path\display\DummyQuestionAttempt[]
      */
-    public function retrieve_learning_path_question_attempts(LearningPathChildAttempt $attempt)
+    public function retrieve_learning_path_question_attempts(TreeNodeDataAttempt $attempt)
     {
         $attempts = $this->get_question_attempts();
         return isset($attempts[$attempt->get_id()]) ? $attempts[$attempt->get_id()] : null;
@@ -313,11 +313,11 @@ class PreviewStorage
 
     /**
      *
-     * @param LearningPathChildAttempt $attempt
+     * @param TreeNodeDataAttempt $attempt
      * @param int $complex_question_id
      * @return \core\repository\content_object\learning_path\display\DummyQuestionAttempt
      */
-    public function retrieve_learning_path_question_attempt(LearningPathChildAttempt $attempt, $complex_question_id)
+    public function retrieve_learning_path_question_attempt(TreeNodeDataAttempt $attempt, $complex_question_id)
     {
         $attempts = $this->get_question_attempts();
         if (isset($attempts[$attempt->get_id()]))

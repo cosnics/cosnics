@@ -4,43 +4,43 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Test\Test;
 
 /**
- * Tests the LearningPathChildService
+ * Tests the TreeNodeDataService
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathChildServiceTest extends Test
+class TreeNodeDataServiceTest extends Test
 {
     /**
-     * @var LearningPathChildRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var TreeNodeDataRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $learningPathChildRepositoryMock;
+    protected $treeNodeDataRepositoryMock;
 
     /**
      * The subject under test
      *
-     * @var LearningPathChildService
+     * @var TreeNodeDataService
      */
-    protected $learningPathChildService;
+    protected $treeNodeDataService;
 
     /**
      * Set up before each test
      */
     protected function setUp()
     {
-        $this->learningPathChildRepositoryMock = $this->getMockBuilder(LearningPathChildRepository::class)
+        $this->treeNodeDataRepositoryMock = $this->getMockBuilder(TreeNodeDataRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->learningPathChildService =
-            new LearningPathChildService($this->learningPathChildRepositoryMock);
+        $this->treeNodeDataService =
+            new TreeNodeDataService($this->treeNodeDataRepositoryMock);
     }
 
     /**
@@ -48,8 +48,8 @@ class LearningPathChildServiceTest extends Test
      */
     protected function tearDown()
     {
-        unset($this->learningPathChildRepositoryMock);
-        unset($this->learningPathChildService);
+        unset($this->treeNodeDataRepositoryMock);
+        unset($this->treeNodeDataService);
     }
 
     public function testAddContentObjectToLearningPath()
@@ -66,7 +66,7 @@ class LearningPathChildServiceTest extends Test
         $this->mockCanContentObjectBeAdded($treeNode, $page, true);
         $this->mockCreate(true);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
+        $this->treeNodeDataService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
@@ -85,7 +85,7 @@ class LearningPathChildServiceTest extends Test
 
         $this->mockCanContentObjectBeAdded($treeNode, $page, false);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
+        $this->treeNodeDataService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
@@ -105,11 +105,11 @@ class LearningPathChildServiceTest extends Test
         $this->mockCanContentObjectBeAdded($treeNode, $page, true);
         $this->mockCreate(false);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
+        $this->treeNodeDataService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
-     * Mocks the canContentObjectBeAdded function of the LearningPathChildValidator service
+     * Mocks the canContentObjectBeAdded function of the TreeNodeDataValidator service
      *
      * @param TreeNode $parentTreeNode
      * @param ContentObject $childContentObject
@@ -122,13 +122,13 @@ class LearningPathChildServiceTest extends Test
     }
 
     /**
-     * Mocks the create function of the LearningPathChildRepository service
+     * Mocks the create function of the TreeNodeDataRepository service
      *
      * @param bool $returnValue
      */
     protected function mockCreate($returnValue = true)
     {
-        $this->learningPathChildRepositoryMock->expects($this->once())
+        $this->treeNodeDataRepositoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($returnValue));
     }

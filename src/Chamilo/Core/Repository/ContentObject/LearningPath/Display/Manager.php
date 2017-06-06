@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -119,7 +119,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return int
      */
-    public function getCurrentLearningPathChildId()
+    public function getCurrentTreeNodeDataId()
     {
         return (int) $this->getRequest()->get(self::PARAM_CHILD_ID, 0);
     }
@@ -128,11 +128,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return boolean
      */
-    public function isCurrentLearningPathChildIdSet()
+    public function isCurrentTreeNodeDataIdSet()
     {
-        $currentLearningPathChildId = $this->getRequest()->get(self::PARAM_CHILD_ID);
+        $currentTreeNodeDataId = $this->getRequest()->get(self::PARAM_CHILD_ID);
 
-        return !is_null($currentLearningPathChildId);
+        return !is_null($currentTreeNodeDataId);
     }
 
     /**
@@ -157,7 +157,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * Helper function to validate and possibly fix the current step when it became corrupt
      */
-    protected function validateSelectedLearningPathChild()
+    protected function validateSelectedTreeNodeData()
     {
         try
         {
@@ -166,20 +166,20 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         catch (\Exception $ex)
         {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('Step'), $this->getCurrentLearningPathChildId()
+                Translation::getInstance()->getTranslation('Step'), $this->getCurrentTreeNodeDataId()
             );
         }
     }
 
     /**
-     * Returns the LearningPathChildService
+     * Returns the TreeNodeDataService
      *
-     * @return LearningPathChildService | object
+     * @return TreeNodeDataService | object
      */
-    public function getLearningPathChildService()
+    public function getTreeNodeDataService()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
         );
     }
 
@@ -221,7 +221,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $tree = $this->getTree();
 
-        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
     }
 
     /**

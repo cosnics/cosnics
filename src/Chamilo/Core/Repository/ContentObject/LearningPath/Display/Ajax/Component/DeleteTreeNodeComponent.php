@@ -31,8 +31,8 @@ class DeleteTreeNodeComponent extends Manager
             $tree = $this->get_application()->getTree();
             $node = $tree->getTreeNodeById((int) $nodeId);
 
-            $learningPathChildService = $this->get_application()->getLearningPathChildService();
-            $learningPathChildService->deleteContentObjectFromLearningPath($node);
+            $treeNodeDataService = $this->get_application()->getTreeNodeDataService();
+            $treeNodeDataService->deleteContentObjectFromLearningPath($node);
 
             return new JsonResponse();
         }

@@ -22,14 +22,14 @@ class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, D
      */
     public function build()
     {
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
 
         $activity_table = new ActivityTable($this);
         
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId())),
+                $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())),
                 Translation::get('ActivityComponent')));
         
         $html = array();

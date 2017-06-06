@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -56,46 +56,46 @@ interface LearningPathTrackingRepositoryInterface
     /**
      * Clears the cache for the LearningPathAttempt data class
      */
-    public function clearLearningPathChildAttemptCache();
+    public function clearTreeNodeDataAttemptCache();
 
     /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPathAttempt $learningPathAttempt
      *
-     * @return LearningPathChildAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeDataAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathChildAttempts(LearningPathAttempt $learningPathAttempt);
+    public function findTreeNodeDataAttempts(LearningPathAttempt $learningPathAttempt);
 
     /**
-     * Finds all the LearningPathChildAttempt objects for a given LearningPath
+     * Finds all the TreeNodeDataAttempt objects for a given LearningPath
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | LearningPathChildAttempt[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | TreeNodeDataAttempt[]
      */
-    public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath);
+    public function findTreeNodeDataAttemptsForLearningPath(LearningPath $learningPath);
 
     /**
-     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and TreeNode
+     * Finds a TreeNodeDataAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
      * @param TreeNode $treeNode
      *
-     * @return LearningPathChildAttempt | DataClass
+     * @return TreeNodeDataAttempt | DataClass
      */
-    public function findActiveLearningPathChildAttempt(
+    public function findActiveTreeNodeDataAttempt(
         LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     );
 
     /**
-     * Finds a LearningPathChildAttempt by a given ID
+     * Finds a TreeNodeDataAttempt by a given ID
      *
-     * @param int $learningPathChildAttemptId
+     * @param int $treeNodeDataAttemptId
      *
-     * @return DataClass | LearningPathChildAttempt
+     * @return DataClass | TreeNodeDataAttempt
      */
-    public function findLearningPathChildAttemptById($learningPathChildAttemptId);
+    public function findTreeNodeDataAttemptById($treeNodeDataAttemptId);
 
     /**
      * Finds a LearningPathAttempt by a given ID
@@ -107,20 +107,20 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathAttemptById($learningPathAttemptId);
 
     /**
-     * Finds the LearningPathQuestionAttempt objects for a given LearningPathChildAttempt
+     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeDataAttempt
      *
-     * @param LearningPathChildAttempt $learningPathChildAttempt
+     * @param TreeNodeDataAttempt $treeNodeDataAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(LearningPathChildAttempt $learningPathChildAttempt);
+    public function findLearningPathQuestionAttempts(TreeNodeDataAttempt $treeNodeDataAttempt);
 
     /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
      * Joined with users for searching and sorting
      *
      * @param LearningPath $learningPath
-     * @param int[] $learningPathChildIds
+     * @param int[] $treeNodeDataIds
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
@@ -129,7 +129,7 @@ interface LearningPathTrackingRepositoryInterface
      * @return RecordIterator
      */
     public function findLearningPathAttemptsWithUser(
-        LearningPath $learningPath, $learningPathChildIds = array(),
+        LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     );
 
@@ -147,7 +147,7 @@ interface LearningPathTrackingRepositoryInterface
      * Finds the targeted users (left) joined with the learning path attempts
      *
      * @param LearningPath $learningPath
-     * @param array $learningPathChildIds
+     * @param array $treeNodeDataIds
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -156,7 +156,7 @@ interface LearningPathTrackingRepositoryInterface
      * @return RecordIterator
      */
     public function findTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, $learningPathChildIds = array(),
+        LearningPath $learningPath, $treeNodeDataIds = array(),
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     );
 
@@ -174,12 +174,12 @@ interface LearningPathTrackingRepositoryInterface
      * Finds the target users with the completed nodes for a given learning path, limiting it by the given nodes
      *
      * @param LearningPath $learningPath
-     * @param int[] $learningPathChildIds
+     * @param int[] $treeNodeDataIds
      *
      * @return RecordIterator
      */
     public function findUsersWithCompletedNodesCount(
-        LearningPath $learningPath, $learningPathChildIds = array()
+        LearningPath $learningPath, $treeNodeDataIds = array()
     );
 
     /**
@@ -192,14 +192,14 @@ interface LearningPathTrackingRepositoryInterface
     public function countTargetUsers(LearningPath $learningPath);
 
     /**
-     * Retrieves all the LearningPathAttempt objects with the LearningPathChildAttempt objects and
+     * Retrieves all the LearningPathAttempt objects with the TreeNodeDataAttempt objects and
      * LearningPathQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeDataAttemptsAndLearningPathQuestionAttempts(
         LearningPath $learningPath
     );
 }

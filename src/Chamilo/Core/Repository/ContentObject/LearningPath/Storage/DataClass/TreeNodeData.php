@@ -13,10 +13,10 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathChild extends DataClass implements DisplayOrderDataClassListenerSupport
+class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
-    const PROPERTY_PARENT_LEARNING_PATH_CHILD_ID = 'parent_learning_path_child_id';
+    const PROPERTY_PARENT_LEARNING_PATH_CHILD_ID = 'parent_tree_node_data_id';
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_MAX_ATTEMPTS = 'max_attempts';
     const PROPERTY_MASTERY_SCORE = 'mastery_score';
@@ -32,7 +32,7 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     const PROPERTY_ADDED_DATE = 'added_date';
 
     /**
-     * LearningPathChild constructor.
+     * TreeNodeData constructor.
      *
      * @param array $default_properties
      * @param array $additional_properties
@@ -99,26 +99,26 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
     /**
      * @return int
      */
-    public function getParentLearningPathChildId()
+    public function getParentTreeNodeDataId()
     {
         return $this->get_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID);
     }
 
     /**
-     * @param int $parentLearningPathChildId
+     * @param int $parentTreeNodeDataId
      *
      * @return $this
      */
-    public function setParentLearningPathChildId($parentLearningPathChildId)
+    public function setParentTreeNodeDataId($parentTreeNodeDataId)
     {
-        if (!is_integer($parentLearningPathChildId))
+        if (!is_integer($parentTreeNodeDataId))
         {
             throw new \InvalidArgumentException(
                 'The given parent learning path child id must be a valid integer'
             );
         }
 
-        $this->set_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentLearningPathChildId);
+        $this->set_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentTreeNodeDataId);
 
         return $this;
     }
@@ -495,5 +495,16 @@ class LearningPathChild extends DataClass implements DisplayOrderDataClassListen
             $this->getShowAnswerFeedback(),
             $this->getFeedbackLocation()
         );
+    }
+
+    /**
+     * This data class needs the learning_path prefix in the database to make clear that the tree node data belongs
+     * to the learning path
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_learning_path_tree_node_data';
     }
 }

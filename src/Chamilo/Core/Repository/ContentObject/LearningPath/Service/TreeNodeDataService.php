@@ -4,94 +4,94 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Money\InvalidArgumentException;
 
 /**
- * Service class to manage LearningPathChild classes
+ * Service class to manage TreeNodeData classes
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathChildService
+class TreeNodeDataService
 {
     /**
-     * @var LearningPathChildRepository
+     * @var TreeNodeDataRepository
      */
-    protected $learningPathChildRepository;
+    protected $treeNodeDataRepository;
 
     /**
-     * LearningPathChildService constructor.
+     * TreeNodeDataService constructor.
      *
-     * @param LearningPathChildRepository $learningPathChildRepository
+     * @param TreeNodeDataRepository $treeNodeDataRepository
      */
-    public function __construct(LearningPathChildRepository $learningPathChildRepository)
+    public function __construct(TreeNodeDataRepository $treeNodeDataRepository)
     {
-        $this->learningPathChildRepository = $learningPathChildRepository;
+        $this->treeNodeDataRepository = $treeNodeDataRepository;
     }
 
     /**
-     * Returns the LearningPathChild objects that belong to a given learning path
+     * Returns the TreeNodeData objects that belong to a given learning path
      *
      * @param LearningPath $learningPath
      *
-     * @return LearningPathChild[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function getLearningPathChildrenForLearningPath(LearningPath $learningPath)
+    public function getTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
-        return $this->learningPathChildRepository->findLearningPathChildrenForLearningPath($learningPath);
+        return $this->treeNodeDataRepository->findTreeNodesDataForLearningPath($learningPath);
     }
 
     /**
-     * Returns the LearningPathChild objects that belong to a given content object ids (not as parent)
+     * Returns the TreeNodeData objects that belong to a given content object ids (not as parent)
      *
      * @param int[] $contentObjectIds
      *
-     * @return LearningPathChild[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function getLearningPathChildrenByContentObjects($contentObjectIds)
+    public function getTreeNodesDataByContentObjects($contentObjectIds)
     {
-        return $this->learningPathChildRepository->findLearningPathChildrenByContentObjects($contentObjectIds);
+        return $this->treeNodeDataRepository->findTreeNodesDataByContentObjects($contentObjectIds);
     }
 
     /**
-     * Returns the LearningPathChild objects that belong to a given user
+     * Returns the TreeNodeData objects that belong to a given user
      *
      * @param int $userId
      *
-     * @return LearningPathChild[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function getLearningPathChildrenByUserId($userId)
+    public function getTreeNodesDataByUserId($userId)
     {
         if (!is_int($userId) || $userId <= 0)
         {
             throw new \InvalidArgumentException('The given user id must be a valid integer and must be bigger than 0');
         }
 
-        return $this->learningPathChildRepository->findLearningPathChildrenByUserId($userId);
+        return $this->treeNodeDataRepository->findTreeNodesDataByUserId($userId);
     }
 
     /**
-     * Returns a LearningPathChild by a given identifier
+     * Returns a TreeNodeData by a given identifier
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      *
-     * @return LearningPathChild
+     * @return TreeNodeData
      */
-    public function getLearningPathChildById($learningPathChildId)
+    public function getTreeNodeDataById($treeNodeDataId)
     {
-        $learningPathChild = $this->learningPathChildRepository->findLearningPathChild($learningPathChildId);
-        if (!$learningPathChild)
+        $treeNodeData = $this->treeNodeDataRepository->findTreeNodeData($treeNodeDataId);
+        if (!$treeNodeData)
         {
             throw new \RuntimeException(
-                sprintf('The given learning path child with id %s could not be found', $learningPathChildId)
+                sprintf('The given learning path child with id %s could not be found', $treeNodeDataId)
             );
         }
 
-        return $learningPathChild;
+        return $treeNodeData;
     }
 
     /**
@@ -104,7 +104,7 @@ class LearningPathChildService
      *
      * @param User $user
      *
-     * @return LearningPathChild
+     * @return TreeNodeData
      */
     public function addContentObjectToLearningPath(
         LearningPath $rootLearningPath, TreeNode $currentTreeNode,
@@ -115,33 +115,33 @@ class LearningPathChildService
         $currentTreeNode->isRootNode() ?
             $currentTreeNode : $currentTreeNode->getParentNode();
 
-        $learningPathChild = new LearningPathChild();
+        $treeNodeData = new TreeNodeData();
 
-        $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
-        $learningPathChild->setParentLearningPathChildId((int) $parentTreeNode->getId());
-        $learningPathChild->setContentObjectId((int) $childContentObject->getId());
-        $learningPathChild->setUserId((int) $user->getId());
-        $learningPathChild->setAddedDate(time());
+        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+        $treeNodeData->setParentTreeNodeDataId((int) $parentTreeNode->getId());
+        $treeNodeData->setContentObjectId((int) $childContentObject->getId());
+        $treeNodeData->setUserId((int) $user->getId());
+        $treeNodeData->setAddedDate(time());
 
-        $this->createLearningPathChild($learningPathChild);
+        $this->createTreeNodeData($treeNodeData);
 
-        return $learningPathChild;
+        return $treeNodeData;
     }
 
     /**
      * Helper function to create the learning path child in the database
      *
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      */
-    public function createLearningPathChild(LearningPathChild $learningPathChild)
+    public function createTreeNodeData(TreeNodeData $treeNodeData)
     {
-        if (!$this->learningPathChildRepository->create($learningPathChild))
+        if (!$this->treeNodeDataRepository->create($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not create a LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
-                    $learningPathChild->getContentObjectId()
+                    'Could not create a TreeNodeDataObject for learning path %s parent %s and child %s',
+                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
+                    $treeNodeData->getContentObjectId()
                 )
             );
         }
@@ -154,7 +154,7 @@ class LearningPathChildService
      * @param User $user
      * @param string $title
      *
-     * @return LearningPathChild
+     * @return TreeNodeData
      */
     public function createAndAddContentObjectToLearningPath(
         $contentObjectType, LearningPath $learningPath, TreeNode $currentTreeNode, User $user, $title = '...'
@@ -172,7 +172,7 @@ class LearningPathChildService
         $contentObject->set_title($title);
         $contentObject->set_owner_id($user->getId());
 
-        if (!$this->learningPathChildRepository->create($contentObject))
+        if (!$this->treeNodeDataRepository->create($contentObject))
         {
             throw new \RuntimeException(sprintf('Could not create a new ContentObject of type %s', $contentObjectType));
         }
@@ -189,20 +189,20 @@ class LearningPathChildService
      * @param TreeNode $treeNode
      * @param ContentObject $newContentObject
      */
-    public function updateContentObjectInLearningPathChild(
+    public function updateContentObjectInTreeNodeData(
         TreeNode $treeNode, ContentObject $newContentObject
     )
     {
-        $learningPathChild = $treeNode->getLearningPathChild();
-        $learningPathChild->setContentObjectId((int) $newContentObject->getId());
+        $treeNodeData = $treeNode->getTreeNodeData();
+        $treeNodeData->setContentObjectId((int) $newContentObject->getId());
 
-        if (!$this->learningPathChildRepository->update($learningPathChild))
+        if (!$this->treeNodeDataRepository->update($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
-                    $learningPathChild->getContentObjectId()
+                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
+                    $treeNodeData->getContentObjectId()
                 )
             );
         }
@@ -221,27 +221,27 @@ class LearningPathChildService
         $newDisplayOrder = null
     )
     {
-        $learningPathChild = $selectedTreeNode->getLearningPathChild();
+        $treeNodeData = $selectedTreeNode->getTreeNodeData();
 
-        if ($learningPathChild->getParentLearningPathChildId() != $parentTreeNode->getId())
+        if ($treeNodeData->getParentTreeNodeDataId() != $parentTreeNode->getId())
         {
-            $learningPathChild->setParentLearningPathChildId(
+            $treeNodeData->setParentTreeNodeDataId(
                 (int) $parentTreeNode->getId()
             );
         }
 
         if (isset($newDisplayOrder))
         {
-            $learningPathChild->setDisplayOrder((int) $newDisplayOrder);
+            $treeNodeData->setDisplayOrder((int) $newDisplayOrder);
         }
 
-        if (!$this->learningPathChildRepository->update($learningPathChild))
+        if (!$this->treeNodeDataRepository->update($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
-                    $learningPathChild->getContentObjectId()
+                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
+                    $treeNodeData->getContentObjectId()
                 )
             );
         }
@@ -254,24 +254,24 @@ class LearningPathChildService
      */
     public function toggleContentObjectBlockedStatus(TreeNode $treeNode)
     {
-        $learningPathChild = $treeNode->getLearningPathChild();
+        $treeNodeData = $treeNode->getTreeNodeData();
 
-        if (!$learningPathChild)
+        if (!$treeNodeData)
         {
             throw new \InvalidArgumentException(
                 'The given learning path tree node does not have a valid learning path child object'
             );
         }
 
-        $learningPathChild->setBlocked(!$learningPathChild->isBlocked());
+        $treeNodeData->setBlocked(!$treeNodeData->isBlocked());
 
-        if (!$this->learningPathChildRepository->update($learningPathChild))
+        if (!$this->treeNodeDataRepository->update($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
-                    $learningPathChild->getContentObjectId()
+                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
+                    $treeNodeData->getContentObjectId()
                 )
             );
         }
@@ -304,7 +304,7 @@ class LearningPathChildService
 
         $contentObject->set_title($newTitle);
 
-        if (!$this->learningPathChildRepository->update($contentObject))
+        if (!$this->treeNodeDataRepository->update($contentObject))
         {
             throw new \RuntimeException(
                 sprintf('Could not update the Contentobject with id %S', $contentObject->getId())
@@ -322,22 +322,22 @@ class LearningPathChildService
      */
     public function deleteContentObjectFromLearningPath(TreeNode $treeNode)
     {
-        $learningPathChild = $treeNode->getLearningPathChild();
+        $treeNodeData = $treeNode->getTreeNodeData();
 
-        if (!$learningPathChild)
+        if (!$treeNodeData)
         {
             throw new \InvalidArgumentException(
                 'The given learning path tree node does not have a valid learning path child object'
             );
         }
 
-        if (!$this->learningPathChildRepository->delete($learningPathChild))
+        if (!$this->treeNodeDataRepository->delete($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not delete the LearningPathChildObject for learning path %s parent %s and child %s',
-                    $learningPathChild->getLearningPathId(), $learningPathChild->getParentLearningPathChildId(),
-                    $learningPathChild->getContentObjectId()
+                    'Could not delete the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
+                    $treeNodeData->getContentObjectId()
                 )
             );
         }
@@ -356,7 +356,7 @@ class LearningPathChildService
      */
     public function emptyLearningPath(LearningPath $learningPath)
     {
-        if (!$this->learningPathChildRepository->deleteChildrenFromLearningPath($learningPath))
+        if (!$this->treeNodeDataRepository->deleteChildrenFromLearningPath($learningPath))
         {
             throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
         }
@@ -371,6 +371,6 @@ class LearningPathChildService
      */
     public function isLearningPathEmpty(LearningPath $learningPath)
     {
-        return $this->learningPathChildRepository->countLearningPathChildrenForLearningPath($learningPath) == 0;
+        return $this->treeNodeDataRepository->countTreeNodesDataForLearningPath($learningPath) == 0;
     }
 }

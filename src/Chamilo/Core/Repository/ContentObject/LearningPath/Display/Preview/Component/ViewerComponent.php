@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
@@ -206,7 +206,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function get_assessment_configuration()
     {
-        return $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        return $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
     }
 
     function get_assessment_parameters()

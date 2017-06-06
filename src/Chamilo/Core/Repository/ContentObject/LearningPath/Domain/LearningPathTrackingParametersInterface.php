@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -23,11 +23,11 @@ interface LearningPathTrackingParametersInterface
     public function createLearningPathAttemptInstance();
 
     /**
-     * Creates a new instance of the LearningPathChildAttempt extension
+     * Creates a new instance of the TreeNodeDataAttempt extension
      *
-     * @return LearningPathChildAttempt
+     * @return TreeNodeDataAttempt
      */
-    public function createLearningPathChildAttemptInstance();
+    public function createTreeNodeDataAttemptInstance();
 
     /**
      * Creates a new instance of the LearningPathQuestionAttempt extension
@@ -44,11 +44,11 @@ interface LearningPathTrackingParametersInterface
     public function getLearningPathAttemptClassName();
 
     /**
-     * Returns the class name for the LearningPathChildAttempt extension
+     * Returns the class name for the TreeNodeDataAttempt extension
      *
      * @return string
      */
-    public function getLearningPathChildAttemptClassName();
+    public function getTreeNodeDataAttemptClassName();
 
     /**
      * Returns the class name for the LearningPathQuestionAttempt extension

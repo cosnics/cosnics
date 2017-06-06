@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -138,27 +138,27 @@ class AssessmentRawResultsExporterComponent extends Manager
         );
 
         $learningPathAttempts = $learningPathTrackingRepository
-            ->findLearningPathAttemptsWithLearningPathChildAttemptsAndLearningPathQuestionAttempts($learningPath);
+            ->findLearningPathAttemptsWithTreeNodeDataAttemptsAndLearningPathQuestionAttempts($learningPath);
 
         $assessment_results = array();
 
         foreach ($learningPathAttempts as $learningPathAttempt)
         {
-            $learningPathChildAttemptId = $learningPathAttempt['learning_path_child_attempt_id'];
-            if (array_key_exists($learningPathChildAttemptId, $learningPathAttempt))
+            $treeNodeDataAttemptId = $learningPathAttempt['tree_node_data_attempt_id'];
+            if (array_key_exists($treeNodeDataAttemptId, $learningPathAttempt))
             {
-                $assessment_result = $assessment_results[$learningPathChildAttemptId];
+                $assessment_result = $assessment_results[$treeNodeDataAttemptId];
             }
             else
             {
                 $assessment_result = new AssessmentResult(
-                    $learningPathChildAttemptId,
+                    $treeNodeDataAttemptId,
                     $learningPathAttempt[LearningPathAttempt::PROPERTY_LEARNING_PATH_ID],
                     null,
                     array(),
-                    $learningPathAttempt[LearningPathChildAttempt::PROPERTY_START_TIME],
-                    $learningPathAttempt[LearningPathChildAttempt::PROPERTY_SCORE],
-                    $learningPathAttempt[LearningPathChildAttempt::PROPERTY_TOTAL_TIME],
+                    $learningPathAttempt[TreeNodeDataAttempt::PROPERTY_START_TIME],
+                    $learningPathAttempt[TreeNodeDataAttempt::PROPERTY_SCORE],
+                    $learningPathAttempt[TreeNodeDataAttempt::PROPERTY_TOTAL_TIME],
                     $learningPathAttempt[LearningPathAttempt::PROPERTY_USER_ID]
                 );
 

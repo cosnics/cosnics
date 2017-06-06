@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\ComplexLearningPathItem;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
@@ -105,10 +105,10 @@ class LearningPathMigrationService
      *
      * @param LearningPath $learningPath
      * @param int $parentId
-     * @param LearningPathChild $parentLearningPathChild
+     * @param TreeNodeData $parentTreeNodeData
      */
     protected function migrateLearningPath(
-        LearningPath $learningPath, $parentId, LearningPathChild $parentLearningPathChild = null
+        LearningPath $learningPath, $parentId, TreeNodeData $parentTreeNodeData = null
     )
     {
         $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
@@ -130,11 +130,11 @@ class LearningPathMigrationService
                 /** @var LearningPath $childContentObject */
 
                 $contentObject = $this->getOrCreateSectionForLearningPath($childContentObject);
-                $learningPathChild = $this->createLearningPathChildForContentObject(
-                    $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild
+                $treeNodeData = $this->createTreeNodeDataForContentObject(
+                    $learningPath, $complexContentObjectItem, $contentObject, $parentTreeNodeData
                 );
 
-                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $learningPathChild);
+                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
             }
             else
             {
@@ -159,65 +159,65 @@ class LearningPathMigrationService
                     continue;
                 }
 
-                $learningPathChild = $this->createLearningPathChildForContentObject(
-                    $learningPath, $complexContentObjectItem, $contentObject, $parentLearningPathChild,
+                $treeNodeData = $this->createTreeNodeDataForContentObject(
+                    $learningPath, $complexContentObjectItem, $contentObject, $parentTreeNodeData,
                     $childContentObject
                 );
             }
 
             $this->complexContentObjectItemsMappingForLearningPath[$complexContentObjectItem->getId()] =
-                $learningPathChild->getId();
+                $treeNodeData->getId();
         }
     }
 
     /**
-     * Creates a LearningPathChild for a given LearningPath, ContentObject and parent LearningPathChild
+     * Creates a TreeNodeData for a given LearningPath, ContentObject and parent TreeNodeData
      *
      * @param LearningPath $learningPath
      * @param ComplexContentObjectItem $complexContentObjectItem
      * @param ContentObject $contentObject
-     * @param LearningPathChild $parentLearningPathChild
+     * @param TreeNodeData $parentTreeNodeData
      * @param LearningPathItem $learningPathItem
      *
-     * @return LearningPathChild
+     * @return TreeNodeData
      *
      * @throws \Exception
      */
-    protected function createLearningPathChildForContentObject(
+    protected function createTreeNodeDataForContentObject(
         LearningPath $learningPath, ComplexContentObjectItem $complexContentObjectItem, ContentObject $contentObject,
-        LearningPathChild $parentLearningPathChild = null, LearningPathItem $learningPathItem = null
+        TreeNodeData $parentTreeNodeData = null, LearningPathItem $learningPathItem = null
     )
     {
-        $parentId = !is_null($parentLearningPathChild) ? $parentLearningPathChild->getId() : 0;
+        $parentId = !is_null($parentTreeNodeData) ? $parentTreeNodeData->getId() : 0;
 
-        $learningPathChild = new LearningPathChild();
+        $treeNodeData = new TreeNodeData();
 
-        $learningPathChild->setLearningPathId((int) $learningPath->getId());
-        $learningPathChild->setParentLearningPathChildId((int) $parentId);
-        $learningPathChild->setContentObjectId((int) $contentObject->getId());
-        $learningPathChild->setUserId((int) $contentObject->get_owner_id());
-        $learningPathChild->setAddedDate(time());
+        $treeNodeData->setLearningPathId((int) $learningPath->getId());
+        $treeNodeData->setParentTreeNodeDataId((int) $parentId);
+        $treeNodeData->setContentObjectId((int) $contentObject->getId());
+        $treeNodeData->setUserId((int) $contentObject->get_owner_id());
+        $treeNodeData->setAddedDate(time());
 
         if ($learningPathItem && $learningPathItem instanceof $learningPathItem)
         {
-            $learningPathChild->setMaxAttempts((int) $learningPathItem->get_max_attempts());
-            $learningPathChild->setMasteryScore((int) $learningPathItem->get_mastery_score());
-            $learningPathChild->setAllowHints((bool) $learningPathItem->get_allow_hints());
-            $learningPathChild->setShowScore((bool) $learningPathItem->get_show_score());
-            $learningPathChild->setShowCorrection((bool) $learningPathItem->get_show_correction());
-            $learningPathChild->setShowSolution((bool) $learningPathItem->get_show_solution());
-            $learningPathChild->setShowAnswerFeedback((int) $learningPathItem->get_show_answer_feedback());
-            $learningPathChild->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
+            $treeNodeData->setMaxAttempts((int) $learningPathItem->get_max_attempts());
+            $treeNodeData->setMasteryScore((int) $learningPathItem->get_mastery_score());
+            $treeNodeData->setAllowHints((bool) $learningPathItem->get_allow_hints());
+            $treeNodeData->setShowScore((bool) $learningPathItem->get_show_score());
+            $treeNodeData->setShowCorrection((bool) $learningPathItem->get_show_correction());
+            $treeNodeData->setShowSolution((bool) $learningPathItem->get_show_solution());
+            $treeNodeData->setShowAnswerFeedback((int) $learningPathItem->get_show_answer_feedback());
+            $treeNodeData->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
-        if (!$this->learningPathTrackingRepository->create($learningPathChild))
+        if (!$this->learningPathTrackingRepository->create($treeNodeData))
         {
             throw new \Exception('Could not create a new learning path child');
         }
 
-        echo "Create LearningPathChild " . $learningPathChild->getId() . PHP_EOL;
+        echo "Create TreeNodeData " . $treeNodeData->getId() . PHP_EOL;
 
-        return $learningPathChild;
+        return $treeNodeData;
     }
 
     /**
@@ -322,33 +322,33 @@ class LearningPathMigrationService
 
     /**
      * Change the tracking tables to match the new identifiers from the
-     * ComplexContentObject identifiers to the LearningPathChild identifers
+     * ComplexContentObject identifiers to the TreeNodeData identifers
      *
      * @param LearningPath $learningPath
      */
     protected function fixLearningPathTracking(LearningPath $learningPath)
     {
-        $learningPathChildAttempts =
-            $this->learningPathTrackingRepository->findLearningPathChildAttemptsForLearningPath($learningPath);
+        $treeNodeDataAttempts =
+            $this->learningPathTrackingRepository->findTreeNodeDataAttemptsForLearningPath($learningPath);
 
-        foreach($learningPathChildAttempts as $learningPathChildAttempt)
+        foreach($treeNodeDataAttempts as $treeNodeDataAttempt)
         {
             $newLearningPathItemId =
-                $this->complexContentObjectItemsMappingForLearningPath[$learningPathChildAttempt->get_learning_path_item_id()];
+                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeDataAttempt->get_learning_path_item_id()];
 
             if(!$newLearningPathItemId)
             {
 //                echo 'New learning path item id not found for id ' .
-//                    $learningPathChildAttempt->get_learning_path_item_id() . PHP_EOL;
+//                    $treeNodeDataAttempt->get_learning_path_item_id() . PHP_EOL;
 
                 continue;
             }
 
-            $learningPathChildAttempt->set_learning_path_item_id($newLearningPathItemId);
-            $learningPathChildAttempt->update();
+            $treeNodeDataAttempt->set_learning_path_item_id($newLearningPathItemId);
+            $treeNodeDataAttempt->update();
         }
 
-        $this->learningPathTrackingRepository->clearLearningPathChildAttemptCache();
+        $this->learningPathTrackingRepository->clearTreeNodeDataAttemptCache();
     }
 }
 
@@ -357,11 +357,11 @@ class LearningPathMigrationService
  *
 DELETE FROM `repository_content_object` WHERE `id` >= 2698805 ORDER BY `id`  ASC;
 
-TRUNCATE repository_learning_path_child;
+TRUNCATE repository_tree_node_data;
 
-TRUNCATE tracking_weblcms_learning_path_child_attempt;
+TRUNCATE tracking_weblcms_tree_node_data_attempt;
 
-INSERT INTO tracking_weblcms_learning_path_child_attempt
-SELECT * FROM tracking_weblcms_learning_path_child_attempt_backup;
+INSERT INTO tracking_weblcms_tree_node_data_attempt
+SELECT * FROM tracking_weblcms_tree_node_data_attempt_backup;
  *
  */

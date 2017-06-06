@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
@@ -124,21 +124,21 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     {
         if ($only_version)
         {
-            $this->getLearningPathChildService()->emptyLearningPath($this);
+            $this->getTreeNodeDataService()->emptyLearningPath($this);
         }
 
         return parent::delete($only_version);
     }
 
     /**
-     * @return object | LearningPathChildService
+     * @return object | TreeNodeDataService
      */
-    protected function getLearningPathChildService()
+    protected function getTreeNodeDataService()
     {
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
         );
     }
 

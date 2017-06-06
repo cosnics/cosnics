@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
@@ -335,7 +335,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_assessment_configuration()
     {
-        return $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        return $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
     }
 
     public function get_assessment_parameters()
@@ -479,7 +479,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         $parameters = array();
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
-            $this->getCurrentLearningPathChildId();
+            $this->getCurrentTreeNodeDataId();
 
         return $this->get_url($parameters, array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID));
     }
@@ -528,7 +528,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return DataManager::retrieve_by_id(LearningPathChildAttempt::class_name(), $learning_path_item_attempt_id);
+        return DataManager::retrieve_by_id(TreeNodeDataAttempt::class_name(), $learning_path_item_attempt_id);
     }
 
     /**

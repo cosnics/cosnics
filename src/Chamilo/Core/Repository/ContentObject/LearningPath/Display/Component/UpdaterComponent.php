@@ -27,7 +27,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
      */
     public function build()
     {
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
 
         if ($this->canEditCurrentTreeNode())
         {
@@ -42,7 +42,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                        self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                     )
                 )
             );
@@ -70,8 +70,8 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 {
                     try
                     {
-                        $learningPathChildService = $this->getLearningPathChildService();
-                        $learningPathChildService->updateContentObjectInLearningPathChild(
+                        $treeNodeDataService = $this->getTreeNodeDataService();
+                        $treeNodeDataService->updateContentObjectInTreeNodeData(
                             $this->getCurrentTreeNode(), $content_object->get_latest_version()
                         );
                     }

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
@@ -25,11 +25,11 @@ class TreeNode
     protected $tree;
 
     /**
-     * The LearningPathChild data
+     * The TreeNodeData data
      *
-     * @var LearningPathChild
+     * @var TreeNodeData
      */
-    protected $learningPathChild;
+    protected $treeNodeData;
 
     /**
      * @var ContentObject
@@ -69,16 +69,16 @@ class TreeNode
      *
      * @param Tree $tree
      * @param ContentObject $contentObject
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      */
     public function __construct(
         Tree $tree, ContentObject $contentObject = null,
-            LearningPathChild $learningPathChild = null
+            TreeNodeData $treeNodeData = null
     )
     {
         $this->tree = $tree;
         $this->contentObject = $contentObject;
-        $this->learningPathChild = $learningPathChild;
+        $this->treeNodeData = $treeNodeData;
 
         $this->parentNodes = array();
         $this->childNodes = array();
@@ -102,9 +102,9 @@ class TreeNode
      */
     public function getId()
     {
-        if ($this->learningPathChild instanceof LearningPathChild)
+        if ($this->treeNodeData instanceof TreeNodeData)
         {
-            return $this->learningPathChild->getId();
+            return $this->treeNodeData->getId();
         }
 
         return 0;
@@ -158,21 +158,21 @@ class TreeNode
     }
 
     /**
-     * @return LearningPathChild
+     * @return TreeNodeData
      */
-    public function getLearningPathChild()
+    public function getTreeNodeData()
     {
-        return $this->learningPathChild;
+        return $this->treeNodeData;
     }
 
     /**
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      *
      * @return TreeNode
      */
-    public function setLearningPathChild($learningPathChild)
+    public function setTreeNodeData($treeNodeData)
     {
-        $this->learningPathChild = $learningPathChild;
+        $this->treeNodeData = $treeNodeData;
 
         return $this;
     }
@@ -401,22 +401,22 @@ class TreeNode
     }
 
     /**
-     * Returns the identifiers for the LearningPathChild objects for this object and all of it's descendants
+     * Returns the identifiers for the TreeNodeData objects for this object and all of it's descendants
      *
      * @return int[]
      */
-    public function getLearningPathChildIdsFromSelfAndDescendants()
+    public function getTreeNodeDataIdsFromSelfAndDescendants()
     {
-        $learningPathChildIds = array();
+        $treeNodeDataIds = array();
 
-        $learningPathChildIds[] = $this->getId();
+        $treeNodeDataIds[] = $this->getId();
 
         foreach($this->getDescendantNodes() as $descendantNode)
         {
-            $learningPathChildIds[] = $descendantNode->getId();
+            $treeNodeDataIds[] = $descendantNode->getId();
         }
 
-        return $learningPathChildIds;
+        return $treeNodeDataIds;
     }
 
     /**

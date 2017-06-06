@@ -22,7 +22,7 @@ abstract class DataClass
     const PROPERTY_ID = 'id';
     const NO_UID = - 1;
 
-    private static $tableNames = array();
+    protected static $tableNames = array();
 
     /**
      * **************************************************************************************************************

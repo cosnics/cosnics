@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -19,9 +19,9 @@ use Chamilo\Libraries\Architecture\Test\Test;
 class TreeBuilderTest extends Test
 {
     /**
-     * @var LearningPathChildRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var TreeNodeDataRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $learningPathChildRepositoryMock;
+    protected $treeNodeDataRepositoryMock;
 
     /**
      * @var ContentObjectRepository | \PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +38,7 @@ class TreeBuilderTest extends Test
      */
     protected function setUp()
     {
-        $this->learningPathChildRepositoryMock = $this->getMockBuilder(LearningPathChildRepository::class)
+        $this->treeNodeDataRepositoryMock = $this->getMockBuilder(TreeNodeDataRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,7 +47,7 @@ class TreeBuilderTest extends Test
             ->getMock();
 
         $this->treeBuilder = new TreeBuilder(
-            $this->learningPathChildRepositoryMock, $this->contentObjectRepositoryMock
+            $this->treeNodeDataRepositoryMock, $this->contentObjectRepositoryMock
         );
     }
 
@@ -56,7 +56,7 @@ class TreeBuilderTest extends Test
      */
     protected function tearDown()
     {
-        unset($this->learningPathChildRepositoryMock);
+        unset($this->treeNodeDataRepositoryMock);
         unset($this->contentObjectRepositoryMock);
         unset($this->treeBuilder);
     }
@@ -69,11 +69,11 @@ class TreeBuilderTest extends Test
         $rootLearningPath = new LearningPath();
         $page = new Page();
 
-        $pageChild = new LearningPathChild();
+        $pageChild = new TreeNodeData();
         $pageChild->setContentObjectId(5);
 
-        $this->learningPathChildRepositoryMock->expects($this->exactly(1))
-            ->method('retrieveLearningPathChildrenForLearningPath')
+        $this->treeNodeDataRepositoryMock->expects($this->exactly(1))
+            ->method('retrieveTreeNodesDataForLearningPath')
             ->withConsecutive($rootLearningPath)
             ->willReturnOnConsecutiveCalls(array($pageChild));
 
@@ -96,16 +96,16 @@ class TreeBuilderTest extends Test
         $subLearningPath = new LearningPath();
         $page = new Page();
 
-        $learningPathChild = new LearningPathChild();
-        $learningPathChild->setContentObjectId(10);
+        $treeNodeData = new TreeNodeData();
+        $treeNodeData->setContentObjectId(10);
 
-        $pageChild = new LearningPathChild();
+        $pageChild = new TreeNodeData();
         $pageChild->setContentObjectId(5);
 
-        $this->learningPathChildRepositoryMock->expects($this->exactly(2))
-            ->method('retrieveLearningPathChildrenForLearningPath')
+        $this->treeNodeDataRepositoryMock->expects($this->exactly(2))
+            ->method('retrieveTreeNodesDataForLearningPath')
             ->withConsecutive($rootLearningPath, $subLearningPath)
-            ->willReturnOnConsecutiveCalls(array($learningPathChild), array($pageChild));
+            ->willReturnOnConsecutiveCalls(array($treeNodeData), array($pageChild));
 
         $this->contentObjectRepositoryMock->expects($this->exactly(2))
             ->method('findById')

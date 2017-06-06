@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\Cpo;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\CpoExportImplementation;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -27,7 +27,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
         if ($contentObject instanceof LearningPath)
         {
-            $this->exportLearningPathChildren($contentObject, $contentObjectNode, $document);
+            $this->exportTreeNodesData($contentObject, $contentObjectNode, $document);
         }
     }
 
@@ -38,7 +38,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
      * @param \DOMElement $contentObjectNode
      * @param \DOMDocument $document
      */
-    protected function exportLearningPathChildren(
+    protected function exportTreeNodesData(
         LearningPath $learningPath, \DOMElement $contentObjectNode, \DOMDocument $document
     )
 
@@ -46,16 +46,16 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         $childrenNode = $document->createElement('children');
         $contentObjectNode->appendChild($childrenNode);
 
-        $learningPathChildService = $this->getLearningPathChildService();
+        $treeNodeDataService = $this->getTreeNodeDataService();
         $contentObjectRepository = $this->getContentObjectRepository();
 
-        $learningPathChildren = $learningPathChildService->getLearningPathChildrenForLearningPath($learningPath);
+        $treeNodesData = $treeNodeDataService->getTreeNodesDataForLearningPath($learningPath);
 
-        foreach($learningPathChildren as $learningPathChild)
+        foreach($treeNodesData as $treeNodeData)
         {
             try
             {
-                $contentObject = $contentObjectRepository->findById($learningPathChild->getContentObjectId());
+                $contentObject = $contentObjectRepository->findById($treeNodeData->getContentObjectId());
                 if ($contentObject instanceof ContentObject)
                 {
                     if(!$this->get_context()->in_id_cache($contentObject->getId()))
@@ -69,29 +69,29 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
                 continue;
             }
 
-            $learningPathChildNode = $document->createElement('child');
+            $treeNodeDataNode = $document->createElement('child');
 
-            foreach($learningPathChild->get_default_properties() as $propertyName => $propertyValue)
+            foreach($treeNodeData->get_default_properties() as $propertyName => $propertyValue)
             {
                 $propertyNode = $document->createElement($propertyName);
                 $propertyNode->appendChild($document->createTextNode($propertyValue));
 
-                $learningPathChildNode->appendChild($propertyNode);
+                $treeNodeDataNode->appendChild($propertyNode);
             }
 
-            $childrenNode->appendChild($learningPathChildNode);
+            $childrenNode->appendChild($treeNodeDataNode);
         }
     }
 
     /**
-     * @return object | LearningPathChildService
+     * @return object | TreeNodeDataService
      */
-    protected function getLearningPathChildService()
+    protected function getTreeNodeDataService()
     {
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
         );
     }
 

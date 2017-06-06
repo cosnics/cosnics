@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
@@ -29,34 +29,34 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathChildAttempt $learningPathChildAttempt
+     * @param TreeNodeDataAttempt $treeNodeDataAttempt
      *
      * @return String
      */
-    public function render_cell($column, $learningPathChildAttempt)
+    public function render_cell($column, $treeNodeDataAttempt)
     {
         $translator = Translation::getInstance();
 
         switch ($column->get_name())
         {
             case 'last_start_time':
-                return DatetimeUtilities::format_locale_date(null, $learningPathChildAttempt->get_start_time());
+                return DatetimeUtilities::format_locale_date(null, $treeNodeDataAttempt->get_start_time());
             case 'status':
                 return $translator->getTranslation(
-                    $learningPathChildAttempt->isFinished() ? 'Completed' : 'Incomplete'
+                    $treeNodeDataAttempt->isFinished() ? 'Completed' : 'Incomplete'
                 );
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
 
                 return $progressBarRenderer->render(
-                    (int) $learningPathChildAttempt->get_score(), ProgressBarRenderer::MODE_SUCCESS
+                    (int) $treeNodeDataAttempt->get_score(), ProgressBarRenderer::MODE_SUCCESS
                 );
 
             case 'time':
-                return DatetimeUtilities::format_seconds_to_hours($learningPathChildAttempt->get_total_time());
+                return DatetimeUtilities::format_seconds_to_hours($treeNodeDataAttempt->get_total_time());
         }
 
-        return parent::render_cell($column, $learningPathChildAttempt);
+        return parent::render_cell($column, $treeNodeDataAttempt);
     }
 
     /**
@@ -75,11 +75,11 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     /**
      * Returns the actions toolbar
      *
-     * @param LearningPathChildAttempt $learningPathChildAttempt
+     * @param TreeNodeDataAttempt $treeNodeDataAttempt
      *
      * @return String
      */
-    public function get_actions($learningPathChildAttempt)
+    public function get_actions($treeNodeDataAttempt)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
@@ -89,7 +89,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
                     Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
-                    Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeDataAttempt->getId()
                 )
             );
 
@@ -113,7 +113,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
                     Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
-                    Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
+                    Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeDataAttempt->getId()
                 )
             );
 

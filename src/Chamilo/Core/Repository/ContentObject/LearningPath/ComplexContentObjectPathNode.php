@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 
 /**
@@ -47,14 +47,14 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
 
     /**
      *
-     * @return LearningPathChildAttempt
+     * @return TreeNodeDataAttempt
      */
     public function get_current_attempt()
     {
         foreach ($this->get_data() as $attempt)
         {
-            if ($attempt->get_status() != LearningPathChildAttempt::STATUS_COMPLETED &&
-                 $attempt->get_status() != LearningPathChildAttempt::STATUS_PASSED)
+            if ($attempt->get_status() != TreeNodeDataAttempt::STATUS_COMPLETED &&
+                 $attempt->get_status() != TreeNodeDataAttempt::STATUS_PASSED)
             {
                 return $attempt;
             }
@@ -65,9 +65,9 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
 
     /**
      *
-     * @param LearningPathChildAttempt $learning_path_item_attempt
+     * @param TreeNodeDataAttempt $learning_path_item_attempt
      */
-    public function set_current_attempt(LearningPathChildAttempt $learning_path_item_attempt)
+    public function set_current_attempt(TreeNodeDataAttempt $learning_path_item_attempt)
     {
         $data = $this->get_data();
         $data[] = $learning_path_item_attempt;
@@ -115,8 +115,8 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
             
             foreach ($this->get_data() as $attempt)
             {
-                if ($attempt->get_status() == LearningPathChildAttempt::STATUS_COMPLETED ||
-                     $attempt->get_status() == LearningPathChildAttempt::STATUS_PASSED)
+                if ($attempt->get_status() == TreeNodeDataAttempt::STATUS_COMPLETED ||
+                     $attempt->get_status() == TreeNodeDataAttempt::STATUS_PASSED)
                 {
                     $this->is_completed = true;
                     break;

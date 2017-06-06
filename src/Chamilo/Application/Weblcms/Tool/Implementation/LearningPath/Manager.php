@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
@@ -181,21 +181,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $learningPath->setId($object);
 
             $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]] =
-                $this->getLearningPathChildService()->isLearningPathEmpty($learningPath);
+                $this->getTreeNodeDataService()->isLearningPathEmpty($learningPath);
         }
 
         return $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]];
     }
 
     /**
-     * Returns the LearningPathChildService
+     * Returns the TreeNodeDataService
      *
-     * @return LearningPathChildService | object
+     * @return TreeNodeDataService | object
      */
-    protected function getLearningPathChildService()
+    protected function getTreeNodeDataService()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_child_service'
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
         );
     }
 
@@ -251,7 +251,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      *
      * @return int
      */
-    public function getCurrentLearningPathChildId()
+    public function getCurrentTreeNodeDataId()
     {
         return (int) $this->getRequest()->get(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
@@ -287,6 +287,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $tree = $this->getTree($learningPath);
 
-        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
     }
 }

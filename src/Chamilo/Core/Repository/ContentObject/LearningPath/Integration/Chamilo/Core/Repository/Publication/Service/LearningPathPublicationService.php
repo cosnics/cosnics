@@ -4,10 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -23,9 +23,9 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 class LearningPathPublicationService
 {
     /**
-     * @var LearningPathChildService
+     * @var TreeNodeDataService
      */
-    protected $learningPathChildService;
+    protected $treeNodeDataService;
 
     /**
      * @var TreeBuilder
@@ -45,16 +45,16 @@ class LearningPathPublicationService
     /**
      * LearningPathPublicationService constructor.
      *
-     * @param LearningPathChildService $learningPathChildService
+     * @param TreeNodeDataService $treeNodeDataService
      * @param TreeBuilder $treeBuilder
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        LearningPathChildService $learningPathChildService, TreeBuilder $treeBuilder,
+        TreeNodeDataService $treeNodeDataService, TreeBuilder $treeBuilder,
         ContentObjectRepository $contentObjectRepository
     )
     {
-        $this->learningPathChildService = $learningPathChildService;
+        $this->treeNodeDataService = $treeNodeDataService;
         $this->treeBuilder = $treeBuilder;
         $this->contentObjectRepository = $contentObjectRepository;
     }
@@ -69,7 +69,7 @@ class LearningPathPublicationService
      */
     public function areContentObjectsPublished($contentObjectIds = array())
     {
-        return count($this->learningPathChildService->getLearningPathChildrenByContentObjects($contentObjectIds)) > 0;
+        return count($this->treeNodeDataService->getTreeNodesDataByContentObjects($contentObjectIds)) > 0;
     }
 
     /**
@@ -79,12 +79,12 @@ class LearningPathPublicationService
      */
     public function deleteContentObjectPublicationsByObjectId($contentObjectId)
     {
-        $learningPathChildren =
-            $this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId));
+        $treeNodesData =
+            $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
 
-        foreach ($learningPathChildren as $learningPathChild)
+        foreach ($treeNodesData as $treeNodeData)
         {
-            $tree = $this->getTreeForLearningPathChild($learningPathChild);
+            $tree = $this->getTreeForTreeNodeData($treeNodeData);
             foreach ($tree->getTreeNodes() as $treeNode)
             {
                 if ($treeNode->getContentObject()->getId() != $contentObjectId)
@@ -94,7 +94,7 @@ class LearningPathPublicationService
 
                 try
                 {
-                    $this->learningPathChildService->deleteContentObjectFromLearningPath($treeNode);
+                    $this->treeNodeDataService->deleteContentObjectFromLearningPath($treeNode);
                 }
                 catch (\Exception $ex)
                 {
@@ -106,28 +106,28 @@ class LearningPathPublicationService
     /**
      * Deletes the learning path child (and their child nodes) by a given learning path child id
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      */
-    public function deleteContentObjectPublicationsByLearningPathChildId($learningPathChildId)
+    public function deleteContentObjectPublicationsByTreeNodeDataId($treeNodeDataId)
     {
-        $treeNode = $this->getTreeNodeByLearningPathChildId($learningPathChildId);
-        $this->learningPathChildService->deleteContentObjectFromLearningPath($treeNode);
+        $treeNode = $this->getTreeNodeByTreeNodeDataId($treeNodeDataId);
+        $this->treeNodeDataService->deleteContentObjectFromLearningPath($treeNode);
     }
 
     /**
      * Updates the content object id in the given learning path child (identified by id)
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      * @param int $newContentObjectId
      */
-    public function updateContentObjectIdInLearningPathChild($learningPathChildId, $newContentObjectId)
+    public function updateContentObjectIdInTreeNodeData($treeNodeDataId, $newContentObjectId)
     {
-        $treeNode = $this->getTreeNodeByLearningPathChildId($learningPathChildId);
+        $treeNode = $this->getTreeNodeByTreeNodeDataId($treeNodeDataId);
 
         $newContentObject = new ContentObject();
         $newContentObject->setId($newContentObjectId);
 
-        $this->learningPathChildService->updateContentObjectInLearningPathChild(
+        $this->treeNodeDataService->updateContentObjectInTreeNodeData(
             $treeNode, $newContentObject
         );
     }
@@ -135,15 +135,15 @@ class LearningPathPublicationService
     /**
      * Returns the ContentObject publication attributes for a given learning path child (identified by id)
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      *
      * @return Attributes
      */
-    public function getContentObjectPublicationAttributesForLearningPathChild($learningPathChildId)
+    public function getContentObjectPublicationAttributesForTreeNodeData($treeNodeDataId)
     {
-        $learningPathChild = $this->learningPathChildService->getLearningPathChildById($learningPathChildId);
+        $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($treeNodeDataId);
 
-        return $this->getAttributesForLearningPathChild($learningPathChild);
+        return $this->getAttributesForTreeNodeData($treeNodeData);
     }
 
     /**
@@ -155,14 +155,14 @@ class LearningPathPublicationService
      */
     public function getContentObjectPublicationAttributesForContentObject($contentObjectId)
     {
-        $learningPathChildren =
-            $this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId));
+        $treeNodesData =
+            $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
 
         $attributes = array();
 
-        foreach ($learningPathChildren as $learningPathChild)
+        foreach ($treeNodesData as $treeNodeData)
         {
-            $attributes[] = $this->getAttributesForLearningPathChild($learningPathChild);
+            $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
         }
 
         return $attributes;
@@ -177,13 +177,13 @@ class LearningPathPublicationService
      */
     public function getContentObjectPublicationAttributesForUser($userId)
     {
-        $learningPathChildren = $this->learningPathChildService->getLearningPathChildrenByUserId((int) $userId);
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
 
         $attributes = array();
 
-        foreach ($learningPathChildren as $learningPathChild)
+        foreach ($treeNodesData as $treeNodeData)
         {
-            $attributes[] = $this->getAttributesForLearningPathChild($learningPathChild);
+            $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
         }
 
         return $attributes;
@@ -198,7 +198,7 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
     {
-        return count($this->learningPathChildService->getLearningPathChildrenByContentObjects(array($contentObjectId)));
+        return count($this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId)));
     }
 
     /**
@@ -210,22 +210,22 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForUser($userId)
     {
-        return count($this->learningPathChildService->getLearningPathChildrenByUserId((int) $userId));
+        return count($this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId));
     }
 
     /**
      * Returns a learning path tree node by a given learning path child identifier
      *
-     * @param int $learningPathChildId
+     * @param int $treeNodeDataId
      *
      * @return TreeNode
      */
-    protected function getTreeNodeByLearningPathChildId($learningPathChildId)
+    protected function getTreeNodeByTreeNodeDataId($treeNodeDataId)
     {
-        $learningPathChild = $this->learningPathChildService->getLearningPathChildById($learningPathChildId);
+        $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($treeNodeDataId);
 
-        $tree = $this->getTreeForLearningPathChild($learningPathChild);
-        $treeNode = $tree->getTreeNodeById((int) $learningPathChildId);
+        $tree = $this->getTreeForTreeNodeData($treeNodeData);
+        $treeNode = $tree->getTreeNodeById((int) $treeNodeDataId);
 
         return $treeNode;
     }
@@ -233,40 +233,40 @@ class LearningPathPublicationService
     /**
      * Builds the learning path tree that belongs to a given learning path child
      *
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      *
      * @return Tree
      */
-    protected function getTreeForLearningPathChild(LearningPathChild $learningPathChild)
+    protected function getTreeForTreeNodeData(TreeNodeData $treeNodeData)
     {
-        if (!array_key_exists($learningPathChild->getLearningPathId(), $this->treeCache))
+        if (!array_key_exists($treeNodeData->getLearningPathId(), $this->treeCache))
         {
-            $learningPath = $this->getLearningPathByLearningPathChild($learningPathChild);
+            $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
 
-            $this->treeCache[$learningPathChild->getLearningPathId()] =
+            $this->treeCache[$treeNodeData->getLearningPathId()] =
                 $this->treeBuilder->buildTree($learningPath);
         }
 
-        return $this->treeCache[$learningPathChild->getLearningPathId()];
+        return $this->treeCache[$treeNodeData->getLearningPathId()];
     }
 
     /**
      * Returns the learning path for the given learning path child
      *
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      *
      * @return LearningPath
      */
-    protected function getLearningPathByLearningPathChild(LearningPathChild $learningPathChild)
+    protected function getLearningPathByTreeNodeData(TreeNodeData $treeNodeData)
     {
-        $learningPath = $this->contentObjectRepository->findById($learningPathChild->getLearningPathId());
+        $learningPath = $this->contentObjectRepository->findById($treeNodeData->getLearningPathId());
 
         if (!$learningPath instanceof LearningPath)
         {
             throw new \RuntimeException(
                 sprintf(
                     'The given learning path child with id %s is found in a learning path that doesn\'t exist',
-                    $learningPathChild->getId()
+                    $treeNodeData->getId()
                 )
             );
         }
@@ -277,24 +277,24 @@ class LearningPathPublicationService
     /**
      * Builds the publication attributes for the given learning path child
      *
-     * @param LearningPathChild $learningPathChild
+     * @param TreeNodeData $treeNodeData
      *
      * @return Attributes
      */
-    protected function getAttributesForLearningPathChild(LearningPathChild $learningPathChild)
+    protected function getAttributesForTreeNodeData(TreeNodeData $treeNodeData)
     {
-        $learningPath = $this->getLearningPathByLearningPathChild($learningPathChild);
-        $contentObject = $this->contentObjectRepository->findById($learningPathChild->getContentObjectId());
+        $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
+        $contentObject = $this->contentObjectRepository->findById($treeNodeData->getContentObjectId());
 
         $attributes = new Attributes();
-        $attributes->setId($learningPathChild->getId());
+        $attributes->setId($treeNodeData->getId());
         $attributes->set_application('Chamilo\Core\Repository\ContentObject\LearningPath');
         $attributes->set_publisher_id($learningPath->get_owner_id());
         $attributes->set_date($contentObject->get_creation_date());
         $attributes->set_location($learningPath->get_title());
         $attributes->set_url(null);
         $attributes->set_title($contentObject->get_title());
-        $attributes->set_content_object_id($learningPathChild->getContentObjectId());
+        $attributes->set_content_object_id($treeNodeData->getContentObjectId());
 
         return $attributes;
     }

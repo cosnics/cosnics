@@ -20,7 +20,7 @@ class TypeSpecificComponent extends BaseHtmlTreeComponent implements Application
      */
     public function build()
     {
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
         
         $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .

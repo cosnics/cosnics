@@ -191,7 +191,7 @@ class TreeJSONMapper
             $nodeData['expanded'] = true;
         }
 
-        if (!$node->isRootNode() && $node->getLearningPathChild()->isBlocked())
+        if (!$node->isRootNode() && $node->getTreeNodeData()->isBlocked())
         {
             $nodeData['step_blocked'] = true;
         }

@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -31,25 +31,25 @@ class LearningPathService
     protected $treeBuilder;
 
     /**
-     * @var LearningPathChildService
+     * @var TreeNodeDataService
      */
-    protected $learningPathChildService;
+    protected $treeNodeDataService;
 
     /**
      * LearningPathService constructor.
      *
      * @param ContentObjectRepository $contentObjectRepository
      * @param TreeBuilder $treeBuilder
-     * @param LearningPathChildService $learningPathChildService
+     * @param TreeNodeDataService $treeNodeDataService
      */
     public function __construct(
         ContentObjectRepository $contentObjectRepository, TreeBuilder $treeBuilder,
-        LearningPathChildService $learningPathChildService
+        TreeNodeDataService $treeNodeDataService
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
         $this->treeBuilder = $treeBuilder;
-        $this->learningPathChildService = $learningPathChildService;
+        $this->treeNodeDataService = $treeNodeDataService;
     }
 
     /**
@@ -110,9 +110,9 @@ class LearningPathService
             $fromNode, $user, $toNode->getContentObject()->get_parent_id(), $copyInsteadOfReuse
         );
 
-        $learningPathChild = $this->copyLearningPathChild($rootLearningPath, $toNode, $fromNode, $user, $contentObject);
+        $treeNodeData = $this->copyTreeNodeData($rootLearningPath, $toNode, $fromNode, $user, $contentObject);
 
-        $newNode = new TreeNode($toNode->getTree(), $contentObject, $learningPathChild);
+        $newNode = new TreeNode($toNode->getTree(), $contentObject, $treeNodeData);
         $toNode->addChildNode($newNode);
 
         foreach ($fromNode->getChildNodes() as $childNode)
@@ -193,31 +193,31 @@ class LearningPathService
      * @param User $user
      * @param ContentObject $contentObject
      *
-     * @return LearningPathChild
+     * @return TreeNodeData
      */
-    protected function copyLearningPathChild(
+    protected function copyTreeNodeData(
         LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
         ContentObject $contentObject
-    ): LearningPathChild
+    ): TreeNodeData
     {
         if ($fromNode->isRootNode())
         {
-            $learningPathChild = new LearningPathChild();
+            $treeNodeData = new TreeNodeData();
         }
         else
         {
-            $learningPathChild = $fromNode->getLearningPathChild();
+            $treeNodeData = $fromNode->getTreeNodeData();
         }
 
-        $learningPathChild->setId(null);
-        $learningPathChild->setUserId((int) $user->getId());
-        $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
-        $learningPathChild->setParentLearningPathChildId((int) $toNode->getId());
-        $learningPathChild->setContentObjectId((int) $contentObject->getId());
-        $learningPathChild->setAddedDate(time());
+        $treeNodeData->setId(null);
+        $treeNodeData->setUserId((int) $user->getId());
+        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+        $treeNodeData->setParentTreeNodeDataId((int) $toNode->getId());
+        $treeNodeData->setContentObjectId((int) $contentObject->getId());
+        $treeNodeData->setAddedDate(time());
 
-        $this->learningPathChildService->createLearningPathChild($learningPathChild);
+        $this->treeNodeDataService->createTreeNodeData($treeNodeData);
 
-        return $learningPathChild;
+        return $treeNodeData;
     }
 }

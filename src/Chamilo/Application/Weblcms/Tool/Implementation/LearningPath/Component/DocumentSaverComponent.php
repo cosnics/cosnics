@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
@@ -60,22 +60,22 @@ class DocumentSaverComponent extends Manager
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChildAttempt::class_name(),
-                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                TreeNodeDataAttempt::class_name(),
+                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
             ),
             new StaticConditionVariable($ccoi_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChildAttempt::class_name(),
-                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+                TreeNodeDataAttempt::class_name(),
+                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($attempt_id)
         );
         $condition = new AndCondition($conditions);
 
         $assessment_attempts = DataManager::retrieves(
-            LearningPathChildAttempt::class_name(),
+            TreeNodeDataAttempt::class_name(),
             new DataClassRetrievesParameters($condition)
         );
         $assessment_attempt_ids = array();

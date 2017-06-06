@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class LearningPathChildAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt
+class TreeNodeDataAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt
 {
 
     /**

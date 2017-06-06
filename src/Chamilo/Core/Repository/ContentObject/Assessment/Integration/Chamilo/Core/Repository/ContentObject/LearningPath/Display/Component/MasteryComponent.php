@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -82,7 +82,7 @@ class MasteryComponent extends Manager
         return $contents;
     }
 
-    public function get_form($url, LearningPathChild $learningPathChild)
+    public function get_form($url, TreeNodeData $learningPathChild)
     {
         $form = new FormValidator('mastery_score', 'post', $url);
 
@@ -108,7 +108,7 @@ class MasteryComponent extends Manager
         return $form;
     }
 
-    public function set_mastery_score(LearningPathChild $learningPathChild, $values)
+    public function set_mastery_score(TreeNodeData $learningPathChild, $values)
     {
         $learningPathChild->setMasteryScore((int) $values['mastery_score']);
 

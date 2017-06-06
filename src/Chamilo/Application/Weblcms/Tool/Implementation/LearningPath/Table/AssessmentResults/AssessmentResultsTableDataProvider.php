@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\AssessmentResults;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathChildAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -23,17 +23,17 @@ class AssessmentResultsTableDataProvider extends DataClassTableDataProvider
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    LearningPathChildAttempt::class_name(),
-                    LearningPathChildAttempt::PROPERTY_START_TIME));
+                    TreeNodeDataAttempt::class_name(),
+                    TreeNodeDataAttempt::PROPERTY_START_TIME));
         }
         
         return DataManager::retrieves(
-            LearningPathChildAttempt::class_name(),
+            TreeNodeDataAttempt::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
-        return DataManager::count(LearningPathChildAttempt::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(TreeNodeDataAttempt::class_name(), new DataClassCountParameters($condition));
     }
 }

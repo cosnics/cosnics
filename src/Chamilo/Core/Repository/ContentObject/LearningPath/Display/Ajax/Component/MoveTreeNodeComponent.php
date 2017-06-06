@@ -30,7 +30,7 @@ class MoveTreeNodeComponent extends Manager
             $tree = $this->get_application()->getTree();
             $treeNode = $tree->getTreeNodeById((int) $childId);
 
-            $learningPathChildService = $this->get_application()->getLearningPathChildService();
+            $treeNodeDataService = $this->get_application()->getTreeNodeDataService();
 
             if (!$this->get_application()->canEditTreeNode($treeNode))
             {
@@ -50,7 +50,7 @@ class MoveTreeNodeComponent extends Manager
             $path = $this->get_application()->getTree();
             $parentNode = $path->getTreeNodeById((int) $parentId);
 
-            $learningPathChildService->moveContentObjectToOtherLearningPath(
+            $treeNodeDataService->moveContentObjectToOtherLearningPath(
                 $treeNode, $parentNode, $displayOrder
             );
 

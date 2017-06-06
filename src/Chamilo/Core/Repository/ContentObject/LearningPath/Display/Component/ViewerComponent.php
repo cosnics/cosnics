@@ -121,8 +121,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
         if ($this->canEditCurrentTreeNode() &&
             (
                 (
-                    $this->getCurrentTreeNode()->getLearningPathChild() &&
-                    $this->getCurrentTreeNode()->getLearningPathChild()->isBlocked()
+                    $this->getCurrentTreeNode()->getTreeNodeData() &&
+                    $this->getCurrentTreeNode()->getTreeNodeData()->isBlocked()
                 ) ||
                 $this->get_root_content_object()->enforcesDefaultTraversingOrder()
             )
@@ -301,7 +301,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $editURL = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
             );
 
@@ -335,7 +335,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                            self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                         )
                     ),
                     SubButton::DISPLAY_ICON_AND_LABEL,
@@ -369,7 +369,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_MANAGE,
-                                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                             )
                         )
                     )
@@ -399,12 +399,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
             return;
         }
 
-        $translationVariable = ($treeNode->getLearningPathChild() &&
-            $treeNode->getLearningPathChild()->isBlocked()) ?
+        $translationVariable = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($treeNode->getLearningPathChild() &&
-            $treeNode->getLearningPathChild()->isBlocked()) ?
+        $icon = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->isBlocked()) ?
             'unlock' : 'ban';
 
         $moveButton = new SubButton(
@@ -462,7 +462,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $url = $this->get_url(
             array(
                 self::PARAM_ACTION => self::ACTION_REPORTING,
-                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
             )
         );
 
@@ -480,7 +480,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
-                        self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
+                        self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId(),
                     )
                 )
             );
@@ -507,7 +507,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_ACTIVITY,
-                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
             )
         );
@@ -529,7 +529,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_SHOW_STUDENT_VIEW,
-                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
             )
         );
@@ -550,7 +550,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
-                    self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId(),
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId(),
                     self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ),

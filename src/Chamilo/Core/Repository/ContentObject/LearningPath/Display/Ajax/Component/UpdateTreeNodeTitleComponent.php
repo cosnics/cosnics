@@ -29,14 +29,14 @@ class UpdateTreeNodeTitleComponent extends Manager
             $tree = $this->get_application()->getTree();
             $treeNode = $tree->getTreeNodeById((int) $childId);
 
-            $learningPathChildService = $this->get_application()->getLearningPathChildService();
+            $treeNodeDataService = $this->get_application()->getTreeNodeDataService();
 
             if (!$this->get_application()->canEditTreeNode($treeNode))
             {
                 throw new NotAllowedException();
             }
 
-            $learningPathChildService->updateContentObjectTitle(
+            $treeNodeDataService->updateContentObjectTitle(
                 $treeNode, $this->getRequestedPostDataValue(self::PARAM_NEW_TITLE)
             );
 

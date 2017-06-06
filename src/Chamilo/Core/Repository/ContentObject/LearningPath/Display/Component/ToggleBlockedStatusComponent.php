@@ -23,14 +23,14 @@ class ToggleBlockedStatusComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
 
         $currentTreeNode = $this->getCurrentTreeNode();
-        $learningPathChildService = $this->getLearningPathChildService();
+        $treeNodeDataService = $this->getTreeNodeDataService();
 
         try
         {
-            $learningPathChildService->toggleContentObjectBlockedStatus($currentTreeNode);
+            $treeNodeDataService->toggleContentObjectBlockedStatus($currentTreeNode);
             $success = true;
         }
         catch(\Exception $ex)
@@ -38,7 +38,7 @@ class ToggleBlockedStatusComponent extends Manager
             $success = false;
         }
 
-        if($currentTreeNode->getLearningPathChild()->isBlocked())
+        if($currentTreeNode->getTreeNodeData()->isBlocked())
         {
             $translation = $success ? 'StepMarkedAsRequired' : 'StepNotMarkedAsRequired';
         }
@@ -52,7 +52,7 @@ class ToggleBlockedStatusComponent extends Manager
             !$success,
             array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_CHILD_ID => $this->getCurrentLearningPathChildId()
+                self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
             ),
             array(self::PARAM_CONTENT_OBJECT_ID)
         );

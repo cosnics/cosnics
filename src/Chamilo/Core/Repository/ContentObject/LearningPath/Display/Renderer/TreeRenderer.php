@@ -110,7 +110,7 @@ class TreeRenderer extends BootstrapTreeMenu
      */
     protected function isSelectedItem(TreeNode $node)
     {
-        return $this->getApplication()->getCurrentLearningPathChildId() == $node->getId();
+        return $this->getApplication()->getCurrentTreeNodeDataId() == $node->getId();
     }
 
     /**
@@ -128,7 +128,7 @@ class TreeRenderer extends BootstrapTreeMenu
         );
         $progressItem['icon'] = 'type_statistics';
 
-        if ($application->get_action() == Manager::ACTION_REPORTING && !$application->isCurrentLearningPathChildIdSet())
+        if ($application->get_action() == Manager::ACTION_REPORTING && !$application->isCurrentTreeNodeDataIdSet())
         {
             $progressItem['state'] = array('selected' => true);
         }

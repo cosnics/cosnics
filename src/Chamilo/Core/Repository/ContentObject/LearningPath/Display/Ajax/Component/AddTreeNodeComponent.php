@@ -38,8 +38,8 @@ class AddTreeNodeComponent extends Manager
             $tree = $this->get_application()->getTree();
             $parentNode = $tree->getTreeNodeById((int) $parentNodeId);
 
-            $learningPathChildService = $this->get_application()->getLearningPathChildService();
-            $learningPathChild = $learningPathChildService->createAndAddContentObjectToLearningPath(
+            $treeNodeDataService = $this->get_application()->getTreeNodeDataService();
+            $treeNodeData = $treeNodeDataService->createAndAddContentObjectToLearningPath(
                 $nodeType, $this->get_application()->get_root_content_object(),
                 $parentNode, $this->getUser()
             );
@@ -47,8 +47,8 @@ class AddTreeNodeComponent extends Manager
             $displayOrder = $this->getRequest()->request->get(self::PARAM_DISPLAY_ORDER);
             if (!empty($displayOrder))
             {
-                $learningPathChild->setDisplayOrder((int) $displayOrder);
-                $learningPathChild->update();
+                $treeNodeData->setDisplayOrder((int) $displayOrder);
+                $treeNodeData->update();
             }
 
             $treeBuilder = $this->get_application()->getTreeBuilder();
@@ -67,16 +67,16 @@ class AddTreeNodeComponent extends Manager
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
                 $this->get_application()->get_application()->get_tree_menu_url(),
-                $tree->getTreeNodeById((int) $learningPathChild->getId()),
+                $tree->getTreeNodeById((int) $treeNodeData->getId()),
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditTreeNode(
-                    $tree->getTreeNodeById((int) $learningPathChild->getId())
+                    $tree->getTreeNodeById((int) $treeNodeData->getId())
                 )
             );
 
             $treeData = $treeJSONMapper->getNodes();
 
-            return new JsonResponse(array('treeData' => $treeData, 'nodeId' => $learningPathChild->getId()));
+            return new JsonResponse(array('treeData' => $treeData, 'nodeId' => $treeNodeData->getId()));
         }
         catch (\Exception $ex)
         {

@@ -81,14 +81,14 @@ class LearningPathAttempt
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathChildAttempt::class_name(),
-                LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+                TreeNodeDataAttempt::class_name(),
+                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($this->getId())
         );
 
         $trackers = DataManager::retrieves(
-            LearningPathChildAttempt::class_name(),
+            TreeNodeDataAttempt::class_name(),
             new DataClassRetrievesParameters($condition)
         );
 

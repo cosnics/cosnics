@@ -19,7 +19,7 @@ class DirectMoverComponent extends Manager
 
     function run()
     {
-        $this->validateSelectedLearningPathChild();
+        $this->validateSelectedTreeNodeData();
 
         $currentNode = $this->getCurrentTreeNode();
         if (!$this->canEditTreeNode($currentNode))
@@ -50,8 +50,8 @@ class DirectMoverComponent extends Manager
 
         try
         {
-            $learningPathChildService = $this->getLearningPathChildService();
-            $learningPathChildService->moveContentObjectToOtherLearningPath(
+            $treeNodeDataService = $this->getTreeNodeDataService();
+            $treeNodeDataService->moveContentObjectToOtherLearningPath(
                 $this->getCurrentTreeNode(), $parentNode, $displayOrder
             );
             $success = true;

@@ -171,7 +171,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      *
      * @return int
      */
-    public function getCurrentLearningPathChildId()
+    public function getCurrentTreeNodeDataId()
     {
         return (int) $this->getRequest()->get(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
@@ -216,7 +216,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     {
         $tree = $this->getTree();
 
-        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
     }
 
     /**
