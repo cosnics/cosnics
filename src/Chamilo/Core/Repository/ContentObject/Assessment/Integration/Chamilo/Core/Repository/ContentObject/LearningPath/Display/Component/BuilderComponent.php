@@ -21,9 +21,9 @@ class BuilderComponent extends Manager
 
     function run()
     {
-        $learningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $learningPathTreeNode = $this->getCurrentTreeNode();
         
-        if (! $this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
+        if (! $this->get_application()->canEditTreeNode($learningPathTreeNode))
         {
             throw new NotAllowedException();
         }

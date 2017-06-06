@@ -328,27 +328,27 @@ class LearningPathMigrationService
      */
     protected function fixLearningPathTracking(LearningPath $learningPath)
     {
-        $treeNodeDataAttempts =
-            $this->learningPathTrackingRepository->findTreeNodeDataAttemptsForLearningPath($learningPath);
+        $treeNodeAttempts =
+            $this->learningPathTrackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
 
-        foreach($treeNodeDataAttempts as $treeNodeDataAttempt)
+        foreach($treeNodeAttempts as $treeNodeAttempt)
         {
             $newLearningPathItemId =
-                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeDataAttempt->get_learning_path_item_id()];
+                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->get_learning_path_item_id()];
 
             if(!$newLearningPathItemId)
             {
 //                echo 'New learning path item id not found for id ' .
-//                    $treeNodeDataAttempt->get_learning_path_item_id() . PHP_EOL;
+//                    $treeNodeAttempt->get_learning_path_item_id() . PHP_EOL;
 
                 continue;
             }
 
-            $treeNodeDataAttempt->set_learning_path_item_id($newLearningPathItemId);
-            $treeNodeDataAttempt->update();
+            $treeNodeAttempt->set_learning_path_item_id($newLearningPathItemId);
+            $treeNodeAttempt->update();
         }
 
-        $this->learningPathTrackingRepository->clearTreeNodeDataAttemptCache();
+        $this->learningPathTrackingRepository->clearTreeNodeAttemptCache();
     }
 }
 
@@ -359,9 +359,9 @@ DELETE FROM `repository_content_object` WHERE `id` >= 2698805 ORDER BY `id`  ASC
 
 TRUNCATE repository_tree_node_data;
 
-TRUNCATE tracking_weblcms_tree_node_data_attempt;
+TRUNCATE tracking_weblcms_tree_node_attempt;
 
-INSERT INTO tracking_weblcms_tree_node_data_attempt
-SELECT * FROM tracking_weblcms_tree_node_data_attempt_backup;
+INSERT INTO tracking_weblcms_tree_node_attempt
+SELECT * FROM tracking_weblcms_tree_node_attempt_backup;
  *
  */

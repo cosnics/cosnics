@@ -165,10 +165,10 @@ INSERT IGNORE INTO `configuration_setting` (`id`,`context`,`variable`,`value`,`u
 
 /* Learning Path Refactoring */
 
-CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
+CREATE TABLE IF NOT EXISTS `repository_learning_path_tree_node_data` (
   `id` int(10) unsigned NOT NULL,
   `learning_path_id` int(10) unsigned NOT NULL,
-  `parent_learning_path_child_id` int(10) unsigned NOT NULL,
+  `parent_tree_node_data_id` int(10) unsigned NOT NULL,
   `content_object_id` int(10) unsigned NOT NULL,
   `max_attempts` int(10) unsigned NOT NULL DEFAULT '0',
   `mastery_score` int(10) unsigned NOT NULL DEFAULT '0',
@@ -184,14 +184,14 @@ CREATE TABLE IF NOT EXISTS `repository_learning_path_child` (
   `added_date` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `repository_learning_path_child`
+ALTER TABLE `repository_learning_path_tree_node_data`
   ADD PRIMARY KEY (`id`),
   ADD KEY `learning_path_id` (`learning_path_id`),
   ADD KEY `content_object_id` (`content_object_id`) USING BTREE,
-  ADD KEY `section_content_object_id` (`parent_learning_path_child_id`),
+  ADD KEY `section_content_object_id` (`parent_tree_node_data_id`),
   ADD KEY `user_id` (`user_id`);
 
-ALTER TABLE `repository_learning_path_child` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `repository_learning_path_tree_node_data` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Note\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Description\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
@@ -199,7 +199,7 @@ DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repositor
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 DELETE FROM configuration_registration WHERE context = 'Chamilo\\Core\\Repository\\ContentObject\\Announcement\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath';
 
-ALTER TABLE `tracking_weblcms_learning_path_item_attempt` RENAME `tracking_weblcms_learning_path_child_attempt`;
+ALTER TABLE `tracking_weblcms_learning_path_item_attempt` RENAME `tracking_weblcms_learning_path_tree_node_attempt`;
 ALTER TABLE `tracking_weblcms_learning_path_attempt` ADD `publication_id` INT(10) UNSIGNED NOT NULL AFTER `learning_path_id`;
 
 UPDATE `tracking_weblcms_learning_path_attempt` SET publication_id = learning_path_id;

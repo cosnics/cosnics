@@ -19,17 +19,17 @@ class NodeActionGenerator
      * Generates the acions for a given TreeNode
      *
      * @param TreeNode $learningPathTreeNode
-     * @param bool $canEditLearningPathTreeNode
+     * @param bool $canEditTreeNode
      *
      * @return array|Action[]
      */
     public function generateNodeActions(
-        TreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+        TreeNode $learningPathTreeNode, $canEditTreeNode = false
     ): array
     {
         $actions = array();
 
-        if ($canEditLearningPathTreeNode)
+        if ($canEditTreeNode)
         {
             $actions[] = $this->getBuildAssessmentAction($learningPathTreeNode);
             $actions[] = $this->getSetMasteryScoreAction($learningPathTreeNode);

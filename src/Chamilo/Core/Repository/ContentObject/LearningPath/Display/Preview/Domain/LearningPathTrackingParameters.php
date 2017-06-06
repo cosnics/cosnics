@@ -28,7 +28,7 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     /**
      * @return string
      */
-    public function getTreeNodeDataAttemptClassName()
+    public function getTreeNodeAttemptClassName()
     {
         return DummyChildAttempt::class_name();
     }
@@ -60,11 +60,11 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     }
 
     /**
-     * Creates a new instance of the TreeNodeDataAttempt extension
+     * Creates a new instance of the TreeNodeAttempt extension
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
      */
-    public function createTreeNodeDataAttemptInstance()
+    public function createTreeNodeAttemptInstance()
     {
         return new DummyChildAttempt();
     }

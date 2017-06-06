@@ -21,7 +21,7 @@ class MasteryComponent extends Manager
 
     public function run()
     {
-        $learningPathChild = $this->getCurrentLearningPathTreeNode()->getLearningPathChild();
+        $learningPathChild = $this->getCurrentTreeNode()->getLearningPathChild();
 
         $form = $this->get_form($this->get_url(), $learningPathChild);
 

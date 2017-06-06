@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -227,7 +227,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         $html[] = '<div class="panel-body">';
         
         $attempts = DataManager::retrieves(
-            TreeNodeDataAttempt::class_name(),
+            LearningPathTreeNodeAttempt::class_name(),
             new DataClassRetrievesParameters($this->get_table_condition()));
         
         if ($attempts->size() > 0)
@@ -320,9 +320,9 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     protected function delete_assessment_attempt($assessment_attempt_id)
     {
-        $assessment_attempt = DataManager::retrieve_by_id(TreeNodeDataAttempt::class_name(), $assessment_attempt_id);
+        $assessment_attempt = DataManager::retrieve_by_id(LearningPathTreeNodeAttempt::class_name(), $assessment_attempt_id);
         
-        if ($assessment_attempt instanceof TreeNodeDataAttempt)
+        if ($assessment_attempt instanceof LearningPathTreeNodeAttempt)
         {
             $assessment_attempt->delete();
         }
@@ -483,7 +483,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     public function change_total_score($score)
     {
         $assessment_attempt = DataManager::retrieve_by_id(
-            TreeNodeDataAttempt::class_name(),
+            LearningPathTreeNodeAttempt::class_name(),
             Request::get(self::PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID));
         
         $assessment_attempt->set_score($score);
@@ -618,15 +618,15 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                TreeNodeDataAttempt::class_name(),
-                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ITEM_ID),
+                LearningPathTreeNodeAttempt::class_name(),
+                LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID),
             new StaticConditionVariable(
                 Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                TreeNodeDataAttempt::class_name(),
-                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
+                LearningPathTreeNodeAttempt::class_name(),
+                LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_ATTEMPT_ID)));
         
         return new AndCondition($conditions);

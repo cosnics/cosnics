@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
@@ -118,9 +118,9 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
      *
      * @param LearningPathAttempt $learningPathAttempt
      *
-     * @return TreeNodeDataAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTreeNodeDataAttempts(LearningPathAttempt $learningPathAttempt)
+    public function findTreeNodeAttempts(LearningPathAttempt $learningPathAttempt)
     {
         $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
 
@@ -128,13 +128,13 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Finds all the TreeNodeDataAttempt objects for a given LearningPath
+     * Finds all the TreeNodeAttempt objects for a given LearningPath
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | TreeNodeDataAttempt[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | TreeNodeAttempt[]
      */
-    public function findTreeNodeDataAttemptsForLearningPath(LearningPath $learningPath)
+    public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath)
     {
         $allChildAttempts = array();
 
@@ -159,14 +159,14 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Finds a TreeNodeDataAttempt by a given LearningPathAttempt and TreeNode
+     * Finds a TreeNodeAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
      * @param TreeNode $treeNode
      *
-     * @return TreeNodeDataAttempt | DataClass
+     * @return TreeNodeAttempt | DataClass
      */
-    public function findActiveTreeNodeDataAttempt(
+    public function findActiveTreeNodeAttempt(
         LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
@@ -188,21 +188,21 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Finds a TreeNodeDataAttempt by a given ID
+     * Finds a TreeNodeAttempt by a given ID
      *
-     * @param int $treeNodeDataAttemptId
+     * @param int $treeNodeAttemptId
      *
-     * @return DataClass | TreeNodeDataAttempt
+     * @return DataClass | TreeNodeAttempt
      */
-    public function findTreeNodeDataAttemptById($treeNodeDataAttemptId)
+    public function findTreeNodeAttemptById($treeNodeAttemptId)
     {
         /** @var DummyChildAttempt[][] $childAttempts */
         $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
         foreach ($childAttempts as $learningPathAttemptId => $childAttemptsForLearningPathAttempt)
         {
-            if (array_key_exists($treeNodeDataAttemptId, $childAttemptsForLearningPathAttempt))
+            if (array_key_exists($treeNodeAttemptId, $childAttemptsForLearningPathAttempt))
             {
-                return $childAttemptsForLearningPathAttempt[$treeNodeDataAttemptId];
+                return $childAttemptsForLearningPathAttempt[$treeNodeAttemptId];
             }
         }
 
@@ -222,18 +222,18 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeDataAttempt
+     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
      *
-     * @param TreeNodeDataAttempt $treeNodeDataAttempt
+     * @param TreeNodeAttempt $treeNodeAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(TreeNodeDataAttempt $treeNodeDataAttempt)
+    public function findLearningPathQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
     {
         /** @var DummyQuestionAttempt[][] $questionAttempts */
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
 
-        return $questionAttempts[$treeNodeDataAttempt->getId()];
+        return $questionAttempts[$treeNodeAttempt->getId()];
     }
 
     /**
@@ -416,21 +416,21 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Retrieves all the LearningPathAttempt objects with the TreeNodeDataAttempt objects and
+     * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
      * LearningPathQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeDataAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts(
         LearningPath $learningPath
     )
     {
         /** @var LearningPathAttempt[][] $attempts */
         $attempts = $this->getFromStorage(DummyAttempt::class);
 
-        /** @var TreeNodeDataAttempt[][] $childAttempts */
+        /** @var TreeNodeAttempt[][] $childAttempts */
         $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
 
         /** @var LearningPathQuestionAttempt[][] $questionAttempts */
@@ -442,8 +442,8 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
 
         foreach($learningPathAttempts as $userId => $learningPathAttempt)
         {
-            $treeNodeDataAttempts = $childAttempts[$learningPathAttempt->getId()];
-            foreach($treeNodeDataAttempts as $childAttempt)
+            $treeNodeAttempts = $childAttempts[$learningPathAttempt->getId()];
+            foreach($treeNodeAttempts as $childAttempt)
             {
                 $childQuestionAttempts = $questionAttempts[$childAttempt->getId()];
                 foreach($childQuestionAttempts as $questionAttempt)
@@ -453,12 +453,12 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
                         LearningPathAttempt::PROPERTY_USER_ID => $learningPathAttempt->get_user_id(),
                         LearningPathAttempt::PROPERTY_LEARNING_PATH_ID => $learningPathAttempt->getLearningPathId(),
                         LearningPathAttempt::PROPERTY_PROGRESS => $learningPathAttempt->get_progress(),
-                        'tree_node_data_attempt_id' => $childAttempt->getId(),
-                        TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ITEM_ID => $childAttempt->get_learning_path_item_id(),
-                        TreeNodeDataAttempt::PROPERTY_START_TIME => $childAttempt->get_start_time(),
-                        TreeNodeDataAttempt::PROPERTY_TOTAL_TIME => $childAttempt->get_total_time(),
-                        TreeNodeDataAttempt::PROPERTY_SCORE => $childAttempt->get_score(),
-                        TreeNodeDataAttempt::PROPERTY_STATUS => $childAttempt->get_status(),
+                        'tree_node_attempt_id' => $childAttempt->getId(),
+                        TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID => $childAttempt->get_learning_path_item_id(),
+                        TreeNodeAttempt::PROPERTY_START_TIME => $childAttempt->get_start_time(),
+                        TreeNodeAttempt::PROPERTY_TOTAL_TIME => $childAttempt->get_total_time(),
+                        TreeNodeAttempt::PROPERTY_SCORE => $childAttempt->get_score(),
+                        TreeNodeAttempt::PROPERTY_STATUS => $childAttempt->get_status(),
                         'learning_path_question_attempt_id' => $questionAttempt->getId(),
                         LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(),
                         LearningPathQuestionAttempt::PROPERTY_ANSWER => $questionAttempt->get_answer(),
@@ -476,7 +476,7 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     /**
      * Clears the cache for the LearningPathAttempt data class
      */
-    public function clearTreeNodeDataAttemptCache()
+    public function clearTreeNodeAttemptCache()
     {
 
     }

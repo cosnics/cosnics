@@ -1,7 +1,8 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\AssessmentResults;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This component provides the data for the table.
- * 
+ *
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class AssessmentResultsTableDataProvider extends DataClassTableDataProvider
@@ -23,17 +24,20 @@ class AssessmentResultsTableDataProvider extends DataClassTableDataProvider
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    TreeNodeDataAttempt::class_name(),
-                    TreeNodeDataAttempt::PROPERTY_START_TIME));
+                    LearningPathTreeNodeAttempt::class_name(),
+                    LearningPathTreeNodeAttempt::PROPERTY_START_TIME
+                )
+            );
         }
-        
+
         return DataManager::retrieves(
-            TreeNodeDataAttempt::class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+            LearningPathTreeNodeAttempt::class_name(),
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
     }
 
     public function count_data($condition)
     {
-        return DataManager::count(TreeNodeDataAttempt::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(LearningPathTreeNodeAttempt::class_name(), new DataClassCountParameters($condition));
     }
 }

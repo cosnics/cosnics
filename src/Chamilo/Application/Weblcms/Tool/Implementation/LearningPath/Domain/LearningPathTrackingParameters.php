@@ -3,7 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
@@ -97,9 +97,9 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     /**
      * @return string
      */
-    public function getTreeNodeDataAttemptClassName()
+    public function getTreeNodeAttemptClassName()
     {
-        return TreeNodeDataAttempt::class_name();
+        return LearningPathTreeNodeAttempt::class_name();
     }
 
     /**
@@ -151,13 +151,13 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     }
 
     /**
-     * Creates a new instance of the TreeNodeDataAttempt extension
+     * Creates a new instance of the TreeNodeAttempt extension
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
      */
-    public function createTreeNodeDataAttemptInstance()
+    public function createTreeNodeAttemptInstance()
     {
-        return new TreeNodeDataAttempt();
+        return new LearningPathTreeNodeAttempt();
     }
 
     /**

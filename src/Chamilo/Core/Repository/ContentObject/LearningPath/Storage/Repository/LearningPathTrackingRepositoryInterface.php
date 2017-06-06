@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeDataAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -56,46 +56,46 @@ interface LearningPathTrackingRepositoryInterface
     /**
      * Clears the cache for the LearningPathAttempt data class
      */
-    public function clearTreeNodeDataAttemptCache();
+    public function clearTreeNodeAttemptCache();
 
     /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPathAttempt $learningPathAttempt
      *
-     * @return TreeNodeDataAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTreeNodeDataAttempts(LearningPathAttempt $learningPathAttempt);
+    public function findTreeNodeAttempts(LearningPathAttempt $learningPathAttempt);
 
     /**
-     * Finds all the TreeNodeDataAttempt objects for a given LearningPath
+     * Finds all the TreeNodeAttempt objects for a given LearningPath
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | TreeNodeDataAttempt[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | TreeNodeAttempt[]
      */
-    public function findTreeNodeDataAttemptsForLearningPath(LearningPath $learningPath);
+    public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath);
 
     /**
-     * Finds a TreeNodeDataAttempt by a given LearningPathAttempt and TreeNode
+     * Finds a TreeNodeAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
      * @param TreeNode $treeNode
      *
-     * @return TreeNodeDataAttempt | DataClass
+     * @return TreeNodeAttempt | DataClass
      */
-    public function findActiveTreeNodeDataAttempt(
+    public function findActiveTreeNodeAttempt(
         LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     );
 
     /**
-     * Finds a TreeNodeDataAttempt by a given ID
+     * Finds a TreeNodeAttempt by a given ID
      *
-     * @param int $treeNodeDataAttemptId
+     * @param int $treeNodeAttemptId
      *
-     * @return DataClass | TreeNodeDataAttempt
+     * @return DataClass | TreeNodeAttempt
      */
-    public function findTreeNodeDataAttemptById($treeNodeDataAttemptId);
+    public function findTreeNodeAttemptById($treeNodeAttemptId);
 
     /**
      * Finds a LearningPathAttempt by a given ID
@@ -107,13 +107,13 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathAttemptById($learningPathAttemptId);
 
     /**
-     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeDataAttempt
+     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
      *
-     * @param TreeNodeDataAttempt $treeNodeDataAttempt
+     * @param TreeNodeAttempt $treeNodeAttempt
      *
      * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(TreeNodeDataAttempt $treeNodeDataAttempt);
+    public function findLearningPathQuestionAttempts(TreeNodeAttempt $treeNodeAttempt);
 
     /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
@@ -192,14 +192,14 @@ interface LearningPathTrackingRepositoryInterface
     public function countTargetUsers(LearningPath $learningPath);
 
     /**
-     * Retrieves all the LearningPathAttempt objects with the TreeNodeDataAttempt objects and
+     * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
      * LearningPathQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeDataAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts(
         LearningPath $learningPath
     );
 }

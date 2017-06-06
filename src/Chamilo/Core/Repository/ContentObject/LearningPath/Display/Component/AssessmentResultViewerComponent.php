@@ -91,7 +91,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
         $trackingService = $this->getLearningPathTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeDataAttemptId()
+            $this->getTreeNodeAttemptId()
         );
 
         $results = [];
@@ -120,7 +120,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeDataAttemptId(), $question_cid, $score, $feedback
+            $this->getTreeNodeAttemptId(), $question_cid, $score, $feedback
         );
     }
 
@@ -131,7 +131,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $this->learningPathTrackingService->changeAssessmentScore(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeDataAttemptId(), $score
+            $this->getTreeNodeAttemptId(), $score
         );
     }
 
@@ -174,7 +174,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     /**
      * @return int
      */
-    protected function getTreeNodeDataAttemptId()
+    protected function getTreeNodeAttemptId()
     {
         return (int) $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
     }

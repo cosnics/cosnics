@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\L
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component\StatisticsViewerComponent;
 use Chamilo\Core\Reporting\ReportingData;
@@ -251,12 +251,12 @@ class LearningPathAttemptProgressBlock extends ToolBlock
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                TreeNodeDataAttempt::class_name(),
-                TreeNodeDataAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
+                TreeNodeAttempt::class_name(),
+                TreeNodeAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($attempt->get_id()));
         
         $item_attempts = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            TreeNodeDataAttempt::class_name(),
+            TreeNodeAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($item_attempt = $item_attempts->next_result())
@@ -278,7 +278,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 $item_attempt_data[$item_id]['time'] += $item_attempt->get_total_time();
             }
             
-            if ($item_attempt->get_status() == TreeNodeDataAttempt::STATUS_COMPLETED)
+            if ($item_attempt->get_status() == TreeNodeAttempt::STATUS_COMPLETED)
             {
                 $item_attempt_data[$item_id]['completed'] = 1;
             }

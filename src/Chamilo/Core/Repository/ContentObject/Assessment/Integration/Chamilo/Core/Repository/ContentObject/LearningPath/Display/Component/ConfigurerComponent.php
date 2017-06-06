@@ -22,7 +22,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $configuration = $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        $configuration = $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
 
         $form = new ConfigurationForm($configuration, $this->get_url());
         
@@ -52,7 +52,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
      */
     public function configure_feedback($values)
     {
-        $learningPathChild = $this->getCurrentLearningPathTreeNode()->getLearningPathChild();
+        $learningPathChild = $this->getCurrentTreeNode()->getLearningPathChild();
         
         if (isset($values[Configuration::PROPERTY_ALLOW_HINTS]))
         {

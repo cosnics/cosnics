@@ -66,19 +66,19 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $counter = 1;
 
-        foreach ($attempts as $treeNodeDataAttempt)
+        foreach ($attempts as $treeNodeAttempt)
         {
             $category = $counter;
             $reporting_data->add_category($category);
             $reporting_data->add_data_category_row(
                 $category,
                 Translation::get('LastStartTime'),
-                DatetimeUtilities::format_locale_date(null, $treeNodeDataAttempt->get_start_time())
+                DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time())
             );
             $reporting_data->add_data_category_row(
                 $category,
                 Translation::get('Status'),
-                Translation::get($treeNodeDataAttempt->isFinished() ? 'Completed' : 'Incomplete')
+                Translation::get($treeNodeAttempt->isFinished() ? 'Completed' : 'Incomplete')
             );
 
             if($showScore)
@@ -86,14 +86,14 @@ class ProgressDetailsBlock extends ReportingBlock
                 $reporting_data->add_data_category_row(
                     $category,
                     Translation::get('Score'),
-                    $treeNodeDataAttempt->get_score() . '%'
+                    $treeNodeAttempt->get_score() . '%'
                 );
             }
 
             $reporting_data->add_data_category_row(
                 $category,
                 Translation::get('Time'),
-                DatetimeUtilities::format_seconds_to_hours($treeNodeDataAttempt->get_total_time())
+                DatetimeUtilities::format_seconds_to_hours($treeNodeAttempt->get_total_time())
             );
 
             if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
@@ -105,7 +105,7 @@ class ProgressDetailsBlock extends ReportingBlock
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID =>
                             $treeNode->getId(),
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID =>
-                            $treeNodeDataAttempt->getId()
+                            $treeNodeAttempt->getId()
                     )
                 );
 

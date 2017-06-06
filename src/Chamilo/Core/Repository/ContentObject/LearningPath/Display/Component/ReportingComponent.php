@@ -295,19 +295,19 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     {
         $labels = $scores = [];
 
-        $treeNodeDataAttempts = $learningPathTrackingService->getTreeNodeAttempts(
+        $treeNodeAttempts = $learningPathTrackingService->getTreeNodeAttempts(
             $learningPath, $user, $treeNode
         );
 
-        foreach ($treeNodeDataAttempts as $treeNodeDataAttempt)
+        foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            if(!$treeNodeDataAttempt->isFinished())
+            if(!$treeNodeAttempt->isFinished())
             {
                 continue;
             }
 
-            $labels[] = DatetimeUtilities::format_locale_date(null, $treeNodeDataAttempt->get_start_time());
-            $scores[] = (int) $treeNodeDataAttempt->get_score();
+            $labels[] = DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time());
+            $scores[] = (int) $treeNodeAttempt->get_score();
         }
 
         $html = array();

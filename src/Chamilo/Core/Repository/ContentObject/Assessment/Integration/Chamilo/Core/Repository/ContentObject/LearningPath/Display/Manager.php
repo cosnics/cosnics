@@ -31,7 +31,7 @@ abstract class Manager extends Application
         TreeNode $node
     )
     {
-        if ($this->get_parent()->canEditLearningPathTreeNode($node))
+        if ($this->get_parent()->canEditTreeNode($node))
         {
             $splitDropDownButton = new SplitDropdownButton(
                 Translation::get('BuilderComponent'),
@@ -86,8 +86,8 @@ abstract class Manager extends Application
     /**
      * @return TreeNode
      */
-    public function getCurrentLearningPathTreeNode()
+    public function getCurrentTreeNode()
     {
-        return $this->get_application()->getCurrentLearningPathTreeNode();
+        return $this->get_application()->getCurrentTreeNode();
     }
 }

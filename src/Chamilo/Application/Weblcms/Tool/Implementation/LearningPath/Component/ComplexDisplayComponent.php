@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeDataAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
@@ -528,7 +528,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return DataManager::retrieve_by_id(TreeNodeDataAttempt::class_name(), $learning_path_item_attempt_id);
+        return DataManager::retrieve_by_id(LearningPathTreeNodeAttempt::class_name(), $learning_path_item_attempt_id);
     }
 
     /**
