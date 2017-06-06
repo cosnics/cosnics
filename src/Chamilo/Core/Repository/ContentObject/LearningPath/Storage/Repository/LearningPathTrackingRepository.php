@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -171,15 +171,15 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     }
 
     /**
-     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
+     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt | DataClass
      */
     public function findActiveLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         $conditions = array();
@@ -197,7 +197,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
                 $this->learningPathTrackingParameters->getLearningPathChildAttemptClassName(),
                 LearningPathChildAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
             ),
-            new StaticConditionVariable($learningPathTreeNode->getId())
+            new StaticConditionVariable($treeNode->getId())
         );
 
         $conditions[] = new NotCondition(

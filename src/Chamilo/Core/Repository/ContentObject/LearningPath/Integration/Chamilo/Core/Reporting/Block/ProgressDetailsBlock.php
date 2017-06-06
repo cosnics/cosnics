@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -30,8 +30,8 @@ class ProgressDetailsBlock extends ReportingBlock
      */
     public function count_data()
     {
-        /** @var LearningPathTreeNode $learningPathTreeNode */
-        $learningPathTreeNode = $this->get_parent()->get_parent()->getCurrentLearningPathTreeNode();
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
 
         /** @var LearningPathTrackingService $learningPathTrackingService */
         $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
@@ -44,7 +44,7 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $reporting_data = new ReportingData();
 
-        $showScore = $learningPathTreeNode->getContentObject() instanceof Assessment;
+        $showScore = $treeNode->getContentObject() instanceof Assessment;
 
         $rows = array(
             Translation::get('LastStartTime'),
@@ -60,8 +60,8 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $reporting_data->set_rows($rows);
 
-        $attempts = $learningPathTrackingService->getLearningPathTreeNodeAttempts(
-            $learningPath, $user, $learningPathTreeNode
+        $attempts = $learningPathTrackingService->getTreeNodeAttempts(
+            $learningPath, $user, $treeNode
         );
 
         $counter = 1;
@@ -103,7 +103,7 @@ class ProgressDetailsBlock extends ReportingBlock
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID =>
-                            $learningPathTreeNode->getId(),
+                            $treeNode->getId(),
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID =>
                             $learningPathChildAttempt->getId()
                     )
@@ -138,8 +138,8 @@ class ProgressDetailsBlock extends ReportingBlock
             Translation::get('Time'),
             '<span style="font-weight: bold;">' .
             DatetimeUtilities::format_seconds_to_hours(
-                $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
-                    $learningPath, $user, $learningPathTreeNode
+                $learningPathTrackingService->getTotalTimeSpentInTreeNode(
+                    $learningPath, $user, $treeNode
                 )
             ) . '</span>'
         );

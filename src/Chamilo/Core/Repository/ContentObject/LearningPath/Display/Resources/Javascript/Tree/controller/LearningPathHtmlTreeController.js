@@ -3,14 +3,14 @@
 
     learningPathHtmlTreeApp.controller(
         'learningPathHtmlTreeController',
-        ['$scope', '$http', 'canEditLearningPathTree', 'inReportingMode', 'treeData',
+        ['$scope', '$http', 'canEditTree', 'inReportingMode', 'treeData',
             'addTreeNodeAjaxUrl', 'deleteTreeNodeAjaxUrl', 'fetchTreeNodesAjaxUrl', 'moveTreeNodeAjaxUrl', 'updateTreeNodeTitleAjaxUrl', 'translationsJSON',
-            function ($scope, $http, canEditLearningPathTree, inReportingMode, treeData, addTreeNodeAjaxUrl, deleteTreeNodeAjaxUrl, fetchTreeNodesAjaxUrl, moveTreeNodeAjaxUrl, updateTreeNodeTitleAjaxUrl, translationsJSON) {
+            function ($scope, $http, canEditTree, inReportingMode, treeData, addTreeNodeAjaxUrl, deleteTreeNodeAjaxUrl, fetchTreeNodesAjaxUrl, moveTreeNodeAjaxUrl, updateTreeNodeTitleAjaxUrl, translationsJSON) {
 
 
             var translations = JSON.parse(translationsJSON);
 
-            $scope.canEditLearningPathTree = canEditLearningPathTree;
+            $scope.canEditTree = canEditTree;
             $scope.inReportingMode = inReportingMode;
             $scope.isLoading = false;
             $scope.showError = false;
@@ -78,7 +78,7 @@
                 var items = {};
                 var actions = [];
 
-                if ($scope.canEditLearningPathTree && !$scope.inReportingMode) {
+                if ($scope.canEditTree && !$scope.inReportingMode) {
                     items["addSection"] =
                         {
                             name: translations['AddNewSection'],
@@ -159,7 +159,7 @@
                 else if (!$scope.inReportingMode) {
                     actions = ['progress', 'activity'];
                 }
-                else if($scope.canEditLearningPathTree && $scope.inReportingMode)
+                else if($scope.canEditTree && $scope.inReportingMode)
                 {
                     actions = ['view', '-', 'reporting', 'progress'];
                 }
@@ -372,7 +372,7 @@
                 renderTitle: function (event, data) {
                     var title = data.node.title;
 
-                    if($scope.canEditLearningPathTree && !$scope.inReportingMode) {
+                    if($scope.canEditTree && !$scope.inReportingMode) {
                         var stepBlocked = data.node.data.step_blocked;
 
                         if(stepBlocked) {

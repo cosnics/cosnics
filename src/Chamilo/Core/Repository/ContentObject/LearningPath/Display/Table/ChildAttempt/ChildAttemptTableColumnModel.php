@@ -22,7 +22,7 @@ class ChildAttemptTableColumnModel extends TableColumnModel implements TableColu
         $this->add_column(new StaticTableColumn('last_start_time'));
         $this->add_column(new StaticTableColumn('status'));
 
-        if($this->get_component()->getCurrentLearningPathTreeNode()->getContentObject() instanceof Assessment)
+        if($this->get_component()->getCurrentTreeNode()->getContentObject() instanceof Assessment)
         {
             $this->add_column(new StaticTableColumn('score'));
         }

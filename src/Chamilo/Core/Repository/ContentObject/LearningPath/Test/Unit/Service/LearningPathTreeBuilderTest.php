@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
@@ -12,11 +12,11 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\Test;
 
 /**
- * Tests the LearningPathTreeBuilder class
+ * Tests the TreeBuilder class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTreeBuilderTest extends Test
+class TreeBuilderTest extends Test
 {
     /**
      * @var LearningPathChildRepository | \PHPUnit_Framework_MockObject_MockObject
@@ -29,9 +29,9 @@ class LearningPathTreeBuilderTest extends Test
     protected $contentObjectRepositoryMock;
 
     /**
-     * @var LearningPathTreeBuilder
+     * @var TreeBuilder
      */
-    protected $learningPathTreeBuilder;
+    protected $treeBuilder;
 
     /**
      * Setup before each test
@@ -46,7 +46,7 @@ class LearningPathTreeBuilderTest extends Test
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->learningPathTreeBuilder = new LearningPathTreeBuilder(
+        $this->treeBuilder = new TreeBuilder(
             $this->learningPathChildRepositoryMock, $this->contentObjectRepositoryMock
         );
     }
@@ -58,13 +58,13 @@ class LearningPathTreeBuilderTest extends Test
     {
         unset($this->learningPathChildRepositoryMock);
         unset($this->contentObjectRepositoryMock);
-        unset($this->learningPathTreeBuilder);
+        unset($this->treeBuilder);
     }
 
     /**
-     * Tests the BuilderLearningPathTree function
+     * Tests the BuilderTree function
      */
-    public function testBuildLearningPathTree()
+    public function testBuildTree()
     {
         $rootLearningPath = new LearningPath();
         $page = new Page();
@@ -82,15 +82,15 @@ class LearningPathTreeBuilderTest extends Test
             ->withConsecutive(array(5))
             ->willReturnOnConsecutiveCalls($page);
 
-        $learningPathTree = $this->learningPathTreeBuilder->buildLearningPathTree($rootLearningPath);
+        $tree = $this->treeBuilder->buildTree($rootLearningPath);
 
-        $this->assertEquals(2, count($learningPathTree->getLearningPathTreeNodes()));
+        $this->assertEquals(2, count($tree->getTreeNodes()));
     }
 
     /**
-     * Tests the BuilderLearningPathTree function with sub learning paths
+     * Tests the BuilderTree function with sub learning paths
      */
-    public function testBuilderLearningPathTreeWithSubLearningPaths()
+    public function testBuilderTreeWithSubLearningPaths()
     {
         $rootLearningPath = new LearningPath();
         $subLearningPath = new LearningPath();
@@ -112,9 +112,9 @@ class LearningPathTreeBuilderTest extends Test
             ->withConsecutive(10, 5)
             ->willReturnOnConsecutiveCalls($subLearningPath, $page);
 
-        $learningPathTree = $this->learningPathTreeBuilder->buildLearningPathTree($rootLearningPath);
+        $tree = $this->treeBuilder->buildTree($rootLearningPath);
 
-        $this->assertEquals(3, count($learningPathTree->getLearningPathTreeNodes()));
+        $this->assertEquals(3, count($tree->getTreeNodes()));
     }
 
 }

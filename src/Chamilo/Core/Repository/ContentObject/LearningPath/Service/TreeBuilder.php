@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTreeBuilder
+class TreeBuilder
 {
     /**
      * @var LearningPathChildRepository
@@ -31,12 +31,12 @@ class LearningPathTreeBuilder
     protected $contentObjectRepository;
 
     /**
-     * @var LearningPathTreeNode[][]
+     * @var TreeNode[][]
      */
-    protected $learningPathTreeNodesPerContentObjectId;
+    protected $treeNodesPerContentObjectId;
 
     /**
-     * LearningPathTreeBuilder constructor.
+     * TreeBuilder constructor.
      *
      * @param LearningPathChildRepository $learningPathChildRepository
      * @param ContentObjectRepository $contentObjectRepository
@@ -55,14 +55,14 @@ class LearningPathTreeBuilder
      *
      * @param LearningPath $learningPath
      *
-     * @return LearningPathTree
+     * @return Tree
      */
-    public function buildLearningPathTree(LearningPath $learningPath)
+    public function buildTree(LearningPath $learningPath)
     {
         $this->learningPathChildRepository->clearLearningPathChildrenCache();
 
-        $learningPathTree = new LearningPathTree();
-        $rootLearningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
+        $tree = new Tree();
+        $rootTreeNode = new TreeNode($tree, $learningPath);
 
         $learningPathChildren = $this->learningPathChildRepository
             ->findLearningPathChildrenForLearningPath($learningPath);
@@ -75,24 +75,24 @@ class LearningPathTreeBuilder
             [$learningPathChild->getDisplayOrder()] = $learningPathChild;
         }
 
-        $this->addChildrenForSection(0, $orderedLearningPathChildren, $learningPathTree, $rootLearningPathTreeNode);
+        $this->addChildrenForSection(0, $orderedLearningPathChildren, $tree, $rootTreeNode);
 
-        $this->addContentObjectsToLearningPathTreeNodes();
+        $this->addContentObjectsToTreeNodes();
 
-        unset($this->learningPathTreeNodesPerContentObjectId);
+        unset($this->treeNodesPerContentObjectId);
 
-        return $learningPathTree;
+        return $tree;
     }
 
     /**
      * @param int $parentLearningPathChildId
      * @param LearningPathChild[][] $orderedLearningPathChildren
-     * @param LearningPathTree $learningPathTree
-     * @param LearningPathTreeNode $parentLearningPathTreeNode
+     * @param Tree $tree
+     * @param TreeNode $parentTreeNode
      */
     protected function addChildrenForSection(
-        $parentLearningPathChildId = 0, $orderedLearningPathChildren = array(), LearningPathTree $learningPathTree,
-        LearningPathTreeNode $parentLearningPathTreeNode
+        $parentLearningPathChildId = 0, $orderedLearningPathChildren = array(), Tree $tree,
+        TreeNode $parentTreeNode
     )
     {
         $learningPathChildrenForSection = $orderedLearningPathChildren[$parentLearningPathChildId];
@@ -100,15 +100,15 @@ class LearningPathTreeBuilder
 
         foreach ($learningPathChildrenForSection as $learningPathChild)
         {
-            $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, null, $learningPathChild);
-            $parentLearningPathTreeNode->addChildNode($learningPathTreeNode);
+            $treeNode = new TreeNode($tree, null, $learningPathChild);
+            $parentTreeNode->addChildNode($treeNode);
 
-            $this->learningPathTreeNodesPerContentObjectId[$learningPathChild->getContentObjectId()][] =
-                $learningPathTreeNode;
+            $this->treeNodesPerContentObjectId[$learningPathChild->getContentObjectId()][] =
+                $treeNode;
 
             $this->addChildrenForSection(
-                $learningPathChild->getId(), $orderedLearningPathChildren, $learningPathTree,
-                $learningPathTreeNode
+                $learningPathChild->getId(), $orderedLearningPathChildren, $tree,
+                $treeNode
             );
         }
     }
@@ -116,9 +116,9 @@ class LearningPathTreeBuilder
     /**
      * Adds the content objects to the learning path tree nodes in batch
      */
-    protected function addContentObjectsToLearningPathTreeNodes()
+    protected function addContentObjectsToTreeNodes()
     {
-        $contentObjectIds = array_keys($this->learningPathTreeNodesPerContentObjectId);
+        $contentObjectIds = array_keys($this->treeNodesPerContentObjectId);
 
         $contentObjects = $this->contentObjectRepository->findAll(
             ContentObject::class_name(),
@@ -133,7 +133,7 @@ class LearningPathTreeBuilder
         while($contentObject = $contentObjects->next_result())
         {
             /** @var ContentObject $contentObject */
-            $nodes = $this->learningPathTreeNodesPerContentObjectId[$contentObject->getId()];
+            $nodes = $this->treeNodesPerContentObjectId[$contentObject->getId()];
             foreach($nodes as $node)
             {
                 $node->setContentObject($contentObject);

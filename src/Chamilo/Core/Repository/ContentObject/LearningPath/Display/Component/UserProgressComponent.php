@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTable;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -35,7 +35,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
     function build()
     {
-        if(!$this->canEditCurrentLearningPathTreeNode())
+        if(!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -56,7 +56,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = '<div class="col-lg-8 col-md-12">';
 
         $html[] = $this->renderInformationPanel(
-            $this->getCurrentLearningPathTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
+            $this->getCurrentTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
         );
 
         $html[] = '</div>';
@@ -94,7 +94,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
     /**
      * Renders the information panel
      *
-     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param TreeNode $currentTreeNode
      * @param AutomaticNumberingService $automaticNumberingService
      * @param Translation $translator
      * @param PanelRenderer $panelRenderer
@@ -102,26 +102,26 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      * @return string
      */
     protected function renderInformationPanel(
-        LearningPathTreeNode $currentLearningPathTreeNode, AutomaticNumberingService $automaticNumberingService,
+        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService,
         Translation $translator, PanelRenderer $panelRenderer
     )
     {
         $parentTitles = array();
-        foreach ($currentLearningPathTreeNode->getParentNodes() as $parentNode)
+        foreach ($currentTreeNode->getParentNodes() as $parentNode)
         {
             $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
-            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($parentNode);
             $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
         }
 
         $informationValues = [];
 
         $informationValues[$translator->getTranslation('Title')] =
-            $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
-                $currentLearningPathTreeNode
+            $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
+                $currentTreeNode
             );
 
-        if (!$currentLearningPathTreeNode->isRootNode())
+        if (!$currentTreeNode->isRootNode())
         {
             $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
         }
@@ -149,13 +149,13 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $data = [
             $trackingService->countTargetUsersWithFullLearningPathAttempts(
-                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+                $this->get_root_content_object(), $this->getCurrentTreeNode()
             ),
             $trackingService->countTargetUsersWithPartialLearningPathAttempts(
-                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+                $this->get_root_content_object(), $this->getCurrentTreeNode()
             ),
             $trackingService->countTargetUsersWithoutLearningPathAttempts(
-                $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode()
+                $this->get_root_content_object(), $this->getCurrentTreeNode()
             )
         ];
 
@@ -218,7 +218,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $buttonGroup = new ButtonGroup();
 
-        $translationVariable = $this->getCurrentLearningPathTreeNode()->isRootNode() ?
+        $translationVariable = $this->getCurrentTreeNode()->isRootNode() ?
             'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
 
         $buttonGroup->addButton(

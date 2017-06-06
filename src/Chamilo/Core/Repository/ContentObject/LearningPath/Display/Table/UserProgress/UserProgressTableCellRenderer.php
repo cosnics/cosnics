@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserP
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,13 +39,13 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
             case 'progress':
                 $learningPathTrackingService = $this->getLearningPathTrackingService();
                 $learningPath = $this->getLearningPath();
-                $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+                $currentTreeNode = $this->getCurrentTreeNode();
 
                 $user = new User();
                 $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
 
                 $progress = $learningPathTrackingService->getLearningPathProgress(
-                    $learningPath, $user, $currentLearningPathTreeNode
+                    $learningPath, $user, $currentTreeNode
                 );
 
                 $progressBarRenderer = new ProgressBarRenderer();
@@ -53,9 +53,9 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 return $progressBarRenderer->render($progress);
             case 'completed':
                 $numberOfNodes = $record['nodes_completed'];
-                $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+                $currentTreeNode = $this->getCurrentTreeNode();
 
-                if ($numberOfNodes >= count($currentLearningPathTreeNode->getDescendantNodes()) + 1)
+                if ($numberOfNodes >= count($currentTreeNode->getDescendantNodes()) + 1)
                 {
                     return Theme::getInstance()->getCommonImage('Status/OkMini');
                 }
@@ -107,8 +107,8 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
             )
         );
 
-        if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
-            $learningPath, $reportingUser, $this->getCurrentLearningPathTreeNode()
+        if ($learningPathTrackingService->hasTreeNodeAttempts(
+            $learningPath, $reportingUser, $this->getCurrentTreeNode()
         )
         )
         {
@@ -173,10 +173,10 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
     }
 
     /**
-     * @return LearningPathTreeNode
+     * @return TreeNode
      */
-    protected function getCurrentLearningPathTreeNode()
+    protected function getCurrentTreeNode()
     {
-        return $this->get_component()->getCurrentLearningPathTreeNode();
+        return $this->get_component()->getCurrentTreeNode();
     }
 }

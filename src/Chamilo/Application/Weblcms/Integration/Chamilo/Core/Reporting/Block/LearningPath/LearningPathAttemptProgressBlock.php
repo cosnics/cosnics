@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component\StatisticsViewerComponent;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPath;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -58,7 +58,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
             ContentObjectPublication::class_name(), 
             $pid);
         
-        $menu = new LearningPathTree($publication->get_content_object_id(), null, null, $attempt_data);
+        $menu = new Tree($publication->get_content_object_id(), null, null, $attempt_data);
         $objects = $menu->get_objects();
 
         /** @var LearningPath $contentObject */

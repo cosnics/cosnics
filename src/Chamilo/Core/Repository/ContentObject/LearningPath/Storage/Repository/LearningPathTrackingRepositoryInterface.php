@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -77,15 +77,15 @@ interface LearningPathTrackingRepositoryInterface
     public function findLearningPathChildAttemptsForLearningPath(LearningPath $learningPath);
 
     /**
-     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
+     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt | DataClass
      */
     public function findActiveLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     );
 
     /**

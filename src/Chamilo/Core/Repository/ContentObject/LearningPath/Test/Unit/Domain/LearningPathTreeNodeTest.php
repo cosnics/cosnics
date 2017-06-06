@@ -2,37 +2,37 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Domain;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Libraries\Architecture\Test\Test;
 
 /**
- * Tests the LearningPathTreeNode class
+ * Tests the TreeNode class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTreeNodeTest extends Test
+class TreeNodeTest extends Test
 {
-    public function testStepAutomaticallySetByLearningPathTree()
+    public function testStepAutomaticallySetByTree()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals(1, $learningPathTreeNode->getStep());
+        $this->assertEquals(1, $treeNode->getStep());
     }
 
-    public function testConstructorCallsLearningPathTree()
+    public function testConstructorCallsTree()
     {
-        /** @var LearningPathTree | \PHPUnit_Framework_MockObject_MockObject $learningPathTreeMock */
-        $learningPathTreeMock = $this->getMock(LearningPathTree::class, array(), array(), '', false);
+        /** @var Tree | \PHPUnit_Framework_MockObject_MockObject $treeMock */
+        $treeMock = $this->getMock(Tree::class, array(), array(), '', false);
 
-        $learningPathTreeMock->expects($this->once())
-            ->method('addLearningPathTreeNode');
+        $treeMock->expects($this->once())
+            ->method('addTreeNode');
 
-        new LearningPathTreeNode($learningPathTreeMock, new LearningPath());
+        new TreeNode($treeMock, new LearningPath());
     }
 
     /**
@@ -40,61 +40,61 @@ class LearningPathTreeNodeTest extends Test
      */
     public function testSetStepCalledTwiceThrowsException()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNode->setStep(5);
+        $treeNode->setStep(5);
     }
 
-    public function testGetLearningPathTree()
+    public function testGetTree()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals($learningPathTree, $learningPathTreeNode->getLearningPathTree());
+        $this->assertEquals($tree, $treeNode->getTree());
     }
 
     public function testGetContentObject()
     {
         $contentObject = new LearningPath();
 
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, $contentObject);
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, $contentObject);
 
-        $this->assertEquals($contentObject, $learningPathTreeNode->getContentObject());
+        $this->assertEquals($contentObject, $treeNode->getContentObject());
     }
 
     public function testSetGetLearningPathChild()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
         $learningPathChild = new LearningPathChild();
-        $learningPathTreeNode->setLearningPathChild($learningPathChild);
+        $treeNode->setLearningPathChild($learningPathChild);
 
-        $this->assertEquals($learningPathChild, $learningPathTreeNode->getLearningPathChild());
+        $this->assertEquals($learningPathChild, $treeNode->getLearningPathChild());
     }
 
     public function testSetParentNode()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
 
-        $this->assertEquals($learningPathTreeNodeParent, $learningPathTreeNodeChild->getParentNode());
+        $this->assertEquals($treeNodeParent, $treeNodeChild->getParentNode());
     }
 
     public function testSetParentNodeAddsParentToAllParents()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
 
-        $this->assertEquals(array(1 => $learningPathTreeNodeParent), $learningPathTreeNodeChild->getParentNodes());
+        $this->assertEquals(array(1 => $treeNodeParent), $treeNodeChild->getParentNodes());
     }
 
     /**
@@ -102,148 +102,148 @@ class LearningPathTreeNodeTest extends Test
      */
     public function testSetParentNodeThrowsExceptionWhenCalledTwice()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
     }
 
     public function testSetParentNodeCallsAddChildNode()
     {
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        /** @var LearningPathTreeNode | \PHPUnit_Framework_MockObject_MockObject $learningPathTreeNodeMock */
-        $learningPathTreeNodeMock =
-            $this->getMock(LearningPathTreeNode::class, array(), array(), '', false);
+        /** @var TreeNode | \PHPUnit_Framework_MockObject_MockObject $treeNodeMock */
+        $treeNodeMock =
+            $this->getMock(TreeNode::class, array(), array(), '', false);
 
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeMock->expects($this->once())
+        $treeNodeMock->expects($this->once())
             ->method('addChildNode')
-            ->with($learningPathTreeNodeChild, false);
+            ->with($treeNodeChild, false);
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeMock);
+        $treeNodeChild->setParentNode($treeNodeMock);
     }
 
     public function testSetParentNodeAddsChildToParent()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getChildNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getChildNodes());
     }
 
     public function testSetParentNodeAddsDescendantToParent()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->setParentNode($learningPathTreeNodeParent);
+        $treeNodeChild->setParentNode($treeNodeParent);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getDescendantNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getDescendantNodes());
     }
 
     public function testAddChildNode()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getChildNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getChildNodes());
     }
 
     public function testAddChildNodeAddsChildToDescendants()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getDescendantNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getDescendantNodes());
     }
 
     public function testAddChildTwiceShouldNotBeAddedTwice()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getChildNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getChildNodes());
     }
 
     public function testSetParentNodeCallsSetParentNode()
     {
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        /** @var LearningPathTreeNode | \PHPUnit_Framework_MockObject_MockObject $learningPathTreeNodeMock */
-        $learningPathTreeNodeMock =
-            $this->getMock(LearningPathTreeNode::class, array(), array(), '', false);
+        /** @var TreeNode | \PHPUnit_Framework_MockObject_MockObject $treeNodeMock */
+        $treeNodeMock =
+            $this->getMock(TreeNode::class, array(), array(), '', false);
 
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeMock->expects($this->once())
+        $treeNodeMock->expects($this->once())
             ->method('setParentNode')
-            ->with($learningPathTreeNodeParent, false);
+            ->with($treeNodeParent, false);
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeMock);
+        $treeNodeParent->addChildNode($treeNodeMock);
     }
 
     public function testAddChildNodeSetsParentNode()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
 
-        $this->assertEquals($learningPathTreeNodeParent, $learningPathTreeNodeChild->getParentNode());
+        $this->assertEquals($treeNodeParent, $treeNodeChild->getParentNode());
     }
 
     public function testAddChildNodeAddsParentNodeToParentNodes()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addChildNode($learningPathTreeNodeChild);
+        $treeNodeParent->addChildNode($treeNodeChild);
 
-        $this->assertEquals(array(1 => $learningPathTreeNodeParent), $learningPathTreeNodeChild->getParentNodes());
+        $this->assertEquals(array(1 => $treeNodeParent), $treeNodeChild->getParentNodes());
     }
 
     public function testAddDescendantNodeTwice()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeParent->addDescendantNode($learningPathTreeNodeChild);
-        $learningPathTreeNodeParent->addDescendantNode($learningPathTreeNodeChild);
+        $treeNodeParent->addDescendantNode($treeNodeChild);
+        $treeNodeParent->addDescendantNode($treeNodeChild);
 
-        $this->assertEquals(array(2 => $learningPathTreeNodeChild), $learningPathTreeNodeParent->getDescendantNodes());
+        $this->assertEquals(array(2 => $treeNodeChild), $treeNodeParent->getDescendantNodes());
     }
 
-    public function testAddLearningPathTreeNodeToParentNodesTwice()
+    public function testAddTreeNodeToParentNodesTwice()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNodeParent = new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNodeChild = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNodeParent = new TreeNode($tree, new LearningPath());
+        $treeNodeChild = new TreeNode($tree, new LearningPath());
 
-        $learningPathTreeNodeChild->addLearningPathTreeNodeToParentNodes($learningPathTreeNodeParent);
-        $learningPathTreeNodeChild->addLearningPathTreeNodeToParentNodes($learningPathTreeNodeParent);
+        $treeNodeChild->addTreeNodeToParentNodes($treeNodeParent);
+        $treeNodeChild->addTreeNodeToParentNodes($treeNodeParent);
 
-        $this->assertEquals(array(1 => $learningPathTreeNodeParent), $learningPathTreeNodeChild->getParentNodes());
+        $this->assertEquals(array(1 => $treeNodeParent), $treeNodeChild->getParentNodes());
     }
 
     /**
@@ -267,18 +267,18 @@ class LearningPathTreeNodeTest extends Test
 
         $page1 = new Page();
 
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        $learningPathNodeA = new LearningPathTreeNode($learningPathTree, $learningPathA);
-        $learningPathNodeB1 = new LearningPathTreeNode($learningPathTree, $learningPathB);
+        $learningPathNodeA = new TreeNode($tree, $learningPathA);
+        $learningPathNodeB1 = new TreeNode($tree, $learningPathB);
 
-        $learningPathNodePage1A = new LearningPathTreeNode($learningPathTree, $page1);
+        $learningPathNodePage1A = new TreeNode($tree, $page1);
 
-        $learningPathNodeC = new LearningPathTreeNode($learningPathTree, $learningPathC);
-        $learningPathNodeD = new LearningPathTreeNode($learningPathTree, $learningPathD);
-        $learningPathNodeB2 = new LearningPathTreeNode($learningPathTree, $learningPathB);
+        $learningPathNodeC = new TreeNode($tree, $learningPathC);
+        $learningPathNodeD = new TreeNode($tree, $learningPathD);
+        $learningPathNodeB2 = new TreeNode($tree, $learningPathB);
 
-        $learningPathNodePage1B = new LearningPathTreeNode($learningPathTree, $page1);
+        $learningPathNodePage1B = new TreeNode($tree, $page1);
 
         $learningPathNodeA->addChildNode($learningPathNodeB1);
         $learningPathNodeB1->addChildNode($learningPathNodePage1A);

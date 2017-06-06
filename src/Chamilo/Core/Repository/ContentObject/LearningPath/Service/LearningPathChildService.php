@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
@@ -96,10 +96,10 @@ class LearningPathChildService
 
     /**
      * Adds a given content object to a learning path. Validates the content object to make sure that the
-     * system does not create a cycle. Uses the LearningPathTree for calculations.
+     * system does not create a cycle. Uses the Tree for calculations.
      *
      * @param LearningPath $rootLearningPath
-     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param TreeNode $currentTreeNode
      * @param ContentObject $childContentObject
      *
      * @param User $user
@@ -107,18 +107,18 @@ class LearningPathChildService
      * @return LearningPathChild
      */
     public function addContentObjectToLearningPath(
-        LearningPath $rootLearningPath, LearningPathTreeNode $currentLearningPathTreeNode,
+        LearningPath $rootLearningPath, TreeNode $currentTreeNode,
         ContentObject $childContentObject, User $user
     )
     {
-        $parentLearningPathTreeNode = $currentLearningPathTreeNode->getContentObject() instanceof Section ||
-        $currentLearningPathTreeNode->isRootNode() ?
-            $currentLearningPathTreeNode : $currentLearningPathTreeNode->getParentNode();
+        $parentTreeNode = $currentTreeNode->getContentObject() instanceof Section ||
+        $currentTreeNode->isRootNode() ?
+            $currentTreeNode : $currentTreeNode->getParentNode();
 
         $learningPathChild = new LearningPathChild();
 
         $learningPathChild->setLearningPathId((int) $rootLearningPath->getId());
-        $learningPathChild->setParentLearningPathChildId((int) $parentLearningPathTreeNode->getId());
+        $learningPathChild->setParentLearningPathChildId((int) $parentTreeNode->getId());
         $learningPathChild->setContentObjectId((int) $childContentObject->getId());
         $learningPathChild->setUserId((int) $user->getId());
         $learningPathChild->setAddedDate(time());
@@ -150,13 +150,14 @@ class LearningPathChildService
     /**
      * @param string $contentObjectType
      * @param LearningPath $learningPath
-     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param TreeNode $currentTreeNode
      * @param User $user
      * @param string $title
+     *
      * @return LearningPathChild
      */
     public function createAndAddContentObjectToLearningPath(
-        $contentObjectType, LearningPath $learningPath, LearningPathTreeNode $currentLearningPathTreeNode, User $user, $title = '...'
+        $contentObjectType, LearningPath $learningPath, TreeNode $currentTreeNode, User $user, $title = '...'
     )
     {
         if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
@@ -177,22 +178,22 @@ class LearningPathChildService
         }
 
         return $this->addContentObjectToLearningPath(
-            $learningPath, $currentLearningPathTreeNode, $contentObject, $user
+            $learningPath, $currentTreeNode, $contentObject, $user
         );
     }
 
     /**
-     * Updates a content object for a given learning path child. Uses the LearningPathTree.
+     * Updates a content object for a given learning path child. Uses the Tree.
      * Validates the content object to make sure that the system does not create a cycle.
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      * @param ContentObject $newContentObject
      */
     public function updateContentObjectInLearningPathChild(
-        LearningPathTreeNode $learningPathTreeNode, ContentObject $newContentObject
+        TreeNode $treeNode, ContentObject $newContentObject
     )
     {
-        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+        $learningPathChild = $treeNode->getLearningPathChild();
         $learningPathChild->setContentObjectId((int) $newContentObject->getId());
 
         if (!$this->learningPathChildRepository->update($learningPathChild))
@@ -211,21 +212,21 @@ class LearningPathChildService
      * Moves a content object from a learning path to a different learning path. The content object and the
      * parent learning path is identified by the learning path tree
      *
-     * @param LearningPathTreeNode $selectedLearningPathTreeNode
-     * @param LearningPathTreeNode $parentLearningPathTreeNode
+     * @param TreeNode $selectedTreeNode
+     * @param TreeNode $parentTreeNode
      * @param int $newDisplayOrder
      */
     public function moveContentObjectToOtherLearningPath(
-        LearningPathTreeNode $selectedLearningPathTreeNode, LearningPathTreeNode $parentLearningPathTreeNode,
+        TreeNode $selectedTreeNode, TreeNode $parentTreeNode,
         $newDisplayOrder = null
     )
     {
-        $learningPathChild = $selectedLearningPathTreeNode->getLearningPathChild();
+        $learningPathChild = $selectedTreeNode->getLearningPathChild();
 
-        if ($learningPathChild->getParentLearningPathChildId() != $parentLearningPathTreeNode->getId())
+        if ($learningPathChild->getParentLearningPathChildId() != $parentTreeNode->getId())
         {
             $learningPathChild->setParentLearningPathChildId(
-                (int) $parentLearningPathTreeNode->getId()
+                (int) $parentTreeNode->getId()
             );
         }
 
@@ -247,13 +248,13 @@ class LearningPathChildService
     }
 
     /**
-     * Toggles the blocked status of a given ContentObject identified by a given LearningPathTreeNode
+     * Toggles the blocked status of a given ContentObject identified by a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      */
-    public function toggleContentObjectBlockedStatus(LearningPathTreeNode $learningPathTreeNode)
+    public function toggleContentObjectBlockedStatus(TreeNode $treeNode)
     {
-        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+        $learningPathChild = $treeNode->getLearningPathChild();
 
         if (!$learningPathChild)
         {
@@ -277,26 +278,26 @@ class LearningPathChildService
     }
 
     /**
-     * Updates the title of a given ContentObject identified by a given LearningPathTreeNode
+     * Updates the title of a given ContentObject identified by a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      * @param string $newTitle
      */
-    public function updateContentObjectTitle(LearningPathTreeNode $learningPathTreeNode, $newTitle = null)
+    public function updateContentObjectTitle(TreeNode $treeNode, $newTitle = null)
     {
         if (empty($newTitle) || !is_string($newTitle))
         {
             throw new \InvalidArgumentException('The given title should not be empty and should be a valid string');
         }
 
-        $contentObject = $learningPathTreeNode->getContentObject();
+        $contentObject = $treeNode->getContentObject();
 
         if (!$contentObject instanceof ContentObject)
         {
             throw new \RuntimeException(
                 sprintf(
-                    'The given LearningPathTreeNode with id %s does not have a valid content object attached',
-                    $learningPathTreeNode->getId()
+                    'The given TreeNode with id %s does not have a valid content object attached',
+                    $treeNode->getId()
                 )
             );
         }
@@ -315,12 +316,13 @@ class LearningPathChildService
      * Deletes a content object from a learning path. The relation between the learning path and the content object
      * is defined by the learning path tree node
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
+     *
      * @todo move to learning path service
      */
-    public function deleteContentObjectFromLearningPath(LearningPathTreeNode $learningPathTreeNode)
+    public function deleteContentObjectFromLearningPath(TreeNode $treeNode)
     {
-        $learningPathChild = $learningPathTreeNode->getLearningPathChild();
+        $learningPathChild = $treeNode->getLearningPathChild();
 
         if (!$learningPathChild)
         {
@@ -340,7 +342,7 @@ class LearningPathChildService
             );
         }
 
-        $childNodes = $learningPathTreeNode->getChildNodes();
+        $childNodes = $treeNode->getChildNodes();
         foreach ($childNodes as $childNode)
         {
             $this->deleteContentObjectFromLearningPath($childNode);

@@ -3,21 +3,14 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -27,7 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GetLearningPathTreeComponent extends Manager
+class GetTreeComponent extends Manager
 {
     const PARAM_LEARNING_PATH_ID = 'learning_path_id';
 
@@ -53,9 +46,9 @@ class GetLearningPathTreeComponent extends Manager
                 throw new NotAllowedException();
             }
 
-            $learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree($learningPath);
+            $tree = $this->getTreeBuilder()->buildTree($learningPath);
 
-            return new JsonResponse($this->convertLearningPathTreeToArray($learningPathTree));
+            return new JsonResponse($this->convertTreeToArray($tree));
         }
         catch (\Exception $ex)
         {
@@ -64,22 +57,22 @@ class GetLearningPathTreeComponent extends Manager
     }
 
     /**
-     * @param LearningPathTree $learningPathTree
+     * @param Tree $tree
      *
      * @return \string[]
      */
-    protected function convertLearningPathTreeToArray(LearningPathTree $learningPathTree)
+    protected function convertTreeToArray(Tree $tree)
     {
-        $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-            $learningPathTree, $this->getUser(),
+        $treeJSONMapper = new TreeJSONMapper(
+            $tree, $this->getUser(),
             null,
             $this->getAutomaticNumberingService(),
             new NodeBaseActionGenerator(Translation::getInstance(), $this->get_parameters()),
             '',
-            $learningPathTree->getRoot(), true, false
+            $tree->getRoot(), true, false
         );
 
-        return $learningPathTreeJSONMapper->getNodes();
+        return $treeJSONMapper->getNodes();
     }
 
     /**
@@ -91,14 +84,14 @@ class GetLearningPathTreeComponent extends Manager
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
+     * Returns the TreeBuilder service
      *
-     * @return LearningPathTreeBuilder | object
+     * @return TreeBuilder | object
      */
-    public function getLearningPathTreeBuilder()
+    public function getTreeBuilder()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
         );
     }
 

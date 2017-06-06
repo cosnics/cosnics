@@ -2,10 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
@@ -28,9 +28,9 @@ class LearningPathPublicationService
     protected $learningPathChildService;
 
     /**
-     * @var LearningPathTreeBuilder
+     * @var TreeBuilder
      */
-    protected $learningPathTreeBuilder;
+    protected $treeBuilder;
 
     /**
      * @var ContentObjectRepository
@@ -38,24 +38,24 @@ class LearningPathPublicationService
     protected $contentObjectRepository;
 
     /**
-     * @var LearningPathTree[]
+     * @var Tree[]
      */
-    protected $learningPathTreeCache;
+    protected $treeCache;
 
     /**
      * LearningPathPublicationService constructor.
      *
      * @param LearningPathChildService $learningPathChildService
-     * @param LearningPathTreeBuilder $learningPathTreeBuilder
+     * @param TreeBuilder $treeBuilder
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        LearningPathChildService $learningPathChildService, LearningPathTreeBuilder $learningPathTreeBuilder,
+        LearningPathChildService $learningPathChildService, TreeBuilder $treeBuilder,
         ContentObjectRepository $contentObjectRepository
     )
     {
         $this->learningPathChildService = $learningPathChildService;
-        $this->learningPathTreeBuilder = $learningPathTreeBuilder;
+        $this->treeBuilder = $treeBuilder;
         $this->contentObjectRepository = $contentObjectRepository;
     }
 
@@ -84,17 +84,17 @@ class LearningPathPublicationService
 
         foreach ($learningPathChildren as $learningPathChild)
         {
-            $learningPathTree = $this->getLearningPathTreeForLearningPathChild($learningPathChild);
-            foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
+            $tree = $this->getTreeForLearningPathChild($learningPathChild);
+            foreach ($tree->getTreeNodes() as $treeNode)
             {
-                if ($learningPathTreeNode->getContentObject()->getId() != $contentObjectId)
+                if ($treeNode->getContentObject()->getId() != $contentObjectId)
                 {
                     continue;
                 }
 
                 try
                 {
-                    $this->learningPathChildService->deleteContentObjectFromLearningPath($learningPathTreeNode);
+                    $this->learningPathChildService->deleteContentObjectFromLearningPath($treeNode);
                 }
                 catch (\Exception $ex)
                 {
@@ -110,8 +110,8 @@ class LearningPathPublicationService
      */
     public function deleteContentObjectPublicationsByLearningPathChildId($learningPathChildId)
     {
-        $learningPathTreeNode = $this->getLearningPathTreeNodeByLearningPathChildId($learningPathChildId);
-        $this->learningPathChildService->deleteContentObjectFromLearningPath($learningPathTreeNode);
+        $treeNode = $this->getTreeNodeByLearningPathChildId($learningPathChildId);
+        $this->learningPathChildService->deleteContentObjectFromLearningPath($treeNode);
     }
 
     /**
@@ -122,13 +122,13 @@ class LearningPathPublicationService
      */
     public function updateContentObjectIdInLearningPathChild($learningPathChildId, $newContentObjectId)
     {
-        $learningPathTreeNode = $this->getLearningPathTreeNodeByLearningPathChildId($learningPathChildId);
+        $treeNode = $this->getTreeNodeByLearningPathChildId($learningPathChildId);
 
         $newContentObject = new ContentObject();
         $newContentObject->setId($newContentObjectId);
 
         $this->learningPathChildService->updateContentObjectInLearningPathChild(
-            $learningPathTreeNode, $newContentObject
+            $treeNode, $newContentObject
         );
     }
 
@@ -218,16 +218,16 @@ class LearningPathPublicationService
      *
      * @param int $learningPathChildId
      *
-     * @return LearningPathTreeNode
+     * @return TreeNode
      */
-    protected function getLearningPathTreeNodeByLearningPathChildId($learningPathChildId)
+    protected function getTreeNodeByLearningPathChildId($learningPathChildId)
     {
         $learningPathChild = $this->learningPathChildService->getLearningPathChildById($learningPathChildId);
 
-        $learningPathTree = $this->getLearningPathTreeForLearningPathChild($learningPathChild);
-        $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $learningPathChildId);
+        $tree = $this->getTreeForLearningPathChild($learningPathChild);
+        $treeNode = $tree->getTreeNodeById((int) $learningPathChildId);
 
-        return $learningPathTreeNode;
+        return $treeNode;
     }
 
     /**
@@ -235,19 +235,19 @@ class LearningPathPublicationService
      *
      * @param LearningPathChild $learningPathChild
      *
-     * @return LearningPathTree
+     * @return Tree
      */
-    protected function getLearningPathTreeForLearningPathChild(LearningPathChild $learningPathChild)
+    protected function getTreeForLearningPathChild(LearningPathChild $learningPathChild)
     {
-        if (!array_key_exists($learningPathChild->getLearningPathId(), $this->learningPathTreeCache))
+        if (!array_key_exists($learningPathChild->getLearningPathId(), $this->treeCache))
         {
             $learningPath = $this->getLearningPathByLearningPathChild($learningPathChild);
 
-            $this->learningPathTreeCache[$learningPathChild->getLearningPathId()] =
-                $this->learningPathTreeBuilder->buildLearningPathTree($learningPath);
+            $this->treeCache[$learningPathChild->getLearningPathId()] =
+                $this->treeBuilder->buildTree($learningPath);
         }
 
-        return $this->learningPathTreeCache[$learningPathChild->getLearningPathId()];
+        return $this->treeCache[$learningPathChild->getLearningPathId()];
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -42,8 +42,8 @@ class ProgressBlock extends ReportingBlock
             )
         );
 
-        /** @var LearningPathTree $learningPathTree */
-        $learningPathTree = $this->get_parent()->get_parent()->getLearningPathTree();
+        /** @var Tree $tree */
+        $tree = $this->get_parent()->get_parent()->getTree();
 
         /** @var LearningPathTrackingService $learningPathTrackingService */
         $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
@@ -58,13 +58,13 @@ class ProgressBlock extends ReportingBlock
         $total_time = 0;
         $attempt_count = 0;
 
-        foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
+        foreach ($tree->getTreeNodes() as $treeNode)
         {
-            $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
-                $learningPath, $user, $learningPathTreeNode
+            $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInTreeNode(
+                $learningPath, $user, $treeNode
             );
 
-            $content_object = $learningPathTreeNode->getContentObject();
+            $content_object = $treeNode->getContentObject();
             $category = $counter;
             $reporting_data->add_category($category);
 
@@ -76,15 +76,15 @@ class ProgressBlock extends ReportingBlock
 
             $reporting_data->add_data_category_row($category, Translation::get('Title'), $content_object->get_title());
 
-            $status = $learningPathTrackingService->isLearningPathTreeNodeCompleted(
-                $learningPath, $user, $learningPathTreeNode
+            $status = $learningPathTrackingService->isTreeNodeCompleted(
+                $learningPath, $user, $treeNode
             ) ?
                 Translation::get('Completed') : Translation::get('Incomplete');
 
             $reporting_data->add_data_category_row($category, Translation::get('Status'), $status);
 
-            $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                $learningPath, $user, $learningPathTreeNode
+            $averageScore = $learningPathTrackingService->getAverageScoreInTreeNode(
+                $learningPath, $user, $treeNode
             );
 
             $reporting_data->add_data_category_row(
@@ -100,15 +100,15 @@ class ProgressBlock extends ReportingBlock
 
             $actions = array();
 
-            if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
-                $learningPath, $user, $learningPathTreeNode
+            if ($learningPathTrackingService->hasTreeNodeAttempts(
+                $learningPath, $user, $treeNode
             )
             )
             {
                 $reporting_url = $this->get_parent()->get_parent()->get_url(
                     array(
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId(
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNode->getId(
                         )
                     )
                 );
@@ -126,7 +126,7 @@ class ProgressBlock extends ReportingBlock
                     $delete_url = $this->get_parent()->get_parent()->get_url(
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId(
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNode->getId(
                             )
                         )
                     );
@@ -143,8 +143,8 @@ class ProgressBlock extends ReportingBlock
 
             $reporting_data->add_data_category_row($category, Translation::get('Action'), implode(PHP_EOL, $actions));
 
-            $attempt_count += $learningPathTrackingService->countLearningPathTreeNodeAttempts(
-                $learningPath, $user, $learningPathTreeNode
+            $attempt_count += $learningPathTrackingService->countTreeNodeAttempts(
+                $learningPath, $user, $treeNode
             );
 
             $total_time += $totalTimeSpent;

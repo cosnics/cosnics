@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -41,9 +41,9 @@ abstract class Embedder
     protected $learningPath;
 
     /**
-     * @var LearningPathTreeNode
+     * @var TreeNode
      */
-    protected $learningPathTreeNode;
+    protected $treeNode;
 
     /**
      * Embedder constructor.
@@ -51,19 +51,19 @@ abstract class Embedder
      * @param Application $application
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param LearningPath $learningPath
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      */
     public function __construct(
         \Chamilo\Libraries\Architecture\Application\Application $application,
         LearningPathTrackingService $learningPathTrackingService,
         LearningPath $learningPath,
-        LearningPathTreeNode $learningPathTreeNode
+        TreeNode $treeNode
     )
     {
         $this->application = $application;
         $this->learningPathTrackingService = $learningPathTrackingService;
         $this->learningPath = $learningPath;
-        $this->learningPathTreeNode = $learningPathTreeNode;
+        $this->treeNode = $treeNode;
     }
 
     /**
@@ -81,11 +81,11 @@ abstract class Embedder
     public function track()
     {
         $this->learningPathTrackingService->changeActiveAttemptStatus(
-            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+            $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 
         $activeAttemptId = $this->learningPathTrackingService->getActiveAttemptId(
-            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+            $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 
         // We need the second parent as the first one is just the display itself, since the embedder is a child of the
@@ -131,7 +131,7 @@ abstract class Embedder
      * @param Application $application
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param LearningPath $learningPath
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Embedder
      */
@@ -139,21 +139,21 @@ abstract class Embedder
         Application $application,
         LearningPathTrackingService $learningPathTrackingService,
         LearningPath $learningPath,
-        LearningPathTreeNode $learningPathTreeNode
+        TreeNode $treeNode
     )
     {
-        $namespace = $learningPathTreeNode->getContentObject()->package() .
+        $namespace = $treeNode->getContentObject()->package() .
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         $class_name = $namespace . '\Embedder';
 
         if (!class_exists($class_name))
         {
             return new ContentObjectEmbedder(
-                $application, $learningPathTrackingService, $learningPath, $learningPathTreeNode
+                $application, $learningPathTrackingService, $learningPath, $treeNode
             );
         }
 
-        return new $class_name($application, $learningPathTrackingService, $learningPath, $learningPathTreeNode);
+        return new $class_name($application, $learningPathTrackingService, $learningPath, $treeNode);
     }
 
     /**

@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGener
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Generates the actions for a given LearningPathTreeNode
+ * Generates the actions for a given TreeNode
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -40,50 +40,50 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
-     * Generates the acions for a given LearningPathTreeNode
+     * Generates the acions for a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
-     * @param bool $canEditLearningPathTreeNode
+     * @param TreeNode $treeNode
+     * @param bool $canEditTreeNode
      *
      * @return array|Action[]
      */
     public function generateNodeActions(
-        LearningPathTreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+        TreeNode $treeNode, $canEditTreeNode = false
     ): array
     {
         $actions = array();
 
-        if ($canEditLearningPathTreeNode)
+        if ($canEditTreeNode)
         {
-            $actions[] = $this->getUpdateNodeAction($learningPathTreeNode);
-            $actions[] = $this->getNodeReportingAction($learningPathTreeNode);
+            $actions[] = $this->getUpdateNodeAction($treeNode);
+            $actions[] = $this->getNodeReportingAction($treeNode);
 
             /** @var LearningPath $learningPath */
-            $learningPath = $learningPathTreeNode->getLearningPathTree()->getRoot()->getContentObject();
+            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
 
-            if (!$learningPath->enforcesDefaultTraversingOrder() && !$learningPathTreeNode->isRootNode())
+            if (!$learningPath->enforcesDefaultTraversingOrder() && !$treeNode->isRootNode())
             {
-                $actions[] = $this->getBlockOrUnblockNodeAction($learningPathTreeNode);
+                $actions[] = $this->getBlockOrUnblockNodeAction($treeNode);
             }
 
-            if (!$learningPathTreeNode->isRootNode())
+            if (!$treeNode->isRootNode())
             {
-                $actions[] = $this->getDeleteNodeAction($learningPathTreeNode);
-                $actions[] = $this->getMoveNodeAction($learningPathTreeNode);
+                $actions[] = $this->getDeleteNodeAction($treeNode);
+                $actions[] = $this->getMoveNodeAction($treeNode);
             }
         }
 
-        $actions[] = $this->getMyProgressNodeAction($learningPathTreeNode);
-        $actions[] = $this->getNodeActivityAction($learningPathTreeNode);
+        $actions[] = $this->getMyProgressNodeAction($treeNode);
+        $actions[] = $this->getNodeActivityAction($treeNode);
 
-        if ($learningPathTreeNode->hasChildNodes())
+        if ($treeNode->hasChildNodes())
         {
-            $actions[] = $this->getManageNodesAction($learningPathTreeNode);
+            $actions[] = $this->getManageNodesAction($treeNode);
         }
 
-        $actions[] = $this->getViewNodeAction($learningPathTreeNode);
+        $actions[] = $this->getViewNodeAction($treeNode);
 
-        $nodeSpecificActions = $this->getNodeSpecificActions($learningPathTreeNode, $canEditLearningPathTreeNode);
+        $nodeSpecificActions = $this->getNodeSpecificActions($treeNode, $canEditTreeNode);
 
         if (is_array($nodeSpecificActions) && !empty($nodeSpecificActions))
         {
@@ -94,54 +94,54 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
-     * Returns the action to view a given LearningPathTreeNode
+     * Returns the action to view a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getViewNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getViewNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('view', $title, $url, 'fa-file');
     }
 
     /**
-     * Returns the action to update a given LearningPathTreeNode
+     * Returns the action to update a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getUpdateNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getUpdateNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('edit', $title, $url, 'fa-pencil');
     }
 
     /**
-     * Returns the action to delete a given LearningPathTreeNode
+     * Returns the action to delete a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getDeleteNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getDeleteNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action(
@@ -150,138 +150,138 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
-     * Returns the action to move a given LearningPathTreeNode
+     * Returns the action to move a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getMoveNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getMoveNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('Move', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_MOVE),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('move', $title, $url, 'fa-random');
     }
 
     /**
-     * Returns the action to view the activity of a given LearningPathTreeNode
+     * Returns the action to view the activity of a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getNodeActivityAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getNodeActivityAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('activity', $title, $url, 'fa-mouse-pointer');
     }
 
     /**
-     * Returns the action to view the activity of a given LearningPathTreeNode
+     * Returns the action to view the activity of a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getManageNodesAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getManageNodesAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('manage', $title, $url, 'fa-bars');
     }
 
     /**
-     * Returns the action to block or unblock a given LearningPathTreeNode
+     * Returns the action to block or unblock a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getBlockOrUnblockNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getBlockOrUnblockNodeAction(TreeNode $treeNode)
     {
-        $translationVariable = ($learningPathTreeNode->getLearningPathChild() &&
-            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $translationVariable = ($treeNode->getLearningPathChild() &&
+            $treeNode->getLearningPathChild()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($learningPathTreeNode->getLearningPathChild() &&
-            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $icon = ($treeNode->getLearningPathChild() &&
+            $treeNode->getLearningPathChild()->isBlocked()) ?
             'unlock' : 'ban';
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('block', $title, $url, 'fa-' . $icon);
     }
 
     /**
-     * Returns the action to view the progress for a given LearningPathTreeNode
+     * Returns the action to view the progress for a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getMyProgressNodeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getMyProgressNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('progress', $title, $url, 'fa-pie-chart');
     }
 
     /**
-     * Returns the action to view the reporting for a given LearningPathTreeNode
+     * Returns the action to view the reporting for a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return Action
      */
-    protected function getNodeReportingAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getNodeReportingAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('Reporting', null, Manager::context());
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS),
-            $learningPathTreeNode->getId()
+            $treeNode->getId()
         );
 
         return new Action('reporting', $title, $url, 'fa-bar-chart');
     }
 
     /**
-     * Generates the node specific actions for the given LearningPathTreeNode
+     * Generates the node specific actions for the given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
-     * @param bool $canEditLearningPathTreeNode
+     * @param TreeNode $treeNode
+     * @param bool $canEditTreeNode
      *
      * @return array|Action[]
      */
     protected function getNodeSpecificActions(
-        LearningPathTreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+        TreeNode $treeNode, $canEditTreeNode = false
     )
     {
-        $contentObjectType = $learningPathTreeNode->getContentObject()->get_type();
+        $contentObjectType = $treeNode->getContentObject()->get_type();
         if (array_key_exists($contentObjectType, $this->contentObjectTypeNodeActionGenerators))
         {
             return $this->contentObjectTypeNodeActionGenerators[$contentObjectType]->generateNodeActions(
-                $learningPathTreeNode, $canEditLearningPathTreeNode
+                $treeNode, $canEditTreeNode
             );
         }
 

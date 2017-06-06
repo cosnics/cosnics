@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Child
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
@@ -63,13 +63,13 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
      * Define the unique identifier for the row needed for e.g.
      * checkboxes
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return int
      */
-    public function render_id_cell($learningPathTreeNode)
+    public function render_id_cell($treeNode)
     {
-        return $learningPathTreeNode->getId();
+        return $treeNode->getId();
     }
 
     /**
@@ -83,12 +83,12 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        if ($this->getCurrentLearningPathTreeNode()->getContentObject() instanceof Assessment)
+        if ($this->getCurrentTreeNode()->getContentObject() instanceof Assessment)
         {
             $assessmentResultViewerUrl = $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_VIEW_ASSESSMENT_RESULT,
-                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentLearningPathTreeNode()->getId(),
+                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
                     Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
                 )
             );
@@ -112,7 +112,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
             $delete_url = $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
-                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentLearningPathTreeNode()->getId(),
+                    Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
                     Manager::PARAM_ITEM_ATTEMPT_ID => $learningPathChildAttempt->getId()
                 )
             );
@@ -132,11 +132,11 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     }
 
     /**
-     * @return LearningPathTreeNode
+     * @return TreeNode
      */
-    protected function getCurrentLearningPathTreeNode()
+    protected function getCurrentTreeNode()
     {
-        return $this->get_component()->getCurrentLearningPathTreeNode();
+        return $this->get_component()->getCurrentTreeNode();
     }
 
     /**

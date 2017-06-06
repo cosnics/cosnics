@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 
 /**
@@ -20,16 +20,16 @@ class AutomaticNumberingService
     protected $automaticNumberingCache = array();
 
     /**
-     * Returns the automatic numbering for the given LearningPathTreeNode
+     * Returns the automatic numbering for the given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return string
      */
-    public function getAutomaticNumberingForLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
+    public function getAutomaticNumberingForTreeNode(TreeNode $treeNode)
     {
         /** @var LearningPath $learningPath */
-        $learningPath = $learningPathTreeNode->getLearningPathTree()->getRoot()->getContentObject();
+        $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
 
         if (!$learningPath->usesAutomaticNumbering())
         {
@@ -38,48 +38,48 @@ class AutomaticNumberingService
 
         if (!array_key_exists($learningPath->getId(), $this->automaticNumberingCache))
         {
-            $this->buildAutomaticNumberingForLearningPathTreeNode(
-                $learningPath, $learningPathTreeNode->getLearningPathTree()->getRoot()
+            $this->buildAutomaticNumberingForTreeNode(
+                $learningPath, $treeNode->getTree()->getRoot()
             );
         }
 
-        if (!array_key_exists($learningPathTreeNode->getId(), $this->automaticNumberingCache[$learningPath->getId()]))
+        if (!array_key_exists($treeNode->getId(), $this->automaticNumberingCache[$learningPath->getId()]))
         {
             throw new \RuntimeException(
-                'Could not generate an automatic number for the LearningPathTreeNode with id ' .
-                $learningPathTreeNode->getId()
+                'Could not generate an automatic number for the TreeNode with id ' .
+                $treeNode->getId()
             );
         }
 
-        return $this->automaticNumberingCache[$learningPath->getId()][$learningPathTreeNode->getId()];
+        return $this->automaticNumberingCache[$learningPath->getId()][$treeNode->getId()];
     }
 
     /**
-     * Returns the title for the given LearningPathTreeNode with the automatic numbering
+     * Returns the title for the given TreeNode with the automatic numbering
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return string
      */
-    public function getAutomaticNumberedTitleForLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
+    public function getAutomaticNumberedTitleForTreeNode(TreeNode $treeNode)
     {
-        return $this->getAutomaticNumberingForLearningPathTreeNode($learningPathTreeNode) . ' ' .
-            $learningPathTreeNode->getContentObject()->get_title();
+        return $this->getAutomaticNumberingForTreeNode($treeNode) . ' ' .
+            $treeNode->getContentObject()->get_title();
     }
 
     /**
      * Builds the automatic numbering for the given learning path and learning path tree node, works recursively
      *
      * @param LearningPath $learningPath
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      * @param int $counter
      * @param string $prefix
      */
-    protected function buildAutomaticNumberingForLearningPathTreeNode(
-        LearningPath $learningPath, LearningPathTreeNode $learningPathTreeNode, $counter = 1, $prefix = ''
+    protected function buildAutomaticNumberingForTreeNode(
+        LearningPath $learningPath, TreeNode $treeNode, $counter = 1, $prefix = ''
     )
     {
-        if(!$learningPathTreeNode->isRootNode())
+        if(!$treeNode->isRootNode())
         {
             $automaticNumber = $prefix ? $prefix . '.' . $counter : $counter;
             $automaticNumberString = $automaticNumber . '.';
@@ -90,17 +90,17 @@ class AutomaticNumberingService
             $automaticNumberString = '';
         }
 
-        $this->automaticNumberingCache[$learningPath->getId()][$learningPathTreeNode->getId()] = $automaticNumberString;
+        $this->automaticNumberingCache[$learningPath->getId()][$treeNode->getId()] = $automaticNumberString;
 
-        if ($learningPathTreeNode->hasChildNodes())
+        if ($treeNode->hasChildNodes())
         {
-            $learningPathTreeChildNodes = $learningPathTreeNode->getChildNodes();
+            $treeChildNodes = $treeNode->getChildNodes();
 
             $counter = 1;
-            foreach ($learningPathTreeChildNodes as $learningPathTreeChildNode)
+            foreach ($treeChildNodes as $treeChildNode)
             {
-                $this->buildAutomaticNumberingForLearningPathTreeNode(
-                    $learningPath, $learningPathTreeChildNode, $counter, $automaticNumber
+                $this->buildAutomaticNumberingForTreeNode(
+                    $learningPath, $treeChildNode, $counter, $automaticNumber
                 );
 
                 $counter ++;

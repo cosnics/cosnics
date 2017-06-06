@@ -8,11 +8,11 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Moves the LearningPathTreeNode to a new parent and with a new display order
+ * Moves the TreeNode to a new parent and with a new display order
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class MoveLearningPathTreeNodeComponent extends Manager
+class MoveTreeNodeComponent extends Manager
 {
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
@@ -27,12 +27,12 @@ class MoveLearningPathTreeNodeComponent extends Manager
         {
             $childId = $this->getRequestedPostDataValue(self::PARAM_CHILD_ID);
 
-            $learningPathTree = $this->get_application()->getLearningPathTree();
-            $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $childId);
+            $tree = $this->get_application()->getTree();
+            $treeNode = $tree->getTreeNodeById((int) $childId);
 
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
 
-            if (!$this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
+            if (!$this->get_application()->canEditTreeNode($treeNode))
             {
                 throw new NotAllowedException();
             }
@@ -47,11 +47,11 @@ class MoveLearningPathTreeNodeComponent extends Manager
                 );
             }
 
-            $path = $this->get_application()->getLearningPathTree();
-            $parentNode = $path->getLearningPathTreeNodeById((int) $parentId);
+            $path = $this->get_application()->getTree();
+            $parentNode = $path->getTreeNodeById((int) $parentId);
 
             $learningPathChildService->moveContentObjectToOtherLearningPath(
-                $learningPathTreeNode, $parentNode, $displayOrder
+                $treeNode, $parentNode, $displayOrder
             );
 
             return new JsonResponse(null, 200);

@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\R
 
 use Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- * Generates the actions for a given LearningPathTreeNode
+ * Generates the actions for a given TreeNode
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -17,15 +17,15 @@ class NodeActionGenerator
 {
 
     /**
-     * Generates the acions for a given LearningPathTreeNode
+     * Generates the acions for a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $learningPathTreeNode
      * @param bool $canEditLearningPathTreeNode
      *
      * @return array|Action[]
      */
     public function generateNodeActions(
-        LearningPathTreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+        TreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
     ): array
     {
         $actions = array();
@@ -34,13 +34,13 @@ class NodeActionGenerator
     }
 
     /**
-     * Returns the action to build the assessment of a given LearningPathTreeNode
+     * Returns the action to build the assessment of a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $learningPathTreeNode
      *
      * @return Action
      */
-    protected function getForumSubscribeAction(LearningPathTreeNode $learningPathTreeNode)
+    protected function getForumSubscribeAction(TreeNode $learningPathTreeNode)
     {
         $contentObject = $learningPathTreeNode->getContentObject();
 

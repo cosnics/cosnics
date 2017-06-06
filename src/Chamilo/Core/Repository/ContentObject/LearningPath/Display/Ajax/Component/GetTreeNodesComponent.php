@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GetLearningPathTreeNodesComponent extends Manager
+class GetTreeNodesComponent extends Manager
 {
     const PARAM_ACTIVE_CHILD_ID = 'active_child_id';
     /**
@@ -30,26 +30,26 @@ class GetLearningPathTreeNodesComponent extends Manager
         {
             $activeChildId = $this->getRequestedPostDataValue(self::PARAM_ACTIVE_CHILD_ID);
 
-            $learningPathTree = $this->get_application()->getLearningPathTree();
-            $activeChildNode = $learningPathTree->getLearningPathTreeNodeById((int) $activeChildId);
+            $tree = $this->get_application()->getTree();
+            $activeChildNode = $tree->getTreeNodeById((int) $activeChildId);
 
             $nodeActionGeneratorFactory =
                 new NodeActionGeneratorFactory(Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(), $this->get_application()->get_parameters());
 
-            $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-                $learningPathTree, $this->getUser(),
+            $treeJSONMapper = new TreeJSONMapper(
+                $tree, $this->getUser(),
                 $this->get_application()->getLearningPathTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
-                $this->get_application()->get_application()->get_learning_path_tree_menu_url(),
+                $this->get_application()->get_application()->get_tree_menu_url(),
                 $activeChildNode,
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
-                $this->get_application()->canEditLearningPathTreeNode(
-                    $this->get_application()->getCurrentLearningPathTreeNode()
+                $this->get_application()->canEditTreeNode(
+                    $this->get_application()->getCurrentTreeNode()
                 )
             );
 
-            $treeData = $learningPathTreeJSONMapper->getNodes();
+            $treeData = $treeJSONMapper->getNodes();
 
             return new JsonResponse($treeData);
         }

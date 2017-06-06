@@ -3,11 +3,11 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -83,9 +83,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected $current_step;
 
     /**
-     * @var LearningPathTree
+     * @var Tree
      */
-    protected $learningPathTree;
+    protected $tree;
 
     /**
      * @var LearningPathTrackingService
@@ -141,7 +141,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function is_allowed_to_edit_attempt_data()
     {
-        return $this->canEditCurrentLearningPathTreeNode() &&
+        return $this->canEditCurrentTreeNode() &&
             $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
     }
 
@@ -161,7 +161,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         try
         {
-            $this->getCurrentLearningPathTreeNode();
+            $this->getCurrentTreeNode();
         }
         catch (\Exception $ex)
         {
@@ -184,44 +184,44 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
+     * Returns the TreeBuilder service
      *
-     * @return LearningPathTreeBuilder | object
+     * @return TreeBuilder | object
      */
-    public function getLearningPathTreeBuilder()
+    public function getTreeBuilder()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
         );
     }
 
     /**
-     * Returns the LearningPathTree for the current learning path root
+     * Returns the Tree for the current learning path root
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree
      */
-    public function getLearningPathTree()
+    public function getTree()
     {
-        if (!isset($this->learningPathTree))
+        if (!isset($this->tree))
         {
-            $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
+            $this->tree = $this->getTreeBuilder()->buildTree(
                 $this->learningPath
             );
         }
 
-        return $this->learningPathTree;
+        return $this->tree;
     }
 
     /**
-     * Returns the LearningPathTreeNode for the current step
+     * Returns the TreeNode for the current step
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
      */
-    public function getCurrentLearningPathTreeNode()
+    public function getCurrentTreeNode()
     {
-        $learningPathTree = $this->getLearningPathTree();
+        $tree = $this->getTree();
 
-        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
     }
 
     /**
@@ -231,7 +231,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function getCurrentContentObject()
     {
-        return $this->getCurrentLearningPathTreeNode()->getContentObject();
+        return $this->getCurrentTreeNode()->getContentObject();
     }
 
     /**
@@ -239,19 +239,19 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return bool
      */
-    public function canEditCurrentLearningPathTreeNode()
+    public function canEditCurrentTreeNode()
     {
-        return $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode());
+        return $this->canEditTreeNode($this->getCurrentTreeNode());
     }
 
     /**
      * Checks if a complex content object path node can be edited
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return bool
      */
-    public function canEditLearningPathTreeNode(LearningPathTreeNode $learningPathTreeNode)
+    public function canEditTreeNode(TreeNode $treeNode)
     {
         if($this->inStudentView())
         {
@@ -266,7 +266,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             return true;
         }
 
-        return $learningPathTreeNode->getContentObject()->get_owner_id() == $this->getUser()->getId();
+        return $treeNode->getContentObject()->get_owner_id() == $this->getUser()->getId();
     }
 
     /**
@@ -293,14 +293,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * Returns the navigation url for a given LearningPathTreeNode either to the reporting component
+     * Returns the navigation url for a given TreeNode either to the reporting component
      * or to the viewer component
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return string
      */
-    public function getLearningPathTreeNodeNavigationUrl(LearningPathTreeNode $learningPathTreeNode)
+    public function getTreeNodeNavigationUrl(TreeNode $treeNode)
     {
         $reportingActions = array(
             self::ACTION_REPORTING, self::ACTION_VIEW_ASSESSMENT_RESULT
@@ -310,7 +310,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
         return $this->get_url(
-            array(self::PARAM_ACTION => $action, self::PARAM_CHILD_ID => $learningPathTreeNode->getId())
+            array(self::PARAM_ACTION => $action, self::PARAM_CHILD_ID => $treeNode->getId())
         );
     }
 

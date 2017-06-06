@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -51,22 +51,22 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             return $this->display_error_page(Translation::get('NoObjectSelected'));
         }
 
-//        $this->learning_path_menu = new LearningPathTreeRenderer(
-//            $this->getLearningPathTree(), $this,
+//        $this->learning_path_menu = new TreeRenderer(
+//            $this->getTree(), $this,
 //            $this->getLearningPathTrackingService(),
 //            $this->getAutomaticNumberingService(),
-//            $this->get_parent()->get_learning_path_tree_menu_url(), 'learning-path-menu'
+//            $this->get_parent()->get_tree_menu_url(), 'learning-path-menu'
 //        );
 
-        $parentAndCurrentNodes = $this->getCurrentLearningPathTreeNode()->getParentNodes();
-        $parentAndCurrentNodes[] = $this->getCurrentLearningPathTreeNode();
+        $parentAndCurrentNodes = $this->getCurrentTreeNode()->getParentNodes();
+        $parentAndCurrentNodes[] = $this->getCurrentTreeNode();
 
         $automaticNumberingService = $this->getAutomaticNumberingService();
 
         foreach ($parentAndCurrentNodes as $parentNode)
         {
-            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($parentNode);
-            $url = $this->getLearningPathTreeNodeNavigationUrl($parentNode);
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($parentNode);
+            $url = $this->getTreeNodeNavigationUrl($parentNode);
 
             $trail->add(new Breadcrumb($url, $title));
         }
@@ -122,7 +122,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
 
         $javascriptFiles = array(
-            'LearningPathTree/app.js', 'LearningPathTree/controller/LearningPathHtmlTreeController.js'
+            'Tree/app.js', 'Tree/controller/LearningPathHtmlTreeController.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)
@@ -194,8 +194,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
                     => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_DELETE_LEARNING_PATH_TREE_NODE
                 )
             ),
-            'canEditLearningPathTree' =>
-                $this->canEditCurrentLearningPathTreeNode() ? 'true' : 'false',
+            'canEditTree' =>
+                $this->canEditCurrentTreeNode() ? 'true' : 'false',
             'inReportingMode' => $inReportingMode ? 'true' : 'false',
             'treeData' => $this->getBootstrapTreeData(),
             'translationsJSON' => json_encode($translations)
@@ -216,7 +216,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $learningPathTrackingService = $this->getLearningPathTrackingService();
             $progress =
                 $learningPathTrackingService->getLearningPathProgress(
-                    $this->get_root_content_object(), $this->getUser(), $this->getLearningPathTree()->getRoot()
+                    $this->get_root_content_object(), $this->getUser(), $this->getTree()->getRoot()
                 );
 
             $progressBarRenderer = new ProgressBarRenderer();
@@ -296,7 +296,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
      */
     private function get_navigation_bar()
     {
-        $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $currentTreeNode = $this->getCurrentTreeNode();
 
         $html = array();
 
@@ -305,11 +305,11 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '<div class="navbar-learning-path-actions">';
         $html[] = '<span class="learning-path-action-menu">';
 
-        $previous_node = $currentLearningPathTreeNode->getPreviousNode();
+        $previous_node = $currentTreeNode->getPreviousNode();
 
-        if ($previous_node instanceof LearningPathTreeNode)
+        if ($previous_node instanceof TreeNode)
         {
-            $previous_url = $this->getLearningPathTreeNodeNavigationUrl($previous_node);
+            $previous_url = $this->getTreeNodeNavigationUrl($previous_node);
             $label = Translation::get('Previous');
 
             $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url .
@@ -335,11 +335,11 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
         $html[] = '</span>';
 
-        $next_node = $currentLearningPathTreeNode->getNextNode();
+        $next_node = $currentTreeNode->getNextNode();
 
-        if ($next_node instanceof LearningPathTreeNode)
+        if ($next_node instanceof TreeNode)
         {
-            $next_url = $this->getLearningPathTreeNodeNavigationUrl($next_node);
+            $next_url = $this->getTreeNodeNavigationUrl($next_node);
             $label = Translation::get('Next');
 
             $html[] = '<a id="learning-path-navigate-right" href="' . $next_url .
@@ -363,24 +363,24 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
     protected function getBootstrapTreeData()
     {
-        $learningPathTree = $this->getLearningPathTree();
+        $tree = $this->getTree();
 
         $nodeActionGeneratorFactory =
             new NodeActionGeneratorFactory(Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(), $this->get_application()->get_parameters());
 
-        $learningPathTreeJSONMapper = new LearningPathTreeJSONMapper(
-            $learningPathTree, $this->getUser(),
+        $treeJSONMapper = new TreeJSONMapper(
+            $tree, $this->getUser(),
             $this->getLearningPathTrackingService(),
             $this->getAutomaticNumberingService(),
             $nodeActionGeneratorFactory->createNodeActionGenerator(),
-            $this->get_application()->get_learning_path_tree_menu_url(),
-            $this->getCurrentLearningPathTreeNode(),
+            $this->get_application()->get_tree_menu_url(),
+            $this->getCurrentTreeNode(),
             $this->get_application()->is_allowed_to_view_content_object(),
-            $this->canEditLearningPathTreeNode(
-                $this->getCurrentLearningPathTreeNode()
+            $this->canEditTreeNode(
+                $this->getCurrentTreeNode()
             )
         );
 
-        return json_encode($learningPathTreeJSONMapper->getNodes());
+        return json_encode($treeJSONMapper->getNodes());
     }
 }

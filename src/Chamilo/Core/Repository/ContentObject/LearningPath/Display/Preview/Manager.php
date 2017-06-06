@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\Le
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -179,44 +179,44 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
+     * Returns the TreeBuilder service
      *
-     * @return LearningPathTreeBuilder | object
+     * @return TreeBuilder | object
      */
-    protected function getLearningPathTreeBuilder()
+    protected function getTreeBuilder()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
         );
     }
 
     /**
-     * Returns the LearningPathTree for the current learning path root
+     * Returns the Tree for the current learning path root
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree
      */
-    protected function getLearningPathTree()
+    protected function getTree()
     {
-        if (!isset($this->learningPathTree))
+        if (!isset($this->tree))
         {
-            $this->learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree(
+            $this->tree = $this->getTreeBuilder()->buildTree(
                 parent::get_root_content_object()
             );
         }
 
-        return $this->learningPathTree;
+        return $this->tree;
     }
 
     /**
-     * Returns the LearningPathTreeNode for the current step
+     * Returns the TreeNode for the current step
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
      */
-    public function getCurrentLearningPathTreeNode()
+    public function getCurrentTreeNode()
     {
-        $learningPathTree = $this->getLearningPathTree();
+        $tree = $this->getTree();
 
-        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
     }
 
     /**

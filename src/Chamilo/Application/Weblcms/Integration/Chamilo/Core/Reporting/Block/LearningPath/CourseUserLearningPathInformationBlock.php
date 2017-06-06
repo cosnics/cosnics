@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\Learning
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -70,8 +70,6 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             $learning_paths[$attempt->get_publication_id()] = $attempt;
         }
 
-        // TODO: Using the content object name for the tool name is a bad idea ... a better solution should be found and
-        // implemented
         $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name());
 
         $params = array();
@@ -149,10 +147,10 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $user = new User();
                 $user->setId($this->get_user_id());
 
-                $learningPathTree = $this->getLearningPathTreeBuilder()->buildLearningPathTree($learning_path);
+                $tree = $this->getTreeBuilder()->buildTree($learning_path);
 
                 $progress = $this->get_progress_bar(
-                    $trackingService->getLearningPathProgress($learning_path, $user, $learningPathTree->getRoot())
+                    $trackingService->getLearningPathProgress($learning_path, $user, $tree->getRoot())
                 );
             }
 
@@ -206,16 +204,16 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
+     * Returns the TreeBuilder service
      *
-     * @return LearningPathTreeBuilder | object
+     * @return TreeBuilder | object
      */
-    protected function getLearningPathTreeBuilder()
+    protected function getTreeBuilder()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $container->get(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
         );
     }
 

@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -51,11 +51,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const PARAM_ATTEMPT_ID = 'attempt_id';
 
     /**
-     * LearningPathTree cache
+     * Tree cache
      *
-     * @var LearningPathTree[]
+     * @var Tree[]
      */
-    protected $learningPathTree;
+    protected $tree;
 
     public function get_available_browser_types()
     {
@@ -235,14 +235,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * Returns the LearningPathTreeBuilder service
+     * Returns the TreeBuilder service
      *
-     * @return LearningPathTreeBuilder | object
+     * @return TreeBuilder | object
      */
-    protected function getLearningPathTreeBuilder()
+    protected function getTreeBuilder()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
         );
     }
 
@@ -259,34 +259,34 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * Returns the LearningPathTree for the current learning path root
+     * Returns the Tree for the current learning path root
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree
      */
-    protected function getLearningPathTree(LearningPath $learningPath)
+    protected function getTree(LearningPath $learningPath)
     {
-        if (!isset($this->learningPathTree[$learningPath->getId()]))
+        if (!isset($this->tree[$learningPath->getId()]))
         {
-            $this->learningPathTree[$learningPath->getId()] =
-                $this->getLearningPathTreeBuilder()->buildLearningPathTree($learningPath);
+            $this->tree[$learningPath->getId()] =
+                $this->getTreeBuilder()->buildTree($learningPath);
         }
 
-        return $this->learningPathTree[$learningPath->getId()];
+        return $this->tree[$learningPath->getId()];
     }
 
     /**
-     * Returns the LearningPathTreeNode for the current step
+     * Returns the TreeNode for the current step
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
      */
-    public function getCurrentLearningPathTreeNode(LearningPath $learningPath)
+    public function getCurrentTreeNode(LearningPath $learningPath)
     {
-        $learningPathTree = $this->getLearningPathTree($learningPath);
+        $tree = $this->getTree($learningPath);
 
-        return $learningPathTree->getLearningPathTreeNodeById($this->getCurrentLearningPathChildId());
+        return $tree->getTreeNodeById($this->getCurrentLearningPathChildId());
     }
 }

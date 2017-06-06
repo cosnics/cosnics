@@ -21,8 +21,8 @@ class DirectMoverComponent extends Manager
     {
         $this->validateSelectedLearningPathChild();
 
-        $currentNode = $this->getCurrentLearningPathTreeNode();
-        if (!$this->canEditLearningPathTreeNode($currentNode))
+        $currentNode = $this->getCurrentTreeNode();
+        if (!$this->canEditTreeNode($currentNode))
         {
             throw new NotAllowedException();
         }
@@ -37,11 +37,11 @@ class DirectMoverComponent extends Manager
             );
         }
 
-        $path = $this->getLearningPathTree();
+        $path = $this->getTree();
 
         try
         {
-            $parentNode = $path->getLearningPathTreeNodeById((int) $parentId);
+            $parentNode = $path->getTreeNodeById((int) $parentId);
         }
         catch (\Exception $ex)
         {
@@ -52,7 +52,7 @@ class DirectMoverComponent extends Manager
         {
             $learningPathChildService = $this->getLearningPathChildService();
             $learningPathChildService->moveContentObjectToOtherLearningPath(
-                $this->getCurrentLearningPathTreeNode(), $parentNode, $displayOrder
+                $this->getCurrentTreeNode(), $parentNode, $displayOrder
             );
             $success = true;
         }
@@ -89,7 +89,7 @@ class DirectMoverComponent extends Manager
         );
 
         $parameters = array();
-        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getId();
+        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getId();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
         $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));

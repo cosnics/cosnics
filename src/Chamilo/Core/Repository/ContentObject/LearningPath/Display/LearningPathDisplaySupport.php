@@ -44,7 +44,7 @@ interface LearningPathDisplaySupport extends DisplaySupport
      *
      * @return string
      */
-    public function get_learning_path_tree_menu_url();
+    public function get_tree_menu_url();
 
     /**
      * Creates a learning path item tracker

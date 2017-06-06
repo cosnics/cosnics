@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -134,27 +134,27 @@ class LearningPathAttemptService
 
     /**
      * Returns the existing and active LearningPathChildAttempt or creates a new one for the given
-     * LearningPathAttempt and LearningPathTreeNode
+     * LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt
      */
     public function getOrCreateActiveLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         $learningPathAttemptId = $learningPathAttempt->getId();
-        $learningPathTreeNodeId = $learningPathTreeNode->getId();
+        $treeNodeId = $treeNode->getId();
 
         if (!array_key_exists($learningPathAttemptId, $this->activeLearningPathChildAttemptCache) || !array_key_exists(
-                $learningPathTreeNodeId, $this->activeLearningPathChildAttemptCache[$learningPathAttemptId]
+                $treeNodeId, $this->activeLearningPathChildAttemptCache[$learningPathAttemptId]
             )
         )
         {
             $activeLearningPathChildAttempt = $this->getActiveLearningPathChildAttempt(
-                $learningPathAttempt, $learningPathTreeNode
+                $learningPathAttempt, $treeNode
             );
 
             if ($activeLearningPathChildAttempt instanceof LearningPathChildAttempt)
@@ -165,49 +165,49 @@ class LearningPathAttemptService
             else
             {
                 $activeLearningPathChildAttempt =
-                    $this->createLearningPathChildAttempt($learningPathAttempt, $learningPathTreeNode);
+                    $this->createLearningPathChildAttempt($learningPathAttempt, $treeNode);
             }
 
-            $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$learningPathTreeNodeId] =
+            $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$treeNodeId] =
                 $activeLearningPathChildAttempt;
         }
 
-        return $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$learningPathTreeNodeId];
+        return $this->activeLearningPathChildAttemptCache[$learningPathAttemptId][$treeNodeId];
     }
 
     /**
-     * Returns the active LearningPathChildAttempt for a given LearningPathAttempt and LearningPathTreeNode
+     * Returns the active LearningPathChildAttempt for a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt
      */
     public function getActiveLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         return $this->learningPathTrackingRepository->findActiveLearningPathChildAttempt(
-            $learningPathAttempt, $learningPathTreeNode
+            $learningPathAttempt, $treeNode
         );
     }
 
     /**
-     * Creates a LearningPathChildAttempt for a given LearningPathAttempt and LearningPathTreeNode
+     * Creates a LearningPathChildAttempt for a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt
      */
     public function createLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         $learningPathChildAttempt = $this->learningPathTrackingParameters->createLearningPathChildAttemptInstance();
 
         $learningPathChildAttempt->set_learning_path_attempt_id($learningPathAttempt->getId());
-        $learningPathChildAttempt->set_learning_path_item_id($learningPathTreeNode->getId());
+        $learningPathChildAttempt->set_learning_path_item_id($treeNode->getId());
         $learningPathChildAttempt->set_start_time(time());
         $learningPathChildAttempt->set_total_time(0);
         $learningPathChildAttempt->set_score(0);
@@ -267,19 +267,19 @@ class LearningPathAttemptService
      * Returns the LearningPathChildAttempt objects for a given learning path tree node
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt[]
      */
-    public function getLearningPathChildAttemptsForLearningPathTreeNode(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+    public function getLearningPathChildAttemptsForTreeNode(
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         $learningPathChildAttempts = $this->getLearningPathChildAttempts($learningPathAttempt);
 
-        if(array_key_exists($learningPathTreeNode->getId(), $learningPathChildAttempts))
+        if(array_key_exists($treeNode->getId(), $learningPathChildAttempts))
         {
-            return $learningPathChildAttempts[$learningPathTreeNode->getId()];
+            return $learningPathChildAttempts[$treeNode->getId()];
         }
 
         return array();

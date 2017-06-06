@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -159,15 +159,15 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
     }
 
     /**
-     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and LearningPathTreeNode
+     * Finds a LearningPathChildAttempt by a given LearningPathAttempt and TreeNode
      *
      * @param LearningPathAttempt $learningPathAttempt
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return LearningPathChildAttempt | DataClass
      */
     public function findActiveLearningPathChildAttempt(
-        LearningPathAttempt $learningPathAttempt, LearningPathTreeNode $learningPathTreeNode
+        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
     )
     {
         /** @var DummyChildAttempt[][] $childAttempts */
@@ -176,7 +176,7 @@ class LearningPathTrackingRepository implements LearningPathTrackingRepositoryIn
 
         foreach ($childAttemptsForLearningPathAttempt as $childAttempt)
         {
-            if ($childAttempt->get_learning_path_item_id() == $learningPathTreeNode->getId() &&
+            if ($childAttempt->get_learning_path_item_id() == $treeNode->getId() &&
                 !$childAttempt->isFinished()
             )
             {

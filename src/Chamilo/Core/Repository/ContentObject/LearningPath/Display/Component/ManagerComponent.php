@@ -22,8 +22,8 @@ class ManagerComponent extends BaseHtmlTreeComponent implements TableSupport
      */
     public function build()
     {
-        $currentNode = $this->getCurrentLearningPathTreeNode();
-        if (!$this->canEditLearningPathTreeNode($currentNode))
+        $currentNode = $this->getCurrentTreeNode();
+        if (!$this->canEditTreeNode($currentNode))
         {
             throw new NotAllowedException();
         }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
@@ -26,9 +26,9 @@ class ItemTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        /** @var LearningPathTreeNode $learningPathTreeNode */
-        $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
-        return new ArrayResultSet(array_values($learningPathTreeNode->getChildNodes()));
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_component()->getCurrentTreeNode();
+        return new ArrayResultSet(array_values($treeNode->getChildNodes()));
     }
 
     /**
@@ -39,8 +39,8 @@ class ItemTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        /** @var LearningPathTreeNode $learningPathTreeNode */
-        $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
-        return count($learningPathTreeNode->getChildNodes());
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_component()->getCurrentTreeNode();
+        return count($treeNode->getChildNodes());
     }
 }

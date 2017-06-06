@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathChild;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
@@ -26,9 +26,9 @@ class LearningPathService
     protected $contentObjectRepository;
 
     /**
-     * @var LearningPathTreeBuilder
+     * @var TreeBuilder
      */
-    protected $learningPathTreeBuilder;
+    protected $treeBuilder;
 
     /**
      * @var LearningPathChildService
@@ -39,16 +39,16 @@ class LearningPathService
      * LearningPathService constructor.
      *
      * @param ContentObjectRepository $contentObjectRepository
-     * @param LearningPathTreeBuilder $learningPathTreeBuilder
+     * @param TreeBuilder $treeBuilder
      * @param LearningPathChildService $learningPathChildService
      */
     public function __construct(
-        ContentObjectRepository $contentObjectRepository, LearningPathTreeBuilder $learningPathTreeBuilder,
+        ContentObjectRepository $contentObjectRepository, TreeBuilder $treeBuilder,
         LearningPathChildService $learningPathChildService
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
-        $this->learningPathTreeBuilder = $learningPathTreeBuilder;
+        $this->treeBuilder = $treeBuilder;
         $this->learningPathChildService = $learningPathChildService;
     }
 
@@ -68,26 +68,26 @@ class LearningPathService
     }
 
     /**
-     * Copies one or multiple nodes from a given LearningPath to a given LearningPathTreeNode
+     * Copies one or multiple nodes from a given LearningPath to a given TreeNode
      *
-     * @param LearningPathTreeNode $toNode
+     * @param TreeNode $toNode
      * @param LearningPath $fromLearningPath
      * @param User $user
      * @param array $selectedNodeIds
      * @param bool $copyInsteadOfReuse
      */
     public function copyNodesFromLearningPath(
-        LearningPathTreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = array(),
+        TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = array(),
         $copyInsteadOfReuse = false
     )
     {
         /** @var LearningPath $rootLearningPath */
-        $rootLearningPath = $toNode->getLearningPathTree()->getRoot()->getContentObject();
+        $rootLearningPath = $toNode->getTree()->getRoot()->getContentObject();
 
-        $fromLearningPathTree = $this->learningPathTreeBuilder->buildLearningPathTree($fromLearningPath);
+        $fromTree = $this->treeBuilder->buildTree($fromLearningPath);
         foreach ($selectedNodeIds as $selectedNodeId)
         {
-            $selectedNode = $fromLearningPathTree->getLearningPathTreeNodeById((int) $selectedNodeId);
+            $selectedNode = $fromTree->getTreeNodeById((int) $selectedNodeId);
             $this->copyNodeAndChildren($rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse);
         }
     }
@@ -96,13 +96,13 @@ class LearningPathService
      * Copies a given node and his children to the given learning path and tree node
      *
      * @param LearningPath $rootLearningPath
-     * @param LearningPathTreeNode $toNode
-     * @param LearningPathTreeNode $fromNode
+     * @param TreeNode $toNode
+     * @param TreeNode $fromNode
      * @param User $user
      * @param bool $copyInsteadOfReuse
      */
     protected function copyNodeAndChildren(
-        LearningPath $rootLearningPath, LearningPathTreeNode $toNode, LearningPathTreeNode $fromNode, User $user,
+        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
         $copyInsteadOfReuse = false
     )
     {
@@ -112,7 +112,7 @@ class LearningPathService
 
         $learningPathChild = $this->copyLearningPathChild($rootLearningPath, $toNode, $fromNode, $user, $contentObject);
 
-        $newNode = new LearningPathTreeNode($toNode->getLearningPathTree(), $contentObject, $learningPathChild);
+        $newNode = new TreeNode($toNode->getTree(), $contentObject, $learningPathChild);
         $toNode->addChildNode($newNode);
 
         foreach ($fromNode->getChildNodes() as $childNode)
@@ -129,7 +129,7 @@ class LearningPathService
      *
      * If the copy flag is set, the content object will be physically copied
      *
-     * @param LearningPathTreeNode $fromNode
+     * @param TreeNode $fromNode
      * @param User $user
      * @param int $categoryId
      * @param bool $copyInsteadOfReuse
@@ -137,7 +137,7 @@ class LearningPathService
      * @return ContentObject
      */
     protected function prepareContentObjectForCopy(
-        LearningPathTreeNode $fromNode, User $user, $categoryId, $copyInsteadOfReuse = false
+        TreeNode $fromNode, User $user, $categoryId, $copyInsteadOfReuse = false
     )
     {
         if ($fromNode->isRootNode())
@@ -164,13 +164,13 @@ class LearningPathService
     /**
      * Copies a given content object
      *
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      * @param User $user
      * @param int $categoryId
      *
      * @return Section|ContentObject
      */
-    protected function copyContentObjectFromNode(LearningPathTreeNode $node, User $user, $categoryId)
+    protected function copyContentObjectFromNode(TreeNode $node, User $user, $categoryId)
     {
         $contentObject = $node->getContentObject();
 
@@ -188,15 +188,15 @@ class LearningPathService
      * Copies a learning path child from a given node to a new node
      *
      * @param LearningPath $rootLearningPath
-     * @param LearningPathTreeNode $toNode
-     * @param LearningPathTreeNode $fromNode
+     * @param TreeNode $toNode
+     * @param TreeNode $fromNode
      * @param User $user
      * @param ContentObject $contentObject
      *
      * @return LearningPathChild
      */
     protected function copyLearningPathChild(
-        LearningPath $rootLearningPath, LearningPathTreeNode $toNode, LearningPathTreeNode $fromNode, User $user,
+        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
         ContentObject $contentObject
     ): LearningPathChild
     {

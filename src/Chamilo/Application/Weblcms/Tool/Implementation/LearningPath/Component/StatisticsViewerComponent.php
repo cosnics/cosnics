@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Tree;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -229,7 +229,7 @@ class StatisticsViewerComponent extends Manager
              '&application=weblcms&tool=learning_path&tool_action=view&publication=' . $pid . '&' . self::PARAM_LP_STEP .
              '=%s';
         
-        $menu = new LearningPathTree($root_object_id, $selected_object_id, $url, $lpi_tracker_data);
+        $menu = new Tree($root_object_id, $selected_object_id, $url, $lpi_tracker_data);
         
         return $menu;
     }

@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html\PropertiesTable;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -23,8 +23,8 @@ class ProgressDetailsInformationBlock extends ReportingBlock
 
     public function count_data()
     {
-        /** @var LearningPathTreeNode $learningPathTreeNode */
-        $learningPathTreeNode = $this->get_parent()->get_parent()->getCurrentLearningPathTreeNode();
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
 
         /** @var LearningPathTrackingService $learningPathTrackingService */
         $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
@@ -35,7 +35,7 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         /** @var User $user */
         $user = $this->get_parent()->get_parent()->getUser();
 
-        $content_object = $learningPathTreeNode->getContentObject();
+        $content_object = $treeNode->getContentObject();
         $reporting_data = new ReportingData();
 
         $reporting_data->set_rows(
@@ -54,15 +54,15 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         $reporting_data->add_data_category_row(
             0,
             Translation::get('AverageScore'),
-            $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
-                $learningPath, $user, $learningPathTreeNode
+            $learningPathTrackingService->getAverageScoreInTreeNode(
+                $learningPath, $user, $treeNode
             ) . '%'
         );
 
         $reporting_data->add_data_category_row(
             0,
             Translation::get('NumberOfAttempts'),
-            $learningPathTrackingService->countLearningPathTreeNodeAttempts($learningPath, $user, $learningPathTreeNode)
+            $learningPathTrackingService->countTreeNodeAttempts($learningPath, $user, $treeNode)
         );
 
         return $reporting_data;

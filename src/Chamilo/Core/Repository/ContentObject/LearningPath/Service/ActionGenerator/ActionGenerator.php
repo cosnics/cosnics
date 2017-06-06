@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGener
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
@@ -65,11 +65,11 @@ abstract class ActionGenerator
      * Returns a url for a given set of parameters and a given node. Caches the urls for faster access
      *
      * @param array $parameters
-     * @param int $learningPathTreeNodeId
+     * @param int $treeNodeId
      *
      * @return string
      */
-    protected function getUrlForNode($parameters = array(), $learningPathTreeNodeId = 0)
+    protected function getUrlForNode($parameters = array(), $treeNodeId = 0)
     {
         $nodePlaceholder = '__NODE__';
 
@@ -80,6 +80,6 @@ abstract class ActionGenerator
             $this->urlCache[$cacheKey] = $this->getUrl($parameters);
         }
 
-        return str_replace($nodePlaceholder, $learningPathTreeNodeId, $this->urlCache[$cacheKey]);
+        return str_replace($nodePlaceholder, $treeNodeId, $this->urlCache[$cacheKey]);
     }
 }

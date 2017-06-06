@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Libraries\File\Path;
@@ -25,30 +25,30 @@ class DirectMoverForm extends FormValidator
 
     /**
      *
-     * @var LearningPathTree
+     * @var Tree
      */
-    protected $learningPathTree;
+    protected $tree;
 
     /**
      *
-     * @var LearningPathTreeNode
+     * @var TreeNode
      */
-    protected $learningPathTreeNode;
+    protected $treeNode;
 
     /**
      * DirectMoverForm constructor.
      * 
      * @param string $action
-     * @param LearningPathTree $learningPathTree
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param Tree $tree
+     * @param TreeNode $treeNode
      */
-    public function __construct($action, LearningPathTree $learningPathTree,
-        LearningPathTreeNode $learningPathTreeNode)
+    public function __construct($action, Tree $tree,
+        TreeNode $treeNode)
     {
         parent::__construct('direct_mover_form', 'post', $action);
         
-        $this->learningPathTree = $learningPathTree;
-        $this->learningPathTreeNode = $learningPathTreeNode;
+        $this->tree = $tree;
+        $this->treeNode = $treeNode;
         
         $this->buildForm();
     }
@@ -58,15 +58,15 @@ class DirectMoverForm extends FormValidator
      */
     protected function buildForm()
     {
-        $nodes = $this->learningPathTree->getLearningPathTreeNodes();
-        $descendants = $this->learningPathTreeNode->getDescendantNodes();
+        $nodes = $this->tree->getTreeNodes();
+        $descendants = $this->treeNode->getDescendantNodes();
         
         $parents = array();
         $positionsPerParent = array();
         
         foreach ($nodes as $node)
         {
-            if ($node == $this->learningPathTreeNode || in_array($node, $descendants))
+            if ($node == $this->treeNode || in_array($node, $descendants))
             {
                 continue;
             }
@@ -88,7 +88,7 @@ class DirectMoverForm extends FormValidator
                 $children = $node->getChildNodes();
                 foreach ($children as $child)
                 {
-                    if ($child == $this->learningPathTreeNode || in_array($child, $descendants))
+                    if ($child == $this->treeNode || in_array($child, $descendants))
                     {
                         continue;
                     }

@@ -90,7 +90,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $trackingService = $this->getLearningPathTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getLearningPathChildAttemptId()
         );
 
@@ -119,7 +119,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_answer_data($question_cid, $score, $feedback)
     {
         $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getLearningPathChildAttemptId(), $question_cid, $score, $feedback
         );
     }
@@ -130,7 +130,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_total_score($score)
     {
         $this->learningPathTrackingService->changeAssessmentScore(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentLearningPathTreeNode(),
+            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getLearningPathChildAttemptId(), $score
         );
     }
@@ -140,7 +140,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     public function get_assessment_configuration()
     {
-        return $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        return $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
     }
 
     /**
@@ -168,7 +168,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
 
     public function get_root_content_object()
     {
-        return $this->getCurrentLearningPathTreeNode()->getContentObject();
+        return $this->getCurrentTreeNode()->getContentObject();
     }
 
     /**

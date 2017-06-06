@@ -15,7 +15,7 @@ class ContentObjectEmbedder extends Embedder
     public function render()
     {
         $content_object_display = ContentObjectRenditionImplementation::launch(
-            $this->learningPathTreeNode->getContentObject(),
+            $this->treeNode->getContentObject(),
             ContentObjectRendition::FORMAT_HTML, 
             ContentObjectRendition::VIEW_FULL,
             $this->get_application());

@@ -15,7 +15,7 @@ class ShowStudentViewComponent extends Manager
 {
     function run()
     {
-        if(!$this->canEditCurrentLearningPathTreeNode())
+        if(!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }

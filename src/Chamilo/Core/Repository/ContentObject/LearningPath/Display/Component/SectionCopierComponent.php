@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeJSONMapper;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -38,7 +38,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     function build()
     {
-        if(!$this->canEditCurrentLearningPathTreeNode())
+        if(!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -68,7 +68,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
                 $this->getLearningPathService()
                     ->copyNodesFromLearningPath(
-                        $this->getCurrentLearningPathTreeNode(), $contentObject, $this->getUser(),
+                        $this->getCurrentTreeNode(), $contentObject, $this->getUser(),
                         $selectedLearningPathNodes, (bool) $copyInsteadOfReuse
                     );
 

@@ -2,113 +2,113 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Domain;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Test\Test;
 
 /**
- * Tests the LearningPathTree class
+ * Tests the Tree class
  */
-class LearningPathTreeTest extends Test
+class TreeTest extends Test
 {
-    public function testSetGetLearningPathTreeNodes()
+    public function testSetGetTreeNodes()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $learningPathTree->setLearningPathTreeNodes(array($learningPathTreeNode));
-        $this->assertEquals(array($learningPathTreeNode), $learningPathTree->getLearningPathTreeNodes());
+        $tree->setTreeNodes(array($treeNode));
+        $this->assertEquals(array($treeNode), $tree->getTreeNodes());
     }
 
-    public function testAddLearningPathTreeNodeSetsStepNumber()
+    public function testAddTreeNodeSetsStepNumber()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals(1, $learningPathTreeNode->getStep());
+        $this->assertEquals(1, $treeNode->getStep());
     }
 
-    public function testAddLearningPathTreeNodeCallsSetStep()
+    public function testAddTreeNodeCallsSetStep()
     {
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        /** @var LearningPathTreeNode | \PHPUnit_Framework_MockObject_MockObject $learningPathTreeNodeMock */
-        $learningPathTreeNodeMock =
-            $this->getMock(LearningPathTreeNode::class, array(), array(), '', false);
+        /** @var TreeNode | \PHPUnit_Framework_MockObject_MockObject $treeNodeMock */
+        $treeNodeMock =
+            $this->getMock(TreeNode::class, array(), array(), '', false);
 
-        $learningPathTreeNodeMock->expects($this->once())
+        $treeNodeMock->expects($this->once())
             ->method('setStep')
             ->with(1);
 
-        $learningPathTree->addLearningPathTreeNode($learningPathTreeNodeMock);
+        $tree->addTreeNode($treeNodeMock);
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testAddLearningPathTreeNodeThrowsExceptionWhenAddedTwice()
+    public function testAddTreeNodeThrowsExceptionWhenAddedTwice()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $learningPathTree->addLearningPathTreeNode($learningPathTreeNode);
+        $tree->addTreeNode($treeNode);
     }
 
-    public function testAddLearningPathTreeNodeIncrementsStepNumber()
+    public function testAddTreeNodeIncrementsStepNumber()
     {
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        new LearningPathTreeNode($learningPathTree, new LearningPath());
-        $learningPathTreeNode2 = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        new TreeNode($tree, new LearningPath());
+        $treeNode2 = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals(2, $learningPathTreeNode2->getStep());
+        $this->assertEquals(2, $treeNode2->getStep());
     }
 
-    public function testGetLearningPathTreeNodeByStep()
+    public function testGetTreeNodeByStep()
     {
-        $learningPathTree = new LearningPathTree();
+        $tree = new Tree();
 
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $treeNode = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals($learningPathTreeNode, $learningPathTree->getLearningPathTreeNodeById(1));
+        $this->assertEquals($treeNode, $tree->getTreeNodeById(1));
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testGetLearningPathTreeNodeByStepWithInvalidStep()
+    public function testGetTreeNodeByStepWithInvalidStep()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTree->getLearningPathTreeNodeById('test');
+        $tree = new Tree();
+        $tree->getTreeNodeById('test');
     }
 
     /**
      * @expectedException \RangeException
      */
-    public function testGetLearningPathTreeNodeByStepWithStepBelowOne()
+    public function testGetTreeNodeByStepWithStepBelowOne()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTree->getLearningPathTreeNodeById(0);
+        $tree = new Tree();
+        $tree->getTreeNodeById(0);
     }
 
     /**
      * @expectedException \RangeException
      */
-    public function testGetLearningPathTreeNodeByStepWithStepAboveMax()
+    public function testGetTreeNodeByStepWithStepAboveMax()
     {
-        $learningPathTree = new LearningPathTree();
-        new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        new TreeNode($tree, new LearningPath());
 
-        $learningPathTree->getLearningPathTreeNodeById(2);
+        $tree->getTreeNodeById(2);
     }
 
     public function testGetRoot()
     {
-        $learningPathTree = new LearningPathTree();
-        $node = new LearningPathTreeNode($learningPathTree, new LearningPath());
+        $tree = new Tree();
+        $node = new TreeNode($tree, new LearningPath());
 
-        $this->assertEquals($node, $learningPathTree->getRoot());
+        $this->assertEquals($node, $tree->getRoot());
     }
 
     /**
@@ -116,7 +116,7 @@ class LearningPathTreeTest extends Test
      */
     public function testGetRootThrowsExceptionWithoutNodes()
     {
-        $learningPathTree = new LearningPathTree();
-        $learningPathTree->getRoot();
+        $tree = new Tree();
+        $tree->getRoot();
     }
 }

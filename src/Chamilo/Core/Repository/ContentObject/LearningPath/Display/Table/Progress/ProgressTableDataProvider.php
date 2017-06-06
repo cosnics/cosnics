@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -58,10 +58,10 @@ class ProgressTableDataProvider extends TableDataProvider
     {
         if (!isset($this->data))
         {
-            /** @var LearningPathTreeNode $learningPathTreeNode */
-            $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
+            /** @var TreeNode $treeNode */
+            $treeNode = $this->get_component()->getCurrentTreeNode();
 
-            $this->data = array_values($learningPathTreeNode->getChildNodes());
+            $this->data = array_values($treeNode->getChildNodes());
         }
 
         return $this->data;

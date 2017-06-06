@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
@@ -49,18 +49,18 @@ class MoverComponent extends BaseHtmlTreeComponent
             $selected_steps = array($selected_steps);
         }
 
-        $path = $this->getLearningPathTree();
+        $path = $this->getTree();
 
-        /** @var LearningPathTreeNode[] $available_nodes */
+        /** @var TreeNode[] $available_nodes */
         $available_nodes = array();
 
         foreach ($selected_steps as $selected_step)
         {
             try
             {
-                $selected_node = $path->getLearningPathTreeNodeById((int) $selected_step);
+                $selected_node = $path->getTreeNodeById((int) $selected_step);
 
-                if ($this->canEditLearningPathTreeNode($selected_node->getParentNode()))
+                if ($this->canEditTreeNode($selected_node->getParentNode()))
                 {
                     $available_nodes[] = $selected_node;
                 }
@@ -82,7 +82,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             );
         }
 
-        $path = $this->getLearningPathTree();
+        $path = $this->getTree();
         $parents = $this->get_possible_parents($available_nodes);
 
         $form = new FormValidator('move', 'post', $this->get_url());
@@ -115,7 +115,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                 throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
             }
 
-            $parent_node = $path->getLearningPathTreeNodeById((int) $selected_node_id);
+            $parent_node = $path->getTreeNodeById((int) $selected_node_id);
 
             $failures = 0;
             $learningPathChildService = $this->getLearningPathChildService();
@@ -152,7 +152,7 @@ class MoverComponent extends BaseHtmlTreeComponent
 
             if ($failures > 0)
             {
-                $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getId();
+                $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getParentNode()->getId();
             }
             else
             {
@@ -189,7 +189,7 @@ class MoverComponent extends BaseHtmlTreeComponent
     /**
      * Render the list of available nodes as HTML
      *
-     * @param LearningPathTreeNode[] $available_nodes
+     * @param TreeNode[] $available_nodes
      *
      * @return string
      */
@@ -219,13 +219,13 @@ class MoverComponent extends BaseHtmlTreeComponent
     /**
      * Get a list of possible parent nodes for the currently selected node(s)
      *
-     * @param LearningPathTreeNode[] $selectedNodes
+     * @param TreeNode[] $selectedNodes
      *
      * @return \string[]
      */
     private function get_possible_parents($selectedNodes = array())
     {
-        $path = $this->getLearningPathTree();
+        $path = $this->getTree();
         $root = $path->getRoot();
 
         if (in_array($root, $selectedNodes))
@@ -248,14 +248,14 @@ class MoverComponent extends BaseHtmlTreeComponent
     /**
      * Get the possible parents for the current node based on the children of a given node
      *
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      * @param string[] $parents
      * @param int $level
      *
      * @return string[]
      */
     private function get_children_from_node(
-        LearningPathTreeNode $node, $selectedNodes, $node_disabled, $parents, $level = 1
+        TreeNode $node, $selectedNodes, $node_disabled, $parents, $level = 1
     )
     {
         $automaticNumberingService = $this->getAutomaticNumberingService();
@@ -267,7 +267,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                 continue;
             }
 
-            $title = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($child);
+            $title = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($child);
 
             if (in_array($child, $selectedNodes))
             {

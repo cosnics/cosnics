@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -25,11 +25,11 @@ abstract class Manager extends Application
     /**
      * @param ButtonGroup $primaryActions
      * @param ButtonGroup $secondaryActions
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      */
     public function get_node_tabs(
         ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
-        LearningPathTreeNode $node
+        TreeNode $node
     )
     {
         $translator = Translation::getInstance();

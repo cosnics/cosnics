@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGener
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,14 +17,14 @@ use Chamilo\Libraries\Platform\Translation;
 abstract class NodeActionGenerator extends ActionGenerator
 {
     /**
-     * Generates the acions for a given LearningPathTreeNode
+     * Generates the acions for a given TreeNode
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
-     * @param bool $canEditLearningPathTreeNode
+     * @param TreeNode $treeNode
+     * @param bool $canEditTreeNode
      *
      * @return array|Action[]
      */
     abstract public function generateNodeActions(
-        LearningPathTreeNode $learningPathTreeNode, $canEditLearningPathTreeNode = false
+        TreeNode $treeNode, $canEditTreeNode = false
     ): array;
 }

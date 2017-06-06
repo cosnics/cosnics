@@ -18,19 +18,19 @@ class ToggleBlockedStatusComponent extends Manager
      */
     public function run()
     {
-        if (!$this->canEditCurrentLearningPathTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
 
         $this->validateSelectedLearningPathChild();
 
-        $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $currentTreeNode = $this->getCurrentTreeNode();
         $learningPathChildService = $this->getLearningPathChildService();
 
         try
         {
-            $learningPathChildService->toggleContentObjectBlockedStatus($currentLearningPathTreeNode);
+            $learningPathChildService->toggleContentObjectBlockedStatus($currentTreeNode);
             $success = true;
         }
         catch(\Exception $ex)
@@ -38,7 +38,7 @@ class ToggleBlockedStatusComponent extends Manager
             $success = false;
         }
 
-        if($currentLearningPathTreeNode->getLearningPathChild()->isBlocked())
+        if($currentTreeNode->getLearningPathChild()->isBlocked())
         {
             $translation = $success ? 'StepMarkedAsRequired' : 'StepNotMarkedAsRequired';
         }

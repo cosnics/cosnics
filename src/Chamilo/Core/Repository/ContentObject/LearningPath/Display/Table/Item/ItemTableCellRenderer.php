@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -30,7 +30,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      *
      * @return String
      */
@@ -63,7 +63,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
     /**
      * Returns the actions toolbar
      *
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      *
      * @return string
      */
@@ -105,7 +105,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             );
         }
 
-        if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
+        if ($this->get_component()->canEditTreeNode($node->getParentNode()))
         {
             $variable = $node->getContentObject() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
 
@@ -124,7 +124,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             );
         }
 
-        if ($this->get_component()->canEditLearningPathTreeNode($node->getParentNode()))
+        if ($this->get_component()->canEditTreeNode($node->getParentNode()))
         {
             $variable = $node->getContentObject() instanceof LearningPath ? 'DeleteFolder' : 'DeleterComponent';
 
@@ -151,7 +151,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
     }
 
     /**
-     * @param LearningPathTreeNode $data_class
+     * @param TreeNode $data_class
      *
      * @return int
      */

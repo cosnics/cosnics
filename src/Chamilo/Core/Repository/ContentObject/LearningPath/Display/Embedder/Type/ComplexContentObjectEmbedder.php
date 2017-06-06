@@ -42,7 +42,7 @@ class ComplexContentObjectEmbedder extends Embedder
     {
         $parameters = array();
         $parameters[Manager::PARAM_ACTION] = null;
-        $parameters[self::PARAM_EMBEDDED_CONTENT_OBJECT_ID] = $this->learningPathTreeNode->getContentObject()->getId();
+        $parameters[self::PARAM_EMBEDDED_CONTENT_OBJECT_ID] = $this->treeNode->getContentObject()->getId();
         return $parameters;
     }
 }

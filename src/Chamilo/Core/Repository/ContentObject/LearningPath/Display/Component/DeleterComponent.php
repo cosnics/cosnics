@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -31,18 +31,18 @@ class DeleterComponent extends Manager
             $selected_steps = array($selected_steps);
         }
 
-        $learningPathTree = $this->getLearningPathTree();
+        $tree = $this->getTree();
 
-        /** @var LearningPathTreeNode[] $available_nodes */
+        /** @var TreeNode[] $available_nodes */
         $available_nodes = array();
 
         foreach ($selected_steps as $selected_step)
         {
             try
             {
-                $selected_node = $learningPathTree->getLearningPathTreeNodeById((int) $selected_step);
+                $selected_node = $tree->getTreeNodeById((int) $selected_step);
 
-                if ($this->canEditLearningPathTreeNode($selected_node->getParentNode()))
+                if ($this->canEditTreeNode($selected_node->getParentNode()))
                 {
                     $available_nodes[] = $selected_node;
                 }
@@ -111,7 +111,7 @@ class DeleterComponent extends Manager
 
         if (!$new_node)
         {
-            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getParentNode()->getId();
+            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getParentNode()->getId();
         }
         else
         {

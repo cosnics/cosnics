@@ -22,7 +22,7 @@ class TypeSpecificComponent extends BaseHtmlTreeComponent implements Application
     {
         $this->validateSelectedLearningPathChild();
         
-        $object_namespace = $this->getCurrentLearningPathTreeNode()->getContentObject()->package();
+        $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .
              '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         

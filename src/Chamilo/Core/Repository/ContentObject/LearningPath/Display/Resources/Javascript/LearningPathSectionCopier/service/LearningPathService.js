@@ -26,9 +26,9 @@
             );
         };
 
-        this.fetchLearningPathTree = function(learningPathId, successCallback, errorCallback) {
+        this.fetchTree = function(learningPathId, successCallback, errorCallback) {
             $http.post(
-                'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetLearningPathTree',
+                'index.php?application=Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Ajax&go=GetTree',
                 $.param({ 'learning_path_id': learningPathId }),
                 {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
             ).then(

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -60,7 +60,7 @@ class ChildAttemptTableDataProvider extends TableDataProvider
     {
         if (!isset($this->data))
         {
-            $learningPathTreeNode = $this->get_component()->getCurrentLearningPathTreeNode();
+            $treeNode = $this->get_component()->getCurrentTreeNode();
 
             /** @var LearningPath $learningPath */
             $learningPath = $this->get_component()->get_root_content_object();
@@ -72,8 +72,8 @@ class ChildAttemptTableDataProvider extends TableDataProvider
             $learningPathTrackingService = $this->get_component()->getLearningPathTrackingService();
 
             $this->data = array_values(
-                $learningPathTrackingService->getLearningPathTreeNodeAttempts(
-                    $learningPath, $user, $learningPathTreeNode
+                $learningPathTrackingService->getTreeNodeAttempts(
+                    $learningPath, $user, $treeNode
                 )
             );
         }

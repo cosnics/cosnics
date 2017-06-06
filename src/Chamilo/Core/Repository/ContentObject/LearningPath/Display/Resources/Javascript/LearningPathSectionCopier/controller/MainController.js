@@ -41,7 +41,7 @@
                 this.selectedLearningPath = learningPath;
                 learningPath.selected = true;
 
-                this.fetchLearningPathTree(this.selectedLearningPath.id);
+                this.fetchTree(this.selectedLearningPath.id);
             };
 
             this.resetSelectedLearningPath = function() {
@@ -112,8 +112,8 @@
                 });
             };
 
-            this.fetchLearningPathTree = function(learningPathId) {
-                LearningPathService.fetchLearningPathTree(learningPathId, function(data) {
+            this.fetchTree = function(learningPathId) {
+                LearningPathService.fetchTree(learningPathId, function(data) {
                     mainController.treeData = data;
                     tree.reload(mainController.treeData);
                 });

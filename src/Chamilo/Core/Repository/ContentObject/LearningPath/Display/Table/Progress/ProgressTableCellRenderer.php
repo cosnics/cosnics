@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -29,7 +29,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      * Renders a single cell
      *
      * @param TableColumn $column
-     * @param LearningPathTreeNode $record
+     * @param TreeNode $record
      *
      * @return String
      */
@@ -50,21 +50,21 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
                 return $content_object->get_icon_image();
             case 'title':
                 return '<a href="' . $this->getReportingUrl($record) . '">' .
-                    $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode($record) .
+                    $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($record) .
                     '</a>';
             case 'status':
-                return $learningPathTrackingService->isLearningPathTreeNodeCompleted(
+                return $learningPathTrackingService->isTreeNodeCompleted(
                     $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
-                $averageScore = $learningPathTrackingService->getAverageScoreInLearningPathTreeNode(
+                $averageScore = $learningPathTrackingService->getAverageScoreInTreeNode(
                     $learningPath, $user, $record
                 );
 
                 return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
             case 'time':
-                $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInLearningPathTreeNode(
+                $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $record
                 );
 
@@ -78,19 +78,19 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
      * Define the unique identifier for the row needed for e.g.
      * checkboxes
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return int
      */
-    public function render_id_cell($learningPathTreeNode)
+    public function render_id_cell($treeNode)
     {
-        return $learningPathTreeNode->getId();
+        return $treeNode->getId();
     }
 
     /**
      * Returns the actions toolbar
      *
-     * @param LearningPathTreeNode $record
+     * @param TreeNode $record
      *
      * @return String
      */
@@ -111,7 +111,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             )
         );
 
-        if ($learningPathTrackingService->hasLearningPathTreeNodeAttempts(
+        if ($learningPathTrackingService->hasTreeNodeAttempts(
             $learningPath, $reportingUser, $record
         )
         )
@@ -145,16 +145,16 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     /**
      * Returns the reporting URL for a given node
      *
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      *
      * @return string
      */
-    protected function getReportingUrl(LearningPathTreeNode $learningPathTreeNode)
+    protected function getReportingUrl(TreeNode $treeNode)
     {
         return $this->get_component()->get_url(
             array(
                 Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
-                Manager::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+                Manager::PARAM_CHILD_ID => $treeNode->getId()
             )
         );
     }

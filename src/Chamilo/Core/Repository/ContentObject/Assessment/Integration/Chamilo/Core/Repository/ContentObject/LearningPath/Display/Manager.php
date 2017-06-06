@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -28,7 +28,7 @@ abstract class Manager extends Application
 
     public function get_node_tabs(
         ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
-        LearningPathTreeNode $node
+        TreeNode $node
     )
     {
         if ($this->get_parent()->canEditLearningPathTreeNode($node))
@@ -84,7 +84,7 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return LearningPathTreeNode
+     * @return TreeNode
      */
     public function getCurrentLearningPathTreeNode()
     {

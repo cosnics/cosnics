@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAtte
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\LearningPathTreeRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Preview\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
@@ -118,7 +118,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $this->learningPathTrackingService->saveAnswerForQuestion(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
-            $this->getCurrentLearningPathTreeNode(), $complex_question_id, $answer, $score, $hint
+            $this->getCurrentTreeNode(), $complex_question_id, $answer, $score, $hint
         );
     }
 
@@ -131,7 +131,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $this->learningPathTrackingService->saveAssessmentScore(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
-            $this->getCurrentLearningPathTreeNode(),
+            $this->getCurrentTreeNode(),
             $total_score
         );
     }
@@ -155,7 +155,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         return $this->learningPathTrackingService->getQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
-            $this->getCurrentLearningPathTreeNode()
+            $this->getCurrentTreeNode()
         );
     }
 
@@ -168,7 +168,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         return $this->learningPathTrackingService->getQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
-            $this->getCurrentLearningPathTreeNode()
+            $this->getCurrentTreeNode()
         );
     }
 
@@ -206,7 +206,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function get_assessment_configuration()
     {
-        return $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        return $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
     }
 
     function get_assessment_parameters()
@@ -240,9 +240,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      *
-     * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::get_learning_path_tree_menu_url()
+     * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::get_tree_menu_url()
      */
-    function get_learning_path_tree_menu_url()
+    function get_tree_menu_url()
     {
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Preview\Manager::context();
@@ -250,7 +250,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] =
             $this->get_root_content_object()->get_id();
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
-            LearningPathTreeRenderer::NODE_PLACEHOLDER;
+            TreeRenderer::NODE_PLACEHOLDER;
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] =
             $this->getRequest()->query->get(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
@@ -305,7 +305,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $this->question_attempts = $this->learningPathTrackingService->registerQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
-            $this->getCurrentLearningPathTreeNode(),
+            $this->getCurrentTreeNode(),
             $question_ids
         );
     }

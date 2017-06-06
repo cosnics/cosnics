@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathActionSelector;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -55,12 +55,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $learningPathTrackingService = $this->getLearningPathTrackingService();
 
         $learningPathTrackingService->trackAttemptForUser(
-            $this->get_root_content_object(), $this->getCurrentLearningPathTreeNode(), $this->getUser()
+            $this->get_root_content_object(), $this->getCurrentTreeNode(), $this->getUser()
         );
 
-        if (!$this->canEditCurrentLearningPathTreeNode() &&
-            $learningPathTrackingService->isCurrentLearningPathTreeNodeBlocked(
-                $learning_path, $this->getUser(), $this->getCurrentLearningPathTreeNode()
+        if (!$this->canEditCurrentTreeNode() &&
+            $learningPathTrackingService->isCurrentTreeNodeBlocked(
+                $learning_path, $this->getUser(), $this->getCurrentTreeNode()
             )
         )
         {
@@ -70,8 +70,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = '<div class="alert alert-danger">';
             $html[] = Translation::get('NotYetAllowedToView');
 
-            $responsibleNodes = $learningPathTrackingService->getResponsibleNodesForBlockedLearningPathTreeNode(
-                $learning_path, $this->getUser(), $this->getCurrentLearningPathTreeNode()
+            $responsibleNodes = $learningPathTrackingService->getResponsibleNodesForBlockedTreeNode(
+                $learning_path, $this->getUser(), $this->getCurrentTreeNode()
             );
 
             $html[] = '<br /><br />';
@@ -86,7 +86,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $html[] = '<li>';
                 $html[] = '<a href="' . $nodeUrl . '">';
 
-                $html[] = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
+                $html[] = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
                     $responsibleNode
                 );
 
@@ -103,7 +103,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $embedder = Embedder::factory(
             $this, $this->getLearningPathTrackingService(), $this->get_root_content_object(),
-            $this->getCurrentLearningPathTreeNode()
+            $this->getCurrentTreeNode()
         );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
@@ -113,16 +113,16 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();
 
-        if($this->canEditCurrentLearningPathTreeNode())
+        if($this->canEditCurrentTreeNode())
         {
             $html[] = $this->renderMovePanel();
         }
 
-        if ($this->canEditCurrentLearningPathTreeNode() &&
+        if ($this->canEditCurrentTreeNode() &&
             (
                 (
-                    $this->getCurrentLearningPathTreeNode()->getLearningPathChild() &&
-                    $this->getCurrentLearningPathTreeNode()->getLearningPathChild()->isBlocked()
+                    $this->getCurrentTreeNode()->getLearningPathChild() &&
+                    $this->getCurrentTreeNode()->getLearningPathChild()->isBlocked()
                 ) ||
                 $this->get_root_content_object()->enforcesDefaultTraversingOrder()
             )
@@ -155,7 +155,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $buttonToolbar = new ButtonToolBar();
             $this->buttonToolbar = $buttonToolbar;
 
-            if (!$this->canEditCurrentLearningPathTreeNode())
+            if (!$this->canEditCurrentTreeNode())
             {
                 return $this->buttonToolbar;
             }
@@ -189,7 +189,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     public function addNodeSpecificButtons(ButtonGroup $primaryActions, ButtonGroup $secondaryActions)
     {
-        $object_namespace = $this->getCurrentLearningPathTreeNode()->getContentObject()->package();
+        $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
         $integration_class_name = $object_namespace . '\Integration\\' . self::package() . '\Manager';
 
         if (class_exists($integration_class_name))
@@ -201,7 +201,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
                 );
                 $component = $factory->getComponent(null, false);
-                $component->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentLearningPathTreeNode());
+                $component->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentTreeNode());
             }
             catch (\Exception $exception)
             {
@@ -220,7 +220,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     public function get_content_object_display_attachment_url($attachment)
     {
         return parent::get_content_object_display_attachment_url(
-            $attachment, $this->getCurrentLearningPathTreeNode()->getId()
+            $attachment, $this->getCurrentTreeNode()->getId()
         );
     }
 
@@ -231,11 +231,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addCreatorButtons($buttonGroup, $translator)
     {
-        if ($this->canEditCurrentLearningPathTreeNode())
+        if ($this->canEditCurrentTreeNode())
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
-            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentLearningPathTreeNode()->getId();
+            $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getId();
 
             $allowedTypes = $this->get_root_content_object()->get_allowed_types();
 
@@ -294,7 +294,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addManageContentObjectButton($buttonGroup, $translator)
     {
-        if ($this->canEditCurrentLearningPathTreeNode())
+        if ($this->canEditCurrentTreeNode())
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
             $editImage = new FontAwesomeGlyph('pencil');
@@ -309,7 +309,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
             $this->addDeleteButton($editButton, $translator);
             $this->addMoveButton($editButton, $translator);
-            $this->addBlockedStatusButton($editButton, $translator, $this->getCurrentLearningPathTreeNode());
+            $this->addBlockedStatusButton($editButton, $translator, $this->getCurrentTreeNode());
             $this->addManageButton($editButton, $translator);
 
             $buttonGroup->addButton($editButton);
@@ -324,8 +324,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addDeleteButton($button, $translator)
     {
-        if (!$this->getCurrentLearningPathTreeNode()->isRootNode() &&
-            $this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
+        if (!$this->getCurrentTreeNode()->isRootNode() &&
+            $this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode())
         )
         {
             $button->addSubButton(
@@ -353,11 +353,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addManageButton($button, $translator)
     {
-        if ($this->canEditCurrentLearningPathTreeNode())
+        if ($this->canEditCurrentTreeNode())
         {
-            if ($this->getCurrentLearningPathTreeNode()->hasChildNodes())
+            if ($this->getCurrentTreeNode()->hasChildNodes())
             {
-                if (!$this->getCurrentLearningPathTreeNode()->isRootNode())
+                if (!$this->getCurrentTreeNode()->isRootNode())
                 {
                     $button->addSubButton(new SubButtonDivider());
                 }
@@ -383,28 +383,28 @@ class ViewerComponent extends BaseHtmlTreeComponent
      *
      * @param SplitDropdownButton $button
      * @param Translation $translator
-     * @param LearningPathTreeNode $learningPathTreeNode
+     * @param TreeNode $treeNode
      */
     protected function addBlockedStatusButton(
-        SplitDropdownButton $button, Translation $translator, LearningPathTreeNode $learningPathTreeNode
+        SplitDropdownButton $button, Translation $translator, TreeNode $treeNode
     )
     {
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_root_content_object();
 
-        if (!$this->canEditCurrentLearningPathTreeNode()
-            || $learningPath->enforcesDefaultTraversingOrder() || $learningPathTreeNode->isRootNode()
+        if (!$this->canEditCurrentTreeNode()
+            || $learningPath->enforcesDefaultTraversingOrder() || $treeNode->isRootNode()
         )
         {
             return;
         }
 
-        $translationVariable = ($learningPathTreeNode->getLearningPathChild() &&
-            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $translationVariable = ($treeNode->getLearningPathChild() &&
+            $treeNode->getLearningPathChild()->isBlocked()) ?
             'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($learningPathTreeNode->getLearningPathChild() &&
-            $learningPathTreeNode->getLearningPathChild()->isBlocked()) ?
+        $icon = ($treeNode->getLearningPathChild() &&
+            $treeNode->getLearningPathChild()->isBlocked()) ?
             'unlock' : 'ban';
 
         $moveButton = new SubButton(
@@ -413,7 +413,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
-                    self::PARAM_CHILD_ID => $learningPathTreeNode->getId()
+                    self::PARAM_CHILD_ID => $treeNode->getId()
                 )
             ),
             Button::DISPLAY_ICON_AND_LABEL
@@ -431,8 +431,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addMoveButton(SplitDropdownButton $button, Translation $translator)
     {
-        if ($this->getCurrentLearningPathTreeNode()->isRootNode() ||
-            !$this->canEditLearningPathTreeNode($this->getCurrentLearningPathTreeNode()->getParentNode())
+        if ($this->getCurrentTreeNode()->isRootNode() ||
+            !$this->canEditTreeNode($this->getCurrentTreeNode()->getParentNode())
         )
         {
             return;
@@ -468,7 +468,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $icon = new FontAwesomeGlyph('pie-chart');
 
-        if (!$this->canEditCurrentLearningPathTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             $splitDropDownButton = new SplitDropdownButton($label, $icon, $url);
         }
@@ -554,8 +554,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ),
-            $this->getLearningPathTree(),
-            $this->getCurrentLearningPathTreeNode()
+            $this->getTree(),
+            $this->getCurrentTreeNode()
         );
 
         $html = array();

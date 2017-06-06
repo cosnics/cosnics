@@ -8,11 +8,11 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Changes the title of a given LearningPathTreeNode
+ * Changes the title of a given TreeNode
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UpdateLearningPathTreeNodeTitleComponent extends Manager
+class UpdateTreeNodeTitleComponent extends Manager
 {
     const PARAM_NEW_TITLE = 'new_title';
     const PARAM_CHILD_ID = 'child_id';
@@ -26,18 +26,18 @@ class UpdateLearningPathTreeNodeTitleComponent extends Manager
         {
             $childId = $this->getRequestedPostDataValue(self::PARAM_CHILD_ID);
 
-            $learningPathTree = $this->get_application()->getLearningPathTree();
-            $learningPathTreeNode = $learningPathTree->getLearningPathTreeNodeById((int) $childId);
+            $tree = $this->get_application()->getTree();
+            $treeNode = $tree->getTreeNodeById((int) $childId);
 
             $learningPathChildService = $this->get_application()->getLearningPathChildService();
 
-            if (!$this->get_application()->canEditLearningPathTreeNode($learningPathTreeNode))
+            if (!$this->get_application()->canEditTreeNode($treeNode))
             {
                 throw new NotAllowedException();
             }
 
             $learningPathChildService->updateContentObjectTitle(
-                $learningPathTreeNode, $this->getRequestedPostDataValue(self::PARAM_NEW_TITLE)
+                $treeNode, $this->getRequestedPostDataValue(self::PARAM_NEW_TITLE)
             );
 
             return new JsonResponse(null, 200);

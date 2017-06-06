@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathChildService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathChildRepository;
@@ -60,13 +60,13 @@ class LearningPathChildServiceTest extends Test
         $page = new Page();
         $page->setId(15);
 
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, $learningPath);
 
-        $this->mockCanContentObjectBeAdded($learningPathTreeNode, $page, true);
+        $this->mockCanContentObjectBeAdded($treeNode, $page, true);
         $this->mockCreate(true);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($learningPathTreeNode, $page);
+        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
@@ -80,12 +80,12 @@ class LearningPathChildServiceTest extends Test
         $page = new Page();
         $page->setId(15);
 
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, $learningPath);
 
-        $this->mockCanContentObjectBeAdded($learningPathTreeNode, $page, false);
+        $this->mockCanContentObjectBeAdded($treeNode, $page, false);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($learningPathTreeNode, $page);
+        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
@@ -99,24 +99,24 @@ class LearningPathChildServiceTest extends Test
         $page = new Page();
         $page->setId(15);
 
-        $learningPathTree = new LearningPathTree();
-        $learningPathTreeNode = new LearningPathTreeNode($learningPathTree, $learningPath);
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, $learningPath);
 
-        $this->mockCanContentObjectBeAdded($learningPathTreeNode, $page, true);
+        $this->mockCanContentObjectBeAdded($treeNode, $page, true);
         $this->mockCreate(false);
 
-        $this->learningPathChildService->addContentObjectToLearningPath($learningPathTreeNode, $page);
+        $this->learningPathChildService->addContentObjectToLearningPath($treeNode, $page);
     }
 
     /**
      * Mocks the canContentObjectBeAdded function of the LearningPathChildValidator service
      *
-     * @param LearningPathTreeNode $parentLearningPathTreeNode
+     * @param TreeNode $parentTreeNode
      * @param ContentObject $childContentObject
      * @param bool $returnValue
      */
     protected function mockCanContentObjectBeAdded(
-        LearningPathTreeNode $parentLearningPathTreeNode, ContentObject $childContentObject, $returnValue = true
+        TreeNode $parentTreeNode, ContentObject $childContentObject, $returnValue = true
     )
     {
     }

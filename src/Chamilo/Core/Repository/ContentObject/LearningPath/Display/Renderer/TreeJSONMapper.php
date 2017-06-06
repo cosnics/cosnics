@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTreeJSONMapper
+class TreeJSONMapper
 {
     const NODE_PLACEHOLDER = '__NODE__';
 
@@ -29,9 +29,9 @@ class LearningPathTreeJSONMapper
     protected $learningPath;
 
     /**
-     * @var LearningPathTree
+     * @var Tree
      */
-    protected $learningPathTree;
+    protected $tree;
 
     /**
      * @var LearningPathTrackingService
@@ -49,9 +49,9 @@ class LearningPathTreeJSONMapper
     protected $treeMenuUrl;
 
     /**
-     * @var LearningPathTreeNode
+     * @var TreeNode
      */
-    protected $currentLearningPathTreeNode;
+    protected $currentTreeNode;
 
     /**
      * @var bool
@@ -71,45 +71,45 @@ class LearningPathTreeJSONMapper
     /**
      * @var bool
      */
-    protected $allowedToEditLearningPathTree;
+    protected $allowedToEditTree;
 
     /**
-     * @param LearningPathTree $learningPathTree
+     * @param Tree $tree
      * @param User $user
      * @param LearningPathTrackingService $learningPathTrackingService
      * @param AutomaticNumberingService $automaticNumberingService
      * @param NodeActionGenerator $nodeActionGenerator
      * @param string $treeMenuUrl
-     * @param LearningPathTreeNode $currentLearningPathTreeNode
+     * @param TreeNode $currentTreeNode
      * @param bool $allowedToViewContentObject
      */
     public function __construct(
-        LearningPathTree $learningPathTree, User $user,
+        Tree $tree, User $user,
         LearningPathTrackingService $learningPathTrackingService = null,
         AutomaticNumberingService $automaticNumberingService,
         NodeActionGenerator $nodeActionGenerator,
-        $treeMenuUrl, LearningPathTreeNode $currentLearningPathTreeNode,
-        $allowedToViewContentObject, $allowedToEditLearningPathTree = false
+        $treeMenuUrl, TreeNode $currentTreeNode,
+        $allowedToViewContentObject, $allowedToEditTree = false
     )
     {
-        $this->learningPathTree = $learningPathTree;
+        $this->tree = $tree;
         $this->user = $user;
-        $this->learningPath = $learningPathTree->getRoot()->getContentObject();
+        $this->learningPath = $tree->getRoot()->getContentObject();
         $this->learningPathTrackingService = $learningPathTrackingService;
         $this->automaticNumberingService = $automaticNumberingService;
         $this->nodeActionGenerator = $nodeActionGenerator;
         $this->treeMenuUrl = $treeMenuUrl;
-        $this->currentLearningPathTreeNode = $currentLearningPathTreeNode;
+        $this->currentTreeNode = $currentTreeNode;
         $this->allowedToViewContentObject = $allowedToViewContentObject;
-        $this->allowedToEditLearningPathTree = $allowedToEditLearningPathTree;
+        $this->allowedToEditTree = $allowedToEditTree;
     }
 
     /**
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      *
      * @return string
      */
-    protected function getItemIcon(LearningPathTreeNode $node)
+    protected function getItemIcon(TreeNode $node)
     {
         $objectType = (string) StringUtilities::getInstance()->createString(
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
@@ -118,7 +118,7 @@ class LearningPathTreeJSONMapper
         $class = 'type_' . $objectType;
 
         if ($this->learningPathTrackingService &&
-            $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+            $this->learningPathTrackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
             )
         )
@@ -130,13 +130,13 @@ class LearningPathTreeJSONMapper
     }
 
     /**
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      *
      * @return boolean
      */
-    protected function isSelectedItem(LearningPathTreeNode $node)
+    protected function isSelectedItem(TreeNode $node)
     {
-        return $this->currentLearningPathTreeNode->getId() == $node->getId();
+        return $this->currentTreeNode->getId() == $node->getId();
     }
 
     /**
@@ -146,19 +146,19 @@ class LearningPathTreeJSONMapper
     {
         $nodeData = array();
 
-        $nodeData[] = $this->getNodeDataForLearningPathTreeNode($this->learningPathTree->getRoot());
+        $nodeData[] = $this->getNodeDataForTreeNode($this->tree->getRoot());
 
         return $nodeData;
     }
 
     /**
-     * @param LearningPathTreeNode $node
+     * @param TreeNode $node
      *
      * @return \string[]
      */
-    protected function getNodeDataForLearningPathTreeNode(LearningPathTreeNode $node)
+    protected function getNodeDataForTreeNode(TreeNode $node)
     {
-        $number = $this->automaticNumberingService->getAutomaticNumberingForLearningPathTreeNode($node);
+        $number = $this->automaticNumberingService->getAutomaticNumberingForTreeNode($node);
 
         $nodeData = array();
 
@@ -186,7 +186,7 @@ class LearningPathTreeJSONMapper
             $nodeData['active'] = true;
         }
 
-        if ($node === $this->currentLearningPathTreeNode)
+        if ($node === $this->currentTreeNode)
         {
             $nodeData['expanded'] = true;
         }
@@ -197,7 +197,7 @@ class LearningPathTreeJSONMapper
         }
 
         if ($this->learningPathTrackingService &&
-            $this->learningPathTrackingService->isLearningPathTreeNodeCompleted(
+            $this->learningPathTrackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
             )
         )
@@ -207,7 +207,7 @@ class LearningPathTreeJSONMapper
 
         if ($node->hasChildNodes())
         {
-            if (in_array($this->currentLearningPathTreeNode, $node->getDescendantNodes()))
+            if (in_array($this->currentTreeNode, $node->getDescendantNodes()))
             {
                 $nodeData['expanded'] = true;
             }
@@ -217,11 +217,11 @@ class LearningPathTreeJSONMapper
             $children = $node->getChildNodes();
             foreach ($children as $child)
             {
-                $nodeData['children'][] = $this->getNodeDataForLearningPathTreeNode($child);
+                $nodeData['children'][] = $this->getNodeDataForTreeNode($child);
             }
         }
 
-        $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditLearningPathTree);
+        $actions = $this->nodeActionGenerator->generateNodeActions($node, $this->allowedToEditTree);
         foreach ($actions as $action)
         {
             $nodeData['actions'][$action->getName()] = $action->toArray();

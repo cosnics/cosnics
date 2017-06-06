@@ -107,16 +107,16 @@ class AssessmentRawResultsExporterComponent extends Manager
      */
     protected function getAssessmentsFromLearningPath(LearningPath $learningPath)
     {
-        $learningPathTreeBuilder = $this->getLearningPathTreeBuilder();
-        $learningPathTree = $learningPathTreeBuilder->buildLearningPathTree($learningPath);
+        $treeBuilder = $this->getTreeBuilder();
+        $tree = $treeBuilder->buildTree($learningPath);
 
         $assessments = array();
 
-        foreach ($learningPathTree->getLearningPathTreeNodes() as $learningPathTreeNode)
+        foreach ($tree->getTreeNodes() as $treeNode)
         {
-            if ($learningPathTreeNode->getContentObject() instanceof Assessment)
+            if ($treeNode->getContentObject() instanceof Assessment)
             {
-                $assessments[] = $learningPathTreeNode->getContentObject();
+                $assessments[] = $treeNode->getContentObject();
             }
         }
 

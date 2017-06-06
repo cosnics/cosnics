@@ -29,7 +29,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
     {
         $this->validateSelectedLearningPathChild();
 
-        if ($this->canEditCurrentLearningPathTreeNode())
+        if ($this->canEditCurrentTreeNode())
         {
             $content_object = $this->getCurrentContentObject();
 
@@ -72,7 +72,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                     {
                         $learningPathChildService = $this->getLearningPathChildService();
                         $learningPathChildService->updateContentObjectInLearningPathChild(
-                            $this->getCurrentLearningPathTreeNode(), $content_object->get_latest_version()
+                            $this->getCurrentTreeNode(), $content_object->get_latest_version()
                         );
                     }
                     catch (\Exception $ex)
@@ -96,7 +96,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
             }
             else
             {
-                if ($this->getCurrentLearningPathTreeNode()->isRootNode())
+                if ($this->getCurrentTreeNode()->isRootNode())
                 {
                     $title = Translation::get('ChangeIntroduction');
                 }

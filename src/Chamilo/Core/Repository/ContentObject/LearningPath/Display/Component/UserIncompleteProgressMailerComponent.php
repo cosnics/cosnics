@@ -10,7 +10,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Mails the users that do not have completed the given LearningPathTreeNode
+ * Mails the users that do not have completed the given TreeNode
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -23,20 +23,20 @@ class UserIncompleteProgressMailerComponent extends Manager
      */
     function run()
     {
-        if (!$this->canEditCurrentLearningPathTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
 
-        $currentLearningPathTreeNode = $this->getCurrentLearningPathTreeNode();
+        $currentTreeNode = $this->getCurrentTreeNode();
         $learningPathTrackingService = $this->getLearningPathTrackingService();
 
         $usersNotYetStarted = $learningPathTrackingService->findTargetUsersWithoutLearningPathAttempts(
-            $this->get_root_content_object(), $currentLearningPathTreeNode
+            $this->get_root_content_object(), $currentTreeNode
         );
 
         $usersPartiallyStarted = $learningPathTrackingService->findTargetUsersWithPartialLearningPathAttempts(
-            $this->get_root_content_object(), $currentLearningPathTreeNode
+            $this->get_root_content_object(), $currentTreeNode
         );
 
         $emailAddresses = array();
@@ -112,8 +112,8 @@ class UserIncompleteProgressMailerComponent extends Manager
     protected function getParameters(): array
     {
         $automaticNumberingService = $this->getAutomaticNumberingService();
-        $currentNodeTitle = $automaticNumberingService->getAutomaticNumberedTitleForLearningPathTreeNode(
-            $this->getCurrentLearningPathTreeNode()
+        $currentNodeTitle = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
+            $this->getCurrentTreeNode()
         );
 
         $variables = array(
