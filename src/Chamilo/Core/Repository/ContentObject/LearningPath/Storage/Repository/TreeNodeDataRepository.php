@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -145,5 +146,30 @@ class TreeNodeDataRepository extends CommonDataClassRepository
             ),
             new StaticConditionVariable($learningPath->getId())
         );
+    }
+
+    /**
+     * Deletes the record in the TreeNodeData table for the LearningPath (as individual step)
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return bool
+     */
+    public function deleteTreeNodeDataForLearningPath(LearningPath $learningPath)
+    {
+        $conditions = array();
+
+        $conditions[] = $this->getConditionForLearningPath($learningPath);
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID
+            ),
+            new StaticConditionVariable($learningPath->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->deletes(TreeNodeData::class_name(), $condition);
     }
 }

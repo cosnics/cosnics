@@ -56,7 +56,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
             try
             {
                 $contentObject = $contentObjectRepository->findById($treeNodeData->getContentObjectId());
-                if ($contentObject instanceof ContentObject)
+                if ($contentObject instanceof ContentObject && !$contentObject instanceof LearningPath)
                 {
                     if(!$this->get_context()->in_id_cache($contentObject->getId()))
                     {

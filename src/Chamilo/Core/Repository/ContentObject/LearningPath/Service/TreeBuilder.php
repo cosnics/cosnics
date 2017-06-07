@@ -62,7 +62,7 @@ class TreeBuilder
         $this->treeNodeDataRepository->clearTreeNodesDataCache();
 
         $tree = new Tree();
-        $rootTreeNode = new TreeNode($tree, $learningPath);
+//        $rootTreeNode = new TreeNode($tree, $learningPath);
 
         $treeNodesData = $this->treeNodeDataRepository
             ->findTreeNodesDataForLearningPath($learningPath);
@@ -75,7 +75,7 @@ class TreeBuilder
             [$treeNodeData->getDisplayOrder()] = $treeNodeData;
         }
 
-        $this->addChildrenForSection(0, $orderedTreeNodesData, $tree, $rootTreeNode);
+        $this->addChildrenForSection(0, $orderedTreeNodesData, $tree);
 
         $this->addContentObjectsToTreeNodes();
 
@@ -92,7 +92,7 @@ class TreeBuilder
      */
     protected function addChildrenForSection(
         $parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
-        TreeNode $parentTreeNode
+        TreeNode $parentTreeNode = null
     )
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];
@@ -101,7 +101,11 @@ class TreeBuilder
         foreach ($treeNodeDataForSection as $treeNodeData)
         {
             $treeNode = new TreeNode($tree, null, $treeNodeData);
-            $parentTreeNode->addChildNode($treeNode);
+
+            if($parentTreeNode instanceof TreeNode)
+            {
+                $parentTreeNode->addChildNode($treeNode);
+            }
 
             $this->treeNodesPerContentObjectId[$treeNodeData->getContentObjectId()][] =
                 $treeNode;

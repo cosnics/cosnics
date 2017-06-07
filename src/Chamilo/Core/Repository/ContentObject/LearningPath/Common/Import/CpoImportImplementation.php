@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Common\Import;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Common\ImportImplementation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 class CpoImportImplementation extends ImportImplementation
 {
@@ -16,9 +18,12 @@ class CpoImportImplementation extends ImportImplementation
 
     public function post_import($contentObject)
     {
+        /** Deletes the default created root node so it can be replaced by the imported root node */
+        $this->getTreeNodeDataService()->deleteTreeNodeDataForLearningPath($contentObject);
+
         $contentObjectNode = $this->get_content_object_import_parameters()->get_content_object_node();
 
-        $treeNodeData = array();
+        $treeNodesData = array();
 
         /** @var \DOMNodeList $childNodes */
         $childNodes = $this->get_controller()->get_dom_xpath()->query('children/child', $contentObjectNode);
@@ -41,10 +46,10 @@ class CpoImportImplementation extends ImportImplementation
 
             $treeNodeData = new TreeNodeData($properties);
             $treeNodeData->setLearningPathId((int) $contentObject->getId());
-            $treeNodeData[] = $treeNodeData;
+            $treeNodesData[] = $treeNodeData;
         }
 
-        $this->importTreeNodesData($treeNodeData);
+        $this->importTreeNodesData($treeNodesData);
 
         return $contentObject;
     }
@@ -135,5 +140,17 @@ class CpoImportImplementation extends ImportImplementation
         }
 
         return $orderedTreeNodesData;
+    }
+
+    /**
+     * @return object | TreeNodeDataService
+     */
+    protected function getTreeNodeDataService()
+    {
+        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $serviceContainer->get(
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
+        );
     }
 }

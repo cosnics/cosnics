@@ -69,7 +69,18 @@ class LearningPathPublicationService
      */
     public function areContentObjectsPublished($contentObjectIds = array())
     {
-        return count($this->treeNodeDataService->getTreeNodesDataByContentObjects($contentObjectIds)) > 0;
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects($contentObjectIds);
+        $count = 0;
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /**
@@ -162,6 +173,11 @@ class LearningPathPublicationService
 
         foreach ($treeNodesData as $treeNodeData)
         {
+            if($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
+            {
+                continue;
+            }
+
             $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
         }
 
@@ -183,6 +199,11 @@ class LearningPathPublicationService
 
         foreach ($treeNodesData as $treeNodeData)
         {
+            if($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
+            {
+                continue;
+            }
+
             $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
         }
 
@@ -198,7 +219,18 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
     {
-        return count($this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId)));
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
+        $count = 0;
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /**
@@ -210,7 +242,18 @@ class LearningPathPublicationService
      */
     public function countContentObjectPublicationAttributesForUser($userId)
     {
-        return count($this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId));
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
+        $count = 0;
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /**

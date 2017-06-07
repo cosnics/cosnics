@@ -129,6 +129,47 @@ class TreeNodeDataService
     }
 
     /**
+     * Creates the TreeNodeData record for the LearningPath itself
+     *
+     * @param LearningPath $rootLearningPath
+     * @param User $user
+     *
+     * @return TreeNodeData
+     */
+    public function createTreeNodeDataForLearningPath(LearningPath $rootLearningPath, User $user)
+    {
+        $treeNodeData = new TreeNodeData();
+
+        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+        $treeNodeData->setParentTreeNodeDataId(0);
+        $treeNodeData->setContentObjectId((int) $rootLearningPath->getId());
+        $treeNodeData->setUserId((int) $user->getId());
+        $treeNodeData->setAddedDate(time());
+
+        $this->createTreeNodeData($treeNodeData);
+
+        return $treeNodeData;
+    }
+
+    /**
+     * Deletes the record in the TreeNodeData table for the LearningPath (as individual step)
+     *
+     * @param LearningPath $learningPath
+     */
+    public function deleteTreeNodeDataForLearningPath(LearningPath $learningPath)
+    {
+        if(!$this->treeNodeDataRepository->deleteTreeNodeDataForLearningPath($learningPath))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not delete the TreeNodeDataObject for learning path %s',
+                    $learningPath->getId()
+                )
+            );
+        }
+    }
+
+    /**
      * Helper function to create the learning path child in the database
      *
      * @param TreeNodeData $treeNodeData

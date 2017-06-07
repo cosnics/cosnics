@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -32,6 +33,11 @@ class LearningPathMigrationService
      * @var LearningPathService
      */
     protected $learningPathService;
+
+    /**
+     * @var TreeNodeDataService
+     */
+    protected $treeNodeDataService;
 
     /**
      * @var LearningPathTrackingRepository
@@ -61,17 +67,20 @@ class LearningPathMigrationService
      * LearningPathMigrationService constructor.
      *
      * @param LearningPathService $learningPathService
+     * @param TreeNodeDataService $treeNodeDataService
      * @param LearningPathTrackingRepository $learningPathTrackingRepository
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        LearningPathService $learningPathService, LearningPathTrackingRepository $learningPathTrackingRepository,
+        LearningPathService $learningPathService, TreeNodeDataService $treeNodeDataService,
+        LearningPathTrackingRepository $learningPathTrackingRepository,
         ContentObjectRepository $contentObjectRepository
     )
     {
-        ini_set('memory_limit', -1);
+        ini_set('memory_limit', - 1);
 
         $this->learningPathService = $learningPathService;
+        $this->treeNodeDataService = $treeNodeDataService;
         $this->learningPathTrackingRepository = $learningPathTrackingRepository;
         $this->contentObjectRepository = $contentObjectRepository;
     }
@@ -86,7 +95,17 @@ class LearningPathMigrationService
         {
             $this->complexContentObjectItemsMappingForLearningPath = array();
 
-            $this->migrateLearningPath($learningPath, $learningPath->getId());
+            $user = new User();
+            $user->setId($learningPath->get_owner_id());
+
+            $learningPathTreeNodeData = $this->treeNodeDataService->createTreeNodeDataForLearningPath(
+                $learningPath, $user
+            );
+
+            $this->complexContentObjectItemsMappingForLearningPath[0] =
+                $learningPathTreeNodeData->getId();
+
+            $this->migrateLearningPath($learningPath, $learningPath->getId(), $learningPathTreeNodeData);
 
             if ($this->hasLearningPathPrerequisites())
             {
@@ -131,7 +150,7 @@ class LearningPathMigrationService
 
                 $contentObject = $this->getOrCreateSectionForLearningPath($childContentObject);
                 $treeNodeData = $this->createTreeNodeDataForContentObject(
-                    $learningPath, $complexContentObjectItem, $contentObject, $parentTreeNodeData
+                    $learningPath, $contentObject, $parentTreeNodeData
                 );
 
                 $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
@@ -160,7 +179,7 @@ class LearningPathMigrationService
                 }
 
                 $treeNodeData = $this->createTreeNodeDataForContentObject(
-                    $learningPath, $complexContentObjectItem, $contentObject, $parentTreeNodeData,
+                    $learningPath, $contentObject, $parentTreeNodeData,
                     $childContentObject
                 );
             }
@@ -174,7 +193,6 @@ class LearningPathMigrationService
      * Creates a TreeNodeData for a given LearningPath, ContentObject and parent TreeNodeData
      *
      * @param LearningPath $learningPath
-     * @param ComplexContentObjectItem $complexContentObjectItem
      * @param ContentObject $contentObject
      * @param TreeNodeData $parentTreeNodeData
      * @param LearningPathItem $learningPathItem
@@ -184,7 +202,7 @@ class LearningPathMigrationService
      * @throws \Exception
      */
     protected function createTreeNodeDataForContentObject(
-        LearningPath $learningPath, ComplexContentObjectItem $complexContentObjectItem, ContentObject $contentObject,
+        LearningPath $learningPath, ContentObject $contentObject,
         TreeNodeData $parentTreeNodeData = null, LearningPathItem $learningPathItem = null
     )
     {
@@ -210,10 +228,7 @@ class LearningPathMigrationService
             $treeNodeData->setFeedbackLocation((int) $learningPathItem->get_feedback_location());
         }
 
-        if (!$this->learningPathTrackingRepository->create($treeNodeData))
-        {
-            throw new \Exception('Could not create a new learning path child');
-        }
+        $this->treeNodeDataService->createTreeNodeData($treeNodeData);
 
         echo "Create TreeNodeData " . $treeNodeData->getId() . PHP_EOL;
 
@@ -331,12 +346,12 @@ class LearningPathMigrationService
         $treeNodeAttempts =
             $this->learningPathTrackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
 
-        foreach($treeNodeAttempts as $treeNodeAttempt)
+        foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
             $newLearningPathItemId =
                 $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->get_learning_path_item_id()];
 
-            if(!$newLearningPathItemId)
+            if (!$newLearningPathItemId)
             {
 //                echo 'New learning path item id not found for id ' .
 //                    $treeNodeAttempt->get_learning_path_item_id() . PHP_EOL;
@@ -351,17 +366,3 @@ class LearningPathMigrationService
         $this->learningPathTrackingRepository->clearTreeNodeAttemptCache();
     }
 }
-
-/**
- * RESTORE
- *
-DELETE FROM `repository_content_object` WHERE `id` >= 2698805 ORDER BY `id`  ASC;
-
-TRUNCATE repository_tree_node_data;
-
-TRUNCATE tracking_weblcms_tree_node_attempt;
-
-INSERT INTO tracking_weblcms_tree_node_attempt
-SELECT * FROM tracking_weblcms_tree_node_attempt_backup;
- *
- */

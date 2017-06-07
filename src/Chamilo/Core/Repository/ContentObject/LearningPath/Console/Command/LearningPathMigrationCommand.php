@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathMigrationTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathMigrationService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Console\Command\ChamiloCommand;
@@ -26,6 +27,11 @@ class LearningPathMigrationCommand extends ChamiloCommand
     protected $learningPathService;
 
     /**
+     * @var TreeNodeDataService
+     */
+    protected $treeNodeDataService;
+
+    /**
      * @var ContentObjectRepository
      */
     protected $contentObjectRepository;
@@ -40,16 +46,19 @@ class LearningPathMigrationCommand extends ChamiloCommand
      *
      * @param Translator $translator
      * @param LearningPathService $learningPathService
+     * @param TreeNodeDataService $treeNodeDataService
      * @param ContentObjectRepository $contentObjectRepository
      * @param DataClassRepository $dataClassRepository
      */
     public function __construct(
         Translator $translator, LearningPathService $learningPathService,
+        TreeNodeDataService $treeNodeDataService,
         ContentObjectRepository $contentObjectRepository,
         DataClassRepository $dataClassRepository
     )
     {
         $this->learningPathService = $learningPathService;
+        $this->treeNodeDataService = $treeNodeDataService;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->dataClassRepository = $dataClassRepository;
 
@@ -84,7 +93,8 @@ class LearningPathMigrationCommand extends ChamiloCommand
         );
 
         $learningPathMigrationService = new LearningPathMigrationService(
-            $this->learningPathService, $learningPathTrackingRepository, $this->contentObjectRepository
+            $this->learningPathService, $this->treeNodeDataService,
+            $learningPathTrackingRepository, $this->contentObjectRepository
         );
 
         $learningPathMigrationService->migrateLearningPaths();

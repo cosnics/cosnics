@@ -7,11 +7,13 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * $Id: learning_path.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -116,7 +118,27 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
-     * Delete a Forum Topic and all its posts.
+     * Creates the LearningPath and create a TreeNodeDataRecord
+     *
+     * @param bool $create_in_batch
+     *
+     * @return bool
+     */
+    public function create($create_in_batch = false)
+    {
+        if(!parent::create($create_in_batch))
+        {
+            return false;
+        }
+
+        $user = new User();
+        $user->setId(Session::get_user_id());
+
+        $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
+    }
+
+    /**
+     * Delete a LearningPath and all of it's node data
      *
      * @return boolean Returns whether the delete was succesfull.
      */

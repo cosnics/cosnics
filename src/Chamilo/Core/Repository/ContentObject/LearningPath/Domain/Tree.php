@@ -57,6 +57,7 @@ class Tree
 
     /**
      * Returns a TreeNode by a given identifier
+     * The root TreeNode can be retrieved with identifier 0 and with the identifier of the TreeNodeData
      *
      * @param int $id
      *
@@ -67,6 +68,11 @@ class Tree
         if (!is_integer($id))
         {
             throw new \InvalidArgumentException('The given id should be valid integer');
+        }
+
+        if($id == 0)
+        {
+            return $this->getRoot();
         }
 
         if (!array_key_exists($id, $this->treeNodes))
@@ -129,7 +135,7 @@ class Tree
             );
         }
 
-        return $this->treeNodes[0];
+        return $this->treeNodesByStep[1];
     }
 
     /**

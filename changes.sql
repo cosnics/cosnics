@@ -227,3 +227,14 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 /**
 Section content object install! (lynx package manager)
  */
+
+/** Migratie uitvoeren via code
+ * Post migratie SQL
+**/
+
+DELETE FROM `repository_complex_content_object_item` WHERE parent_id IN
+(SELECT id FROM repository_content_object CO WHERE CO.type = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Storage\\DataClass\\LearningPath');
+
+DELETE FROM `repository_complex_learning_path_item`;
+
+
