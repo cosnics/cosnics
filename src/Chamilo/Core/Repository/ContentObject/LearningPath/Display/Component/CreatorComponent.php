@@ -83,13 +83,13 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                     $object_id
                 );
 
-                $treeNodeDataService = $this->getTreeNodeDataService();
+                $learningPathService = $this->getLearningPathService();
 
                 try
                 {
                     $parentNode = $this->getCurrentTreeNode();
 
-                    $treeNodeData = $treeNodeDataService->addContentObjectToLearningPath(
+                    $treeNodeData = $learningPathService->addContentObjectToLearningPath(
                         $this->get_root_content_object(), $parentNode, $object, $this->getUser()
                     );
 

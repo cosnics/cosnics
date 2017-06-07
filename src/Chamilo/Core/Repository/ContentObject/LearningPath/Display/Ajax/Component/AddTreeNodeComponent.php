@@ -38,8 +38,8 @@ class AddTreeNodeComponent extends Manager
             $tree = $this->get_application()->getTree();
             $parentNode = $tree->getTreeNodeById((int) $parentNodeId);
 
-            $treeNodeDataService = $this->get_application()->getTreeNodeDataService();
-            $treeNodeData = $treeNodeDataService->createAndAddContentObjectToLearningPath(
+            $learningPathService = $this->get_application()->getLearningPathService();
+            $treeNodeData = $learningPathService->createAndAddContentObjectToLearningPath(
                 $nodeType, $this->get_application()->get_root_content_object(),
                 $parentNode, $this->getUser()
             );

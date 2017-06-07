@@ -95,40 +95,6 @@ class TreeNodeDataService
     }
 
     /**
-     * Adds a given content object to a learning path. Validates the content object to make sure that the
-     * system does not create a cycle. Uses the Tree for calculations.
-     *
-     * @param LearningPath $rootLearningPath
-     * @param TreeNode $currentTreeNode
-     * @param ContentObject $childContentObject
-     *
-     * @param User $user
-     *
-     * @return TreeNodeData
-     */
-    public function addContentObjectToLearningPath(
-        LearningPath $rootLearningPath, TreeNode $currentTreeNode,
-        ContentObject $childContentObject, User $user
-    )
-    {
-        $parentTreeNode = $currentTreeNode->getContentObject() instanceof Section ||
-        $currentTreeNode->isRootNode() ?
-            $currentTreeNode : $currentTreeNode->getParentNode();
-
-        $treeNodeData = new TreeNodeData();
-
-        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
-        $treeNodeData->setParentTreeNodeDataId((int) $parentTreeNode->getId());
-        $treeNodeData->setContentObjectId((int) $childContentObject->getId());
-        $treeNodeData->setUserId((int) $user->getId());
-        $treeNodeData->setAddedDate(time());
-
-        $this->createTreeNodeData($treeNodeData);
-
-        return $treeNodeData;
-    }
-
-    /**
      * Creates the TreeNodeData record for the LearningPath itself
      *
      * @param LearningPath $rootLearningPath
@@ -189,59 +155,17 @@ class TreeNodeDataService
     }
 
     /**
-     * @param string $contentObjectType
-     * @param LearningPath $learningPath
-     * @param TreeNode $currentTreeNode
-     * @param User $user
-     * @param string $title
+     * Helper function to create the learning path child in the database
      *
-     * @return TreeNodeData
+     * @param TreeNodeData $treeNodeData
      */
-    public function createAndAddContentObjectToLearningPath(
-        $contentObjectType, LearningPath $learningPath, TreeNode $currentTreeNode, User $user, $title = '...'
-    )
+    public function updateTreeNodeData(TreeNodeData $treeNodeData)
     {
-        if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
-        {
-            throw new InvalidArgumentException(
-                sprintf('The given ContentObject type %s is not a valid content object', $contentObjectType)
-            );
-        }
-
-        /** @var ContentObject $contentObject */
-        $contentObject = new $contentObjectType();
-        $contentObject->set_title($title);
-        $contentObject->set_owner_id($user->getId());
-
-        if (!$this->treeNodeDataRepository->create($contentObject))
-        {
-            throw new \RuntimeException(sprintf('Could not create a new ContentObject of type %s', $contentObjectType));
-        }
-
-        return $this->addContentObjectToLearningPath(
-            $learningPath, $currentTreeNode, $contentObject, $user
-        );
-    }
-
-    /**
-     * Updates a content object for a given learning path child. Uses the Tree.
-     * Validates the content object to make sure that the system does not create a cycle.
-     *
-     * @param TreeNode $treeNode
-     * @param ContentObject $newContentObject
-     */
-    public function updateContentObjectInTreeNodeData(
-        TreeNode $treeNode, ContentObject $newContentObject
-    )
-    {
-        $treeNodeData = $treeNode->getTreeNodeData();
-        $treeNodeData->setContentObjectId((int) $newContentObject->getId());
-
         if (!$this->treeNodeDataRepository->update($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    'Could not update a TreeNodeDataObject for learning path %s parent %s and child %s',
                     $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
                     $treeNodeData->getContentObjectId()
                 )
@@ -250,168 +174,46 @@ class TreeNodeDataService
     }
 
     /**
-     * Moves a content object from a learning path to a different learning path. The content object and the
-     * parent learning path is identified by the learning path tree
+     * Helper function to create the learning path child in the database
      *
-     * @param TreeNode $selectedTreeNode
-     * @param TreeNode $parentTreeNode
-     * @param int $newDisplayOrder
+     * @param TreeNodeData $treeNodeData
      */
-    public function moveContentObjectToOtherLearningPath(
-        TreeNode $selectedTreeNode, TreeNode $parentTreeNode,
-        $newDisplayOrder = null
-    )
+    public function deleteTreeNodeData(TreeNodeData $treeNodeData)
     {
-        $treeNodeData = $selectedTreeNode->getTreeNodeData();
-
-        if ($treeNodeData->getParentTreeNodeDataId() != $parentTreeNode->getId())
-        {
-            $treeNodeData->setParentTreeNodeDataId(
-                (int) $parentTreeNode->getId()
-            );
-        }
-
-        if (isset($newDisplayOrder))
-        {
-            $treeNodeData->setDisplayOrder((int) $newDisplayOrder);
-        }
-
-        if (!$this->treeNodeDataRepository->update($treeNodeData))
-        {
-            throw new \RuntimeException(
-                sprintf(
-                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
-                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
-                    $treeNodeData->getContentObjectId()
-                )
-            );
-        }
-    }
-
-    /**
-     * Toggles the blocked status of a given ContentObject identified by a given TreeNode
-     *
-     * @param TreeNode $treeNode
-     */
-    public function toggleContentObjectBlockedStatus(TreeNode $treeNode)
-    {
-        $treeNodeData = $treeNode->getTreeNodeData();
-
-        if (!$treeNodeData)
-        {
-            throw new \InvalidArgumentException(
-                'The given learning path tree node does not have a valid learning path child object'
-            );
-        }
-
-        $treeNodeData->setBlocked(!$treeNodeData->isBlocked());
-
-        if (!$this->treeNodeDataRepository->update($treeNodeData))
-        {
-            throw new \RuntimeException(
-                sprintf(
-                    'Could not update the TreeNodeDataObject for learning path %s parent %s and child %s',
-                    $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
-                    $treeNodeData->getContentObjectId()
-                )
-            );
-        }
-    }
-
-    /**
-     * Updates the title of a given ContentObject identified by a given TreeNode
-     *
-     * @param TreeNode $treeNode
-     * @param string $newTitle
-     */
-    public function updateContentObjectTitle(TreeNode $treeNode, $newTitle = null)
-    {
-        if (empty($newTitle) || !is_string($newTitle))
-        {
-            throw new \InvalidArgumentException('The given title should not be empty and should be a valid string');
-        }
-
-        $contentObject = $treeNode->getContentObject();
-
-        if (!$contentObject instanceof ContentObject)
-        {
-            throw new \RuntimeException(
-                sprintf(
-                    'The given TreeNode with id %s does not have a valid content object attached',
-                    $treeNode->getId()
-                )
-            );
-        }
-
-        $contentObject->set_title($newTitle);
-
-        if (!$this->treeNodeDataRepository->update($contentObject))
-        {
-            throw new \RuntimeException(
-                sprintf('Could not update the Contentobject with id %S', $contentObject->getId())
-            );
-        }
-    }
-
-    /**
-     * Deletes a content object from a learning path. The relation between the learning path and the content object
-     * is defined by the learning path tree node
-     *
-     * @param TreeNode $treeNode
-     *
-     * @todo move to learning path service
-     */
-    public function deleteContentObjectFromLearningPath(TreeNode $treeNode)
-    {
-        $treeNodeData = $treeNode->getTreeNodeData();
-
-        if (!$treeNodeData)
-        {
-            throw new \InvalidArgumentException(
-                'The given learning path tree node does not have a valid learning path child object'
-            );
-        }
-
         if (!$this->treeNodeDataRepository->delete($treeNodeData))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not delete the TreeNodeDataObject for learning path %s parent %s and child %s',
+                    'Could not update a TreeNodeDataObject for learning path %s parent %s and child %s',
                     $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
                     $treeNodeData->getContentObjectId()
                 )
             );
         }
-
-        $childNodes = $treeNode->getChildNodes();
-        foreach ($childNodes as $childNode)
-        {
-            $this->deleteContentObjectFromLearningPath($childNode);
-        }
     }
 
     /**
-     * Empties the given learning path by removing all the children
+     * Deletes the tree nodes from a given LearningPath
      *
      * @param LearningPath $learningPath
      */
-    public function emptyLearningPath(LearningPath $learningPath)
+    public function deleteTreeNodesFromLearningPath(LearningPath $learningPath)
     {
-        if (!$this->treeNodeDataRepository->deleteChildrenFromLearningPath($learningPath))
+        if (!$this->treeNodeDataRepository->deleteTreeNodesFromLearningPath($learningPath))
         {
-            throw new \RuntimeException('Could not empty the learning path with id ' . $learningPath->getId());
+            throw new \RuntimeException('Could not delete the tree nodes for learning path ' . $learningPath->getId());
         }
     }
 
     /**
-     * Checks whether or not the given learning path is empty
+     * Returns the number of tree nodes data for a given LearningPath
      *
      * @param LearningPath $learningPath
      *
      * @return bool
      */
-    public function isLearningPathEmpty(LearningPath $learningPath)
+    public function countTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
-        return $this->treeNodeDataRepository->countTreeNodesDataForLearningPath($learningPath) == 0;
+        return $this->treeNodeDataRepository->countTreeNodesDataForLearningPath($learningPath);
     }
 }

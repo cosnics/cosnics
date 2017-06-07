@@ -125,7 +125,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      *
      * @return bool
      */
-    public function deleteChildrenFromLearningPath(LearningPath $learningPath)
+    public function deleteTreeNodesFromLearningPath(LearningPath $learningPath)
     {
         $condition = $this->getConditionForLearningPath($learningPath);
         return $this->dataClassRepository->deletes(TreeNodeData::class_name(), $condition);

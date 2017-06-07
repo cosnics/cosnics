@@ -70,8 +70,8 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 {
                     try
                     {
-                        $treeNodeDataService = $this->getTreeNodeDataService();
-                        $treeNodeDataService->updateContentObjectInTreeNodeData(
+                        $treeNodeDataService = $this->getLearningPathService();
+                        $treeNodeDataService->updateContentObjectInTreeNode(
                             $this->getCurrentTreeNode(), $content_object->get_latest_version()
                         );
                     }

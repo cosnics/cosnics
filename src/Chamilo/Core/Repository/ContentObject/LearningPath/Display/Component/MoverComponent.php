@@ -118,14 +118,14 @@ class MoverComponent extends BaseHtmlTreeComponent
             $parent_node = $path->getTreeNodeById((int) $selected_node_id);
 
             $failures = 0;
-            $treeNodeDataService = $this->getTreeNodeDataService();
+            $learningPathService = $this->getLearningPathService();
             $new_node = null;
 
             foreach ($available_nodes as $available_node)
             {
                 try
                 {
-                    $treeNodeDataService->moveContentObjectToOtherLearningPath($available_node, $parent_node);
+                    $learningPathService->moveContentObjectToNewParent($available_node, $parent_node);
 
                     $new_node = $available_node;
 

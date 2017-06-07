@@ -204,6 +204,42 @@ class ContentObjectRepository
             $contentObjectId);
     }
 
+    /**
+     * Calls the create function from the content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function create(ContentObject $contentObject)
+    {
+        return $contentObject->create();
+    }
+
+    /**
+     * Calls the update function from the content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function update(ContentObject $contentObject)
+    {
+        return $contentObject->update();
+    }
+
+    /**
+     * Calls the delete function from the content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function delete(ContentObject $contentObject)
+    {
+        return $contentObject->delete();
+    }
+
     protected function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
     {
         $conditions = array();

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -28,6 +29,11 @@ class LearningPathPublicationService
     protected $treeNodeDataService;
 
     /**
+     * @var LearningPathService
+     */
+    protected $learningPathService;
+
+    /**
      * @var TreeBuilder
      */
     protected $treeBuilder;
@@ -46,15 +52,17 @@ class LearningPathPublicationService
      * LearningPathPublicationService constructor.
      *
      * @param TreeNodeDataService $treeNodeDataService
+     * @param LearningPathService $learningPathService
      * @param TreeBuilder $treeBuilder
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        TreeNodeDataService $treeNodeDataService, TreeBuilder $treeBuilder,
-        ContentObjectRepository $contentObjectRepository
+        TreeNodeDataService $treeNodeDataService, LearningPathService $learningPathService,
+        TreeBuilder $treeBuilder, ContentObjectRepository $contentObjectRepository
     )
     {
         $this->treeNodeDataService = $treeNodeDataService;
+        $this->learningPathService = $learningPathService;
         $this->treeBuilder = $treeBuilder;
         $this->contentObjectRepository = $contentObjectRepository;
     }
@@ -105,7 +113,7 @@ class LearningPathPublicationService
 
                 try
                 {
-                    $this->treeNodeDataService->deleteContentObjectFromLearningPath($treeNode);
+                    $this->learningPathService->deleteContentObjectFromLearningPath($treeNode);
                 }
                 catch (\Exception $ex)
                 {
@@ -122,7 +130,7 @@ class LearningPathPublicationService
     public function deleteContentObjectPublicationsByTreeNodeDataId($treeNodeDataId)
     {
         $treeNode = $this->getTreeNodeByTreeNodeDataId($treeNodeDataId);
-        $this->treeNodeDataService->deleteContentObjectFromLearningPath($treeNode);
+        $this->learningPathService->deleteContentObjectFromLearningPath($treeNode);
     }
 
     /**
@@ -138,7 +146,7 @@ class LearningPathPublicationService
         $newContentObject = new ContentObject();
         $newContentObject->setId($newContentObjectId);
 
-        $this->treeNodeDataService->updateContentObjectInTreeNodeData(
+        $this->learningPathService->updateContentObjectInTreeNode(
             $treeNode, $newContentObject
         );
     }

@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
@@ -181,7 +182,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $learningPath->setId($object);
 
             $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]] =
-                $this->getTreeNodeDataService()->isLearningPathEmpty($learningPath);
+                $this->getLearningPathService()->isLearningPathEmpty($learningPath);
         }
 
         return $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]];
@@ -196,6 +197,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
+        );
+    }
+
+    /**
+     * Returns the LearningPathService
+     *
+     * @return LearningPathService | object
+     */
+    protected function getLearningPathService()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
         );
     }
 

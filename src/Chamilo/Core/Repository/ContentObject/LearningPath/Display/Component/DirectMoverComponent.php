@@ -50,8 +50,8 @@ class DirectMoverComponent extends Manager
 
         try
         {
-            $treeNodeDataService = $this->getTreeNodeDataService();
-            $treeNodeDataService->moveContentObjectToOtherLearningPath(
+            $learningPathService = $this->getLearningPathService();
+            $learningPathService->moveContentObjectToNewParent(
                 $this->getCurrentTreeNode(), $parentNode, $displayOrder
             );
             $success = true;

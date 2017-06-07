@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
@@ -180,6 +181,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->getService(
             'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
+        );
+    }
+
+    /**
+     * Returns the TreeNodeDataService
+     *
+     * @return LearningPathService | object
+     */
+    public function getLearningPathService()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
         );
     }
 

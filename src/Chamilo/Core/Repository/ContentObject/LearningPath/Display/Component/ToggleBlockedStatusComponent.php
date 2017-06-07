@@ -26,11 +26,11 @@ class ToggleBlockedStatusComponent extends Manager
         $this->validateSelectedTreeNodeData();
 
         $currentTreeNode = $this->getCurrentTreeNode();
-        $treeNodeDataService = $this->getTreeNodeDataService();
+        $learningPathService = $this->getLearningPathService();
 
         try
         {
-            $treeNodeDataService->toggleContentObjectBlockedStatus($currentTreeNode);
+            $learningPathService->toggleContentObjectBlockedStatus($currentTreeNode);
             $success = true;
         }
         catch(\Exception $ex)
