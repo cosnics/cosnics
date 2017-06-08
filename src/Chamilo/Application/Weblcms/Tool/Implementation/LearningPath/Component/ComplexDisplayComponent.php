@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
@@ -20,8 +19,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -37,7 +34,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;

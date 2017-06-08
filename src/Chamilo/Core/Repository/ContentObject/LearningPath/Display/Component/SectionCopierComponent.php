@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
@@ -66,7 +67,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     throw new NotAllowedException();
                 }
 
-                $this->getLearningPathService()
+                $this->getTreeNodeCopier()
                     ->copyNodesFromLearningPath(
                         $this->getCurrentTreeNode(), $contentObject, $this->getUser(),
                         $selectedLearningPathNodes, (bool) $copyInsteadOfReuse
@@ -76,7 +77,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                 $success = true;
             }
             catch (\Exception $ex)
-            {
+            { var_dump($ex); exit;
                 $message = 'LearningPathNodesNotCopied';
                 $success = false;
             }
@@ -155,11 +156,11 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
     }
 
     /**
-     * @return LearningPathService | object
+     * @return TreeNodeCopier | object
      */
-    protected function getLearningPathService()
+    protected function getTreeNodeCopier()
     {
-        return $this->getService('chamilo.core.repository.content_object.learning_path.service.learning_path_service');
+        return $this->getService('chamilo.core.repository.content_object.learning_path.service.tree_node_copier');
     }
 
 }

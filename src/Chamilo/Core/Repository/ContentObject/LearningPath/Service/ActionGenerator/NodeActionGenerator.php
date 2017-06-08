@@ -24,7 +24,5 @@ abstract class NodeActionGenerator extends ActionGenerator
      *
      * @return array|Action[]
      */
-    abstract public function generateNodeActions(
-        TreeNode $treeNode, $canEditTreeNode = false
-    ): array;
+    abstract public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array;
 }

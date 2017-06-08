@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\LearningPathTrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAttemptService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -179,14 +179,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     }
 
     /**
-     * Returns the TreeBuilder service
+     * Returns the LearningPathService service
      *
-     * @return TreeBuilder | object
+     * @return LearningPathService | object
      */
-    protected function getTreeBuilder()
+    protected function getLearningPathService()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
         );
     }
 
@@ -197,14 +197,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      */
     protected function getTree()
     {
-        if (!isset($this->tree))
-        {
-            $this->tree = $this->getTreeBuilder()->buildTree(
-                parent::get_root_content_object()
-            );
-        }
-
-        return $this->tree;
+        return $this->getLearningPathService()->getTree(parent::get_root_content_object());
     }
 
     /**

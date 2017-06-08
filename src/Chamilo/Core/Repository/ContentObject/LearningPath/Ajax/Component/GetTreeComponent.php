@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSON
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -46,7 +46,7 @@ class GetTreeComponent extends Manager
                 throw new NotAllowedException();
             }
 
-            $tree = $this->getTreeBuilder()->buildTree($learningPath);
+            $tree = $this->getLearningPathService()->getTree($learningPath);
 
             return new JsonResponse($this->convertTreeToArray($tree));
         }
@@ -84,14 +84,14 @@ class GetTreeComponent extends Manager
     }
 
     /**
-     * Returns the TreeBuilder service
+     * Returns the LearningPathService service
      *
-     * @return TreeBuilder | object
+     * @return LearningPathService | object
      */
-    public function getTreeBuilder()
+    public function getLearningPathService()
     {
         return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
         );
     }
 

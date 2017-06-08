@@ -2,21 +2,16 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -82,11 +77,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @var int
      */
     protected $current_step;
-
-    /**
-     * @var Tree
-     */
-    protected $tree;
 
     /**
      * @var LearningPathTrackingService
@@ -197,32 +187,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * Returns the TreeBuilder service
-     *
-     * @return TreeBuilder | object
-     */
-    public function getTreeBuilder()
-    {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
-        );
-    }
-
-    /**
      * Returns the Tree for the current learning path root
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree
      */
     public function getTree()
     {
-        if (!isset($this->tree))
-        {
-            $this->tree = $this->getTreeBuilder()->buildTree(
-                $this->learningPath
-            );
-        }
-
-        return $this->tree;
+        return $this->getLearningPathService()->getTree($this->get_root_content_object());
     }
 
     /**

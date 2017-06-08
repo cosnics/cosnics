@@ -107,8 +107,7 @@ class AssessmentRawResultsExporterComponent extends Manager
      */
     protected function getAssessmentsFromLearningPath(LearningPath $learningPath)
     {
-        $treeBuilder = $this->getTreeBuilder();
-        $tree = $treeBuilder->buildTree($learningPath);
+        $tree = $this->getLearningPathService()->getTree($learningPath);
 
         $assessments = array();
 

@@ -62,7 +62,6 @@ class TreeBuilder
         $this->treeNodeDataRepository->clearTreeNodesDataCache();
 
         $tree = new Tree();
-//        $rootTreeNode = new TreeNode($tree, $learningPath);
 
         $treeNodesData = $this->treeNodeDataRepository
             ->findTreeNodesDataForLearningPath($learningPath);

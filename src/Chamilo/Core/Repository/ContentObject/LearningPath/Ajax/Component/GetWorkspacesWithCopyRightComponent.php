@@ -3,23 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
-use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

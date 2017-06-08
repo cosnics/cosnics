@@ -51,9 +51,9 @@ class AddTreeNodeComponent extends Manager
                 $treeNodeData->update();
             }
 
-            $treeBuilder = $this->get_application()->getTreeBuilder();
+            $learningPathService = $this->get_application()->getLearningPathService();
             $tree =
-                $treeBuilder->buildTree($this->get_application()->get_root_content_object());
+                $learningPathService->buildTree($this->get_application()->get_root_content_object());
 
             $nodeActionGeneratorFactory =
                 new NodeActionGeneratorFactory(

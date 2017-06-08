@@ -47,9 +47,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      *
      * @return array|Action[]
      */
-    public function generateNodeActions(
-        TreeNode $treeNode, $canEditTreeNode = false
-    ): array
+    public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array
     {
         $actions = array();
 

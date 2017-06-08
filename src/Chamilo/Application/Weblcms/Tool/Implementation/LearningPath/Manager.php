@@ -8,24 +8,18 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  * $Id: learning_path_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -248,18 +242,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * Returns the TreeBuilder service
-     *
-     * @return TreeBuilder | object
-     */
-    protected function getTreeBuilder()
-    {
-        return $this->getService(
-            'chamilo.core.repository.content_object.learning_path.service.tree_builder'
-        );
-    }
-
-    /**
      * Returns the currently selected learning path child id from the request
      *
      * @return int
@@ -280,13 +262,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     protected function getTree(LearningPath $learningPath)
     {
-        if (!isset($this->tree[$learningPath->getId()]))
-        {
-            $this->tree[$learningPath->getId()] =
-                $this->getTreeBuilder()->buildTree($learningPath);
-        }
-
-        return $this->tree[$learningPath->getId()];
+        return $this->getLearningPathService()->getTree($learningPath);
     }
 
     /**
