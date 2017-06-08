@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -45,8 +45,8 @@ class ProgressBlock extends ReportingBlock
         /** @var Tree $tree */
         $tree = $this->get_parent()->get_parent()->getTree();
 
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_parent()->get_parent()->getTrackingService();
 
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
@@ -60,7 +60,7 @@ class ProgressBlock extends ReportingBlock
 
         foreach ($tree->getTreeNodes() as $treeNode)
         {
-            $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInTreeNode(
+            $totalTimeSpent = $trackingService->getTotalTimeSpentInTreeNode(
                 $learningPath, $user, $treeNode
             );
 
@@ -76,14 +76,14 @@ class ProgressBlock extends ReportingBlock
 
             $reporting_data->add_data_category_row($category, Translation::get('Title'), $content_object->get_title());
 
-            $status = $learningPathTrackingService->isTreeNodeCompleted(
+            $status = $trackingService->isTreeNodeCompleted(
                 $learningPath, $user, $treeNode
             ) ?
                 Translation::get('Completed') : Translation::get('Incomplete');
 
             $reporting_data->add_data_category_row($category, Translation::get('Status'), $status);
 
-            $averageScore = $learningPathTrackingService->getAverageScoreInTreeNode(
+            $averageScore = $trackingService->getAverageScoreInTreeNode(
                 $learningPath, $user, $treeNode
             );
 
@@ -100,7 +100,7 @@ class ProgressBlock extends ReportingBlock
 
             $actions = array();
 
-            if ($learningPathTrackingService->hasTreeNodeAttempts(
+            if ($trackingService->hasTreeNodeAttempts(
                 $learningPath, $user, $treeNode
             )
             )
@@ -143,7 +143,7 @@ class ProgressBlock extends ReportingBlock
 
             $reporting_data->add_data_category_row($category, Translation::get('Action'), implode(PHP_EOL, $actions));
 
-            $attempt_count += $learningPathTrackingService->countTreeNodeAttempts(
+            $attempt_count += $trackingService->countTreeNodeAttempts(
                 $learningPath, $user, $treeNode
             );
 

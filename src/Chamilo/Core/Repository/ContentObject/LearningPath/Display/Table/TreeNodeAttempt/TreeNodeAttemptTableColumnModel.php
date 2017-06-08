@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\TableColumnModel;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ChildAttemptTableColumnModel extends TableColumnModel implements TableColumnModelActionsColumnSupport
+class TreeNodeAttemptTableColumnModel extends TableColumnModel implements TableColumnModelActionsColumnSupport
 {
     /**
      * Initializes the columns for the table

@@ -29,7 +29,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
     {
         $this->cleanupOrderProperty($order_property);
 
-        return $this->getLearningPathTrackingService()->getTargetUsersWithLearningPathAttempts(
+        return $this->getTrackingService()->getTargetUsersWithLearningPathAttempts(
             $this->getLearningPath(), $this->getCurrentTreeNode(),
             $condition, $offset, $count, $order_property
         );
@@ -44,7 +44,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getLearningPathTrackingService()->countTargetUsersWithLearningPathAttempts(
+        return $this->getTrackingService()->countTargetUsersWithLearningPathAttempts(
             $this->getLearningPath(), $condition
         );
     }

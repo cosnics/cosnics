@@ -3,11 +3,11 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\LearningPathTrackingRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAttemptService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -25,14 +25,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
 {
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     /**
-     * @var LearningPathTrackingRepository
+     * @var TrackingRepository
      */
-    protected $learningPathTrackingRepository;
+    protected $trackingRepository;
 
     /**
      *
@@ -217,32 +217,32 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      */
     public function reset()
     {
-        $this->buildLearningPathTrackingService();
-        $this->learningPathTrackingRepository->resetStorage();
+        $this->buildTrackingService();
+        $this->trackingRepository->resetStorage();
 
         return true;
     }
 
     /**
-     * Builds the LearningPathTrackingService
+     * Builds the TrackingService
      *
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    public function buildLearningPathTrackingService()
+    public function buildTrackingService()
     {
-        if (!isset($this->learningPathTrackingService))
+        if (!isset($this->trackingService))
         {
-            $this->learningPathTrackingRepository = new LearningPathTrackingRepository();
+            $this->trackingRepository = new TrackingRepository();
 
-            $learningPathAttemptService = new LearningPathAttemptService(
-                $this->learningPathTrackingRepository, new LearningPathTrackingParameters()
+            $attemptService = new AttemptService(
+                $this->trackingRepository, new TrackingParameters()
             );
 
-            $this->learningPathTrackingService = new LearningPathTrackingService(
-                $learningPathAttemptService, $this->learningPathTrackingRepository
+            $this->trackingService = new TrackingService(
+                $attemptService, $this->trackingRepository
             );
         }
 
-        return $this->learningPathTrackingService;
+        return $this->trackingService;
     }
 }

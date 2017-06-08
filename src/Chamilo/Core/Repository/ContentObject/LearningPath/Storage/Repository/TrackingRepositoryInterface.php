@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface LearningPathTrackingRepositoryInterface
+interface TrackingRepositoryInterface
 {
     /**
      * @param DataClass $dataClass

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item\ItemTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode\TreeNodeTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,7 +30,7 @@ class ManagerComponent extends BaseHtmlTreeComponent implements TableSupport
         
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get('ManagerComponent')));
         
-        $table = new ItemTable($this);
+        $table = new TreeNodeTable($this);
         
         $html = array();
         

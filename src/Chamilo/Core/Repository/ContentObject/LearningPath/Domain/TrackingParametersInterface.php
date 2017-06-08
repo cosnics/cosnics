@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Domain
  */
-interface LearningPathTrackingParametersInterface
+interface TrackingParametersInterface
 {
     /**
      * Creates a new instance of the LearningPathAttempt extension

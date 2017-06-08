@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathActionSelector;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -52,14 +51,14 @@ class ViewerComponent extends BaseHtmlTreeComponent
             throw new ObjectNotExistException($translator->getTranslation('LearningPath'));
         }
 
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
 
-        $learningPathTrackingService->trackAttemptForUser(
+        $trackingService->trackAttemptForUser(
             $this->get_root_content_object(), $this->getCurrentTreeNode(), $this->getUser()
         );
 
         if (!$this->canEditCurrentTreeNode() &&
-            $learningPathTrackingService->isCurrentTreeNodeBlocked(
+            $trackingService->isCurrentTreeNodeBlocked(
                 $learning_path, $this->getUser(), $this->getCurrentTreeNode()
             )
         )
@@ -70,7 +69,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = '<div class="alert alert-danger">';
             $html[] = Translation::get('NotYetAllowedToView');
 
-            $responsibleNodes = $learningPathTrackingService->getResponsibleNodesForBlockedTreeNode(
+            $responsibleNodes = $trackingService->getResponsibleNodesForBlockedTreeNode(
                 $learning_path, $this->getUser(), $this->getCurrentTreeNode()
             );
 
@@ -102,7 +101,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $embedder = Embedder::factory(
-            $this, $this->getLearningPathTrackingService(), $this->get_root_content_object(),
+            $this, $this->getTrackingService(), $this->get_root_content_object(),
             $this->getCurrentTreeNode()
         );
 
@@ -239,7 +238,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
             $allowedTypes = $this->get_root_content_object()->get_allowed_types();
 
-            $actionSelector = new LearningPathActionSelector(
+            $actionSelector = new \Chamilo\Core\Repository\ContentObject\LearningPath\Display\ActionSelector(
                 $this,
                 $this->getUser()->getId(),
                 $allowedTypes,

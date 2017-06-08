@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -32,9 +32,9 @@ class TreeRenderer extends BootstrapTreeMenu
     protected $tree;
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     /**
      * @var AutomaticNumberingService
@@ -44,21 +44,21 @@ class TreeRenderer extends BootstrapTreeMenu
     /**
      * @param Tree $tree
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param TrackingService $trackingService
      * @param AutomaticNumberingService $automaticNumberingService
      * @param string $treeMenuUrl
      * @param string $menuName
      */
     public function __construct(
         Tree $tree, Application $application,
-        LearningPathTrackingService $learningPathTrackingService,
+        TrackingService $trackingService,
         AutomaticNumberingService $automaticNumberingService,
         $treeMenuUrl, $menuName = 'bootstrap-tree-menu'
     )
     {
         $this->tree = $tree;
         $this->learningPath = $tree->getRoot()->getContentObject();
-        $this->learningPathTrackingService = $learningPathTrackingService;
+        $this->trackingService = $trackingService;
         $this->automaticNumberingService = $automaticNumberingService;
 
         parent::__construct($application, $treeMenuUrl, $menuName);
@@ -81,7 +81,7 @@ class TreeRenderer extends BootstrapTreeMenu
     {
         if ($this->getApplication()->get_parent()->is_allowed_to_view_content_object($node))
         {
-            if ($this->learningPathTrackingService->isTreeNodeCompleted(
+            if ($this->trackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->getApplication()->getUser(), $node
             )
             )

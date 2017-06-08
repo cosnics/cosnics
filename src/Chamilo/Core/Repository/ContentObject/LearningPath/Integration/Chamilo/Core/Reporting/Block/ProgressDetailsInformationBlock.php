@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html\PropertiesTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
@@ -26,8 +26,8 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         /** @var TreeNode $treeNode */
         $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
 
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_parent()->get_parent()->getTrackingService();
 
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
@@ -54,7 +54,7 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         $reporting_data->add_data_category_row(
             0,
             Translation::get('AverageScore'),
-            $learningPathTrackingService->getAverageScoreInTreeNode(
+            $trackingService->getAverageScoreInTreeNode(
                 $learningPath, $user, $treeNode
             ) . '%'
         );
@@ -62,7 +62,7 @@ class ProgressDetailsInformationBlock extends ReportingBlock
         $reporting_data->add_data_category_row(
             0,
             Translation::get('NumberOfAttempts'),
-            $learningPathTrackingService->countTreeNodeAttempts($learningPath, $user, $treeNode)
+            $trackingService->countTreeNodeAttempts($learningPath, $user, $treeNode)
         );
 
         return $reporting_data;

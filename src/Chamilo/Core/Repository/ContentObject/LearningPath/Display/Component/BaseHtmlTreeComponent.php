@@ -53,7 +53,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
 //        $this->learning_path_menu = new TreeRenderer(
 //            $this->getTree(), $this,
-//            $this->getLearningPathTrackingService(),
+//            $this->getTrackingService(),
 //            $this->getAutomaticNumberingService(),
 //            $this->get_parent()->get_tree_menu_url(), 'learning-path-menu'
 //        );
@@ -213,9 +213,9 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         if ($this->get_action() == self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
         {
-            $learningPathTrackingService = $this->getLearningPathTrackingService();
+            $trackingService = $this->getTrackingService();
             $progress =
-                $learningPathTrackingService->getLearningPathProgress(
+                $trackingService->getLearningPathProgress(
                     $this->get_root_content_object(), $this->getUser(), $this->getTree()->getRoot()
                 );
 
@@ -370,7 +370,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $treeJSONMapper = new TreeJSONMapper(
             $tree, $this->getUser(),
-            $this->getLearningPathTrackingService(),
+            $this->getTrackingService(),
             $this->getAutomaticNumberingService(),
             $nodeActionGeneratorFactory->createNodeActionGenerator(),
             $this->get_application()->get_tree_menu_url(),

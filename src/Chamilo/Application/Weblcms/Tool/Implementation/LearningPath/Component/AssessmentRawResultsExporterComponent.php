@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataMa
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentResult;
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentResultsExportController;
@@ -18,7 +18,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ComplexLearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\ComplexLearningPathItem;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -131,9 +131,9 @@ class AssessmentRawResultsExporterComponent extends Manager
      */
     protected function getAssessmentResultsForLearningPath(LearningPath $learningPath)
     {
-        $learningPathTrackingRepository = new LearningPathTrackingRepository(
+        $learningPathTrackingRepository = new TrackingRepository(
             $this->getDataClassRepository(),
-            new LearningPathTrackingParameters((int) $this->get_course_id(), (int) $this->get_publication_id())
+            new TrackingParameters((int) $this->get_course_id(), (int) $this->get_publication_id())
         );
 
         $learningPathAttempts = $learningPathTrackingRepository

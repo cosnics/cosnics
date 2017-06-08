@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -31,9 +31,9 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
         try
         {
             $treeNodeAttemptId = $this->getPostDataValue(self::PARAM_TRACKER_ID);
-            $learningPathTrackingService = $this->buildLearningPathTrackingService();
+            $trackingService = $this->buildTrackingService();
 
-            $learningPathTrackingService->setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId);
+            $trackingService->setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId);
         }
         catch(\Exception $ex)
         {
@@ -44,25 +44,25 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     }
 
     /**
-     * Builds the LearningPathTrackingService
+     * Builds the TrackingService
      *
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    public function buildLearningPathTrackingService()
+    public function buildTrackingService()
     {
-        $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
+        $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
-        return $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
-            new LearningPathTrackingParameters(1, 1)
+        return $trackingServiceBuilder->buildTrackingService(
+            new TrackingParameters(1, 1)
         );
     }
 
     /**
-     * @return LearningPathTrackingServiceBuilder | object
+     * @return TrackingServiceBuilder | object
      */
-    protected function getLearningPathTrackingServiceBuilder()
+    protected function getTrackingServiceBuilder()
     {
-        return new LearningPathTrackingServiceBuilder(
+        return new TrackingServiceBuilder(
             $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository')
         );
     }

@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathN
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
@@ -31,9 +31,9 @@ abstract class Embedder
     private $application;
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     /**
      * @var LearningPath
@@ -49,19 +49,19 @@ abstract class Embedder
      * Embedder constructor.
      *
      * @param Application $application
-     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param TrackingService $trackingService
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      */
     public function __construct(
         \Chamilo\Libraries\Architecture\Application\Application $application,
-        LearningPathTrackingService $learningPathTrackingService,
+        TrackingService $trackingService,
         LearningPath $learningPath,
         TreeNode $treeNode
     )
     {
         $this->application = $application;
-        $this->learningPathTrackingService = $learningPathTrackingService;
+        $this->trackingService = $trackingService;
         $this->learningPath = $learningPath;
         $this->treeNode = $treeNode;
     }
@@ -80,11 +80,11 @@ abstract class Embedder
      */
     public function track()
     {
-        $this->learningPathTrackingService->changeActiveAttemptStatus(
+        $this->trackingService->changeActiveAttemptStatus(
             $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 
-        $activeAttemptId = $this->learningPathTrackingService->getActiveAttemptId(
+        $activeAttemptId = $this->trackingService->getActiveAttemptId(
             $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 
@@ -129,7 +129,7 @@ abstract class Embedder
     /**
      *
      * @param Application $application
-     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param TrackingService $trackingService
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
@@ -137,7 +137,7 @@ abstract class Embedder
      */
     static public function factory(
         Application $application,
-        LearningPathTrackingService $learningPathTrackingService,
+        TrackingService $trackingService,
         LearningPath $learningPath,
         TreeNode $treeNode
     )
@@ -149,11 +149,11 @@ abstract class Embedder
         if (!class_exists($class_name))
         {
             return new ContentObjectEmbedder(
-                $application, $learningPathTrackingService, $learningPath, $treeNode
+                $application, $trackingService, $learningPath, $treeNode
             );
         }
 
-        return new $class_name($application, $learningPathTrackingService, $learningPath, $treeNode);
+        return new $class_name($application, $trackingService, $learningPath, $treeNode);
     }
 
     /**

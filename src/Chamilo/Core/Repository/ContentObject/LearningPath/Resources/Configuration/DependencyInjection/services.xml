@@ -49,8 +49,8 @@
             class="Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService" />
 
         <service
-                id="chamilo.core.repository.content_object.learning_path.integration.chamilo.core.repository.publication.service.learning_path_publication_service"
-                class="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathPublicationService">
+                id="chamilo.core.repository.content_object.learning_path.integration.chamilo.core.repository.publication.service.publication_service"
+                class="Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\PublicationService">
             <argument
                     type="service"
                     id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service" />
@@ -64,8 +64,8 @@
                       id="chamilo.core.repository.workspace.repository.content_object_repository" />
         </service>
 
-        <service id="chamilo.core.repository.content_object.learning_path.console.command.learning_path_migration_command"
-                 class="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\LearningPathMigrationCommand">
+        <service id="chamilo.core.repository.content_object.learning_path.console.command.migration_command"
+                 class="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationCommand">
             <argument type="service" id="symfony.component.translation.translator" />
             <argument
                     type="service"

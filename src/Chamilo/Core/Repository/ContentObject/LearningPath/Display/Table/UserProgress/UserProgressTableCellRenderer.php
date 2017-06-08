@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserP
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
@@ -37,14 +37,14 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         switch ($column->get_name())
         {
             case 'progress':
-                $learningPathTrackingService = $this->getLearningPathTrackingService();
+                $trackingService = $this->getTrackingService();
                 $learningPath = $this->getLearningPath();
                 $currentTreeNode = $this->getCurrentTreeNode();
 
                 $user = new User();
                 $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
 
-                $progress = $learningPathTrackingService->getLearningPathProgress(
+                $progress = $trackingService->getLearningPathProgress(
                     $learningPath, $user, $currentTreeNode
                 );
 
@@ -89,7 +89,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
     public function get_actions($record)
     {
         $learningPath = $this->getLearningPath();
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
 
         $reportingUser = new User();
         $reportingUser->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
@@ -107,13 +107,13 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
             )
         );
 
-        if ($learningPathTrackingService->hasTreeNodeAttempts(
+        if ($trackingService->hasTreeNodeAttempts(
             $learningPath, $reportingUser, $this->getCurrentTreeNode()
         )
         )
         {
             if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
-                $learningPathTrackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
+                $trackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
             )
             {
                 $delete_url = $this->get_component()->get_url(
@@ -165,11 +165,11 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
     }
 
     /**
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    protected function getLearningPathTrackingService()
+    protected function getTrackingService()
     {
-        return $this->get_component()->getLearningPathTrackingService();
+        return $this->get_component()->getTrackingService();
     }
 
     /**

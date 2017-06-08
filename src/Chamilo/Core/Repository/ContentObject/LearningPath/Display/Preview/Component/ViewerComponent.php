@@ -6,20 +6,10 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\Assessme
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\LearningPathTrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Preview\Storage\Repository\LearningPathTrackingRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -46,7 +36,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function run()
     {
-        $this->buildLearningPathTrackingService();
+        $this->buildTrackingService();
 
         $className = $this->get_root_content_object()->package() . '\Display';
 
@@ -116,7 +106,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function save_assessment_answer($complex_question_id, $answer, $score, $hint)
     {
-        $this->learningPathTrackingService->saveAnswerForQuestion(
+        $this->trackingService->saveAnswerForQuestion(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
             $this->getCurrentTreeNode(), $complex_question_id, $answer, $score, $hint
         );
@@ -129,7 +119,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function save_assessment_result($total_score)
     {
-        $this->learningPathTrackingService->saveAssessmentScore(
+        $this->trackingService->saveAssessmentScore(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
             $this->getCurrentTreeNode(),
             $total_score
@@ -153,7 +143,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     public function get_assessment_question_attempts()
     {
-        return $this->learningPathTrackingService->getQuestionAttempts(
+        return $this->trackingService->getQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
             $this->getCurrentTreeNode()
         );
@@ -166,7 +156,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     protected function retrieve_question_attempts()
     {
-        return $this->learningPathTrackingService->getQuestionAttempts(
+        return $this->trackingService->getQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
             $this->getCurrentTreeNode()
         );
@@ -303,7 +293,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     public function register_question_ids($question_ids)
     {
-        $this->question_attempts = $this->learningPathTrackingService->registerQuestionAttempts(
+        $this->question_attempts = $this->trackingService->registerQuestionAttempts(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
             $this->getCurrentTreeNode(),
             $question_ids

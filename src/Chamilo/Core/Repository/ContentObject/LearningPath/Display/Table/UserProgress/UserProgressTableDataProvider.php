@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserP
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
@@ -37,7 +37,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     {
         $this->cleanupOrderProperty($order_property);
 
-        return $this->getLearningPathTrackingService()->getLearningPathAttemptsWithUser(
+        return $this->getTrackingService()->getLearningPathAttemptsWithUser(
             $this->getLearningPath(), $this->getCurrentTreeNode(),
             $condition, $offset, $count, $order_property
         );
@@ -52,17 +52,17 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return $this->getLearningPathTrackingService()->countLearningPathAttemptsWithUsers(
+        return $this->getTrackingService()->countLearningPathAttemptsWithUsers(
             $this->getLearningPath(), $condition
         );
     }
 
     /**
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    protected function getLearningPathTrackingService()
+    protected function getTrackingService()
     {
-        return $this->get_component()->getLearningPathTrackingService();
+        return $this->get_component()->getTrackingService();
     }
 
     /**

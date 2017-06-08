@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\TableColumnModel;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ProgressTableColumnModel extends TableColumnModel implements TableColumnModelActionsColumnSupport
+class TreeNodeProgressTableColumnModel extends TableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
     /**

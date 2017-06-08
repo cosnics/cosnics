@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTrackingParameters implements LearningPathTrackingParametersInterface
+class TrackingParameters implements TrackingParametersInterface
 {
     /**
      * @var int
@@ -37,7 +37,7 @@ class LearningPathTrackingParameters implements LearningPathTrackingParametersIn
     protected $targetUserIds;
 
     /**
-     * LearningPathTrackingParameters constructor.
+     * TrackingParameters constructor.
      *
      * @param int $courseId
      * @param int $publicationId

@@ -1,12 +1,12 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
+class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     /**
      * Renders a single cell
@@ -104,7 +104,7 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
         }
 
         if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
-            $this->getLearningPathTrackingService()->canDeleteLearningPathAttemptData(
+            $this->getTrackingService()->canDeleteLearningPathAttemptData(
                 $this->getUser(), $this->getReportingUser()
             )
         )
@@ -156,10 +156,10 @@ class ChildAttemptTableCellRenderer extends TableCellRenderer implements TableCe
     }
 
     /**
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    protected function getLearningPathTrackingService()
+    protected function getTrackingService()
     {
-        return $this->get_component()->getLearningPathTrackingService();
+        return $this->get_component()->getTrackingService();
     }
 }

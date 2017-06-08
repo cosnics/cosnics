@@ -2,15 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
- * Extension on the Weblcms LearningPathTrackingParameters for data migration
+ * Extension on the Weblcms TrackingParameters for data migration
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathMigrationTrackingParameters extends LearningPathTrackingParameters
+class MigrationTrackingParameters extends TrackingParameters
 {
     /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct()

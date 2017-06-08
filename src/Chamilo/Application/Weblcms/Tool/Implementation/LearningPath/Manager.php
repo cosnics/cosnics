@@ -5,11 +5,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -207,28 +207,28 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * Creates the LearningPathTrackingService for a given Publication and Course
+     * Creates the TrackingService for a given Publication and Course
      *
      * @param int $publicationId
      * @param int $courseId
      *
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    public function createLearningPathTrackingServiceForPublicationAndCourse($publicationId, $courseId)
+    public function createTrackingServiceForPublicationAndCourse($publicationId, $courseId)
     {
-        $learningPathTrackingServiceBuilder = $this->getLearningPathTrackingServiceBuilder();
+        $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
-        return $learningPathTrackingServiceBuilder->buildLearningPathTrackingService(
-            new LearningPathTrackingParameters((int) $courseId, (int) $publicationId)
+        return $trackingServiceBuilder->buildTrackingService(
+            new TrackingParameters((int) $courseId, (int) $publicationId)
         );
     }
 
     /**
-     * @return LearningPathTrackingServiceBuilder | object
+     * @return TrackingServiceBuilder | object
      */
-    protected function getLearningPathTrackingServiceBuilder()
+    protected function getTrackingServiceBuilder()
     {
-        return new LearningPathTrackingServiceBuilder($this->getDataClassRepository());
+        return new TrackingServiceBuilder($this->getDataClassRepository());
     }
 
     /**

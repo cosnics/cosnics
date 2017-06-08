@@ -139,7 +139,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      */
     protected function renderTargetStatistics(PanelRenderer $panelRenderer, Translation $translator)
     {
-        $trackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
 
         $labels = [
             $translator->getTranslation('TargetUsersWithFullAttempts'),

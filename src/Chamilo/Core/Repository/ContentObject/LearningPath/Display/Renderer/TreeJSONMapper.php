@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGenerator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -34,9 +34,9 @@ class TreeJSONMapper
     protected $tree;
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     /**
      * @var AutomaticNumberingService
@@ -76,7 +76,7 @@ class TreeJSONMapper
     /**
      * @param Tree $tree
      * @param User $user
-     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param TrackingService $trackingService
      * @param AutomaticNumberingService $automaticNumberingService
      * @param NodeActionGenerator $nodeActionGenerator
      * @param string $treeMenuUrl
@@ -85,7 +85,7 @@ class TreeJSONMapper
      */
     public function __construct(
         Tree $tree, User $user,
-        LearningPathTrackingService $learningPathTrackingService = null,
+        TrackingService $trackingService = null,
         AutomaticNumberingService $automaticNumberingService,
         NodeActionGenerator $nodeActionGenerator,
         $treeMenuUrl, TreeNode $currentTreeNode,
@@ -95,7 +95,7 @@ class TreeJSONMapper
         $this->tree = $tree;
         $this->user = $user;
         $this->learningPath = $tree->getRoot()->getContentObject();
-        $this->learningPathTrackingService = $learningPathTrackingService;
+        $this->trackingService = $trackingService;
         $this->automaticNumberingService = $automaticNumberingService;
         $this->nodeActionGenerator = $nodeActionGenerator;
         $this->treeMenuUrl = $treeMenuUrl;
@@ -117,8 +117,8 @@ class TreeJSONMapper
 
         $class = 'type_' . $objectType;
 
-        if ($this->learningPathTrackingService &&
-            $this->learningPathTrackingService->isTreeNodeCompleted(
+        if ($this->trackingService &&
+            $this->trackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
             )
         )
@@ -196,8 +196,8 @@ class TreeJSONMapper
             $nodeData['step_blocked'] = true;
         }
 
-        if ($this->learningPathTrackingService &&
-            $this->learningPathTrackingService->isTreeNodeCompleted(
+        if ($this->trackingService &&
+            $this->trackingService->isTreeNodeCompleted(
                 $this->learningPath, $this->user, $node
             )
         )

@@ -1,11 +1,11 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
+class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     /**
      * Renders a single cell
@@ -41,7 +41,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
 
         $learningPath = $this->getLearningPath();
         $user = $this->getReportingUser();
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
         $automaticNumberingService = $this->getAutomaticNumberingService();
 
         switch ($column->get_name())
@@ -53,18 +53,18 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
                     $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($record) .
                     '</a>';
             case 'status':
-                return $learningPathTrackingService->isTreeNodeCompleted(
+                return $trackingService->isTreeNodeCompleted(
                     $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
-                $averageScore = $learningPathTrackingService->getAverageScoreInTreeNode(
+                $averageScore = $trackingService->getAverageScoreInTreeNode(
                     $learningPath, $user, $record
                 );
 
                 return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
             case 'time':
-                $totalTimeSpent = $learningPathTrackingService->getTotalTimeSpentInTreeNode(
+                $totalTimeSpent = $trackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $record
                 );
 
@@ -98,7 +98,7 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     {
         $learningPath = $this->getLearningPath();
         $reportingUser = $this->getReportingUser();
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
@@ -111,13 +111,13 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
             )
         );
 
-        if ($learningPathTrackingService->hasTreeNodeAttempts(
+        if ($trackingService->hasTreeNodeAttempts(
             $learningPath, $reportingUser, $record
         )
         )
         {
             if ($this->get_component()->is_allowed_to_edit_attempt_data() &&
-                $learningPathTrackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
+                $trackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser)
             )
             {
                 $delete_url = $this->get_component()->get_url(
@@ -184,11 +184,11 @@ class ProgressTableCellRenderer extends TableCellRenderer implements TableCellRe
     }
 
     /**
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    protected function getLearningPathTrackingService()
+    protected function getTrackingService()
     {
-        return $this->get_component()->getLearningPathTrackingService();
+        return $this->get_component()->getTrackingService();
     }
 
     /**

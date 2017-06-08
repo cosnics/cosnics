@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChil
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepositoryInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -21,10 +21,10 @@ use Chamilo\Libraries\Utilities\UUID;
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTrackingRepository implements LearningPathTrackingRepositoryInterface
+class TrackingRepository implements TrackingRepositoryInterface
 {
     /**
-     * LearningPathTrackingRepository constructor.
+     * TrackingRepository constructor.
      */
     public function __construct()
     {

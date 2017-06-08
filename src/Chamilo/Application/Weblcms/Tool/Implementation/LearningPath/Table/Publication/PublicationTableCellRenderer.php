@@ -5,11 +5,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\Pub
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCellRenderer;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\LearningPathTrackingParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
@@ -80,9 +80,9 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      */
     public function get_progress($publication)
     {
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_component()->get_tool_browser()->get_parent()
-            ->createLearningPathTrackingServiceForPublicationAndCourse(
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_component()->get_tool_browser()->get_parent()
+            ->createTrackingServiceForPublicationAndCourse(
                 $publication[ContentObjectPublication::PROPERTY_ID],
                 $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
             );
@@ -93,7 +93,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         $learningPath = new LearningPath();
         $learningPath->setId($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
-        $progress = $learningPathTrackingService->getLearningPathProgress(
+        $progress = $trackingService->getLearningPathProgress(
             $learningPath, $user,
                 $this->get_component()->get_tool_browser()->get_parent()->getCurrentTreeNode($learningPath)
         );

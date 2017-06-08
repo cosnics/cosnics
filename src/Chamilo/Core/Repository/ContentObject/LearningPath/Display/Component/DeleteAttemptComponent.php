@@ -29,7 +29,7 @@ class DeleteAttemptComponent extends BaseReportingComponent
 
         $parameters = array();
 
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
         $learningPath = $this->get_root_content_object();
         $reportingUser = $this->getReportingUser();
         $treeNode = $this->getCurrentTreeNode();
@@ -43,13 +43,13 @@ class DeleteAttemptComponent extends BaseReportingComponent
         {
             if (isset($item_attempt_id))
             {
-                $learningPathTrackingService->deleteTreeNodeAttemptById(
+                $trackingService->deleteTreeNodeAttemptById(
                     $learningPath, $this->getUser(), $reportingUser, $treeNode, (int) $item_attempt_id
                 );
             }
             else
             {
-                $learningPathTrackingService->deleteTreeNodeAttemptsForTreeNode(
+                $trackingService->deleteTreeNodeAttemptsForTreeNode(
                     $learningPath, $this->getUser(), $reportingUser, $treeNode
                 );
             }

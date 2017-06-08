@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathPublicationService
+class PublicationService
 {
     /**
      * @var TreeNodeDataService
@@ -49,7 +49,7 @@ class LearningPathPublicationService
     protected $treeCache;
 
     /**
-     * LearningPathPublicationService constructor.
+     * PublicationService constructor.
      *
      * @param TreeNodeDataService $treeNodeDataService
      * @param LearningPathService $learningPathService

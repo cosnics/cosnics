@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
+class TreeNodeTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
     /**

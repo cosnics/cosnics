@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
+class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
     /**

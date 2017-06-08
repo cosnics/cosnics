@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -79,9 +79,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected $current_step;
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     /**
      * @var LearningPath
@@ -254,16 +254,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    public function getLearningPathTrackingService()
+    public function getTrackingService()
     {
-        if (!isset($this->learningPathTrackingService))
+        if (!isset($this->trackingService))
         {
-            $this->learningPathTrackingService = $this->get_application()->buildLearningPathTrackingService();
+            $this->trackingService = $this->get_application()->buildTrackingService();
         }
 
-        return $this->learningPathTrackingService;
+        return $this->trackingService;
     }
 
     /**

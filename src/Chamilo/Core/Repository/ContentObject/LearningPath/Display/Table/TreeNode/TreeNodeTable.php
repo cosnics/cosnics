@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTable extends DataClassTable implements TableFormActionsSupport
+class TreeNodeTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CHILD_ID;
 

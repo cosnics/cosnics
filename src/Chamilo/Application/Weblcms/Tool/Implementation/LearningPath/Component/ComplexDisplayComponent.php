@@ -18,7 +18,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -57,9 +57,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     private $question_attempts;
 
     /**
-     * @var LearningPathTrackingService
+     * @var TrackingService
      */
-    protected $learningPathTrackingService;
+    protected $trackingService;
 
     public function run()
     {
@@ -85,7 +85,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             throw new ObjectNotExistException($contentObjectPublicationTranslation, $publication_id);
         }
 
-        $this->buildLearningPathTrackingService();
+        $this->buildTrackingService();
 
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
@@ -308,7 +308,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
     {
-        $this->learningPathTrackingService->saveAnswerForQuestion(
+        $this->trackingService->saveAnswerForQuestion(
             $this->publication->get_content_object(), $this->getUser(),
             $this->getCurrentTreeNode(), $complex_question_id, $answer, $score, $hint
         );
@@ -316,7 +316,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function save_assessment_result($total_score)
     {
-        $this->learningPathTrackingService->saveAssessmentScore(
+        $this->trackingService->saveAssessmentScore(
             $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode(),
             $total_score
         );
@@ -365,7 +365,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     protected function retrieve_question_attempts()
     {
-        return $this->learningPathTrackingService->getQuestionAttempts(
+        return $this->trackingService->getQuestionAttempts(
             $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode()
         );
     }
@@ -377,7 +377,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function register_question_ids($question_ids)
     {
-        $this->question_attempts = $this->learningPathTrackingService->registerQuestionAttempts(
+        $this->question_attempts = $this->trackingService->registerQuestionAttempts(
             $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode(),
             $question_ids
         );
@@ -532,7 +532,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     protected function checkMaximumAssessmentAttempts()
     {
-        if ($this->learningPathTrackingService->isMaximumAttemptsReachedForAssessment(
+        if ($this->trackingService->isMaximumAttemptsReachedForAssessment(
             $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode()
         )
         )
@@ -548,19 +548,19 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     }
 
     /**
-     * Builds the LearningPathTrackingService
+     * Builds the TrackingService
      *
-     * @return LearningPathTrackingService
+     * @return TrackingService
      */
-    public function buildLearningPathTrackingService()
+    public function buildTrackingService()
     {
-        if (!isset($this->learningPathTrackingService))
+        if (!isset($this->trackingService))
         {
-            $this->learningPathTrackingService = $this->createLearningPathTrackingServiceForPublicationAndCourse(
+            $this->trackingService = $this->createTrackingServiceForPublicationAndCourse(
                 (int) $this->publication->getId(), (int) $this->get_course_id()
             );
         }
 
-        return $this->learningPathTrackingService;
+        return $this->trackingService;
     }
 }

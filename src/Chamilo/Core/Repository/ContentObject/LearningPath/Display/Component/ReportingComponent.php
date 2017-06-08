@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ChildAttempt\ChildAttemptTable;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress\ProgressTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt\TreeNodeAttemptTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress\TreeNodeProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
@@ -38,7 +38,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     public function build()
     {
         $translator = Translation::getInstance();
-        $trackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
         $currentTreeNode = $this->getCurrentTreeNode();
         $automaticNumberingService = $this->getAutomaticNumberingService();
         $panelRenderer = new PanelRenderer();
@@ -75,11 +75,11 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         if ($this->getCurrentTreeNode()->hasChildNodes())
         {
-            $table = new ProgressTable($this);
+            $table = new TreeNodeProgressTable($this);
             $html[] = $panelRenderer->render($translator->getTranslation('Children'), $table->as_html());
         }
 
-        $table = new ChildAttemptTable($this);
+        $table = new TreeNodeAttemptTable($this);
         $html[] = $panelRenderer->render($translator->getTranslation('Attempts'), $table->as_html());
 
         if ($currentTreeNode->getContentObject() instanceof Assessment)
@@ -131,14 +131,14 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      * @param TreeNode $currentTreeNode
      * @param AutomaticNumberingService $automaticNumberingService
      * @param Translation $translator
-     * @param LearningPathTrackingService $trackingService
+     * @param TrackingService $trackingService
      * @param PanelRenderer $panelRenderer
      *
      * @return string
      */
     protected function renderInformationPanel(
         TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService,
-        Translation $translator, LearningPathTrackingService $trackingService, PanelRenderer $panelRenderer
+        Translation $translator, TrackingService $trackingService, PanelRenderer $panelRenderer
     )
     {
         $parentTitles = array();
@@ -210,14 +210,14 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      * Renders the progress doughnut chart
      *
      * @param Translation $translator
-     * @param LearningPathTrackingService $trackingService
+     * @param TrackingService $trackingService
      * @param TreeNode $currentTreeNode
      * @param PanelRenderer $panelRenderer
      *
      * @return string
      */
     protected function renderProgress(
-        Translation $translator, LearningPathTrackingService $trackingService,
+        Translation $translator, TrackingService $trackingService,
         TreeNode $currentTreeNode, PanelRenderer $panelRenderer
     )
     {
@@ -279,7 +279,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     /**
      * Renders the scores for every attempt in a chart
      *
-     * @param LearningPathTrackingService $learningPathTrackingService
+     * @param TrackingService $trackingService
      * @param Translation $translator
      * @param PanelRenderer $panelRenderer
      * @param LearningPath $learningPath
@@ -289,13 +289,13 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      * @return string
      */
     protected function renderScoreChart(
-        LearningPathTrackingService $learningPathTrackingService, Translation $translator, PanelRenderer $panelRenderer,
+        TrackingService $trackingService, Translation $translator, PanelRenderer $panelRenderer,
         LearningPath $learningPath, User $user, TreeNode $treeNode
     )
     {
         $labels = $scores = [];
 
-        $treeNodeAttempts = $learningPathTrackingService->getTreeNodeAttempts(
+        $treeNodeAttempts = $trackingService->getTreeNodeAttempts(
             $learningPath, $user, $treeNode
         );
 

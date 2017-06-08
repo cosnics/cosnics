@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathPublicationService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository\Publication\Service\PublicationService;
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
@@ -26,7 +26,7 @@ class Manager implements PublicationInterface
      */
     public static function content_object_is_published($object_id)
     {
-        return self::getLearningPathPublicationService()->areContentObjectsPublished(array($object_id));
+        return self::getPublicationService()->areContentObjectsPublished(array($object_id));
     }
 
     /*
@@ -34,7 +34,7 @@ class Manager implements PublicationInterface
      */
     public static function any_content_object_is_published($object_ids)
     {
-        return self::getLearningPathPublicationService()->areContentObjectsPublished($object_ids);
+        return self::getPublicationService()->areContentObjectsPublished($object_ids);
     }
 
     /*
@@ -47,13 +47,13 @@ class Manager implements PublicationInterface
     {
         if ($type == self::ATTRIBUTES_TYPE_OBJECT)
         {
-            return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForContentObject(
+            return self::getPublicationService()->getContentObjectPublicationAttributesForContentObject(
                 $object_id
             );
         }
         else
         {
-            return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForUser(
+            return self::getPublicationService()->getContentObjectPublicationAttributesForUser(
                 $object_id
             );
         }
@@ -64,7 +64,7 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_attribute($publication_id)
     {
-        return self::getLearningPathPublicationService()->getContentObjectPublicationAttributesForTreeNodeData(
+        return self::getPublicationService()->getContentObjectPublicationAttributesForTreeNodeData(
             $publication_id
         );
     }
@@ -76,13 +76,13 @@ class Manager implements PublicationInterface
     {
         if ($attributes_type == self::ATTRIBUTES_TYPE_OBJECT)
         {
-            return self::getLearningPathPublicationService()->countContentObjectPublicationAttributesForContentObject(
+            return self::getPublicationService()->countContentObjectPublicationAttributesForContentObject(
                 $identifier
             );
         }
         else
         {
-            return self::getLearningPathPublicationService()->countContentObjectPublicationAttributesForUser(
+            return self::getPublicationService()->countContentObjectPublicationAttributesForUser(
                 $identifier
             );
         }
@@ -95,7 +95,7 @@ class Manager implements PublicationInterface
     {
         try
         {
-            self::getLearningPathPublicationService()->deleteContentObjectPublicationsByObjectId($object_id);
+            self::getPublicationService()->deleteContentObjectPublicationsByObjectId($object_id);
 
             return true;
         }
@@ -112,7 +112,7 @@ class Manager implements PublicationInterface
     {
         try
         {
-            self::getLearningPathPublicationService()->deleteContentObjectPublicationsByTreeNodeDataId(
+            self::getPublicationService()->deleteContentObjectPublicationsByTreeNodeDataId(
                 $publication_id
             );
 
@@ -133,7 +133,7 @@ class Manager implements PublicationInterface
     {
         try
         {
-            self::getLearningPathPublicationService()->updateContentObjectIdInTreeNodeData(
+            self::getPublicationService()->updateContentObjectIdInTreeNodeData(
                 $publication_attributes->getId(), $publication_attributes->get_content_object_id()
             );
 
@@ -173,15 +173,15 @@ class Manager implements PublicationInterface
     }
 
     /**
-     * @return LearningPathPublicationService | object
+     * @return PublicationService | object
      */
-    protected static function getLearningPathPublicationService()
+    protected static function getPublicationService()
     {
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $dependencyInjectionContainer->get(
             'chamilo.core.repository.content_object.learning_path.integration.' .
-            'chamilo.core.repository.publication.service.learning_path_publication_service'
+            'chamilo.core.repository.publication.service.publication_service'
         );
     }
 }

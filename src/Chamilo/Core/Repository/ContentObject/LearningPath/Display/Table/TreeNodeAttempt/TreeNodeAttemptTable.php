@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt;
 
 use Chamilo\Libraries\Format\Table\Table;
 
@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Table\Table;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ProgressTable extends Table
+class TreeNodeAttemptTable extends Table
 {
 
 }

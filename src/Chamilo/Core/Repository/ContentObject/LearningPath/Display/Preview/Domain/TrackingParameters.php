@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Dom
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTrackingParameters implements LearningPathTrackingParametersInterface
+class TrackingParameters implements TrackingParametersInterface
 {
     /**
      * @return string

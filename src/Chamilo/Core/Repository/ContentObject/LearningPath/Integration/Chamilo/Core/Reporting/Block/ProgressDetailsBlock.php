@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -33,8 +33,8 @@ class ProgressDetailsBlock extends ReportingBlock
         /** @var TreeNode $treeNode */
         $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
 
-        /** @var LearningPathTrackingService $learningPathTrackingService */
-        $learningPathTrackingService = $this->get_parent()->get_parent()->getLearningPathTrackingService();
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_parent()->get_parent()->getTrackingService();
 
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
@@ -60,7 +60,7 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $reporting_data->set_rows($rows);
 
-        $attempts = $learningPathTrackingService->getTreeNodeAttempts(
+        $attempts = $trackingService->getTreeNodeAttempts(
             $learningPath, $user, $treeNode
         );
 
@@ -138,7 +138,7 @@ class ProgressDetailsBlock extends ReportingBlock
             Translation::get('Time'),
             '<span style="font-weight: bold;">' .
             DatetimeUtilities::format_seconds_to_hours(
-                $learningPathTrackingService->getTotalTimeSpentInTreeNode(
+                $trackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $treeNode
                 )
             ) . '</span>'

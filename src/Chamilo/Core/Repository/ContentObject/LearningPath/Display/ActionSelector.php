@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
-use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 
 /**
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathActionSelector extends ActionSelector
+class ActionSelector extends \Chamilo\Core\Repository\Viewer\ActionSelector
 {
     /**
      * Returns the dropdown button

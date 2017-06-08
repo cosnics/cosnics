@@ -88,7 +88,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     public function retrieve_assessment_results()
     {
-        $trackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getTreeNodeAttemptId()
@@ -118,7 +118,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     public function change_answer_data($question_cid, $score, $feedback)
     {
-        $this->learningPathTrackingService->changeQuestionScoreAndFeedback(
+        $this->trackingService->changeQuestionScoreAndFeedback(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getTreeNodeAttemptId(), $question_cid, $score, $feedback
         );
@@ -129,7 +129,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     public function change_total_score($score)
     {
-        $this->learningPathTrackingService->changeAssessmentScore(
+        $this->trackingService->changeAssessmentScore(
             parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
             $this->getTreeNodeAttemptId(), $score
         );

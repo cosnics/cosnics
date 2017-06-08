@@ -29,13 +29,13 @@ class UserIncompleteProgressMailerComponent extends Manager
         }
 
         $currentTreeNode = $this->getCurrentTreeNode();
-        $learningPathTrackingService = $this->getLearningPathTrackingService();
+        $trackingService = $this->getTrackingService();
 
-        $usersNotYetStarted = $learningPathTrackingService->findTargetUsersWithoutLearningPathAttempts(
+        $usersNotYetStarted = $trackingService->findTargetUsersWithoutLearningPathAttempts(
             $this->get_root_content_object(), $currentTreeNode
         );
 
-        $usersPartiallyStarted = $learningPathTrackingService->findTargetUsersWithPartialLearningPathAttempts(
+        $usersPartiallyStarted = $trackingService->findTargetUsersWithPartialLearningPathAttempts(
             $this->get_root_content_object(), $currentTreeNode
         );
 

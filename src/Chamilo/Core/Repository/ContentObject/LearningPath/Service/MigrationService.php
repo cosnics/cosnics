@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\ComplexLearningPathItem;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathMigrationService
+class MigrationService
 {
     /**
      * @var LearningPathService
@@ -40,9 +40,9 @@ class LearningPathMigrationService
     protected $treeNodeDataService;
 
     /**
-     * @var LearningPathTrackingRepository
+     * @var TrackingRepository
      */
-    protected $learningPathTrackingRepository;
+    protected $trackingRepository;
 
     /**
      * @var ContentObjectRepository
@@ -64,16 +64,14 @@ class LearningPathMigrationService
     protected $complexContentObjectItemsMappingForLearningPath;
 
     /**
-     * LearningPathMigrationService constructor.
-     *
      * @param LearningPathService $learningPathService
      * @param TreeNodeDataService $treeNodeDataService
-     * @param LearningPathTrackingRepository $learningPathTrackingRepository
+     * @param TrackingRepository $trackingRepository
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
         LearningPathService $learningPathService, TreeNodeDataService $treeNodeDataService,
-        LearningPathTrackingRepository $learningPathTrackingRepository,
+        TrackingRepository $trackingRepository,
         ContentObjectRepository $contentObjectRepository
     )
     {
@@ -81,7 +79,7 @@ class LearningPathMigrationService
 
         $this->learningPathService = $learningPathService;
         $this->treeNodeDataService = $treeNodeDataService;
-        $this->learningPathTrackingRepository = $learningPathTrackingRepository;
+        $this->trackingRepository = $trackingRepository;
         $this->contentObjectRepository = $contentObjectRepository;
     }
 
@@ -344,7 +342,7 @@ class LearningPathMigrationService
     protected function fixLearningPathTracking(LearningPath $learningPath)
     {
         $treeNodeAttempts =
-            $this->learningPathTrackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
+            $this->trackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
@@ -363,6 +361,6 @@ class LearningPathMigrationService
             $treeNodeAttempt->update();
         }
 
-        $this->learningPathTrackingRepository->clearTreeNodeAttemptCache();
+        $this->trackingRepository->clearTreeNodeAttemptCache();
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Progress;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -15,7 +17,7 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ProgressTableDataProvider extends TableDataProvider
+class TreeNodeAttemptTableDataProvider extends TableDataProvider
 {
     /**
      * @var array
@@ -58,10 +60,22 @@ class ProgressTableDataProvider extends TableDataProvider
     {
         if (!isset($this->data))
         {
-            /** @var TreeNode $treeNode */
             $treeNode = $this->get_component()->getCurrentTreeNode();
 
-            $this->data = array_values($treeNode->getChildNodes());
+            /** @var LearningPath $learningPath */
+            $learningPath = $this->get_component()->get_root_content_object();
+
+            /** @var User $user */
+            $user = $this->get_component()->getReportingUser();
+
+            /** @var TrackingService $trackingService */
+            $trackingService = $this->get_component()->getTrackingService();
+
+            $this->data = array_values(
+                $trackingService->getTreeNodeAttempts(
+                    $learningPath, $user, $treeNode
+                )
+            );
         }
 
         return $this->data;

@@ -2,11 +2,11 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathMigrationTrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathMigrationService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\MigrationTrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathTrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Console\Command\ChamiloCommand;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -19,7 +19,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathMigrationCommand extends ChamiloCommand
+class MigrationCommand extends ChamiloCommand
 {
     /**
      * @var LearningPathService
@@ -42,7 +42,7 @@ class LearningPathMigrationCommand extends ChamiloCommand
     protected $dataClassRepository;
 
     /**
-     * LearningPathMigrationCommand constructor.
+     * MigrationCommand constructor.
      *
      * @param Translator $translator
      * @param LearningPathService $learningPathService
@@ -88,16 +88,16 @@ class LearningPathMigrationCommand extends ChamiloCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $learningPathTrackingRepository = new LearningPathTrackingRepository(
-            $this->dataClassRepository, new LearningPathMigrationTrackingParameters()
+        $trackingRepository = new TrackingRepository(
+            $this->dataClassRepository, new MigrationTrackingParameters()
         );
 
-        $learningPathMigrationService = new LearningPathMigrationService(
+        $migrationService = new MigrationService(
             $this->learningPathService, $this->treeNodeDataService,
-            $learningPathTrackingRepository, $this->contentObjectRepository
+            $trackingRepository, $this->contentObjectRepository
         );
 
-        $learningPathMigrationService->migrateLearningPaths();
+        $migrationService->migrateLearningPaths();
     }
 
 }

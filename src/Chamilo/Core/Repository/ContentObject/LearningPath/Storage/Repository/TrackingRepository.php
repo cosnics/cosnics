@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\LearningPathTrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -35,28 +35,27 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathTrackingRepository extends CommonDataClassRepository
-    implements LearningPathTrackingRepositoryInterface
+class TrackingRepository extends CommonDataClassRepository implements TrackingRepositoryInterface
 {
     /**
-     * @var LearningPathTrackingParametersInterface
+     * @var TrackingParametersInterface
      */
-    protected $learningPathTrackingParameters;
+    protected $trackingParameters;
 
     /**
-     * LearningPathTrackingRepository constructor.
+     * TrackingRepository constructor.
      *
      * @param DataClassRepository $dataClassRepository
-     * @param LearningPathTrackingParametersInterface $learningPathTrackingParameters
+     * @param TrackingParametersInterface $trackingParameters
      */
     public function __construct(
         DataClassRepository $dataClassRepository,
-        LearningPathTrackingParametersInterface $learningPathTrackingParameters
+        TrackingParametersInterface $trackingParameters
     )
     {
         parent::__construct($dataClassRepository);
 
-        $this->learningPathTrackingParameters = $learningPathTrackingParameters;
+        $this->trackingParameters = $trackingParameters;
     }
 
     /**
@@ -71,7 +70,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $conditions = array();
 
-        $customConditions = $this->learningPathTrackingParameters->getLearningPathAttemptConditions();
+        $customConditions = $this->trackingParameters->getLearningPathAttemptConditions();
         if ($customConditions)
         {
             $conditions[] = $customConditions;
@@ -79,7 +78,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getLearningPathAttemptClassName(),
+                $this->trackingParameters->getLearningPathAttemptClassName(),
                 LearningPathAttempt::PROPERTY_LEARNING_PATH_ID
             ),
             new StaticConditionVariable($learningPath->getId())
@@ -87,7 +86,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getLearningPathAttemptClassName(),
+                $this->trackingParameters->getLearningPathAttemptClassName(),
                 LearningPathAttempt::PROPERTY_USER_ID
             ),
             new StaticConditionVariable($user->getId())
@@ -96,7 +95,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            $this->learningPathTrackingParameters->getLearningPathAttemptClassName(),
+            $this->trackingParameters->getLearningPathAttemptClassName(),
             new DataClassRetrieveParameters($condition)
         );
     }
@@ -106,7 +105,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     public function clearLearningPathAttemptCache()
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $this->dataClassRepository->getDataClassRepositoryCache()->truncate($learningPathAttemptClassName);
     }
@@ -117,7 +116,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     public function clearTreeNodeAttemptCache()
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $this->dataClassRepository->getDataClassRepositoryCache()->truncate($treeNodeAttemptClassName);
     }
@@ -133,14 +132,14 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+                $this->trackingParameters->getTreeNodeAttemptClassName(),
                 TreeNodeAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($learningPathAttempt->getId())
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+            $this->trackingParameters->getTreeNodeAttemptClassName(),
             new DataClassRetrievesParameters($condition)
         );
     }
@@ -155,10 +154,10 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath)
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $learningPathAttemptClassName =
-            $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+            $this->trackingParameters->getLearningPathAttemptClassName();
 
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
 
@@ -186,7 +185,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+                $this->trackingParameters->getTreeNodeAttemptClassName(),
                 TreeNodeAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
             ),
             new StaticConditionVariable($learningPathAttempt->getId())
@@ -194,7 +193,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+                $this->trackingParameters->getTreeNodeAttemptClassName(),
                 TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
             ),
             new StaticConditionVariable($treeNode->getId())
@@ -203,7 +202,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $conditions[] = new NotCondition(
             new InCondition(
                 new PropertyConditionVariable(
-                    $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+                    $this->trackingParameters->getTreeNodeAttemptClassName(),
                     TreeNodeAttempt::PROPERTY_STATUS
                 ),
                 array(TreeNodeAttempt::STATUS_COMPLETED, TreeNodeAttempt::STATUS_PASSED)
@@ -213,7 +212,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(),
+            $this->trackingParameters->getTreeNodeAttemptClassName(),
             new DataClassRetrieveParameters($condition)
         );
     }
@@ -228,7 +227,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     public function findTreeNodeAttemptById($treeNodeAttemptId)
     {
         return $this->dataClassRepository->retrieveById(
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName(), $treeNodeAttemptId
+            $this->trackingParameters->getTreeNodeAttemptClassName(), $treeNodeAttemptId
         );
     }
 
@@ -242,7 +241,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     public function findLearningPathAttemptById($learningPathAttemptId)
     {
         return $this->dataClassRepository->retrieveById(
-            $this->learningPathTrackingParameters->getLearningPathAttemptClassName(), $learningPathAttemptId
+            $this->trackingParameters->getLearningPathAttemptClassName(), $learningPathAttemptId
         );
     }
 
@@ -257,14 +256,14 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName(),
+                $this->trackingParameters->getLearningPathQuestionAttemptClassName(),
                 LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
             ),
             new StaticConditionVariable($treeNodeAttempt->getId())
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName(),
+            $this->trackingParameters->getLearningPathQuestionAttemptClassName(),
             new DataClassRetrievesParameters($condition)
         );
     }
@@ -287,9 +286,9 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
         $joins = $this->getJoinsForLearningPathAttemptsWithUser();
@@ -321,7 +320,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null)
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $condition = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath, $condition);
         $joins = $this->getJoinsForLearningPathAttemptsWithUser();
@@ -351,9 +350,9 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     protected function getPropertiesForLearningPathAttemptsWithUser()
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $properties = new DataClassProperties();
 
@@ -442,7 +441,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     )
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $properties = new DataClassProperties();
 
@@ -484,7 +483,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     public function countTargetUsers(LearningPath $learningPath)
     {
-        return count($this->learningPathTrackingParameters->getLearningPathTargetUserIds($learningPath));
+        return count($this->trackingParameters->getLearningPathTargetUserIds($learningPath));
     }
 
     /**
@@ -501,7 +500,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     )
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $joins = $this->getJoinsForTargetUsersWithLearningPathAttempts($learningPath);
 
@@ -525,7 +524,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     protected function getJoinsForTargetUsersWithLearningPathAttempts(LearningPath $learningPath)
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $joinConditions = array();
         $joinConditions[] = $this->getConditionForLearningPathAttemptsForLearningPath($learningPath);
@@ -550,7 +549,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         LearningPath $learningPath, Condition $condition = null
     )
     {
-        $targetUserIds = $this->learningPathTrackingParameters->getLearningPathTargetUserIds($learningPath);
+        $targetUserIds = $this->trackingParameters->getLearningPathTargetUserIds($learningPath);
 
         $conditions = array();
 
@@ -573,7 +572,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
      */
     protected function getConditionForLearningPathAttemptWithUser()
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         return new EqualityCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
@@ -595,7 +594,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         LearningPath $learningPath, Condition $condition = null
     )
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $conditions = array();
 
@@ -606,7 +605,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
             new StaticConditionVariable($learningPath->getId())
         );
 
-        $customCondition = $this->learningPathTrackingParameters->getLearningPathAttemptConditions();
+        $customCondition = $this->trackingParameters->getLearningPathAttemptConditions();
         if ($customCondition instanceof Condition)
         {
             $conditions[] = $customCondition;
@@ -634,13 +633,13 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         LearningPath $learningPath
     )
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $learningPathQuestionAttemptClassName =
-            $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName();
+            $this->trackingParameters->getLearningPathQuestionAttemptClassName();
 
         $properties = new DataClassProperties();
 
@@ -730,7 +729,7 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     protected function getConditionForCompletedTreeNodesData($treeNodeDataIds = array())
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $conditions = array();
 
@@ -767,10 +766,10 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
         $joinWithClass, $joinType = Join::TYPE_NORMAL, Condition $joinCondition = null
     )
     {
-        $learningPathAttemptClassName = $this->learningPathTrackingParameters->getLearningPathAttemptClassName();
+        $learningPathAttemptClassName = $this->trackingParameters->getLearningPathAttemptClassName();
 
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $joinConditions = array();
 
@@ -800,10 +799,10 @@ class LearningPathTrackingRepository extends CommonDataClassRepository
     protected function getJoinForTreeNodeAttemptWithLearningPathQuestionAttempt()
     {
         $treeNodeAttemptClassName =
-            $this->learningPathTrackingParameters->getTreeNodeAttemptClassName();
+            $this->trackingParameters->getTreeNodeAttemptClassName();
 
         $learningPathQuestionAttemptClassName =
-            $this->learningPathTrackingParameters->getLearningPathQuestionAttemptClassName();
+            $this->trackingParameters->getLearningPathQuestionAttemptClassName();
 
         return new Join(
             $learningPathQuestionAttemptClassName,

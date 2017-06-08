@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTableDataProvider extends DataClassTableDataProvider
+class TreeNodeTableDataProvider extends DataClassTableDataProvider
 {
 
     /**

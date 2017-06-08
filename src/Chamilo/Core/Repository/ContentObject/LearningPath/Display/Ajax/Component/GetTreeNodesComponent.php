@@ -38,7 +38,7 @@ class GetTreeNodesComponent extends Manager
 
             $treeJSONMapper = new TreeJSONMapper(
                 $tree, $this->getUser(),
-                $this->get_application()->getLearningPathTrackingService(),
+                $this->get_application()->getTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
                 $this->get_application()->get_application()->get_tree_menu_url(),
