@@ -21,7 +21,7 @@ class MigrationTrackingParameters extends TrackingParameters
     /**
      * @return Condition
      */
-    public function getLearningPathAttemptConditions()
+    public function getTreeNodeAttemptConditions()
     {
         return null;
     }

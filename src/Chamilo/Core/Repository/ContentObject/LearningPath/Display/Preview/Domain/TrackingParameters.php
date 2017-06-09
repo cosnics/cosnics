@@ -20,14 +20,6 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * @return string
      */
-    public function getLearningPathAttemptClassName()
-    {
-        return DummyAttempt::class_name();
-    }
-
-    /**
-     * @return string
-     */
     public function getTreeNodeAttemptClassName()
     {
         return DummyChildAttempt::class_name();
@@ -44,19 +36,9 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * @return Condition
      */
-    public function getLearningPathAttemptConditions()
+    public function getTreeNodeAttemptConditions()
     {
         return null;
-    }
-
-    /**
-     * Creates a new instance of the LearningPathAttempt extension
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt
-     */
-    public function createLearningPathAttemptInstance()
-    {
-        return new DummyAttempt();
     }
 
     /**

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -89,14 +90,6 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * @return string
      */
-    public function getLearningPathAttemptClassName()
-    {
-        return LearningPathAttempt::class_name();
-    }
-
-    /**
-     * @return string
-     */
     public function getTreeNodeAttemptClassName()
     {
         return LearningPathTreeNodeAttempt::class_name();
@@ -113,41 +106,15 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * @return Condition
      */
-    public function getLearningPathAttemptConditions()
+    public function getTreeNodeAttemptConditions()
     {
-        $conditions = array();
-
-        $conditions[] = new EqualityCondition(
+        return new EqualityCondition(
             new PropertyConditionVariable(
-                $this->getLearningPathAttemptClassName(), LearningPathAttempt::PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($this->courseId)
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                $this->getLearningPathAttemptClassName(),
-                LearningPathAttempt::PROPERTY_PUBLICATION_ID
+                $this->getTreeNodeAttemptClassName(),
+                LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
             ),
             new StaticConditionVariable($this->publicationId)
         );
-
-        return new AndCondition($conditions);
-    }
-
-    /**
-     * Creates a new instance of the LearningPathAttempt extension
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt
-     */
-    public function createLearningPathAttemptInstance()
-    {
-        $learningPathAttempt = new LearningPathAttempt();
-
-        $learningPathAttempt->set_course_id($this->courseId);
-        $learningPathAttempt->set_publication_id($this->publicationId);
-
-        return $learningPathAttempt;
     }
 
     /**
@@ -157,7 +124,9 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function createTreeNodeAttemptInstance()
     {
-        return new LearningPathTreeNodeAttempt();
+        $treeNodeAttempt = new LearningPathTreeNodeAttempt();
+        $treeNodeAttempt->set_publication_id($this->publicationId);
+        return $treeNodeAttempt;
     }
 
     /**

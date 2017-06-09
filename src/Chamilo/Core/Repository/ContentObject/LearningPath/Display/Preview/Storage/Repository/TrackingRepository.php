@@ -116,11 +116,12 @@ class TrackingRepository implements TrackingRepositoryInterface
     /**
      * Finds the learning path child attempts for a given learning path attempt
      *
-     * @param LearningPathAttempt $learningPathAttempt
+     * @param LearningPath $learningPath
+     * @param User $user
      *
-     * @return TreeNodeAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeAttempt[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTreeNodeAttempts(LearningPathAttempt $learningPathAttempt)
+    public function findTreeNodeAttempts(LearningPath $learningPath, User $user)
     {
         $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
 
@@ -143,13 +144,13 @@ class TrackingRepository implements TrackingRepositoryInterface
 
         $learningPathAttempts = $attempts[$learningPath->getId()];
 
-        foreach($learningPathAttempts as $learningPathAttempt)
+        foreach ($learningPathAttempts as $learningPathAttempt)
         {
             /** @var LearningPathAttempt $learningPathAttempt */
 
             $learningPathAttemptChildAttempts = $childAttempts[$learningPathAttempt->getId()];
 
-            if(is_array($learningPathAttemptChildAttempts))
+            if (is_array($learningPathAttemptChildAttempts))
             {
                 $allChildAttempts += $learningPathAttemptChildAttempts;
             }
@@ -161,13 +162,14 @@ class TrackingRepository implements TrackingRepositoryInterface
     /**
      * Finds a TreeNodeAttempt by a given LearningPathAttempt and TreeNode
      *
-     * @param LearningPathAttempt $learningPathAttempt
+     * @param LearningPath $learningPath
      * @param TreeNode $treeNode
+     * @param User $user
      *
-     * @return TreeNodeAttempt | DataClass
+     * @return TreeNodeAttempt|DataClass
      */
     public function findActiveTreeNodeAttempt(
-        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
+        LearningPath $learningPath, TreeNode $treeNode, User $user
     )
     {
         /** @var DummyChildAttempt[][] $childAttempts */
@@ -218,7 +220,6 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findLearningPathAttemptById($learningPathAttemptId)
     {
-
     }
 
     /**
@@ -305,7 +306,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function createDummyAttempt(DummyAttempt $dummyAttempt)
     {
-        if(!$dummyAttempt->is_identified())
+        if (!$dummyAttempt->is_identified())
         {
             $dummyAttempt->setId(UUID::v4());
         }
@@ -344,7 +345,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function createDummyChildAttempt(DummyChildAttempt $dummyChildAttempt)
     {
-        if(!$dummyChildAttempt->is_identified())
+        if (!$dummyChildAttempt->is_identified())
         {
             $dummyChildAttempt->setId(UUID::v4());
         }
@@ -384,7 +385,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function createDummyQuestionAttempt(DummyQuestionAttempt $dummyQuestionAttempt)
     {
-        if(!$dummyQuestionAttempt->is_identified())
+        if (!$dummyQuestionAttempt->is_identified())
         {
             $dummyQuestionAttempt->setId(UUID::v4());
         }
@@ -440,15 +441,15 @@ class TrackingRepository implements TrackingRepositoryInterface
 
         $allData = array();
 
-        foreach($learningPathAttempts as $userId => $learningPathAttempt)
+        foreach ($learningPathAttempts as $userId => $learningPathAttempt)
         {
             $treeNodeAttempts = $childAttempts[$learningPathAttempt->getId()];
-            foreach($treeNodeAttempts as $childAttempt)
+            foreach ($treeNodeAttempts as $childAttempt)
             {
                 $childQuestionAttempts = $questionAttempts[$childAttempt->getId()];
-                foreach($childQuestionAttempts as $questionAttempt)
+                foreach ($childQuestionAttempts as $questionAttempt)
                 {
-                    $allData[]= array(
+                    $allData[] = array(
                         'learning_path_attempt_id' => $learningPathAttempt->getId(),
                         LearningPathAttempt::PROPERTY_USER_ID => $learningPathAttempt->get_user_id(),
                         LearningPathAttempt::PROPERTY_LEARNING_PATH_ID => $learningPathAttempt->getLearningPathId(),
@@ -460,7 +461,8 @@ class TrackingRepository implements TrackingRepositoryInterface
                         TreeNodeAttempt::PROPERTY_SCORE => $childAttempt->get_score(),
                         TreeNodeAttempt::PROPERTY_STATUS => $childAttempt->get_status(),
                         'learning_path_question_attempt_id' => $questionAttempt->getId(),
-                        LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(),
+                        LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(
+                        ),
                         LearningPathQuestionAttempt::PROPERTY_ANSWER => $questionAttempt->get_answer(),
                         LearningPathQuestionAttempt::PROPERTY_FEEDBACK => $questionAttempt->get_feedback(),
                         LearningPathQuestionAttempt::PROPERTY_SCORE => $questionAttempt->get_score(),
@@ -478,7 +480,6 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function clearTreeNodeAttemptCache()
     {
-
     }
 
     /**
@@ -506,11 +507,14 @@ class TrackingRepository implements TrackingRepositoryInterface
      * Counts the learning path attempts joined with users for searching
      *
      * @param LearningPath $learningPath
+     * @param int[] $treeNodeDataIds
      * @param Condition $condition
      *
      * @return int
      */
-    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null)
+    public function countLearningPathAttemptsWithUser(
+        LearningPath $learningPath, $treeNodeDataIds = array(), Condition $condition = null
+    )
     {
         return 0;
     }
@@ -543,83 +547,9 @@ class TrackingRepository implements TrackingRepositoryInterface
      *
      * @return int
      */
-    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null)
+    public function countTargetUsersForLearningPath(LearningPath $learningPath, Condition $condition = null)
     {
         return 0;
     }
 
-    /**
-     * Counts the target users without attempts on a learning path
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return int
-     */
-    public function countTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
-    {
-        return 0;
-    }
-
-    /**
-     * Finds the target users with the completed nodes for a given learning path, limiting it by the given nodes
-     *
-     * @param LearningPath $learningPath
-     * @param int[] $treeNodeDataIds
-     *
-     * @return RecordIterator
-     */
-    public function findUsersWithCompletedNodesCount(
-        LearningPath $learningPath, $treeNodeDataIds = array()
-    )
-    {
-        return new RecordIterator(User::class_name(), array());
-    }
-
-    /**
-     * Counts the target users with attempts on a learning path that are not completed
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return int
-     */
-    public function countTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
-    {
-        return 0;
-    }
-
-    /**
-     * Counts the total number of target users for a given learning path
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return int
-     */
-    public function countTargetUsers(LearningPath $learningPath)
-    {
-        return 0;
-    }
-
-    /**
-     * Finds the target users without attempts on a learning path
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
-     */
-    public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath)
-    {
-        return new RecordIterator(User::class_name(), array());
-    }
-
-    /**
-     * Finds the target users with attempts on a learning path that are not completed
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
-     */
-    public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath)
-    {
-        return new RecordIterator(User::class_name(), array());
-    }
 }

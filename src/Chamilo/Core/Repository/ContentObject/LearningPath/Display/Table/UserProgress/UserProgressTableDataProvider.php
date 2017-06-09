@@ -53,7 +53,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     public function count_data($condition)
     {
         return $this->getTrackingService()->countLearningPathAttemptsWithUsers(
-            $this->getLearningPath(), $condition
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition
         );
     }
 

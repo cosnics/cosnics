@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -13,6 +14,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 abstract class TreeNodeAttempt extends DataClass
 {
     // Properties
+    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
+    const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_LEARNING_PATH_ATTEMPT_ID = 'learning_path_attempt_id';
     const PROPERTY_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
     const PROPERTY_START_TIME = 'start_time';
@@ -23,7 +26,7 @@ abstract class TreeNodeAttempt extends DataClass
     const PROPERTY_SUSPEND_DATA = 'suspend_data';
     const PROPERTY_MAX_SCORE = 'max_score';
     const PROPERTY_MIN_SCORE = 'min_score';
-    
+
     // Status
     const STATUS_COMPLETED = 'completed';
     const STATUS_NOT_ATTEMPTED = 'not attempted';
@@ -34,16 +37,20 @@ abstract class TreeNodeAttempt extends DataClass
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_LEARNING_PATH_ATTEMPT_ID, 
-                self::PROPERTY_LEARNING_PATH_ITEM_ID, 
-                self::PROPERTY_START_TIME, 
-                self::PROPERTY_TOTAL_TIME, 
-                self::PROPERTY_SCORE, 
-                self::PROPERTY_STATUS, 
-                self::PROPERTY_LESSON_LOCATION, 
-                self::PROPERTY_SUSPEND_DATA, 
-                self::PROPERTY_MAX_SCORE, 
-                self::PROPERTY_MIN_SCORE));
+                self::PROPERTY_LEARNING_PATH_ID,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_LEARNING_PATH_ATTEMPT_ID,
+                self::PROPERTY_LEARNING_PATH_ITEM_ID,
+                self::PROPERTY_START_TIME,
+                self::PROPERTY_TOTAL_TIME,
+                self::PROPERTY_SCORE,
+                self::PROPERTY_STATUS,
+                self::PROPERTY_LESSON_LOCATION,
+                self::PROPERTY_SUSPEND_DATA,
+                self::PROPERTY_MAX_SCORE,
+                self::PROPERTY_MIN_SCORE
+            )
+        );
     }
 
     public function get_learning_path_attempt_id()
@@ -144,6 +151,40 @@ abstract class TreeNodeAttempt extends DataClass
     public function set_max_score($max_score)
     {
         $this->set_default_property(self::PROPERTY_MAX_SCORE, $max_score);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLearningPathId()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
+    }
+
+    /**
+     * @param int $learningPathId
+     */
+    public function setLearningPathId($learningPathId)
+    {
+        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->get_default_property(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     *
+     * @param int $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

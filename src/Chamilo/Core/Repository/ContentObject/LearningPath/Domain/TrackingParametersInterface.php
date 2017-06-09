@@ -16,13 +16,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 interface TrackingParametersInterface
 {
     /**
-     * Creates a new instance of the LearningPathAttempt extension
-     *
-     * @return LearningPathAttempt
-     */
-    public function createLearningPathAttemptInstance();
-
-    /**
      * Creates a new instance of the TreeNodeAttempt extension
      *
      * @return TreeNodeAttempt
@@ -35,13 +28,6 @@ interface TrackingParametersInterface
      * @return LearningPathQuestionAttempt
      */
     public function createLearningPathQuestionAttemptInstance();
-
-    /**
-     * Returns the class name for the LearningPathAttempt extension
-     *
-     * @return string
-     */
-    public function getLearningPathAttemptClassName();
 
     /**
      * Returns the class name for the TreeNodeAttempt extension
@@ -58,12 +44,12 @@ interface TrackingParametersInterface
     public function getLearningPathQuestionAttemptClassName();
 
     /**
-     * Returns the condition needed to retrieve learning path attempts
+     * Returns the condition needed to retrieve tree node attempts
      * (can be used to add additional parameters to the queries)
      *
      * @return Condition
      */
-    public function getLearningPathAttemptConditions();
+    public function getTreeNodeAttemptConditions();
 
     /**
      * Returns the user ids for whom the learning path was targeted

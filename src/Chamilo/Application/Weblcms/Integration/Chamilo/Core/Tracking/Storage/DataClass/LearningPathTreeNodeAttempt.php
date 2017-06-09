@@ -9,6 +9,38 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class LearningPathTreeNodeAttempt extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt
 {
+    const PROPERTY_PUBLICATION_ID = 'publication_id';
+
+    /**
+     *
+     * @param string[] $extended_property_names
+     *
+     * @return string[]
+     */
+    public static function get_default_property_names($extended_property_names = array())
+    {
+        $extended_property_names[] = self::PROPERTY_PUBLICATION_ID;
+
+        return parent::get_default_property_names($extended_property_names);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_publication_id()
+    {
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+    }
+
+    /**
+     *
+     * @param int $publication_id
+     */
+    public function set_publication_id($publication_id)
+    {
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+    }
 
     /**
      */

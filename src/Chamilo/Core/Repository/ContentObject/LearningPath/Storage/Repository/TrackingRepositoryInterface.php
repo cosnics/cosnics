@@ -39,21 +39,6 @@ interface TrackingRepositoryInterface
     public function delete(DataClass $dataClass);
 
     /**
-     * Finds a learning path attempt by a given learning path and user
-     *
-     * @param LearningPath $learningPath
-     * @param User $user
-     *
-     * @return LearningPathAttempt | \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findLearningPathAttemptForUser(LearningPath $learningPath, User $user);
-
-    /**
-     * Clears the cache for the LearningPathAttempt data class
-     */
-    public function clearLearningPathAttemptCache();
-
-    /**
      * Clears the cache for the LearningPathAttempt data class
      */
     public function clearTreeNodeAttemptCache();
@@ -61,11 +46,12 @@ interface TrackingRepositoryInterface
     /**
      * Finds the learning path child attempts for a given learning path attempt
      *
-     * @param LearningPathAttempt $learningPathAttempt
+     * @param LearningPath $learningPath
+     * @param User $user
      *
-     * @return TreeNodeAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeAttempt[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findTreeNodeAttempts(LearningPathAttempt $learningPathAttempt);
+    public function findTreeNodeAttempts(LearningPath $learningPath, User $user);
 
     /**
      * Finds all the TreeNodeAttempt objects for a given LearningPath
@@ -79,13 +65,14 @@ interface TrackingRepositoryInterface
     /**
      * Finds a TreeNodeAttempt by a given LearningPathAttempt and TreeNode
      *
-     * @param LearningPathAttempt $learningPathAttempt
+     * @param LearningPath $learningPath
      * @param TreeNode $treeNode
+     * @param User $user
      *
-     * @return TreeNodeAttempt | DataClass
+     * @return TreeNodeAttempt|DataClass
      */
     public function findActiveTreeNodeAttempt(
-        LearningPathAttempt $learningPathAttempt, TreeNode $treeNode
+        LearningPath $learningPath, TreeNode $treeNode, User $user
     );
 
     /**
@@ -96,15 +83,6 @@ interface TrackingRepositoryInterface
      * @return DataClass | TreeNodeAttempt
      */
     public function findTreeNodeAttemptById($treeNodeAttemptId);
-
-    /**
-     * Finds a LearningPathAttempt by a given ID
-     *
-     * @param int $learningPathAttemptId
-     *
-     * @return DataClass | LearningPathAttempt
-     */
-    public function findLearningPathAttemptById($learningPathAttemptId);
 
     /**
      * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
@@ -137,11 +115,14 @@ interface TrackingRepositoryInterface
      * Counts the learning path attempts joined with users for searching
      *
      * @param LearningPath $learningPath
+     * @param int[] $treeNodeDataIds
      * @param Condition $condition
      *
      * @return int
      */
-    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, Condition $condition = null);
+    public function countLearningPathAttemptsWithUser(
+        LearningPath $learningPath, $treeNodeDataIds = array(), Condition $condition = null
+    );
 
     /**
      * Finds the targeted users (left) joined with the learning path attempts
@@ -161,35 +142,14 @@ interface TrackingRepositoryInterface
     );
 
     /**
-     * Counts the targeted users (left) joined with the learning path attempts
+     * Counts the targeted users for the given learning path (with a condition)
      *
      * @param LearningPath $learningPath
      * @param Condition $condition
      *
      * @return int
      */
-    public function countTargetUsersWithLearningPathAttempts(LearningPath $learningPath, Condition $condition = null);
-
-    /**
-     * Finds the target users with the completed nodes for a given learning path, limiting it by the given nodes
-     *
-     * @param LearningPath $learningPath
-     * @param int[] $treeNodeDataIds
-     *
-     * @return RecordIterator
-     */
-    public function findUsersWithCompletedNodesCount(
-        LearningPath $learningPath, $treeNodeDataIds = array()
-    );
-
-    /**
-     * Counts the total number of target users for a given learning path
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return int
-     */
-    public function countTargetUsers(LearningPath $learningPath);
+    public function countTargetUsersForLearningPath(LearningPath $learningPath, Condition $condition = null);
 
     /**
      * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
