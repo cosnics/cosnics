@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -126,12 +126,10 @@ class AttemptService
 
         $treeNodeAttempt->setLearningPathId($learningPath->getId());
         $treeNodeAttempt->setUserId($user->getId());
-        $treeNodeAttempt->set_learning_path_item_id($treeNode->getId());
+        $treeNodeAttempt->setTreeNodeDataId($treeNode->getId());
         $treeNodeAttempt->set_start_time(time());
         $treeNodeAttempt->set_total_time(0);
         $treeNodeAttempt->set_score(0);
-        $treeNodeAttempt->set_min_score(0);
-        $treeNodeAttempt->set_max_score(0);
         $treeNodeAttempt->set_status(TreeNodeAttempt::STATUS_NOT_ATTEMPTED);
 
         $this->trackingRepository->create($treeNodeAttempt);
@@ -168,7 +166,7 @@ class AttemptService
 
             foreach ($treeNodeAttempts as $treeNodeAttempt)
             {
-                $attempt_data[$treeNodeAttempt->get_learning_path_item_id()][] = $treeNodeAttempt;
+                $attempt_data[$treeNodeAttempt->getTreeNodeDataId()][] = $treeNodeAttempt;
             }
 
             $this->treeNodeAttemptCache[$cacheKey] = $attempt_data;
@@ -201,54 +199,54 @@ class AttemptService
     }
 
     /**
-     * Returns the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
+     * Returns the TreeNodeQuestionAttempt objects for a given TreeNodeAttempt
      *
      * @param TreeNodeAttempt $learningPathItemAttempt
      *
-     * @return LearningPathQuestionAttempt[]
+     * @return TreeNodeQuestionAttempt[]
      */
-    public function getLearningPathQuestionAttempts(
+    public function getTreeNodeQuestionAttempts(
         TreeNodeAttempt $learningPathItemAttempt
     )
     {
-        $learningPathQuestionAttempts =
-            $this->trackingRepository->findLearningPathQuestionAttempts($learningPathItemAttempt);
+        $treeNodeQuestionAttempts =
+            $this->trackingRepository->findTreeNodeQuestionAttempts($learningPathItemAttempt);
 
-        $learningPathQuestionAttemptsPerQuestion = array();
+        $treeNodeQuestionAttemptsPerQuestion = array();
 
-        foreach ($learningPathQuestionAttempts as $learningPathQuestionAttempt)
+        foreach ($treeNodeQuestionAttempts as $treeNodeQuestionAttempt)
         {
-            $learningPathQuestionAttemptsPerQuestion[$learningPathQuestionAttempt->get_question_complex_id()] =
-                $learningPathQuestionAttempt;
+            $treeNodeQuestionAttemptsPerQuestion[$treeNodeQuestionAttempt->get_question_complex_id()] =
+                $treeNodeQuestionAttempt;
         }
 
-        return $learningPathQuestionAttemptsPerQuestion;
+        return $treeNodeQuestionAttemptsPerQuestion;
     }
 
     /**
-     * Creates a LearningPathQuestionAttempt for a given TreeNodeAttempt and question identifier
+     * Creates a TreeNodeQuestionAttempt for a given TreeNodeAttempt and question identifier
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      * @param int $questionId
      *
-     * @return LearningPathQuestionAttempt
+     * @return TreeNodeQuestionAttempt
      */
-    public function createLearningPathQuestionAttempt(TreeNodeAttempt $treeNodeAttempt, $questionId
+    public function createTreeNodeQuestionAttempt(TreeNodeAttempt $treeNodeAttempt, $questionId
     )
     {
-        $learningPathQuestionAttempt =
-            $this->trackingParameters->createLearningPathQuestionAttemptInstance();
+        $treeNodeQuestionAttempt =
+            $this->trackingParameters->createTreeNodeQuestionAttemptInstance();
 
-        $learningPathQuestionAttempt->set_item_attempt_id($treeNodeAttempt->getId());
-        $learningPathQuestionAttempt->set_question_complex_id($questionId);
-        $learningPathQuestionAttempt->set_answer('');
-        $learningPathQuestionAttempt->set_score(0);
-        $learningPathQuestionAttempt->set_feedback('');
-        $learningPathQuestionAttempt->set_hint(0);
+        $treeNodeQuestionAttempt->setTreeNodeAttemptId($treeNodeAttempt->getId());
+        $treeNodeQuestionAttempt->set_question_complex_id($questionId);
+        $treeNodeQuestionAttempt->set_answer('');
+        $treeNodeQuestionAttempt->set_score(0);
+        $treeNodeQuestionAttempt->set_feedback('');
+        $treeNodeQuestionAttempt->set_hint(0);
 
-        $this->trackingRepository->create($learningPathQuestionAttempt);
+        $this->trackingRepository->create($treeNodeQuestionAttempt);
 
-        return $learningPathQuestionAttempt;
+        return $treeNodeQuestionAttempt;
     }
 
     /**

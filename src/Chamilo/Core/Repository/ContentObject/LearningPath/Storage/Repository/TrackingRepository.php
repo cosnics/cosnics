@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -123,7 +123,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->trackingParameters->getTreeNodeAttemptClassName(),
-                TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($treeNode->getId())
         );
@@ -161,24 +161,24 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     }
 
     /**
-     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
+     * Finds the TreeNodeQuestionAttempt objects for a given TreeNodeAttempt
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      *
-     * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
+    public function findTreeNodeQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->trackingParameters->getLearningPathQuestionAttemptClassName(),
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+                $this->trackingParameters->getTreeNodeQuestionAttemptClassName(),
+                TreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID
             ),
             new StaticConditionVariable($treeNodeAttempt->getId())
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->trackingParameters->getLearningPathQuestionAttemptClassName(),
+            $this->trackingParameters->getTreeNodeQuestionAttemptClassName(),
             new DataClassRetrievesParameters($condition)
         );
     }
@@ -277,7 +277,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
                 new FunctionConditionVariable(
                     FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                         $this->trackingParameters->getTreeNodeAttemptClassName(),
-                        TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                        TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID
                     )
                 ),
                 'nodes_completed'
@@ -444,21 +444,21 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
     /**
      * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
-     * LearningPathQuestionAttempt objects for a given learning path
+     * TreeNodeQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
         LearningPath $learningPath
     )
     {
         $treeNodeAttemptClassName =
             $this->trackingParameters->getTreeNodeAttemptClassName();
 
-        $learningPathQuestionAttemptClassName =
-            $this->trackingParameters->getLearningPathQuestionAttemptClassName();
+        $treeNodeQuestionAttemptClassName =
+            $this->trackingParameters->getTreeNodeQuestionAttemptClassName();
 
         $properties = new DataClassProperties();
 
@@ -471,7 +471,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $treeNodeAttemptProperties = array(
             TreeNodeAttempt::PROPERTY_USER_ID, TreeNodeAttempt::PROPERTY_LEARNING_PATH_ID,
-            TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID, TreeNodeAttempt::PROPERTY_START_TIME,
+            TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID, TreeNodeAttempt::PROPERTY_START_TIME,
             TreeNodeAttempt::PROPERTY_TOTAL_TIME, TreeNodeAttempt::PROPERTY_SCORE,
             TreeNodeAttempt::PROPERTY_STATUS
         );
@@ -485,28 +485,28 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $properties->add(
             new FixedPropertyConditionVariable(
-                $learningPathQuestionAttemptClassName, LearningPathQuestionAttempt::PROPERTY_ID,
-                'learning_path_question_attempt_id'
+                $treeNodeQuestionAttemptClassName, TreeNodeQuestionAttempt::PROPERTY_ID,
+                'tree_node_question_attempt_id'
             )
         );
 
-        $learningPathQuestionAttemptProperties = array(
-            LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID, LearningPathQuestionAttempt::PROPERTY_ANSWER,
-            LearningPathQuestionAttempt::PROPERTY_FEEDBACK, LearningPathQuestionAttempt::PROPERTY_SCORE,
-            LearningPathQuestionAttempt::PROPERTY_HINT
+        $treeNodeQuestionAttemptProperties = array(
+            TreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID, TreeNodeQuestionAttempt::PROPERTY_ANSWER,
+            TreeNodeQuestionAttempt::PROPERTY_FEEDBACK, TreeNodeQuestionAttempt::PROPERTY_SCORE,
+            TreeNodeQuestionAttempt::PROPERTY_HINT
         );
 
-        foreach ($learningPathQuestionAttemptProperties as $learningPathQuestionAttemptProperty)
+        foreach ($treeNodeQuestionAttemptProperties as $treeNodeQuestionAttemptProperty)
         {
             $properties->add(
                 new PropertyConditionVariable(
-                    $learningPathQuestionAttemptClassName, $learningPathQuestionAttemptProperty
+                    $treeNodeQuestionAttemptClassName, $treeNodeQuestionAttemptProperty
                 )
             );
         }
 
         $joins = new Joins();
-        $joins->add($this->getJoinForTreeNodeAttemptWithLearningPathQuestionAttempt());
+        $joins->add($this->getJoinForTreeNodeAttemptWithTreeNodeQuestionAttempt());
 
         $condition = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath);
 
@@ -541,7 +541,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         {
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    $treeNodeAttemptClassName, TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                    $treeNodeAttemptClassName, TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID
                 ),
                 $treeNodeDataIds
             );
@@ -551,26 +551,26 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     }
 
     /**
-     * Builds a Join object between TreeNodeAttempt and LearningPathQuestionAttempt
+     * Builds a Join object between TreeNodeAttempt and TreeNodeQuestionAttempt
      *
      * @return Join
      */
-    protected function getJoinForTreeNodeAttemptWithLearningPathQuestionAttempt()
+    protected function getJoinForTreeNodeAttemptWithTreeNodeQuestionAttempt()
     {
         $treeNodeAttemptClassName =
             $this->trackingParameters->getTreeNodeAttemptClassName();
 
-        $learningPathQuestionAttemptClassName =
-            $this->trackingParameters->getLearningPathQuestionAttemptClassName();
+        $treeNodeQuestionAttemptClassName =
+            $this->trackingParameters->getTreeNodeQuestionAttemptClassName();
 
         return new Join(
-            $learningPathQuestionAttemptClassName,
+            $treeNodeQuestionAttemptClassName,
             new EqualityCondition(
                 new PropertyConditionVariable(
                     $treeNodeAttemptClassName, TreeNodeAttempt::PROPERTY_ID
                 ),
                 new PropertyConditionVariable(
-                    $learningPathQuestionAttemptClassName, LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+                    $treeNodeQuestionAttemptClassName, TreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID
                 )
 
             )

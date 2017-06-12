@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -300,21 +300,21 @@ class TrackingService
     {
         $this->validateTreeNodeIsAssessment($treeNode);
 
-        $learningPathQuestionAttempts = $this->getQuestionAttempts($learningPath, $user, $treeNode);
-        $learningPathQuestionAttempt = $learningPathQuestionAttempts[$questionIdentifier];
+        $treeNodeQuestionAttempts = $this->getQuestionAttempts($learningPath, $user, $treeNode);
+        $treeNodeQuestionAttempt = $treeNodeQuestionAttempts[$questionIdentifier];
 
-        if (!$learningPathQuestionAttempt instanceof LearningPathQuestionAttempt)
+        if (!$treeNodeQuestionAttempt instanceof TreeNodeQuestionAttempt)
         {
             throw new \RuntimeException(
-                sprintf('The given LearningPathQuestionAttempt for the question %s is not found', $questionIdentifier)
+                sprintf('The given TreeNodeQuestionAttempt for the question %s is not found', $questionIdentifier)
             );
         }
 
-        $learningPathQuestionAttempt->set_answer($answer);
-        $learningPathQuestionAttempt->set_score($score);
-        $learningPathQuestionAttempt->set_hint($hint);
+        $treeNodeQuestionAttempt->set_answer($answer);
+        $treeNodeQuestionAttempt->set_score($score);
+        $treeNodeQuestionAttempt->set_hint($hint);
 
-        $this->trackingRepository->update($learningPathQuestionAttempt);
+        $this->trackingRepository->update($treeNodeQuestionAttempt);
     }
 
     /**
@@ -385,23 +385,23 @@ class TrackingService
         $questionIdentifier, $score = 0, $feedback = ''
     )
     {
-        $learningPathQuestionAttempts = $this->getQuestionAttempts(
+        $treeNodeQuestionAttempts = $this->getQuestionAttempts(
             $learningPath, $user, $treeNode, $treeNodeAttemptId
         );
 
-        $learningPathQuestionAttempt = $learningPathQuestionAttempts[$questionIdentifier];
+        $treeNodeQuestionAttempt = $treeNodeQuestionAttempts[$questionIdentifier];
 
-        if (!$learningPathQuestionAttempt instanceof LearningPathQuestionAttempt)
+        if (!$treeNodeQuestionAttempt instanceof TreeNodeQuestionAttempt)
         {
             throw new \RuntimeException(
-                sprintf('The given LearningPathQuestionAttempt for the question %s is not found', $questionIdentifier)
+                sprintf('The given TreeNodeQuestionAttempt for the question %s is not found', $questionIdentifier)
             );
         }
 
-        $learningPathQuestionAttempt->set_score($score);
-        $learningPathQuestionAttempt->set_feedback($feedback);
+        $treeNodeQuestionAttempt->set_score($score);
+        $treeNodeQuestionAttempt->set_feedback($feedback);
 
-        $this->trackingRepository->update($learningPathQuestionAttempt);
+        $this->trackingRepository->update($treeNodeQuestionAttempt);
     }
 
     /**
@@ -439,7 +439,7 @@ class TrackingService
      * @param TreeNode $treeNode
      * @param int $treeNodeAttemptId
      *
-     * @return LearningPathQuestionAttempt[]
+     * @return TreeNodeQuestionAttempt[]
      */
     public function getQuestionAttempts(
         LearningPath $learningPath, User $user, TreeNode $treeNode,
@@ -459,7 +459,7 @@ class TrackingService
             );
         }
 
-        $questionAttempts = $this->attemptService->getLearningPathQuestionAttempts(
+        $questionAttempts = $this->attemptService->getTreeNodeQuestionAttempts(
             $treeNodeAttempt
         );
 
@@ -481,7 +481,7 @@ class TrackingService
      * @param TreeNode $treeNode
      * @param int[] $questionIdentifiers
      *
-     * @return LearningPathQuestionAttempt[]
+     * @return TreeNodeQuestionAttempt[]
      */
     public function registerQuestionAttempts(
         LearningPath $learningPath, User $user, TreeNode $treeNode,
@@ -496,7 +496,7 @@ class TrackingService
         foreach ($questionIdentifiers as $questionIdentifier)
         {
             $questionAttemptPerQuestion[$questionIdentifier] =
-                $this->attemptService->createLearningPathQuestionAttempt(
+                $this->attemptService->createTreeNodeQuestionAttempt(
                     $activeAttempt, $questionIdentifier
                 );
         }

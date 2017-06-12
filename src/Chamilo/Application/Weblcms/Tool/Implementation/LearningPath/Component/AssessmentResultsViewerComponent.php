@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
@@ -114,12 +114,12 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
+                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID)));
         
         $question_attempts_result_set = DataManager::retrieves(
-            LearningPathQuestionAttempt::class_name(), 
+            LearningPathTreeNodeQuestionAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($question_attempt = $question_attempts_result_set->next_result())
@@ -291,12 +291,12 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
+                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID)));
         
         $question_attempts = DataManager::retrieves(
-            LearningPathQuestionAttempt::class_name(), 
+            LearningPathTreeNodeQuestionAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         $results = array();
@@ -456,20 +456,20 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
+                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID)));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID), 
+                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
             new StaticConditionVariable($question_cid));
         
         $condition = new AndCondition($conditions);
         
         $question_attempt = DataManager::retrieve(
-            LearningPathQuestionAttempt::class_name(), 
+            LearningPathTreeNodeQuestionAttempt::class_name(),
             new DataClassRetrieveParameters($condition));
         
         $question_attempt->set_score($score);
@@ -619,7 +619,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LearningPathTreeNodeAttempt::class_name(),
-                LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID),
+                LearningPathTreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID),
             new StaticConditionVariable(
                 Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)));
         

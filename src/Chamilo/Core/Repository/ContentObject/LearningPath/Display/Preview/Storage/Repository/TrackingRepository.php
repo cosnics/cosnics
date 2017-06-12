@@ -2,11 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -92,28 +90,6 @@ class TrackingRepository implements TrackingRepositoryInterface
     }
 
     /**
-     * Finds a learning path attempt by a given learning path and user
-     *
-     * @param LearningPath $learningPath
-     * @param User $user
-     *
-     * @return LearningPathAttempt | \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findLearningPathAttemptForUser(LearningPath $learningPath, User $user)
-    {
-        $attempts = $this->getFromStorage(DummyAttempt::class);
-
-        return $attempts[$learningPath->getId()][$user->getId()];
-    }
-
-    /**
-     * Clears the cache for the LearningPathAttempt data class
-     */
-    public function clearLearningPathAttemptCache()
-    {
-    }
-
-    /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPath $learningPath
@@ -123,9 +99,9 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findTreeNodeAttempts(LearningPath $learningPath, User $user)
     {
-        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
 
-        return $childAttempts[$learningPathAttempt->getId()];
+        return $treeNodeAttempts[$learningPath->getId()][$user->getId()];
     }
 
     /**
@@ -137,26 +113,20 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath)
     {
-        $allChildAttempts = array();
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
+        $allTreeNodeAttempts = array();
 
-        $attempts = $this->getFromStorage(DummyAttempt::class);
-        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
+        $treeNodeAttemptsForLearningPath = $treeNodeAttempts[$learningPath->getId()];
 
-        $learningPathAttempts = $attempts[$learningPath->getId()];
-
-        foreach ($learningPathAttempts as $learningPathAttempt)
+        foreach ($treeNodeAttemptsForLearningPath as $treeNodeAttempts)
         {
-            /** @var LearningPathAttempt $learningPathAttempt */
-
-            $learningPathAttemptChildAttempts = $childAttempts[$learningPathAttempt->getId()];
-
-            if (is_array($learningPathAttemptChildAttempts))
+            if (is_array($treeNodeAttempts))
             {
-                $allChildAttempts += $learningPathAttemptChildAttempts;
+                $allTreeNodeAttempts += $treeNodeAttempts;
             }
         }
 
-        return $allChildAttempts;
+        return $allTreeNodeAttempts;
     }
 
     /**
@@ -172,17 +142,17 @@ class TrackingRepository implements TrackingRepositoryInterface
         LearningPath $learningPath, TreeNode $treeNode, User $user
     )
     {
-        /** @var DummyChildAttempt[][] $childAttempts */
-        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
-        $childAttemptsForLearningPathAttempt = $childAttempts[$learningPathAttempt->getId()];
+        /** @var DummyTreeNodeAttempt[][][] $treeNodeAttempts */
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
+        $treeNodeAttemptsForUser = $treeNodeAttempts[$learningPath->getId()][$user->getId()];
 
-        foreach ($childAttemptsForLearningPathAttempt as $childAttempt)
+        foreach ($treeNodeAttemptsForUser as $treeNodeAttempt)
         {
-            if ($childAttempt->get_learning_path_item_id() == $treeNode->getId() &&
-                !$childAttempt->isFinished()
+            if ($treeNodeAttempt->getTreeNodeDataId() == $treeNode->getId() &&
+                !$treeNodeAttempt->isFinished()
             )
             {
-                return $childAttempt;
+                return $treeNodeAttempt;
             }
         }
 
@@ -198,13 +168,17 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findTreeNodeAttemptById($treeNodeAttemptId)
     {
-        /** @var DummyChildAttempt[][] $childAttempts */
-        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
-        foreach ($childAttempts as $learningPathAttemptId => $childAttemptsForLearningPathAttempt)
+        /** @var DummyTreeNodeAttempt[][][] $treeNodeAttempts */
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
+
+        foreach($treeNodeAttempts as $learningPathId => $learningPathTreeNodeAttempts)
         {
-            if (array_key_exists($treeNodeAttemptId, $childAttemptsForLearningPathAttempt))
+            foreach($learningPathTreeNodeAttempts as $userId => $userTreeNodeAttempts)
             {
-                return $childAttemptsForLearningPathAttempt[$treeNodeAttemptId];
+                if (array_key_exists($treeNodeAttemptId, $userTreeNodeAttempts))
+                {
+                    return $userTreeNodeAttempts[$treeNodeAttemptId];
+                }
             }
         }
 
@@ -212,24 +186,13 @@ class TrackingRepository implements TrackingRepositoryInterface
     }
 
     /**
-     * Finds a LearningPathAttempt by a given ID
-     *
-     * @param int $learningPathAttemptId
-     *
-     * @return DataClass | LearningPathAttempt
-     */
-    public function findLearningPathAttemptById($learningPathAttemptId)
-    {
-    }
-
-    /**
-     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
+     * Finds the TreeNodeQuestionAttempt objects for a given TreeNodeAttempt
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      *
-     * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
+    public function findTreeNodeQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
     {
         /** @var DummyQuestionAttempt[][] $questionAttempts */
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
@@ -246,10 +209,8 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         switch (get_class($dataClass))
         {
-            case DummyAttempt::class:
-                return $this->createDummyAttempt($dataClass);
-            case DummyChildAttempt::class:
-                return $this->createDummyChildAttempt($dataClass);
+            case DummyTreeNodeAttempt::class:
+                return $this->createDummyTreeNodeAttempt($dataClass);
             case DummyQuestionAttempt::class:
                 return $this->createDummyQuestionAttempt($dataClass);
         }
@@ -266,10 +227,8 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         switch (get_class($dataClass))
         {
-            case DummyAttempt::class:
-                return $this->createDummyAttempt($dataClass);
-            case DummyChildAttempt::class:
-                return $this->createDummyChildAttempt($dataClass);
+            case DummyTreeNodeAttempt::class:
+                return $this->createDummyTreeNodeAttempt($dataClass);
             case DummyQuestionAttempt::class:
                 return $this->createDummyQuestionAttempt($dataClass);
         }
@@ -286,10 +245,8 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         switch (get_class($dataClass))
         {
-            case DummyAttempt::class:
-                return $this->deleteDummyAttempt($dataClass);
-            case DummyChildAttempt::class:
-                return $this->deleteDummyChildAttempt($dataClass);
+            case DummyTreeNodeAttempt::class:
+                return $this->deleteDummyTreeNodeAttempt($dataClass);
             case DummyQuestionAttempt::class:
                 return $this->deleteDummyQuestionAttempt($dataClass);
         }
@@ -298,80 +255,44 @@ class TrackingRepository implements TrackingRepositoryInterface
     }
 
     /**
-     * Creates a DummyAttempt
+     * Creates a DummyTreeNodeAttempt
      *
-     * @param DummyAttempt $dummyAttempt
+     * @param DummyTreeNodeAttempt $dummyTreeNodeAttempt
      *
      * @return bool
      */
-    protected function createDummyAttempt(DummyAttempt $dummyAttempt)
+    protected function createDummyTreeNodeAttempt(DummyTreeNodeAttempt $dummyTreeNodeAttempt)
     {
-        if (!$dummyAttempt->is_identified())
+        if (!$dummyTreeNodeAttempt->is_identified())
         {
-            $dummyAttempt->setId(UUID::v4());
+            $dummyTreeNodeAttempt->setId(UUID::v4());
         }
 
-        $attempts = $this->getFromStorage(DummyAttempt::class);
-        $attempts[$dummyAttempt->getLearningPathId()][$dummyAttempt->get_user_id()] = $dummyAttempt;
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
+        $treeNodeAttempts[$dummyTreeNodeAttempt->getLearningPathId()][$dummyTreeNodeAttempt->getUserId()]
+            [$dummyTreeNodeAttempt->getId()] = $dummyTreeNodeAttempt;
 
-        $this->setInStorage(DummyAttempt::class, $attempts);
-
-        return true;
-    }
-
-    /**
-     * Deletes a DummyAttempt
-     *
-     * @param DummyAttempt $dummyAttempt
-     *
-     * @return bool
-     */
-    protected function deleteDummyAttempt(DummyAttempt $dummyAttempt)
-    {
-        $attempts = $this->getFromStorage(DummyAttempt::class);
-        unset($attempts[$dummyAttempt->getLearningPathId()][$dummyAttempt->get_user_id()]);
-
-        $this->setInStorage(DummyAttempt::class, $attempts);
+        $this->setInStorage(DummyTreeNodeAttempt::class, $treeNodeAttempts);
 
         return true;
     }
 
     /**
-     * Creates a DummyChildAttempt
+     * Deletes a DummyTreeNodeAttempt
      *
-     * @param DummyChildAttempt $dummyChildAttempt
-     *
-     * @return bool
-     */
-    protected function createDummyChildAttempt(DummyChildAttempt $dummyChildAttempt)
-    {
-        if (!$dummyChildAttempt->is_identified())
-        {
-            $dummyChildAttempt->setId(UUID::v4());
-        }
-
-        $itemAttempts = $this->getFromStorage(DummyChildAttempt::class);
-        $itemAttempts[$dummyChildAttempt->get_learning_path_attempt_id()][$dummyChildAttempt->getId()] =
-            $dummyChildAttempt;
-
-        $this->setInStorage(DummyChildAttempt::class, $itemAttempts);
-
-        return true;
-    }
-
-    /**
-     * Deletes a DummyChildAttempt
-     *
-     * @param DummyChildAttempt $dummyChildAttempt
+     * @param DummyTreeNodeAttempt $dummyTreeNodeAttempt
      *
      * @return bool
      */
-    protected function deleteDummyChildAttempt(DummyChildAttempt $dummyChildAttempt)
+    protected function deleteDummyTreeNodeAttempt(DummyTreeNodeAttempt $dummyTreeNodeAttempt)
     {
-        $itemAttempts = $this->getFromStorage(DummyChildAttempt::class);
-        unset($itemAttempts[$dummyChildAttempt->get_learning_path_attempt_id()][$dummyChildAttempt->getId()]);
+        $itemAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
+        unset(
+            $itemAttempts[$dummyTreeNodeAttempt->getLearningPathId()]
+                [$dummyTreeNodeAttempt->getUserId()][$dummyTreeNodeAttempt->getId()]
+        );
 
-        $this->setInStorage(DummyChildAttempt::class, $itemAttempts);
+        $this->setInStorage(DummyTreeNodeAttempt::class, $itemAttempts);
 
         return true;
     }
@@ -391,7 +312,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         }
 
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
-        $questionAttempts[$dummyQuestionAttempt->get_item_attempt_id()][$dummyQuestionAttempt->getId()] =
+        $questionAttempts[$dummyQuestionAttempt->getTreeNodeAttemptId()][$dummyQuestionAttempt->getId()] =
             $dummyQuestionAttempt;
 
         $this->setInStorage(DummyQuestionAttempt::class, $questionAttempts);
@@ -409,7 +330,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     protected function deleteDummyQuestionAttempt(DummyQuestionAttempt $dummyQuestionAttempt)
     {
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
-        unset($questionAttempts[$dummyQuestionAttempt->get_item_attempt_id()][$dummyQuestionAttempt->getId()]);
+        unset($questionAttempts[$dummyQuestionAttempt->getTreeNodeAttemptId()][$dummyQuestionAttempt->getId()]);
 
         $this->setInStorage(DummyQuestionAttempt::class, $questionAttempts);
 
@@ -418,61 +339,57 @@ class TrackingRepository implements TrackingRepositoryInterface
 
     /**
      * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
-     * LearningPathQuestionAttempt objects for a given learning path
+     * TreeNodeQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
         LearningPath $learningPath
     )
     {
-        /** @var LearningPathAttempt[][] $attempts */
-        $attempts = $this->getFromStorage(DummyAttempt::class);
+        /** @var TreeNodeAttempt[][][] $treeNodeAttempts */
+        $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
 
-        /** @var TreeNodeAttempt[][] $childAttempts */
-        $childAttempts = $this->getFromStorage(DummyChildAttempt::class);
-
-        /** @var LearningPathQuestionAttempt[][] $questionAttempts */
+        /** @var TreeNodeQuestionAttempt[][] $questionAttempts */
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
-
-        $learningPathAttempts = $attempts[$learningPath->getId()];
 
         $allData = array();
 
-        foreach ($learningPathAttempts as $userId => $learningPathAttempt)
+        foreach ($treeNodeAttempts as $learningPathId => $learningPathTreeNodeAttempts)
         {
-            $treeNodeAttempts = $childAttempts[$learningPathAttempt->getId()];
-            foreach ($treeNodeAttempts as $childAttempt)
+            foreach ($learningPathTreeNodeAttempts as $userTreeNodeAttempts)
             {
-                $childQuestionAttempts = $questionAttempts[$childAttempt->getId()];
-                foreach ($childQuestionAttempts as $questionAttempt)
+                foreach($userTreeNodeAttempts as $treeNodeAttempt)
                 {
-                    $allData[] = array(
-                        'learning_path_attempt_id' => $learningPathAttempt->getId(),
-                        LearningPathAttempt::PROPERTY_USER_ID => $learningPathAttempt->get_user_id(),
-                        LearningPathAttempt::PROPERTY_LEARNING_PATH_ID => $learningPathAttempt->getLearningPathId(),
-                        LearningPathAttempt::PROPERTY_PROGRESS => $learningPathAttempt->get_progress(),
-                        'tree_node_attempt_id' => $childAttempt->getId(),
-                        TreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID => $childAttempt->get_learning_path_item_id(),
-                        TreeNodeAttempt::PROPERTY_START_TIME => $childAttempt->get_start_time(),
-                        TreeNodeAttempt::PROPERTY_TOTAL_TIME => $childAttempt->get_total_time(),
-                        TreeNodeAttempt::PROPERTY_SCORE => $childAttempt->get_score(),
-                        TreeNodeAttempt::PROPERTY_STATUS => $childAttempt->get_status(),
-                        'learning_path_question_attempt_id' => $questionAttempt->getId(),
-                        LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(
-                        ),
-                        LearningPathQuestionAttempt::PROPERTY_ANSWER => $questionAttempt->get_answer(),
-                        LearningPathQuestionAttempt::PROPERTY_FEEDBACK => $questionAttempt->get_feedback(),
-                        LearningPathQuestionAttempt::PROPERTY_SCORE => $questionAttempt->get_score(),
-                        LearningPathQuestionAttempt::PROPERTY_HINT => $questionAttempt->get_hint()
-                    );
+                    $childQuestionAttempts = $questionAttempts[$treeNodeAttempt->getId()];
+                    foreach ($childQuestionAttempts as $questionAttempt)
+                    {
+                        $allData[] = array(
+                            TreeNodeAttempt::PROPERTY_USER_ID => $treeNodeAttempt->getUserId(),
+                            TreeNodeAttempt::PROPERTY_LEARNING_PATH_ID => $treeNodeAttempt->getLearningPathId(),
+                            'tree_node_attempt_id' => $treeNodeAttempt->getId(),
+                            TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID =>
+                                $treeNodeAttempt->getTreeNodeDataId(),
+                            TreeNodeAttempt::PROPERTY_START_TIME => $treeNodeAttempt->get_start_time(),
+                            TreeNodeAttempt::PROPERTY_TOTAL_TIME => $treeNodeAttempt->get_total_time(),
+                            TreeNodeAttempt::PROPERTY_SCORE => $treeNodeAttempt->get_score(),
+                            TreeNodeAttempt::PROPERTY_STATUS => $treeNodeAttempt->get_status(),
+                            'tree_node_question_attempt_id' => $questionAttempt->getId(),
+                            TreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(
+                            ),
+                            TreeNodeQuestionAttempt::PROPERTY_ANSWER => $questionAttempt->get_answer(),
+                            TreeNodeQuestionAttempt::PROPERTY_FEEDBACK => $questionAttempt->get_feedback(),
+                            TreeNodeQuestionAttempt::PROPERTY_SCORE => $questionAttempt->get_score(),
+                            TreeNodeQuestionAttempt::PROPERTY_HINT => $questionAttempt->get_hint()
+                        );
+                    }
                 }
             }
         }
 
-        return new RecordIterator(LearningPathAttempt::class_name(), $allData);
+        return new RecordIterator(TreeNodeAttempt::class_name(), $allData);
     }
 
     /**
@@ -500,7 +417,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        return new RecordIterator(DummyAttempt::class_name(), array());
+        return new RecordIterator(DummyTreeNodeAttempt::class, array());
     }
 
     /**

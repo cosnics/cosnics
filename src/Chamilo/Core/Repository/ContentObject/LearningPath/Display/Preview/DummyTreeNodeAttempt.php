@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyChildAttempt extends TreeNodeAttempt
+class DummyTreeNodeAttempt extends TreeNodeAttempt
 {
 
     /**

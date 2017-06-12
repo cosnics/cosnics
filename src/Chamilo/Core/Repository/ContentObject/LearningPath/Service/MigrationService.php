@@ -347,7 +347,7 @@ class MigrationService
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
             $newLearningPathItemId =
-                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->get_learning_path_item_id()];
+                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->getTreeNodeDataId()];
 
             if (!$newLearningPathItemId)
             {
@@ -357,7 +357,7 @@ class MigrationService
                 continue;
             }
 
-            $treeNodeAttempt->set_learning_path_item_id($newLearningPathItemId);
+            $treeNodeAttempt->setTreeNodeDataId($newLearningPathItemId);
             $treeNodeAttempt->update();
         }
 

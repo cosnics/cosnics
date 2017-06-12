@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyQuestionAttempt extends LearningPathQuestionAttempt
+class DummyQuestionAttempt extends TreeNodeQuestionAttempt
 {
 
     /**

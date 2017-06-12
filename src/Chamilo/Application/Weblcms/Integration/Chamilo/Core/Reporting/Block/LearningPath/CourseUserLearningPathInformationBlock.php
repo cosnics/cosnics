@@ -47,28 +47,6 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         );
         $user_id = $this->get_user_id();
 
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        $attempts = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            LearningPathAttempt::class_name(),
-            new DataClassRetrievesParameters($condition)
-        );
-
-        while ($attempt = $attempts->next_result())
-        {
-            /** @var LearningPathAttempt $attempt */
-            $learning_paths[$attempt->get_publication_id()] = $attempt;
-        }
-
         $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name());
 
         $params = array();
@@ -131,27 +109,24 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             );
 
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
-                $publication[ContentObjectPublication::PROPERTY_ID];
+            $publication[ContentObjectPublication::PROPERTY_ID];
 
-            if ($learning_paths[$publication[ContentObjectPublication::PROPERTY_ID]])
-            {
-                $params_detail = $params;
-                $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
-                $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
-                    $this->get_user_id();
+            $params_detail = $params;
+            $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
+            $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
+                $this->get_user_id();
 
-                $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $img . '</a>';
+            $link = '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $img . '</a>';
 
-                $user = new User();
-                $user->setId($this->get_user_id());
+            $user = new User();
+            $user->setId($this->get_user_id());
 
-                $tree = $this->getLearningPathService()->getTree($learning_path);
+            $tree = $this->getLearningPathService()->getTree($learning_path);
 
-                $progress = $this->get_progress_bar(
-                    $trackingService->getLearningPathProgress($learning_path, $user, $tree->getRoot())
-                );
-            }
+            $progress = $this->get_progress_bar(
+                $trackingService->getLearningPathProgress($learning_path, $user, $tree->getRoot())
+            );
 
             $redirect = new Redirect($params);
             $url = '<a href="' . $redirect->getUrl() . '" target="_blank">' . $learning_path->get_title() . '</a>';

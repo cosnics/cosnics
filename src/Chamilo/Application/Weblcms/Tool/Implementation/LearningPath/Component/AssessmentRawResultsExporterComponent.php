@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -137,7 +137,7 @@ class AssessmentRawResultsExporterComponent extends Manager
         );
 
         $learningPathAttempts = $learningPathTrackingRepository
-            ->findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts($learningPath);
+            ->findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts($learningPath);
 
         $assessment_results = array();
 
@@ -152,13 +152,13 @@ class AssessmentRawResultsExporterComponent extends Manager
             {
                 $assessment_result = new AssessmentResult(
                     $treeNodeAttemptId,
-                    $learningPathAttempt[LearningPathAttempt::PROPERTY_LEARNING_PATH_ID],
+                    $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ID],
                     null,
                     array(),
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_START_TIME],
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_SCORE],
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_TOTAL_TIME],
-                    $learningPathAttempt[LearningPathAttempt::PROPERTY_USER_ID]
+                    $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_USER_ID]
                 );
 
                 $assessment_results[] = $assessment_result;
@@ -166,13 +166,13 @@ class AssessmentRawResultsExporterComponent extends Manager
 
             $assessment_result->addQuestionResult(
                 new QuestionResult(
-                    unserialize($learningPathAttempt[LearningPathQuestionAttempt::PROPERTY_ANSWER]),
+                    unserialize($learningPathAttempt[LearningPathTreeNodeQuestionAttempt::PROPERTY_ANSWER]),
                     $assessment_result,
-                    $learningPathAttempt[LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID],
-                    $learningPathAttempt[LearningPathQuestionAttempt::PROPERTY_SCORE],
+                    $learningPathAttempt[LearningPathTreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID],
+                    $learningPathAttempt[LearningPathTreeNodeQuestionAttempt::PROPERTY_SCORE],
                     array(
                         self::COLUMN_COURSE_GROUP_ID => $this->getCourseGroupsForUser(
-                            $learningPathAttempt[LearningPathAttempt::PROPERTY_USER_ID]
+                            $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_USER_ID]
                         )
                     )
                 )

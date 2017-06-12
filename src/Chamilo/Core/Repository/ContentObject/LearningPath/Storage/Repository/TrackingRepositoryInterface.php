@@ -2,9 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -85,13 +84,13 @@ interface TrackingRepositoryInterface
     public function findTreeNodeAttemptById($treeNodeAttemptId);
 
     /**
-     * Finds the LearningPathQuestionAttempt objects for a given TreeNodeAttempt
+     * Finds the TreeNodeQuestionAttempt objects for a given TreeNodeAttempt
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      *
-     * @return LearningPathQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLearningPathQuestionAttempts(TreeNodeAttempt $treeNodeAttempt);
+    public function findTreeNodeQuestionAttempts(TreeNodeAttempt $treeNodeAttempt);
 
     /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
@@ -153,13 +152,13 @@ interface TrackingRepositoryInterface
 
     /**
      * Retrieves all the LearningPathAttempt objects with the TreeNodeAttempt objects and
-     * LearningPathQuestionAttempt objects for a given learning path
+     * TreeNodeQuestionAttempt objects for a given learning path
      *
      * @param LearningPath $learningPath
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeAttemptsAndLearningPathQuestionAttempts(
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
         LearningPath $learningPath
     );
 }

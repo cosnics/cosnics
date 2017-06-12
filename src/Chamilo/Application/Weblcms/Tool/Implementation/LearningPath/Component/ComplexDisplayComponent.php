@@ -346,7 +346,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     /**
      * Returns the assessment question attempts
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
      */
     public function get_assessment_question_attempts()
     {
@@ -361,7 +361,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     /**
      * Retrieves the question attempts for the selected assessment attempt
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
      */
     protected function retrieve_question_attempts()
     {

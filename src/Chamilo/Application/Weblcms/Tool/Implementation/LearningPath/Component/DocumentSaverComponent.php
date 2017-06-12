@@ -61,7 +61,7 @@ class DocumentSaverComponent extends Manager
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LearningPathTreeNodeAttempt::class_name(),
-                LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ITEM_ID
+                LearningPathTreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($ccoi_id)
         );
@@ -110,18 +110,18 @@ class DocumentSaverComponent extends Manager
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::class_name(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::class_name(
                 ),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID
             ),
             $document_open_question_ids
         );
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::class_name(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::class_name(
                 ),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID
             ),
             $assessment_attempt_ids
         );
@@ -129,8 +129,8 @@ class DocumentSaverComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $question_attempt_trackers =
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::get_data(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt::class_name(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::get_data(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt::class_name(
                 ),
                 null,
                 $condition

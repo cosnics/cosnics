@@ -50,12 +50,12 @@ class LearningPathTreeNodeAttempt extends \Chamilo\Core\Repository\ContentObject
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathQuestionAttempt::class_name(), 
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID), 
+                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID),
             new StaticConditionVariable($this->get_id()));
         
         $trackers = DataManager::retrieves(
-            LearningPathQuestionAttempt::class_name(), 
+            LearningPathTreeNodeQuestionAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
         
         while ($tracker = $trackers->next_result())

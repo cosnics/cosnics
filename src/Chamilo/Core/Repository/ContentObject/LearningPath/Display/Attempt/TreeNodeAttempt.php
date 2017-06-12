@@ -16,16 +16,11 @@ abstract class TreeNodeAttempt extends DataClass
     // Properties
     const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
     const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_LEARNING_PATH_ATTEMPT_ID = 'learning_path_attempt_id';
-    const PROPERTY_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
+    const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
     const PROPERTY_START_TIME = 'start_time';
     const PROPERTY_TOTAL_TIME = 'total_time';
     const PROPERTY_SCORE = 'score';
     const PROPERTY_STATUS = 'status';
-    const PROPERTY_LESSON_LOCATION = 'lesson_location';
-    const PROPERTY_SUSPEND_DATA = 'suspend_data';
-    const PROPERTY_MAX_SCORE = 'max_score';
-    const PROPERTY_MIN_SCORE = 'min_score';
 
     // Status
     const STATUS_COMPLETED = 'completed';
@@ -39,28 +34,13 @@ abstract class TreeNodeAttempt extends DataClass
             array(
                 self::PROPERTY_LEARNING_PATH_ID,
                 self::PROPERTY_USER_ID,
-                self::PROPERTY_LEARNING_PATH_ATTEMPT_ID,
-                self::PROPERTY_LEARNING_PATH_ITEM_ID,
+                self::PROPERTY_TREE_NODE_DATA_ID,
                 self::PROPERTY_START_TIME,
                 self::PROPERTY_TOTAL_TIME,
                 self::PROPERTY_SCORE,
-                self::PROPERTY_STATUS,
-                self::PROPERTY_LESSON_LOCATION,
-                self::PROPERTY_SUSPEND_DATA,
-                self::PROPERTY_MAX_SCORE,
-                self::PROPERTY_MIN_SCORE
+                self::PROPERTY_STATUS
             )
         );
-    }
-
-    public function get_learning_path_attempt_id()
-    {
-        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_ATTEMPT_ID);
-    }
-
-    public function set_learning_path_attempt_id($learning_path_attempt_id)
-    {
-        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ATTEMPT_ID, $learning_path_attempt_id);
     }
 
     public function get_start_time()
@@ -73,14 +53,14 @@ abstract class TreeNodeAttempt extends DataClass
         $this->set_default_property(self::PROPERTY_START_TIME, $start_time);
     }
 
-    public function get_learning_path_item_id()
+    public function getTreeNodeDataId()
     {
-        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_ITEM_ID);
+        return $this->get_default_property(self::PROPERTY_TREE_NODE_DATA_ID);
     }
 
-    public function set_learning_path_item_id($learning_path_item_id)
+    public function setTreeNodeDataId($learning_path_item_id)
     {
-        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ITEM_ID, $learning_path_item_id);
+        $this->set_default_property(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
     }
 
     public function get_total_time()
@@ -111,46 +91,6 @@ abstract class TreeNodeAttempt extends DataClass
     public function set_status($status)
     {
         $this->set_default_property(self::PROPERTY_STATUS, $status);
-    }
-
-    public function get_lesson_location()
-    {
-        return $this->get_default_property(self::PROPERTY_LESSON_LOCATION);
-    }
-
-    public function set_lesson_location($lesson_location)
-    {
-        $this->set_default_property(self::PROPERTY_LESSON_LOCATION, $lesson_location);
-    }
-
-    public function get_suspend_data()
-    {
-        return $this->get_default_property(self::PROPERTY_SUSPEND_DATA);
-    }
-
-    public function set_suspend_data($suspend_data)
-    {
-        $this->set_default_property(self::PROPERTY_SUSPEND_DATA, $suspend_data);
-    }
-
-    public function get_min_score()
-    {
-        return $this->get_default_property(self::PROPERTY_MIN_SCORE);
-    }
-
-    public function set_min_score($min_score)
-    {
-        $this->set_default_property(self::PROPERTY_MIN_SCORE, $min_score);
-    }
-
-    public function get_max_score()
-    {
-        return $this->get_default_property(self::PROPERTY_MAX_SCORE);
-    }
-
-    public function set_max_score($max_score)
-    {
-        $this->set_default_property(self::PROPERTY_MAX_SCORE, $max_score);
     }
 
     /**

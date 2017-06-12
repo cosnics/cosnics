@@ -139,7 +139,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     /**
      * Returns the assessment question attempts
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
      */
     public function get_assessment_question_attempts()
     {
@@ -152,7 +152,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     /**
      * Retrieves the question attempts for the selected assessment attempt
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt[]
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
      */
     protected function retrieve_question_attempts()
     {

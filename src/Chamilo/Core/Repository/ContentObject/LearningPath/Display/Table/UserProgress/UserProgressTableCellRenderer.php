@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
@@ -42,7 +42,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                 $currentTreeNode = $this->getCurrentTreeNode();
 
                 $user = new User();
-                $user->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
+                $user->setId($record[TreeNodeAttempt::PROPERTY_USER_ID]);
 
                 $progress = $trackingService->getLearningPathProgress(
                     $learningPath, $user, $currentTreeNode
@@ -92,7 +92,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
         $trackingService = $this->getTrackingService();
 
         $reportingUser = new User();
-        $reportingUser->setId($record[LearningPathAttempt::PROPERTY_USER_ID]);
+        $reportingUser->setId($record[TreeNodeAttempt::PROPERTY_USER_ID]);
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 

@@ -193,7 +193,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getTree()
     {
-        return $this->getLearningPathService()->getTree($this->get_root_content_object());
+        return $this->getLearningPathService()->getTree($this->learningPath);
     }
 
     /**

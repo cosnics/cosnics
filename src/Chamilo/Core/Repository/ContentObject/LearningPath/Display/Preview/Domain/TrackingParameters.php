@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Dom
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyChildAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -22,13 +22,13 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getTreeNodeAttemptClassName()
     {
-        return DummyChildAttempt::class_name();
+        return DummyTreeNodeAttempt::class_name();
     }
 
     /**
      * @return string
      */
-    public function getLearningPathQuestionAttemptClassName()
+    public function getTreeNodeQuestionAttemptClassName()
     {
         return DummyQuestionAttempt::class_name();
     }
@@ -48,15 +48,15 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function createTreeNodeAttemptInstance()
     {
-        return new DummyChildAttempt();
+        return new DummyTreeNodeAttempt();
     }
 
     /**
-     * Creates a new instance of the LearningPathQuestionAttempt extension
+     * Creates a new instance of the TreeNodeQuestionAttempt extension
      *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathQuestionAttempt
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt
      */
-    public function createLearningPathQuestionAttemptInstance()
+    public function createTreeNodeQuestionAttemptInstance()
     {
         return new DummyQuestionAttempt();
     }
