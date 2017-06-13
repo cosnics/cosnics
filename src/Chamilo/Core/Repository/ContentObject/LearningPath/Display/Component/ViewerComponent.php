@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -90,6 +91,16 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 );
 
                 $html[] = '</a>';
+
+                if($responsibleNode->getContentObject() instanceof  Assessment)
+                {
+                    $masteryScore = $responsibleNode->getTreeNodeData()->getMasteryScore();
+                    if($masteryScore > 0)
+                    {
+                        $html[] = ' (' . $translator->getTranslation('MasteryScore') . ': ' . $masteryScore . '%)';
+                    }
+                }
+
                 $html[] = '</li>';
             }
 

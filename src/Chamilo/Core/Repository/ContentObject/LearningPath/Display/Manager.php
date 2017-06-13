@@ -38,7 +38,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_TYPE_SPECIFIC = 'TypeSpecific';
     const ACTION_BUILD = 'Builder';
     const ACTION_REPORTING = 'Reporting';
-    const ACTION_DELETE_ATTEMPT = 'DeleteAttempt';
+    const ACTION_DELETE_TREE_NODE_ATTEMPT = 'DeleteTreeNodeAttempt';
+    const ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE = 'DeleteAttemptsForTreeNode';
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
     const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';

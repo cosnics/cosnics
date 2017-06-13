@@ -3,19 +3,20 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * Component to list activity on a portfolio item
+ * Deletes all the attempts for a given tree node and user
  *
- * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DeleteAttemptComponent extends BaseReportingComponent
+class DeleteAttemptsForTreeNodeComponent extends BaseReportingComponent
 {
+    const PARAM_SOURCE = 'source';
 
     /**
      * Executes this component
@@ -27,37 +28,43 @@ class DeleteAttemptComponent extends BaseReportingComponent
             throw new NotAllowedException();
         }
 
-        $parameters = array();
+        $parameters = $filters = array();
 
         $trackingService = $this->getTrackingService();
         $learningPath = $this->get_root_content_object();
         $reportingUser = $this->getReportingUser();
         $treeNode = $this->getCurrentTreeNode();
 
-        $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
-        $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNodeDataId();
+        $source = $this->getRequest()->get(self::PARAM_SOURCE);
 
-        $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
+        $action = self::ACTION_VIEW_USER_PROGRESS;
+        $childId = $treeNode->getId();
+
+        if($source == self::ACTION_REPORTING)
+        {
+            $action = $source;
+
+            $childId = $treeNode->getParentNode() instanceof TreeNode ?
+                $treeNode->getParentNode()->getId() : $treeNode->getId();
+        }
+        else
+        {
+            $filters[] = self::PARAM_REPORTING_USER_ID;
+        }
+
+        $parameters[self::PARAM_ACTION] = $action;
+        $parameters[self::PARAM_CHILD_ID] = $childId;
 
         try
         {
-            if (isset($item_attempt_id))
-            {
-                $trackingService->deleteTreeNodeAttemptById(
-                    $learningPath, $this->getUser(), $reportingUser, $treeNode, (int) $item_attempt_id
-                );
-            }
-            else
-            {
-                $trackingService->deleteTreeNodeAttemptsForTreeNode(
-                    $learningPath, $this->getUser(), $reportingUser, $treeNode
-                );
-            }
+            $trackingService->deleteTreeNodeAttemptsForTreeNode(
+                $learningPath, $this->getUser(), $reportingUser, $treeNode
+            );
 
             $is_error = false;
 
             $message = Translation::get(
-                'ObjectDeleted',
+                'ObjectsDeleted',
                 array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
             );
         }
@@ -66,12 +73,12 @@ class DeleteAttemptComponent extends BaseReportingComponent
             $is_error = true;
 
             $message = Translation::get(
-                'ObjectNotDeleted',
+                'ObjectsNotDeleted',
                 array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
             );
         }
 
-        $this->redirect($message, $is_error, $parameters);
+        $this->redirect($message, $is_error, $parameters, $filters);
     }
 
     function build()

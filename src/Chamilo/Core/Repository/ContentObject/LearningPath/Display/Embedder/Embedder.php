@@ -80,7 +80,7 @@ abstract class Embedder
      */
     public function track()
     {
-        $this->trackingService->changeActiveAttemptStatus(
+        $this->trackingService->setActiveAttemptCompleted(
             $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\DeleteAttemptsForTreeNodeComponent;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
@@ -122,8 +123,9 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
             {
                 $delete_url = $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
-                        Manager::PARAM_CHILD_ID => $record->getId()
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE,
+                        Manager::PARAM_CHILD_ID => $record->getId(),
+                        DeleteAttemptsForTreeNodeComponent::PARAM_SOURCE => Manager::ACTION_REPORTING
                     )
                 );
 

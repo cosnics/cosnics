@@ -230,6 +230,14 @@ ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` DROP `learning_pa
 ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` CHANGE `learning_path_item_id` `tree_node_data_id` INT(10) UNSIGNED NOT NULL;
 ALTER TABLE `tracking_weblcms_learning_path_question_attempt` CHANGE `item_attempt_id` `tree_node_attempt_id` INT(10) UNSIGNED NOT NULL;
 
+UPDATE `tracking_weblcms_learning_path_tree_node_attempt`
+SET status = 1 WHERE status IN ('passed', 'failed', 'completed');
+
+UPDATE `tracking_weblcms_learning_path_tree_node_attempt`
+SET status = 0 WHERE status IN ('not attempted');
+
+ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` CHANGE `status` `completed` TINYINT(1) NOT NULL DEFAULT '0';
+
 ALTER TABLE `repository_learning_path`
   DROP `control_mode`,
   DROP `version`,

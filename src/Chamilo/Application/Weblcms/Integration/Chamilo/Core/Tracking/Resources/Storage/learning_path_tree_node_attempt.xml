@@ -44,11 +44,10 @@
             notnull="1"
             default="0" />
         <property
-            name="status"
-            type="text"
-            length="50"
+            name="completed"
+            type="boolean"
             notnull="1"
-            default="incomplete" />
+            default="1" />
     </properties>
     <index name="tree_node_data_id">
         <indexproperty name="tree_node_data_id" />

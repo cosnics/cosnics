@@ -82,16 +82,12 @@ class TrackingService
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      * @param User $user
-     * @param string $newStatus
      */
-    public function changeActiveAttemptStatus(
-        LearningPath $learningPath, TreeNode $treeNode, User $user,
-        $newStatus = TreeNodeAttempt::STATUS_COMPLETED
-    )
+    public function setActiveAttemptCompleted(LearningPath $learningPath, TreeNode $treeNode, User $user)
     {
         $activeAttempt = $this->attemptService->getOrCreateActiveTreeNodeAttempt($learningPath, $treeNode, $user);
 
-        $activeAttempt->set_status($newStatus);
+        $activeAttempt->setCompleted(true);
         $this->trackingRepository->update($activeAttempt);
     }
 
@@ -246,13 +242,39 @@ class TrackingService
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            if ($treeNodeAttempt->isFinished())
+            if($this->isAttemptCompleted($treeNode, $treeNodeAttempt))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Checks whether or not a given attempt for a treenode is completed
+     *
+     * @param TreeNode $treeNode
+     * @param TreeNodeAttempt $treeNodeAttempt
+     *
+     * @return bool
+     */
+    protected function isAttemptCompleted(TreeNode $treeNode, TreeNodeAttempt $treeNodeAttempt)
+    {
+        $isAssessment = $treeNode->getContentObject() instanceof Assessment;
+        $masteryScore = $treeNode->getTreeNodeData()->getMasteryScore();
+
+        if (!$treeNodeAttempt->isCompleted())
+        {
+            return false;
+        }
+
+        if(!$isAssessment)
+        {
+            return true;
+        }
+
+        return $treeNodeAttempt->get_score() >= $masteryScore;
     }
 
     /**
@@ -335,7 +357,7 @@ class TrackingService
 
         $activeAttempt->set_score($assessmentScore);
         $activeAttempt->calculateAndSetTotalTime();
-        $activeAttempt->set_status($this->determineStatusForAssessmentByScore($treeNode, $assessmentScore));
+        $activeAttempt->setCompleted(true);
 
         $this->trackingRepository->update($activeAttempt);
     }
@@ -360,10 +382,6 @@ class TrackingService
         );
 
         $treeNodeAttempt->set_score($newScore);
-
-        $treeNodeAttempt->set_status(
-            $this->determineStatusForAssessmentByScore($treeNode, $newScore)
-        );
 
         $this->trackingRepository->update($treeNodeAttempt);
     }
@@ -402,32 +420,6 @@ class TrackingService
         $treeNodeQuestionAttempt->set_feedback($feedback);
 
         $this->trackingRepository->update($treeNodeQuestionAttempt);
-    }
-
-    /**
-     * Determines the status for a given assessment TreeNode based on the given score
-     *
-     * @param TreeNode $treeNode
-     * @param int $assessmentScore
-     *
-     * @return string
-     */
-    protected function determineStatusForAssessmentByScore(
-        TreeNode $treeNode, $assessmentScore = 0
-    )
-    {
-        $masteryScore = $treeNode->getTreeNodeData()->getMasteryScore();
-        if ($masteryScore > 0)
-        {
-            $status = ($assessmentScore >= $masteryScore) ? TreeNodeAttempt::STATUS_PASSED :
-                TreeNodeAttempt::STATUS_FAILED;
-        }
-        else
-        {
-            $status = TreeNodeAttempt::STATUS_COMPLETED;
-        }
-
-        return $status;
     }
 
     /**

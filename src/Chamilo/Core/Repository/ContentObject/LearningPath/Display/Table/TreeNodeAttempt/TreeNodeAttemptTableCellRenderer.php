@@ -43,7 +43,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
                 return DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time());
             case 'status':
                 return $translator->getTranslation(
-                    $treeNodeAttempt->isFinished() ? 'Completed' : 'Incomplete'
+                    $treeNodeAttempt->isCompleted() ? 'Completed' : 'Incomplete'
                 );
             case 'score':
                 $progressBarRenderer = new ProgressBarRenderer();
@@ -111,7 +111,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
         {
             $delete_url = $this->get_component()->get_url(
                 array(
-                    Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
+                    Manager::PARAM_ACTION => Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
                     Manager::PARAM_CHILD_ID => $this->get_component()->getCurrentTreeNode()->getId(),
                     Manager::PARAM_ITEM_ATTEMPT_ID => $treeNodeAttempt->getId()
                 )

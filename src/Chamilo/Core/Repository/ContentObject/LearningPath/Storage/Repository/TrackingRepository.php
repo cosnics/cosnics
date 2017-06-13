@@ -129,12 +129,12 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         );
 
         $conditions[] = new NotCondition(
-            new InCondition(
+            new EqualityCondition(
                 new PropertyConditionVariable(
                     $this->trackingParameters->getTreeNodeAttemptClassName(),
-                    TreeNodeAttempt::PROPERTY_STATUS
+                    TreeNodeAttempt::PROPERTY_COMPLETED
                 ),
-                array(TreeNodeAttempt::STATUS_COMPLETED, TreeNodeAttempt::STATUS_PASSED)
+                new StaticConditionVariable(1)
             )
         );
 
@@ -473,7 +473,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
             TreeNodeAttempt::PROPERTY_USER_ID, TreeNodeAttempt::PROPERTY_LEARNING_PATH_ID,
             TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID, TreeNodeAttempt::PROPERTY_START_TIME,
             TreeNodeAttempt::PROPERTY_TOTAL_TIME, TreeNodeAttempt::PROPERTY_SCORE,
-            TreeNodeAttempt::PROPERTY_STATUS
+            TreeNodeAttempt::PROPERTY_COMPLETED
         );
 
         foreach ($treeNodeAttemptProperties as $treeNodeAttemptProperty)
@@ -530,11 +530,11 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $conditions = array();
 
-        $conditions[] = new InCondition(
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                $treeNodeAttemptClassName, TreeNodeAttempt::PROPERTY_STATUS
+                $treeNodeAttemptClassName, TreeNodeAttempt::PROPERTY_COMPLETED
             ),
-            array(TreeNodeAttempt::STATUS_COMPLETED, TreeNodeAttempt::STATUS_PASSED)
+            new StaticConditionVariable(1)
         );
 
         if (!empty($treeNodeDataIds) && is_array($treeNodeDataIds))

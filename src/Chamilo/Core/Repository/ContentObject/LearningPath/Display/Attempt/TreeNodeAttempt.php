@@ -20,13 +20,7 @@ abstract class TreeNodeAttempt extends DataClass
     const PROPERTY_START_TIME = 'start_time';
     const PROPERTY_TOTAL_TIME = 'total_time';
     const PROPERTY_SCORE = 'score';
-    const PROPERTY_STATUS = 'status';
-
-    // Status
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_NOT_ATTEMPTED = 'not attempted';
-    const STATUS_PASSED = 'passed';
-    const STATUS_FAILED = 'failed';
+    const PROPERTY_COMPLETED = 'completed';
 
     public static function get_default_property_names($extended_property_names = array())
     {
@@ -38,7 +32,7 @@ abstract class TreeNodeAttempt extends DataClass
                 self::PROPERTY_START_TIME,
                 self::PROPERTY_TOTAL_TIME,
                 self::PROPERTY_SCORE,
-                self::PROPERTY_STATUS
+                self::PROPERTY_COMPLETED
             )
         );
     }
@@ -83,14 +77,20 @@ abstract class TreeNodeAttempt extends DataClass
         $this->set_default_property(self::PROPERTY_SCORE, $score);
     }
 
-    public function get_status()
+    /**
+     * @return bool
+     */
+    public function isCompleted()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->get_default_property(self::PROPERTY_COMPLETED);
     }
 
-    public function set_status($status)
+    /**
+     * @param bool $completed
+     */
+    public function setCompleted($completed = true)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->set_default_property(self::PROPERTY_COMPLETED, $completed);
     }
 
     /**
@@ -125,14 +125,6 @@ abstract class TreeNodeAttempt extends DataClass
     public function setUserId($user_id)
     {
         $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFinished()
-    {
-        return $this->get_status() == self::STATUS_COMPLETED || $this->get_status() == self::STATUS_PASSED;
     }
 
     /**

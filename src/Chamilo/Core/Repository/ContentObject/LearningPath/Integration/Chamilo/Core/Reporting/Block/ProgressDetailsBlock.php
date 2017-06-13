@@ -78,7 +78,7 @@ class ProgressDetailsBlock extends ReportingBlock
             $reporting_data->add_data_category_row(
                 $category,
                 Translation::get('Status'),
-                Translation::get($treeNodeAttempt->isFinished() ? 'Completed' : 'Incomplete')
+                Translation::get($treeNodeAttempt->isCompleted() ? 'Completed' : 'Incomplete')
             );
 
             if($showScore)

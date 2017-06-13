@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
@@ -53,13 +54,14 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
     {
         foreach ($this->get_data() as $attempt)
         {
-            if ($attempt->get_status() != TreeNodeAttempt::STATUS_COMPLETED &&
-                 $attempt->get_status() != TreeNodeAttempt::STATUS_PASSED)
+            if ($attempt->get_status() != 'completed' &&
+                $attempt->get_status() != 'passed'
+            )
             {
                 return $attempt;
             }
         }
-        
+
         return false;
     }
 
@@ -81,7 +83,7 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
     {
         unset($this->is_completed);
 
-        if($recalculateParents)
+        if ($recalculateParents)
         {
             $parents = $this->get_parents(false);
             foreach ($parents as $parent)
@@ -97,33 +99,34 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
      */
     public function is_completed()
     {
-        if (! isset($this->is_completed))
+        if (!isset($this->is_completed))
         {
             $this->is_completed = false;
-            
+
             if ($this->get_content_object() instanceof LearningPath)
             {
                 $descendants = $this->get_descendants();
                 foreach ($descendants as $descendant)
                 {
-                    if (! $descendant->is_completed())
+                    if (!$descendant->is_completed())
                     {
                         return false;
                     }
                 }
             }
-            
+
             foreach ($this->get_data() as $attempt)
             {
-                if ($attempt->get_status() == TreeNodeAttempt::STATUS_COMPLETED ||
-                     $attempt->get_status() == TreeNodeAttempt::STATUS_PASSED)
+                if ($attempt->get_status() == 'completed' ||
+                    $attempt->get_status() == 'passed'
+                )
                 {
                     $this->is_completed = true;
                     break;
                 }
             }
         }
-        
+
         return $this->is_completed;
     }
 
@@ -133,18 +136,18 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
      */
     public function get_average_score()
     {
-        if (! isset($this->average_score))
+        if (!isset($this->average_score))
         {
             $total_score = 0;
-            
+
             foreach ($this->get_data() as $attempt)
             {
                 $total_score += $attempt->get_score();
             }
-            
+
             $this->average_score = round($total_score / count($this->get_data()));
         }
-        
+
         return $this->average_score;
     }
 
@@ -154,16 +157,16 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
      */
     public function get_total_time()
     {
-        if (! isset($this->total_time))
+        if (!isset($this->total_time))
         {
             $this->total_time = 0;
-            
+
             foreach ($this->get_data() as $attempt)
             {
                 $this->total_time += $attempt->get_total_time();
             }
         }
-        
+
         return $this->total_time;
     }
 }

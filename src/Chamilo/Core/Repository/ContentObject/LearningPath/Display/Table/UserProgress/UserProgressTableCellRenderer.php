@@ -118,7 +118,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
             {
                 $delete_url = $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE,
                         Manager::PARAM_REPORTING_USER_ID => $record['user_id']
                     )
                 );

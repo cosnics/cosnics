@@ -21,13 +21,13 @@ class MasteryComponent extends Manager
 
     public function run()
     {
-        $learningPathChild = $this->getCurrentTreeNode()->getLearningPathChild();
+        $treeNodeData = $this->getCurrentTreeNode()->getTreeNodeData();
 
-        $form = $this->get_form($this->get_url(), $learningPathChild);
+        $form = $this->get_form($this->get_url(), $treeNodeData);
 
         if ($form->validate())
         {
-            $succes = $this->set_mastery_score($learningPathChild, $form->exportValues());
+            $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
             $this->redirect(Translation::get($message), !$succes, $this->get_application()->get_parameters());
         }
@@ -82,7 +82,7 @@ class MasteryComponent extends Manager
         return $contents;
     }
 
-    public function get_form($url, TreeNodeData $learningPathChild)
+    public function get_form($url, TreeNodeData $treeNodeData)
     {
         $form = new FormValidator('mastery_score', 'post', $url);
 
@@ -95,9 +95,9 @@ class MasteryComponent extends Manager
 
         $form->addElement('select', 'mastery_score', Translation::get('MasteryScore'), $values);
 
-        if ($learningPathChild->getMasteryScore())
+        if ($treeNodeData->getMasteryScore())
         {
-            $form->setDefaults(array('mastery_score' => $learningPathChild->getMasteryScore()));
+            $form->setDefaults(array('mastery_score' => $treeNodeData->getMasteryScore()));
         }
 
         $form->addElement('html', $this->renderTemplate(Manager::context(), 'MasteryScoreSlider.html'));
@@ -108,10 +108,10 @@ class MasteryComponent extends Manager
         return $form;
     }
 
-    public function set_mastery_score(TreeNodeData $learningPathChild, $values)
+    public function set_mastery_score(TreeNodeData $treeNodeData, $values)
     {
-        $learningPathChild->setMasteryScore((int) $values['mastery_score']);
+        $treeNodeData->setMasteryScore((int) $values['mastery_score']);
 
-        return $learningPathChild->update();
+        return $treeNodeData->update();
     }
 }

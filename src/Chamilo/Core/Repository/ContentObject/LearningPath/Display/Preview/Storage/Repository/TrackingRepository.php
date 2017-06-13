@@ -149,7 +149,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         foreach ($treeNodeAttemptsForUser as $treeNodeAttempt)
         {
             if ($treeNodeAttempt->getTreeNodeDataId() == $treeNode->getId() &&
-                !$treeNodeAttempt->isFinished()
+                !$treeNodeAttempt->isCompleted()
             )
             {
                 return $treeNodeAttempt;
@@ -375,7 +375,7 @@ class TrackingRepository implements TrackingRepositoryInterface
                             TreeNodeAttempt::PROPERTY_START_TIME => $treeNodeAttempt->get_start_time(),
                             TreeNodeAttempt::PROPERTY_TOTAL_TIME => $treeNodeAttempt->get_total_time(),
                             TreeNodeAttempt::PROPERTY_SCORE => $treeNodeAttempt->get_score(),
-                            TreeNodeAttempt::PROPERTY_STATUS => $treeNodeAttempt->get_status(),
+                            TreeNodeAttempt::PROPERTY_COMPLETED => $treeNodeAttempt->isCompleted(),
                             'tree_node_question_attempt_id' => $questionAttempt->getId(),
                             TreeNodeQuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID => $questionAttempt->get_question_complex_id(
                             ),

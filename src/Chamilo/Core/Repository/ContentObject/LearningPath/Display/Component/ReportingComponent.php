@@ -301,7 +301,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            if(!$treeNodeAttempt->isFinished())
+            if(!$treeNodeAttempt->isCompleted())
             {
                 continue;
             }

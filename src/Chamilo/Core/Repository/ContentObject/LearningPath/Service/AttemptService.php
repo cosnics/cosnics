@@ -130,7 +130,7 @@ class AttemptService
         $treeNodeAttempt->set_start_time(time());
         $treeNodeAttempt->set_total_time(0);
         $treeNodeAttempt->set_score(0);
-        $treeNodeAttempt->set_status(TreeNodeAttempt::STATUS_NOT_ATTEMPTED);
+        $treeNodeAttempt->setCompleted(false);
 
         $this->trackingRepository->create($treeNodeAttempt);
         $this->clearTreeNodeAttemptCache();

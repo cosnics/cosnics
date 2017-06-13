@@ -22,7 +22,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $configuration = $this->getCurrentTreeNode()->getLearningPathChild()->getAssessmentConfiguration();
+        $configuration = $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
 
         $form = new ConfigurationForm($configuration, $this->get_url());
         
@@ -52,63 +52,63 @@ class ConfigurerComponent extends Manager implements DelegateComponent
      */
     public function configure_feedback($values)
     {
-        $learningPathChild = $this->getCurrentTreeNode()->getLearningPathChild();
+        $treeNodeData = $this->getCurrentTreeNode()->getTreeNodeData();
         
         if (isset($values[Configuration::PROPERTY_ALLOW_HINTS]))
         {
-            $learningPathChild->setAllowHints((bool) $values[Configuration::PROPERTY_ALLOW_HINTS]);
+            $treeNodeData->setAllowHints((bool) $values[Configuration::PROPERTY_ALLOW_HINTS]);
         }
         else
         {
-            $learningPathChild->setAllowHints(false);
+            $treeNodeData->setAllowHints(false);
         }
         
         if (isset($values[Configuration::PROPERTY_SHOW_SCORE]))
         {
-            $learningPathChild->setShowScore((bool) $values[Configuration::PROPERTY_SHOW_SCORE]);
+            $treeNodeData->setShowScore((bool) $values[Configuration::PROPERTY_SHOW_SCORE]);
         }
         else
         {
-            $learningPathChild->setShowScore(false);
+            $treeNodeData->setShowScore(false);
         }
         
         if (isset($values[Configuration::PROPERTY_SHOW_CORRECTION]))
         {
-            $learningPathChild->setShowCorrection((bool) $values[Configuration::PROPERTY_SHOW_CORRECTION]);
+            $treeNodeData->setShowCorrection((bool) $values[Configuration::PROPERTY_SHOW_CORRECTION]);
         }
         else
         {
-            $learningPathChild->setShowCorrection(false);
+            $treeNodeData->setShowCorrection(false);
         }
         
         if (isset($values[Configuration::PROPERTY_SHOW_SOLUTION]))
         {
-            $learningPathChild->setShowSolution((bool) $values[Configuration::PROPERTY_SHOW_SOLUTION]);
+            $treeNodeData->setShowSolution((bool) $values[Configuration::PROPERTY_SHOW_SOLUTION]);
         }
         else
         {
-            $learningPathChild->setShowSolution(false);
+            $treeNodeData->setShowSolution(false);
         }
         
         if (isset($values[ConfigurationForm::PROPERTY_ANSWER_FEEDBACK_OPTION]))
         {
-            $learningPathChild->setShowAnswerFeedback((int) $values[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK]);
+            $treeNodeData->setShowAnswerFeedback((int) $values[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK]);
         }
         else
         {
-            $learningPathChild->setShowAnswerFeedback(Configuration::ANSWER_FEEDBACK_TYPE_NONE);
+            $treeNodeData->setShowAnswerFeedback(Configuration::ANSWER_FEEDBACK_TYPE_NONE);
         }
         
-        if ($learningPathChild->getShowScore() || $learningPathChild->getShowCorrection() ||
-             $learningPathChild->getShowSolution() || $learningPathChild->getShowAnswerFeedback())
+        if ($treeNodeData->getShowScore() || $treeNodeData->getShowCorrection() ||
+             $treeNodeData->getShowSolution() || $treeNodeData->getShowAnswerFeedback())
         {
-            $learningPathChild->setFeedbackLocation((int) $values[Configuration::PROPERTY_FEEDBACK_LOCATION]);
+            $treeNodeData->setFeedbackLocation((int) $values[Configuration::PROPERTY_FEEDBACK_LOCATION]);
         }
         else
         {
-            $learningPathChild->setFeedbackLocation(Configuration::FEEDBACK_LOCATION_TYPE_NONE);
+            $treeNodeData->setFeedbackLocation(Configuration::FEEDBACK_LOCATION_TYPE_NONE);
         }
         
-        return $learningPathChild->update();
+        return $treeNodeData->update();
     }
 }
