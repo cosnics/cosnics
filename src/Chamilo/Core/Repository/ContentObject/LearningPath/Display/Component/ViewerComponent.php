@@ -565,7 +565,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 )
             ),
             $this->getTree(),
-            $this->getCurrentTreeNode()
+            $this->getCurrentTreeNode(),
+            $this->getAutomaticNumberingService()
         );
 
         $html = array();
