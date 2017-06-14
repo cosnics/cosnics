@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParameters
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingServiceBuilder extends \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder
+class TrackingServiceBuilder extends \Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder
 {
     /**
      * Builds the TrackingRepository based on the given TrackingParameters

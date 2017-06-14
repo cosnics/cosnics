@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**

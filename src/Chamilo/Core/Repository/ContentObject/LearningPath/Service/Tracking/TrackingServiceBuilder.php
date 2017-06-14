@@ -1,12 +1,9 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AssessmentTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AttemptSummaryCalculator;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AttemptTrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\ProgressCalculator;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
