@@ -2,8 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;

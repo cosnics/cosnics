@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
-use Chamilo\Libraries\Utilities\UUID;
 
 /**
  *

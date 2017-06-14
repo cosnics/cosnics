@@ -5,7 +5,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserP
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

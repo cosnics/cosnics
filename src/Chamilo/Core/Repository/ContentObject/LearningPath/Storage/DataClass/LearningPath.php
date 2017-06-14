@@ -4,16 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**

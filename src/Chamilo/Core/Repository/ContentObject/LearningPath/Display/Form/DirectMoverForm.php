@@ -2,13 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;

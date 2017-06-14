@@ -38,7 +38,7 @@ interface TrackingRepositoryInterface
     public function delete(DataClass $dataClass);
 
     /**
-     * Clears the cache for the LearningPathAttempt data class
+     * Clears the cache for the TreeNodeAttempt data class
      */
     public function clearTreeNodeAttemptCache();
 

@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\LearningPathAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;

@@ -2,24 +2,14 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\Publication;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCellRenderer;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
@@ -51,7 +41,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         {
             case PublicationTableColumnModel::COLUMN_PROGRESS :
             {
-                if (!$this->get_component()->get_tool_browser()->get_parent()->is_empty_learning_path($publication))
+                if (!$this->get_component()->get_tool_browser()->get_parent()->isEmptyLearningPath($publication))
                 {
                     return $this->get_progress($publication);
                 }

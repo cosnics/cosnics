@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGenerator;

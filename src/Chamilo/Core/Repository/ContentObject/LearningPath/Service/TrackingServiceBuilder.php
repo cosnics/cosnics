@@ -3,11 +3,16 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AssessmentTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AttemptSummaryCalculator;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\AttemptTrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\ProgressCalculator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 
 /**
- * Builds the TrackingService and TrackingRepository based on the
+ * Builds the TrackingServices and TrackingRepository based on the
  * given TrackingParameters class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -24,7 +29,7 @@ class TrackingServiceBuilder
      *
      * @param DataClassRepository $dataClassRepository
      */
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(DataClassRepository $dataClassRepository = null)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
@@ -37,13 +42,33 @@ class TrackingServiceBuilder
      *
      * @return TrackingService
      */
-    public function buildTrackingService(
-        TrackingParametersInterface $trackingParameters
-    )
+    public function buildTrackingService(TrackingParametersInterface $trackingParameters)
     {
-        $repository = new TrackingRepository($this->dataClassRepository, $trackingParameters);
+        $repository = $this->buildTrackingRepository($trackingParameters);
         $attemptService = new AttemptService($repository, $trackingParameters);
+        $attemptTrackingService = new AttemptTrackingService($attemptService, $repository);
+        $attemptSummaryCalculator = new AttemptSummaryCalculator($attemptService, $repository);
+        $progressCalculator = new ProgressCalculator($attemptService);
 
-        return new TrackingService($attemptService, $repository);
+        $assessmentTrackingService = new AssessmentTrackingService(
+            $attemptService, $attemptTrackingService, $repository
+        );
+
+
+        return new TrackingService(
+            $attemptTrackingService, $attemptSummaryCalculator, $assessmentTrackingService, $progressCalculator
+        );
+    }
+
+    /**
+     * Builds the TrackingRepository based on the given TrackingParameters
+     *
+     * @param TrackingParametersInterface $trackingParameters
+     *
+     * @return TrackingRepositoryInterface
+     */
+    protected function buildTrackingRepository(TrackingParametersInterface $trackingParameters)
+    {
+        return new TrackingRepository($this->dataClassRepository, $trackingParameters);
     }
 }

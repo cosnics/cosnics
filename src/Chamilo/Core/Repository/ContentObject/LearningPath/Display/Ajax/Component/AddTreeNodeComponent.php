@@ -6,10 +6,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
-use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

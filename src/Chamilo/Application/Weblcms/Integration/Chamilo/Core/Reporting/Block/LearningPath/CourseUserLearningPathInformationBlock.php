@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\LearningPath;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Core\Reporting\ReportingData;
@@ -165,7 +164,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
         return $trackingServiceBuilder->buildTrackingService(
-            new TrackingParameters((int) $courseId, (int) $publicationId)
+            new TrackingParameters((int) $publicationId)
         );
     }
 

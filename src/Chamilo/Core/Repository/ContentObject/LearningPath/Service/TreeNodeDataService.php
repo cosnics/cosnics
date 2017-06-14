@@ -2,14 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
-use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Money\InvalidArgumentException;
 
 /**
  * Service class to manage TreeNodeData classes

@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
-use Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 

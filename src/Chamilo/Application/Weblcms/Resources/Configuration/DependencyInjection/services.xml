@@ -52,11 +52,5 @@
         <service id="chamilo.application.weblcms.storage.repository.publication_repository"
                  class="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository" />
 
-
-        <service id="chamilo.application.weblcms.service.learning_path_progress_fixer"
-                 class="Chamilo\Application\Weblcms\Service\LearningPathProgressFixer">
-            <argument type="service" id="chamilo.application.weblcms.service.publication" />
-        </service>
-
     </services>
 </container>

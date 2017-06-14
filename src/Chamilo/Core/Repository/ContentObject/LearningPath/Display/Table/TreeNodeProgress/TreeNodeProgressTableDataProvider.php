@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;

@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\MigrationTrackingParameters;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;

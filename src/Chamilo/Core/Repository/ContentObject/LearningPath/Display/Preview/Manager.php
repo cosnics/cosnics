@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
@@ -232,15 +232,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     {
         if (!isset($this->trackingService))
         {
-            $this->trackingRepository = new TrackingRepository();
-
-            $attemptService = new AttemptService(
-                $this->trackingRepository, new TrackingParameters()
-            );
-
-            $this->trackingService = new TrackingService(
-                $attemptService, $this->trackingRepository
-            );
+            $trackingServiceBuilder = new TrackingServiceBuilder();
+            $this->trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
         }
 
         return $this->trackingService;

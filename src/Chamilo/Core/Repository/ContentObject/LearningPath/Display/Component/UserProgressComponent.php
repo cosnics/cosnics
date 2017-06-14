@@ -2,9 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\User\Storage\DataClass\User;

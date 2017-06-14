@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\CpoExportImplementation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;

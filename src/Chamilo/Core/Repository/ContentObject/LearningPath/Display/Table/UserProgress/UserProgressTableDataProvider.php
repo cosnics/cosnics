@@ -2,19 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
-use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
-use JMS\Serializer\Tests\Fixtures\Order;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path

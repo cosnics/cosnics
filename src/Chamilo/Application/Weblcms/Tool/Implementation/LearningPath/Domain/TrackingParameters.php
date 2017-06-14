@@ -2,14 +2,11 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -25,11 +22,6 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * @var int
      */
-    protected $courseId;
-
-    /**
-     * @var int
-     */
     protected $publicationId;
 
     /**
@@ -40,32 +32,11 @@ class TrackingParameters implements TrackingParametersInterface
     /**
      * TrackingParameters constructor.
      *
-     * @param int $courseId
      * @param int $publicationId
      */
-    public function __construct($courseId, $publicationId)
+    public function __construct($publicationId)
     {
-        $this->setCourseId($courseId)
-            ->setPublicationId($publicationId);
-    }
-
-    /**
-     * @param int $courseId
-     *
-     * @return $this
-     */
-    public function setCourseId($courseId)
-    {
-        if (empty($courseId) || !is_int($courseId))
-        {
-            throw new \InvalidArgumentException(
-                'The given courseId should be a valid integer and should not be empty'
-            );
-        }
-
-        $this->courseId = $courseId;
-
-        return $this;
+        $this->setPublicationId($publicationId);
     }
 
     /**
@@ -150,7 +121,7 @@ class TrackingParameters implements TrackingParametersInterface
     {
         if(!isset($this->targetUserIds))
         {
-            $this->targetUserIds = DataManager::getPublicationTargetUserIds($this->publicationId, $this->courseId);
+            $this->targetUserIds = DataManager::getPublicationTargetUserIds($this->publicationId, null);
         }
 
         return $this->targetUserIds;

@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\L
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Core\Reporting\ReportingData;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -172,7 +170,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
         return $trackingServiceBuilder->buildTrackingService(
-            new TrackingParameters((int) $courseId, (int) $publicationId)
+            new TrackingParameters((int) $publicationId)
         );
     }
 

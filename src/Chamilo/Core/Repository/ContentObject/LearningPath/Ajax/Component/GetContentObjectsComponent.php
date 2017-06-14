@@ -8,13 +8,9 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

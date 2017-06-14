@@ -19,6 +19,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Renderer\TreeRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -154,7 +155,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
             );
 
-            return $this->publication->get_content_object();
+            return $this->getSelectedLearningPath();
         }
     }
 
@@ -303,13 +304,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function getCurrentTreeNode()
     {
-        return parent::getCurrentTreeNode($this->publication->getContentObject());
+        return parent::getCurrentTreeNode($this->getSelectedLearningPath());
     }
 
     public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
     {
         $this->trackingService->saveAnswerForQuestion(
-            $this->publication->get_content_object(), $this->getUser(),
+            $this->getSelectedLearningPath(), $this->getUser(),
             $this->getCurrentTreeNode(), $complex_question_id, $answer, $score, $hint
         );
     }
@@ -317,7 +318,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function save_assessment_result($total_score)
     {
         $this->trackingService->saveAssessmentScore(
-            $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode(),
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode(),
             $total_score
         );
     }
@@ -366,7 +367,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     protected function retrieve_question_attempts()
     {
         return $this->trackingService->getQuestionAttempts(
-            $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode()
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode()
         );
     }
 
@@ -378,7 +379,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function register_question_ids($question_ids)
     {
         $this->question_attempts = $this->trackingService->registerQuestionAttempts(
-            $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode(),
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode(),
             $question_ids
         );
     }
@@ -533,7 +534,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     protected function checkMaximumAssessmentAttempts()
     {
         if ($this->trackingService->isMaximumAttemptsReachedForAssessment(
-            $this->publication->get_content_object(), $this->getUser(), $this->getCurrentTreeNode()
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode()
         )
         )
         {
@@ -562,5 +563,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         }
 
         return $this->trackingService;
+    }
+
+    /**
+     * Returns the currently selected LearningPath
+     * 
+     * @return LearningPath | ContentObject
+     */
+    protected function getSelectedLearningPath()
+    {
+        return $this->publication->getContentObject();
     }
 }

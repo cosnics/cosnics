@@ -4,8 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class Manager

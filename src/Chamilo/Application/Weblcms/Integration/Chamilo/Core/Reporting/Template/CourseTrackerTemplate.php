@@ -24,8 +24,6 @@ class CourseTrackerTemplate extends ReportingTemplate
         parent::__construct($parent);
         
         $this->add_reporting_block($this->get_last_access_to_tool());
-        $this->add_reporting_block($this->get_average_learning_path_score());
-        
         // $this->add_reporting_block($this->get_average_exercise_score());
     }
 
@@ -41,17 +39,6 @@ class CourseTrackerTemplate extends ReportingTemplate
         if ($user_id)
         {
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $user_id);
-        }
-        return $course_weblcms_block;
-    }
-
-    public function get_average_learning_path_score()
-    {
-        $course_weblcms_block = new AverageLearningPathScoreBlock($this);
-        $course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        if ($course_id)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
         }
         return $course_weblcms_block;
     }

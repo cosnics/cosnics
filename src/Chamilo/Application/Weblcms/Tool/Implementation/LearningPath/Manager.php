@@ -16,6 +16,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -33,25 +34,16 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
-    const ACTION_DOWNLOAD_DOCUMENTS = 'DocumentSaver';
-    const ACTION_VIEW_ASSESSMENT_RESULTS = 'AssessmentResultsViewer';
     const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
-    const ACTION_VIEW_STATISTICS = 'StatisticsViewer';
-    const PARAM_ASSESSMENT_ID = 'assessment';
-    const PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID = 'lpi_attempt';
-    const PARAM_OBJECT_ID = 'object_id';
-    const PARAM_LEARNING_PATH = 'lp';
-    const PARAM_LP_STEP = 'step';
-    const PARAM_LEARNING_PATH_ID = 'lpid';
-    const PARAM_ATTEMPT_ID = 'attempt_id';
 
     /**
-     * Tree cache
-     *
-     * @var Tree[]
+     * @var int[]
      */
-    protected $tree;
+    protected $checkedPublications;
 
+    /**
+     * @return array
+     */
     public function get_available_browser_types()
     {
         $browser_types = array();
@@ -61,16 +53,23 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $browser_types;
     }
 
+    /**
+     * @return array
+     */
     public static function get_allowed_types()
     {
         return array(LearningPath::class_name());
     }
 
+    /**
+     * @param Toolbar $toolbar
+     * @param array $publication
+     */
     public function add_content_object_publication_actions($toolbar, $publication)
     {
         $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
-        if (!$this->is_empty_learning_path($publication))
+        if (!$this->isEmptyLearningPath($publication))
         {
             if ($allowed)
             {
@@ -121,6 +120,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         }
     }
 
+    /**
+     * @param array $publication
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     */
     public function addContentObjectPublicationButtons(
         $publication, ButtonGroup $buttonGroup,
         DropdownButton $dropdownButton
@@ -128,7 +132,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
-        if (!$this->is_empty_learning_path($publication))
+        if (!$this->isEmptyLearningPath($publication))
         {
             if ($allowed)
             {
@@ -165,21 +169,24 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         }
     }
 
-    private static $checked_publications = array();
-
-    public function is_empty_learning_path($publication)
+    /**
+     * @param $publication
+     *
+     * @return int
+     */
+    public function isEmptyLearningPath($publication)
     {
-        if (!array_key_exists($publication[ContentObjectPublication::PROPERTY_ID], $this->checked_publications))
+        if (!array_key_exists($publication[ContentObjectPublication::PROPERTY_ID], $this->checkedPublications))
         {
             $object = $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID];
             $learningPath = new LearningPath();
             $learningPath->setId($object);
 
-            $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]] =
+            $this->checkedPublications[$publication[ContentObjectPublication::PROPERTY_ID]] =
                 $this->getLearningPathService()->isLearningPathEmpty($learningPath);
         }
 
-        return $this->checked_publications[$publication[ContentObjectPublication::PROPERTY_ID]];
+        return $this->checkedPublications[$publication[ContentObjectPublication::PROPERTY_ID]];
     }
 
     /**
@@ -219,7 +226,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
         return $trackingServiceBuilder->buildTrackingService(
-            new TrackingParameters((int) $courseId, (int) $publicationId)
+            new TrackingParameters((int) $publicationId)
         );
     }
 

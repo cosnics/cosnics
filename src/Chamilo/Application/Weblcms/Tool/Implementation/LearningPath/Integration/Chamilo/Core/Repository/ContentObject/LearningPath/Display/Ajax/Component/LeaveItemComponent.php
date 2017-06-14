@@ -53,7 +53,7 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
         $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
         return $trackingServiceBuilder->buildTrackingService(
-            new TrackingParameters(1, 1)
+            new TrackingParameters(1)
         );
     }
 
