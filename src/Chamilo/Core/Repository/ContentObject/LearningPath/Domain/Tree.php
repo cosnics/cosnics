@@ -100,11 +100,9 @@ class Tree
             throw new \InvalidArgumentException('The given step should be valid integer');
         }
 
-        if (!array_key_exists($step, $this->treeNodesByStep))
+        if($step < 1 || $step > count($this->treeNodesByStep))
         {
-            throw new \InvalidArgumentException(
-                sprintf('The learning path three node with step %s could not be found', $step)
-            );
+            throw new \RangeException(sprintf('The given step %s is not within the available range of steps', $step));
         }
 
         return $this->treeNodesByStep[$step];

@@ -7,7 +7,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Platform\Security;
 
 /**
  * Tests the TreeNode class
@@ -16,18 +19,97 @@ use Chamilo\Libraries\Architecture\Test\Test;
  */
 class TreeNodeTest extends Test
 {
+    /**
+     * @var Tree
+     */
+    protected $tree;
+
+    /**
+     * @var LearningPath | Section | Page | ContentObject
+     */
+    protected $contentObjects;
+
+    /**
+     * @var TreeNodeData[]
+     */
+    protected $treeNodesData;
+
+    /**
+     * @var TreeNode[]
+     */
+    protected $treeNodes;
+
+    /**
+     * Setup before each test
+     *
+     * Builds a complex learning path for each test
+     *
+     * - Learning Path A - ID: 1
+     *    - Section A - ID: 2
+     *        - Page 1 - ID: 6
+     *    - Section B - ID: 3
+     *    - Section C - ID: 4
+     *        - Section D - ID: 5
+     *            - Page 2 - ID: 7
+     */
+    public function setUp()
+    {
+        $this->tree = new Tree();
+
+        $this->contentObjects[1] = new LearningPath();
+
+        for ($i = 2; $i < 6; $i ++)
+        {
+            $this->contentObjects[$i] = new Section();
+        }
+
+        for ($i = 6; $i < 8; $i ++)
+        {
+            $this->contentObjects[$i] = new Page();
+        }
+
+        foreach ($this->contentObjects as $index => $contentObject)
+        {
+            $this->treeNodesData[$index] = new TreeNodeData();
+            $this->treeNodesData[$index]->setId($index);
+        }
+
+        $this->treeNodes[1] = new TreeNode($this->tree, $this->contentObjects[1], $this->treeNodesData[1]);
+        $this->treeNodes[2] = new TreeNode($this->tree, $this->contentObjects[2], $this->treeNodesData[2]);
+        $this->treeNodes[6] = new TreeNode($this->tree, $this->contentObjects[6], $this->treeNodesData[6]);
+        $this->treeNodes[3] = new TreeNode($this->tree, $this->contentObjects[3], $this->treeNodesData[3]);
+        $this->treeNodes[4] = new TreeNode($this->tree, $this->contentObjects[4], $this->treeNodesData[4]);
+        $this->treeNodes[5] = new TreeNode($this->tree, $this->contentObjects[5], $this->treeNodesData[5]);
+        $this->treeNodes[7] = new TreeNode($this->tree, $this->contentObjects[7], $this->treeNodesData[7]);
+
+        $this->treeNodes[1]->addChildNode($this->treeNodes[2]);
+        $this->treeNodes[2]->addChildNode($this->treeNodes[6]);
+        $this->treeNodes[1]->addChildNode($this->treeNodes[3]);
+        $this->treeNodes[1]->addChildNode($this->treeNodes[4]);
+        $this->treeNodes[4]->addChildNode($this->treeNodes[5]);
+        $this->treeNodes[5]->addChildNode($this->treeNodes[7]);
+    }
+
+    /**
+     * Tear down after each test
+     */
+    public function tearDown()
+    {
+        unset($this->treeNodes);
+        unset($this->tree);
+        unset($this->treeNodesData);
+        unset($this->contentObjects);
+    }
+
     public function testStepAutomaticallySetByTree()
     {
-        $tree = new Tree();
-        $treeNode = new TreeNode($tree, new LearningPath());
-
-        $this->assertEquals(1, $treeNode->getStep());
+        $this->assertEquals(5, $this->treeNodes[4]->getStep());
     }
 
     public function testConstructorCallsTree()
     {
         /** @var Tree | \PHPUnit_Framework_MockObject_MockObject $treeMock */
-        $treeMock = $this->getMock(Tree::class, array(), array(), '', false);
+        $treeMock = $this->getMockBuilder(Tree::class)->disableOriginalConstructor()->getMock();
 
         $treeMock->expects($this->once())
             ->method('addTreeNode');
@@ -40,39 +122,33 @@ class TreeNodeTest extends Test
      */
     public function testSetStepCalledTwiceThrowsException()
     {
-        $tree = new Tree();
-        $treeNode = new TreeNode($tree, new LearningPath());
-
-        $treeNode->setStep(5);
+        $this->treeNodes[1]->setStep(2);
     }
 
     public function testGetTree()
     {
-        $tree = new Tree();
-        $treeNode = new TreeNode($tree, new LearningPath());
-
-        $this->assertEquals($tree, $treeNode->getTree());
+        $this->assertEquals($this->tree, $this->treeNodes[1]->getTree());
     }
 
     public function testGetContentObject()
     {
+        $this->assertEquals($this->contentObjects[1], $this->treeNodes[1]->getContentObject());
+    }
+
+    public function testSetContentObject()
+    {
         $contentObject = new LearningPath();
+        $this->treeNodes[1]->setContentObject($contentObject);
 
-        $tree = new Tree();
-        $treeNode = new TreeNode($tree, $contentObject);
-
-        $this->assertEquals($contentObject, $treeNode->getContentObject());
+        $this->assertEquals($contentObject, $this->treeNodes[1]->getContentObject());
     }
 
     public function testSetGetTreeNodeData()
     {
-        $tree = new Tree();
-        $treeNode = new TreeNode($tree, new LearningPath());
-
         $treeNodeData = new TreeNodeData();
-        $treeNode->setTreeNodeData($treeNodeData);
+        $this->treeNodes[1]->setTreeNodeData($treeNodeData);
 
-        $this->assertEquals($treeNodeData, $treeNode->getTreeNodeData());
+        $this->assertEquals($treeNodeData, $this->treeNodes[1]->getTreeNodeData());
     }
 
     public function testSetParentNode()
@@ -115,8 +191,7 @@ class TreeNodeTest extends Test
         $tree = new Tree();
 
         /** @var TreeNode | \PHPUnit_Framework_MockObject_MockObject $treeNodeMock */
-        $treeNodeMock =
-            $this->getMock(TreeNode::class, array(), array(), '', false);
+        $treeNodeMock = $this->getMockBuilder(TreeNode::class)->disableOriginalConstructor()->getMock();
 
         $treeNodeChild = new TreeNode($tree, new LearningPath());
 
@@ -188,9 +263,7 @@ class TreeNodeTest extends Test
         $tree = new Tree();
 
         /** @var TreeNode | \PHPUnit_Framework_MockObject_MockObject $treeNodeMock */
-        $treeNodeMock =
-            $this->getMock(TreeNode::class, array(), array(), '', false);
-
+        $treeNodeMock = $this->getMockBuilder(TreeNode::class)->disableOriginalConstructor()->getMock();
         $treeNodeParent = new TreeNode($tree, new LearningPath());
 
         $treeNodeMock->expects($this->once())
@@ -246,57 +319,83 @@ class TreeNodeTest extends Test
         $this->assertEquals(array(1 => $treeNodeParent), $treeNodeChild->getParentNodes());
     }
 
-    /**
-     * Tests a complex learning path structure and checks
-     * if all the contents are correctly mapped
-     *
-     * - Learning Path A
-     *      - Learning Path B
-     *          - Page 1
-     *      - Learning Path C
-     *      - Learning Path D
-     *          - Learning Path B
-     *              - Page 1
-     */
-    public function testComplexLearningPathStructure()
+    public function testHasParentNode()
     {
-        $learningPathA = new LearningPath();
-        $learningPathB = new LearningPath();
-        $learningPathC = new LearningPath();
-        $learningPathD = new LearningPath();
+        $this->assertTrue($this->treeNodes[6]->hasParentNode());
+    }
 
-        $page1 = new Page();
-
-        $tree = new Tree();
-
-        $learningPathNodeA = new TreeNode($tree, $learningPathA);
-        $learningPathNodeB1 = new TreeNode($tree, $learningPathB);
-
-        $learningPathNodePage1A = new TreeNode($tree, $page1);
-
-        $learningPathNodeC = new TreeNode($tree, $learningPathC);
-        $learningPathNodeD = new TreeNode($tree, $learningPathD);
-        $learningPathNodeB2 = new TreeNode($tree, $learningPathB);
-
-        $learningPathNodePage1B = new TreeNode($tree, $page1);
-
-        $learningPathNodeA->addChildNode($learningPathNodeB1);
-        $learningPathNodeB1->addChildNode($learningPathNodePage1A);
-
-        $learningPathNodeA->addChildNode($learningPathNodeC);
-        $learningPathNodeA->addChildNode($learningPathNodeD);
-
-        $learningPathNodeD->addChildNode($learningPathNodeB2);
-        $learningPathNodeB2->addChildNode($learningPathNodePage1B);
-
+    public function testGetParentNodes()
+    {
         $this->assertEquals(
-            array(1 => $learningPathNodeA, 5 => $learningPathNodeD, 6 => $learningPathNodeB2),
-            $learningPathNodePage1B->getParentNodes()
-        );
-
-        $this->assertEquals(
-            array(6 => $learningPathNodeB2, 7 => $learningPathNodePage1B),
-            $learningPathNodeD->getDescendantNodes()
+            array(1 => $this->treeNodes[1], 5 => $this->treeNodes[4], 6 => $this->treeNodes[5]),
+            $this->treeNodes[7]->getParentNodes()
         );
     }
+
+    public function testGetDescendantNodes()
+    {
+        $this->assertEquals(
+            array(6 => $this->treeNodes[5], 7 => $this->treeNodes[7]),
+            $this->treeNodes[4]->getDescendantNodes()
+        );
+    }
+
+    public function testHasChildNodes()
+    {
+        $this->assertTrue($this->treeNodes[4]->hasChildNodes());
+    }
+
+    public function testGetNextNode()
+    {
+        $this->assertEquals($this->treeNodes[6], $this->treeNodes[2]->getNextNode());
+    }
+
+    public function testGetNextNodeOnLastNode()
+    {
+        $this->assertNull($this->treeNodes[7]->getNextNode());
+    }
+
+    public function testGetPreviousNode()
+    {
+        $this->assertEquals($this->treeNodes[4], $this->treeNodes[5]->getPreviousNode());
+    }
+
+    public function testGetPreviousNodeOnFirstNode()
+    {
+        $this->assertNull($this->treeNodes[1]->getPreviousNode());
+    }
+
+    public function testGetPreviousNodes()
+    {
+        $this->assertEquals(
+            array($this->treeNodes[1], $this->treeNodes[2], $this->treeNodes[6]),
+            $this->treeNodes[3]->getPreviousNodes()
+        );
+    }
+
+    public function testisRootNode()
+    {
+        $this->assertTrue($this->treeNodes[1]->isRootNode());
+    }
+
+    public function testisRootNodeForNoRootNode()
+    {
+        $this->assertFalse($this->treeNodes[6]->isRootNode());
+    }
+
+    public function testIsChildOf()
+    {
+        $this->assertTrue($this->treeNodes[7]->isChildOf($this->treeNodes[5]));
+    }
+
+    public function testIsChildOfReturnsFalse()
+    {
+        $this->assertFalse($this->treeNodes[6]->isChildOf($this->treeNodes[5]));
+    }
+
+    public function testGetTreeNodeDataIdsFromSelfAndDescendants()
+    {
+        $this->assertEquals(array(4, 5, 7), $this->treeNodes[4]->getTreeNodeDataIdsFromSelfAndDescendants());
+    }
+
 }
