@@ -35,20 +35,27 @@ class TreeNodeCopier
     protected $treeNodeDataService;
 
     /**
+     * @var ContentObjectCopierWrapper
+     */
+    protected $contentObjectCopierWrapper;
+
+    /**
      * LearningPathService constructor.
      *
      * @param ContentObjectRepository $contentObjectRepository
      * @param TreeBuilder $treeBuilder
      * @param TreeNodeDataService $treeNodeDataService
+     * @param ContentObjectCopierWrapper $contentObjectCopierWrapper
      */
     public function __construct(
         ContentObjectRepository $contentObjectRepository, TreeBuilder $treeBuilder,
-        TreeNodeDataService $treeNodeDataService
+        TreeNodeDataService $treeNodeDataService, ContentObjectCopierWrapper $contentObjectCopierWrapper
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
         $this->treeBuilder = $treeBuilder;
         $this->treeNodeDataService = $treeNodeDataService;
+        $this->contentObjectCopierWrapper = $contentObjectCopierWrapper;
     }
 
     /**
@@ -132,7 +139,7 @@ class TreeNodeCopier
             $contentObject->set_title($fromNode->getContentObject()->get_title());
             $contentObject->set_description($fromNode->getContentObject()->get_description());
 
-            $contentObject->create();
+            $this->contentObjectRepository->create($contentObject);
 
             return $contentObject;
         }
@@ -156,15 +163,9 @@ class TreeNodeCopier
      */
     protected function copyContentObjectFromNode(TreeNode $node, User $user, $categoryId)
     {
-        $contentObject = $node->getContentObject();
+        $newContentObjectIdentifiers =
+            $this->contentObjectCopierWrapper->copyContentObject($node->getContentObject(), $user, $categoryId);
 
-        $contentObjectCopier = new ContentObjectCopier(
-            $user, array($contentObject->getId()), new PersonalWorkspace($contentObject->get_owner()),
-            $contentObject->get_owner_id(), new PersonalWorkspace($user), $user->getId(),
-            $categoryId
-        );
-
-        $newContentObjectIdentifiers = $contentObjectCopier->run();
         return $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
     }
 
@@ -184,14 +185,7 @@ class TreeNodeCopier
         ContentObject $contentObject
     ): TreeNodeData
     {
-        if ($fromNode->isRootNode())
-        {
-            $treeNodeData = new TreeNodeData();
-        }
-        else
-        {
-            $treeNodeData = $fromNode->getTreeNodeData();
-        }
+        $treeNodeData = $fromNode->getTreeNodeData();
 
         $treeNodeData->setId(null);
         $treeNodeData->setUserId((int) $user->getId());

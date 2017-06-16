@@ -81,6 +81,7 @@ class TreeJSONMapper
      * @param string $treeMenuUrl
      * @param TreeNode $currentTreeNode
      * @param bool $allowedToViewContentObject
+     * @param bool $allowedToEditTree
      */
     public function __construct(
         Tree $tree, User $user,
@@ -171,14 +172,7 @@ class TreeJSONMapper
             $nodeData['folder'] = true;
         }
 
-        if ($this->allowedToViewContentObject)
-        {
-            $nodeData['href'] = $this->getNodeUrl($node->getId());
-        }
-        else
-        {
-            $nodeData['href'] = '#';
-        }
+        $nodeData['href'] = $this->getNodeUrl($node->getId());
 
         if ($this->isSelectedItem($node))
         {

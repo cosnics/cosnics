@@ -2,13 +2,14 @@
 namespace Chamilo\Libraries\Architecture\Test;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * This abstract test case is used as a base for all chamilo tests
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class Test extends \PHPUnit_Framework_TestCase
+abstract class Test extends TestCase
 {
 
     protected $backupGlobalsBlacklist = array('_MDB2_databases');

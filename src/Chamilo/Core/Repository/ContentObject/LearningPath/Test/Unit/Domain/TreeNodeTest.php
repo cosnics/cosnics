@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\TreeTestDataGenerator;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -54,40 +55,11 @@ class TreeNodeTest extends Test
      */
     public function setUp()
     {
-        $this->tree = new Tree();
-
-        $this->contentObjects[1] = new LearningPath();
-
-        for ($i = 2; $i < 6; $i ++)
-        {
-            $this->contentObjects[$i] = new Section();
-        }
-
-        for ($i = 6; $i < 8; $i ++)
-        {
-            $this->contentObjects[$i] = new Page();
-        }
-
-        foreach ($this->contentObjects as $index => $contentObject)
-        {
-            $this->treeNodesData[$index] = new TreeNodeData();
-            $this->treeNodesData[$index]->setId($index);
-        }
-
-        $this->treeNodes[1] = new TreeNode($this->tree, $this->contentObjects[1], $this->treeNodesData[1]);
-        $this->treeNodes[2] = new TreeNode($this->tree, $this->contentObjects[2], $this->treeNodesData[2]);
-        $this->treeNodes[6] = new TreeNode($this->tree, $this->contentObjects[6], $this->treeNodesData[6]);
-        $this->treeNodes[3] = new TreeNode($this->tree, $this->contentObjects[3], $this->treeNodesData[3]);
-        $this->treeNodes[4] = new TreeNode($this->tree, $this->contentObjects[4], $this->treeNodesData[4]);
-        $this->treeNodes[5] = new TreeNode($this->tree, $this->contentObjects[5], $this->treeNodesData[5]);
-        $this->treeNodes[7] = new TreeNode($this->tree, $this->contentObjects[7], $this->treeNodesData[7]);
-
-        $this->treeNodes[1]->addChildNode($this->treeNodes[2]);
-        $this->treeNodes[2]->addChildNode($this->treeNodes[6]);
-        $this->treeNodes[1]->addChildNode($this->treeNodes[3]);
-        $this->treeNodes[1]->addChildNode($this->treeNodes[4]);
-        $this->treeNodes[4]->addChildNode($this->treeNodes[5]);
-        $this->treeNodes[5]->addChildNode($this->treeNodes[7]);
+        $treeTestDataGenerator = new TreeTestDataGenerator();
+        $this->tree = $treeTestDataGenerator->getTree();
+        $this->contentObjects = $treeTestDataGenerator->getContentObjects();
+        $this->treeNodesData = $treeTestDataGenerator->getTreeNodesData();
+        $this->treeNodes = $treeTestDataGenerator->getTreeNodes();
     }
 
     /**

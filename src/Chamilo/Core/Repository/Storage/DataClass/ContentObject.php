@@ -214,6 +214,9 @@ class ContentObject extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_OWNER_ID);
     }
 
+    /**
+     * @return User
+     */
     public function get_owner()
     {
         if (! isset($this->owner))
