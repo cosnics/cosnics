@@ -55,6 +55,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function usesAutomaticNumbering()
     {
+        if(!in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
+        {
+            return false;
+        }
+
         return $this->getAutomaticNumbering() != self::AUTOMATIC_NUMBERING_NONE;
     }
 

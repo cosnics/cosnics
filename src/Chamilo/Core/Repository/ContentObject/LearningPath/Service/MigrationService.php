@@ -108,7 +108,7 @@ class MigrationService
             if ($this->hasLearningPathPrerequisites())
             {
                 $learningPath->setEnforceDefaultTraversingOrder(true);
-                $learningPath->update();
+                $this->contentObjectRepository->update($learningPath);
 
                 echo 'Learning Path Prerequisites ' . $learningPath->getId() . PHP_EOL;
             }
@@ -255,7 +255,7 @@ class MigrationService
             $section->set_creation_date($learningPath->get_creation_date());
             $section->set_owner_id($learningPath->get_owner_id());
 
-            if (!$section->create())
+            if (!$this->contentObjectRepository->create($section))
             {
                 throw new \Exception('Could not create a new section');
             }
@@ -358,7 +358,7 @@ class MigrationService
             }
 
             $treeNodeAttempt->setTreeNodeDataId($newLearningPathItemId);
-            $treeNodeAttempt->update();
+            $this->trackingRepository->update($treeNodeAttempt);
         }
 
         $this->trackingRepository->clearTreeNodeAttemptCache();
