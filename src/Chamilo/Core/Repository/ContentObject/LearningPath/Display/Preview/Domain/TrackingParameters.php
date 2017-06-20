@@ -70,6 +70,11 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        return array(Session::get_user_id());
+        if(empty(Session::get_user_id()))
+        {
+            return [];
+        }
+
+        return [Session::get_user_id()];
     }
 }

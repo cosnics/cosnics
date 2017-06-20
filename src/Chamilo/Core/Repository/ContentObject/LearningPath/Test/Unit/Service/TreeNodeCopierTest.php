@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ContentObjectCopierWrapper;
+use Chamilo\Core\Repository\Service\ContentObjectCopierWrapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;

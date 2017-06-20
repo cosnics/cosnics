@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
+namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;

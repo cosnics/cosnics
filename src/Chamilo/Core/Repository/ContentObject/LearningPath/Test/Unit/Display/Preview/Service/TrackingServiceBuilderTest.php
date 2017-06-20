@@ -1,0 +1,32 @@
+<?php
+
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Display\Preview\Service;
+
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
+use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+
+/**
+ * Tests the TrackingServiceBuilder class
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class TrackingServiceBuilderTest extends Test
+{
+    public function testBuildTrackingServiceSetsCorrectRepository()
+    {
+        $dataClassRepositoryMock = $this->getMockBuilder(DataClassRepository::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $trackingServiceBuilder = new TrackingServiceBuilder($dataClassRepositoryMock);
+
+        $trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
+        $attemptTrackingService = $this->get_property_value($trackingService, 'attemptTrackingService');
+
+        $this->assertInstanceOf(
+            TrackingRepository::class, $this->get_property_value($attemptTrackingService, 'trackingRepository')
+        );
+    }
+}
