@@ -1,6 +1,6 @@
 <?php
 
-namespace test;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Service\Tracking;;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -447,4 +447,62 @@ class TrackingServiceTest extends Test
             $this->learningPath, $this->treeNode, $condition, 0, 0, []
         );
     }
+
+    public function testFindTargetUsersWithoutLearningPathAttempts()
+    {
+        $this->attemptSummaryCalculatorMock->expects($this->once())
+            ->method('findTargetUsersWithoutLearningPathAttempts')
+            ->with($this->learningPath, $this->treeNode);
+
+        $this->trackingService->findTargetUsersWithoutLearningPathAttempts($this->learningPath, $this->treeNode);
+    }
+
+
+    public function testCountTargetUsersWithoutLearningPathAttempts()
+    {
+        $this->attemptSummaryCalculatorMock->expects($this->once())
+            ->method('countTargetUsersWithoutLearningPathAttempts')
+            ->with($this->learningPath, $this->treeNode);
+
+        $this->trackingService->countTargetUsersWithoutLearningPathAttempts($this->learningPath, $this->treeNode);
+    }
+
+    public function testCountTargetUsersWithFullLearningPathAttempts()
+    {
+        $this->attemptSummaryCalculatorMock->expects($this->once())
+            ->method('countTargetUsersWithFullLearningPathAttempts')
+            ->with($this->learningPath, $this->treeNode);
+
+        $this->trackingService->countTargetUsersWithFullLearningPathAttempts($this->learningPath, $this->treeNode);
+    }
+
+
+    public function testFindTargetUsersWithPartialLearningPathAttempts()
+    {
+        $this->attemptSummaryCalculatorMock->expects($this->once())
+            ->method('findTargetUsersWithPartialLearningPathAttempts')
+            ->with($this->learningPath, $this->treeNode);
+
+        $this->trackingService->findTargetUsersWithPartialLearningPathAttempts($this->learningPath, $this->treeNode);
+    }
+
+    public function testCountTargetUsersWithPartialLearningPathAttempts()
+    {
+        $this->attemptSummaryCalculatorMock->expects($this->once())
+            ->method('countTargetUsersWithPartialLearningPathAttempts')
+            ->with($this->learningPath, $this->treeNode);
+
+        $this->trackingService->countTargetUsersWithPartialLearningPathAttempts($this->learningPath, $this->treeNode);
+    }
+
+
+    public function testCountTargetUsers()
+    {
+        $this->attemptTrackingServiceMock->expects($this->once())
+            ->method('countTargetUsers')
+            ->with($this->learningPath);
+
+        $this->trackingService->countTargetUsers($this->learningPath);
+    }
+
 }

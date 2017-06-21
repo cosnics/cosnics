@@ -352,7 +352,7 @@ class AttemptTrackingService
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     public function getTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, TreeNode $treeNode,
+        LearningPath $learningPath, TreeNode $treeNode = null,
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {

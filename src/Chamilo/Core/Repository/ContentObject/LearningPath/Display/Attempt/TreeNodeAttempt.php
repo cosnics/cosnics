@@ -45,6 +45,8 @@ abstract class TreeNodeAttempt extends DataClass
     public function set_start_time($start_time)
     {
         $this->set_default_property(self::PROPERTY_START_TIME, $start_time);
+
+        return $this;
     }
 
     public function getTreeNodeDataId()
@@ -55,6 +57,8 @@ abstract class TreeNodeAttempt extends DataClass
     public function setTreeNodeDataId($learning_path_item_id)
     {
         $this->set_default_property(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
+
+        return $this;
     }
 
     public function get_total_time()
@@ -65,6 +69,8 @@ abstract class TreeNodeAttempt extends DataClass
     public function set_total_time($total_time)
     {
         $this->set_default_property(self::PROPERTY_TOTAL_TIME, $total_time);
+
+        return $this;
     }
 
     public function get_score()
@@ -75,6 +81,8 @@ abstract class TreeNodeAttempt extends DataClass
     public function set_score($score)
     {
         $this->set_default_property(self::PROPERTY_SCORE, $score);
+
+        return $this;
     }
 
     /**
@@ -87,10 +95,14 @@ abstract class TreeNodeAttempt extends DataClass
 
     /**
      * @param bool $completed
+     *
+     * @return $this
      */
     public function setCompleted($completed = true)
     {
         $this->set_default_property(self::PROPERTY_COMPLETED, $completed);
+
+        return $this;
     }
 
     /**
@@ -103,10 +115,14 @@ abstract class TreeNodeAttempt extends DataClass
 
     /**
      * @param int $learningPathId
+     *
+     * @return $this
      */
     public function setLearningPathId($learningPathId)
     {
         $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
+
+        return $this;
     }
 
     /**
@@ -121,10 +137,14 @@ abstract class TreeNodeAttempt extends DataClass
     /**
      *
      * @param int $user_id
+     *
+     * @return $this
      */
     public function setUserId($user_id)
     {
         $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+
+        return $this;
     }
 
     /**
@@ -133,5 +153,7 @@ abstract class TreeNodeAttempt extends DataClass
     public function calculateAndSetTotalTime()
     {
         $this->set_total_time($this->get_total_time() + (time() - $this->get_start_time()));
+
+        return $this;
     }
 }

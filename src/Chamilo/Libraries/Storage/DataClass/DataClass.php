@@ -441,8 +441,10 @@ abstract class DataClass
 
     /**
      * Sets id of the object
-     * 
+     *
      * @param $id int
+     *
+     * @return $this
      */
     public function setId($id)
     {
@@ -450,6 +452,8 @@ abstract class DataClass
         {
             $this->set_default_property(self::PROPERTY_ID, $id);
         }
+
+        return $this;
     }
 
     /**
