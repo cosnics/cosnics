@@ -156,6 +156,7 @@ class ProgressCalculatorTest extends Test
         unset($this->contentObjects);
         unset($this->tree);
         unset($this->treeNodeAttempts);
+        unset($this->learningPath);
     }
 
     public function testGetLearningPathProgress()
@@ -231,6 +232,14 @@ class ProgressCalculatorTest extends Test
                 $this->learningPath, $this->user, $this->tree->getTreeNodeById(2)
             )
         );
+    }
+
+    /**
+     * @expectedException \TypeError
+     */
+    public function testGetLearningPathProgressWithoutTreeNode()
+    {
+        $this->progressCalculator->getLearningPathProgress($this->learningPath, $this->user, null);
     }
 
     public function testIsTreeNodeCompleted()

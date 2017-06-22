@@ -66,7 +66,7 @@ class AssessmentTrackingService
         $this->validateTreeNodeIsAssessment($treeNode);
 
         $treeNodeAttempts =
-            $this->attemptService->getTreeNodeAttempts($learningPath, $user);
+            $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
 
         /** @var Assessment $assessment */
         $assessment = $treeNode->getContentObject();
@@ -149,6 +149,8 @@ class AssessmentTrackingService
         TreeNode $treeNode, $treeNodeAttemptId, $newScore = 0
     )
     {
+        $this->validateTreeNodeIsAssessment($treeNode);
+
         $treeNodeAttempt = $this->attemptTrackingService->getTreeNodeAttemptById(
             $learningPath, $user, $treeNode, $treeNodeAttemptId
         );
@@ -277,7 +279,7 @@ class AssessmentTrackingService
     {
         if (!$treeNode->getContentObject() instanceof Assessment)
         {
-            throw new \RuntimeException(
+            throw new \InvalidArgumentException(
                 'The given TreeNode is not connected to an assessment'
             );
         }

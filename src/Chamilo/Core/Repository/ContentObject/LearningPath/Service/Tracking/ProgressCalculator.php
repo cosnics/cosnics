@@ -47,7 +47,7 @@ class ProgressCalculator
      * @return int
      */
     public function getLearningPathProgress(
-        LearningPath $learningPath, User $user, TreeNode $treeNode = null
+        LearningPath $learningPath, User $user, TreeNode $treeNode
     )
     {
         /** @var TreeNode[] $nodes */

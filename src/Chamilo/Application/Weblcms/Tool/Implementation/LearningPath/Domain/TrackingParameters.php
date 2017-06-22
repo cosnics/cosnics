@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManagerWrapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -30,13 +31,26 @@ class TrackingParameters implements TrackingParametersInterface
     protected $targetUserIds;
 
     /**
+     * @var DataManagerWrapper
+     */
+    protected $dataManagerWrapper;
+
+    /**
      * TrackingParameters constructor.
      *
      * @param int $publicationId
+     * @param DataManagerWrapper|null $dataManagerWrapper
      */
-    public function __construct($publicationId)
+    public function __construct($publicationId, DataManagerWrapper $dataManagerWrapper = null)
     {
         $this->setPublicationId($publicationId);
+
+        if(empty($dataManagerWrapper))
+        {
+            $dataManagerWrapper = new DataManagerWrapper();
+        }
+
+        $this->dataManagerWrapper = $dataManagerWrapper;
     }
 
     /**
@@ -121,7 +135,7 @@ class TrackingParameters implements TrackingParametersInterface
     {
         if(!isset($this->targetUserIds))
         {
-            $this->targetUserIds = DataManager::getPublicationTargetUserIds($this->publicationId, null);
+            $this->targetUserIds = $this->dataManagerWrapper->getPublicationTargetUserIds($this->publicationId);
         }
 
         return $this->targetUserIds;
