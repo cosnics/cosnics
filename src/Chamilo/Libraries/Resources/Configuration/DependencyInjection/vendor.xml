@@ -21,14 +21,5 @@
                 method="createTranslator" />
         </service>
 
-        <!-- DOCTRINE -->
-        <service
-            id="doctrine.dbal.connection"
-            class="Doctrine\DBAL\Connection">
-            <factory
-                service="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
-                method="getConnection" />
-        </service>
-
     </services>
 </container>

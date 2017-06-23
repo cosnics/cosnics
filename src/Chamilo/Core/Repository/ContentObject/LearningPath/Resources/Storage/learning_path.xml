@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="learning_path">
+<object name="repository_learning_path">
     <properties>
         <property name="id" type="integer" unsigned="1" notnull="1" />
         <property name="automatic_numbering" type="text" notnull="1" length="15" default="none" />

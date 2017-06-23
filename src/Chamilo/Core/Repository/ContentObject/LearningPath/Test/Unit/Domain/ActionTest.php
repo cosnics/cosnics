@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Domain;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Domain;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Libraries\Architecture\Test\Test;
