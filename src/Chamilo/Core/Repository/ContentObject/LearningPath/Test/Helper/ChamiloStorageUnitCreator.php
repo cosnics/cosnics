@@ -51,8 +51,7 @@ class ChamiloStorageUnitCreator
 
         /** @var SplFileInfo[] | Finder $files */
         $files = $finder->in($storagePath)
-            ->files()
-            ->name('*.xml');
+            ->files();
 
         if(!empty($storageUnitNames))
         {
@@ -61,10 +60,14 @@ class ChamiloStorageUnitCreator
                 $files->name($storageUnitName . '.xml');
             }
         }
+        else
+        {
+            $files->name('*.xml');
+        }
 
         foreach ($files as $file)
         {
-            $this->createStorageUnitFromXMLFile($file);
+            $this->createStorageUnitFromXMLFile($file->getPathname());
         }
     }
 
