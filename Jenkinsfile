@@ -35,7 +35,8 @@ try {
 def notifySlack(String buildStatus = 'STARTED') {
         // Build status of null means success.
         buildStatus = buildStatus ?: 'SUCCESS'
-
+        
+        def extraMessage
         def color
 
         if (buildStatus == 'STARTED') {
@@ -48,7 +49,7 @@ def notifySlack(String buildStatus = 'STARTED') {
             color = '#FF9FA1'
         }
 
-        def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
+        def msg = "${buildStatus}: `${env.JOB_NAME}` #<${env.BUILD_URL}|${env.BUILD_NUMBER}>"
 
         slackSend(color: color, message: msg)
  }
