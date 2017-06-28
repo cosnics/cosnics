@@ -36,20 +36,21 @@ def notifySlack(String buildStatus = 'STARTED') {
         // Build status of null means success.
         buildStatus = buildStatus ?: 'SUCCESS'
         
-        def extraMessage
+        def extraMessage = ""
         def color
 
         if (buildStatus == 'STARTED') {
             color = '#D4DADF'
         } else if (buildStatus == 'SUCCESS') {
             color = '#BDFFC3'
+            extraMessage = " - <https://demo.cosnics.org/${BRANCH_NAME}|demo>"
         } else if (buildStatus == 'UNSTABLE') {
             color = '#FFFE89'
         } else {
             color = '#FF9FA1'
         }
 
-        def msg = "${buildStatus}: `${env.JOB_NAME}` #<${env.BUILD_URL}|${env.BUILD_NUMBER}>"
+        def msg = "BUILD ${buildStatus}: `${env.JOB_NAME}` <${env.BUILD_URL}|#${env.BUILD_NUMBER}> ${extraMessage}"
 
         slackSend(color: color, message: msg)
  }
