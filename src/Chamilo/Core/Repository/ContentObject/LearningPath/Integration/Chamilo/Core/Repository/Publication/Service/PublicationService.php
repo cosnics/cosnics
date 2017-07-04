@@ -104,7 +104,10 @@ class PublicationService
             $tree = $this->getTreeForTreeNodeData($treeNodeData);
             foreach ($tree->getTreeNodes() as $treeNode)
             {
-                if ($treeNode->getContentObject()->getId() != $contentObjectId)
+                if (
+                    $treeNodeData->getLearningPathId() == $contentObjectId ||
+                    $treeNode->getContentObject()->getId() != $contentObjectId
+                )
                 {
                     continue;
                 }
