@@ -211,11 +211,19 @@ ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt`
   DROP `min_score`,
   DROP `max_score`;
 
+ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` CHANGE `learning_path_item_id` `tree_node_data_id` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `tracking_weblcms_learning_path_tree_node_question_attempt` CHANGE `item_attempt_id` `tree_node_attempt_id` INT(10) UNSIGNED NOT NULL;
+
+ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt`
+  ADD INDEX(`user_id`),
+  ADD INDEX(`learning_path_id`),
+  ADD INDEX(`publication_id`);
+
 # ALTER TABLE `tracking_weblcms_learning_path_attempt` ADD `publication_id` INT(10) UNSIGNED NOT NULL AFTER `learning_path_id`;
 # UPDATE `tracking_weblcms_learning_path_attempt` SET publication_id = learning_path_id;
 
 UPDATE `tracking_weblcms_learning_path_tree_node_attempt` TN_ATT
-  JOIN tracking_weblcms_learning_path_attempt LP_ATT
+  JOIN tracking_weblcms_learning_path_attempt LP_ATT on TN_ATT.learning_path_attempt_id = LP_ATT.id
 SET TN_ATT.user_id = LP_ATT.user_id, TN_ATT.learning_path_id = LP_ATT.learning_path_id;
 
 UPDATE `tracking_weblcms_learning_path_tree_node_attempt` SET publication_id = learning_path_id;
@@ -225,10 +233,7 @@ JOIN weblcms_content_object_publication PUB on PUB.id = ATT.publication_id
 SET ATT.learning_path_id = PUB.content_object_id;
 
 DROP TABLE tracking_weblcms_learning_path_attempt;
-
 ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` DROP `learning_path_attempt_id`;
-ALTER TABLE `tracking_weblcms_learning_path_tree_node_attempt` CHANGE `learning_path_item_id` `tree_node_data_id` INT(10) UNSIGNED NOT NULL;
-ALTER TABLE `tracking_weblcms_learning_path_question_attempt` CHANGE `item_attempt_id` `tree_node_attempt_id` INT(10) UNSIGNED NOT NULL;
 
 UPDATE `tracking_weblcms_learning_path_tree_node_attempt`
 SET status = 1 WHERE status IN ('passed', 'failed', 'completed');

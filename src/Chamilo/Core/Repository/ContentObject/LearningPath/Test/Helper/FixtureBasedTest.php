@@ -44,7 +44,7 @@ abstract class FixtureBasedTest extends DependencyInjectionBasedTest
      * Returns the fixture files that need to be inserted. This method requires a multidimensional array with the
      * names of the fixture files per context
      *
-     * [ $context => [$storageUnit1, $storageUnit2] ]
+     * [ $context => [$fixtureFileName1, $fixtureFileName2] ]
      *
      * @return array
      */
