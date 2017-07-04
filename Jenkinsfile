@@ -1,11 +1,12 @@
 try {
-    notifySlack()
     pipeline {
             agent any
 
             stages {
                 stage('Run Composer') {
                     steps {
+                        echo 'Notifying slack build has started'
+                        notifySlack()
                         echo 'Composer update'
                         sh 'composer update'
                     }
