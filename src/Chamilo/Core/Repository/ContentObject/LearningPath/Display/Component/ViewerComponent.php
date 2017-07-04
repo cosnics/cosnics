@@ -131,12 +131,14 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     $this->getCurrentTreeNode()->getTreeNodeData() &&
                     $this->getCurrentTreeNode()->getTreeNodeData()->isBlocked()
                 ) ||
-                $this->get_root_content_object()->enforcesDefaultTraversingOrder()
+                $this->learningPath->enforcesDefaultTraversingOrder()
             )
         )
         {
-            $html[] = '<div class="alert alert-warning">' .
-                Translation::getInstance()->getTranslation('ThisStepIsRequired') . '</div>';
+            $message = $this->learningPath->enforcesDefaultTraversingOrder() ?
+                'LearningPathEnforcesDefaultTraversingOrder' : 'ThisStepIsRequired';
+
+            $html[] = '<div class="alert alert-warning">' . $translator->getTranslation($message) . '</div>';
         }
 
         $html[] = $embedder->run();
