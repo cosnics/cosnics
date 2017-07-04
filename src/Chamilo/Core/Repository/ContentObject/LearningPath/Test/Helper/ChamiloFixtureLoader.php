@@ -24,4 +24,15 @@ class ChamiloFixtureLoader extends NativeLoader
             )
         );
     }
+
+    /**
+     * Seed used to generate random data. The seed is passed to the random number generator, so calling the a script
+     * twice with the same seed produces the same results.
+     *
+     * @return int|null
+     */
+    protected function getSeed()
+    {
+        return 100;
+    }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="weblcms_learning_path_tree_node_attempt">
+<object name="tracking_weblcms_learning_path_tree_node_attempt">
     <properties>
         <property
             name="id"

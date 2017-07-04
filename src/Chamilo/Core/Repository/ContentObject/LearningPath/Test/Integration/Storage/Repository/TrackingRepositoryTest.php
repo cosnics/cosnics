@@ -2,9 +2,17 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Storage\Repository;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\FixtureBasedTest;
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Tests the TrackingRepository
@@ -66,12 +74,77 @@ class TrackingRepositoryTest extends FixtureBasedTest
      */
     protected function getFixtureFiles()
     {
-        return [];
+        return ['Chamilo\Core\Repository\ContentObject\LearningPath' => ['TreeNodeAttempt', 'TreeNodeQuestionAttempt']];
     }
 
-    public function test()
+    public function testClearTreeNodeAttemptCache()
     {
+        $this->trackingRepository->clearTreeNodeAttemptCache();
+        $this->assertTrue(true);
+    }
 
+    public function testFindTreeNodeAttempts()
+    {
+        $learningPath = new LearningPath();
+        $learningPath->setId(1);
+
+        $user = new User();
+        $user->setId(2);
+
+        $this->assertCount(11, $this->trackingRepository->findTreeNodeAttempts($learningPath, $user));
+    }
+
+    public function testFindTreeNodeAttemptsForLearningPath()
+    {
+        $learningPath = new LearningPath();
+        $learningPath->setId(1);
+
+        $this->assertCount(16, $this->trackingRepository->findTreeNodeAttemptsForLearningPath($learningPath));
+    }
+
+    public function testFindActiveTreeNodeAttempt()
+    {
+        $learningPath = new LearningPath();
+        $learningPath->setId(1);
+
+        $lpTreeNodeData = new TreeNodeData();
+        $lpTreeNodeData->setId(1);
+
+        $user = new User();
+        $user->setId(2);
+
+        $tree = new Tree();
+        $treeNode = new TreeNode($tree, $learningPath, $lpTreeNodeData);
+
+        $this->assertEquals(
+            16, $this->trackingRepository->findActiveTreeNodeAttempt($learningPath, $treeNode, $user)->getId()
+        );
+    }
+
+    public function testFindTreeNodeAttemptById()
+    {
+        $this->assertEquals(16, $this->trackingRepository->findTreeNodeAttemptById(16)->getId());
+    }
+
+    public function testFindTreeNodeQuestionAttempts()
+    {
+        $treeNodeAttempt = new LearningPathTreeNodeAttempt();
+        $treeNodeAttempt->setId(1);
+
+        $this->assertCount(10, $this->trackingRepository->findTreeNodeQuestionAttempts($treeNodeAttempt));
+    }
+
+    public function testFindLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts()
+    {
+        $learningPath = new LearningPath();
+        $learningPath->setId(1);
+
+        $this->assertCount(
+            10,
+            $this->trackingRepository->findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
+                $learningPath
+            )
+        );
     }
 }
 
