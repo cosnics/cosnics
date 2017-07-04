@@ -41,6 +41,7 @@ def notifySlack(String buildStatus = 'STARTED') {
 
         if (buildStatus == 'STARTED') {
             color = '#D4DADF'
+            extraMessage = getChangeString()
         } else if (buildStatus == 'SUCCESS') {
             color = '#BDFFC3'
             extraMessage = " - <https://demo.cosnics.org/${BRANCH_NAME}|demo>"
@@ -54,3 +55,24 @@ def notifySlack(String buildStatus = 'STARTED') {
 
         slackSend(color: color, message: msg)
  }
+
+@NonCPS
+def getChangeString() {
+    MAX_MSG_LEN = 100
+    def changeString = ""
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            truncated_msg = entry.msg.take(MAX_MSG_LEN)
+            changeString += " - ${truncated_msg} [${entry.author}]\n"
+        }
+    }
+
+    if (!changeString) {
+        changeString = " - No new changes"
+    }
+    
+    return changeString
+}
