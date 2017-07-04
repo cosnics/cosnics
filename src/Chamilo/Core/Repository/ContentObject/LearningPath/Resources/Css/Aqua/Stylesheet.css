@@ -149,19 +149,20 @@ ul.tree-menu li div a.type_learning_path_default.type_completed {
 
 #repo-drag-panel #drag-button {
     position: fixed;
-    top: 9%;
+    top: 118px;
     right: 0;
     border-radius: 20px 0 0 20px;
     z-index: 100000;
     padding: 7px 10px 7px 13px;
-    color: #577ab7;
+    background-color: #577ab7;
+    color: #f7f7f7;
 }
 
 #repo-drag-panel .cd-panel-container {
     /*...*/
     position: fixed;
     width: 245px;
-    top: 9%;
+    top: 118px;
     right: 0;
     z-index: 100000;
     border: 1px solid lightgray;
