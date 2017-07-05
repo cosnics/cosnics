@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -223,7 +224,14 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     )
     {
         $parameters = new DataClassCountParameters(
-            $condition, $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds)
+            $condition, $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds),
+            new FunctionConditionVariable(
+                FunctionConditionVariable::DISTINCT,
+                new PropertyConditionVariable(
+                    $this->trackingParameters->getTreeNodeAttemptClassName(),
+                    TreeNodeAttempt::PROPERTY_USER_ID
+                )
+            )
         );
 
         return $this->dataClassRepository->count($this->trackingParameters->getTreeNodeAttemptClassName(), $parameters);
@@ -248,8 +256,10 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $joinConditions[] = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath);
         $joinConditions[] = $this->getConditionForCompletedTreeNodesData($treeNodeDataIds);
 
+        $joinCondition = new AndCondition($joinConditions);
+
         $joins = new Joins();
-        $joins->add(new Join(User::class_name(), $this->getConditionForTreeNodeAttemptWithUser(), $joinType));
+        $joins->add(new Join(User::class_name(), $joinCondition, $joinType));
 
         return $joins;
     }
@@ -323,12 +333,13 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      */
     public function countTargetUsersForLearningPath(LearningPath $learningPath, Condition $condition = null)
     {
-        if(empty($condition))
+        if (empty($condition))
         {
             return count($this->trackingParameters->getLearningPathTargetUserIds($learningPath));
         }
 
         $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
+
         return $this->dataClassRepository->count(User::class_name(), $condition);
     }
 
@@ -379,12 +390,11 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * Returns the condition needed to retrieve TreeNodeAttempt objects for a given LearningPath
      *
      * @param LearningPath $learningPath
-     * @param Condition $conditionToAdd
      *
      * @return AndCondition
      */
     protected function getConditionForTreeNodeAttemptsForLearningPath(
-        LearningPath $learningPath, Condition $conditionToAdd = null
+        LearningPath $learningPath
     )
     {
         $conditions = array();
@@ -403,11 +413,6 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
             $conditions[] = $customCondition;
         }
 
-        if ($conditionToAdd instanceof Condition)
-        {
-            $conditions[] = $conditionToAdd;
-        }
-
         return new AndCondition($conditions);
     }
 
@@ -416,12 +421,11 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      *
      * @param LearningPath $learningPath
      * @param User $user
-     * @param Condition $conditionToAdd
      *
      * @return AndCondition
      */
     protected function getConditionForTreeNodeAttemptsForLearningPathAndUser(
-        LearningPath $learningPath, User $user, Condition $conditionToAdd = null
+        LearningPath $learningPath, User $user
     )
     {
         $conditions = array();
@@ -434,7 +438,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
             new StaticConditionVariable($user->getId())
         );
 
-        $conditions[] = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath, $conditionToAdd);
+        $conditions[] = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath);
 
         return new AndCondition($conditions);
     }

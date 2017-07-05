@@ -28,7 +28,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         $storage = $this->getStorage();
 
-        if (!isset($storage))
+        if (!isset($storage) || empty($storage))
         {
             $this->setStorage(array());
         }
