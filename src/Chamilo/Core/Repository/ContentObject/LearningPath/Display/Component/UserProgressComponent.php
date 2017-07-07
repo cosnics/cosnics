@@ -5,8 +5,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Exporter;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer\CsvWriter;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -37,6 +41,14 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         {
             throw new NotAllowedException();
         }
+
+//        $pathBuilder = $this->getConfigurablePathBuilder();
+//        $filename = $pathBuilder->getTemporaryPath(Manager::context()) . 'UsersProgressExport.csv';
+//        Filesystem::create_dir(dirname($filename));
+//        $csvWriter = new CsvWriter($filename);
+//
+//        $exporter = new Exporter($this->getTrackingService());
+//        $exporter->exportUserProgress($this->learningPath, $this->getCurrentTreeNode(), $csvWriter);
 
         $panelRenderer = new PanelRenderer();
         $translator = Translation::getInstance();
