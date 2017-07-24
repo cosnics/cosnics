@@ -110,6 +110,12 @@ class ContentObjectResourceRenderer
                 if (!$object instanceof ContentObject) {
                     continue;
                 }
+
+                $securityCode = $placeholder->getAttribute('data-security-code');
+                if(empty($securityCode) || $securityCode != $object->calculate_security_code())
+                {
+                    continue;
+                }
             } catch (\Exception $exception) {
                 continue;
             }

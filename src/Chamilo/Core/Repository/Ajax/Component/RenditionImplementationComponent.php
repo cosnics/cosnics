@@ -17,8 +17,6 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     const PARAM_VIEW = 'view';
     const PARAM_PARAMETERS = 'parameters';
 
-    const PARAM_SECURITY_CODE = 'security_code';
-
     const PROPERTY_RENDITION = 'rendition';
 
     /*
@@ -27,11 +25,11 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     public function getRequiredPostParameters()
     {
         return array(
-            self :: PARAM_CONTENT_OBJECT_ID,
-            self :: PARAM_FORMAT,
-            self :: PARAM_VIEW,
-            self :: PARAM_SECURITY_CODE,
-            self :: PARAM_PARAMETERS
+            self::PARAM_CONTENT_OBJECT_ID,
+            self::PARAM_FORMAT,
+            self::PARAM_VIEW,
+            self::PARAM_SECURITY_CODE,
+            self::PARAM_PARAMETERS
         );
     }
 
@@ -47,7 +45,7 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
              */
             $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
                 ContentObject:: class_name(),
-                $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID)
+                $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID)
             );
 
             $security_code = $this->getPostDataValue(self::PARAM_SECURITY_CODE);
@@ -58,25 +56,25 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
 
             $display = ContentObjectRenditionImplementation:: factory(
                 $object,
-                $this->getPostDataValue(self :: PARAM_FORMAT),
-                $this->getPostDataValue(self :: PARAM_VIEW),
+                $this->getPostDataValue(self::PARAM_FORMAT),
+                $this->getPostDataValue(self::PARAM_VIEW),
                 $this
             );
 
-            $rendition = $display->render($this->getPostDataValue(self :: PARAM_PARAMETERS));
+            $rendition = $display->render($this->getPostDataValue(self::PARAM_PARAMETERS));
         }
         catch (NotAllowedException $ex)
         {
             $result = new JsonAjaxResult(401);
             $result->display(); //contains exit.
         }
-        catch( \Exception $ex)
+        catch (\Exception $ex)
         {
             $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
         }
 
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_RENDITION, $rendition);
+        $result->set_property(self::PROPERTY_RENDITION, $rendition);
         $result->display();
     }
 }

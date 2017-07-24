@@ -202,6 +202,10 @@
             }
         };
 
+        var rendition = {
+            url: ''
+        };
+
         $.ajax({
             type : "POST",
             url : ajaxUri,
@@ -209,8 +213,11 @@
             async : false
         }).success(function(json)
         {
-            rendition = json.properties.rendition;
+            if(json.result_code == 200) {
+                rendition = json.properties.rendition;
+            }
         }).error(function(error) {
+
         });
 
         return rendition;
