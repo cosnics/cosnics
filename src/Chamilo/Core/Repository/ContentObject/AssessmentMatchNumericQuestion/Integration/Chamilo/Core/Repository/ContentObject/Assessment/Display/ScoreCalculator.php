@@ -23,7 +23,17 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         
         $max_score = $question->get_best_option()->get_score();
         $options = $question->get_options();
-        
+
+        usort($options, function($optionA, $optionB) {
+            $scoreA = $optionA->get_score();
+            $scoreB = $optionB->get_score();
+
+            if ($scoreA == $scoreB) {
+                return 0;
+            }
+            return ($scoreA < $scoreB) ? 1 : -1;
+        });
+
         $result = 0;
         foreach ($options as $option)
         {

@@ -6,6 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -29,16 +31,15 @@ class LanguageCategoryItem extends CategoryItem
         $sub_html = array();
         
         $languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
+        $currentLanguage = LocalSetting::getInstance()->get('platform_language');
         
         if (count($languages) > 1)
         {
             $redirect = new Redirect();
             $currentUrl = $redirect->getCurrentUrl();
-            
+
             $sub_html[] = '<ul class="dropdown-menu language-selector">';
-            
-            $currentLanguage = LocalSetting::getInstance()->get('platform_language');
-            
+
             foreach ($languages as $isocode => $language)
             {
                 $redirect = new Redirect(
@@ -62,12 +63,19 @@ class LanguageCategoryItem extends CategoryItem
             $sub_html[] = '</ul>';
             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
-        
+
         $html[] = '<li class="dropdown">';
-        
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
-        $html[] = '<div class="chamilo-menu-item-label">';
-        $html[] = $currentLanguage;
+
+        $imagePath = Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Language');
+        $title = $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());
+
+        $html[] = '<img class="chamilo-menu-item-icon' .
+            ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
+            '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
+
+        $html[] = '<div class="chamilo-menu-item-label-with-image">';
+        $html[] = strtoupper($currentLanguage);
         $html[] = '<span class="caret"></span>';
         $html[] = '</div>';
         $html[] = '</a>';

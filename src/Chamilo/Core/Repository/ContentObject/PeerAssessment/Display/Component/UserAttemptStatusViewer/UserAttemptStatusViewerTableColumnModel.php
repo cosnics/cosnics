@@ -3,13 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
-use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
  * This class represents a column model for a publication candidate table
  */
-class UserAttemptStatusViewerTableColumnModel extends DataClassTableColumnModel implements 
-    TableColumnModelActionsColumnSupport
+class UserAttemptStatusViewerTableColumnModel extends DataClassTableColumnModel
 {
     const COLUMN_STATUS = 'status';
     const COLUMN_TITLE = 'title';

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Install\Form;
 
+use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Install\ValidateDatabaseConnection;
@@ -552,7 +553,7 @@ class SettingsForm extends FormValidator
             $defaults['archive_path'] = Path::getInstance()->getStoragePath('archive');
             $defaults['cache_path'] = Path::getInstance()->getStoragePath('cache');
             $defaults['garbage_path'] = Path::getInstance()->getStoragePath('garbage');
-            $defaults['hotpotatoes_path'] = Path::getInstance()->getStoragePath('hotpotatoes');
+            $defaults['hotpotatoes_path'] = Path::getInstance()->getPublicStoragePath(Hotpotatoes::package());
             $defaults['logs_path'] = Path::getInstance()->getStoragePath('logs');
             $defaults['repository_path'] = Path::getInstance()->getStoragePath('repository');
             $defaults['scorm_path'] = Path::getInstance()->getStoragePath('scorm');

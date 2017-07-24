@@ -46,7 +46,9 @@
             async : false
         }).success(function(json)
         {
-            rendition = json.properties.rendition.url;
+            if(json['result_code'] == 200) {
+                rendition = json.properties.rendition.url;
+            }
         });
 
         return rendition;

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 /**
  * This class represents an table to display resources like thumbnails, images, videos...
  * Refactoring from GalleryObjectTable to support the new Table structure
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class GalleryTable extends Table
@@ -23,12 +23,13 @@ abstract class GalleryTable extends Table
 
     /**
      * The current row that is being processed
-     * 
+     *
      * @var array
      */
     private $current_row;
 
     /**
+     *
      * @var TableFormActions
      */
     protected $form_actions;
@@ -38,36 +39,34 @@ abstract class GalleryTable extends Table
      * Inherited Rendering Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Constructs the sortable table
      */
     protected function constructTable()
     {
-        $count = $this->get_default_row_count();
-        
         $this->table = new GalleryHTMLTable(
-            $this->get_name(), 
-            array($this, 'countData'), 
-            array($this, 'getData'), 
-            array($this, 'get_property_model'), 
-            0, 
-            $count, 
-            SORT_ASC, 
-            ! $this->prohibits_order_direction(), 
+            $this->get_name(),
+            array($this, 'countData'),
+            array($this, 'getData'),
+            array($this, 'get_property_model'),
+            $this->get_property_model()->get_default_order_property() + ($this->has_form_actions() ? 1 : 0),
+            $this->get_default_row_count(),
+            $this->get_property_model()->get_default_order_direction(),
+            ! $this->prohibits_order_direction(),
             ! $this->prohibits_page_selection());
-        
+
         if ($this->has_form_actions())
         {
             $this->table->setTableFormActions($this->get_form_actions());
         }
-        
+
         $this->table->setAdditionalParameters($this->get_parameters());
     }
 
     /**
      * Initializes the table
-     * 
+     *
      * @return HTML_Table
      */
     protected function initialize_table()
@@ -79,11 +78,11 @@ abstract class GalleryTable extends Table
      * Inherited Data Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Retrieves the data from the data provider, parses the data through the cell renderer and returns the data
      * as an array
-     * 
+     *
      * @param int $offset
      * @param int $count
      * @param int $order_column
@@ -94,18 +93,18 @@ abstract class GalleryTable extends Table
     public function getData($offset, $count, $order_column, $order_direction)
     {
         $table_data = parent::getData($offset, $count, $order_column, $order_direction);
-        
+
         if (count($this->current_row) > 0)
         {
             $table_data[] = $this->current_row;
         }
-        
+
         return $table_data;
     }
 
     /**
      * Returns the order property as ObjectTableOrder
-     * 
+     *
      * @param int $order_index
      * @param int $order_direction
      *
@@ -118,7 +117,7 @@ abstract class GalleryTable extends Table
 
     /**
      * Handles a single result of the data and adds it to the table data
-     * 
+     *
      * @param $table_data
      * @param $result
      */
@@ -129,9 +128,9 @@ abstract class GalleryTable extends Table
             $table_data[] = $this->current_row;
             $this->current_row = array();
         }
-        
+
         $this->current_row[] = array(
-            $this->get_cell_renderer()->render_id_cell($result), 
+            $this->get_cell_renderer()->render_id_cell($result),
             $this->get_cell_renderer()->render_cell($result));
     }
 
@@ -140,10 +139,10 @@ abstract class GalleryTable extends Table
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Gets the table's cell renderer or builds one if it is not set
-     * 
+     *
      * @throws \Exception
      *
      * @return GalleryTableCellRenderer The cell renderer
@@ -155,7 +154,7 @@ abstract class GalleryTable extends Table
         {
             throw new \Exception('The cell renderer must be of type GalleryTableCellRenderer');
         }
-        
+
         return $cell_renderer;
     }
 
@@ -164,10 +163,10 @@ abstract class GalleryTable extends Table
      * Additional Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Gets the default column count of the table.
-     * 
+     *
      * @return int The number of columns.
      */
     public function get_default_column_count()
@@ -177,7 +176,7 @@ abstract class GalleryTable extends Table
 
     /**
      * Returns whether or not the table has form actions
-     * 
+     *
      * @return boolean
      */
     public function has_form_actions()
@@ -188,7 +187,7 @@ abstract class GalleryTable extends Table
 
     /**
      * Gets the actions for the mass-update form at the bottom of the table.
-     * 
+     *
      * @return TableFormActions The actions as an associative array.
      */
     public function get_form_actions()
@@ -197,13 +196,13 @@ abstract class GalleryTable extends Table
         {
             $this->form_actions = $this->get_implemented_form_actions();
         }
-        
+
         return $this->form_actions;
     }
 
     /**
      * Gets the table's property model.
-     * 
+     *
      * @return GalleryTablePropertyModel The properties.
      */
     public function get_property_model()
@@ -218,7 +217,7 @@ abstract class GalleryTable extends Table
 
     /**
      * Returns if this table supports order direction or not
-     * 
+     *
      * @return boolean
      */
     public function prohibits_order_direction()

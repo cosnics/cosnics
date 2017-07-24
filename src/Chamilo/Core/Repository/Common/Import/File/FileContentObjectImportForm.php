@@ -83,4 +83,12 @@ class FileContentObjectImportForm extends ContentObjectImportForm
                 self::PROPERTY_TYPE => ContentObjectImport::FORMAT_FILE, 
                 self::PROPERTY_LINK => 'http://'));
     }
+    
+    /**
+     * @return boolean
+     */
+    protected function implementsDropZoneSupport()
+    {
+        return true;
+    }
 }

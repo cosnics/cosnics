@@ -5,8 +5,8 @@
     </properties>
     <translations>
         <variable value="TypeName">
-            <translation language="en">short answer question</translation>
-            <translation language="nl">kort antwoord vraag</translation>
+            <translation language="en">Short answer question</translation>
+            <translation language="nl">Kort antwoord vraag</translation>
             <translation language="fr">Question de correspondance</translation>
             <translation language="de">Übereinstimmende Textfrage</translation>
         </variable>

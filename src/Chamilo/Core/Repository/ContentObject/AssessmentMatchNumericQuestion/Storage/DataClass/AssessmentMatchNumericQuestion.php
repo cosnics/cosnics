@@ -49,6 +49,9 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
+    /**
+     * @return AssessmentMatchNumericQuestionOption[]
+     */
     public function get_options()
     {
         if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))

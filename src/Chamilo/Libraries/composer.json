@@ -13,9 +13,9 @@
         "danielstjules/stringy" : "2.*",
         "ensepar/html2pdf" : "=1.0.1",
         "phpoffice/phpexcel" : "1.8.*",
-        "kigkonsult/icalcreator": "*",
-        "fastfeed/fastfeed": "=0.4.0",
+        "kigkonsult/icalcreator": "2.22.5",
         "simplepie/simplepie": "1.*",
+        "ezyang/htmlpurifier": "4.9.2",
         "sentry/sentry": "*",
         "google/recaptcha": "~1.1"
     },

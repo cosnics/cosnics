@@ -88,8 +88,8 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 foreach ($options as $index => $option)
                 {
                     $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_TOLERANCE][$index] = $option->get_tolerance();
-                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
+                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_TOLERANCE][$index] = $option->get_tolerance() ? $option->get_tolerance() : 0;
+                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$index] = !is_null($option->get_score()) ? $option->get_score() : 1;
                     $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
                 }
                 
@@ -101,8 +101,8 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
-                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$option_number] = 0;
-                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_TOLERANCE][$option_number] = 1;
+                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_SCORE][$option_number] = 1;
+                    $defaults[AssessmentMatchNumericQuestionOption::PROPERTY_TOLERANCE][$option_number] = 0;
                 }
             }
         }
@@ -175,7 +175,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
             Session::unregister('match_skip_options');
         }
         
-        Session::registerIfNotSet('match_number_of_options', 3);
+        Session::registerIfNotSet('match_number_of_options', 1);
         Session::registerIfNotSet('match_skip_options', array());
         
         $extraOptionRequested = Request::post('add');
@@ -214,7 +214,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $number_of_options = (int) Session::retrieve('match_number_of_options');
         $skippedOptions = Session::retrieve('match_skip_options');
         
-        $this->addElement('category', Translation::get('Options'));
+        $this->addElement('category', Translation::get('PossibleAnswers'));
         $this->addElement(
             'hidden', 
             'match_number_of_options', 
@@ -256,19 +256,6 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                          '">{element}</div>', 
                         AssessmentMatchNumericQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']');
                 
-                // Feedback
-                $this->add_html_editor(
-                    AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']', 
-                    Translation::get('Feedback'), 
-                    false, 
-                    $htmlEditorOptions);
-                
-                $renderer->setElementTemplate(
-                    '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
-                         AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
-                         '"><label>{label}</label>{element}</div>', 
-                        AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
-                
                 // Score
                 $this->addElement(
                     'text', 
@@ -277,11 +264,24 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                     'size="2"  class="input_numeric form-control"');
                 
                 $renderer->setElementTemplate(
-                    '<div class="option-score-field form-assessment-extra-container form-inline" data-element="' .
+                    '<div class="option-score-field assessment_match_question_score_container form-inline" data-element="' .
                          AssessmentMatchNumericQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
                          '"><label>{label}:</label> {element}</div>', 
                         AssessmentMatchNumericQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
-                
+
+                // Feedback
+                $this->add_html_editor(
+                    AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
+                    Translation::get('Feedback'),
+                    false,
+                    $htmlEditorOptions);
+
+                $renderer->setElementTemplate(
+                    '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
+                    AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
+                    '"><label>{label}</label>{element}</div>',
+                    AssessmentMatchNumericQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
+
                 // Tolerance
                 $this->addElement(
                     'text', 
@@ -301,7 +301,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 
                 $actionButtons = array();
                 
-                if ($number_of_options - count($skippedOptions) > 2)
+                if ($number_of_options - count($skippedOptions) > 1)
                 {
                     $removeClass = 'text-danger';
                 }
@@ -312,8 +312,6 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 
                 $actionButtons[] = '<span data-option-id="' . $option_number .
                      '" class="option-action option-feedback fa fa-comment text-primary"></span>';
-                $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-score fa fa-percent text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
                      '" class="option-action option-tolerance fa fa-magnet text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .

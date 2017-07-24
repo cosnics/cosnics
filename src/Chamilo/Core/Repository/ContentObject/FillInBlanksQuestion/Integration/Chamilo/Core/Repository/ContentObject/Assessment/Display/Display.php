@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: fill_in_blanks_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
  */
 class Display extends QuestionDisplay
@@ -22,19 +22,19 @@ class Display extends QuestionDisplay
     {
         $complex_question = $this->get_complex_content_object_question();
         $id = $complex_question->get_id();
-        
+
         $question = $this->get_question();
         $answers = $question->get_answers();
         $question_type = $question->get_question_type();
         $answer_text = $question->get_answer_text();
         $answer_text = nl2br($answer_text);
-        
+
         $parts = preg_split(FillInBlanksQuestionAnswer::QUESTIONS_REGEX, $answer_text);
-        
+
         $this->add_html('<div class="panel-body">');
         $this->add_html('<div class="fill_in_the_blanks_text">');
         $this->add_html(array_shift($parts));
-        
+
         if ($question->get_show_inline()) // inline
         {
             $element_template = '<div style="display: inline">{element}</div>';
@@ -45,15 +45,15 @@ class Display extends QuestionDisplay
         }
         $renderer = $this->get_renderer();
         $renderer->setElementTemplate($element_template, 'select');
-        
+
         $index = 0;
-        
+
         $formvalidator = $this->get_formvalidator();
-        
+
         foreach ($parts as $part)
         {
             $name = $id . '_' . $index;
-            
+
             if ($question->get_show_inline()) // inline
             {
                 $this->add_question($name, $id, $index, $question_type, $answers);
@@ -64,57 +64,62 @@ class Display extends QuestionDisplay
                 {
                     $this->add_html(
                         '<span class="fill_in_the_blanks_gap">' .
-                             Translation::get(
-                                'GapNumber', 
-                                array('NUMBER' => ($index + 1)), 
-                                ContentObject::get_content_object_type_namespace($question->get_type_name())) . '</span>');
+                        Translation::get(
+                            'GapNumber',
+                            array('NUMBER' => ($index + 1)),
+                            'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion'
+                        ) . '</span>'
+                    );
                 }
                 else
                 {
                     $this->add_html('<span class="fill_in_the_blanks_gap">' . Translation::get('Answer') . '</span>');
                 }
             }
-            
+
             $this->add_html($part);
             $index ++;
         }
-        
+
         $this->add_html('</div>');
         $this->add_html('<div class="clear"></div>');
         $this->add_html('</div>');
-        
-        if (! $question->get_show_inline())
+
+        if (!$question->get_show_inline())
         {
             $parts = preg_split(FillInBlanksQuestionAnswer::QUESTIONS_REGEX, $answer_text);
             array_shift($parts);
-            
+
             $table_header = array();
-            $table_header[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
+            $table_header[] =
+                '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
             $table_header[] = '<thead>';
             $table_header[] = '<tr>';
-            
+
             if (count($parts) > 1)
             {
                 $table_header[] = '<th class="list"></th>';
                 $table_header[] = '<th>' . Translation::get(
-                    'Answers', 
-                    null, 
-                    ContentObject::get_content_object_type_namespace($question->get_type_name())) . '</th>';
+                        'Answers',
+                        null,
+                        ContentObject::get_content_object_type_namespace($question->get_type_name())
+                    ) . '</th>';
             }
             else
             {
                 $table_header[] = '<th>' . Translation::get(
-                    'Answer', 
-                    null, 
-                    ContentObject::get_content_object_type_namespace($question->get_type_name())) . '</th>';
+                        'Answer',
+                        null,
+                        ContentObject::get_content_object_type_namespace($question->get_type_name())
+                    ) . '</th>';
             }
-            
+
             $table_header[] = '<th>' . Translation::get('Hint') . '</th>';
             $table_header[] = '</tr>';
             $table_header[] = '</thead>';
             $table_header[] = '<tbody>';
             $this->add_html($table_header);
-            
+
             $index = 0;
             foreach ($parts as $part)
             {
@@ -122,7 +127,7 @@ class Display extends QuestionDisplay
                 $this->add_question($name, $id, $index, $question_type, $answers, count($parts) > 1);
                 $index ++;
             }
-            
+
             $table_footer = array();
             $table_footer[] = '</tbody>';
             $table_footer[] = '</table>';
@@ -131,8 +136,9 @@ class Display extends QuestionDisplay
         else
         {
             $hint_table = array();
-            $hint_table[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment" id="hint_table_' .
-                 $id . '" style="display:none;">';
+            $hint_table[] =
+                '<table class="table table-striped table-bordered table-hover table-data take_assessment" id="hint_table_' .
+                $id . '" style="display:none;">';
             $hint_table[] = '<thead>';
             $hint_table[] = '<tr>';
             $hint_table[] = '<th></th>';
@@ -142,16 +148,19 @@ class Display extends QuestionDisplay
             $hint_table[] = '<tbody>';
             $hint_table[] = '</tbody>';
             $hint_table[] = '</table>';
-            
+
             $this->add_html(implode(PHP_EOL, $hint_table));
         }
-        
+
         $formvalidator->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
-                    ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 7), 
-                    true) . 'GiveHint.js'));
+                    ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 7),
+                    true
+                ) . 'GiveHint.js'
+            )
+        );
     }
 
     public function add_html($html)
@@ -165,36 +174,38 @@ class Display extends QuestionDisplay
     {
         $formvalidator = $this->get_formvalidator();
         $select = $formvalidator->createElement('select', $name, '');
-        
+
         $select->addOption('-- ' . Translation::get('SelectAnswer') . ' --');
         foreach ($options as $key => $value)
         {
             $select->addOption($value, $key);
         }
-        
+
         return $select;
     }
 
     public function add_text($name, $size)
     {
         $formvalidator = $this->get_formvalidator();
+
         return $formvalidator->createElement(
-            'text', 
-            $name, 
-            null, 
-            array('class' => FillInBlanksQuestion::TEXT_INPUT_FIELD_CSS_CLASS, 'size' => $size, 'autocomplete' => 'off'));
+            'text',
+            $name,
+            null,
+            array('class' => FillInBlanksQuestion::TEXT_INPUT_FIELD_CSS_CLASS, 'size' => $size, 'autocomplete' => 'off')
+        );
     }
 
     public function add_question($name, $id, $index, $question_type, $answers, $multiple_answers)
     {
         $formvalidator = $this->get_formvalidator();
-        
+
         $group = array();
         if ($multiple_answers)
         {
             $group[] = $formvalidator->createElement('static', null, null, ($index + 1) . '.');
         }
-        
+
         if ($question_type == FillInBlanksQuestion::TYPE_SELECT)
         {
             // combobox
@@ -206,52 +217,55 @@ class Display extends QuestionDisplay
             $size = $this->get_question()->get_input_field_size($index);
             $group[] = $this->add_text($name, $size);
         }
-        
+
         $html = array();
-        
+
         if ($this->get_configuration()->allow_hints())
         {
             if ($question_type != FillInBlanksQuestion::TYPE_SELECT)
             {
                 $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id() . '_' . $index;
-                
+
                 if ($this->get_question()->get_show_inline())
                 {
                     $html[] = '<a title="' . Translation::get('GetHint') . '" id="' . $hint_name .
-                         '" class="button blanks_hint_button character_hint_button" style="width: 16px; height: 16px; margin: 0px 3px; padding: 0px; background-position: top left; border: 0px; background-color: transparent;">&nbsp;</a>';
+                        '" class="button blanks_hint_button character_hint_button" style="width: 16px; height: 16px; margin: 0px 3px; padding: 0px; background-position: top left; border: 0px; background-color: transparent;">&nbsp;</a>';
                 }
                 else
                 {
-                    $html[] = '<a id="' . $hint_name . '" class="button blanks_hint_button character_hint_button">' . Translation::get(
-                        'GetHint') . '</a>';
+                    $html[] = '<a id="' . $hint_name . '" class="button blanks_hint_button character_hint_button">' .
+                        Translation::get(
+                            'GetHint'
+                        ) . '</a>';
                 }
             }
-            
+
             if ($this->get_question()->get_best_answer_for_question($index)->has_hint())
             {
-                
+
                 $hint_name = 'answer_hint_' . $this->get_complex_content_object_question()->get_id() . '_' . $index;
-                
+
                 if ($this->get_question()->get_show_inline())
                 {
                     $html[] = '<a title="' . Translation::get('GetAnswerHint') . '" id="' . $hint_name .
-                         '" class="button blanks_hint_button" style="width: 16px; height: 16px; margin: 0px 3px; padding: 0px; background-position: top left; border: 0px; background-color: transparent;">&nbsp;</a>';
+                        '" class="button blanks_hint_button" style="width: 16px; height: 16px; margin: 0px 3px; padding: 0px; background-position: top left; border: 0px; background-color: transparent;">&nbsp;</a>';
                 }
                 else
                 {
                     $html[] = '<a id="' . $hint_name . '" class="button blanks_hint_button">' . Translation::get(
-                        'GetAnswerHint') . '</a>';
+                            'GetAnswerHint'
+                        ) . '</a>';
                 }
             }
-            
+
             $hint_buttons = implode(" ", $html);
             $hint_buttons = strlen($hint_buttons) > 0 ? ' ' . $hint_buttons : '';
-            
+
             $group[] = $formvalidator->createElement('static', null, null, $hint_buttons);
         }
-        
+
         $formvalidator->addGroup($group, 'option_' . $id . '_' . $index, null, '', false);
-        
+
         $renderer = $this->get_renderer();
         if ($this->get_question()->get_show_inline())
         {
@@ -261,8 +275,9 @@ class Display extends QuestionDisplay
         else
         {
             $renderer->setElementTemplate(
-                '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
-                'option_' . $id . '_' . $index);
+                '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
+                'option_' . $id . '_' . $index
+            );
             $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $id . '_' . $index);
         }
     }
@@ -270,7 +285,7 @@ class Display extends QuestionDisplay
     public function get_question_options($index, $answers)
     {
         $result = array();
-        
+
         foreach ($answers as $answer)
         {
             if ($answer->get_position() == $index)
@@ -279,13 +294,13 @@ class Display extends QuestionDisplay
                 $result[(string) $option] = $option;
             }
         }
-        
+
         $clo_question = $this->get_complex_content_object_question();
         if ($clo_question->get_random())
         {
             $result = $this->shuffle_with_keys($result);
         }
-        
+
         return $result;
     }
 

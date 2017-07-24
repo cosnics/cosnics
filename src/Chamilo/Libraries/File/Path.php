@@ -143,7 +143,8 @@ class Path
         else
         {
             $basePath = realpath(
-                $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'Files');
+                $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web'
+            ) . DIRECTORY_SEPARATOR . 'Files';
         }
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
              ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(

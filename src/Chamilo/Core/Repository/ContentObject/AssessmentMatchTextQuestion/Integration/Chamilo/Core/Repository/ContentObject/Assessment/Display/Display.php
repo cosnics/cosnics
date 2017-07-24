@@ -20,7 +20,10 @@ class Display extends QuestionDisplay
         $renderer = $this->get_renderer();
         $clo_question = $this->get_complex_content_object_question();
         $question = $this->get_question();
-        
+
+        $formvalidator->addElement('html', '<div class="panel-body">');
+        $formvalidator->addElement('html', $this->get_instruction());
+
         $textarea_width = '400px';
         $textarea_height = '50px';
         $textarea_style = 'width: ' . $textarea_width . '; height: ' . $textarea_height . ';';
@@ -36,7 +39,9 @@ class Display extends QuestionDisplay
         $name = $clo_question->get_id() . '_0';
         $formvalidator->addElement('textarea', $name, '', array('style' => $textarea_style));
         $renderer->setElementTemplate($element_template, $name);
-        
+
+        $formvalidator->addElement('html', '</div>');
+
         $formvalidator->addElement(
             'html', 
             ResourceManager::getInstance()->get_resource_html(
@@ -48,6 +53,11 @@ class Display extends QuestionDisplay
         return true;
     }
 
+    public function needsDescriptionBorder()
+    {
+        return true;
+    }
+
     public function get_instruction()
     {
         $instruction = array();
@@ -55,9 +65,11 @@ class Display extends QuestionDisplay
         
         if ($question->has_description())
         {
-            $instruction[] = '<div class="splitter">';
+            $instruction[] = '<p>';
+            $instruction[] = '<strong>';
             $instruction[] = Translation::get('EnterAnswer');
-            $instruction[] = '</div>';
+            $instruction[] = '</strong>';
+            $instruction[] = '</p>';
         }
         else
         {
@@ -76,10 +88,9 @@ class Display extends QuestionDisplay
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
             $html[] = '<div class="panel-body">';
-            $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
-                 Translation :: get('GetAHint') . '</a></div>';
+            $html[] = '<a id="' . $hint_name .
+                '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
+                Translation::get('GetAHint') . '</a>';
             $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);

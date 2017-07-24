@@ -208,6 +208,11 @@ div.description_hotspot #hotspot_marking, div.description_hotspot .hotspot_marki
     margin-bottom: 0px;
 }
 
+div.hotspot-question-info
+{
+	margin-top: 20px;
+}
+
 img.set_hotspot {
     cursor: pointer;
 }

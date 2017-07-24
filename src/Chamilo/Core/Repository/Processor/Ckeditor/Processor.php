@@ -18,7 +18,7 @@ class Processor extends HtmlEditorProcessor
     public function run()
     {
         $selected_object = $this->get_selected_content_objects();
-        
+
         if (is_array($selected_object) && count($selected_object) > 0)
         {
             $selected_object = $selected_object[0];
@@ -70,8 +70,9 @@ class Processor extends HtmlEditorProcessor
             . ');';
              // . '\');';
         $html[] = 'window.close();';
-        $html[] = '</script>';
         
+        $html[] = '</script>';
+
         return implode(PHP_EOL, $html);
     }
 }

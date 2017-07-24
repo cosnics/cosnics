@@ -7,11 +7,10 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc
  */
 abstract class AssessmentQuestionResultDisplay
@@ -35,7 +34,7 @@ abstract class AssessmentQuestionResultDisplay
 
     private $hints;
 
-    public function __construct(Application $viewerApplication, $complex_content_object_question, $question_nr, $answers, 
+    public function __construct(Application $viewerApplication, $complex_content_object_question, $question_nr, $answers,
         $score, $hints)
     {
         $this->viewerApplication = $viewerApplication;
@@ -85,22 +84,22 @@ abstract class AssessmentQuestionResultDisplay
     public function as_html()
     {
         $html = array();
-        
+
         $html[] = $this->header();
-        
+
         if ($this->add_borders())
         {
             $html[] = '<div class="with_borders">';
         }
-        
+
         $html[] = $this->get_question_result();
-        
+
         if ($this->add_borders())
         {
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
-        
+
         $html[] = $this->footer();
         return implode(PHP_EOL, $html);
     }
@@ -120,17 +119,17 @@ abstract class AssessmentQuestionResultDisplay
         $html[] = '<h3 class="panel-title pull-left">' . $this->question_nr . '. ' . $this->question->get_title() . '</h3>';
 
         $html[] = '<div class="pull-right">';
-        
+
         if ($this->hints > 0)
         {
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
             $label = Translation::get($variable, array('COUNT' => $this->hints));
-            
+
             $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme::getInstance()->getImagePath(
-                'Chamilo\Core\Repository\ContentObject\Assessment\Display', 
+                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
                 'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . htmlentities($label) . '" />&nbsp;&nbsp;';
         }
-        
+
         if ($this->getViewerApplication()->get_configuration()->show_score())
         {
             $html[] = $this->get_score() . ' / ' . $this->get_complex_content_object_question()->get_weight();
@@ -141,7 +140,7 @@ abstract class AssessmentQuestionResultDisplay
         $html[] = '</div>';
 
         $html[] = $this->get_description();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -180,20 +179,20 @@ abstract class AssessmentQuestionResultDisplay
         return false;
     }
 
-    public static function factory(Application $viewerApplication, $complex_content_object_question, $question_nr, 
+    public static function factory(Application $viewerApplication, $complex_content_object_question, $question_nr,
         $answers, $score, $hints)
     {
         $class = $complex_content_object_question->get_ref_object()->package() . '\Integration\\' .
              Assessment::package() . '\Display\ResultDisplay';
-        
+
         $question_result_display = new $class(
-            $viewerApplication, 
-            $complex_content_object_question, 
-            $question_nr, 
-            $answers, 
-            $score, 
+            $viewerApplication,
+            $complex_content_object_question,
+            $question_nr,
+            $answers,
+            $score,
             $hints);
-        
+
         return $question_result_display;
     }
 }

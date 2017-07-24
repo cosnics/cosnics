@@ -83,7 +83,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 foreach ($options as $index => $option)
                 {
                     $defaults[AssessmentMatchTextQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 1;
                     $defaults[AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
                 }
                 
@@ -99,7 +99,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
-                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$option_number] = 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$option_number] = 1;
                 }
             }
         }
@@ -172,7 +172,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
             Session::unregister('match_skip_options');
         }
         
-        Session::registerIfNotSet('match_number_of_options', 3);
+        Session::registerIfNotSet('match_number_of_options', 1);
         Session::registerIfNotSet('match_skip_options', array());
         
         $extraOptionRequested = Request::post('add');
@@ -211,7 +211,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $number_of_options = (int) Session::retrieve('match_number_of_options');
         $skippedOptions = Session::retrieve('match_skip_options');
         
-        $this->addElement('category', Translation::get('Options'));
+        $this->addElement('category', Translation::get('PossibleAnswers'));
         $this->addElement(
             'hidden', 
             'match_number_of_options', 
@@ -251,32 +251,32 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                     '<div class="option-answer-field" data-element="' . AssessmentMatchTextQuestionOption::PROPERTY_VALUE .
                          '[' . $option_number . ']' . '">{element}</div>', 
                         AssessmentMatchTextQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']');
-                
+
+                // Score
+                $this->addElement(
+                    'text',
+                    AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
+                    Translation::get('Score'),
+                    'size="2"  class="input_numeric form-control"');
+
+                $renderer->setElementTemplate(
+                    '<div class="option-score-field assessment_match_question_score_container form-inline" data-element="' .
+                    AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
+                    '"><label>{label}:</label> {element}</div>',
+                    AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
+
                 // Feedback
                 $this->add_html_editor(
                     AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']', 
                     Translation::get('Feedback'), 
                     false, 
                     $htmlEditorOptions);
-                
+
                 $renderer->setElementTemplate(
                     '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
                          AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
                          '"><label>{label}</label>{element}</div>', 
                         AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
-                
-                // Score
-                $this->addElement(
-                    'text', 
-                    AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']', 
-                    Translation::get('Score'), 
-                    'size="2"  class="input_numeric form-control"');
-                
-                $renderer->setElementTemplate(
-                    '<div class="option-score-field form-assessment-extra-container form-inline" data-element="' .
-                         AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
-                         '"><label>{label}:</label> {element}</div>', 
-                        AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
                 
                 $this->addElement('html', '</td>');
                 
@@ -284,7 +284,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 
                 $actionButtons = array();
                 
-                if ($number_of_options - count($skippedOptions) > 2)
+                if ($number_of_options - count($skippedOptions) > 1)
                 {
                     $removeClass = 'text-danger';
                 }
@@ -295,8 +295,6 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 
                 $actionButtons[] = '<span data-option-id="' . $option_number .
                      '" class="option-action option-feedback fa fa-comment text-primary"></span>';
-                $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-score fa fa-percent text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
                      '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
                 

@@ -1526,7 +1526,7 @@ class ContentObject extends CompositeDataClass
      * change was made to the description of an included object, the security code in the including object wouldn't
      * match anymore unless replaced.
      * 
-     * @return type
+     * @return string
      */
     public function calculate_security_code()
     {

@@ -12,7 +12,7 @@
 	min-width: 332px;
 	height: 106px;
 	overflow: hidden;
-	background-color: #C50C2E;
+	background-color: rgb(60, 60, 59);
 	clear: both;
 	white-space: normal;
 	position: fixed;
@@ -30,12 +30,11 @@
 div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
 	width: 72px;
 	height: 72px;
-	border: 1px solid #8f0000;
+	border: 1px solid white;
 	z-index: 10;
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
-	border-top: 1px dotted #8b0504;
 	padding: 8px 16px;
 	position: absolute;
 	bottom: 0px;
@@ -44,5 +43,5 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	text-align: center;
 	color: white;
 	line-height: 16px;
-	background-color: #C50C2E;
+	background-color: rgb(60, 60, 59);
 }

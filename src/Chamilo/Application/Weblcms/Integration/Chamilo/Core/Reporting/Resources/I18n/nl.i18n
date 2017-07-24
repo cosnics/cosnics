@@ -145,3 +145,12 @@ AssignmentSubmissionsTemplate = "assignment_submissions"
 
 LearningPathAttemptProgressInformationBlock = "Information over de voortgang binnen het leerpad"
 LearningPathAttemptProgressBlock = "Voortgang voor individuele stappen binnen het leerpad"
+
+NoOfCoursesBlock = "Aantal cursussen"
+NoOfCoursesByLanguageBlock = "Aantal cursussen per taal"
+CoursesPerCategoryBlock = "Aantal cursussen per categorie"
+MostActiveInactiveLastVisitBlock = "Meest actieve / inactieve cursussen (laatste bezoek)"
+MostActiveInactiveLastPublicationBlock = "Meest actieve / inactieve cursussen (laatste publicatie)"
+MostActiveInactiveLastDetailBlock = "Meest actieve / inactieve cursussen (details)"
+LastAccessToToolsPlatformBlock = "Laatste toegang tot tools"
+NoOfUsersSubscribedCourseBlock = "Aantal gebruikers per cursus"

@@ -33,14 +33,14 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         $authenticationValidator = new AuthenticationValidator(
-            $this->getRequest(), 
+            $this->getRequest(),
             $this->getService('chamilo.configuration.service.configuration_consulter'));
-        
+
         if (! $authenticationValidator->isAuthenticated())
         {
             $authentication = QueryAuthentication::factory('SecurityToken', $this->getRequest());
             $user = $authentication->login();
-            
+
             if ($user instanceof User)
             {
                 $this->getApplicationConfiguration()->setUser($user);
@@ -64,33 +64,33 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             {
                 $icalDownloadUrl = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => self::package(), 
-                        self::PARAM_ACTION => Manager::ACTION_ICAL, 
+                        Application::PARAM_CONTEXT => self::package(),
+                        self::PARAM_ACTION => Manager::ACTION_ICAL,
                         self::PARAM_DOWNLOAD => 1));
-                
+
                 $icalExternalUrl = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => self::package(), 
-                        self::PARAM_ACTION => Manager::ACTION_ICAL, 
+                        Application::PARAM_CONTEXT => self::package(),
+                        self::PARAM_ACTION => Manager::ACTION_ICAL,
                         User::PROPERTY_SECURITY_TOKEN => $this->getUser()->get_security_token()));
-                
+
                 $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getInternalSourceNames());
-                
+
                 $html = array();
-                
+
                 $html[] = $this->render_header();
-                
+
                 $html[] = Display::normal_message(
                     Translation::get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl())));
-                
+
                 $html[] = Display::normal_message(
                     Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
-                
+
                 $html[] = Display::warning_message(
                     Translation::get('ICalWarningMessage', array('INCLUDED_CALENDARS' => $includedCalendars)));
-                
+
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }
@@ -105,13 +105,13 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (! isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), 
-                $this->get_user(), 
-                $this->get_user(), 
-                array(), 
+                new CalendarRendererProviderRepository(),
+                $this->get_user(),
+                $this->get_user(),
+                array(),
                 \Chamilo\Application\Calendar\Ajax\Manager::context());
         }
-        
+
         return $this->calendarRendererProvider;
     }
 

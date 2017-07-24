@@ -30,6 +30,9 @@ class AssessmentSelectQuestion extends ContentObject
         return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
+    /**
+     * @return AssessmentSelectQuestionOption[]
+     */
     public function get_options()
     {
         if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))

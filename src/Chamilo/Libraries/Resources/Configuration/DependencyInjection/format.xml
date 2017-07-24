@@ -18,8 +18,18 @@
                 type="service"
                 id="chamilo.libraries.file.path_builder" />
         </service>
-        <service id="chamilo.libraries.format.utilities.resource_processor" class="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
-            <argument type="service" id="chamilo.libraries.file.path_builder" />
+
+        <service
+            id="chamilo.libraries.format.utilities.resource_processor"
+            class="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path_builder" />
+        </service>
+
+        <service
+            id="chamilo.libraries.format.notification_message.notification_message_renderer"
+            class="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer">
         </service>
     </services>
 </container>

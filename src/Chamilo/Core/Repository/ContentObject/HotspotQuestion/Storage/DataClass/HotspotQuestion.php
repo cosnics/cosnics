@@ -35,6 +35,9 @@ class HotspotQuestion extends ContentObject implements Versionable
         return $this->set_additional_property(self::PROPERTY_ANSWERS, serialize($answers));
     }
 
+    /**
+     * @return HotspotQuestionAnswer[]
+     */
     public function get_answers()
     {
         if ($result = unserialize($this->get_additional_property(self::PROPERTY_ANSWERS)))

@@ -146,3 +146,12 @@ AssignmentSubmitterSubmissionsBlock = "Submissions of the user"
 
 LearningPathAttemptProgressInformationBlock = "Information about the learning path progress"
 LearningPathAttemptProgressBlock = "Learning path item progress"
+
+NoOfCoursesBlock = "Number of courses"
+NoOfCoursesByLanguageBlock = "Number of courses per language"
+CoursesPerCategoryBlock = "Number of courses per category"
+MostActiveInactiveLastVisitBlock = "Most active / inactive courses (based on last visit)"
+MostActiveInactiveLastPublicationBlock = "Most active / inactive courses (based on last visit)"
+MostActiveInactiveLastDetailBlock = "Most active / inactive courses (details)"
+LastAccessToToolsPlatformBlock = "Last access to tools"
+NoOfUsersSubscribedCourseBlock = "Number of users that are subscribed to courses"

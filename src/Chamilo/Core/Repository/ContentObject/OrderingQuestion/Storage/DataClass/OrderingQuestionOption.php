@@ -103,7 +103,7 @@ class OrderingQuestionOption
 
     /**
      *
-     * @param field_type $feedback
+     * @param string $feedback
      */
     public function set_feedback($feedback)
     {

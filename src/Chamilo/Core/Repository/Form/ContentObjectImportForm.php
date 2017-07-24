@@ -63,8 +63,7 @@ abstract class ContentObjectImportForm extends FormValidator
     {
         $categorymenu = new ContentObjectCategoryMenu(
             $this->importFormParameters->getWorkspace(),
-            $this->get_application()->get_user_id()
-        );
+            $this->get_application()->get_user_id());
         $renderer = new OptionsMenuRenderer();
         $categorymenu->render($renderer, 'sitemap');
 
@@ -85,25 +84,29 @@ abstract class ContentObjectImportForm extends FormValidator
             ContentObject::PROPERTY_PARENT_ID,
             Translation::get('CategoryTypeName'),
             $this->get_categories(),
-            array('id' => 'parent_id')
-        );
+            array('id' => 'parent_id'));
 
-        $category_group[] = $this->createElement(
-            'image',
-            'add_category',
-            Theme::getInstance()->getCommonImagePath('Action/Add'),
-            array('id' => 'add_category', 'style' => 'display:none')
-        );
+        if (! $this->implementsDropZoneSupport())
+        {
+            $category_group[] = $this->createElement(
+                'image',
+                'add_category',
+                Theme::getInstance()->getCommonImagePath('Action/Add'),
+                array('id' => 'add_category', 'style' => 'display:none'));
+        }
 
         $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
 
-        $group = array();
-        $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
-        $group[] = $this->createElement('static', null, null, Translation::get('AddNewCategory'));
-        $group[] = $this->createElement('text', self::NEW_CATEGORY);
-        $group[] = $this->createElement('static', null, null, '</div>');
+        if (! $this->implementsDropZoneSupport())
+        {
+            $group = array();
+            $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
+            $group[] = $this->createElement('static', null, null, Translation::get('AddNewCategory'));
+            $group[] = $this->createElement('text', self::NEW_CATEGORY);
+            $group[] = $this->createElement('static', null, null, '</div>');
 
-        $this->addGroup($group);
+            $this->addGroup($group);
+        }
     }
 
     public function add_footer()
@@ -116,17 +119,14 @@ abstract class ContentObjectImportForm extends FormValidator
             Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
             array('id' => 'import_button'),
             null,
-            'import'
-        );
+            'import');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Import.js'
-            )
-        );
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Import.js'));
     }
 
     public function get_application()
@@ -144,21 +144,27 @@ abstract class ContentObjectImportForm extends FormValidator
     public static function factory(ImportFormParameters $importFormParameters)
     {
         $class = Manager::package() . '\Common\Import\\' .
-            StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
-            '\\' .
-            (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())
-                ->upperCamelize() .
-            'ContentObjectImportForm';
+             StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
+             '\\' . (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
+             'ContentObjectImportForm';
 
-        if (!class_exists($class))
+        if (! class_exists($class))
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
-                    'UnknownImportType', array('TYPE' => $importFormParameters->getImportFormType())
-                )
-            );
+                    'UnknownImportType',
+                    array('TYPE' => $importFormParameters->getImportFormType())));
         }
 
         return new $class($importFormParameters);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function implementsDropZoneSupport()
+    {
+        return false;
     }
 }

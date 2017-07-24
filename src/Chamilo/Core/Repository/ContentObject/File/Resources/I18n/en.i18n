@@ -78,3 +78,5 @@ PlaybackNotSupported ="We can't play back this file in your browser at the momen
 OfficeViewerFullScreen = "Your document is now full screen"
 OfficeViewerExitFullScreen = "Exit Full Screen (Esc)"
 ShowInline = "Show online preview (when possible)"
+FileType = "File type"
+SelectAType = "Select a type"

@@ -32,5 +32,32 @@
             <argument type="service" id="chamilo.core.repository.storage.repository.content_object_template_repository" />
             <argument type="service" id="chamilo.core.repository.service.configuration_cache_service" />
         </service>
+
+        <service
+                id="chamilo.core.repository.workspace.repository.content_object_repository"
+                class="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository">
+        </service>
+
+        <service
+                id="chamilo.core.repository.storage.repository.resource_fixer_repository"
+                class="Chamilo\Core\Repository\Storage\Repository\ResourceFixerRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service
+                id="chamilo.core.repository.service.resource_fixer.resource_fixer_director_factory"
+                class="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirectorFactory">
+            <argument type="service" id="chamilo.core.repository.storage.repository.resource_fixer_repository" />
+            <argument type="service" id="chamilo.libraries.file.configurable_path_builder" />
+        </service>
+
+        <service
+                id="chamilo.core.repository.service.resource_fixer.resource_fixer_director"
+                class="Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector"
+                factory-service="chamilo.core.repository.service.resource_fixer.resource_fixer_director_factory"
+                factory-method="buildResourceFixerDirector" >
+        </service>
+
+
     </services>
 </container>

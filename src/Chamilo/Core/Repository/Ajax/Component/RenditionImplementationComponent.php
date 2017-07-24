@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
@@ -15,6 +16,9 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
     const PARAM_PARAMETERS = 'parameters';
+
+    const PARAM_SECURITY_CODE = 'security_code';
+
     const PROPERTY_RENDITION = 'rendition';
 
     /*
