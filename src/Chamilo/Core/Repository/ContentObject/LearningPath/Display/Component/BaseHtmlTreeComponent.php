@@ -367,8 +367,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             new NodeActionGeneratorFactory(Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(), $this->get_application()->get_parameters());
 
         $treeJSONMapper = new TreeJSONMapper(
-            $tree, $this->getUser(),
-            $this->getTrackingService(),
+            $tree, $this->getTreeUser(),
+            $this->showProgressInTree() ? $this->getTrackingService() : null,
             $this->getAutomaticNumberingService(),
             $nodeActionGeneratorFactory->createNodeActionGenerator(),
             $this->get_application()->get_tree_menu_url(),
@@ -380,5 +380,25 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         );
 
         return json_encode($treeJSONMapper->getNodes());
+    }
+
+    /**
+     * Returns the user that is used to calculate and render the progress in the tree
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    protected function getTreeUser()
+    {
+        return $this->getUser();
+    }
+
+    /**
+     * Returns whether or not the progress should be shown
+     *
+     * @return bool
+     */
+    protected function showProgressInTree()
+    {
+        return true;
     }
 }

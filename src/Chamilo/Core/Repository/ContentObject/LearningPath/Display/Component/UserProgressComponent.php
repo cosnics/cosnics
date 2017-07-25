@@ -263,4 +263,14 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
             )
         );
     }
+
+    /**
+     * Returns whether or not the progress should be shown
+     *
+     * @return bool
+     */
+    protected function showProgressInTree()
+    {
+        return false;
+    }
 }

@@ -141,4 +141,14 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
         return $additionalParameters;
     }
 
+    /**
+     * Returns the user that is used to calculate and render the progress in the tree
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    protected function getTreeUser()
+    {
+        return $this->getReportingUser();
+    }
+
 }
