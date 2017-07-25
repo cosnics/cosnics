@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\DeleteAttemptsForTreeNodeComponent;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -58,6 +59,11 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                     $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
+                if(!$content_object instanceof Assessment)
+                {
+                    return null;
+                }
+
                 $progressBarRenderer = new ProgressBarRenderer();
                 $averageScore = $trackingService->getAverageScoreInTreeNode(
                     $learningPath, $user, $record
