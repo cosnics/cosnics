@@ -22,8 +22,8 @@ class Embedder extends ContentObjectEmbedder
      */
     public function run()
     {
-        $activeAttemptId = $this->learningPathTrackingService->getActiveAttemptId(
-            $this->learningPath, $this->learningPathTreeNode, $this->get_application()->getUser()
+        $activeAttemptId = $this->trackingService->getActiveAttemptId(
+            $this->learningPath, $this->treeNode, $this->get_application()->getUser()
         );
 
         $redirect = new Redirect(
@@ -36,7 +36,7 @@ class Embedder extends ContentObjectEmbedder
         );
 
         /** @var Hotpotatoes $hotpotoatoes */
-        $hotpotoatoes = $this->learningPathTreeNode->getContentObject();
+        $hotpotoatoes = $this->treeNode->getContentObject();
 
         $link = $hotpotoatoes->add_javascript(
             $redirect->getUrl(),
