@@ -261,11 +261,19 @@ abstract class Table
 
         $tableData = array();
 
-        if ($resultSet)
+        if ($resultSet instanceof ResultSet)
         {
             while ($result = $resultSet->next_result())
             {
-                $this->handle_result($tableData, $result);
+                $this->handle_result($table_data, $result);
+            }
+        }
+
+        if($resultSet instanceof DataClassIterator)
+        {
+            foreach($resultSet as $result)
+            {
+                $this->handle_result($table_data, $result);
             }
         }
 
@@ -289,7 +297,7 @@ abstract class Table
             }
         }
         
-        return $table_data;
+        return $orderProperties;
     }
 
     /**
