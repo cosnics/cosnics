@@ -265,7 +265,7 @@ abstract class Table
         {
             while ($result = $resultSet->next_result())
             {
-                $this->handle_result($table_data, $result);
+                $this->handle_result($tableData, $result);
             }
         }
 
@@ -273,7 +273,7 @@ abstract class Table
         {
             foreach($resultSet as $result)
             {
-                $this->handle_result($table_data, $result);
+                $this->handle_result($tableData, $result);
             }
         }
 
