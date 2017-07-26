@@ -42,14 +42,6 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
             throw new NotAllowedException();
         }
 
-//        $pathBuilder = $this->getConfigurablePathBuilder();
-//        $filename = $pathBuilder->getTemporaryPath(Manager::context()) . 'UsersProgressExport.csv';
-//        Filesystem::create_dir(dirname($filename));
-//        $csvWriter = new CsvWriter($filename);
-//
-//        $exporter = new Exporter($this->getTrackingService());
-//        $exporter->exportUserProgress($this->learningPath, $this->getCurrentTreeNode(), $csvWriter);
-
         $panelRenderer = new PanelRenderer();
         $translator = Translation::getInstance();
 
