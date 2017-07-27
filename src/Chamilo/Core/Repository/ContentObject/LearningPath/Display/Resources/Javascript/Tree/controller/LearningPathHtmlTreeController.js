@@ -97,6 +97,26 @@
                     };
                     items['sep0'] = '-';
 
+                    items["create"] = {
+                      name: 'Create',
+                      icon: 'fa-plus',
+                      items: []
+                    };
+
+                    items['addFrom'] = {
+                      name: 'AddFrom',
+                      icon: 'fa-refresh',
+                      items: []
+                    };
+
+                    items['import'] = {
+                        name: 'Import',
+                        icon: 'fa-upload',
+                        items: []
+                    };
+
+                    items['sep1'] = '-';
+
                     if($scope.quickEditStructureEnabled) {
                         items["editStructure"] = {
                             name: translations['StopStructureQuickEditMode'],
@@ -115,7 +135,7 @@
                         }
                     }
 
-                    items['sep1'] = '-';
+                    items['sep2'] = '-';
 
                     items["editTitle"] = {
                         name: translations['EditTitle'], icon: "fa-edit", callback: function () {
@@ -168,7 +188,7 @@
                     actions = ['view', 'progress'];
                 }
 
-                var separatorCounter = 2;
+                var separatorCounter = 3;
                 var previousIsSeperator = true;
 
                 actions.forEach(function (action) {
