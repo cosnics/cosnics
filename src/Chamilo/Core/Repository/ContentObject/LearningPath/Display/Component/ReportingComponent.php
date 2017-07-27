@@ -18,14 +18,19 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Shows the progress of a user in the learning path
@@ -79,11 +84,22 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         if ($this->getCurrentTreeNode()->hasChildNodes())
         {
             $table = new TreeNodeProgressTable($this);
-            $html[] = $panelRenderer->render($translator->getTranslation('Children'), $table->as_html());
+            $panelHtml = array();
+
+            $panelHtml[] = $this->getTreeNodeProgressButtonToolbar($translator)->render();
+            $panelHtml[] = $table->as_html();
+
+
+            $html[] = $panelRenderer->render($translator->getTranslation('Children'), implode(PHP_EOL, $panelHtml));
         }
 
         $table = new TreeNodeAttemptTable($this);
-        $html[] = $panelRenderer->render($translator->getTranslation('Attempts'), $table->as_html());
+        $panelHtml = array();
+
+        $panelHtml[] = $this->getTreeNodeAttemptsButtonToolbar($translator)->render();
+        $panelHtml[] = $table->as_html();
+
+        $html[] = $panelRenderer->render($translator->getTranslation('Attempts'), implode(PHP_EOL, $panelHtml));
 
         if ($currentTreeNode->getContentObject() instanceof Assessment)
         {
@@ -101,6 +117,58 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns the button toolbar for the TreeNodeProgressTable block
+     *
+     * @param Translation $translator
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getTreeNodeProgressButtonToolbar(Translation $translator)
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        $buttonToolbar->addItem(new Button(
+            $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+            new FontAwesomeGlyph('download'),
+            $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
+                    ReportingExporterComponent::PARAM_EXPORT =>
+                        ReportingExporterComponent::EXPORT_TREE_NODE_CHILDREN_PROGRESS
+                ]
+            )
+        ));
+
+        return new ButtonToolBarRenderer($buttonToolbar);
+    }
+
+    /**
+     * Returns the button toolbar for the TreeNodeProgressTable block
+     *
+     * @param Translation $translator
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getTreeNodeAttemptsButtonToolbar(Translation $translator)
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        $buttonToolbar->addItem(new Button(
+            $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+            new FontAwesomeGlyph('download'),
+            $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
+                    ReportingExporterComponent::PARAM_EXPORT =>
+                        ReportingExporterComponent::EXPORT_TREE_NODE_ATTEMPTS
+                ]
+            )
+        ));
+
+        return new ButtonToolBarRenderer($buttonToolbar);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\TreeNodeChildrenUserProgressExportFormat;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\UsersProgressExportFormat;
@@ -12,7 +13,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * Formats the reporting data to an exportable format that can be processed by the export writer
@@ -87,12 +87,14 @@ class Exporter
     {
         $userTreeNodeAttemptExportObjects = [];
 
+        $showScore = $treeNodeToExport->getContentObject() instanceof Assessment;
+
         $treeNodeAttempts = $this->trackingService->getTreeNodeAttempts($learningPath, $user, $treeNodeToExport);
         foreach($treeNodeAttempts as $treeNodeAttempt)
         {
             $userTreeNodeAttemptExportObjects[] = new UserTreeNodeAttemptExportFormat(
-                $treeNodeAttempt->get_start_time(), $treeNodeAttempt->isCompleted(), $treeNodeAttempt->get_score(),
-                $treeNodeAttempt->get_total_time()
+                $treeNodeAttempt->get_start_time(), $treeNodeAttempt->isCompleted(),
+                $showScore ? $treeNodeAttempt->get_score() : null, $treeNodeAttempt->get_total_time()
             );
         }
 

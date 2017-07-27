@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Exporter;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer\CsvWriter;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 
 /**
@@ -34,27 +35,46 @@ class ReportingExporterComponent extends BaseReportingComponent
         $exportMode = $this->getRequest()->get(self::PARAM_EXPORT);
         $this->validateExportMode($exportMode);
 
-        $exporter->exportUserProgress(
-            $this->learningPath, $this->getCurrentTreeNode(),
-            new CsvWriter($temporaryDirectory . 'UsersProgressExport.csv')
-        );
+        $file = $temporaryDirectory . uniqid() . '.csv';
+        $filename = '';
+        $csvWriter = new CsvWriter($file);
 
-        $exporter->exportTreeNodeAttemptsForUser(
-            $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(),
-            new CsvWriter($temporaryDirectory . 'TreeNodeAttempts.csv')
-        );
+        switch($exportMode)
+        {
+            case self::EXPORT_USER_PROGRESS:
+                $exporter->exportUserProgress($this->learningPath, $this->getCurrentTreeNode(), $csvWriter);
+                $filename = 'Progress.csv';
+                break;
+            case self::EXPORT_TREE_NODE_ATTEMPTS:
+                $exporter->exportTreeNodeAttemptsForUser(
+                    $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(), $csvWriter
+                );
+                $filename = 'Attempts.csv';
+                break;
+            case self::EXPORT_TREE_NODE_CHILDREN_PROGRESS:
+                $exporter->exportTreeNodeChildrenProgressForUser(
+                    $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(), $csvWriter
+                );
+                $filename = 'UserProgress.csv';
+                break;
+        }
 
-        $exporter->exportTreeNodeChildrenProgressForUser(
-            $this->learningPath, $this->getCurrentTreeNode(), $this->getReportingUser(),
-            new CsvWriter($temporaryDirectory . 'TreeNodeChildrenProgress.csv')
-        );
-//        Filesystem::file_send_for_download($filename, false, null, 'text/csv');
+        Filesystem::file_send_for_download($file, false, $filename, 'text/csv');
+        Filesystem::remove($file);
     }
 
     function build()
     {
     }
 
+    /**
+     * Validates the given export mode
+     *
+     * @param string $exportMode
+     *
+     * @throws \InvalidArgumentException
+     * @throws NotAllowedException
+     */
     protected function validateExportMode($exportMode)
     {
         $exportModes =
@@ -62,7 +82,12 @@ class ReportingExporterComponent extends BaseReportingComponent
 
         if(!in_array($exportMode, $exportModes))
         {
-            
+            throw new \InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
+        }
+
+        if($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
+        {
+            throw new NotAllowedException();
         }
     }
 }

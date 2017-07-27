@@ -54,11 +54,17 @@ class UserTreeNodeAttemptExportFormat implements ExportFormatInterface
      */
     public function toArray(): array
     {
-        return [
+        $exportData = [
             'start_time' => DatetimeUtilities::format_locale_date(null, $this->startTime),
             'completed' => (string) $this->completed,
-            'score' => $this->score . '%',
             'time' => DatetimeUtilities::format_seconds_to_hours($this->time),
         ];
+
+        if(!is_null($this->score))
+        {
+            $exportData['score'] = $this->score . '%';
+        }
+
+        return $exportData;
     }
 }

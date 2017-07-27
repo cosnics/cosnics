@@ -49,6 +49,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_COPY_SECTIONS = 'SectionCopier';
     const ACTION_SHOW_STUDENT_VIEW = 'ShowStudentView';
     const ACTION_DISABLE_STUDENT_VIEW = 'DisableStudentView';
+    const ACTION_EXPORT_REPORTING = 'ReportingExporter';
 
     // Parameters
     const PARAM_STEP = 'step';
