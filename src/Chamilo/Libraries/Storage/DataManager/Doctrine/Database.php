@@ -246,6 +246,7 @@ class Database
         }
         catch (\Exception $exception)
         {
+            $this->error_handling($exception);
             return false;
         }
     }

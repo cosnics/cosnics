@@ -218,7 +218,13 @@ abstract class Installer extends Action
         $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
         $data_manager = $context . '\Storage\DataManager';
 
-        $table_name = $data_manager::PREFIX . $storage_unit_info['name'];
+        $prefix = $data_manager::PREFIX;
+        $table_name = $storage_unit_info['name'];
+
+        if(strpos($table_name, $prefix) !== 0)
+        {
+            $table_name = $prefix . $table_name;
+        }
 
         if (! $data_manager::create_storage_unit(
             $table_name,

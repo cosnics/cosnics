@@ -46,7 +46,6 @@
         <property
             name="completed"
             type="boolean"
-            notnull="1"
             default="1" />
     </properties>
     <index name="tree_node_data_id">
