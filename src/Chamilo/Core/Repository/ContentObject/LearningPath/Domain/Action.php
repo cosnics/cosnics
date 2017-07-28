@@ -7,7 +7,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class Action
+class Action implements ActionInterface
 {
     /**
      * A name for the action, used as identifier

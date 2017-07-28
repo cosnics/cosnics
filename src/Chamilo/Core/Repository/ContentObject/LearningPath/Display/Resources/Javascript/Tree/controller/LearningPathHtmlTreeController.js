@@ -17,23 +17,30 @@
             $scope.treeData = treeData;
 
             var extractContextMenuItemFromNodeAction = function(node, action) {
-                if(node.data.actions[action] === undefined) return null;
+                return extractContextMenuItemFromActionsArray(node.data.actions, action);
+            };
 
-                var nodeActionData = node.data.actions[action];
+            var extractContextMenuItemFromActionsArray = function(actionsArray, action) {
+                if(actionsArray[action] === undefined) return null;
+
+                return createContextMenuItemFromAction(actionsArray[action]);
+            };
+
+            var createContextMenuItemFromAction = function(actionObject) {
                 return {
-                    name: nodeActionData.title,
-                    icon: nodeActionData.image,
+                    name: actionObject.title,
+                    icon: actionObject.image,
                     callback: function () {
-                        if(nodeActionData.confirm)
+                        if(actionObject.confirm)
                         {
-                            var result = confirm(nodeActionData.confirmation_message);
+                            var result = confirm(actionObject.confirmation_message);
                             if(result === false)
                             {
                                 return;
                             }
                         }
 
-                        window.location.href = nodeActionData.url;
+                        window.location.href = actionObject.url;
                     }
                 }
             };
@@ -97,22 +104,44 @@
                     };
                     items['sep0'] = '-';
 
+                    var createActions = [];
+
+                    if(node.data.actions['create'] !== undefined) {
+                        node.data.actions['create'].forEach(function(action) {
+                            createActions.push(createContextMenuItemFromAction(action));
+                        });
+                    }
+
                     items["create"] = {
-                      name: 'Create',
+                      name: translations['Create'],
                       icon: 'fa-plus',
-                      items: []
+                      items: createActions
                     };
+
+                    var addFromItems = [];
+                    addFromItems.push(extractContextMenuItemFromNodeAction(node, 'browse_repository'));
+                    addFromItems.push(extractContextMenuItemFromNodeAction(node, 'browse_workspaces'));
 
                     items['addFrom'] = {
-                      name: 'AddFrom',
+                      name: translations['AddFrom'],
                       icon: 'fa-refresh',
-                      items: []
+                      items: addFromItems
                     };
 
+                    var importActions = [];
+
+                    if(node.data.actions['import'] !== undefined) {
+                        node.data.actions['import'].forEach(function(action) {
+                            importActions.push(createContextMenuItemFromAction(action));
+                        });
+                    }
+
+                    console.log(importActions);
+
                     items['import'] = {
-                        name: 'Import',
+                        name: translations['Import'],
                         icon: 'fa-upload',
-                        items: []
+                        items: importActions
                     };
 
                     items['sep1'] = '-';

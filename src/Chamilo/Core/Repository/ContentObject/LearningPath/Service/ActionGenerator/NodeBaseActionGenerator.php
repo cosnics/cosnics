@@ -2,15 +2,19 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
+use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionGroup;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Selector\TypeSelectorOption;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Generates the actions for a given TreeNode
@@ -25,6 +29,20 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @var NodeActionGenerator[]
      */
     protected $contentObjectTypeNodeActionGenerators;
+
+    /**
+     * Caching for create actions
+     *
+     * @var TypeSelectorOption[]
+     */
+    protected $typeSelectorOptions;
+
+    /**
+     * Caching for import actions
+     *
+     * @var string[]
+     */
+    protected $importTypes;
 
     /**
      * NodeActionGenerator constructor.
@@ -48,7 +66,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @param TreeNode $treeNode
      * @param bool $canEditTreeNode
      *
-     * @return array|Action[]
+     * @return array|ActionInterface[]
      */
     public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array
     {
@@ -73,9 +91,9 @@ class NodeBaseActionGenerator extends NodeActionGenerator
                 $actions[] = $this->getMoveNodeAction($treeNode);
             }
 
-            $this->addCreatorActions($actions, $treeNode);
+            $actions[] = $this->getCreatorActions($treeNode);
             $this->addSelectFromActions($actions, $treeNode);
-            $this->addImportActions($actions, $treeNode);
+            $actions[] = $this->getImportActions($treeNode);
         }
 
         $actions[] = $this->getMyProgressNodeAction($treeNode);
@@ -294,44 +312,118 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
+     * Generates the several available create actions
+     *
+     * @param TreeNode $treeNode
+     *
+     * @return ActionGroup
+     */
+    protected function getCreatorActions(TreeNode $treeNode)
+    {
+        $baseParameters = [
+            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION =>
+                \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR
+        ];
+
+        if(!isset($this->typeSelectorOptions))
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
+            $typeSelectorFactory = new TypeSelectorFactory(
+                $learningPath->get_allowed_types(), Session::get_user_id(), TypeSelectorFactory::MODE_FLAT_LIST, false
+            );
+
+            $typeSelector = $typeSelectorFactory->getTypeSelector();
+
+            $this->typeSelectorOptions = $typeSelector->getAllTypeSelectorOptions();
+        }
+
+        $createAction = new ActionGroup('create');
+
+        foreach ($this->typeSelectorOptions as $option)
+        {
+            $id = $option->get_template_registration_id();
+            $baseParameters[TypeSelector::PARAM_SELECTION] = $id;
+            $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
+
+            $createAction->addAction(
+                new Action(
+                    'create_' . $id, $option->get_label(), $url, ''
+                )
+            );
+        }
+
+        return $createAction;
+    }
+
+    /**
      * @param array $actions
      * @param TreeNode $treeNode
      */
-    protected function addCreatorActions($actions = array(), TreeNode $treeNode)
+    protected function addSelectFromActions(&$actions = array(), TreeNode $treeNode)
     {
+        $repoViewerContext = 'Chamilo\Core\Repository\Viewer';
+
+        $baseParameters = [
+            Manager::PARAM_ACTION => Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION =>
+                \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
+        ];
+
+        $url = $this->getUrlForNode($baseParameters, $treeNode->getId());
+
+        $actions[] = new Action(
+            'browse_repository', $this->translator->getTranslation('SelectFromRepository', null, $repoViewerContext),
+            $url, ''
+        );
+
+        $workspaceParameters = $baseParameters;
+        $workspaceParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES] = true;
+
+        $url = $this->getUrlForNode($workspaceParameters, $treeNode->getId());
+
+        $actions[] = new Action(
+            'browse_workspaces', $this->translator->getTranslation('SelectFromWorkspaces', null, $repoViewerContext),
+            $url, ''
+        );
 
     }
 
-    protected function addSelectFromActions($actions = array(), TreeNode $treeNode)
-    {
-
-    }
-
-    protected function addImportActions(&$actions = array(), TreeNode $treeNode)
+    /**
+     * Returns the import actions
+     *
+     * @param TreeNode $treeNode
+     *
+     * @return ActionGroup
+     */
+    protected function getImportActions(TreeNode $treeNode)
     {
         $creatorParameters = $this->baseParameters;
         $creatorParameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
         $creatorParameters[Manager::PARAM_CHILD_ID] = $treeNode->getId();
+        $creatorParameters[\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION] =
+            \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER;
 
-        /** @var LearningPath $learningPath */
-        $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
-        $importTypeSelector = new ImportTypeSelector($creatorParameters, $learningPath->get_allowed_types());
-        $importTypes = $importTypeSelector->getImportTypes();
-
-        foreach($importTypes as $importType => $importName)
+        if(!isset($this->importTypes))
         {
-            $importLink = $importTypeSelector->getLink($importType);
-            $typeImageName = (string) StringUtilities::getInstance()->createString($importType)->upperCamelize();
-            $imageContext = \Chamilo\Core\Repository\Manager::package();
+            /** @var LearningPath $learningPath */
+            $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
+            $importTypeSelector = new ImportTypeSelector($creatorParameters, $learningPath->get_allowed_types());
+            $this->importTypes = $importTypeSelector->getImportTypes();
+        }
 
-            $actions[] = new Action(
-                'import_' . $importType,
-                $importName,
-                $importLink,
-                Theme::getInstance()->getImagePath($imageContext, 'Import/16/' . $typeImageName)
+        $actionGroup = new ActionGroup('import');
+
+        foreach($this->importTypes as $importType => $importName)
+        {
+            $creatorParameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
+
+            $actionGroup->addAction(
+                new Action('import_' . $importType, $importName, $this->getUrlForNode($creatorParameters), '')
             );
         }
 
-        var_dump($actions);
+        return $actionGroup;
     }
 }

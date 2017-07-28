@@ -144,10 +144,11 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $inReportingMode = in_array($this->get_action(), $reportingActions);
 
         $translationVariables = array(
-            'AddNewPage', 'AddNewSection', 'StartStructureQuickEditMode', 'StopStructureQuickEditMode', 'EditTitle'
+            'AddNewPage', 'AddNewSection', 'StartStructureQuickEditMode', 'StopStructureQuickEditMode', 'EditTitle',
+            'AddFrom'
         );
 
-        $commonTranslationVariables = array('Remove', 'Confirm');
+        $commonTranslationVariables = array('Remove', 'Confirm', 'Create', 'Import');
 
         $translator = Translation::getInstance();
         $translations = array();
