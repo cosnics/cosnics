@@ -2,12 +2,16 @@
 namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -122,5 +126,68 @@ class UserRepository implements UserRepositoryInterface
         $users = DataManager::retrieves(User::class_name(), $parameters)->as_array();
         
         return $users;
+    }
+
+    public function create(DataClass $dataClass)
+    {
+        return $dataClass->create();
+    }
+
+    public function update(DataClass $dataClass)
+    {
+        return $dataClass->update();
+    }
+
+    public function delete(DataClass $dataClass)
+    {
+        return $dataClass->delete();
+    }
+
+    public function getUserSettingForSettingAndUser($context, $variable, User $user)
+    {
+        $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
+            $variable, $context
+        );
+
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
+            new StaticConditionVariable($setting->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return \Chamilo\Core\User\Storage\DataManager::retrieve(
+            UserSetting::class_name(), new DataClassRetrieveParameters($condition)
+        );
+    }
+
+    public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
+    {
+        $userSetting = $this->getUserSettingForSettingAndUser($context, $variable, $user);
+        if(!$userSetting instanceof UserSetting)
+        {
+            $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
+                $variable, $context
+            );
+
+            $userSetting = new UserSetting();
+            $userSetting->set_setting_id($setting->getId());
+            $userSetting->set_user_id($user->getId());
+            $userSetting->set_value($value);
+
+            return $this->create($userSetting);
+        }
+        else
+        {
+            $userSetting->set_value($value);
+            return $this->update($userSetting);
+        }
     }
 }

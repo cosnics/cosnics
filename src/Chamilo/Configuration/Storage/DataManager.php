@@ -31,7 +31,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param string $variable
      * @param string $context
-     * @return \configuration\Setting
+     * @return Setting
      */
     public static function retrieve_setting_from_variable_name($variable, $context = 'Chamilo\Core\Admin')
     {

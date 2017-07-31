@@ -1,0 +1,84 @@
+<?php
+
+namespace Chamilo\Core\Group\Storage\Repository;
+
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+
+/**
+ * Dataclass repository for the group application
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class GroupRepository extends CommonDataClassRepository
+{
+    /**
+     * Finds a GroupRelUser object by a given group code and user id
+     *
+     * @param string $groupCode
+     * @param int $userId
+     *
+     * @return GroupRelUser | DataClass
+     */
+    public function findGroupRelUserByGroupCodeAndUserId($groupCode, $userId)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
+            new StaticConditionVariable($groupCode)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                Group::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+                    new PropertyConditionVariable(
+                        Group::class,
+                        Group::PROPERTY_ID
+                    )
+                )
+            )
+        );
+
+        return $this->dataClassRepository->retrieve(
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, array(), $joins)
+        );
+    }
+
+    /**
+     * Finds a group object by a given group code
+     *
+     * @param string $groupCode
+     *
+     * @return DataClass | Group
+     */
+    public function findGroupByCode($groupCode)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
+            new StaticConditionVariable($groupCode)
+        );
+
+        return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
+    }
+}
