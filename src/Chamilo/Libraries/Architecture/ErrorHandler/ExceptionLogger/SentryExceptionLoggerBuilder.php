@@ -21,6 +21,8 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     /**
      *
      * @see \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerBuilderInterface::__construct()
+     *
+     * @param ConfigurationConsulter $configurationConsulter
      */
     public function __construct(ConfigurationConsulter $configurationConsulter)
     {
