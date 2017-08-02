@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function(config)
     config.toolbar_Basic = [
             [ 'Maximize', '-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'Bold', 'Italic', 'Underline' ],
             '/',
-            [ 'Preview', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-',
+            [ 'Preview', 'Print', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-',
                     'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
                     'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
             '/',
@@ -72,7 +72,7 @@ CKEDITOR.editorConfig = function(config)
 
     config.startupFocus = true;
 
-    config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
 
     config.autosave = {
         SaveKey: null, // fix to force unique savekey (even for page with multiple instances)
