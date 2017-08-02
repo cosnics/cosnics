@@ -78,16 +78,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         $content[] = $this->renderToolHeader();
         $content[] = '<div class="publication_container row">';
 
-        try
-        {
-            $this->checkAuthorization();
-            $publicationsContent = $this->renderPublications();
-        }
-        catch (\Exception $ex)
-        {
-            $publicationsContent = '<div class="alert alert-danger">' .
-                 Translation::getInstance()->getTranslation('NoViewRights', null, Manager::context()) . '</div>';
-        }
+        $this->checkAuthorization();
+
+        $publicationsContent = $this->renderPublications();
 
         if ($this->get_parent() instanceof Categorizable)
         {
