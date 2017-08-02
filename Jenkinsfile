@@ -14,12 +14,12 @@ try {
                 stage('Deploy') {
                     steps {
                         echo 'Deploying..'
-                        sh 'ansible-playbook /ansible/deploy.yml -i /ansible/hosts --extra-vars "hosts=test remote_user=jenkins project_root=/cosnics/${BRANCH_NAME} project_local_path=${WORKSPACE}/"'
+                        sh 'ansible-playbook /ansible/deploy.yml -i /ansible/hosts --extra-vars "hosts=test remote_user=jenkins project_root=/cosnics/${BRANCH_NAME} project_local_path=${WORKSPACE}/ cosnics_deploy_database_name=cosnics-${BRANCH_NAME} cosnics_deploy_test_database_name=cosnics-${BRANCH_NAME}-test"'
                     }
                 }
                 stage('Test') {
                     steps {
-                        echo 'Testing...'
+                        sh '/cosnics/${BRANCH_NAME}/current/bin/phpunit -c /cosnics/${BRANCH_NAME}/current/src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml'
                     }
                 }
             }
