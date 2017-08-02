@@ -203,7 +203,7 @@ class NodeBaseActionGeneratorTest extends Test
     public function testGenerateNodeActionsWithEditRight()
     {
         $actions = $this->nodeBaseActionGenerator->generateNodeActions($this->tree->getTreeNodeByStep(2), true);
-        $this->assertCount(8, $actions);
+        $this->assertCount(12, $actions);
     }
 
     public function testUpdateAction()
