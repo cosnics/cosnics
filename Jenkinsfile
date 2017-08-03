@@ -24,7 +24,7 @@ try {
                         }
                         step([$class: 'XUnitBuilder',
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                            tools: [[$class: 'JUnitType', pattern: '/cosnics/${BRANCH_NAME}/current/storage/build-reports/**']]])
+                            tools: [[$class: 'JUnitType', pattern: "/cosnics/${env.BRANCH_NAME}/current/storage/build-reports/**"]]])
                     }
                 }
             }
