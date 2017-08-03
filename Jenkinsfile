@@ -25,6 +25,7 @@ try {
                         step([$class: 'XUnitBuilder',
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                             tools: [[$class: 'JUnitType', pattern: "build-reports/*.xml"]]])
+                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
                     }
                 }
             }
