@@ -20,11 +20,11 @@ try {
                 stage('Test') {
                     steps {
                         dir ("/cosnics/${env.BRANCH_NAME}/current/") {
-                            sh 'bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml --log-junit storage/build-reports/phpunit-result.xml'
+                            sh "bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml"
                         }
                         step([$class: 'XUnitBuilder',
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                            tools: [[$class: 'JUnitType', pattern: "/cosnics/${env.BRANCH_NAME}/current/storage/build-reports/**"]]])
+                            tools: [[$class: 'JUnitType', pattern: "build-reports/**"]]])
                     }
                 }
             }
