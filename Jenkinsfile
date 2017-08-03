@@ -19,7 +19,7 @@ try {
                 }
                 stage('Test') {
                     steps {
-                        echo 'Testing...'
+                        sh '/cosnics/${BRANCH_NAME}/current/bin/phpunit -c /cosnics/${BRANCH_NAME}/current/src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml'
                     }
                 }
             }
