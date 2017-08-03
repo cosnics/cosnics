@@ -19,7 +19,9 @@ try {
                 }
                 stage('Test') {
                     steps {
-                        sh '/cosnics/${BRANCH_NAME}/current/bin/phpunit -c /cosnics/${BRANCH_NAME}/current/src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml'
+                        dir ('/cosnics/${BRANCH_NAME}/current/') {
+                            sh 'bin/phpunit -c /cosnics/${BRANCH_NAME}/current/src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml'
+                        }
                     }
                 }
             }
