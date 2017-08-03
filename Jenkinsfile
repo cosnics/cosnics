@@ -20,8 +20,9 @@ try {
                 stage('Test') {
                     steps {
                         dir ("/cosnics/${env.BRANCH_NAME}/current/") {
-                            sh 'bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml ---log-junit storage/build-reports/phpunit.log.xml'
+                            sh 'bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml --log-junit storage/build-reports/phpunit.log.xml'
                         }
+                        junit '/cosnics/${env.BRANCH_NAME}/current/storage/build-reports'
                     }
                 }
             }
