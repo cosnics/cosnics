@@ -22,7 +22,9 @@ try {
                         dir ("/cosnics/${env.BRANCH_NAME}/current/") {
                             sh 'bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml --log-junit storage/build-reports/phpunit-result.xml'
                         }
-                        junit "/cosnics/${BRANCH_NAME}/current/storage/build-reports/phpunit-result.xml"
+                        step([$class: 'XUnitBuilder',
+                            thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                            tools: [[$class: 'JUnitType', pattern: '/cosnics/${BRANCH_NAME}/current/storage/build-reports/**']]])
                     }
                 }
             }
