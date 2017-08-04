@@ -71,7 +71,7 @@ class EphorusRequestTest extends Test
     private function build_mock_component($valid_id = true, $valid_object = true)
     {
         // build mock component
-        $mock_component = $this->getMock(
+        $mock_component = $this->createMock(
             'application\weblcms\tool\implementation\ephorus\EphorusRequestComponent', 
             array('get_course_id', 'get_user_id'), 
             array(), 
@@ -86,7 +86,7 @@ class EphorusRequestTest extends Test
         }
         
         // build request mock object
-        $mock_request = $this->getMock('libraries\platform\Request', array('get'));
+        $mock_request = $this->createMock('libraries\platform\Request', array('get'));
         
         $mock_request::staticExpects($this->any())->method('get')->will($this->returnValue($id));
         
@@ -104,7 +104,7 @@ class EphorusRequestTest extends Test
     protected function build_mock_component_valid_data_manager($mock_component, $valid_object)
     {
         // build datamanager mock object
-        $mock_datamanager = $this->getMock(
+        $mock_datamanager = $this->createMock(
             'core\repository\DataManager', 
             array('get_instance', 'retrieve_content_object'));
         

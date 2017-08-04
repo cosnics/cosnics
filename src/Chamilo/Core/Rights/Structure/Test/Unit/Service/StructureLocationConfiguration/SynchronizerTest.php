@@ -47,7 +47,7 @@ class SynchronizerTest extends Test
     public function setUp()
     {
         $this->configurationLoader = $this->getMockForAbstractClass(LoaderInterface::class);
-        $this->registrationConsulterMock = $this->getMock(RegistrationConsulter::class, array(), array(), '', false);
+        $this->registrationConsulterMock = $this->createMock(RegistrationConsulter::class, array(), array(), '', false);
         $this->structureLocationServiceMock = $this->getMockForAbstractClass(StructureLocationServiceInterface::class);
 
         $this->structureLocationRoleServiceMock =

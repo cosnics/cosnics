@@ -21,5 +21,12 @@
                 method="createTranslator" />
         </service>
 
+        <service id="chamilo.libraries.format.twig.twig_factory" class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory" />
+
+        <service id="twig.environment" class="Twig_Environment" factory-method="createEnvironment"
+                 factory-service="chamilo.libraries.format.twig.twig_factory" >
+            <argument type="service" id="symfony.component.translation.translator" />
+        </service>
+
     </services>
 </container>

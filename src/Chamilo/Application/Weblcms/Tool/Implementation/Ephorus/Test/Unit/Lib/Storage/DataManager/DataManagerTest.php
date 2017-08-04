@@ -47,7 +47,7 @@ class DataManagerTest extends Test
      */
     protected function invoke_retrieve_request_by_guid($retrieve_expect, $guid = null)
     {
-        $mocked_object = $this->getMock('\application\weblcms\tool\ephorus\DataManager', array('retrieve'));
+        $mocked_object = $this->createMock('\application\weblcms\tool\ephorus\DataManager', array('retrieve'));
         
         $mocked_object::staticExpects($retrieve_expect)->method('retrieve');
         

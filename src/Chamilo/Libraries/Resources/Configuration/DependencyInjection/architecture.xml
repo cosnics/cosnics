@@ -94,5 +94,14 @@
                 type="service"
                 id="chamilo.configuration.service.file_configuration_consulter" />
         </service>
+
+        <service
+                id="chamilo.libraries.architecture.test.php_unit_generator"
+                class="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator">
+            <argument type="service" id="twig.environment" />
+            <argument type="service" id="chamilo.libraries.file.path_builder" />
+            <argument type="service" id="chamilo.configuration.service.registration_consulter" />
+        </service>
+
     </services>
 </container>

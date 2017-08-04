@@ -19,7 +19,6 @@ class TwigEnvironmentFactory
      * Initializes the twig templating for forms
      * 
      * @param TranslatorInterface $translator
-     * @param UrlGenerator $generator
      *
      * @return \Twig_Environment
      */
@@ -43,7 +42,6 @@ class TwigEnvironmentFactory
      * Adds the necessary extensions to twig
      * 
      * @param TranslatorInterface $translator
-     * @param UrlGenerator $generator
      * @param \Twig_Environment $twig
      */
     protected function addTwigExtensions(TranslatorInterface $translator, $twig)

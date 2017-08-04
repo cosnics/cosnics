@@ -47,5 +47,12 @@
                     id="chamilo.libraries.format.utilities.resource_processor" />
             <tag name="chamilo.libraries.console.command" />
         </service>
+
+        <service id="chamilo.libraries.console.command.generate_php_unit_config"
+                 class="Chamilo\Libraries\Console\Command\PHPUnitGeneratorCommand">
+            <tag name="chamilo.libraries.console.command" />
+            <argument type="service" id="chamilo.libraries.architecture.test.php_unit_generator" />
+        </service>
+
     </services>
 </container>
