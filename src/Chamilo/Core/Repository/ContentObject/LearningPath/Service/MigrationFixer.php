@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -15,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class MigrationFixerService
+class MigrationFixer
 {
     /**
      * @var LearningPathService
@@ -58,6 +57,8 @@ class MigrationFixerService
 
     /**
      * Migrates the old learning paths to the new structure
+     *
+     * @param OutputInterface $output
      */
     public function migrateLearningPaths(OutputInterface $output)
     {
@@ -65,7 +66,7 @@ class MigrationFixerService
 
         foreach ($learningPathIds as $learningPathId)
         {
-            $output->writeln('Fixing learning path ' . $learningPathId);
+            $output->writeln(sprintf('[%s] Fixing learning path', $learningPathId));
 
             /** @var LearningPath $learningPath */
             $learningPath = $this->contentObjectRepository->findById($learningPathId);
@@ -76,6 +77,9 @@ class MigrationFixerService
 
             foreach ($descendantNodes as $descendantNode)
             {
+                /** Remove first because this object will be recreated during copy action with section */
+                $this->treeNodeDataService->deleteTreeNodeData($descendantNode->getTreeNodeData());
+
                 $this->convertLearningPathToSection(
                     $output, $learningPath, $descendantNode, $descendantNode->getParentNode()->getTreeNodeData()
                 );
@@ -84,8 +88,8 @@ class MigrationFixerService
     }
 
     /**
-     * Converts a learning path to a section and recursively scans if the learning path contains other (sub) learning paths
-     * to convert
+     * Converts a learning path to a section and recursively scans if the learning path contains
+     * other (sub) learning paths to convert
      *
      * @param OutputInterface $output
      * @param LearningPath $rootLearningPath
@@ -107,8 +111,8 @@ class MigrationFixerService
 
         $output->writeln(
             sprintf(
-                'Found child LearningPath. Converting LearningPath %s to a new Section %s', $subLearningPath->getId(),
-                $section->getId()
+                '[%s] Found child LearningPath. Converting LearningPath %s to a new Section %s',
+                $rootLearningPath->getId(), $subLearningPath->getId(), $section->getId()
             )
         );
 
@@ -122,7 +126,10 @@ class MigrationFixerService
         $this->treeNodeDataService->createTreeNodeData($sectionTreeNodeData);
 
         $output->writeln(
-            sprintf('Created new TreeNodeData %s', $sectionTreeNodeData->getId())
+            sprintf(
+                '[%s] Created new TreeNodeData %s for Section %s', $rootLearningPath->getId(),
+                $sectionTreeNodeData->getId(), $section->getId()
+            )
         );
 
         $subLearningPathTree = $this->learningPathService->getTree($subLearningPath);
@@ -141,7 +148,8 @@ class MigrationFixerService
 
             $output->writeln(
                 sprintf(
-                    'Created new TreeNodeData %s for child ContentObject %s ', $treeNodeData->getId(),
+                    '[%s] Created new TreeNodeData %s for child ContentObject %s',
+                    $rootLearningPath->getId(), $treeNodeData->getId(),
                     $subLearningPathDescendantNode->getContentObject()->getId()
                 )
             );

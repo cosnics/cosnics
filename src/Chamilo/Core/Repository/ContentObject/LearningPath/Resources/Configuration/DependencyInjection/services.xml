@@ -88,5 +88,27 @@
             <tag name="chamilo.libraries.console.command" />
         </service>
 
+        <service id="chamilo.core.repository.content_object.learning_path.service.migration_fixer"
+                 class="Chamilo\Core\Repository\ContentObject\LearningPath\Service\MigrationFixer">
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.content_object.learning_path.service.learning_path_service" />
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service" />
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.workspace.repository.content_object_repository" />
+        </service>
+
+        <service id="chamilo.core.repository.content_object.learning_path.console.command.migration_fixer_command"
+                 class="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationFixerCommand">
+            <argument type="service" id="symfony.component.translation.translator" />
+            <argument
+                    type="service"
+                    id="chamilo.core.repository.content_object.learning_path.service.migration_fixer" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+
     </services>
 </container>
