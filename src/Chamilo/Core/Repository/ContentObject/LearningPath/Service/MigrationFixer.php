@@ -117,6 +117,7 @@ class MigrationFixer
         );
 
         $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
+        $oldDisplayOrder = $sectionTreeNodeData->getDisplayOrder();
 
         $sectionTreeNodeData->setLearningPathId((int) $rootLearningPath->getId());
         $sectionTreeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());
@@ -124,6 +125,9 @@ class MigrationFixer
         $sectionTreeNodeData->setId(0);
 
         $this->treeNodeDataService->createTreeNodeData($sectionTreeNodeData);
+
+        $sectionTreeNodeData->setDisplayOrder($oldDisplayOrder);
+        $this->treeNodeDataService->updateTreeNodeData($sectionTreeNodeData);
 
         $output->writeln(
             sprintf(
