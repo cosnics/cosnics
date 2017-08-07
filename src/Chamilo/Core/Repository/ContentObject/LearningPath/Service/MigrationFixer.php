@@ -118,9 +118,9 @@ class MigrationFixer
 
         $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
 
-        $sectionTreeNodeData->setLearningPathId($rootLearningPath->getId());
-        $sectionTreeNodeData->setParentTreeNodeDataId($parentTreeNodeData->getId());
-        $sectionTreeNodeData->setContentObjectId($section->getId());
+        $sectionTreeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+        $sectionTreeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());
+        $sectionTreeNodeData->setContentObjectId((int) $section->getId());
         $sectionTreeNodeData->setId(0);
 
         $this->treeNodeDataService->createTreeNodeData($sectionTreeNodeData);
@@ -140,8 +140,8 @@ class MigrationFixer
         {
             $treeNodeData = $subLearningPathDescendantNode->getTreeNodeData();
 
-            $treeNodeData->setLearningPathId($rootLearningPath->getId());
-            $treeNodeData->setParentTreeNodeDataId($sectionTreeNodeData->getId());
+            $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+            $treeNodeData->setParentTreeNodeDataId((int) $sectionTreeNodeData->getId());
             $treeNodeData->setId(0);
 
             $this->treeNodeDataService->createTreeNodeData($treeNodeData);
