@@ -68,7 +68,7 @@ class OpenCourseServiceTest extends Test
         $user = new User();
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
 
         $this->authorizationCheckerMock->expects($this->once())
             ->method('isAuthorized')
@@ -88,7 +88,7 @@ class OpenCourseServiceTest extends Test
     public function testGetOpenCoursesNoManager()
     {
         $user = new User();
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
         $roles = array(new Role());
 
         $this->authorizationCheckerMock->expects($this->once())
@@ -113,7 +113,7 @@ class OpenCourseServiceTest extends Test
 
     public function testGetClosedCourses()
     {
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
 
         $this->openCourseRepositoryMock->expects($this->once())
             ->method('findClosedCourses')

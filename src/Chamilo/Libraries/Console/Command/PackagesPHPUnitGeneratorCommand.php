@@ -1,0 +1,95 @@
+<?php
+
+namespace Chamilo\Libraries\Console\Command;
+
+use Chamilo\Libraries\File\Path;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Command to generate the phpunit configuration file for all the chamilo packages individually
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class PackagesPHPUnitGeneratorCommand extends Command
+{
+    /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * PackagesPHPUnitGeneratorCommand constructor.
+     *
+     * @param \Twig_Environment $twig
+     */
+    public function __construct(\Twig_Environment $twig)
+    {
+        parent::__construct();
+
+        $this->twig = $twig;
+    }
+
+    /**
+     * Configures the current command.
+     */
+    protected function configure()
+    {
+        $this->setName('chamilo:phpunit:generate-packages-config')
+            ->setDescription('Generates PHPUnit for every package in the system');
+    }
+
+    /**
+     * Executes the current command.
+     *
+     * @param InputInterface $input An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     *
+     * @return null
+     *
+     * @see Command::execute()
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list()->get_list(true);
+
+        foreach($packages as $packageContext => $package)
+        {
+            $packagePath = Path::getInstance()->namespaceToFullPath($packageContext);
+            $testPath = $packagePath . 'Test';
+            $phpUnitFile = $testPath . DIRECTORY_SEPARATOR . 'phpunit.xml';
+
+            $sourcePathExists = $integrationPathExists = $unitPathExists = false;
+
+            $sourcePath = $testPath . DIRECTORY_SEPARATOR . 'Source';
+            if(is_dir($sourcePath))
+            {
+               $sourcePathExists = true;
+            }
+
+            $integrationPath = $testPath . DIRECTORY_SEPARATOR . 'Integration';
+            if(is_dir($integrationPath))
+            {
+                $output->writeln('[INTEGRATION] ' . $packageContext);
+                $integrationPathExists = true;
+            }
+
+            $unitPath = $testPath . DIRECTORY_SEPARATOR . 'Unit';
+            if(is_dir($unitPath))
+            {
+                $output->writeln('[UNIT] ' . $packageContext);
+                $unitPathExists = true;
+            }
+
+            if(file_exists($phpUnitFile) || (!$sourcePathExists && !$integrationPathExists && !$unitPathExists))
+            {
+                continue;
+            }
+
+            $output->writeln($phpUnitFile);
+
+        }
+        return null;
+    }
+}

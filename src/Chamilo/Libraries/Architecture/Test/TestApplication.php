@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\Test;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -92,7 +93,9 @@ trait TestApplication
     /**
      * This test checks if the given component uses the correct class name
      *
-     * @param string $component_file @dataProvider component_files_data_provider
+     * @param string $component_file
+     *
+     * @dataProvider component_files_data_provider
      */
     public function test_component_uses_correct_class_name($component_file)
     {
@@ -104,9 +107,15 @@ trait TestApplication
         $base_component_name =
             (string) StringUtilities::getInstance()->createString(basename($component_file, '.php'))->upperCamelize();
 
-        $expected_component_name = $base_component_name . 'Component';
+        $expected_component_name =
+            $base_component_name . (strpos($base_component_name, 'Component') !== false ? '' : 'Component');
 
-        $this->assertEquals($expected_component_name, $this->getClassNameFromPHPFile($component_file));
+        $this->assertEquals(
+            $expected_component_name,
+            ClassnameUtilities::getInstance()->getClassnameFromNamespace(
+                $this->getClassNameFromPHPFile($component_file)
+            )
+        );
     }
 
     /**
@@ -128,7 +137,7 @@ trait TestApplication
     {
         if (file_exists($this->get_component_folder_path()))
         {
-            return $this->scan_files_in_directory($this->get_component_folder_path(), '/^.+\.class\.php$/i', 0);
+            return $this->scan_files_in_directory($this->get_component_folder_path(), '/^.+\.php$/i', 0);
         }
 
         return array(array(''));
@@ -190,6 +199,19 @@ trait TestApplication
      */
     public function data_manager_files_data_provider()
     {
-        return $this->scan_files_in_directory($this->get_source_path(), '/^.+DataManager\.php$/i');
+        $dataManagerPaths = [
+            $this->get_source_path() . 'DataManager/DataManager.php',
+            $this->get_source_path() . 'Storage/DataManager.php'
+        ];
+
+        foreach($dataManagerPaths as $dataManagerPath)
+        {
+            if(file_exists($dataManagerPath))
+            {
+                return [[$dataManagerPath]];
+            }
+        }
+
+        return [];
     }
 }

@@ -176,10 +176,20 @@ class MigrationService
                     continue;
                 }
 
+                if ($contentObject instanceof LearningPath)
+                {
+                    $contentObject = $this->getOrCreateSectionForLearningPath($contentObject);
+                }
+
                 $treeNodeData = $this->createTreeNodeDataForContentObject(
                     $learningPath, $contentObject, $parentTreeNodeData,
                     $childContentObject
                 );
+
+                if($contentObject instanceof LearningPath)
+                {
+                    $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
+                }
             }
 
             $this->complexContentObjectItemsMappingForLearningPath[$complexContentObjectItem->getId()] =

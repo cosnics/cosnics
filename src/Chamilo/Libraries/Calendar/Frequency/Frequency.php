@@ -9,93 +9,74 @@ use Sabre\VObject;
 
 trait Frequency
 {
-    
-    // Properties
-    const PROPERTY_FREQUENCY = 'frequency';
-    const PROPERTY_FREQUENCY_UNTIL = 'frequency_until';
-    const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
-    const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
-    const PROPERTY_FREQUENCY_BYDAY = 'frequency_byday';
-    const PROPERTY_FREQUENCY_BYMONTHDAY = 'frequency_bymonthday';
-    const PROPERTY_FREQUENCY_BYMONTH = 'frequency_bymonth';
-    
-    // Frequency options
-    const FREQUENCY_NONE = '0';
-    const FREQUENCY_DAILY = '1';
-    const FREQUENCY_WEEKLY = '2';
-    const FREQUENCY_WEEKDAYS = '3';
-    const FREQUENCY_BIWEEK = '4';
-    const FREQUENCY_MONTHLY = '5';
-    const FREQUENCY_YEARLY = '6';
-
     public function get_frequency()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY);
+        return $this->get_additional_property('frequency');
     }
 
     public function set_frequency($frequency)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY, $frequency);
+        return $this->set_additional_property('frequency', $frequency);
     }
 
     public function get_frequency_until()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_UNTIL);
+        return $this->get_additional_property('frequency_until');
     }
 
     public function set_frequency_until($frequency_until)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_UNTIL, $frequency_until);
+        return $this->set_additional_property('frequency_until', $frequency_until);
     }
 
     public function get_frequency_count()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_COUNT);
+        return $this->get_additional_property('frequency_count');
     }
 
     public function set_frequency_count($frequency_count)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
+        return $this->set_additional_property('frequency_count', $frequency_count);
     }
 
     public function get_frequency_interval()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_INTERVAL);
+        return $this->get_additional_property('frequency_interval');
     }
 
     public function set_frequency_interval($frequency_interval)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
+        return $this->set_additional_property('frequency_interval', $frequency_interval);
     }
 
     public function get_frequency_byday()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_BYDAY);
+        return $this->get_additional_property('frequency_byday');
     }
 
     public function set_frequency_byday($frequency_byday)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_BYDAY, $frequency_byday);
+        return $this->set_additional_property('frequency_byday', $frequency_byday);
     }
 
     public function get_frequency_bymonthday()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_BYMONTHDAY);
+        return $this->get_additional_property('frequency_bymonthday');
     }
 
     public function set_frequency_bymonthday($frequency_bymonthday)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_BYMONTHDAY, $frequency_bymonthday);
+        return $this->set_additional_property('frequency_bymonthday', $frequency_bymonthday);
     }
 
     public function get_frequency_bymonth()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_BYMONTH);
+        return $this->get_additional_property('frequency_bymonth');
     }
 
     public function set_frequency_bymonth($frequency_bymonth)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_BYMONTH, $frequency_bymonth);
+        return $this->set_additional_property('frequency_bymonth', $frequency_bymonth);
     }
 
     public function has_frequency()
@@ -160,9 +141,9 @@ trait Frequency
             self::PROPERTY_START_DATE, 
             self::PROPERTY_END_DATE, 
             self::PROPERTY_UNTIL, 
-            self::PROPERTY_FREQUENCY, 
-            self::PROPERTY_FREQUENCY_COUNT, 
-            self::PROPERTY_FREQUENCY_INTERVAL, 
+            'frequency', 
+            'frequency_count', 
+            'frequency_interval', 
             self::PROPERTY_BYDAY, 
             self::PROPERTY_BYMONTH, 
             self::PROPERTY_BYMONTHDAY);

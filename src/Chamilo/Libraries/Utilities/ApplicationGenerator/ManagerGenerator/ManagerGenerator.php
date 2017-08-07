@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Utilities\ApplicationGenerator\ManagerGenerator;
 
+use Chamilo\Libraries\Utilities\ApplicationGenerator\MyTemplate;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -28,7 +30,7 @@ class ManagerGenerator
             mkdir($location, 0777, true);
 
         $manager_file = fopen(
-            $location (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
+            $location . (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
                  '_manager.class.php',
                 'w+');
         

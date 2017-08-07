@@ -45,16 +45,16 @@ abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\
         $this->assertTrue($syntax_correct);
     }
 
-    /**
-     * This test checks if the package uses the correct installer
-     */
-    public function test_package_uses_installer()
-    {
-        $namespace = $this->determine_package_namespace();
-        $class_name = $namespace . '\Package\Installer';
-        
-        $this->assertTrue(class_exists($class_name));
-    }
+//    /**
+//     * This test checks if the package uses the correct installer
+//     */
+//    public function test_package_uses_installer()
+//    {
+//        $namespace = $this->determine_package_namespace();
+//        $class_name = $namespace . '\Package\Installer';
+//
+//        $this->assertTrue(class_exists($class_name));
+//    }
 
     /**
      * **************************************************************************************************************

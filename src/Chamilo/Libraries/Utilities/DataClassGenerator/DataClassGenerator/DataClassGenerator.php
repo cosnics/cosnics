@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Utilities\DataClassGenerator\DataClassGenerator;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Utilities\DataClassGenerator\MyTemplate;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

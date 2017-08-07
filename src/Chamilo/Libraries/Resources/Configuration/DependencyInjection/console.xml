@@ -54,5 +54,11 @@
             <argument type="service" id="chamilo.libraries.architecture.test.php_unit_generator" />
         </service>
 
+        <service id="chamilo.libraries.console.command.generate_packages_php_unit_config"
+                 class="Chamilo\Libraries\Console\Command\PackagesPHPUnitGeneratorCommand">
+            <tag name="chamilo.libraries.console.command" />
+            <argument type="service" id="twig.environment" />
+        </service>
+
     </services>
 </container>

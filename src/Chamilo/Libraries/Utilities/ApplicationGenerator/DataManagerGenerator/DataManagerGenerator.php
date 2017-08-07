@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Utilities\ApplicationGenerator\DataManagerGenerator;
 
+use Chamilo\Libraries\Utilities\ApplicationGenerator\MyTemplate;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -32,11 +34,11 @@ class DataManagerGenerator
             mkdir($database_location, 0777, true);
 
         $dm_file = fopen(
-            $data_manager_location (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
+            $data_manager_location . (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
                  '_data_manager.class.php',
                 'w+');
         $dm_interface_file = fopen(
-            $data_manager_location (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
+            $data_manager_location . (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
                  '_data_manager_interface.class.php',
                 'w+');
         $database_file = fopen($database_location . 'mdb2.class.php', 'w+');

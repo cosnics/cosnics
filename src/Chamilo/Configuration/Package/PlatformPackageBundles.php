@@ -89,7 +89,7 @@ class PlatformPackageBundles
 
     /**
      *
-     * @return \configuration\package\storage\data_class\PackageList
+     * @return PackageList
      */
     public function get_package_list()
     {

@@ -1,14 +1,11 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
         backupGlobals="true"
         bootstrap="../../../../../Libraries/Architecture/Test/bootstrap.php">
     <testsuites>
         <testsuite name="Source">
             <directory>Source</directory>
-        </testsuite>
-        <testsuite name="Unit">
-            <directory>Unit</directory>
         </testsuite>
     </testsuites>
     <filter>

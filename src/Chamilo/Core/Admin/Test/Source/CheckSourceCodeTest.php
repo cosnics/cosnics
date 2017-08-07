@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Test\Source;
 
-use Chamilo\Libraries\Architecture\Test\TestApplication;
-
 /**
  * This test case checks the php syntax for the php files of this package
  * 
@@ -10,5 +8,5 @@ use Chamilo\Libraries\Architecture\Test\TestApplication;
  */
 class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\Source\CheckSourceCodeTest
 {
-    use TestApplication;
+
 }

@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Mdb2\ResultSet;
 
-use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
-
 /**
  * This class represents an MDB2 object ResultSet
  * 
  * @package common.libraries
  * @author Hans De Bisschop
  */
-class DataClassResultSet extends DataClassResultSet
+class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
 {
 
     /**

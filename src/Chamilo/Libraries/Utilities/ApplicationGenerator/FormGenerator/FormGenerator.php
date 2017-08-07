@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Utilities\ApplicationGenerator\FormGenerator;
 
+use Chamilo\Libraries\Utilities\ApplicationGenerator\MyTemplate;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -37,7 +39,7 @@ class FormGenerator
             mkdir($location, 0777, true);
 
         $file = fopen(
-            $location (string) StringUtilities :: getInstance()->createString($object_name)->underscored() . '_form.class.php',
+            $location . (string) StringUtilities :: getInstance()->createString($object_name)->underscored() . '_form.class.php',
             'w+');
         
         if ($file)

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Utilities\ApplicationGenerator\InstallGenerator;
 
+use Chamilo\Libraries\Utilities\ApplicationGenerator\MyTemplate;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -34,7 +36,7 @@ class InstallGenerator
             mkdir($location, 0777, true);
 
         $file = fopen(
-            $location (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
+            $location . (string) StringUtilities :: getInstance()->createString($application_name)->underscored() .
                  '_installer.class.php',
                 'w+');
         

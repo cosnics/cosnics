@@ -19,7 +19,7 @@ class PdfExport extends Export
         if (is_array($data))
         {
             require_once Path::getInstance()->getPluginPath() . 'ezpdf/class.ezpdf.php';
-            $pdf = & new Cezpdf();
+            $pdf = new Cezpdf();
             $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
             foreach ($data as $datapair)
             {
