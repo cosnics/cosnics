@@ -126,7 +126,7 @@ class MigrationFixer
 
         $this->treeNodeDataService->createTreeNodeData($sectionTreeNodeData);
 
-        $sectionTreeNodeData->setDisplayOrder($oldDisplayOrder);
+        $sectionTreeNodeData->setDisplayOrder((int) $oldDisplayOrder);
         $this->treeNodeDataService->updateTreeNodeData($sectionTreeNodeData);
 
         $output->writeln(
