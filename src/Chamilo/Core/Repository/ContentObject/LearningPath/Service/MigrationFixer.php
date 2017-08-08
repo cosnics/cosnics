@@ -68,9 +68,7 @@ class MigrationFixer
      */
     public function migrateLearningPaths(OutputInterface $output)
     {
-        $learningPathIds = [
-            100999,103963,106204,108080,108125,109902,175569,175691,176338,177484
-        ];
+        $learningPathIds = [54413];
 
         foreach ($learningPathIds as $learningPathId)
         {
