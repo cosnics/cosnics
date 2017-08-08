@@ -118,8 +118,11 @@ class MigrationFixer
             return;
         }
 
+        $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
+        $sectionTreeNodeData->remove_listener(0);
+
         /** Remove first because this object will be recreated during copy action with section */
-        $this->treeNodeDataService->deleteTreeNodeData($subLearningPathTreeNode->getTreeNodeData());
+        $this->treeNodeDataService->deleteTreeNodeData($sectionTreeNodeData);
 
         $section = $this->getOrCreateSectionForLearningPath($subLearningPath);
 
@@ -130,18 +133,12 @@ class MigrationFixer
             )
         );
 
-        $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
-        $oldDisplayOrder = $sectionTreeNodeData->getDisplayOrder();
-
         $sectionTreeNodeData->setLearningPathId((int) $rootLearningPath->getId());
         $sectionTreeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());
         $sectionTreeNodeData->setContentObjectId((int) $section->getId());
         $sectionTreeNodeData->setId(0);
 
         $this->treeNodeDataService->createTreeNodeData($sectionTreeNodeData);
-
-        $sectionTreeNodeData->setDisplayOrder((int) $oldDisplayOrder);
-        $this->treeNodeDataService->updateTreeNodeData($sectionTreeNodeData);
 
         $output->writeln(
             sprintf(
@@ -157,6 +154,7 @@ class MigrationFixer
         foreach ($subLearningPathDescendantNodes as $subLearningPathDescendantNode)
         {
             $treeNodeData = $subLearningPathDescendantNode->getTreeNodeData();
+            $treeNodeData->remove_listener(0);
 
             $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
             $treeNodeData->setParentTreeNodeDataId((int) $sectionTreeNodeData->getId());
