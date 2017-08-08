@@ -174,7 +174,7 @@ class MigrationFixer
         TreeNode $treeNode, TreeNodeData $parentTreeNodeData
     )
     {
-        $childNodes = $treeNode->getDescendantNodes();
+        $childNodes = $treeNode->getChildNodes();
 
         foreach ($childNodes as $childNode)
         {
