@@ -85,7 +85,7 @@ class MigrationFixer
             /** @var LearningPath $learningPath */
             $learningPath = $this->contentObjectRepository->findById($learningPathId);
 
-            $learningPathTree = $this->learningPathService->getTree($learningPath);
+            $learningPathTree = $this->learningPathService->buildTree($learningPath);
             $rootNode = $learningPathTree->getRoot();
             $descendantNodes = $rootNode->getDescendantNodes();
 
@@ -154,7 +154,7 @@ class MigrationFixer
             )
         );
 
-        $subLearningPathTree = $this->learningPathService->getTree($subLearningPath);
+        $subLearningPathTree = $this->learningPathService->buildTree($subLearningPath);
         $subLearningPathRootNode = $subLearningPathTree->getRoot();
 
         $this->copyChildrenFromNodeToSection($output, $rootLearningPath, $subLearningPathRootNode, $sectionTreeNodeData);
