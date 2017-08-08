@@ -21,7 +21,7 @@ try {
                     steps {
                         dir ("/cosnics/${env.BRANCH_NAME}/current/") {
                             sh "php console chamilo:phpunit:generate-config"
-                            sh "bin/phpunit -c files/configuration/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml --coverage-html ${WORKSPACE}/build-reports"
+                            sh "bin/phpunit -c files/configuration/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml"
                         }
                         step([$class: 'XUnitBuilder',
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
