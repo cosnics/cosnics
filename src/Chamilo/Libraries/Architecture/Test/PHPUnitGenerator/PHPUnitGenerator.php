@@ -57,8 +57,10 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
 
     /**
      * Generates the global phpunit configuration file for Chamilo
+     *
+     * @param bool $includeSource
      */
-    public function generate()
+    public function generate($includeSource = true)
     {
         $testDirectories = $sourceDirectories = $excludedDirectories = [];
 
@@ -87,8 +89,14 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
 
             foreach ($domNodeList as $domElement)
             {
+                $testFolder = trim($domElement->textContent);
+                if(!$includeSource && $testFolder == 'Source')
+                {
+                    continue;
+                }
+
                 /** @var \DOMElement $domElement */
-                $testDirectories[] = $testPath . DIRECTORY_SEPARATOR . trim($domElement->textContent);
+                $testDirectories[] = $testPath . DIRECTORY_SEPARATOR . $testFolder;
             }
 
             $sourceDirectories[] = $packagePath;

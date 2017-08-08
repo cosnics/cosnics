@@ -20,7 +20,8 @@ try {
                 stage('Test') {
                     steps {
                         dir ("/cosnics/${env.BRANCH_NAME}/current/") {
-                            sh "bin/phpunit -c src/Chamilo/Core/Repository/ContentObject/LearningPath/Test/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml --coverage-html ${WORKSPACE}/build-reports"
+                            sh "php console chamilo:phpunit:generate-config"
+                            sh "bin/phpunit -c files/configuration/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml --coverage-html ${WORKSPACE}/build-reports"
                         }
                         step([$class: 'XUnitBuilder',
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],

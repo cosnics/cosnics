@@ -2,17 +2,27 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
         backupGlobals="true"
-        bootstrap="../../../../../../../Libraries/Architecture/Test/bootstrap.php">
+        bootstrap="{{ BootstrapPath }}">
     <testsuites>
+        {%- if SourcePathExists %}
+
         <testsuite name="Source">
             <directory>Source</directory>
         </testsuite>
+        {%- endif %}
+        {%- if UnitPathExists %}
+
         <testsuite name="Unit">
             <directory>Unit</directory>
         </testsuite>
+        {%- endif %}
+        {%- if IntegrationPathExists %}
+
         <testsuite name="Integration">
             <directory>Integration</directory>
         </testsuite>
+        {%- endif %}
+
     </testsuites>
     <filter>
         <whitelist>

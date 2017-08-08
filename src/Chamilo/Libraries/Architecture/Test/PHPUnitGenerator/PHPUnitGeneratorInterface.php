@@ -11,6 +11,8 @@ interface PHPUnitGeneratorInterface
 {
     /**
      * Generates the global phpunit configuration file for Chamilo
+     *
+     * @param bool $includeSource
      */
-    public function generate();
+    public function generate($includeSource = true);
 }

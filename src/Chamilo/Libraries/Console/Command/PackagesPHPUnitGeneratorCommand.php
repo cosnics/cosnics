@@ -5,6 +5,7 @@ namespace Chamilo\Libraries\Console\Command;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -14,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PackagesPHPUnitGeneratorCommand extends Command
 {
+
+
     /**
      * @var \Twig_Environment
      */
@@ -52,9 +55,10 @@ class PackagesPHPUnitGeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list()->get_list(true);
+        $packages =
+            \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list()->get_list(true);
 
-        foreach($packages as $packageContext => $package)
+        foreach ($packages as $packageContext => $package)
         {
             $packagePath = Path::getInstance()->namespaceToFullPath($packageContext);
             $testPath = $packagePath . 'Test';
@@ -63,33 +67,46 @@ class PackagesPHPUnitGeneratorCommand extends Command
             $sourcePathExists = $integrationPathExists = $unitPathExists = false;
 
             $sourcePath = $testPath . DIRECTORY_SEPARATOR . 'Source';
-            if(is_dir($sourcePath))
+            if (is_dir($sourcePath))
             {
-               $sourcePathExists = true;
+                $sourcePathExists = true;
             }
 
             $integrationPath = $testPath . DIRECTORY_SEPARATOR . 'Integration';
-            if(is_dir($integrationPath))
+            if (is_dir($integrationPath))
             {
                 $output->writeln('[INTEGRATION] ' . $packageContext);
                 $integrationPathExists = true;
             }
 
             $unitPath = $testPath . DIRECTORY_SEPARATOR . 'Unit';
-            if(is_dir($unitPath))
+            if (is_dir($unitPath))
             {
                 $output->writeln('[UNIT] ' . $packageContext);
                 $unitPathExists = true;
             }
 
-            if(file_exists($phpUnitFile) || (!$sourcePathExists && !$integrationPathExists && !$unitPathExists))
+            if (file_exists($phpUnitFile) || (!$sourcePathExists && !$integrationPathExists && !$unitPathExists))
             {
                 continue;
             }
 
             $output->writeln($phpUnitFile);
 
+            $packageParts = explode('\\', $packageContext);
+            $bootstrapPath = str_repeat('../', (count($packageParts) + 1)) .
+                'Chamilo/Libraries/Architecture/Test/bootstrap.php';
+
+            $phpunitContent = $this->twig->render(
+                'Chamilo\Libraries:PHPUnitGenerator/package_phpunit.xml.twig', [
+                    'SourcePathExists' => $sourcePathExists, 'IntegrationPathExists' => $integrationPathExists,
+                    'UnitPathExists' => $unitPathExists, 'BootstrapPath' => $bootstrapPath
+                ]
+            );
+
+            file_put_contents($phpUnitFile, $phpunitContent);
         }
+
         return null;
     }
 }
