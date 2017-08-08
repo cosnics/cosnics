@@ -12,6 +12,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Fixes the learning paths that were not fully migrated due to corrupt data
  *
+ * DETECTION QUERY:
+ *
+ *  SELECT * FROM `repository_learning_path_tree_node_data` TND
+    JOIN repository_content_object CO on CO.id = TND.content_object_id
+    WHERE TND.learning_path_id <> TND.content_object_id AND CO.type LIKE '%LearningPath';
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MigrationFixer
@@ -85,9 +91,6 @@ class MigrationFixer
 
             foreach ($descendantNodes as $descendantNode)
             {
-                /** Remove first because this object will be recreated during copy action with section */
-                $this->treeNodeDataService->deleteTreeNodeData($descendantNode->getTreeNodeData());
-
                 $this->convertLearningPathToSection(
                     $output, $learningPath, $descendantNode, $descendantNode->getParentNode()->getTreeNodeData()
                 );
@@ -114,6 +117,9 @@ class MigrationFixer
         {
             return;
         }
+
+        /** Remove first because this object will be recreated during copy action with section */
+        $this->treeNodeDataService->deleteTreeNodeData($subLearningPathTreeNode->getTreeNodeData());
 
         $section = $this->getOrCreateSectionForLearningPath($subLearningPath);
 
