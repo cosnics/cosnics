@@ -91,9 +91,20 @@ class MigrationFixer
 
             foreach ($descendantNodes as $descendantNode)
             {
-                $this->convertLearningPathToSection(
-                    $output, $learningPath, $descendantNode, $descendantNode->getParentNode()->getTreeNodeData()
-                );
+                $subLearningPath = $descendantNode->getContentObject();
+                if ($subLearningPath instanceof LearningPath)
+                {
+                    $sectionTreeNodeData = $descendantNode->getTreeNodeData();
+                    $sectionTreeNodeData->remove_listener(0);
+
+                    /** Remove first because this object will be recreated during copy action with section */
+                    $this->treeNodeDataService->deleteTreeNodeData($sectionTreeNodeData);
+
+                    $this->convertLearningPathToSection(
+                        $output, $learningPath, $descendantNode, $descendantNode->getParentNode()->getTreeNodeData()
+                    );
+                }
+
             }
         }
     }
@@ -118,12 +129,6 @@ class MigrationFixer
             return;
         }
 
-        $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
-        $sectionTreeNodeData->remove_listener(0);
-
-        /** Remove first because this object will be recreated during copy action with section */
-        $this->treeNodeDataService->deleteTreeNodeData($sectionTreeNodeData);
-
         $section = $this->getOrCreateSectionForLearningPath($subLearningPath);
 
         $output->writeln(
@@ -132,6 +137,8 @@ class MigrationFixer
                 $rootLearningPath->getId(), $subLearningPath->getId(), $section->getId()
             )
         );
+
+        $sectionTreeNodeData = $subLearningPathTreeNode->getTreeNodeData();
 
         $sectionTreeNodeData->setLearningPathId((int) $rootLearningPath->getId());
         $sectionTreeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());
@@ -149,30 +156,60 @@ class MigrationFixer
 
         $subLearningPathTree = $this->learningPathService->getTree($subLearningPath);
         $subLearningPathRootNode = $subLearningPathTree->getRoot();
-        $subLearningPathDescendantNodes = $subLearningPathRootNode->getDescendantNodes();
 
-        foreach ($subLearningPathDescendantNodes as $subLearningPathDescendantNode)
+        $this->copyChildrenFromNodeToSection($output, $rootLearningPath, $subLearningPathRootNode, $sectionTreeNodeData);
+
+    }
+
+    /**
+     * Copies the children from a node to a given section. The parent section is identified by the TreeNodeData
+     *
+     * @param OutputInterface $output
+     * @param LearningPath $rootLearningPath
+     * @param TreeNode $treeNode
+     * @param TreeNodeData $parentTreeNodeData
+     */
+    protected function copyChildrenFromNodeToSection(
+        OutputInterface $output, LearningPath $rootLearningPath,
+        TreeNode $treeNode, TreeNodeData $parentTreeNodeData
+    )
+    {
+        $childNodes = $treeNode->getDescendantNodes();
+
+        foreach ($childNodes as $childNode)
         {
-            $treeNodeData = $subLearningPathDescendantNode->getTreeNodeData();
-            $treeNodeData->remove_listener(0);
+            $contentObject = $childNode->getContentObject();
 
-            $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
-            $treeNodeData->setParentTreeNodeDataId((int) $sectionTreeNodeData->getId());
-            $treeNodeData->setId(0);
+            if($contentObject instanceof LearningPath)
+            {
+                $this->convertLearningPathToSection(
+                    $output, $rootLearningPath, $childNode, $parentTreeNodeData
+                );
+            }
+            else
+            {
+                $treeNodeData = $childNode->getTreeNodeData();
+                $treeNodeData->remove_listener(0);
 
-            $this->treeNodeDataService->createTreeNodeData($treeNodeData);
+                $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+                $treeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());
+                $treeNodeData->setId(0);
 
-            $output->writeln(
-                sprintf(
-                    '[%s] Created new TreeNodeData %s for child ContentObject %s',
-                    $rootLearningPath->getId(), $treeNodeData->getId(),
-                    $subLearningPathDescendantNode->getContentObject()->getId()
-                )
-            );
+                $this->treeNodeDataService->createTreeNodeData($treeNodeData);
 
-            $this->convertLearningPathToSection(
-                $output, $rootLearningPath, $subLearningPathDescendantNode, $treeNodeData
-            );
+                $output->writeln(
+                    sprintf(
+                        '[%s] Created new TreeNodeData %s for child ContentObject %s',
+                        $rootLearningPath->getId(), $treeNodeData->getId(),
+                        $contentObject->getId()
+                    )
+                );
+
+                if($contentObject instanceof Section)
+                {
+                    $this->copyChildrenFromNodeToSection($output, $rootLearningPath, $childNode, $treeNodeData);
+                }
+            }
         }
     }
 

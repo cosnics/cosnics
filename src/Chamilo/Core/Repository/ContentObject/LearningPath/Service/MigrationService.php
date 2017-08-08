@@ -186,7 +186,7 @@ class MigrationService
                     $childContentObject
                 );
 
-                if($contentObject instanceof LearningPath)
+                if($contentObject instanceof Section)
                 {
                     $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
                 }
