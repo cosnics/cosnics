@@ -35,7 +35,7 @@
 
         <service
                 id="chamilo.core.repository.service.content_object_copier_wrapper"
-                class="Chamilo\Core\Repository\ContentObject\ContentObjectCopierWrapper" />
+                class="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper" />
 
         <service
                 id="chamilo.core.repository.content_object.learning_path.service.tree_node_copier"
