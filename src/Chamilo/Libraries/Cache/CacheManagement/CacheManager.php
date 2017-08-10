@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Cache;
+namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CacheDirector
+class CacheManager
 {
 
     /**

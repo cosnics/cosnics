@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
@@ -65,6 +66,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
+        $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
     }
 
     /**

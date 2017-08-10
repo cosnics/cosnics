@@ -1,5 +1,6 @@
 <?php
-namespace Chamilo\Libraries\Cache;
+
+namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
@@ -32,6 +33,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Twig\TwigCacheService;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\TranslationCacheService;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
@@ -49,16 +51,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Builds the cache directory by adding custom cache services directly (through code) and indirectly
- * (through dependency injection)
+ * Creates the cache services for Chamilo
  *
- * @package Chamilo\Libraries\Cache
  * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CacheDirectorBuilder
+class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterface
 {
-
     /**
      *
      * @var ContainerInterface
@@ -66,8 +64,6 @@ class CacheDirectorBuilder
     protected $container;
 
     /**
-     * CacheDirectorBuilder constructor.
-     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -76,36 +72,22 @@ class CacheDirectorBuilder
     }
 
     /**
-     * Builds the cache director and adds the chamilo cache services through code
+     * Creates and adds the cache services to the given cache manager
      *
-     * @return CacheDirector
+     * @param CacheManager $cacheManager
      */
-    public function buildCacheDirector()
+    public function createCacheServices(CacheManager $cacheManager)
     {
-        $cacheDirector = new CacheDirector();
-
-        $this->addChamiloCacheServices($cacheDirector);
-
-        return $cacheDirector;
-    }
-
-    /**
-     * Adds the chamilo cache services through code
-     *
-     * @param CacheDirector $cacheDirector
-     */
-    protected function addChamiloCacheServices(CacheDirector $cacheDirector)
-    {
-        $this->addGeneralCacheServices($cacheDirector);
-        $this->addUserCacheServices($cacheDirector);
+        $this->addGeneralCacheServices($cacheManager);
+        $this->addUserCacheServices($cacheManager);
     }
 
     /**
      * Adds general chamilo cache services
      *
-     * @param CacheDirector $cacheDirector
+     * @param CacheManager $cacheManager
      */
-    protected function addGeneralCacheServices(CacheDirector $cacheDirector)
+    protected function addGeneralCacheServices(CacheManager $cacheManager)
     {
         $stringUtilities = new StringUtilities();
         $classnameUtilities = new ClassnameUtilities($stringUtilities);
@@ -134,35 +116,36 @@ class CacheDirectorBuilder
             new DataClassFactory()
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_dependency_injection',
             new DependencyInjectionCacheService($configurationConsulter)
         );
-        $cacheDirector->addCacheService('chamilo_translations', new TranslationCacheService());
+        $cacheManager->addCacheService('chamilo_translations', new TranslationCacheService());
+        $cacheManager->addCacheService('symfony_translations', new \Chamilo\Libraries\Translation\TranslationCacheService());
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_configuration',
             new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository)))
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_registration',
             new DataCacheLoader(
                 new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))
             )
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_language',
             new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository)))
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_repository_configuration',
             new \Chamilo\Core\Repository\Service\ConfigurationCacheService()
         );
 
-        $cacheDirector->addCacheService('chamilo_packages', new PackageBundlesCacheService());
+        $cacheManager->addCacheService('chamilo_packages', new PackageBundlesCacheService());
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
             $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
@@ -171,32 +154,39 @@ class CacheDirectorBuilder
         $pathBuilder = new PathBuilder($classnameUtilities);
         $theme = Theme::getInstance();
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_stylesheets',
             new StylesheetCacheService($pathBuilder, $configurablePathBuilder, $theme)
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_javascript', new JavascriptCacheService($pathBuilder, $configurablePathBuilder)
         );
 
-        $cacheDirector->addCacheService('chamilo_calculator', new CalculatorCacheService());
-        $cacheDirector->addCacheService('chamilo_menu_items', new ItemsCacheService(new ItemRepository()));
+        $cacheManager->addCacheService('chamilo_calculator', new CalculatorCacheService());
+        $cacheManager->addCacheService('chamilo_menu_items', new ItemsCacheService(new ItemRepository()));
+
+        $cacheManager->addCacheService(
+            'chamilo_twig',
+            new TwigCacheService(
+                $this->container->get('twig.environment'), $this->container->get('symfony.component.forms.form')
+            )
+        );
     }
 
     /**
      * Adds user based cache services
      *
-     * @param CacheDirector $cacheDirector
+     * @param CacheManager $cacheManager
      */
-    protected function addUserCacheServices(CacheDirector $cacheDirector)
+    protected function addUserCacheServices(CacheManager $cacheManager)
     {
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_repository_type_selector',
             new TypeSelectorCacheService(new TypeSelectorFactory())
         );
 
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService(
             'chamilo_office365_requests',
             new RequestCacheService(
                 new \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository('', '', '', '')
@@ -209,17 +199,17 @@ class CacheDirectorBuilder
             ''
         );
 
-        $cacheDirector->addCacheService('chamilo_google_events', new EventsCacheService($googleCalendarRepository));
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService('chamilo_google_events', new EventsCacheService($googleCalendarRepository));
+        $cacheManager->addCacheService(
             'chamilo_google_calendars',
             new OwnedCalendarsCacheService($googleCalendarRepository)
         );
-        $cacheDirector->addCacheService('chamilo_external_calendar', new ExternalCalendarCacheService());
-        $cacheDirector->addCacheService(
+        $cacheManager->addCacheService('chamilo_external_calendar', new ExternalCalendarCacheService());
+        $cacheManager->addCacheService(
             'chamilo_menu_rights',
             new RightsCacheService(new ItemService(new ItemRepository()))
         );
-        $cacheDirector->addCacheService('chamilo_user_groups', new UserGroupMembershipCacheService());
-        $cacheDirector->addCacheService('chamilo_local_settings', new LocalSettingCacheService());
+        $cacheManager->addCacheService('chamilo_user_groups', new UserGroupMembershipCacheService());
+        $cacheManager->addCacheService('chamilo_local_settings', new LocalSettingCacheService());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Console\Command;
 
-use Chamilo\Libraries\Cache\CacheDirector;
+use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,19 +24,19 @@ abstract class CacheCommand extends ChamiloCommand
     /**
      * The CacheDirector
      * 
-     * @var CacheDirector
+     * @var CacheManager
      */
-    protected $cacheDirector;
+    protected $cacheManager;
 
     /**
      * Constructor
      * 
      * @param Translator $translator
-     * @param CacheDirector $cacheDirector
+     * @param CacheManager $cacheManager
      */
-    public function __construct(Translator $translator, CacheDirector $cacheDirector)
+    public function __construct(Translator $translator, CacheManager $cacheManager)
     {
-        $this->cacheDirector = $cacheDirector;
+        $this->cacheManager = $cacheManager;
         parent::__construct($translator);
     }
 
@@ -101,7 +101,7 @@ abstract class CacheCommand extends ChamiloCommand
                 '<comment>' . $this->translator->trans('AvailableCacheServices', array(), 'Chamilo\Libraries') . '</comment>');
             $output->writeln('');
             
-            foreach ($this->cacheDirector->getCacheServiceAliases() as $serviceAlias)
+            foreach ($this->cacheManager->getCacheServiceAliases() as $serviceAlias)
             {
                 $output->writeln('<info>' . $serviceAlias . '</info>');
             }
@@ -120,7 +120,7 @@ abstract class CacheCommand extends ChamiloCommand
      */
     protected function clearCache(InputInterface $input, OutputInterface $output)
     {
-        $this->cacheDirector->clear($this->getSelectedCacheServices($input));
+        $this->cacheManager->clear($this->getSelectedCacheServices($input));
         $output->writeln($this->translator->trans('CacheCleared', array(), 'Chamilo\Libraries'));
     }
 
@@ -132,7 +132,7 @@ abstract class CacheCommand extends ChamiloCommand
      */
     protected function warmUpCache(InputInterface $input, OutputInterface $output)
     {
-        $this->cacheDirector->warmUp($this->getSelectedCacheServices($input));
+        $this->cacheManager->warmUp($this->getSelectedCacheServices($input));
         $output->writeln($this->translator->trans('CacheWarmedUp', array(), 'Chamilo\Libraries'));
     }
 

@@ -32,7 +32,7 @@
                 id="symfony.component.translation.translator" />
             <argument
                 type="service"
-                id="chamilo.libraries.cache.cache_director" />
+                id="chamilo.libraries.cache.cache_management.cache_manager" />
             <tag name="chamilo.libraries.console.command" />
         </service>
 

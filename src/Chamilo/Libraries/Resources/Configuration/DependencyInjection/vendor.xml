@@ -26,7 +26,15 @@
         <service id="twig.environment" class="Twig_Environment" factory-method="createEnvironment"
                  factory-service="chamilo.libraries.format.twig.twig_factory" >
             <argument type="service" id="symfony.component.translation.translator" />
+            <argument type="service" id="chamilo.libraries.architecture.application.routing.url_generator" />
         </service>
+
+        <service id="symfony.component.forms.form" class="Symfony\Component\Form\FormFactory" factory-method="buildFormFactory" factory-service="chamilo.libraries.format.form.form_factory_builder">
+            <argument type="service" id="twig.environment"/>
+            <argument type="service" id="symfony.component.validator.validator"/>
+        </service>
+
+        <service id="chamilo.libraries.format.form.form_factory_builder" class="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder" />
 
     </services>
 </container>

@@ -54,7 +54,7 @@ class ResourceManagementExtension extends \Twig_Extension
      */
     public function getImagePath($image, $context, $extension = 'png')
     {
-        $context = $context ?: self::HOGENT_LIBRARIES_CONTEXT;
+        $context = $context ?: self::DEFAULT_CONTEXT;
         
         return Theme::getInstance()->getImagePath($context, $image, $extension);
     }
