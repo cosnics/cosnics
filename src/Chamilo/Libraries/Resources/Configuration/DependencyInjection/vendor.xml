@@ -46,5 +46,14 @@
         <service id="chamilo.libraries.format.validator.validator_factory"
                  class="Chamilo\Libraries\Format\Validator\SymfonyDataClassValidatorFactory"/>
 
+        <service id="jms.serializer" class="JMS\Serializer\Serializer" factory-method="createSerializer"
+                 factory-service="jms.serializer.serializer_factory"/>
+
+        <service id="jms.serializer.serializer_builder" class="JMS\Serializer\SerializerBuilder" />
+
+        <service id="jms.serializer.serializer_factory" class="Chamilo\Libraries\Format\Serializer\SerializerFactory">
+            <argument type="service" id="jms.serializer.serializer_builder" />
+        </service>
+
     </services>
 </container>
