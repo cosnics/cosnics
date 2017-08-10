@@ -55,5 +55,16 @@
             <argument type="service" id="jms.serializer.serializer_builder" />
         </service>
 
+        <service id="monolog.logger" class="Monolog\Logger">
+            <argument>Chamilo</argument>
+        </service>
+
+        <service id="symfony.component.event_dispatcher" class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="symfony.config.processor" class="Symfony\Component\Config\Definition\Processor" />
+        <service id="symfony.yaml.parser" class="Symfony\Component\Yaml\Parser" />
+
     </services>
 </container>
