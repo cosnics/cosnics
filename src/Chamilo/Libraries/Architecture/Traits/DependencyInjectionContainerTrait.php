@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -100,6 +101,14 @@ trait DependencyInjectionContainerTrait
     public function getConfigurablePathBuilder()
     {
         return $this->getService('chamilo.libraries.file.configurable_path_builder');
+    }
+
+    /**
+     * @return object | ConfigurationConsulter
+     */
+    public function getConfigurationConsulter()
+    {
+        return $this->getService('chamilo.configuration.service.configuration_consulter');
     }
 
     /**

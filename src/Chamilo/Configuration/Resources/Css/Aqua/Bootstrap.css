@@ -907,3 +907,7 @@ ul.nav-wizard.publication-wizard {
 	color: #406e8e;
 	font-size: 14px;
 }
+
+.img-responsive {
+	display: inline-block;
+}
