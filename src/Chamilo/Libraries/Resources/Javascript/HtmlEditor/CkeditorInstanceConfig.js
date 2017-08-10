@@ -59,8 +59,8 @@ CKEDITOR.editorConfig = function(config)
 
     config.contentsCss = [
         web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/contents.css?v=1',
-        web_path + 'index.php?application=Chamilo\\Libraries\\Ajax&go=CkeditorCss&theme=' + getTheme() + '?v=1',
-        web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme() + '?v=1'
+        web_path + 'index.php?application=Chamilo\\Libraries\\Ajax&go=CkeditorCss&theme=' + getTheme() + '&v=1',
+        web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme() + '&v=1'
     ];
 
     config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //free. Default is iframely.
