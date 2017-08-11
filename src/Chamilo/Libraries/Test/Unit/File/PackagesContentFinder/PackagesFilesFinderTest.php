@@ -47,7 +47,6 @@ class PackagesFilesFinderTest extends Test
         $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
 
         $this->assertEquals(count($files['Chamilo\Libraries']), 3);
-        $this->assertContains('test2.txt', $files['Chamilo\Libraries'][1]);
     }
 
     /**
