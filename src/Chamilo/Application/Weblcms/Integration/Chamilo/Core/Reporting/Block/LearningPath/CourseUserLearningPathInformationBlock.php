@@ -107,6 +107,11 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
+            if(!$learning_path instanceof LearningPath)
+            {
+                continue;
+            }
+
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
             $publication[ContentObjectPublication::PROPERTY_ID];
 
