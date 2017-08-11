@@ -210,7 +210,7 @@ class CalendarRepository
 
                 $this->saveAccessToken($this->googleClient->getAccessToken());
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
                 $this->clearAccessToken();
             }
@@ -245,7 +245,7 @@ class CalendarRepository
 
                 return $this->saveAccessToken($googleClient->getAccessToken());
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
                 $this->clearAccessToken();
             }
@@ -338,8 +338,17 @@ class CalendarRepository
      */
     public function findOwnedCalendars()
     {
-        $calendarItems =
-            $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
+        try
+        {
+            $calendarItems = $this->getCalendarClient()->calendarList
+                ->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
+        }
+        catch (\Exception $ex)
+        {
+            $this->clearAccessToken();
+
+            return [];
+        }
 
         $availableCalendars = array();
 
@@ -374,9 +383,18 @@ class CalendarRepository
         $timeMax = new \DateTime();
         $timeMax->setTimestamp($toDate);
 
-        return $this->getCalendarClient()->events->listEvents(
-            $calendarIdentifier,
-            array('timeMin' => $timeMin->format(\DateTime::RFC3339), 'timeMax' => $timeMax->format(\DateTime::RFC3339))
-        );
+        try
+        {
+            return $this->getCalendarClient()->events->listEvents(
+                $calendarIdentifier,
+                array('timeMin' => $timeMin->format(\DateTime::RFC3339), 'timeMax' => $timeMax->format(\DateTime::RFC3339))
+            );
+        }
+        catch (\Exception $ex)
+        {
+            $this->clearAccessToken();
+
+            return null;
+        }
     }
 }
