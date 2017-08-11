@@ -79,7 +79,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
                 $parameters[self::PARAM_CLASS] = '';
             }
 
-            $html[] = '<img title="' . Translation::get('DownloadFile') . '" src="' . $url . '&display=1"
+            $html[] = '<img src="' . $url . '&display=1"
                         alt="' . $parameters[self::PARAM_ALT] . '"
                         title="' .
                         htmlentities($parameters[self::PARAM_ALT]) . '"
