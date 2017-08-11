@@ -21,7 +21,7 @@ class TwigLoaderChamiloFilesystemTest extends Test
     public function test_get_cache_key()
     {
         $twig_loader_chamilo_filesystem = new TwigLoaderChamiloFilesystem();
-        $this->assertNotEmpty($twig_loader_chamilo_filesystem->getCacheKey('Hogent\Libraries:Test/test.html.twig'));
+        $this->assertNotEmpty($twig_loader_chamilo_filesystem->getCacheKey('Chamilo\Libraries:Test/test.html.twig'));
     }
 
     /**
@@ -65,7 +65,7 @@ class TwigLoaderChamiloFilesystemTest extends Test
     public function test_get_cache_key_with_invalid_template_path_in_template_name()
     {
         $twig_loader_chamilo_filesystem = new TwigLoaderChamiloFilesystem();
-        $twig_loader_chamilo_filesystem->getCacheKey('Hogent\Libraries:test/invalid.html.twig');
+        $twig_loader_chamilo_filesystem->getCacheKey('Chamilo\Libraries:test/invalid.html.twig');
     }
 
     /**
@@ -76,7 +76,7 @@ class TwigLoaderChamiloFilesystemTest extends Test
     public function test_get_cache_key_with_empty_template_path_in_template_name()
     {
         $twig_loader_chamilo_filesystem = new TwigLoaderChamiloFilesystem();
-        $twig_loader_chamilo_filesystem->getCacheKey('Hogent\Libraries:');
+        $twig_loader_chamilo_filesystem->getCacheKey('Chamilo\Libraries:');
     }
 
     /**
@@ -85,7 +85,7 @@ class TwigLoaderChamiloFilesystemTest extends Test
     public function test_is_fresh()
     {
         $twig_loader_chamilo_filesystem = new TwigLoaderChamiloFilesystem();
-        $this->assertTrue($twig_loader_chamilo_filesystem->isFresh('Hogent\Libraries:Test/test.html.twig', time()));
+        $this->assertTrue($twig_loader_chamilo_filesystem->isFresh('Chamilo\Libraries:Test/test.html.twig', time()));
     }
 
     /**
@@ -97,9 +97,9 @@ class TwigLoaderChamiloFilesystemTest extends Test
 
         $this->assertEquals(
             file_get_contents(
-                Path::getInstance()->getBasePath() . 'Hogent/Libraries/Resources/Templates/Test/test.html.twig'
+                Path::getInstance()->getBasePath() . 'Chamilo/Libraries/Resources/Templates/Test/test.html.twig'
             ),
-            $twig_loader_chamilo_filesystem->getSource('Hogent\Libraries:Test/test.html.twig')
+            $twig_loader_chamilo_filesystem->getSource('Chamilo\Libraries:Test/test.html.twig')
         );
     }
 }
