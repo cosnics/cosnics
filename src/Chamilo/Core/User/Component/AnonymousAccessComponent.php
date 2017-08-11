@@ -221,7 +221,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     /**
      * @return ConfigurationConsulter
      */
-    protected function getConfigurationConsulter()
+    public function getConfigurationConsulter()
     {
         return $this->getService('chamilo.configuration.service.configuration_consulter');
     }
