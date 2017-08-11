@@ -119,4 +119,74 @@ trait DependencyInjectionContainerTrait
         return $this->getService('chamilo.libraries.architecture.error_handler.exception_logger');
     }
 
+    /**
+     * Returns the validator form the dependency injection container
+     *
+     * @return \Symfony\Component\Validator\Validator | object
+     */
+    public function getValidator()
+    {
+        return $this->getService('symfony.component.validator.validator');
+    }
+
+    /**
+     * Returns the symfony form builder and renderer
+     *
+     * @return \Symfony\Component\Form\FormFactory | object
+     */
+    public function getForm()
+    {
+        return $this->getService('symfony.component.forms.form');
+    }
+
+    /**
+     * Returns the Twig_Environment
+     *
+     * @return \Twig_Environment | object
+     */
+    public function getTwig()
+    {
+        return $this->getService('twig.environment');
+    }
+
+    /**
+     * Returns the Monolog Logger
+     *
+     * @return \Monolog\Logger | object
+     */
+    public function getLogger()
+    {
+        return $this->getService('monolog.logger');
+    }
+
+    /**
+     * Returns the translator
+     *
+     * @return \Symfony\Component\Translation\Translator | object
+     */
+    public function getTranslator()
+    {
+        return $this->getService('symfony.component.translation.translator');
+    }
+
+    /**
+     * Returns the event dispatcher
+     *
+     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher | object
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getService('symfony.component.event_dispatcher');
+    }
+
+    /**
+     * Returns the serializer service
+     *
+     * @return \JMS\Serializer\Serializer | object
+     */
+    public function getSerializer()
+    {
+        return $this->getService('jms.serializer');
+    }
+
 }

@@ -5,7 +5,8 @@ namespace Chamilo\Libraries\Format\Twig;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\Path;
-use Hogent\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
+use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
+use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
@@ -53,16 +54,18 @@ class TwigCacheService extends FileBasedCacheService
     public function warmUp()
     {
         $packagesFilesFinder =
-            new PackagesFilesFinder(Path::getInstance(), Configuration::getInstance()->get_registration_contexts());
-        
+            new PackagesFilesFinder(
+                PathBuilder::getInstance(), Configuration::getInstance()->get_registration_contexts()
+            );
+
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 
         $basePath = Path::getInstance()->getBasePath();
         $this->twig->getLoader()->addLoader(new \Twig_Loader_Filesystem(array($basePath)));
 
-        foreach($templatesPerPackage as $package => $templates)
+        foreach ($templatesPerPackage as $package => $templates)
         {
-            foreach($templates as $template)
+            foreach ($templates as $template)
             {
                 $template = str_replace($basePath, '', $template);
                 $this->twig->loadTemplate($template);
