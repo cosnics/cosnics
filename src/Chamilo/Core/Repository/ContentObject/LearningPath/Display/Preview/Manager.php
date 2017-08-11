@@ -233,6 +233,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
         if (!isset($this->trackingService))
         {
             $trackingServiceBuilder = new TrackingServiceBuilder();
+            $this->trackingRepository = $trackingServiceBuilder->getTrackingRepository();
             $this->trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
         }
 
