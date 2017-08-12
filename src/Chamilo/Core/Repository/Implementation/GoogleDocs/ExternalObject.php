@@ -115,10 +115,9 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
             Instance::class_name(), 
             $this->get_external_repository_id());
-        
-        $externalExportURL = $this->get_export_link($exportFormat);
-        
-        return DataConnector::getInstance($external_repository)->import_external_repository_object($externalExportURL);
+        $downloadMethod = $this->get_export_link($exportFormat);
+
+        return DataConnector::getInstance($external_repository)->import_external_repository_object($this->get_id(),$downloadMethod);
     }
 
     public function get_icon_image()
