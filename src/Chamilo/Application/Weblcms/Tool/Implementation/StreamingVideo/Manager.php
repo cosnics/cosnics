@@ -3,10 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn;
-use Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video;
-use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
-use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
@@ -24,22 +20,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        $allowedTypes = array(
-            Youtube::class_name(), 
-            Vimeo::class_name(), 
-            Matterhorn::class_name(), 
-            Office365Video::class_name());
-        
-        $hogentTypes = array(
+        $allowedTypesString = array(
+            'Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video',
+            'Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo',
+            'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube',
             'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa',
             'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video'
         );
-        
-        foreach ($hogentTypes as $hogentType)
+
+        $allowedTypes = [];
+
+        foreach ($allowedTypesString as $allowedTypeString)
         {
-            if (class_exists($hogentType))
+            if (class_exists($allowedTypeString))
             {
-                $allowedTypes[] = $hogentType;
+                $allowedTypes[] = $allowedTypeString;
             }
         }
         
