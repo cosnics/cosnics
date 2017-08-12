@@ -3,10 +3,34 @@ try {
             agent any
 
             stages {
-                stage('Run Composer') {
+                stage('Create Build') {
                     steps {
                         echo 'Notifying slack build has started'
                         notifySlack()
+                        echo 'Delete unsupported code'
+                        sh 'rm -rf src/Chamilo/Application/Survey'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Survey'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Bookmark'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Matterhorn'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/PhysicalLocation'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Vimeo'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Bitbucket'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Box'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Dropbox'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Flickr'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Hq23'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Matterhorn'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Photobucket'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Picase'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Scribd'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Slideshare'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Soundcloud'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Vimeo'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Wikimedia'
+                        sh 'rm -rf src/Chamilo/Core/Repository/Implementation/Wikipedia'
+                        sh 'rm -rf src/Chamilo/Application/Weblcms/Tool/Implementation/Ephorus'
+                        sh 'rm -rf src/Chamilo/Application/Weblcms/Tool/Implementation/Chat'
+                        sh 'rm -rf src/Chamilo/Application/Weblcms/Tool/Implementation/Geolocation'
                         echo 'Composer update'
                         sh 'composer update'
                     }
@@ -27,6 +51,13 @@ try {
                             thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                             tools: [[$class: 'JUnitType', pattern: "build-reports/*.xml"]]])
                         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+                    }
+                }
+                stage('Release') {
+                    steps{
+                        if (env.BRANCH_NAME == 'master') {
+                            sh 'tar -cvzf /cosnics-releases/release.tar.gz *'
+                        }
                     }
                 }
             }
