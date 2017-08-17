@@ -9,6 +9,10 @@ try {
                         notifySlack()
                         echo 'Delete unsupported code'
                         sh 'rm -rf src/Chamilo/Application/Survey'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Survey'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Bookmark'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/Matterhorn'
+                        sh 'rm -rf src/Chamilo/Core/Repository/ContentObject/PhysicalLocation'
                         echo 'Composer update'
                         sh 'composer update'
                     }
