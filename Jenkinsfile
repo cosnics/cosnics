@@ -38,7 +38,7 @@ try {
                 stage('Release') {
                     steps{
                         if (env.BRANCH_NAME == 'master') {
-                            sh 'tar -cvzf /cosnics-releases/release.tar.gz'
+                            sh 'tar -cvzf /cosnics-releases/release.tar.gz *'
                         }
                     }
                 }
