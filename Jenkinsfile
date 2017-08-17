@@ -3,10 +3,12 @@ try {
             agent any
 
             stages {
-                stage('Run Composer') {
+                stage('Create Build') {
                     steps {
                         echo 'Notifying slack build has started'
                         notifySlack()
+                        echo 'Delete unsupported code'
+                        sh 'rm -rf src/Chamilo/Application/Survey'
                         echo 'Composer update'
                         sh 'composer update'
                     }
