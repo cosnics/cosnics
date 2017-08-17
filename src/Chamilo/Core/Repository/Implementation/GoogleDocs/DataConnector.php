@@ -52,7 +52,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $user, 
                 'https://www.googleapis.com/auth/drive'));
         
-        $this->service = new Google_Service_Drive($this->googleClientService->getGoogleClient());
+        $this->service = new  Google_Service_Drive($this->googleClientService->getGoogleClient());
     }
 
     public function login()
@@ -89,19 +89,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_type($file->mimeType);
         $object->set_icon_link($file->iconLink);
         
-        // $exportLinks = $file->exportLinks;
-        // $exportLinks = $this->service->files->get($file->id, array('alt'=>'media'));//$file->exportLinks;
-        // $exportLinks = $this->service->files->get($file->id, 'application/pdf');//$file->exportLinks;
-        /*
-         * if (count($exportLinks) > 0)
-         * {
-         * $object->set_export_links($exportLinks);
-         * }
-         * else
-         * {
-         * $object->set_export_links(array($file->mimeType => $file->downloadUrl));
-         * }
-         */
+        $exportMethods=$this->get_export_methods($file['mimeType']);
+        $object->set_export_links($exportMethods);
+
         if ($file->viewedByMeTime != null)
         {
             $object->set_viewed(strtotime($file->viewedByMeTime));
@@ -260,20 +250,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_modified(strtotime($file_item['modifiedTime']));
             $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             $object->set_owner_name($file_item['owners'][0]['displayName']);
-            
-            // $exportLinks = $file_item['files']['export'];
-            $exportLinks = $file_item['exportLinks'];
-            
-            if (count($exportLinks) > 0)
-            {
-                $object->set_export_links($exportLinks);
-            }
-            elseif ($file_item['downloadUrl'])
-            {
-                // $object->set_export_links(array($file_item['mimeType']=>'test', 'application/Pdf'=>'test'));
-                $object->set_export_links(array($file_item['mimeType'] => $file_item['downloadUrl']));
-            }
-            
+
+            $exportMethods=$this->get_export_methods($file_item['mimeType']);
+            $object->set_export_links($exportMethods);
+
             if ($file_item['lastModifyingUser'])
             
             {
@@ -308,7 +288,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $object->set_content(str_replace('=s220', '=w1000', $file_item['thumbnailLink']));
             }
             
-            $object->set_preview($file_item['embedLink']);
+            // $object->set_preview($file_item['embedLink']);
             
             $objects[] = $object;
         }
@@ -367,24 +347,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return file_get_contents($url);
     }
 
-    public function import_external_repository_object($externalExportURL)
+    public function import_external_repository_object($externalExportURL,$type)
     {
         if (! $externalExportURL)
         {
             throw new \InvalidArgumentException('Could not import an Google Drive because the download URL is invalid');
         }
-        
-        $request = new \Google_Http_Request($externalExportURL, 'GET', null, null);
-        
-        $httpRequest = $this->service->getClient()->getAuth()->authenticatedRequest($request);
-        if ($httpRequest->getResponseHttpCode() == 200)
-        {
-            return $httpRequest->getResponseBody();
-        }
-        else
-        {
-            throw new \RuntimeException('Could not import the google drive file');
-        }
+        if ($type=='get')
+            $response = $this->service->files->get($externalExportURL,array('alt'=>'media'));//getClient()->getAuth()->authenticatedRequest($request);
+        elseif ($type=='export')
+            $response = $this->service->files->export($externalExportURL,'application/pdf',array('alt'=>'media'));//getClient()->getAuth()->authenticatedRequest($request);
+
+        return $response;//->getBody()->getContents();
+
     }
 
     public function create_external_repository_object($file, $folder)
@@ -422,5 +397,21 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $folder->setParent($file['parents'][0]['id']);
         
         return $folder;
+    }
+    public function get_export_methods($mimeType)
+    {
+        switch ($mimeType)
+        {
+            case 'application/vnd.google-apps.document':
+                return array('application/pdf'=>'export');//, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'export');
+            case 'application/vnd.google-apps.spreadsheet':
+                return array('application/pdf'=>'export');//, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'export');
+            case 'application/vnd.google-apps.presentation':
+                return array('application/pdf'=>'export');//, 'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'export');
+            case 'application/vnd.google-apps.drawing':
+                return array('application/pdf'=>'export');//, 'image/png' => 'export');
+            default:
+                return array($mimeType => 'get');
+        }
     }
 }
