@@ -14,6 +14,7 @@
         <!-- Factory Services -->
         <service id="doctrine.orm.entity_manager_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
             <argument type="service" id="doctrine.orm.mapping_driver" />
+            <argument type="service" id="doctrine.dbal.connection" />
         </service>
 
         <service id="doctrine.orm.mapping_driver_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory">
@@ -33,6 +34,20 @@
         <service id="doctrine.orm.schema_tool" class="Doctrine\ORM\Tools\SchemaTool">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
+
+        <!-- Doctrine ORM Test -->
+        <service id="doctrine.orm.test.entity_manager" class="Doctrine\ORM\EntityManager"
+                 factory-method="createEntityManager" factory-service="doctrine.orm.test.entity_manager_factory"/>
+
+        <service id="doctrine.orm.test.entity_manager_factory" class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
+            <argument type="service" id="doctrine.orm.mapping_driver" />
+            <argument type="service" id="doctrine.test.dbal.connection" />
+        </service>
+
+        <service id="doctrine.orm.test.schema_tool" class="Doctrine\ORM\Tools\SchemaTool">
+            <argument type="service" id="doctrine.orm.test.entity_manager" />
+        </service>
+
 
     </services>
 </container>

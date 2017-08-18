@@ -77,9 +77,7 @@ abstract class FixtureBasedTest extends DependencyInjectionBasedTest
 
         foreach ($this->getFixtureFiles() as $context => $fixtureFiles)
         {
-            $basePath = PathBuilder::getInstance()->namespaceToFullPath(
-                    'Chamilo\Core\Repository\ContentObject\LearningPath\Test'
-                ) . 'Fixtures/';
+            $basePath = PathBuilder::getInstance()->namespaceToFullPath($context . '\Test') . 'Fixtures/';
 
             foreach ($fixtureFiles as $fixtureFile)
             {

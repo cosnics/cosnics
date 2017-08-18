@@ -67,12 +67,12 @@ abstract class DependencyInjectionBasedTest extends Test
     }
 
     /**
-     * Returns the entity manager from the dependency injection container
+     * Returns the test entity manager from the dependency injection container
      *
      * @return \Doctrine\ORM\EntityManager | object
      */
-    public function getEntityManager()
+    public function getTestEntityManager()
     {
-        return $this->getService('doctrine.orm.entity_manager');
+        return $this->getService('doctrine.orm.test.entity_manager');
     }
 }
