@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\DependencyInjection;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
+use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -50,12 +52,15 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('storage.xml');
         $xmlFileLoader->load('storage.doctrine.xml');
         $xmlFileLoader->load('storage.doctrine_test.xml');
+        $xmlFileLoader->load('storage.doctrine_orm.xml');
         $xmlFileLoader->load('translation.xml');
         $xmlFileLoader->load('utilities.xml');
         $xmlFileLoader->load('vendor.xml');
         
         // Console configuration
         $xmlFileLoader->load('console.xml');
+
+        $this->processLibrariesConfiguration($configuration, $container);
     }
 
     /**
@@ -67,6 +72,47 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
         $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
+        $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
+    }
+
+    /**
+     * Processes the configuration for chamilo.libraries
+     *
+     * @param $configuration
+     * @param ContainerBuilder $container
+     */
+    protected function processLibrariesConfiguration(array $configuration, ContainerBuilder $container)
+    {
+        $config = $this->processConfiguration(new LibrariesConfiguration(), $configuration);
+
+        if(array_key_exists('doctrine', $config) && array_key_exists('orm', $config['doctrine']))
+        {
+            $ormConfig = $config['doctrine']['orm'];
+
+            if(array_key_exists('mappings', $ormConfig))
+            {
+                $mappingDriverDef = $container->getDefinition('doctrine.orm.mapping_driver');
+                $mappingDriverDef->setArguments(array($ormConfig['mappings']));
+            }
+
+            if (array_key_exists('resolve_target_entities', $ormConfig))
+            {
+                $resolveTargetEntityListenerDef = $container->getDefinition(
+                    'doctrine.orm.listeners.resolve_target_entity'
+                );
+
+                foreach($ormConfig['resolve_target_entities'] as $name => $implementation)
+                {
+                    $resolveTargetEntityListenerDef->addMethodCall(
+                        'addResolveTargetEntity', array($name, $implementation, array())
+                    );
+                }
+
+                $resolveTargetEntityListenerDef->addTag(
+                    'doctrine.orm.event_listener', array('event' => 'loadClassMetadata')
+                );
+            }
+        }
     }
 
     /**
