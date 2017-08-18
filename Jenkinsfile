@@ -53,13 +53,6 @@ try {
                         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
                     }
                 }
-                stage('Release') {
-                    steps{
-                        if (env.BRANCH_NAME == 'master') {
-                            sh 'tar -cvzf /cosnics-releases/release.tar.gz *'
-                        }
-                    }
-                }
             }
         }
      } 
