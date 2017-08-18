@@ -59,6 +59,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         
         // Console configuration
         $xmlFileLoader->load('console.xml');
+        $xmlFileLoader->load('console.doctrine.xml');
 
         $this->processLibrariesConfiguration($configuration, $container);
     }
