@@ -189,4 +189,14 @@ trait DependencyInjectionContainerTrait
         return $this->getService('jms.serializer');
     }
 
+    /**
+     * Returns the entity manager from the dependency injection container
+     *
+     * @return \Doctrine\ORM\EntityManager | object
+     */
+    public function getEntityManager()
+    {
+        return $this->getService('doctrine.orm.entity_manager');
+    }
+
 }

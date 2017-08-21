@@ -43,6 +43,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineProxyCacheService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -171,6 +172,11 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             new TwigCacheService(
                 $this->container->get('twig.environment'), $this->container->get('symfony.component.forms.form')
             )
+        );
+
+        $cacheManager->addCacheService(
+            'doctrine_proxies',
+            new DoctrineProxyCacheService($this->container->get('doctrine.orm.entity_manager'))
         );
     }
 
