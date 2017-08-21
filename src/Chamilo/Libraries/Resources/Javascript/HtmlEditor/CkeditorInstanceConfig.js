@@ -72,7 +72,7 @@ CKEDITOR.editorConfig = function(config)
 
     config.startupFocus = true;
 
-    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+    config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML';
 
     config.autosave = {
         SaveKey: null, // fix to force unique savekey (even for page with multiple instances)
