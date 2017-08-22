@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\FixtureBasedTest;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloFixturesBasedTestCase;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingRepositoryTest extends FixtureBasedTest
+class TrackingRepositoryTest extends ChamiloFixturesBasedTestCase
 {
     /**
      * @var TrackingRepository
@@ -63,7 +63,7 @@ class TrackingRepositoryTest extends FixtureBasedTest
      *
      * [ $context => [$storageUnit1, $storageUnit2] ]
      *
-     * @return array
+     * @return string[][]
      */
     protected function getStorageUnitsToCreate()
     {

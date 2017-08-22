@@ -64,7 +64,7 @@ class HtmlEditorFileUploadComponent extends Manager
      */
     protected function handleUploadedFile(UploadedFile $uploadedFile)
     {
-        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations('Chamilo\Core\Repository\HtmlEditor');
+        $registrations = $this->getRegistrationConsulter()->getRegistrationsByType('Chamilo\Core\Repository\HtmlEditor');
 
         usort($registrations, function($registrationA, $registrationB) {
             return $registrationA[Registration::PROPERTY_PRIORITY] > $registrationB[Registration::PROPERTY_PRIORITY];
@@ -76,6 +76,7 @@ class HtmlEditorFileUploadComponent extends Manager
             if (class_exists($registration[Registration::PROPERTY_CONTEXT] . '\HtmlEditorUploadedFileHandler'))
             {
                 $className = $registration[Registration::PROPERTY_CONTEXT] . '\HtmlEditorUploadedFileHandler';
+
                 $uploadedFileHandlerCandidate = new $className;
                 if ($uploadedFileHandlerCandidate->canHandleUploadedFile($uploadedFile))
                 {

@@ -12,12 +12,12 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AttemptServiceTest extends Test
+class AttemptServiceTest extends ChamiloTestCase
 {
     /**
      * @var AttemptService

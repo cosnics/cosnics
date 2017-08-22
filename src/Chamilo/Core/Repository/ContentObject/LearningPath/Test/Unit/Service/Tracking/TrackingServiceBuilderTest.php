@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Progress
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 
 /**
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingServiceBuilderTest extends Test
+class TrackingServiceBuilderTest extends ChamiloTestCase
 {
     /**
      * @var TrackingService

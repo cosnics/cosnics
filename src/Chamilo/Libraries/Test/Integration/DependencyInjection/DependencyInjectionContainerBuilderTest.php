@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Integration\DependencyInjection;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Filesystem;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DependencyInjectionContainerBuilderTest extends Test
+class DependencyInjectionContainerBuilderTest extends ChamiloTestCase
 {
     /**
      * Tests the createContainer function

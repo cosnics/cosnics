@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Unit\File\PackagesContentFinder;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\PathBuilder;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\File\PathBuilder;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PackagesClassFinderTest extends Test
+class PackagesClassFinderTest extends ChamiloTestCase
 {
     /**
      * The cache file

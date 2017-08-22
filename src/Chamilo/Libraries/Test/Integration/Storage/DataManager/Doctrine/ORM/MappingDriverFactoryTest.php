@@ -2,7 +2,7 @@
 
 namespace Chamilo\Test\Integration\Storage\DataManager\Doctrine\ORM;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\DependencyInjectionBasedTest;
+use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class MappingDriverFactoryTest extends DependencyInjectionBasedTest
+class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
 {
     /**
      * The SUT

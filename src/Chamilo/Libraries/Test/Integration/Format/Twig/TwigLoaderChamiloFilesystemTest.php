@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Integration\Format\Twig;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Twig\TwigLoaderChamiloFilesystem;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Twig\TwigLoaderChamiloFilesystem;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TwigLoaderChamiloFilesystemTest extends Test
+class TwigLoaderChamiloFilesystemTest extends ChamiloTestCase
 {
     /**
      * Tests the getCacheKey function, which relies on the protected method find_template

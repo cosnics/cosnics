@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Architecture\Test;
+namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use PHPUnit\Framework\TestCase;
@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class Test extends TestCase
+abstract class ChamiloTestCase extends TestCase
 {
 
     protected $backupGlobalsBlacklist = array('_MDB2_databases');

@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Display\P
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 
 /**
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingServiceBuilderTest extends Test
+class TrackingServiceBuilderTest extends ChamiloTestCase
 {
     public function testBuildTrackingServiceSetsCorrectRepository()
     {

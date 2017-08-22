@@ -16,14 +16,14 @@ use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the TreeJSONMapper
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeJSONMapperTest extends Test
+class TreeJSONMapperTest extends ChamiloTestCase
 {
     /**
      * @var Tree

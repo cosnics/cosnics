@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Money\InvalidArgumentException;
 
 /**
@@ -18,7 +18,7 @@ use Money\InvalidArgumentException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingParametersTest extends Test
+class TrackingParametersTest extends ChamiloTestCase
 {
 //    /**
 //     * @var TrackingParameters

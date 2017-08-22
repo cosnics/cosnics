@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Storage\R
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\CommonDataClassRepositoryExtension;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CommonDataClassRepositTest extends Test
+class CommonDataClassRepositTest extends ChamiloTestCase
 {
     /**
      * @var CommonDataClassRepository

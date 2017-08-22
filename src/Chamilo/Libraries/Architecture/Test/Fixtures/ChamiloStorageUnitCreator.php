@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper;
+namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;

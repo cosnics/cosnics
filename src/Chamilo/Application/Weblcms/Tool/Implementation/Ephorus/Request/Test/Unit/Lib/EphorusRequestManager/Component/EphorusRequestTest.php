@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Test\Unit\Lib\EphorusRequestManager\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * This test case test the ephorus tool ephorus request component class
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Test\Test;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EphorusRequestTest extends Test
+class EphorusRequestTest extends ChamiloTestCase
 {
 
     /**

@@ -16,14 +16,14 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the TreeNodeCopier class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeNodeCopierTest extends Test
+class TreeNodeCopierTest extends ChamiloTestCase
 {
     /**
      * @var TreeNodeCopier

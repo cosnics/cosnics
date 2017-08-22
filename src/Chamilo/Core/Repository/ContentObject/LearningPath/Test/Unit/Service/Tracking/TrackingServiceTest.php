@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 
@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingServiceTest extends Test
+class TrackingServiceTest extends ChamiloTestCase
 {
     /**
      * @var TrackingService

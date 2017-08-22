@@ -10,8 +10,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\ChamiloFixtureLoader;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\DependencyInjectionBasedTest;
+use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
+use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingRepositoryTest extends DependencyInjectionBasedTest
+class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
 {
     /**
      * @var TrackingRepository

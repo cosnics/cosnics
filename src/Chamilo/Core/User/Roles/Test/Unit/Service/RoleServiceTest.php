@@ -6,14 +6,14 @@ use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\RoleService;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Chamilo\Core\User\Roles\Service\RoleService class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class RoleServiceTest extends Test
+class RoleServiceTest extends ChamiloTestCase
 {
     /**
      * @var RoleRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject

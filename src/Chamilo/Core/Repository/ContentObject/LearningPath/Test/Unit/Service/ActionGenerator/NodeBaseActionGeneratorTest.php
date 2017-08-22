@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\N
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NodeBaseActionGeneratorTest extends Test
+class NodeBaseActionGeneratorTest extends ChamiloTestCase
 {
     /**
      * @var NodeBaseActionGenerator

@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\TreeTestDataG
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\Security;
 
 /**
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Security;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeNodeTest extends Test
+class TreeNodeTest extends ChamiloTestCase
 {
     /**
      * @var Tree

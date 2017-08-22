@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class MigrationServiceTest extends Test
+class MigrationServiceTest extends ChamiloTestCase
 {
     /**
      * @var MigrationService

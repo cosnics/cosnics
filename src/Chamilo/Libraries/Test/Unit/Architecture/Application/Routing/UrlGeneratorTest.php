@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Unit\Architecture\Application\Routing;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UrlGeneratorTest extends Test
+class UrlGeneratorTest extends ChamiloTestCase
 {
     /**
      * The request mock

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Test\Integration\Storage\DataManager\Doctrine\ORM;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\DependencyInjectionBasedTest;
+use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory;
 
 /**
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFact
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DoctrineEntityManagerFactoryTest extends DependencyInjectionBasedTest
+class DoctrineEntityManagerFactoryTest extends DependencyInjectionBasedTestCase
 {
     /**
      * The SUT

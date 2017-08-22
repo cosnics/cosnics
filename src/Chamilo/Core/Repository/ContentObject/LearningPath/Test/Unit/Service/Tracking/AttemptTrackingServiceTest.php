@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AttemptTrackingServiceTest extends Test
+class AttemptTrackingServiceTest extends ChamiloTestCase
 {
     /**
      * @var AttemptTrackingService

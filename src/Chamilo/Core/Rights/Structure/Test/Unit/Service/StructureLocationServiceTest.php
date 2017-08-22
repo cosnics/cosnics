@@ -5,14 +5,14 @@ namespace Chamilo\Core\Rights\Structure\Test\Unit\Service;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationService;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRepositoryInterface;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Chamilo\Core\Rights\Structure\Service\StructureLocationService class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class StructureLocationServiceTest extends Test
+class StructureLocationServiceTest extends ChamiloTestCase
 {
     /**
      * @var StructureLocationRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
