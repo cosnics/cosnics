@@ -57,8 +57,12 @@ class ChamiloFixtureLoader extends NativeLoader
 
             foreach ($fixtureFiles as $fixtureFile)
             {
-                $loadedObjects =
-                    $chamiloFixtureLoader->loadFile($basePath . $fixtureFile . '.yml', [], $createdObjects);
+                if(strpos($fixtureFile, '.yml') === false)
+                {
+                    $fixtureFile = $basePath . $fixtureFile . '.yml';
+                }
+
+                $loadedObjects = $chamiloFixtureLoader->loadFile($fixtureFile, [], $createdObjects);
                 $createdObjects = array_merge($createdObjects, $loadedObjects->getObjects());
             }
         }

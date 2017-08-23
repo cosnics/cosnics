@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Hogent\Elearning\Administration\Domain\Entity\Company;
 
 /**
  * TestCase that recreates the database (partially) and installs fixture in the database for this test case
@@ -100,7 +101,14 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
             $entityManager->persist($object);
         }
 
-        $entityManager->flush();
+        try
+        {
+            $entityManager->flush();
+        }
+        catch(\Exception $ex)
+        {
+            var_dump($ex->getMessage());
+        }
     }
 
     /**
