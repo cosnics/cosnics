@@ -102,7 +102,16 @@ abstract class Menu extends BootstrapTreeMenu
         {
             $menuItem['state'] = array('selected' => true);
         }
-        
+
+        $descendants = $node->get_descendants();
+        foreach($descendants as $descendant)
+        {
+            if($descendant->get_id() == $this->getApplication()->get_current_step())
+            {
+                $menuItem['state']['expanded'] = true;
+            }
+        }
+
         if ($node->has_children())
         {
             $menuItem['nodes'] = array();
