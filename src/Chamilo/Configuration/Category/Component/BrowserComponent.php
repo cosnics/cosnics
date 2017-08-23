@@ -5,6 +5,7 @@ use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Configuration\Category\Table\Browser\CategoryTable;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -41,8 +42,10 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+        $category_id = $this->get_category_id();
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $category_id = Request::get(self::PARAM_CATEGORY_ID);
+
         $menu = new CategoryMenu($category_id, $this->get_parent());
         
         $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
@@ -118,12 +121,19 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_category()
     {
-        return (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
+        return $this->get_category_id();
     }
 
     public function get_category_id()
     {
-        return (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
+        $category_id = (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
+        if(is_array($category_id) && !empty($category_id))
+        {
+            $category_id = $category_id[0];
+            $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
+        }
+
+        return $category_id;
     }
 
     public function getButtonToolbarRenderer()
@@ -140,7 +150,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new Button(
                         Translation::get('Add', null, Utilities::COMMON_LIBRARIES), 
                         Theme::getInstance()->getCommonImagePath('Action/Add'), 
-                        $this->get_create_category_url(Request::get(self::PARAM_CATEGORY_ID)), 
+                        $this->get_create_category_url($this->get_category_id()),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             
