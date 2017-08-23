@@ -90,7 +90,7 @@ class ImporterComponent extends Manager
             $text .= 'xxx;';
         }
         
-        $text .= 'xxx;1/5;1/0;<b>xxx</b>;xxx;date/0;date/0;platform/ldap;xxx';
+        $text .= 'xxx;1/5;1/0;<b>xxx</b>;xxx;date/0;date/0;Platform/Ldap;xxx';
         $html[] = $text;
         $html[] = '</pre>';
         $html[] = '</blockquote>';
