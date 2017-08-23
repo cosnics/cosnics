@@ -58,7 +58,7 @@ abstract class QueryAuthentication extends Authentication
      *
      * @param string $authenticationMethod
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Chamilo\Libraries\Authentication\CredentialsAuthentication
+     * @return \Chamilo\Libraries\Authentication\QueryAuthentication
      */
     public static function factory($authenticationMethod, \Symfony\Component\HttpFoundation\Request $request)
     {
