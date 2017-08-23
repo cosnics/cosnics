@@ -527,7 +527,7 @@ class UserImportForm extends FormValidator
             array('Chamilo\Core\Admin', 'administrator_email')
         );
 
-        $subject = Translation::get('YourRegistrationOn') . $options['site_name'];
+        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
         $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
         foreach ($options as $option => $value)
