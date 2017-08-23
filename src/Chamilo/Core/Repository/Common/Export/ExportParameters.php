@@ -76,9 +76,16 @@ class ExportParameters
                     
                     if ($this->getWorkspace() instanceof PersonalWorkspace)
                     {
-                        $condition = new EqualityCondition(
+                        $conditions = array();
+                        $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
                             new StaticConditionVariable($this->get_user()));
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                            new StaticConditionVariable(ContentObject::STATE_NORMAL)
+                        );
+
+                        $condition = new AndCondition($conditions);
                         
                         $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID);
                     }
@@ -126,6 +133,10 @@ class ExportParameters
                         $conditions[] = new InCondition(
                             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID), 
                             $category_ids);
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                            new StaticConditionVariable(ContentObject::STATE_NORMAL)
+                        );
                         
                         $condition = new AndCondition($conditions);
                         

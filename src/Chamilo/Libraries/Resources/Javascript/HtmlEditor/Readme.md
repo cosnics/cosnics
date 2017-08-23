@@ -8,6 +8,5 @@ To update to a new version:
 * Download the optimized build
 * Copy the new release in the CKeditor folder.
 * Delete the sample folder
-* Change CKEDITOR.timestamp='v1' for cache busting. src/Chamilo/Libraries/Format/Form/FormValidatorCkeditorHtmlEditor.php
 Change skin:
 * Change default skin in src/Chamilo/Libraries/Format/Form/FormValidatorCkeditorHtmlEditorOptions.php
