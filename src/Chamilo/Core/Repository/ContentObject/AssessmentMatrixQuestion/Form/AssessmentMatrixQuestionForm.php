@@ -28,7 +28,6 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', 
                     true) . 'AssessmentMatrixQuestion.js'));
-        $this->add_example_box();
     }
 
     protected function build_editing_form()
@@ -41,7 +40,6 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', 
                     true) . 'AssessmentMatrixQuestion.js'));
-        $this->add_example_box();
     }
 
     /**
@@ -202,8 +200,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $visual_number = 0;
         
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
@@ -330,8 +327,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $label = 'A';
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {

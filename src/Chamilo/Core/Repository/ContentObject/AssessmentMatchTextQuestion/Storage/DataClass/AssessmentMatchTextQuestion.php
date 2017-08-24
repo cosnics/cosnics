@@ -144,18 +144,24 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public function get_best_option()
     {
-        $best_score = 0;
-        $best_option = null;
+        return $this->getBestOptions()[0];
+    }
+    
+    public function getBestOptions()
+    {
+        $bestScore = null;
+        $bestOptions = [];
+
         foreach ($this->get_options() as $key => $option)
         {
-            if ($option->get_score() >= $best_score)
+            if (is_null($bestScore) || $option->get_score() >= $bestScore)
             {
-                $best_score = $option->get_score();
-                $best_option = $option;
+                $bestScore = $option->get_score();
+                $bestOptions[] = $option;
             }
         }
-        
-        return $best_option;
+
+        return $bestOptions;
     }
 
     public function get_option($answer, $ignore_case, $use_wildcards)

@@ -70,7 +70,7 @@ CKEDITOR.editorConfig = function(config)
     config.resize_dir = 'both';
     //config.enterMode = CKEDITOR.ENTER_DIV;
 
-    config.startupFocus = true;
+    // config.startupFocus = true;
 
     config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML';
 

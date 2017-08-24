@@ -17,7 +17,7 @@ class ReportingViewerComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE)), 
-                Translation::get('AssessmentToolBrowserComponent')));
+                Translation::get('BrowserComponent')));
         
         $breadcrumbtrail->add(
             new Breadcrumb(
@@ -26,7 +26,7 @@ class ReportingViewerComponent extends Manager
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW, 
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => Request::get(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))), 
-                Translation::get('AssessmentToolViewerComponent')));
+                Translation::get('ViewerComponent')));
     }
 
     public function get_additional_parameters()

@@ -45,8 +45,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         return $htmlEditorOptions;
     }
 
@@ -226,8 +225,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $this->addElement('html', '<table class="table table-assessment-question-form"><tbody>');
         
         $optionLabelCounter = 1;
@@ -374,8 +372,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $this->add_html_editor(
             AssessmentMatchNumericQuestion::PROPERTY_HINT, 
             Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 

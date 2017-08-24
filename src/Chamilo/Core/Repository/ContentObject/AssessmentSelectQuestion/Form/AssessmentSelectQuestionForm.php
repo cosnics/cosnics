@@ -44,8 +44,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         return $htmlEditorOptions;
     }
 
@@ -262,8 +261,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
-        $htmlEditorOptions['toolbar'] = 'RepositoryQuestion';
-        
+
         $this->addElement('html', '<table class="table table-assessment-question-form"><tbody>');
         
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
@@ -432,8 +430,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $this->add_html_editor(
             AssessmentSelectQuestion::PROPERTY_HINT, 
             Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 

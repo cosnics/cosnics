@@ -51,7 +51,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         
         $links[] = new LinkTypeSelectorOption(
             self::package(), 
-            'AnswerFeedbackType', 
+            'AnswerFeedbackType',
             $this->get_url(
                 array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE)));
         

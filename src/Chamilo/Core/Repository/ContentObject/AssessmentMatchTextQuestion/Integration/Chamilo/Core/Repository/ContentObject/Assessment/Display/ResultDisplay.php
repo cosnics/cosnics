@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
@@ -21,10 +22,25 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
     public function get_question_result()
     {
-        $best_option = $this->get_question()->get_best_option();
-        $best_answer = $this->get_score() == $best_option->get_score();
-        $valid_answer = $this->get_score() > 0;
         $user_answer = $this->get_answers();
+        $bestAnswer = false;
+
+        $bestOptions = $this->get_question()->getBestOptions();
+        foreach ($bestOptions as $bestOption)
+        {
+            if ($bestOption->matches(
+                $user_answer[0],
+                $this->get_question()->get_ignore_case(),
+                $this->get_question()->get_use_wildcards()
+            ))
+            {
+                $bestAnswer = true;
+                break;
+            }
+        }
+
+        $valid_answer = $this->get_score() > 0;
+
         $answer_option = $this->get_question()->get_option(
             $user_answer[0],
             $this->get_question()->get_ignore_case(),
@@ -56,12 +72,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         {
             if ($configuration->show_correction() || $configuration->show_solution())
             {
-                if ($valid_answer && $best_option->matches(
-                        $user_answer[0],
-                        $this->get_question()->get_ignore_case(),
-                        $this->get_question()->get_use_wildcards()
-                    )
-                )
+                if ($valid_answer && $bestAnswer)
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
                         Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
@@ -145,18 +156,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         if ($configuration->show_solution())
         {
-            if (!$valid_answer || ($valid_answer && !$best_option->matches(
-                        $user_answer[0],
-                        $this->get_question()->get_ignore_case(),
-                        $this->get_question()->get_use_wildcards()
-                    ))
-            )
+            if (!$valid_answer || ($valid_answer && $bestAnswer))
             {
                 $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
                 $html[] = '<thead>';
                 $html[] = '<tr>';
                 $html[] = '<th style="width: 50%;">' .
-                    Translation::get('BestPossibleAnswer', null, 'Chamilo\Core\Repository\ContentObject\Assessment') .
+                    Translation::get(
+                        'BestPossibleAnswer', null, 'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion'
+                    ) .
                     '</th>';
 
                 $answer_feedback_display = AnswerFeedbackDisplay::allowed(
@@ -177,19 +185,22 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '</thead>';
                 $html[] = '<tbody>';
 
-                $html[] = '<tr class="row_even">';
-                $html[] = '<td>' . $best_option->get_value() . '</td>';
-
-                if ($answer_feedback_display)
+                foreach ($bestOptions as $bestOption)
                 {
-                    $object_renderer = new ContentObjectResourceRenderer(
-                        $this->getViewerApplication(),
-                        $best_option->get_feedback()
-                    );
-                    $html[] = '<td>' . $object_renderer->run() . '</td>';
-                }
+                    $html[] = '<tr>';
+                    $html[] = '<td>' . $bestOption->get_value() . '</td>';
 
-                $html[] = '</tr>';
+                    if ($answer_feedback_display)
+                    {
+                        $object_renderer = new ContentObjectResourceRenderer(
+                            $this->getViewerApplication(),
+                            $bestOption->get_feedback()
+                        );
+                        $html[] = '<td>' . $object_renderer->run() . '</td>';
+                    }
+
+                    $html[] = '</tr>';
+                }
                 $html[] = '</tbody>';
                 $html[] = '</table>';
             }

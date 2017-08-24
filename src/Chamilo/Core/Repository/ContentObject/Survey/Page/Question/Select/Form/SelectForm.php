@@ -284,8 +284,7 @@ class SelectForm extends ContentObjectForm
         
         $html_editor_options = array();
         $html_editor_options['style'] = 'width: 100%; height: 65px;';
-        $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
+
         $table_header = array();
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';

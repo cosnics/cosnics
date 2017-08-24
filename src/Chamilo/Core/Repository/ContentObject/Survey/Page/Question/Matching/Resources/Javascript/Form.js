@@ -125,7 +125,7 @@ $(function ()
 		
 		$('#mq_number_of_options').val(newNumber);
 		
-		parameters = { "width" : "100%", "height" : "65", "toolbar" : "RepositoryQuestion", "collapse_toolbar" : true };
+		parameters = { "width" : "100%", "height" : "65", "collapse_toolbar" : true };
 		editorName = 'option_value[' + numberOfOptions + ']';
 		
 		field = renderHtmlEditor(editorName, parameters);
@@ -183,7 +183,7 @@ $(function ()
 		setMemory('mq_number_of_matches', newNumber);
 		$('#mq_number_of_matches').val(newNumber);
 		
-		parameters = { "width" : "100%", "height" : "65", "toolbar" : "RepositoryQuestion", "collapse_toolbar" : true };
+		parameters = { "width" : "100%", "height" : "65", "collapse_toolbar" : true };
 		editorName = 'match_value[' + numberOfMatches + ']';
 		
 		fieldOption = labels[newNumber] + '<input type="hidden" value="' + labels[newNumber] + '" name="match_label[' + numberOfMatches + ']" />';

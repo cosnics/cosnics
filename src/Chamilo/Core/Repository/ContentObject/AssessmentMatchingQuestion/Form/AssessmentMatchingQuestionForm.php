@@ -286,8 +286,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $visual_number = 0;
         
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
@@ -418,8 +417,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $label = 'A';
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {

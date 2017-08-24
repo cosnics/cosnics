@@ -49,10 +49,10 @@ abstract class ScoreCalculator
         
         if ($relative_weight == null)
             return $score;
-        
-        if ($total_weight == 0)
+
+        if ($total_weight <= 0)
         {
-            return 0;
+            return $score < 0 ? $score : 0;
         }
         
         $factor = ($total_weight / $relative_weight);

@@ -102,8 +102,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $html_editor_options['height'] = '100';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $this->add_html_editor(
             AssessmentRatingQuestion::PROPERTY_FEEDBACK, 
             Translation::get('Feedback'), 
@@ -155,8 +154,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         return $htmlEditorOptions;
     }
 
@@ -244,8 +242,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
         $htmlEditorOptions['show_tags'] = false;
-        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $this->add_html_editor(
             AssessmentRatingQuestion::PROPERTY_HINT, 
             Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 

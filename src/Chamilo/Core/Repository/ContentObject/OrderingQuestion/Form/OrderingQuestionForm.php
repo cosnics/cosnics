@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -29,26 +31,6 @@ class OrderingQuestionForm extends ContentObjectForm
                      'OrderingQuestion.js'));
         $this->add_options();
         $this->addElement('category');
-        
-        $this->addElement('category', Translation::get('Hint'));
-        
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '100';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
-        $renderer = $this->defaultRenderer();
-        $this->add_html_editor(
-            OrderingQuestion::PROPERTY_HINT, 
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 
-            false, 
-            $html_editor_options);
-        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion::PROPERTY_HINT);
-        $this->addElement('category');
-        
-        $this->add_example_box();
     }
 
     protected function build_editing_form()
@@ -62,26 +44,6 @@ class OrderingQuestionForm extends ContentObjectForm
                      'OrderingQuestion.js'));
         $this->add_options();
         $this->addElement('category');
-        
-        $this->addElement('category', Translation::get('Hint'));
-        
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '100';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
-        $renderer = $this->defaultRenderer();
-        $this->add_html_editor(
-            OrderingQuestion::PROPERTY_HINT, 
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), 
-            false, 
-            $html_editor_options);
-        $renderer->setElementTemplate('{element}<div class="clear"></div>', OrderingQuestion::PROPERTY_HINT);
-        $this->addElement('category');
-        
-        $this->add_example_box();
     }
 
     public function setDefaults($defaults = array ())
@@ -215,8 +177,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
+
         $table_header = array();
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
@@ -312,5 +273,38 @@ class OrderingQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
             'question_buttons');
+    }
+
+    public function prepareTabs()
+    {
+        $this->addDefaultTab();
+        $this->addHintTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
+    }
+
+    public function addHintTab()
+    {
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                'add-hint',
+                Translation::get('AddHint'),
+                new FontAwesomeGlyph('magic', array('ident-sm')),
+                'buildHintForm'));
+    }
+
+    public function buildHintForm()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = true;
+        $htmlEditorOptions['show_tags'] = false;
+
+        $this->add_html_editor(
+            OrderingQuestion::PROPERTY_HINT,
+            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            false,
+            $htmlEditorOptions);
     }
 }

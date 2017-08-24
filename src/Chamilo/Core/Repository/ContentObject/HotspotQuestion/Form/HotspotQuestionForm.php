@@ -6,8 +6,11 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Hots
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -103,8 +106,6 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement('html', '</div>');
         
         $this->set_session_answers();
-        
-        $this->add_example_box();
     }
 
     protected function build_editing_form()
@@ -158,8 +159,6 @@ class HotspotQuestionForm extends ContentObjectForm
         
         $this->addElement('category');
         $this->set_session_answers();
-        
-        $this->add_example_box();
     }
 
     public function setDefaults($defaults = array ())
@@ -386,8 +385,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
+
         $table_header = array();
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
@@ -498,5 +496,12 @@ class HotspotQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
             'question_buttons');
+    }
+
+    public function prepareTabs()
+    {
+        $this->addDefaultTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
     }
 }
