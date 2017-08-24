@@ -92,10 +92,15 @@ class RecordCache
      * @param string $class
      * @return boolean
      */
-    public static function truncate($class)
+    public static function truncate($class = null)
     {
         $instance = self::getInstance();
-        
+
+        if(empty($class))
+        {
+            unset($instance->cache);
+        }
+
         if (isset($instance->cache[$class]))
         {
             unset($instance->cache[$class]);

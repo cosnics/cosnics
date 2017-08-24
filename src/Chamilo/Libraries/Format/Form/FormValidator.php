@@ -116,7 +116,7 @@ EOT;
         $this->renderer->setRequiredNoteTemplate($required_note_template);
     }
 
-    public function getElementTemplate($extraClasses)
+    public function getElementTemplate($extraClasses = null)
     {
         $element_template = array();
         
