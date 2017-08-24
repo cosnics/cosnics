@@ -4,10 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Integration\St
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\ChamiloFixtureLoader;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\ChamiloStorageUnitCreator;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\DependencyInjectionBasedTest;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\FixtureBasedTest;
+use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
+use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloStorageUnitCreator;
+use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloFixturesBasedTestCase;
 use Chamilo\Libraries\File\PathBuilder;
 
 /**
@@ -15,7 +15,7 @@ use Chamilo\Libraries\File\PathBuilder;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeNodeDataRepositoryTest extends FixtureBasedTest
+class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
 {
     /**
      * @var TreeNodeDataRepository

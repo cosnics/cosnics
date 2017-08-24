@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\TreeTestDataG
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Gedmo\Exception\RuntimeException;
 
 /**
@@ -19,7 +19,7 @@ use Gedmo\Exception\RuntimeException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AutomaticNumberingServiceTest extends Test
+class AutomaticNumberingServiceTest extends ChamiloTestCase
 {
     /**
      * @var AutomaticNumberingService

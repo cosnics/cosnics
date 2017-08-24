@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Unit\Translation;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\PackagesTranslationResourcesFinder;
 use Chamilo\Libraries\Translation\TranslationResourcesFinderInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TranslationResourcesOptimizerTest extends Test
+class TranslationResourcesOptimizerTest extends ChamiloTestCase
 {
     /**
      * The mocks of the translation loaders

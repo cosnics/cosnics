@@ -3,14 +3,14 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Domain;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Action class
  *
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
-class ActionTest extends Test
+class ActionTest extends ChamiloTestCase
 {
     /**
      * @var Action

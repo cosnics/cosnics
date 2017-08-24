@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathServiceTest extends Test
+class LearningPathServiceTest extends ChamiloTestCase
 {
     /**
      * @var LearningPathService

@@ -7,14 +7,14 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the TreeNodeDataService
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeNodeDataServiceTest extends Test
+class TreeNodeDataServiceTest extends ChamiloTestCase
 {
     /**
      * @var TreeNodeDataRepository | \PHPUnit_Framework_MockObject_MockObject

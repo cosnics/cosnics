@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\Tr
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TrackingParametersTest extends Test
+class TrackingParametersTest extends ChamiloTestCase
 {
     public function testGetTreeNodeAttemptClassName()
     {

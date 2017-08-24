@@ -10,7 +10,9 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\Export\ExportTable;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
@@ -45,6 +47,11 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
+        if (! RightsService::getInstance()->canCopyContentObjects($this->get_user(), $this->getWorkspace()))
+        {
+            throw new NotAllowedException();
+        }
+
         $content_object_ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $content_object_ids);
         

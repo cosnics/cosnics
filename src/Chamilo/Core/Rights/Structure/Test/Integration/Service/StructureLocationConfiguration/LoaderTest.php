@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Rights\Structure\Test\Integration\Service\StructureLocationConfiguration;
 
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -11,7 +11,7 @@ use Chamilo\Libraries\File\Path;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LoaderTest extends Test
+class LoaderTest extends ChamiloTestCase
 {
     /**
      * @var Loader

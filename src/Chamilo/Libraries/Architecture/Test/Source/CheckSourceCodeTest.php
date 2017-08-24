@@ -9,7 +9,7 @@ use Chamilo\Libraries\File\Path;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\Test
+abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase
 {
     use \Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
 

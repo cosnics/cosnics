@@ -17,14 +17,14 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the AttemptSummaryCalculator
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AttemptSummaryCalculatorTest extends Test
+class AttemptSummaryCalculatorTest extends ChamiloTestCase
 {
     /**
      * @var AttemptSummaryCalculator

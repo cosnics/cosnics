@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Unit\Translation;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\Translation\PackagesTranslationResourcesFinder;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\PackagesTranslationResourcesFinder;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PackagesTranslationResourcesFinderTest extends Test
+class PackagesTranslationResourcesFinderTest extends ChamiloTestCase
 {
     /**
      * The packages files finder mock

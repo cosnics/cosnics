@@ -10,14 +10,14 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Chamilo\Core\Rights\Structure\Service\StructureLocationRoleService class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class StructureLocationRoleServiceTest extends Test
+class StructureLocationRoleServiceTest extends ChamiloTestCase
 {
     /**
      * @var RoleServiceInterface | \PHPUnit_Framework_MockObject_MockObject

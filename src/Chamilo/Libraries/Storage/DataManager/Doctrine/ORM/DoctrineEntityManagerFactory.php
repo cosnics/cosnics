@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 
@@ -28,22 +29,29 @@ class DoctrineEntityManagerFactory
      *
      * @var MappingDriver
      */
-    private $mappingDriver;
+    protected $mappingDriver;
+
+    /**
+     * @var Connection
+     */
+    protected $doctrineConnection;
 
     /**
      * The event listeners
      *
      * @var object
      */
-    private $eventListeners;
+    protected $eventListeners;
 
     /**
      * Constructor
      *
      * @param MappingDriver $mappingDriver
+     * @param Connection $doctrineConnection
      */
-    public function __construct(MappingDriver $mappingDriver)
+    public function __construct(MappingDriver $mappingDriver, Connection $doctrineConnection)
     {
+        $this->doctrineConnection = $doctrineConnection;
         $this->mappingDriver = $mappingDriver;
         $this->eventListeners = array();
     }
@@ -77,10 +85,7 @@ class DoctrineEntityManagerFactory
         $configuration->setMetadataDriverImpl($this->mappingDriver);
         $configuration->setNamingStrategy(new ChamiloNamingStrategy());
 
-        $entityManager = EntityManager::create(
-            \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection::getInstance()->get_connection(),
-            $configuration
-        );
+        $entityManager = EntityManager::create($this->doctrineConnection, $configuration);
 
         foreach($this->eventListeners as $eventListener)
         {

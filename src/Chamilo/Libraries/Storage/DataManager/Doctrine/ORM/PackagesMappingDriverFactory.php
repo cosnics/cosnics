@@ -87,9 +87,9 @@ class PackagesMappingDriverFactory
 
             $packageConfiguration = $this->yamlParser->parse(file_get_contents($packageConfigFile));
 
-            if(array_key_exists('hogent.libraries', $packageConfiguration))
+            if(array_key_exists('chamilo.libraries', $packageConfiguration))
             {
-                $configurations[] = $packageConfiguration['hogent.libraries'];
+                $configurations[] = $packageConfiguration['chamilo.libraries'];
             }
         }
 

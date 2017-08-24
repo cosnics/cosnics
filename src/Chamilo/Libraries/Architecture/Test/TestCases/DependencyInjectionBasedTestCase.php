@@ -1,8 +1,7 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper;
+namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
-use Chamilo\Libraries\Architecture\Test\Test;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
@@ -13,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class DependencyInjectionBasedTest extends Test
+abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
 {
     /**
      * @var ContainerInterface
@@ -64,5 +63,15 @@ abstract class DependencyInjectionBasedTest extends Test
     protected function getTestDataClassRepository()
     {
         return $this->getService('chamilo.libraries.storage.data_manager.doctrine.test.data_class_repository');
+    }
+
+    /**
+     * Returns the test entity manager from the dependency injection container
+     *
+     * @return \Doctrine\ORM\EntityManager | object
+     */
+    public function getTestEntityManager()
+    {
+        return $this->getService('doctrine.orm.test.entity_manager');
     }
 }

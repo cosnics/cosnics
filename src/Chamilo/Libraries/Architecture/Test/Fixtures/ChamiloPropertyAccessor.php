@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper;
+namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
 use Symfony\Component\PropertyAccess\Exception;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;

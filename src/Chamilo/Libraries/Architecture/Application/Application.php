@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -96,6 +97,11 @@ abstract class Application
      */
     public function checkAuthorization($context, $action = null)
     {
+        if(!$this->getUser() instanceof User)
+        {
+            throw new NotAllowedException();
+        }
+
         return $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
     }
 
@@ -110,6 +116,11 @@ abstract class Application
      */
     public function isAuthorized($context, $action = null)
     {
+        if(!$this->getUser() instanceof User)
+        {
+            return false;
+        }
+
         return $this->getAuthorizationChecker()->isAuthorized($this->getUser(), $context, $action);
     }
 

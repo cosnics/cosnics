@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Test\Unit\Translation;
 
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Translation\OptimizedTranslationsPhpFileLoader;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\OptimizedTranslationsPhpFileLoader;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class OptimizedTranslationsPhpFileLoaderTest extends Test
+class OptimizedTranslationsPhpFileLoaderTest extends ChamiloTestCase
 {
     /**
      * Tests the load function

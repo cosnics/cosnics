@@ -26,17 +26,22 @@ class DoctrineEventListenerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if(!$container->hasDefinition('doctrine.orm.entity_manager_factory'))
+        if (!$container->hasDefinition('doctrine.orm.entity_manager_factory'))
         {
             return;
         }
 
         $taggedServices = $container->findTaggedServiceIds('doctrine.orm.event_listener');
         $doctrineEntityManagerFactoryDef = $container->getDefinition('doctrine.orm.entity_manager_factory');
+        $doctrineTestEntityManagerFactoryDef = $container->getDefinition('doctrine.orm.test.entity_manager_factory');
 
-        foreach($taggedServices as $taggedServiceId => $tags)
+        foreach ($taggedServices as $taggedServiceId => $tags)
         {
             $doctrineEntityManagerFactoryDef->addMethodCall(
+                'addEventListener', array($tags[0]['event'], new Reference($taggedServiceId))
+            );
+
+            $doctrineTestEntityManagerFactoryDef->addMethodCall(
                 'addEventListener', array($tags[0]['event'], new Reference($taggedServiceId))
             );
         }
