@@ -304,7 +304,7 @@ class AccountForm extends FormValidator
             return true;
         }
 
-        if(strlen($newPassword) < 8)
+        if(strlen($newPassword) < 6)
         {
             return false;
         }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ActivityTable;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activity;
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 

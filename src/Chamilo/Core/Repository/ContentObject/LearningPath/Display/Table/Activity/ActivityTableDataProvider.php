@@ -1,9 +1,11 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ActivityTable;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activity;
 
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataManager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  * Table data provider for the schema
@@ -19,16 +21,14 @@ class ActivityTableDataProvider
      * @param int $count
      * @param null $order_property
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
+     * @return ArrayResultSet
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager::retrieve_activities(
-            $this->get_component()->get_current_content_object(),
-            $condition,
-            $offset,
-            $count,
-            $order_property
+        return new ArrayResultSet(
+            $this->getActivityService()->retrieveActivitiesForTreeNode(
+                $this->getCurrentTreeNode(), $offset, $count, $order_property[0]
+            )
         );
     }
 
@@ -39,6 +39,24 @@ class ActivityTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count_activities($this->get_component()->get_current_content_object(), $condition);
+        return $this->getActivityService()->countActivitiesForTreeNode($this->getCurrentTreeNode());
+    }
+
+    /**
+     * @return TreeNode
+     */
+    protected function getCurrentTreeNode()
+    {
+        return $this->get_component()->getCurrentTreeNode();
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->get_component()->getService(
+            'chamilo.core.repository.content_object.learning_path.service.activity_service'
+        );
     }
 }

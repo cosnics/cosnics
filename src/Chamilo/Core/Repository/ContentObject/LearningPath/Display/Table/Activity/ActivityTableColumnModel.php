@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\ActivityTable;
+namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activity;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;

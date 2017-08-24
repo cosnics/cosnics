@@ -283,7 +283,7 @@ class UserForm extends FormValidator
 
         $newPassword = $exportValues['pw'][User::PROPERTY_PASSWORD];
 
-        if (strlen($newPassword) < 8)
+        if (strlen($newPassword) < 6)
         {
             return false;
         }
