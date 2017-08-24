@@ -62,7 +62,8 @@ class UserIncompleteProgressMailerComponent extends Manager
             $mailerFactory = new MailerFactory();
             $mail = new Mail(
                 $translator->getTranslation('IncompleteProgressMailTitle', $this->getParameters()),
-                $mailContent, $emailAddresses
+                $mailContent, $emailAddresses, true, array(), array(), $this->getUser()->get_fullname(),
+                $this->getUser()->get_email()
             );
 
             $mailer = $mailerFactory->getActiveMailer();
