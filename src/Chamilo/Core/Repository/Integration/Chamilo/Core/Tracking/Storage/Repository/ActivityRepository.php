@@ -57,7 +57,7 @@ class ActivityRepository extends CommonDataClassRepository
      *
      * @return Activity[]
      */
-    public function filterActivities($activities, $offset, $count, OrderBy $orderBy)
+    public function filterActivities($activities, $offset = null, $count = null, OrderBy $orderBy = null)
     {
         usort(
             $activities,
