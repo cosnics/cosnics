@@ -25,11 +25,11 @@ CKEDITOR.editorConfig = function(config)
             [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
             [ 'Link', 'Unlink', 'Anchor' ],
             [ 'Chamilo', 'Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
-                    'PageBreak' ], '/', [ 'Styles', 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
+                    'PageBreak' ], '/', [ 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
             [ 'Maximize', 'ShowBlocks', '-', 'About' ] ];
 
     config.toolbar_Basic = [
-            [ 'Maximize', '-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'Bold', 'Italic', 'Underline' ],
+            [ 'Maximize', '-', 'Format', 'Font', 'FontSize', '-', 'Bold', 'Italic', 'Underline' ],
             '/',
             [ 'Preview', 'Print', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-',
                     'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
