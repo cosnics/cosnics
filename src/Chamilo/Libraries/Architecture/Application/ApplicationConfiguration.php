@@ -13,7 +13,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request $request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     private $request;
 
@@ -37,11 +37,11 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null, 
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request, $user = null, $application = null,
         $configurationParameters = array())
     {
         $this->request = $request;
@@ -52,7 +52,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {

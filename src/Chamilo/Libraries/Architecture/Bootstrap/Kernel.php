@@ -30,7 +30,7 @@ class Kernel
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -78,14 +78,14 @@ class Kernel
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param integer $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         ExceptionLoggerInterface $exceptionLogger, $version, User $user = null)
     {
@@ -99,7 +99,7 @@ class Kernel
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -108,7 +108,7 @@ class Kernel
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest($request)
     {

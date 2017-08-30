@@ -24,7 +24,7 @@ class AuthenticationValidator
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -36,10 +36,10 @@ class AuthenticationValidator
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, 
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         ConfigurationConsulter $configurationConsulter)
     {
         $this->request = $request;
@@ -48,7 +48,7 @@ class AuthenticationValidator
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -57,9 +57,9 @@ class AuthenticationValidator
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function setRequest(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }

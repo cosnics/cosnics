@@ -19,7 +19,7 @@ class ApplicationFactory
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -37,11 +37,11 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Platform\Translation $translation
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, StringUtilities $stringUtilities,
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request, StringUtilities $stringUtilities,
         Translation $translation)
     {
         $this->request = $request;
@@ -51,7 +51,7 @@ class ApplicationFactory
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -60,9 +60,9 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function setRequest(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }

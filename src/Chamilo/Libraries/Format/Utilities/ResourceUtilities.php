@@ -56,7 +56,7 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -67,11 +67,11 @@ abstract class ResourceUtilities
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param ClassnameUtilities $classnameUtilities
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct($context = __NAMESPACE__, Theme $themeUtilities, PathBuilder $pathBuilder,
         ConfigurablePathBuilder $configurablePathBuilder, ClassnameUtilities $classnameUtilities,
-        \Symfony\Component\HttpFoundation\Request $request)
+        \Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->context = $context;
         $this->themeUtilities = $themeUtilities;
@@ -164,7 +164,7 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -173,7 +173,7 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest($request)
     {
@@ -189,7 +189,7 @@ abstract class ResourceUtilities
         $this->classnameUtilties = $classnameUtilties;
     }
 
-    static public function launch(\Symfony\Component\HttpFoundation\Request $request)
+    static public function launch(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $type = Request::get(self::PARAM_TYPE, null);
 

@@ -71,7 +71,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the request
      * 
-     * @return \Symfony\Component\HttpFoundation\Request | object
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest | object
      */
     public function getRequest()
     {

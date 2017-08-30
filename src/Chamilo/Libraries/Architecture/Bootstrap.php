@@ -23,7 +23,7 @@ class Bootstrap
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -37,7 +37,7 @@ class Bootstrap
     {
         $this->initialize();
         
-        $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        $this->request = \Chamilo\Libraries\Platform\ChamiloRequest::createFromGlobals();
         $this->configuration = \Chamilo\Configuration\Configuration::getInstance();
     }
 
@@ -74,7 +74,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {

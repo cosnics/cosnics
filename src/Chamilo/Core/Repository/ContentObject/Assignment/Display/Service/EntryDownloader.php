@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -100,10 +100,10 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param integer $entryIdentifier
      */
-    public function downloadByEntryIdentifier(Request $request, $entryIdentifier)
+    public function downloadByEntryIdentifier(ChamiloRequest $request, $entryIdentifier)
     {
         return $this->downloadByEntryIdentifiers($request, array($entryIdentifier));
     }
@@ -120,10 +120,10 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param integer[] $entryIdentifier
      */
-    public function downloadByEntryIdentifiers(Request $request, $entryIdentifiers)
+    public function downloadByEntryIdentifiers(ChamiloRequest $request, $entryIdentifiers)
     {
         return $this->downloadEntries($request, $this->compressByEntryIdentifiers($entryIdentifiers));
     }
@@ -145,11 +145,11 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param integer $entityType
      * @param integer $entityIdentifier
      */
-    public function downloadForEntityTypeAndIdentifier(Request $request, $entityType, $entityIdentifier)
+    public function downloadForEntityTypeAndIdentifier(ChamiloRequest $request, $entityType, $entityIdentifier)
     {
         return $this->downloadEntries(
             $request, 
@@ -173,11 +173,11 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      */
-    public function downloadForEntityTypeAndIdentifiers(Request $request, $entityType, $entityIdentifiers)
+    public function downloadForEntityTypeAndIdentifiers(ChamiloRequest $request, $entityType, $entityIdentifiers)
     {
         return $this->downloadEntries(
             $request, 
@@ -201,18 +201,18 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function downloadAll(Request $request)
+    public function downloadAll(ChamiloRequest $request)
     {
         return $this->downloadEntries($request, $this->compressAll());
     }
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function downloadByRequest(Request $request)
+    public function downloadByRequest(ChamiloRequest $request)
     {
         $entryIdentifiers = $request->get(Manager::PARAM_ENTRY_ID);
         
@@ -295,11 +295,11 @@ class EntryDownloader
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param string $fileName
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[] $entries
      */
-    protected function downloadEntries(Request $request, $archivePath)
+    protected function downloadEntries(ChamiloRequest $request, $archivePath)
     {
         $archiveName = basename($archivePath);
         $archiveSafeName = Filesystem::create_safe_name($archiveName);

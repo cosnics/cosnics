@@ -77,7 +77,7 @@ class Kernel
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -95,10 +95,10 @@ class Kernel
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Configuration $configuration
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, Configuration $configuration)
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request, Configuration $configuration)
     {
         $this->request = $request;
         $this->configuration = $configuration;
@@ -178,7 +178,7 @@ class Kernel
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -187,7 +187,7 @@ class Kernel
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest($request)
     {

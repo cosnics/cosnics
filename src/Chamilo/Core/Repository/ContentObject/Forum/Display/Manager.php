@@ -52,7 +52,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param unknown $user
      * @param unknown $parent
      * @throws \Exception

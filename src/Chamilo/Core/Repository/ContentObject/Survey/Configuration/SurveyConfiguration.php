@@ -21,12 +21,12 @@ class SurveyConfiguration extends ApplicationConfiguration
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param string $answerServiceContext
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null, 
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request, $user = null, $application = null,
         $answerServiceContext = null)
     {
         parent::__construct($request, $user, $application);

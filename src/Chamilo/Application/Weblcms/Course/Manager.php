@@ -52,7 +52,7 @@ abstract class Manager extends Application
      */
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
      * @throws \Exception

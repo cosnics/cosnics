@@ -18,7 +18,7 @@ class Bootstrap
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -48,13 +48,13 @@ class Bootstrap
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param ErrorHandler $errorHandler
      * @param bool $showErrors
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
         ErrorHandler $errorHandler, $showErrors = false)
     {
@@ -67,7 +67,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -76,7 +76,7 @@ class Bootstrap
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest(Request $request)
     {

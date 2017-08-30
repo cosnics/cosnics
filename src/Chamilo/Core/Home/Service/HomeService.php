@@ -11,7 +11,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -260,10 +260,10 @@ class HomeService
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @return integer
      */
-    public function getCurrentTabIdentifier(Request $request)
+    public function getCurrentTabIdentifier(ChamiloRequest $request)
     {
         return $request->query->get(self::PARAM_TAB_ID);
     }
@@ -305,12 +305,12 @@ class HomeService
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param integer $tabKey
      * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
      * @return boolean
      */
-    public function isActiveTab(Request $request, $tabKey, Tab $tab)
+    public function isActiveTab(ChamiloRequest $request, $tabKey, Tab $tab)
     {
         $currentTabIdentifier = $this->getCurrentTabIdentifier($request);
         return ($currentTabIdentifier == $tab->getId() || (! isset($currentTabIdentifier) && $tabKey == 0));

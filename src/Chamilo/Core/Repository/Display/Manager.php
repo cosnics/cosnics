@@ -49,7 +49,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param unknown $user
      * @param unknown $parent
      */

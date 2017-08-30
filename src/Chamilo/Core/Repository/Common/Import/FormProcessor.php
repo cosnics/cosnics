@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\Libraries\File\Properties\FileProperties;
 
@@ -41,7 +41,7 @@ abstract class FormProcessor
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -50,9 +50,9 @@ abstract class FormProcessor
      * @param integer $userIdentifier
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param string[] $formValues
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function __construct($userIdentifier, WorkspaceInterface $workspace, $formValues, Request $request)
+    public function __construct($userIdentifier, WorkspaceInterface $workspace, $formValues, ChamiloRequest $request)
     {
         $this->userIdentifier = $userIdentifier;
         $this->workspace = $workspace;
@@ -116,7 +116,7 @@ abstract class FormProcessor
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -125,9 +125,9 @@ abstract class FormProcessor
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(Request $request)
+    public function setRequest(ChamiloRequest $request)
     {
         $this->request = $request;
     }

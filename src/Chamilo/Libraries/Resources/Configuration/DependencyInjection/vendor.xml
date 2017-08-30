@@ -7,9 +7,9 @@
         <!-- SYMFONY -->
         <service
                 id="symfony.component.http_foundation.request"
-                class="Symfony\Component\HttpFoundation\Request">
+                class="Chamilo\Libraries\Platform\ChamiloRequest">
             <factory
-                    class="Symfony\Component\HttpFoundation\Request"
+                    class="Chamilo\Libraries\Platform\ChamiloRequest"
                     method="createFromGlobals"/>
         </service>
 

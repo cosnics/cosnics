@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Renderer\Menu;
 
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -26,7 +26,7 @@ abstract class Renderer
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -53,7 +53,7 @@ abstract class Renderer
      *
      * @param $user User|null
      */
-    public function __construct($containerMode, Request $request = null, $user = null)
+    public function __construct($containerMode, ChamiloRequest $request = null, $user = null)
     {
         $this->containerMode = $containerMode;
         $this->user = $user;
@@ -98,7 +98,7 @@ abstract class Renderer
      * @param $user User|null
      * @return Renderer
      */
-    public static function factory($type, $containerMode, Request $request = null, $user = null)
+    public static function factory($type, $containerMode, ChamiloRequest $request = null, $user = null)
     {
         $class = __NAMESPACE__ . '\Type\\' . $type;
         return new $class($containerMode, $request, $user);
@@ -110,7 +110,7 @@ abstract class Renderer
      * @param $user User|null
      * @return string
      */
-    public static function toHtml($type, $containerMode = 'container-fluid', Request $request = null, $user = null)
+    public static function toHtml($type, $containerMode = 'container-fluid', ChamiloRequest $request = null, $user = null)
     {
         return self::factory($type, $containerMode, $request, $user)->render();
     }

@@ -45,7 +45,7 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param string $context
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
@@ -67,7 +67,7 @@ class ApplicationFactory
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {

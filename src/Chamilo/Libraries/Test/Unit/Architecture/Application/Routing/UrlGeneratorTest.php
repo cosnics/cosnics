@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  * Tests the UrlGenerator class
@@ -18,7 +18,7 @@ class UrlGeneratorTest extends ChamiloTestCase
     /**
      * The request mock
      *
-     * @var Request | \PHPUnit_Framework_MockObject_MockObject
+     * @var ChamiloRequest | \PHPUnit_Framework_MockObject_MockObject
      */
     private $request_mock;
 
@@ -34,7 +34,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function setUp()
     {
-        $this->request_mock = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $this->request_mock = $this->createMock('Chamilo\Libraries\Platform\ChamiloRequest');
 
         $parameters = array('course_id' => 1, 'publication_id' => 2);
         $this->request_mock->query = new ParameterBag($parameters);

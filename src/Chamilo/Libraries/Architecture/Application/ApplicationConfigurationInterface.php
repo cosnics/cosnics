@@ -13,7 +13,7 @@ interface ApplicationConfigurationInterface
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest();
 

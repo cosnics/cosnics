@@ -16,7 +16,7 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -24,14 +24,14 @@ abstract class QueryAuthentication extends Authentication
      *
      * @param string $userName
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request)
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -40,9 +40,9 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function setRequest(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }
@@ -57,10 +57,10 @@ abstract class QueryAuthentication extends Authentication
     /**
      *
      * @param string $authenticationMethod
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @return \Chamilo\Libraries\Authentication\QueryAuthentication
      */
-    public static function factory($authenticationMethod, \Symfony\Component\HttpFoundation\Request $request)
+    public static function factory($authenticationMethod, \Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $authenticationClass = __NAMESPACE__ . '\\' . $authenticationMethod . '\\' . $authenticationMethod .
              'Authentication';

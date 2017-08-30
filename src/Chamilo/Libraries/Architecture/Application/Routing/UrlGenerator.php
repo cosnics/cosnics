@@ -23,9 +23,9 @@ class UrlGenerator
     /**
      * Constructor
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request)
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->setUrlParameterBag($request->query);
     }
