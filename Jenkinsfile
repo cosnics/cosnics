@@ -1,5 +1,6 @@
 try {
     pipeline {
+            properties([disableConcurrentBuilds(), pipelineTriggers([])])
             agent any
 
             stages {
