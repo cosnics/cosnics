@@ -1,8 +1,7 @@
 try {
     pipeline {
-            properties([disableConcurrentBuilds(), pipelineTriggers([])])
             agent any
-
+            options { disableConcurrentBuilds() }
             stages {
                 stage('Create Build') {
                     steps {
