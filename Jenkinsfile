@@ -48,7 +48,7 @@ try {
                             sh "bin/phpunit -c files/configuration/phpunit.xml --log-junit ${WORKSPACE}/build-reports/phpunit-result.xml"
                         }
                         step([$class: 'XUnitBuilder',
-                            thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                            thresholds: [[$class: 'FailedThreshold', unstableThreshold: '0']],
                             tools: [[$class: 'JUnitType', pattern: "build-reports/*.xml"]]])
                         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
                     }
