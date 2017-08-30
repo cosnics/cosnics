@@ -124,7 +124,7 @@ class CategoryMenu extends HtmlMenu
         return $menu;
     }
 
-    private function get_url($id)
+    private function get_url($id = null)
     {
         if (! $id)
             $id = 0;

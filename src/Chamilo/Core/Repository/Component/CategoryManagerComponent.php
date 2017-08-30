@@ -139,7 +139,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      *
      * @return int
      */
-    public function count_categories($condition)
+    public function count_categories($condition = null)
     {
         if ($condition)
         {

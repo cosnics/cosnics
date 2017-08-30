@@ -8,7 +8,7 @@ use HTML_Table;
 class ExportTable extends SortableTableFromArray
 {
 
-    public function toHtml($totalValue, $totalColumn)
+    public function toHtml($totalValue = null, $totalColumn = null)
     {
         $this->initializeTable();
         

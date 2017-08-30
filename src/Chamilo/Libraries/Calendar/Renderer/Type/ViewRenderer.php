@@ -157,7 +157,7 @@ abstract class ViewRenderer extends Renderer
      * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source, $userIdentifier)
+    public function isSourceVisible($source, $userIdentifier = null)
     {
         if ($this->getDataProvider()->supportsVisibility())
         {

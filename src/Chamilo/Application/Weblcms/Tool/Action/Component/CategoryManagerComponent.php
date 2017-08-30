@@ -151,7 +151,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return true;
     }
 
-    public function count_categories($condition)
+    public function count_categories($condition = null)
     {
         if ($condition)
         {

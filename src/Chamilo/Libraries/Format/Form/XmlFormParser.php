@@ -427,7 +427,7 @@ class XmlFormParser
      *
      * @return String
      */
-    protected function translate($translation_variable, $parameters)
+    protected function translate($translation_variable, $parameters = [])
     {
         $translation_variable = (string) StringUtilities::getInstance()->createString($translation_variable)->upperCamelize();
         return Translation::get($translation_variable, $parameters, $this->get_context());

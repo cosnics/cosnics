@@ -55,7 +55,7 @@ class CourseUserEntity extends UserEntity
         return self::$instance;
     }
 
-    public function __construct($course_id, $limited_users = array(), $excluded_users = array())
+    public function __construct($course_id = 0, $limited_users = array(), $excluded_users = array())
     {
         $this->limited_users = $limited_users;
         $this->excluded_users = $excluded_users;

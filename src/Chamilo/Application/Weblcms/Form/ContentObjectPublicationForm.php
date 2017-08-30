@@ -953,6 +953,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         
         foreach ($target_users as $target_user)
         {
+//            var_dump($target_user);
             $target_email[] = $target_user[User::PROPERTY_EMAIL];
         }
 

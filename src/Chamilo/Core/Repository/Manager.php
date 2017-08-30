@@ -625,7 +625,7 @@ abstract class Manager extends Application
         return \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($content_object);
     }
 
-    public function get_content_object_exporting_url($content_object, $type)
+    public function get_content_object_exporting_url($content_object, $type = null)
     {
         return $this->get_url(
             array(

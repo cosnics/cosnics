@@ -66,7 +66,7 @@ abstract class TableColumn
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
-    public function __construct($name, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null)
+    public function __construct($name = '', $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null)
     {
         $this->set_name($name);
         

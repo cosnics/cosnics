@@ -184,7 +184,7 @@ class Menu extends HtmlMenu
         return $menu;
     }
 
-    private function get_cloi_url($cloi)
+    private function get_cloi_url($cloi = null)
     {
         if ($cloi == null || $cloi->get_ref() == $this->root)
         {

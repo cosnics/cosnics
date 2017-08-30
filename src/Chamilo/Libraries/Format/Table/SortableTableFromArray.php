@@ -170,7 +170,7 @@ class SortableTableFromArray extends SortableTable
      *
      * @return string[]
      */
-    public function getData($offset, $count, $orderColumn, $orderDirection)
+    public function getData($offset = null, $count = null, $orderColumn = 0, $orderDirection = SORT_ASC)
     {
         $content = $this->getTableData();
         

@@ -74,7 +74,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
         return new WeblcmsCategoryForm();
     }
 
-    public function count_categories($condition)
+    public function count_categories($condition = null)
     {
         return DataManager::count(CourseCategory::class_name(), new DataClassCountParameters($condition));
     }

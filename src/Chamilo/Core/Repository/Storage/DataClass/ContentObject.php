@@ -1615,7 +1615,7 @@ class ContentObject extends CompositeDataClass
         return $this->count_includers($only_version) > 0;
     }
 
-    public function count_publications($user)
+    public function count_publications()
     {
         return \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager::count_publication_attributes(
             PublicationInterface::ATTRIBUTES_TYPE_OBJECT, 

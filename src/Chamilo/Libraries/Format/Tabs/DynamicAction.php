@@ -14,7 +14,7 @@ class DynamicAction
 
     private $confirm;
 
-    public function __construct($title, $description, $image, $url, $confirm = false)
+    public function __construct($title, $description, $image, $url = null, $confirm = false)
     {
         $this->title = $title;
         $this->description = $description;

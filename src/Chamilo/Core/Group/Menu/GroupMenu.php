@@ -238,7 +238,7 @@ class GroupMenu extends HtmlMenu
         return htmlentities(sprintf($this->urlFmt, $group));
     }
 
-    private function get_home_url($category)
+    private function get_home_url($category = null)
     {
         // TODO: Put another class in charge of the htmlentities() invocation
         return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));

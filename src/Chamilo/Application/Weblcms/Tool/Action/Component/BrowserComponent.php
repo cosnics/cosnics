@@ -311,9 +311,13 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * Retrieves the publications
      *
+     * @param int $offset
+     * @param int $max_objects
+     * @param array $object_table_order
+     *
      * @return array An array of ContentObjectPublication objects
      */
-    public function get_publications($offset, $max_objects, $object_table_order = array())
+    public function get_publications($offset = 0, $max_objects = 0, $object_table_order = array())
     {
         if (empty($this->publications))
         {

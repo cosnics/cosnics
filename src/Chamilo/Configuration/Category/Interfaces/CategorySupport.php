@@ -14,7 +14,7 @@ interface CategorySupport
 
     public function allowed_to_add_category($parent_category_id);
 
-    public function count_categories($condition);
+    public function count_categories($condition = null);
 
     public function retrieve_categories($condition, $offset, $count, $order_property);
 

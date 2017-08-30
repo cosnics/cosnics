@@ -25,7 +25,7 @@ class StaticTableColumn extends TableColumn
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
-    public function __construct($name, $title = null, $headerCssClasses = null, $contentCssClasses = null)
+    public function __construct($name = null, $title = null, $headerCssClasses = null, $contentCssClasses = null)
     {
         parent::__construct($name, $title, false, $headerCssClasses, $contentCssClasses);
     }
