@@ -40,7 +40,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
      * @param string $edit_and_publish_url_format URL for editing and publishing the selected learning object.
      * @see PublicationCandidateTableCellRenderer::PublicationCandidateTableCellRenderer()
      */
-    public function __construct($component, $owner, $types, $query)
+    public function __construct($component, $owner = null, $types = [], $query = null)
     {
         parent::__construct($component);
         $this->set_types($types);

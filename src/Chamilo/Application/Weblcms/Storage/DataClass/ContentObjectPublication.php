@@ -605,7 +605,10 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         
         foreach ($target_users as $target_user)
         {
-            $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            if(!array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
+            {
+                $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            }
         }
         
         // safety check: filter any dubbles

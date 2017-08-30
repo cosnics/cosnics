@@ -252,7 +252,10 @@ class ContentObjectPublicationMailer
         
         foreach ($target_users as $target_user)
         {
-            $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            if(!array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
+            {
+                $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            }
         }
         
         $unique_email = array_unique($target_email);
