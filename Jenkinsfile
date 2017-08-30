@@ -32,7 +32,7 @@ try {
                         sh 'rm -rf src/Chamilo/Application/Weblcms/Tool/Implementation/Chat'
                         sh 'rm -rf src/Chamilo/Application/Weblcms/Tool/Implementation/Geolocation'
                         echo 'Composer update'
-                        sh 'composer update'
+                        sh 'composer update -o'
                     }
                 }
                 stage('Deploy') {
