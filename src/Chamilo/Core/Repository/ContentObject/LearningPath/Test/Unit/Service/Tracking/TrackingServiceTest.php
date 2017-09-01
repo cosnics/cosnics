@@ -504,5 +504,4 @@ class TrackingServiceTest extends ChamiloTestCase
 
         $this->trackingService->countTargetUsers($this->learningPath);
     }
-
 }

@@ -211,7 +211,7 @@ class TrackingRepositoryTest extends ChamiloFixturesBasedTestCase
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-            new StaticConditionVariable('Jamey')
+            new StaticConditionVariable('Kiana')
         );
 
         $this->assertCount(
@@ -242,7 +242,7 @@ class TrackingRepositoryTest extends ChamiloFixturesBasedTestCase
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-            new StaticConditionVariable('Jamey')
+            new StaticConditionVariable('Kiana')
         );
 
         $this->assertEquals(1, $this->trackingRepository->countTargetUsersForLearningPath($learningPath, $condition));

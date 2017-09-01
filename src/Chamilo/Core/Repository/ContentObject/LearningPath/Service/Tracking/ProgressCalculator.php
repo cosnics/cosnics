@@ -148,6 +148,7 @@ class ProgressCalculator
         return $blockedNodes;
     }
 
+
     /**
      * Helper function to check whether or not the
      *
@@ -163,29 +164,22 @@ class ProgressCalculator
         TreeNode $possibleBlockNode
     )
     {
-        if ($currentTreeNode->isChildOf($possibleBlockNode))
+        if ($currentTreeNode->isChildOf($possibleBlockNode) || !$currentTreeNode->comesAfterNode($possibleBlockNode))
         {
             return false;
         }
 
-        $firstDefaultTraversingOrderParentNode = null;
-
-        $parents = $currentTreeNode->getParentNodes();
-        foreach($parents as $parentNode)
-        {
-            if($parentNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
-            {
-                $firstDefaultTraversingOrderParentNode = $parentNode;
-            }
-        }
+        $firstDefaultTraversingOrderParentNode = $currentTreeNode->getFirstParentThatEnforcesDefaultTraversingOrder();
 
         if (
-            $learningPath->enforcesDefaultTraversingOrder() ||
             (
                 $firstDefaultTraversingOrderParentNode instanceof TreeNode &&
                 $possibleBlockNode->isChildOf($firstDefaultTraversingOrderParentNode)
-            ) ||
-            (!$possibleBlockNode->isRootNode() && $possibleBlockNode->getTreeNodeData()->isBlocked())
+            )
+            ||
+            (
+                !$possibleBlockNode->isRootNode() && $possibleBlockNode->getTreeNodeData()->isBlocked()
+            )
         )
         {
             if (!$this->isTreeNodeCompleted($learningPath, $user, $possibleBlockNode))
@@ -196,7 +190,6 @@ class ProgressCalculator
 
         return false;
     }
-
 
     /**
      * Determines whether or not the learning path tree node is completed by checking the tracking and every subitem
@@ -235,7 +228,7 @@ class ProgressCalculator
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            if($this->isAttemptCompleted($treeNode, $treeNodeAttempt))
+            if ($this->isAttemptCompleted($treeNode, $treeNodeAttempt))
             {
                 return true;
             }
@@ -262,7 +255,7 @@ class ProgressCalculator
             return false;
         }
 
-        if(!$isAssessment)
+        if (!$isAssessment)
         {
             return true;
         }

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
@@ -429,5 +430,53 @@ class TreeNode
     public function isChildOf(TreeNode $possibleParentNode)
     {
         return in_array($possibleParentNode, $this->getParentNodes());
+    }
+
+    /**
+     * Returns whether or not the current node (self) is a follow-up node of the giving node.
+     *
+     * @param TreeNode $possiblePreviousNode
+     *
+     * @return bool
+     */
+    public function comesAfterNode(TreeNode $possiblePreviousNode)
+    {
+        return $this->getStep() > $possiblePreviousNode->getStep();
+    }
+
+    /**
+     * Returns whether or not this node is used in a default traversing order of any of his parents
+     *
+     * @return bool
+     */
+    public function isInDefaultTraversingOrder()
+    {
+        return $this->getFirstParentThatEnforcesDefaultTraversingOrder() instanceof TreeNode;
+    }
+
+    /**
+     * Returns the first parent that enforces the default traversing order
+     *
+     * @return TreeNode|null
+     */
+    public function getFirstParentThatEnforcesDefaultTraversingOrder()
+    {
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->getTree()->getRoot()->getContentObject();
+        if ($learningPath->enforcesDefaultTraversingOrder())
+        {
+            return $this->getTree()->getRoot();
+        }
+
+        $parents = $this->getParentNodes();
+        foreach ($parents as $parentNode)
+        {
+            if ($parentNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
+            {
+                return $parentNode;
+            }
+        }
+
+        return null;
     }
 }

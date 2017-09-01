@@ -131,11 +131,11 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     $this->getCurrentTreeNode()->getTreeNodeData() &&
                     $this->getCurrentTreeNode()->getTreeNodeData()->isBlocked()
                 ) ||
-                $this->learningPath->enforcesDefaultTraversingOrder()
+                $this->getCurrentTreeNode()->isInDefaultTraversingOrder()
             )
         )
         {
-            $message = $this->learningPath->enforcesDefaultTraversingOrder() ?
+            $message = $this->getCurrentTreeNode()->isInDefaultTraversingOrder() ?
                 'LearningPathEnforcesDefaultTraversingOrder' : 'ThisStepIsRequired';
 
             $html[] = '<div class="alert alert-warning">' . $translator->getTranslation($message) . '</div>';
@@ -402,7 +402,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $learningPath = $this->get_root_content_object();
 
         if (!$this->canEditCurrentTreeNode()
-            || $learningPath->enforcesDefaultTraversingOrder() || $treeNode->isRootNode()
+            || $treeNode->isInDefaultTraversingOrder() || $treeNode->isRootNode()
         )
         {
             return;

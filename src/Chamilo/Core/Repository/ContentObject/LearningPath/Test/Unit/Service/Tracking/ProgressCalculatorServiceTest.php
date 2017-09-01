@@ -76,6 +76,8 @@ class ProgressCalculatorTest extends ChamiloTestCase
      * - Learning Path A - ID: 1
      *    - Section A - ID: 2
      *        - Page 1 - ID: 6
+     *        - Section E - ID: 8
+     *              - Page 3 - ID: 9
      *    - Section B - ID: 3
      *    - Section C - ID: 4
      *        - Section D - ID: 5
@@ -90,14 +92,46 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
         $treeTestDataGenerator = new TreeTestDataGenerator();
 
-        $this->tree = $treeTestDataGenerator->getTree();
+        $this->tree = new Tree();
         $this->contentObjects = $treeTestDataGenerator->getContentObjects();
         $this->treeNodesData = $treeTestDataGenerator->getTreeNodesData();
         $this->treeNodes = $treeTestDataGenerator->getTreeNodes();
-        $this->learningPath = $this->tree->getRoot()->getContentObject();
 
         $this->user = new User();
         $this->user->setId(2);
+
+        $this->contentObjects[8] = new Section();
+        $this->contentObjects[8]->setId(8);
+
+        $this->treeNodesData[8] = new TreeNodeData();
+        $this->treeNodesData[8]->setId(8);
+
+        $this->contentObjects[9] = new Page();
+        $this->contentObjects[9]->setId(9);
+
+        $this->treeNodesData[9] = new TreeNodeData();
+        $this->treeNodesData[9]->setId(9);
+
+        $this->treeNodes[1] = new TreeNode($this->tree, $this->contentObjects[1], $this->treeNodesData[1]);
+        $this->treeNodes[2] = new TreeNode($this->tree, $this->contentObjects[2], $this->treeNodesData[2]);
+        $this->treeNodes[6] = new TreeNode($this->tree, $this->contentObjects[6], $this->treeNodesData[6]);
+        $this->treeNodes[8] = new TreeNode($this->tree, $this->contentObjects[8], $this->treeNodesData[8]);
+        $this->treeNodes[9] = new TreeNode($this->tree, $this->contentObjects[9], $this->treeNodesData[9]);
+        $this->treeNodes[3] = new TreeNode($this->tree, $this->contentObjects[3], $this->treeNodesData[3]);
+        $this->treeNodes[4] = new TreeNode($this->tree, $this->contentObjects[4], $this->treeNodesData[4]);
+        $this->treeNodes[5] = new TreeNode($this->tree, $this->contentObjects[5], $this->treeNodesData[5]);
+        $this->treeNodes[7] = new TreeNode($this->tree, $this->contentObjects[7], $this->treeNodesData[7]);
+
+        $this->treeNodes[1]->addChildNode($this->treeNodes[2]);
+        $this->treeNodes[2]->addChildNode($this->treeNodes[6]);
+        $this->treeNodes[2]->addChildNode($this->treeNodes[8]);
+        $this->treeNodes[8]->addChildNode($this->treeNodes[9]);
+        $this->treeNodes[1]->addChildNode($this->treeNodes[3]);
+        $this->treeNodes[1]->addChildNode($this->treeNodes[4]);
+        $this->treeNodes[4]->addChildNode($this->treeNodes[5]);
+        $this->treeNodes[5]->addChildNode($this->treeNodes[7]);
+
+        $this->learningPath = $this->tree->getRoot()->getContentObject();
 
         $assessment = new Assessment();
         $assessment->setId(14);
@@ -161,9 +195,9 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
     public function testGetLearningPathProgress()
     {
-        $this->mockGetTreeNodeAttempts(8, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(10, $this->treeNodeAttempts);
         $this->assertEquals(
-            37,
+            30,
             $this->progressCalculator->getLearningPathProgress($this->learningPath, $this->user, $this->tree->getRoot())
         );
     }
@@ -211,7 +245,7 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
     public function testGetLearningPathProgressWithAssessmentAndMasteryScore()
     {
-        $this->mockGetTreeNodeAttempts(3, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(5, $this->treeNodeAttempts);
 
         $this->assertEquals(
             0,
@@ -224,10 +258,10 @@ class ProgressCalculatorTest extends ChamiloTestCase
     public function testGetLearningPathProgressWithAssessmentAndMasteryScorePassed()
     {
         $this->treeNodeAttempts[12][0]->set_score(80);
-        $this->mockGetTreeNodeAttempts(3, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(5, $this->treeNodeAttempts);
 
         $this->assertEquals(
-            33,
+            20,
             $this->progressCalculator->getLearningPathProgress(
                 $this->learningPath, $this->user, $this->tree->getTreeNodeById(2)
             )
@@ -277,7 +311,7 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
     public function testIsTreeNodeCompletedOnNotCompletedSection()
     {
-        $this->mockGetTreeNodeAttempts(3, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(5, $this->treeNodeAttempts);
 
         $this->assertFalse(
             $this->progressCalculator->isTreeNodeCompleted(
@@ -288,7 +322,7 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
     public function testIsTreeNodeCompletedOnNotCompletedLearningPath()
     {
-        $this->mockGetTreeNodeAttempts(8, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(10, $this->treeNodeAttempts);
 
         $this->assertFalse(
             $this->progressCalculator->isTreeNodeCompleted(
@@ -335,7 +369,7 @@ class ProgressCalculatorTest extends ChamiloTestCase
 
     public function testIsCurrentTreeNodeBlocked()
     {
-        $this->mockGetTreeNodeAttempts(3, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(5, $this->treeNodeAttempts);
 
         $this->treeNodes[2]->getTreeNodeData()->setBlocked(true);
         $this->assertTrue(
@@ -387,9 +421,44 @@ class ProgressCalculatorTest extends ChamiloTestCase
         );
     }
 
+    public function testIsCurrentTreeNodeBlockedSectionEnforcesDefaultTraversingOrder()
+    {
+        $this->treeNodesData[2]->setEnforceDefaultTraversingOrder(true);
+
+        $this->assertTrue(
+            $this->progressCalculator->isCurrentTreeNodeBlocked(
+                $this->learningPath, $this->user, $this->tree->getTreeNodeById(9)
+            )
+        );
+    }
+
+    public function testIsCurrentTreeNodeBlockedSectionEnforcesDefaultTraversingOrderWhenNoParent()
+    {
+        $this->treeNodesData[2]->setEnforceDefaultTraversingOrder(true);
+
+        $this->assertFalse(
+            $this->progressCalculator->isCurrentTreeNodeBlocked(
+                $this->learningPath, $this->user, $this->tree->getTreeNodeById(4)
+            )
+        );
+    }
+
+    public function testIsCurrentTreeNodeBlockedSectionEnforcesDefaultTraversingOrderCompleted()
+    {
+        $this->treeNodesData[2]->setEnforceDefaultTraversingOrder(true);
+        $this->treeNodeAttempts[6][0]->setCompleted(true);
+        $this->mockGetTreeNodeAttempts(1, $this->treeNodeAttempts);
+
+        $this->assertFalse(
+            $this->progressCalculator->isCurrentTreeNodeBlocked(
+                $this->learningPath, $this->user, $this->tree->getTreeNodeById(8)
+            )
+        );
+    }
+
     public function testGetResponsibleNodesForBlockedTreeNode()
     {
-        $this->mockGetTreeNodeAttempts(3, $this->treeNodeAttempts);
+        $this->mockGetTreeNodeAttempts(5, $this->treeNodeAttempts);
 
         $this->treeNodes[2]->getTreeNodeData()->setBlocked(true);
 
@@ -428,9 +497,34 @@ class ProgressCalculatorTest extends ChamiloTestCase
         $this->learningPath->setEnforceDefaultTraversingOrder(true);
 
         $this->assertEquals(
-            [$this->treeNodes[2], $this->treeNodes[6], $this->treeNodes[3]],
+            [$this->treeNodes[2], $this->treeNodes[6], $this->treeNodes[8], $this->treeNodes[9], $this->treeNodes[3]],
             $this->progressCalculator->getResponsibleNodesForBlockedTreeNode(
                 $this->learningPath, $this->user, $this->tree->getTreeNodeById(4)
+            )
+        );
+    }
+
+    public function testGetResponsibleNodesForBlockedTreeNodeSectionEnforcesDefaultTraversingOrder()
+    {
+        $this->treeNodesData[2]->setEnforceDefaultTraversingOrder(true);
+
+        $this->assertEquals(
+            [$this->treeNodes[6]],
+            $this->progressCalculator->getResponsibleNodesForBlockedTreeNode(
+                $this->learningPath, $this->user, $this->tree->getTreeNodeById(9)
+            )
+        );
+    }
+
+    public function testGetResponsibleNodesForBlockedTreeNodeSectionEnforcesDefaultTraversingOrderSearchesFirstParent()
+    {
+        $this->treeNodesData[2]->setEnforceDefaultTraversingOrder(true);
+        $this->treeNodesData[8]->setEnforceDefaultTraversingOrder(true);
+
+        $this->assertEquals(
+            [$this->treeNodes[6]],
+            $this->progressCalculator->getResponsibleNodesForBlockedTreeNode(
+                $this->learningPath, $this->user, $this->tree->getTreeNodeById(9)
             )
         );
     }
