@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -72,7 +73,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                 $success = true;
             }
             catch (\Exception $ex)
-            { var_dump($ex); exit;
+            {
+                $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
                 $message = 'LearningPathNodesNotCopied';
                 $success = false;
             }
