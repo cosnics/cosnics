@@ -32,9 +32,12 @@ class AnonymousAuthentication extends QueryAuthentication
     {
         $allowedAnonymousAuthenticationUrl = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'anonymous_authentication_url'));
-        
+
+        $allowedAnonymousAuthenticationUrl = str_replace('http://', '', $allowedAnonymousAuthenticationUrl);
+        $allowedAnonymousAuthenticationUrl = str_replace('https://', '', $allowedAnonymousAuthenticationUrl);
+
         $baseUrl = $this->getRequest()->server->get('SERVER_NAME');
-        if (strpos($allowedAnonymousAuthenticationUrl, $baseUrl) === false)
+        if (strpos($allowedAnonymousAuthenticationUrl, $baseUrl) !== 0)
         {
             return null;
         }
