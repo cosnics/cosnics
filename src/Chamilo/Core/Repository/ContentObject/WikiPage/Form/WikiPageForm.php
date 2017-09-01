@@ -45,14 +45,4 @@ class WikiPageForm extends ContentObjectForm
         
         parent::setDefaults($defaults);
     }
-
-    public function build_creation_form()
-    {
-        parent::build_creation_form(array('toolbar' => 'WikiPage'));
-    }
-
-    public function build_editing_form()
-    {
-        parent::build_editing_form(array('toolbar' => 'WikiPage'));
-    }
 }

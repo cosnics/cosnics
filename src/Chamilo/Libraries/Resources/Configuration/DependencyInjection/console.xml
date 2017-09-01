@@ -57,6 +57,9 @@
             <argument
                     type="service"
                     id="chamilo.libraries.format.utilities.resource_processor" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.cache.cache_management.cache_manager" />
             <tag name="chamilo.libraries.console.command" />
         </service>
 

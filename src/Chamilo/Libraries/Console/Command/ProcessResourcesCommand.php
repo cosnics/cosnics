@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Console\Command;
 
+use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
 use Chamilo\Libraries\Format\Utilities\ResourceProcessor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,14 +24,23 @@ class ProcessResourcesCommand extends ChamiloCommand
     protected $resourceProcessor;
 
     /**
+     * @var CacheManager
+     */
+    protected $cacheManager;
+
+    /**
      * ProcessResourcesCommand constructor.
      *
      * @param Translator $translator
      * @param ResourceProcessor $resourceProcessor
+     * @param CacheManager $cacheManager
      */
-    public function __construct(Translator $translator, ResourceProcessor $resourceProcessor)
+    public function __construct(
+        Translator $translator, ResourceProcessor $resourceProcessor, CacheManager $cacheManager
+    )
     {
         $this->resourceProcessor = $resourceProcessor;
+        $this->cacheManager = $cacheManager;
 
         parent::__construct($translator);
     }
@@ -60,5 +70,6 @@ class ProcessResourcesCommand extends ChamiloCommand
     {
         $packages = $input->getArgument(self::ARG_CONTEXT);
         $this->resourceProcessor->processResources($packages, $output);
+        $this->cacheManager->clear(['chamilo_stylesheets', 'chamilo_javascript']);
     }
 }
