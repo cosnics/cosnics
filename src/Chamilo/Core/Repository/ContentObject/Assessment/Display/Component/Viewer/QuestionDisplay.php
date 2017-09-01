@@ -131,7 +131,7 @@ abstract class QuestionDisplay
         return implode(PHP_EOL, $html);
     }
 
-    public function add_footer($formvalidator)
+    public function add_footer()
     {
         $formvalidator = $this->formvalidator;
         $html[] = '</div>';

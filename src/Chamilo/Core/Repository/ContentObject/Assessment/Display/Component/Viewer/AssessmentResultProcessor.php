@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\AssessmentViewerComponent;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator;
 use Chamilo\Libraries\Platform\Security;
@@ -136,8 +138,14 @@ class AssessmentResultProcessor
         $this->question_results[] = '<h2>' . Translation::get('ViewAssessmentResults') . '</h2>';
         
         $this->question_results[] = '<div class="form-row"><div class="formc formc_no_margin">';
-        $this->question_results[] = '<b>' . $assessment->get_title() . '</b><br />';
-        $this->question_results[] = $assessment->get_description() . '</div></div>';
+
+        $display = ContentObjectRenditionImplementation::factory(
+            $assessment,
+            ContentObjectRendition::FORMAT_HTML,
+            ContentObjectRendition::VIEW_FULL,
+            $this->assessment_viewer);
+
+        $this->question_results[] = $display->render(). '</div></div>';
         
         $this->question_results[] = '</div>';
         

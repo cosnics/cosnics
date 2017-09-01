@@ -225,7 +225,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
      * @param string $answer
      * @param int $score
      */
-    public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
+    public function save_assessment_answer($complex_question_id, $answer = '', $score = 0, $hint = '')
     {
         $question_attempt = $this->get_assessment_question_attempt($complex_question_id);
         

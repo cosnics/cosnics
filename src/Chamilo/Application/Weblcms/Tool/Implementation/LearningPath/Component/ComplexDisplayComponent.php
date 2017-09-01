@@ -306,7 +306,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return parent::getCurrentTreeNode($this->getSelectedLearningPath());
     }
 
-    public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
+    public function save_assessment_answer($complex_question_id, $answer = '', $score = 0, $hint = '')
     {
         $this->trackingService->saveAnswerForQuestion(
             $this->getSelectedLearningPath(), $this->getUser(),

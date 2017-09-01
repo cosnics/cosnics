@@ -414,7 +414,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition);
     }
 
-    public static function select_next_display_order($parent_id, $complex_type)
+    public static function select_next_display_order($parent_id, $complex_type = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

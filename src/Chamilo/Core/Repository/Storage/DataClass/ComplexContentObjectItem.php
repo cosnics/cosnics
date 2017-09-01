@@ -195,7 +195,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         return count($this->get_allowed_types()) > 0;
     }
 
-    public static function factory($class, &$record)
+    public static function factory($class, &$record = [])
     {
         if (is_subclass_of($class, ComplexContentObjectItem::class_name()))
         {

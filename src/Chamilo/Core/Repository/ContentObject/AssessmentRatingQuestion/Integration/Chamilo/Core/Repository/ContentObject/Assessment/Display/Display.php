@@ -83,7 +83,7 @@ class Display extends QuestionDisplay
         return implode(PHP_EOL, $instruction);
     }
 
-    public function add_footer($formvalidator)
+    public function add_footer()
     {
         $formvalidator = $this->get_formvalidator();
         
@@ -102,6 +102,6 @@ class Display extends QuestionDisplay
             $formvalidator->addElement('html', $footer);
         }
         
-        parent::add_footer($formvalidator);
+        parent::add_footer();
     }
 }
