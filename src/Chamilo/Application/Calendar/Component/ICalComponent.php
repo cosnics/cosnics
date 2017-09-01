@@ -58,11 +58,19 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             {
                 $response = new \Symfony\Component\HttpFoundation\Response();
                 $response->setStatusCode(401);
-                $response->send();
+                return $response;
+
             }
         }
         else
         {
+            if(!$this->getUser() instanceof User)
+            {
+                $response = new \Symfony\Component\HttpFoundation\Response();
+                $response->setStatusCode(401);
+                return $response;
+            }
+
             if ($this->getRequest()->query->get(self::PARAM_DOWNLOAD))
             {
                 $this->renderCalendar($this->getUser());
