@@ -168,8 +168,23 @@ class ProgressCalculator
             return false;
         }
 
+        $firstDefaultTraversingOrderParentNode = null;
+
+        $parents = $currentTreeNode->getParentNodes();
+        foreach($parents as $parentNode)
+        {
+            if($parentNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
+            {
+                $firstDefaultTraversingOrderParentNode = $parentNode;
+            }
+        }
+
         if (
             $learningPath->enforcesDefaultTraversingOrder() ||
+            (
+                $firstDefaultTraversingOrderParentNode instanceof TreeNode &&
+                $possibleBlockNode->isChildOf($firstDefaultTraversingOrderParentNode)
+            ) ||
             (!$possibleBlockNode->isRootNode() && $possibleBlockNode->getTreeNodeData()->isBlocked())
         )
         {

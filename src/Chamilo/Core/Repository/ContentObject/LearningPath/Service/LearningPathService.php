@@ -239,6 +239,27 @@ class LearningPathService
     }
 
     /**
+     * Toggles the enforce default traversing order of a given ContentObject identified by a given TreeNode
+     *
+     * @param TreeNode $treeNode
+     */
+    public function toggleEnforceDefaultTraversingOrder(TreeNode $treeNode)
+    {
+        $treeNodeData = $treeNode->getTreeNodeData();
+
+        if (!$treeNodeData)
+        {
+            throw new \InvalidArgumentException(
+                'The given learning path tree node does not have a valid learning path child object'
+            );
+        }
+
+        $treeNodeData->setEnforceDefaultTraversingOrder(!$treeNodeData->enforcesDefaultTraversingOrder());
+
+        $this->treeNodeDataService->updateTreeNodeData($treeNodeData);
+    }
+
+    /**
      * Updates the title of a given ContentObject identified by a given TreeNode
      *
      * @param TreeNode $treeNode

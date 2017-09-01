@@ -30,6 +30,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     const PROPERTY_DISPLAY_ORDER = 'display_order';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_ADDED_DATE = 'added_date';
+    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
 
     /**
      * TreeNodeData constructor.
@@ -64,7 +65,8 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
                 self::PROPERTY_BLOCKED,
                 self::PROPERTY_DISPLAY_ORDER,
                 self::PROPERTY_USER_ID,
-                self::PROPERTY_ADDED_DATE
+                self::PROPERTY_ADDED_DATE,
+                self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER
             )
         );
     }
@@ -478,6 +480,31 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEARNING_PATH_ID),
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID)
         );
+    }
+
+    /**
+     * Sets whether or not the default traversing order should be enforced
+     *
+     * @param bool $enforceDefaultTraversingOrder
+     */
+    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
+    {
+        if(!is_bool($enforceDefaultTraversingOrder))
+        {
+            throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+        }
+
+        $this->set_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+    }
+
+    /**
+     * Returns whether or not the default traversing order is enforced
+     *
+     * @return bool
+     */
+    public function enforcesDefaultTraversingOrder()
+    {
+        return (bool) $this->get_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
 
     /**
