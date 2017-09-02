@@ -201,7 +201,7 @@
                             'edit', 'delete', 'move', 'manage', '-',
                             'buildAssessment', 'setAssessmentMasteryScore', 'configureAssessment',
                             'forumSubscribe', '-',
-                            'block', '-', 'reporting', 'progress', 'activity'
+                            'block', 'default_traversing_order', '-', 'reporting', 'progress', 'activity'
                         ];
                     }
                 }

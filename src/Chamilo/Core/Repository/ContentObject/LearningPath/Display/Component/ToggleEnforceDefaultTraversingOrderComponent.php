@@ -38,7 +38,7 @@ class ToggleEnforceDefaultTraversingOrderComponent extends Manager
             $success = false;
         }
 
-        if($currentTreeNode->getTreeNodeData()->isBlocked())
+        if($currentTreeNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
         {
             $translation = $success ? 'DefaultTraversingOrderEnforced' : 'DefaultTraversingOrderNotEnforced';
         }

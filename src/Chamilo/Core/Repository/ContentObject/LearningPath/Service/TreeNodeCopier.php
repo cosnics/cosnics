@@ -196,6 +196,23 @@ class TreeNodeCopier
         $treeNodeData->setContentObjectId((int) $contentObject->getId());
         $treeNodeData->setAddedDate(time());
 
+        if ($fromNode->isRootNode())
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $fromNode->getContentObject();
+            if ($learningPath->enforcesDefaultTraversingOrder() ||
+                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
+            {
+                $treeNodeData->setEnforceDefaultTraversingOrder(true);
+            }
+        }
+        else
+        {
+            $treeNodeData->setEnforceDefaultTraversingOrder(
+                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder()
+            );
+        }
+
         $this->treeNodeDataService->createTreeNodeData($treeNodeData);
 
         return $treeNodeData;

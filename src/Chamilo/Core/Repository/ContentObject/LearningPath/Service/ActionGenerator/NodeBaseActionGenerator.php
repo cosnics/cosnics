@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionGroup;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
@@ -77,9 +78,17 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             $actions[] = $this->getUpdateNodeAction($treeNode);
             $actions[] = $this->getNodeReportingAction($treeNode);
 
-            if (!$treeNode->isInDefaultTraversingOrder() && !$treeNode->isRootNode())
+            if (!$treeNode->isInDefaultTraversingOrder())
             {
-                $actions[] = $this->getBlockOrUnblockNodeAction($treeNode);
+                if(!$treeNode->isRootNode())
+                {
+                    $actions[] = $this->getBlockOrUnblockNodeAction($treeNode);
+                }
+
+                if($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
+                {
+                    $actions[] = $this->getToggleDefaultTraversingOrderAction($treeNode);
+                }
             }
 
             if (!$treeNode->isRootNode())
@@ -247,6 +256,32 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         );
 
         return new Action('block', $title, $url, 'fa-' . $icon);
+    }
+
+    /**
+     * Returns the action to toggle the default traversing order for a given TreeNode
+     *
+     * @param TreeNode $treeNode
+     *
+     * @return Action
+     */
+    protected function getToggleDefaultTraversingOrderAction(TreeNode $treeNode)
+    {
+        $translationVariable = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+            'DisableDefaultTraversingOrder' : 'EnableDefaultTraversingOrder';
+
+        $icon = ($treeNode->getTreeNodeData() &&
+            $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+            'sitemap' : 'sitemap';
+
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $url = $this->getUrlForNode(
+            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER),
+            $treeNode->getId()
+        );
+
+        return new Action('default_traversing_order', $title, $url, 'fa-' . $icon);
     }
 
     /**
