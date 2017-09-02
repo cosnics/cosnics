@@ -2,11 +2,13 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -34,6 +36,30 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class_name(), new DataClassRetrievesParameters($condition, null, null)
+        );
+    }
+
+    /**
+     * Retrieves the treeNodeData record for the given learning path (root step)
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return TreeNodeData | DataClass
+     */
+    public function findTreeNodeDataForLearningPathRoot(LearningPath $learningPath)
+    {
+        $conditions = [
+            $this->getConditionForLearningPath($learningPath),
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID
+                ),
+                new StaticConditionVariable($learningPath->getId())
+            )
+        ];
+
+        return $this->dataClassRepository->retrieve(
+            TreeNodeData::class_name(), new DataClassRetrieveParameters(new AndCondition($conditions))
         );
     }
 

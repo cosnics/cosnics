@@ -118,10 +118,23 @@ class TreeNodeDataService
         return $treeNodeData;
     }
 
-//    public function updateTreeNodeDataForLearningPath(LearningPath $learningPath)
-//    {
-//        $treeNodeData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath()
-//    }
+    /**
+     * Updates the TreeNodeData for a giving learning path. Used to sync the enforceDefaultTraversingOrder option
+     *
+     * @param LearningPath $learningPath
+     */
+    public function updateTreeNodeDataForLearningPath(LearningPath $learningPath)
+    {
+        $treeNodeData = $this->treeNodeDataRepository->findTreeNodeDataForLearningPathRoot($learningPath);
+
+        if(!$treeNodeData instanceof TreeNodeData)
+        {
+            throw new \RuntimeException('No TreeNodeData was found for LearningPath ' . $learningPath->getId());
+        }
+
+        $treeNodeData->setEnforceDefaultTraversingOrder($learningPath->enforcesDefaultTraversingOrder());
+        $this->updateTreeNodeData($treeNodeData);
+    }
 
     /**
      * Deletes the record in the TreeNodeData table for the LearningPath (as individual step)

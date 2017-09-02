@@ -144,12 +144,12 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 
     public function update($trueUpdate = true)
     {
-        if(!parent::create($trueUpdate))
+        if(!parent::update($trueUpdate))
         {
             return false;
         }
 
-//        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
+        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
 
         return true;
     }
