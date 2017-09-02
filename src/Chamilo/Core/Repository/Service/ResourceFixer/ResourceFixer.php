@@ -38,11 +38,12 @@ abstract class ResourceFixer
     /**
      * Fixes the resource tags in a given text
      *
+     * @param ContentObject|null $contentObject
      * @param string $textContent
      *
      * @return string
      */
-    protected function fixResourcesInTextContent($textContent)
+    protected function fixResourcesInTextContent(ContentObject $contentObject = null, $textContent = '')
     {
         $originalTextContent = $textContent;
 
@@ -58,12 +59,6 @@ abstract class ResourceFixer
         /** @var \DOMElement $resourceTag */
         foreach ($resourceTags as $resourceTag)
         {
-            if ($resourceTag->hasAttribute('security_code'))
-            {
-                $this->logger->debug('Security code already found, skipping resource tag');
-                continue;
-            }
-
             $objectId = $resourceTag->getAttribute('source');
             if (!$objectId)
             {
@@ -95,6 +90,17 @@ abstract class ResourceFixer
                     )
                 );
 
+                continue;
+            }
+
+            if($contentObject instanceof ContentObject)
+            {
+                $contentObject->include_content_object($objectId);
+            }
+
+            if ($resourceTag->hasAttribute('security_code'))
+            {
+                $this->logger->debug('Security code already found, skipping resource tag');
                 continue;
             }
 
@@ -137,6 +143,33 @@ abstract class ResourceFixer
                         $object->calculate_security_code()
                     )
                 );
+            }
+        }
+
+        $placeholders = $domXPath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
+        foreach($placeholders as $placeholder)
+        {
+            /**
+             * @var \DOMNode $placeholder
+             */
+            $contentObjectId = $placeholder->getAttribute('data-co-id');
+
+            try
+            {
+                $this->contentObjectResourceFixerRepository->findContentObjectById($contentObjectId);
+            }
+            catch (\Exception $ex)
+            {
+                $this->logger->debug(
+                    sprintf('The content object with ID %s is not found, skipping data-co-id tag', $contentObjectId)
+                );
+
+                continue;
+            }
+
+            if($contentObject instanceof ContentObject)
+            {
+                $contentObject->include_content_object($contentObjectId);
             }
         }
 

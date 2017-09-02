@@ -45,7 +45,7 @@ class OrderingQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing option %s value', $index));
 
                     $value = $option->get_value();
-                    $newValue = $this->fixResourcesInTextContent($value);
+                    $newValue = $this->fixResourcesInTextContent($orderingQuestion, $value);
 
                     if ($value != $newValue)
                     {
@@ -56,7 +56,7 @@ class OrderingQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing option %s feedback', $index));
 
                     $feedback = $option->get_feedback();
-                    $newFeedback = $this->fixResourcesInTextContent($feedback);
+                    $newFeedback = $this->fixResourcesInTextContent($orderingQuestion, $feedback);
 
                     if ($feedback != $newFeedback)
                     {
@@ -70,7 +70,7 @@ class OrderingQuestionResourceFixer extends ResourceFixer
                 $this->logger->debug(sprintf('Parsing ordering question hint'));
 
                 $hint = $orderingQuestion->get_hint();
-                $newHint = $this->fixResourcesInTextContent($hint);
+                $newHint = $this->fixResourcesInTextContent($orderingQuestion, $hint);
 
                 if($newHint != $hint)
                 {

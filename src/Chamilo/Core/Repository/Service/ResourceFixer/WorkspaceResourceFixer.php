@@ -36,7 +36,7 @@ class WorkspaceResourceFixer extends ResourceFixer
                 );
 
                 $content = $workspace->getDescription();
-                $newContent = $this->fixResourcesInTextContent($content);
+                $newContent = $this->fixResourcesInTextContent(null, $content);
 
                 if($content != $newContent)
                 {

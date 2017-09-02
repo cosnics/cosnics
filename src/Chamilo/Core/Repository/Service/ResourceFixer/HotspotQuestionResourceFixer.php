@@ -46,7 +46,7 @@ class HotspotQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing answer %s value', $index));
 
                     $value = $answer->get_answer();
-                    $newValue = $this->fixResourcesInTextContent($value);
+                    $newValue = $this->fixResourcesInTextContent($hotspotQuestion, $value);
 
                     if ($value != $newValue)
                     {
@@ -57,7 +57,7 @@ class HotspotQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing answer %s feedback', $index));
 
                     $feedback = $answer->get_comment();
-                    $newFeedback = $this->fixResourcesInTextContent($feedback);
+                    $newFeedback = $this->fixResourcesInTextContent($hotspotQuestion, $feedback);
 
                     if ($feedback != $newFeedback)
                     {

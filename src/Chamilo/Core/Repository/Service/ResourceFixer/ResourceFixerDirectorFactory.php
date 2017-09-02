@@ -50,53 +50,53 @@ class ResourceFixerDirectorFactory
 
         $resourceFixerDirector = new ResourceFixerDirector($logger);
 
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentMatchingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentMatchNumericQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentMatchTextQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentMatrixQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentMultipleChoiceQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentRatingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new AssessmentSelectQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentMatchingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentMatchNumericQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentMatchTextQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentMatrixQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentMultipleChoiceQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentRatingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new AssessmentSelectQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
 
         $resourceFixerDirector->addResourceFixer(
             new ContentObjectDescriptionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
         );
 
-//        $resourceFixerDirector->addResourceFixer(
-//            new ForumPostResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new HotspotQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new OrderingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
-//
-//        $resourceFixerDirector->addResourceFixer(
-//            new WorkspaceResourceFixer($this->contentObjectResourceFixerRepository, $logger)
-//        );
+        $resourceFixerDirector->addResourceFixer(
+            new ForumPostResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new HotspotQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new OrderingQuestionResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
+
+        $resourceFixerDirector->addResourceFixer(
+            new WorkspaceResourceFixer($this->contentObjectResourceFixerRepository, $logger)
+        );
 
         return $resourceFixerDirector;
     }

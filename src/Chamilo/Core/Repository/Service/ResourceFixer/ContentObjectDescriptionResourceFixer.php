@@ -37,7 +37,7 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
                     )
                 );
                 
-                $newDescription = $this->fixResourcesInTextContent($contentObject->get_description());
+                $newDescription = $this->fixResourcesInTextContent($contentObject, $contentObject->get_description());
                 if ($newDescription != $contentObject->get_description())
                 {
                     $this->logger->info(

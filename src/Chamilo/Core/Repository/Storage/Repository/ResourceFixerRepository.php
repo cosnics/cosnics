@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -54,12 +55,18 @@ class ResourceFixerRepository
      */
     public function findContentObjectsWithResourceTags($offset = 0)
     {
-        $condition = new PatternMatchCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
-            '*<resource*'
-        );
+        $conditions = [
+            new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                '*<resource*'
+            ),
+            new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                '*data-co-id*'
+            )
+        ];
 
-        $parameters = new DataClassRetrievesParameters($condition, 1000, $offset);
+        $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
 
         return $this->dataClassRepository->retrieves(ContentObject::class_name(), $parameters);
     }
@@ -71,12 +78,18 @@ class ResourceFixerRepository
      */
     public function countContentObjectsWithResourceTags()
     {
-        $condition = new PatternMatchCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
-            '*<resource*'
-        );
+        $conditions = [
+            new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                '*<resource*'
+            ),
+            new PatternMatchCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                '*data-co-id*'
+            )
+        ];
 
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(new OrCondition($conditions));
 
         return $this->dataClassRepository->count(ContentObject::class_name(), $parameters);
     }
