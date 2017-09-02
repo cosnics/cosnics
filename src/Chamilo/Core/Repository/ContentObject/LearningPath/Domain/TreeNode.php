@@ -463,7 +463,7 @@ class TreeNode
     {
         /** @var LearningPath $learningPath */
         $learningPath = $this->getTree()->getRoot()->getContentObject();
-        if ($learningPath->enforcesDefaultTraversingOrder())
+        if ($learningPath->enforcesDefaultTraversingOrder() && !$this->isRootNode())
         {
             return $this->getTree()->getRoot();
         }

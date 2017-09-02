@@ -138,6 +138,20 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $user->setId(Session::get_user_id());
 
         $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
+
+        return true;
+    }
+
+    public function update($trueUpdate = true)
+    {
+        if(!parent::create($trueUpdate))
+        {
+            return false;
+        }
+
+//        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
+
+        return true;
     }
 
     /**

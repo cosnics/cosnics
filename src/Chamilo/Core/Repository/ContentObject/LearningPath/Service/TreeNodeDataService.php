@@ -108,10 +108,20 @@ class TreeNodeDataService
         $treeNodeData->setUserId((int) $user->getId());
         $treeNodeData->setAddedDate(time());
 
+        if($rootLearningPath->enforcesDefaultTraversingOrder())
+        {
+            $treeNodeData->setEnforceDefaultTraversingOrder(true);
+        }
+
         $this->createTreeNodeData($treeNodeData);
 
         return $treeNodeData;
     }
+
+//    public function updateTreeNodeDataForLearningPath(LearningPath $learningPath)
+//    {
+//        $treeNodeData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath()
+//    }
 
     /**
      * Deletes the record in the TreeNodeData table for the LearningPath (as individual step)

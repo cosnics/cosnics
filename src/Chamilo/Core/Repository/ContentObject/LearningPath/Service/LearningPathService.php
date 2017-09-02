@@ -257,6 +257,15 @@ class LearningPathService
         $treeNodeData->setEnforceDefaultTraversingOrder(!$treeNodeData->enforcesDefaultTraversingOrder());
 
         $this->treeNodeDataService->updateTreeNodeData($treeNodeData);
+
+        if($treeNode->isRootNode())
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $treeNode->getContentObject();
+            $learningPath->setEnforceDefaultTraversingOrder($treeNodeData->enforcesDefaultTraversingOrder());
+
+            $this->contentObjectRepository->update($learningPath);
+        }
     }
 
     /**
