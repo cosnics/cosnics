@@ -151,19 +151,48 @@ class CpoContentObjectImport extends ContentObjectImport
                 $old_source = $resource->getAttribute('source');
                 $new_source = $controller->get_content_object_id_cache_id($old_source);
 
-                $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $new_source
-                );
-                
-                $resource->setAttribute('source', $new_source);
-                $resource->setAttribute('security_code', $contentObject->calculate_security_code());
+                try
+                {
+                    $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                        ContentObject::class_name(), $new_source
+                    );
+
+                    $resource->setAttribute('source', $new_source);
+                    $resource->setAttribute('security_code', $contentObject->calculate_security_code());
+                }
+                catch(\Exception $ex)
+                {
+
+                }
+            }
+
+            $placeholders = $dom_xpath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
+            foreach($placeholders as $placeholder)
+            {
+                /**
+                 * @var \DOMNode $placeholder
+                 */
+                $contentObjectId = $placeholder->getAttribute('data-co-id');
+                $new_source = $controller->get_content_object_id_cache_id($old_source);
+
+                try
+                {
+                    $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                        ContentObject::class_name(), $new_source
+                    );
+
+                    $placeholder->setAttribute('data-co-id', $new_source);
+                    $placeholder->setAttribute('data-security-code', $contentObject->calculate_security_code());
+                }
+                catch(\Exception $ex)
+                {
+
+                }
             }
 
             /**
              * Return iso-8859-1 encoded HTML entities to original UTF-8 encoding.
              */
-            return mb_convert_encoding($dom_document->saveHTML(), 'UTF-8', 'html-entities');
-
             return mb_convert_encoding($dom_document->saveHTML(), 'UTF-8', 'html-entities');
         }
     }
