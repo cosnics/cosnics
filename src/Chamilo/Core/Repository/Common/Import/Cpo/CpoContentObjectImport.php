@@ -173,7 +173,7 @@ class CpoContentObjectImport extends ContentObjectImport
                  * @var \DOMNode $placeholder
                  */
                 $contentObjectId = $placeholder->getAttribute('data-co-id');
-                $new_source = $controller->get_content_object_id_cache_id($old_source);
+                $new_source = $controller->get_content_object_id_cache_id($contentObjectId);
 
                 try
                 {
