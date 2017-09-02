@@ -134,7 +134,6 @@ class CpoContentObjectImport extends ContentObjectImport
 
         if ($dom_document->firstChild instanceof \DOMNode)
         {
-            $dom_document->removeChild($dom_document->firstChild);
             $dom_xpath = new \DOMXPath($dom_document);
 
             $body_nodes = $dom_xpath->query('body/*');
