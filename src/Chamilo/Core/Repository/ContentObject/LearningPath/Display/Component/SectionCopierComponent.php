@@ -6,7 +6,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -23,6 +25,7 @@ use Chamilo\Libraries\Platform\Translation;
 class SectionCopierComponent extends BaseHtmlTreeComponent
 {
     const PARAM_SELECTED_CONTENT_OBJECT = 'selected_content_object';
+    const PARAM_SELECTED_WORKSPACE = 'selected_workspace';
     const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
     const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
 
@@ -35,14 +38,18 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     function build()
     {
-        if(!$this->canEditCurrentTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
 
-        $selectedContentObject = $this->getRequest()->get(self::PARAM_SELECTED_CONTENT_OBJECT);
-        $selectedLearningPathNodes = json_decode($this->getRequest()->get(self::PARAM_SELECTED_LEARNING_PATH_NODES));
-        $copyInsteadOfReuse = $this->getRequest()->get(self::PARAM_COPY_INSTEAD_OF_REUSE);
+        $selectedContentObject = $this->getRequest()->getFromPost(self::PARAM_SELECTED_CONTENT_OBJECT);
+        $selectedWorkspace = $this->getRequest()->getFromPost(self::PARAM_SELECTED_WORKSPACE);
+
+        $selectedLearningPathNodes =
+            json_decode($this->getRequest()->getFromPost(self::PARAM_SELECTED_LEARNING_PATH_NODES));
+
+        $copyInsteadOfReuse = (bool) $this->getRequest()->getFromPost(self::PARAM_COPY_INSTEAD_OF_REUSE);
 
         $translator = Translation::getInstance();
 
@@ -58,9 +65,21 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     );
                 }
 
-                $canUse = $this->getRightsService()->canUseContentObject($this->getUser(), $contentObject);
-                $canCopy = $this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject);
-                if(!$canUse && !$canCopy)
+                $workspaceService = new WorkspaceService(new WorkspaceRepository());
+                $workspace = $workspaceService->determineWorkspaceForUserByIdentifier(
+                    $this->getUser(), (int) $selectedWorkspace
+                );
+
+                if (!$contentObject instanceof LearningPath)
+                {
+                    throw new ObjectNotExistException(
+                        $translator->getTranslation('Workspace', null, 'Chamilo\Core\Repository'), $selectedContentObject
+                    );
+                }
+
+                $canUse = $this->getRightsService()->canUseContentObject($this->getUser(), $contentObject, $workspace);
+                $canCopy = $this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject, $workspace);
+                if (!$canUse && !$canCopy)
                 {
                     throw new NotAllowedException();
                 }
