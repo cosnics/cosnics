@@ -270,6 +270,8 @@ class MigrationService
                 throw new \Exception('Could not create a new section');
             }
 
+            $this->contentObjectRepository->copyIncludesFromContentObject($learningPath, $section);
+
             echo "Create Section " . $section->getId() . PHP_EOL;
 
             $this->sectionFromLearningPathCache[$learningPath->getId()] = $section;

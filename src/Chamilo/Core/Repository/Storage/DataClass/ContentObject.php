@@ -1842,6 +1842,13 @@ class ContentObject extends CompositeDataClass
         return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
     }
 
+    /**
+     * @param array $order_by
+     * @param null $offset
+     * @param null $count
+     *
+     * @return ContentObject[]
+     */
     public function get_includes($order_by = array(), $offset = null, $count = null)
     {
         if (! is_array($this->includes))
