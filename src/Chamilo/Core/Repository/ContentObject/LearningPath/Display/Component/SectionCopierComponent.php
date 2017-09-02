@@ -58,10 +58,14 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     );
                 }
 
-                if(!$this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject))
+                $canUse = $this->getRightsService()->canUseContentObject($this->getUser(), $contentObject);
+                $canCopy = $this->getRightsService()->canCopyContentObject($this->getUser(), $contentObject);
+                if(!$canUse && !$canCopy)
                 {
                     throw new NotAllowedException();
                 }
+
+                $copyInsteadOfReuse = ($canUse && $canCopy) ? $copyInsteadOfReuse : $canCopy;
 
                 $this->getTreeNodeCopier()
                     ->copyNodesFromLearningPath(
