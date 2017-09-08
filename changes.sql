@@ -253,12 +253,13 @@ ALTER TABLE `repository_learning_path` ADD `automatic_numbering` VARCHAR(15) NOT
 DELETE FROM `configuration_registration` WHERE `context` LIKE '%LearningPathItem%';
 DELETE FROM `configuration_registration` WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
 
-
 ALTER TABLE `configuration_registration` ADD `priority` INT(3) UNSIGNED NOT NULL DEFAULT '1';
 UPDATE configuration_registration SET priority = 20 WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\Assessment\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
 UPDATE configuration_registration SET priority = 50 WHERE `context` LIKE 'Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\Page\\\\Integration\\\\Chamilo\\\\Core\\\\Repository\\\\ContentObject\\\\LearningPath';
 
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Core\\Repository\\ContentObject\\File\\Integration\\Chamilo\\Core\\Repository\\HtmlEditor', 'Chamilo\\Core\\Repository\\ContentObject\\File\\Integration', NULL, 'Repository', '1', '5.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Integration\\Chamilo\\Core\\Repository', 'Chamilo\\Core\\Repository\\ContentObject\\earningPath\\Integration', NULL, 'Repository', '1', '5.0.0', '1');
+
 /**
 Section content object install! (lynx package manager)
  */
@@ -271,5 +272,7 @@ DELETE FROM `repository_complex_content_object_item` WHERE parent_id IN
 (SELECT id FROM repository_content_object CO WHERE CO.type = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Storage\\DataClass\\LearningPath');
 
 DELETE FROM `repository_complex_learning_path_item`;
+
+
 
 

@@ -139,6 +139,9 @@ class TreeNodeCopier
             $contentObject->set_description($fromNode->getContentObject()->get_description());
 
             $this->contentObjectRepository->create($contentObject);
+            $this->contentObjectRepository->copyIncludesFromContentObject(
+                $fromNode->getContentObject(), $contentObject
+            );
 
             return $contentObject;
         }

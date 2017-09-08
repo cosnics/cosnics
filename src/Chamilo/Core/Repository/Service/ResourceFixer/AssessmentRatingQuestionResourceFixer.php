@@ -37,7 +37,7 @@ class AssessmentRatingQuestionResourceFixer extends ResourceFixer
                 );
 
                 $feedback = $assessmentRatingQuestion->get_feedback();
-                $newFeedback = $this->fixResourcesInTextContent($feedback);
+                $newFeedback = $this->fixResourcesInTextContent($assessmentRatingQuestion, $feedback);
 
                 if ($feedback != $newFeedback)
                 {

@@ -27,7 +27,6 @@
         "doctrine/dbal" : "2.5.4",
         "doctrine/cache" : "1.5.*",
         "chamilo/pear-libraries" : "*",
-        "glenscott/soundcloud": "dev-psr-4",
         "google/apiclient": "1.*",
         "monolog/monolog": "1.*",
         "jms/serializer": "*",
