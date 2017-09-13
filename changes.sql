@@ -274,5 +274,10 @@ DELETE FROM `repository_complex_content_object_item` WHERE parent_id IN
 DELETE FROM `repository_complex_learning_path_item`;
 
 
+/** NEW **/
 
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'maintenance_warning_show', '0', '0'),
+  (NULL, 'Chamilo\\Core\\Admin', 'maintenance_warning_message', NULL, '0'),
+  (NULL, 'Chamilo\\Core\\Admin', 'maintenance_block_access', NULL, '0');
 
+DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND context LIKE 'Chamilo\\\\Core\\\\Admin'

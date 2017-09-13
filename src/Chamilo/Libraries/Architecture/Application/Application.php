@@ -293,13 +293,6 @@ abstract class Application
             $html[] = '<div class="clearfix"></div>';
         }
 
-        $maintenanceMode = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_mode'));
-
-        if ($maintenanceMode)
-        {
-            $html[] = Display::error_message(Translation::get('MaintenanceModeMessage'));
-        }
-
         // Display messages
         $messages = Session::retrieve(self::PARAM_MESSAGES);
 

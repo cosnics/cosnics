@@ -158,7 +158,7 @@ class Bootstrap
     /**
      * Check if the system has been installed, if not display message accordingly
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return $this
      */
     protected function checkInstallation()
     {
@@ -184,7 +184,7 @@ class Bootstrap
     /**
      * Registers the error handler by using the error handler manager
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return $this
      */
     protected function registerErrorHandlers()
     {
@@ -198,7 +198,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return $this
      */
     public function setup()
     {

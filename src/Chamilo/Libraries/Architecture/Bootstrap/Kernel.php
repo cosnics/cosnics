@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -8,12 +9,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
+use Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -71,6 +76,11 @@ class Kernel
     private $application;
 
     /**
+     * @var SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
      *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
@@ -81,17 +91,21 @@ class Kernel
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
+     * @param SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param integer $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
+    public function __construct(
+        \Chamilo\Libraries\Platform\ChamiloRequest $request,
         ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, $version, User $user = null)
+        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger, $version, User $user = null
+    )
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
+        $this->sessionUtilities = $sessionUtilities;
         $this->exceptionLogger = $exceptionLogger;
         $this->version = $version;
         $this->user = $user;
@@ -245,11 +259,28 @@ class Kernel
     {
         try
         {
-            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()
+                ->checkPlatformAvailability()->buildApplication()->traceVisit()->runApplication();
         }
         catch (NotAuthenticatedException $exception)
         {
             $response = $this->getNotAuthenticatedResponse();
+            $response->send();
+        }
+        catch (PlatformNotAvailableException $exception)
+        {
+            $page = Page::getInstance();
+            $page->setApplication($this->getApplication());
+
+            $html = array();
+            $html[] = $page->getHeader()->toHtml();
+            $html[] = '<br />';
+            $html[] = '<div class="alert alert-danger text-center">';
+            $html[] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_warning_message']);
+            $html[] = '</div>';
+            $html[] = $page->getFooter()->toHtml();
+
+            $response = new Response(implode("\n", $html));
             $response->send();
         }
         catch (UserException $exception)
@@ -279,11 +310,11 @@ class Kernel
     {
         $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
-        if (! $getContext)
+        if (!$getContext)
         {
             $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
 
-            if (! $postContext)
+            if (!$postContext)
             {
                 $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
 
@@ -327,13 +358,14 @@ class Kernel
     {
         $context = $this->getContext();
 
-        if (! isset($context))
+        if (!isset($context))
         {
             throw new \Exception('Must call configureContext before buildApplication');
         }
 
         $this->setApplication(
-            $this->getApplicationFactory()->getApplication($this->getContext(), $this->getApplicationConfiguration()));
+            $this->getApplicationFactory()->getApplication($this->getContext(), $this->getApplicationConfiguration())
+        );
 
         return $this;
     }
@@ -354,14 +386,14 @@ class Kernel
     {
         $application = $this->getApplication();
 
-        if (! isset($application))
+        if (!isset($application))
         {
             throw new \Exception('Must call buildApplication before runApplication');
         }
 
         $response = $application->run();
 
-        if (! $response instanceof Response)
+        if (!$response instanceof Response)
         {
             $response = new \Chamilo\Libraries\Format\Response\Response($this->getVersion(), $response);
         }
@@ -370,12 +402,24 @@ class Kernel
     }
 
     /**
+     * Checks if the platform is available for the given user
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return $this
+     *
+     * @throws PlatformNotAvailableException
      */
-    protected function setup()
+    protected function checkPlatformAvailability()
     {
-        return $this->registerErrorHandlers()->configureTimezone();
+        if($this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
+        {
+            $asAdmin = $this->sessionUtilities->get('_as_admin');
+            if($this->getUser() instanceof User && !$this->getUser()->is_platform_admin() && !$asAdmin)
+            {
+                throw new PlatformNotAvailableException();
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -385,7 +429,8 @@ class Kernel
     protected function configureTimezone()
     {
         date_default_timezone_set(
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Libraries\Calendar', 'platform_timezone')));
+            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Libraries\Calendar', 'platform_timezone'))
+        );
 
         return $this;
     }
@@ -429,16 +474,18 @@ class Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName(
             $this->getContext(),
-            $this->getApplicationConfiguration());
-        $applicationRequiresAuthentication = ! is_subclass_of(
+            $this->getApplicationConfiguration()
+        );
+        $applicationRequiresAuthentication = !is_subclass_of(
             $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
+            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport'
+        );
 
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
 
         if ($applicationRequiresAuthentication)
         {
-            if (! $authenticationValidator->validate())
+            if (!$authenticationValidator->validate())
             {
                 throw new NotAuthenticatedException(true);
             }
@@ -455,10 +502,12 @@ class Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName(
             $this->getContext(),
-            $this->getApplicationConfiguration());
-        $applicationRequiresTracing = ! is_subclass_of(
+            $this->getApplicationConfiguration()
+        );
+        $applicationRequiresTracing = !is_subclass_of(
             $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
+            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface'
+        );
 
         if ($applicationRequiresTracing)
         {
@@ -467,19 +516,23 @@ class Kernel
                 Event::trigger(
                     'Online',
                     \Chamilo\Core\Admin\Manager::context(),
-                    array('user' => $this->getUser()->get_id()));
+                    array('user' => $this->getUser()->get_id())
+                );
 
                 $requestUri = $this->getRequest()->server->get('REQUEST_URI');
 
                 if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
+                    $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
                     $return = Event::trigger(
                         'Enter',
                         \Chamilo\Core\User\Manager::context(),
                         array(
                             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_USER_ID => $this->getUser()->get_id()));
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_USER_ID => $this->getUser(
+                            )->get_id()
+                        )
+                    );
                 }
             }
         }

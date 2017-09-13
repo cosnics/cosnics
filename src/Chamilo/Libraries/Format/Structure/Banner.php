@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
@@ -43,7 +44,9 @@ class Banner
      * @param Application $application
      * @param integer $viewMode
      */
-    public function __construct(Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(
+        Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid'
+    )
     {
         $this->application = $application;
         $this->viewMode = $viewMode;
@@ -122,20 +125,35 @@ class Banner
             $userFullName = '';
         }
 
-        if (! is_null(Session::get('_as_admin')))
+        $showMaintenanceWarning =
+            Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_warning_show'));
+
+        if ($showMaintenanceWarning)
+        {
+            $maintenanceWarning =
+                Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_warning_message'));
+
+            if (!empty($maintenanceWarning))
+            {
+                $html[] = '<div class="warning-banner bg-warning text-warning">' . $maintenanceWarning . '</div>';
+            }
+        }
+
+        if (!is_null(Session::get('_as_admin')))
         {
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER));
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER
+                )
+            );
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">' .
                 Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' .
-                 $userFullName. ' <a href="' . $link . '">' .
+                $userFullName . ' <a href="' . $link . '">' .
                 Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
         }
-
 
         $html[] = '<a name="top"></a>';
 
@@ -150,7 +168,8 @@ class Banner
             $menuRenderer,
             $this->getContainerMode(),
             $request,
-            $user);
+            $user
+        );
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {

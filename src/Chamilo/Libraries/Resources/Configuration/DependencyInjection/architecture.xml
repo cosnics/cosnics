@@ -36,6 +36,9 @@
                     id="chamilo.libraries.architecture.factory.application_factory"/>
             <argument
                     type="service"
+                    id="chamilo.libraries.platform.session.session_utilities"/>
+            <argument
+                    type="service"
                     id="chamilo.libraries.architecture.error_handler.exception_logger"/>
             <argument>%chamilo.configuration.version%</argument>
             <argument

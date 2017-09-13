@@ -116,6 +116,13 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 }
                 else
                 {
+                    if(count($users) > 1)
+                    {
+                        $html[] = '<div class="alert alert-warning">' .
+                            Translation::getInstance()->getTranslation('MultipleUsersWithSameEmailFound')
+                            . '</div>';
+                    }
+
                     $failures = 0;
                     /** @var User $user */
                     foreach ($users as $index => $user)
@@ -124,46 +131,47 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                         $auth = Authentication::factory($auth_source);
                         if (!$user->get_active())
                         {
-                            $html[] = Display::error_message(
-                                Translation::getInstance()->getTranslation('ResetPasswordNotPossibleForInactiveUser')
-                            );
+                            $html[] = '<div class="alert alert-danger">' .
+                                Translation::getInstance()->getTranslation(
+                                    'ResetPasswordNotPossibleForInactiveUser',
+                                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
+                                )
+                                . '</div>';
                             $failures ++;
                         }
                         elseif (!$auth instanceof ChangeablePassword)
                         {
+                            $html[] = '<div class="alert alert-danger">' .
+                                Translation::getInstance()->getTranslation(
+                                    'ResetPasswordNotPossibleForThisUser',
+                                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
+                                )
+                                . '</div>';
+
                             $html[] = Display::error_message(
-                                Translation::getInstance()->getTranslation('ResetPasswordNotPossibleForThisUser')
+                                Translation::getInstance()->getTranslation(
+                                    'ResetPasswordNotPossibleForThisUser',
+                                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
+                                )
                             );
                             $failures ++;
                         }
                         else
                         {
-
                             if (!$this->send_reset_link($user))
                             {
                                 $failures ++;
                             }
+                            else
+                            {
+                                $html[] = '<div class="alert alert-success">' .
+                                    Translation::getInstance()->getTranslation(
+                                        'ResetLinkSendForUser',
+                                        ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
+                                    )
+                                    . '</div>';
+                            }
                         }
-                    }
-
-                    $message = $this->get_result(
-                        $failures,
-                        count($users),
-                        Translation::getInstance()->getTranslation('ResetLinkHasNotBeenSend'),
-                        Translation::getInstance()->getTranslation('ResetLinksHasNotBeenSend'),
-                        Translation::getInstance()->getTranslation('ResetLinkHasBeenSend'),
-                        Translation::getInstance()->getTranslation('ResetLinksHasBeenSend')
-                    );
-
-                    if ($failures == 0)
-                    {
-                        $html[] = Display::normal_message(
-                            Translation::getInstance()->getTranslation($message, null, Manager::context())
-                        );
-                    }
-                    else
-                    {
-                        $html[] = Display::error_message($message);
                     }
                 }
             }
