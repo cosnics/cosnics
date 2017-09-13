@@ -3,6 +3,9 @@ namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -587,8 +590,18 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $tool = $this->get_tool();
         $link = $this->get_course_viewer_link();
         $course = CourseDataManager::retrieve_course($this->get_course_id());
-        
-        $body = Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
+
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'resource';
+        $parameters[ResourceUtilities::PARAM_THEME] = Theme::getInstance()->getTheme();
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
+        $parameters['modified'] = time();
+        $redirect = new Redirect($parameters);
+
+        $body = '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+
+        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
              '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';

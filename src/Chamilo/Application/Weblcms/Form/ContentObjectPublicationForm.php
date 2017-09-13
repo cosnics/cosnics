@@ -15,6 +15,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -24,7 +25,9 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
@@ -935,14 +938,24 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $content_object = $publication->get_content_object();
         $tool = $publication->get_tool();
         $link = $this->get_course_viewer_link($publication);
-        
-        $body = Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
+
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'resource';
+        $parameters[ResourceUtilities::PARAM_THEME] = Theme::getInstance()->getTheme();
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
+        $parameters['modified'] = time();
+        $redirect = new Redirect($parameters);
+
+        $body = '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+
+        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
              $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
              ' - ' . Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
-        
+        echo($body); exit;
         // get targets
         $target_email = array();
         
