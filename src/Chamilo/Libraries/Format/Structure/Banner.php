@@ -135,7 +135,9 @@ class Banner
 
             if (!empty($maintenanceWarning))
             {
-                $html[] = '<div class="warning-banner bg-warning text-warning">' . $maintenanceWarning . '</div>';
+                $html[] = '<div class="warning-banner bg-warning text-warning text-maintenance">';
+                $html[] = $maintenanceWarning;
+                $html[] = '</div>';
             }
         }
 
