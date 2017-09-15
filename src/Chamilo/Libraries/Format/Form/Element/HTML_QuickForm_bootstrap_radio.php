@@ -62,15 +62,20 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
      */
     function toHtml()
     {
-        $html = array();
-        
-        $html[] = '<div class="radio">';
-        $html[] = HTML_QuickForm_input::toHtml();
-        $html[] = '<label>';
-        $html[] = $this->_text;
-        $html[] = '</label>';
-        $html[] = '</div>';
-        
-        return implode(PHP_EOL, $html);
+        if(!$this->isFrozen())
+        {
+            $html = array();
+
+            $html[] = '<div class="radio">';
+            $html[] = HTML_QuickForm_input::toHtml();
+            $html[] = '<label>';
+            $html[] = $this->_text;
+            $html[] = '</label>';
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
+        }
+
+        return '<div>' . parent::toHtml() . '</div>';
     }
 }
