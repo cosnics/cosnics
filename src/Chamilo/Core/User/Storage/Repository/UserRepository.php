@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\Repository;
 
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
@@ -189,5 +190,14 @@ class UserRepository implements UserRepositoryInterface
             $userSetting->set_value($value);
             return $this->update($userSetting);
         }
+    }
+
+    public function triggerImportEvent(User $actionUser, User $targetUser)
+    {
+        Event::trigger(
+            'Import',
+            'Chamilo\Core\User',
+            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
+        );
     }
 }

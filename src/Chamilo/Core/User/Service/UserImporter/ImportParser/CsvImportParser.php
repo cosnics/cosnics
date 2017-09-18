@@ -37,8 +37,8 @@ class CsvImportParser implements ImportParserInterface
      */
     public function parse(UploadedFile $file)
     {
-        $result = array();
-        $handle = fopen($file->getPath(), "r");
+        $importUsersData = array();
+        $handle = fopen($file->getPathname(), "r");
         $keys = fgetcsv($handle, 1000, ";");
 
         for ($i = 0; $i < count($keys); $i ++)
@@ -46,18 +46,26 @@ class CsvImportParser implements ImportParserInterface
             $keys[$i] = (string) $this->stringUtilities->createString($keys[$i])->underscored();
         }
 
-        while (($row_tmp = fgetcsv($handle, 1000, ";")) !== FALSE)
+        while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
         {
+            $rowData = array();
 
-            $row = array();
             foreach ($row_tmp as $index => $value)
             {
-                $row[$keys[$index]] = (trim($value));
+                $rowData[$keys[$index]] = (trim($value));
             }
-            $result[] = $row;
+
+            $importUsersData[] = new ImportUserData(
+                implode(';', $row_tmp), $rowData['action'], $rowData['username'], $rowData['firstname'],
+                $rowData['lastname'],  $rowData['email'], $rowData['official_code'], $rowData['language'],
+                $rowData['status'], $rowData['active'],  $rowData['phone'], $rowData['activation_date'],
+                $rowData['expiration_date'], $rowData['auth_source'], $rowData['password']
+            );
         }
+
         fclose($handle);
-        return $result;
+
+        return $importUsersData;
     }
 
     /**
