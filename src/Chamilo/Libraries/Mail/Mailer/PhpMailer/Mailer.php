@@ -8,7 +8,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
  * PHPMailer mailer service
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
@@ -28,20 +28,20 @@ class Mailer extends AbstractMailer
 
     /**
      * Mailer constructor.
-     * 
+     *
      * @param Configuration $configuration
      * @param \PHPMailer $phpMailer
      */
     public function __construct(Configuration $configuration = null, \PHPMailer $phpMailer = null)
     {
         parent::__construct($configuration);
-        
+
         $this->setPHPMailer($phpMailer);
     }
 
     /**
      * Sends a single mail
-     * 
+     *
      * @param Mail $mail
      */
     public function sendMail(Mail $mail)
@@ -51,7 +51,7 @@ class Mailer extends AbstractMailer
         $this->addEmbeddedImages($mail);
         $this->addAttachments($mail);
         $this->addContent($mail);
-        
+
         if (! $mail->getSendIndividually())
         {
             $this->addRecipients($mail);
@@ -61,13 +61,13 @@ class Mailer extends AbstractMailer
         {
             $this->sendIndividually($mail);
         }
-        
+
         $this->resetMailer();
     }
 
     /**
      * Adds the information about the sender
-     * 
+     *
      * @param Mail $mail
      */
     protected function addSenderInformation(Mail $mail)
@@ -79,7 +79,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Adds optionally reply information
-     * 
+     *
      * @param Mail $mail
      */
     protected function addReplyInformation(Mail $mail)
@@ -97,7 +97,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Adds the embedded images
-     * 
+     *
      * @param Mail $mail
      */
     protected function addEmbeddedImages(Mail $mail)
@@ -105,17 +105,17 @@ class Mailer extends AbstractMailer
         foreach ($mail->getEmbeddedImages() as $index => $mailFile)
         {
             $this->phpMailer->addEmbeddedImage(
-                $mailFile->getPath(), 
-                $index, 
-                $mailFile->getFilename(), 
-                'base64', 
+                $mailFile->getPath(),
+                $index,
+                $mailFile->getFilename(),
+                'base64',
                 $mailFile->getMimeType());
         }
     }
 
     /**
      * Adds the attachments
-     * 
+     *
      * @param Mail $mail
      *
      * @throws \phpmailerException
@@ -130,7 +130,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Adds the content
-     * 
+     *
      * @param Mail $mail
      */
     protected function addContent(Mail $mail)
@@ -141,7 +141,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Adds the recipients
-     * 
+     *
      * @param Mail $mail
      */
     protected function addRecipients(Mail $mail)
@@ -150,12 +150,12 @@ class Mailer extends AbstractMailer
         {
             $this->phpMailer->addAddress($recipient, $recipient);
         }
-        
+
         foreach ($mail->getCc() as $recipient)
         {
             $this->phpMailer->addCC($recipient, $recipient);
         }
-        
+
         foreach ($mail->getBcc() as $recipient)
         {
             $this->phpMailer->addBCC($recipient, $recipient);
@@ -164,7 +164,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Sends the actual mail
-     * 
+     *
      * @param Mail $mail
      *
      * @throws \phpmailerException
@@ -184,7 +184,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Sends the mail individually
-     * 
+     *
      * @param Mail $mail
      *
      * @throws \Exception
@@ -192,11 +192,11 @@ class Mailer extends AbstractMailer
     protected function sendIndividually(Mail $mail)
     {
         $recipientsFailed = array();
-        
+
         foreach ($mail->getTo() as $recipient)
         {
             $this->phpMailer->addAddress($recipient, $recipient);
-            
+
             try
             {
                 $this->send($mail);
@@ -205,10 +205,10 @@ class Mailer extends AbstractMailer
             {
                 $recipientsFailed[] = $recipient;
             }
-            
+
             $this->phpMailer->clearAllRecipients();
         }
-        
+
         if (count($recipientsFailed) > 0)
         {
             throw new \Exception('Some mails could not be send (' . implode(', ', $recipientsFailed) . ')');
@@ -228,7 +228,7 @@ class Mailer extends AbstractMailer
 
     /**
      * Sets and optionally initializes the phpmailer
-     * 
+     *
      * @param \PHPMailer $phpMailer
      */
     protected function setPHPMailer(\PHPMailer $phpMailer = null)
@@ -238,28 +238,33 @@ class Mailer extends AbstractMailer
             global $phpMailerConfiguration;
             require_once (\Chamilo\Libraries\File\Path::getInstance()->getStoragePath() .
                  'configuration/phpmailer.conf.php');
-            
+
             $phpMailer = new \PHPMailer();
-            
+
             $phpMailer->isHTML(true);
             $phpMailer->CharSet = 'utf-8';
             $phpMailer->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
             $phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
             $phpMailer->Port = $phpMailerConfiguration['SMTP_PORT'];
-            
+
+            if ($phpMailerConfiguration['SMTP_SECURE'])
+            {
+                $phpMailer->SMTPSecure = $phpMailerConfiguration['SMTP_SECURE'];
+            }
+
             if ($phpMailerConfiguration['SMTP_AUTH'])
             {
                 $phpMailer->SMTPAuth = 1;
                 $phpMailer->Username = $phpMailerConfiguration['SMTP_USER'];
                 $phpMailer->Password = $phpMailerConfiguration['SMTP_PASS'];
             }
-            
+
             $phpMailer->Priority = 3;
             $phpMailer->addCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
-            
+
             $phpMailer->SMTPKeepAlive = true;
         }
-        
+
         $this->phpMailer = $phpMailer;
     }
 }
