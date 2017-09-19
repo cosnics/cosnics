@@ -64,7 +64,7 @@ class UserImportForm extends FormValidator
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
         $allowed_upload_types = array('xml', 'csv');
-        $this->addRule('file', Translation::get('OnlyXMLCSVAllowed'), 'filetype', $allowed_upload_types);
+        $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $group = array();
         $group[] = &$this->createElement(

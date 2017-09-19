@@ -237,7 +237,7 @@ class AccountForm extends FormValidator
                 'password',
                 self::NEW_PASSWORD,
                 Translation::get('NewPassword'),
-                array('size' => 40, 'autocomplete' => 'off', 'id' => 'new_password', 'pattern' => '.{8,}')
+                array('size' => 40, 'autocomplete' => 'off', 'id' => 'new_password', 'pattern' => '.{6,}')
             );
             $this->addElement(
                 'password',

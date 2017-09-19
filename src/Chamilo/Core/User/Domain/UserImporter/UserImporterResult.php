@@ -10,6 +10,16 @@ namespace Chamilo\Core\User\Domain\UserImporter;
 class UserImporterResult
 {
     /**
+     * @var string
+     */
+    protected $rawImportDataHeader;
+
+    /**
+     * @var string
+     */
+    protected $rawImportDataFooter;
+
+    /**
      * List of import user results that have failed
      *
      * @var ImportUserResult[]
@@ -48,6 +58,31 @@ class UserImporterResult
     }
 
     /**
+     * Adds the result of a single user import.
+     *
+     * @param ImportUserResult $importUserResult
+     *
+     * @throws \Exception
+     */
+    public function addImportUserResult(ImportUserResult $importUserResult)
+    {
+        if (!$importUserResult->isCompleted())
+        {
+            throw new \Exception('The import result could not be added because the user import is not yet completed');
+        }
+
+        if ($importUserResult->isSuccessful())
+        {
+            $this->addSuccessUserResult($importUserResult);
+        }
+
+        if ($importUserResult->hasFailed())
+        {
+            $this->addFailedUserResult($importUserResult);
+        }
+    }
+
+    /**
      * @return ImportUserResult[]
      */
     public function getFailedUserResults(): array
@@ -61,5 +96,75 @@ class UserImporterResult
     public function getSuccessUserResults(): array
     {
         return $this->successUserResults;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawImportDataHeader()
+    {
+        return $this->rawImportDataHeader;
+    }
+
+    /**
+     * @param string $rawImportDataHeader
+     *
+     * @return UserImporterResult
+     */
+    public function setRawImportDataHeader($rawImportDataHeader): UserImporterResult
+    {
+        $this->rawImportDataHeader = $rawImportDataHeader;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawImportDataFooter()
+    {
+        return $this->rawImportDataFooter;
+    }
+
+    /**
+     * @param string $rawImportDataFooter
+     *
+     * @return UserImporterResult
+     */
+    public function setRawImportDataFooter($rawImportDataFooter): UserImporterResult
+    {
+        $this->rawImportDataFooter = $rawImportDataFooter;
+
+        return $this;
+    }
+
+    /**
+     * Counts the total amount of results
+     *
+     * @return int
+     */
+    public function countResults()
+    {
+        return $this->countSuccessUserResults() + $this->countFailedUserResults();
+    }
+
+    /**
+     * Counts the successful user results
+     *
+     * @return int
+     */
+    public function countSuccessUserResults()
+    {
+        return count($this->successUserResults);
+    }
+
+    /**
+     * Counts the failed user results
+     *
+     * @return int
+     */
+    public function countFailedUserResults()
+    {
+        return count($this->failedUserResults);
     }
 }

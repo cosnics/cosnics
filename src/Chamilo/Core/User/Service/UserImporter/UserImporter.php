@@ -90,10 +90,10 @@ class UserImporter
      */
     public function importUsersFromFile(User $currentUser, UploadedFile $file, $sendMailToNewUsers = false)
     {
-        $importParser = $this->userImportParserFactory->getImportParserForUploadedFile($file);
-        $importUsersData = $importParser->parse($file);
-
         $userImporterResult = new UserImporterResult();
+
+        $importParser = $this->userImportParserFactory->getImportParserForUploadedFile($file);
+        $importUsersData = $importParser->parse($file, $userImporterResult);
 
         $this->validateAndCompleteImportedUsers($importUsersData);
         $this->createUsers($currentUser, $importUsersData, $userImporterResult, $sendMailToNewUsers);
@@ -149,7 +149,7 @@ class UserImporter
             $importUserResult = $importUserData->getImportUserResult();
             if ($importUserResult->isCompleted())
             {
-                $this->addImportUserResultToUserImporterResult($importUserResult, $userImporterResult);
+                $userImporterResult->addImportUserResult($importUserResult);
                 continue;
             }
 
@@ -200,7 +200,7 @@ class UserImporter
 
                 if (!$this->userRepository->update($user))
                 {
-                    $importUserResult->addMessage($this->translateMessage('ImportUserCouldNotDeleteUserInDatabase'));
+                    $importUserResult->addMessage($this->translateMessage('ImportUserCouldNotDeleteUserFromDatabase'));
                     $importUserResult->setFailed();
                 }
                 else
@@ -209,35 +209,7 @@ class UserImporter
                 }
             }
 
-            $this->addImportUserResultToUserImporterResult($importUserResult, $userImporterResult);
-        }
-    }
-
-    /**
-     * Adds the result of a single user import to the summary of imports
-     *
-     * @param ImportUserResult $importUserResult
-     * @param UserImporterResult $userImporterResult
-     *
-     * @throws \Exception
-     */
-    protected function addImportUserResultToUserImporterResult(
-        ImportUserResult $importUserResult, UserImporterResult $userImporterResult
-    )
-    {
-        if (!$importUserResult->isCompleted())
-        {
-            throw new \Exception('The import result could not be added because the user import is not yet completed');
-        }
-
-        if ($importUserResult->isSuccessful())
-        {
-            $userImporterResult->addSuccessUserResult($importUserResult);
-        }
-
-        if ($importUserResult->hasFailed())
-        {
-            $userImporterResult->addFailedUserResult($importUserResult);
+            $userImporterResult->addImportUserResult($importUserResult);
         }
     }
 
@@ -343,6 +315,13 @@ class UserImporter
 
             throw new RuntimeException($this->translateMessage('ImportUserNoUsernameFound'));
         }
+
+        $user = $this->userRepository->findUserByUsername($importUserData->getUsername());
+
+        if($user instanceof User)
+        {
+            $importUserData->setUser($user);
+        }
     }
 
     /**
@@ -351,17 +330,15 @@ class UserImporter
      */
     protected function validateAction($importUserData, $importUserResult)
     {
-        $user = $this->userRepository->findUserByUsername($importUserData->getUsername());
+        $user = $importUserData->getUser();
         $userExists = $user instanceof User;
 
         if (!$importUserData->hasValidAction())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserNoValidActionFound'));
-            $importUserData->setActionToNew();
-            $user = new User();
+            $importUserResult->setFailed();
+            throw new RuntimeException($this->translateMessage('ImportUserNoValidActionFound'));
         }
-
-        $importUserData->setUser($user);
 
         if ($importUserData->isNewOrUpdate())
         {
@@ -383,6 +360,11 @@ class UserImporter
             $importUserResult->addMessage($this->translateMessage('ImportUserUserAlreadyExists'));
 
             throw new RuntimeException($this->translateMessage('ImportUserUserAlreadyExists'));
+        }
+
+        if($importUserData->isNew())
+        {
+            $importUserData->setUser(new User());
         }
 
         if ($importUserData->isUpdate() && !$userExists)
@@ -419,7 +401,7 @@ class UserImporter
      */
     protected function validateActive($importUserData, $importUserResult)
     {
-        if ($importUserData->isNew() && !$importUserData->isActiveNotSet())
+        if ($importUserData->isNew() && !$importUserData->isActiveSet())
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserActiveNotFound'));
             $importUserData->setActive(true);
@@ -479,6 +461,6 @@ class UserImporter
      */
     protected function translateMessage($message, $parameters = [])
     {
-        return $this->translator->trans($message, $parameters, 'Chamilo\Core\User');
+        return $this->translator->trans($message, $parameters, 'Chamilo\\Core\\User');
     }
 }

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\User\Service\UserImporter\ImportParser;
 
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
+use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -32,10 +33,11 @@ class CsvImportParser implements ImportParserInterface
      * Parses an upload file into
      *
      * @param UploadedFile $file
+     * @param UserImporterResult $userImporterResult
      *
      * @return ImportUserData[]
      */
-    public function parse(UploadedFile $file)
+    public function parse(UploadedFile $file, UserImporterResult $userImporterResult)
     {
         $importUsersData = array();
         $handle = fopen($file->getPathname(), "r");
@@ -45,6 +47,8 @@ class CsvImportParser implements ImportParserInterface
         {
             $keys[$i] = (string) $this->stringUtilities->createString($keys[$i])->underscored();
         }
+
+        $userImporterResult->setRawImportDataHeader(implode(';', $keys));
 
         while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
         {
