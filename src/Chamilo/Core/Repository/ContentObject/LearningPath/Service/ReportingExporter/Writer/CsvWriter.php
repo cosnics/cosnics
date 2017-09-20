@@ -1,8 +1,5 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer;
-
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\ExportFormatInterface;
 
 /**
  * Writes exported objects to a CSV file
@@ -11,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter
  */
 class CsvWriter implements WriterInterface
 {
+
     /**
      * The path to the file
      *
@@ -29,11 +27,12 @@ class CsvWriter implements WriterInterface
     }
 
     /**
+     *
      * @param ExportFormatInterface[] $exportedObjects
      */
     public function writeExportedObjects(array $exportedObjects = array())
     {
-        if(empty($exportedObjects))
+        if (empty($exportedObjects))
         {
             return;
         }
@@ -42,7 +41,7 @@ class CsvWriter implements WriterInterface
 
         fputcsv($fileHandle, array_keys($exportedObjects[0]->toArray()), ';');
 
-        foreach($exportedObjects as $exportedObject)
+        foreach ($exportedObjects as $exportedObject)
         {
             fputcsv($fileHandle, $exportedObject->toArray(), ';');
         }

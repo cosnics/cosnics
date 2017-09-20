@@ -4,13 +4,12 @@ namespace Chamilo\Libraries\Format\Table\Column;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class represents a column for a table Refactoring from ObjectTable to split between a table based on a record
  * and based on an object (@TODO: Used New in the name because of the fact that there is currently a class with the name
  * TableColumn)
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableColumn
@@ -24,10 +23,10 @@ abstract class TableColumn
      * Properties *
      * **************************************************************************************************************
      */
-    
+
     /**
      * The name of the column
-     * 
+     *
      * @var string
      */
     private $name;
@@ -39,14 +38,14 @@ abstract class TableColumn
 
     /**
      * Whether or not the column is sortable
-     * 
+     *
      * @var bool
      */
     private $sortable;
 
     /**
      * The CSS Classes
-     * 
+     *
      * @var string[]
      */
     protected $cssClasses;
@@ -56,10 +55,10 @@ abstract class TableColumn
      * Constructor *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
      * @param bool $sortable - [OPTIONAL] default null
@@ -69,13 +68,13 @@ abstract class TableColumn
     public function __construct($name = '', $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null)
     {
         $this->set_name($name);
-        
+
         if (is_null($title))
         {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            
+
             $index = 1;
-            
+
             do
             {
                 $called_class = $backtrace[$index]['class'];
@@ -83,19 +82,19 @@ abstract class TableColumn
                 $index ++;
             }
             while ($context == __NAMESPACE__);
-            
+
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), 
-                array(), 
+                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
+                array(),
                 $context);
         }
-        
+
         $this->set_title($title);
         $this->set_sortable($sortable);
-        
+
         $this->setCssClasses(
             array(
-                self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses, 
+                self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
                 self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses));
     }
 
@@ -104,10 +103,10 @@ abstract class TableColumn
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the name of this column
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -117,7 +116,7 @@ abstract class TableColumn
 
     /**
      * Sets the name of this column
-     * 
+     *
      * @param string $name
      */
     public function set_name($name)
@@ -127,7 +126,7 @@ abstract class TableColumn
 
     /**
      * Returns the title of this column
-     * 
+     *
      * @return string
      */
     public function get_title()
@@ -137,7 +136,7 @@ abstract class TableColumn
 
     /**
      * Sets the title of this column
-     * 
+     *
      * @param string $title
      */
     public function set_title($title)
@@ -147,7 +146,7 @@ abstract class TableColumn
 
     /**
      * Returns if this column is sortable
-     * 
+     *
      * @return boolean
      */
     public function is_sortable()
@@ -157,7 +156,7 @@ abstract class TableColumn
 
     /**
      * Sets if this column is sortable
-     * 
+     *
      * @param boolean $sortable
      */
     public function set_sortable($sortable)

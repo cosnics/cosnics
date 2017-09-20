@@ -6,13 +6,13 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Theme;
 
 class Processor extends HtmlEditorProcessor
 {
 
     /**
+     *
      * @return string
      */
     public function run()
@@ -27,50 +27,44 @@ class Processor extends HtmlEditorProcessor
         try
         {
             /**
+             *
              * @var ContentObject $object
              */
-            $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                ContentObject:: class_name(),
-                $selected_object
-            );
+            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                $selected_object);
 
-            $display = ContentObjectRenditionImplementation:: factory(
-                $object,
-                'json',
-                'image',
-                $this
-            );
+            $display = ContentObjectRenditionImplementation::factory($object, 'json', 'image', $this);
 
-
-            if($object instanceof File) {
-                if($object->is_image()) {
+            if ($object instanceof File)
+            {
+                if ($object->is_image())
+                {
                     $type = 'image';
                 }
                 else
                     $type = 'file';
-            } else {
+            }
+            else
+            {
                 $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($object->get_type(), true);
             }
 
             $rendition = $display->render();
         }
-        catch( \Exception $ex)
+        catch (\Exception $ex)
         {
             $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
         }
 
         $html = array();
         $html[] = '<script type="text/javascript">';
-        $html[] = 'window.opener.CKEDITOR.tools.callFunction('
-            . $this->get_parameter('CKEditorFuncNum')
-            . ', "' . $rendition['url'] . '"'
-            . ', ' . $object->getId()
-            . ', "' . $object->calculate_security_code() . '"'
-            . ', "' . $type . '"'
-            . ');';
-             // . '\');';
+        $html[] = 'window.opener.CKEDITOR.tools.callFunction(' . $this->get_parameter('CKEditorFuncNum') . ', "' .
+             $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' . ', "' .
+             $type . '"' . ');';
+        // . '\');';
         $html[] = 'window.close();';
-        
+
         $html[] = '</script>';
 
         return implode(PHP_EOL, $html);

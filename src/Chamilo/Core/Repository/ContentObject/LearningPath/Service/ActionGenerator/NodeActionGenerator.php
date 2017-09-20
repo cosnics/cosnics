@@ -1,9 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\ActionInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
@@ -13,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
  */
 abstract class NodeActionGenerator extends ActionGenerator
 {
+
     /**
      * Generates the acions for a given TreeNode
      *

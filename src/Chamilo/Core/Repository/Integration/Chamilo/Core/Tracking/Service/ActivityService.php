@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service;
 
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -15,7 +13,9 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 class ActivityService
 {
+
     /**
+     *
      * @var ActivityRepository
      */
     protected $activityRepository;
@@ -48,16 +48,13 @@ class ActivityService
             foreach ($complex_content_object_path->get_nodes() as $node)
             {
                 $activitiesCount += $this->activityRepository->countActivitiesForContentObject(
-                    $node->get_content_object()
-                );
+                    $node->get_content_object());
             }
 
             return $activitiesCount;
         }
 
-        return $this->activityRepository->countActivitiesForContentObject(
-            $contentObject
-        );
+        return $this->activityRepository->countActivitiesForContentObject($contentObject);
     }
 
     /**
@@ -70,9 +67,8 @@ class ActivityService
      *
      * @return Activity[]
      */
-    public function retrieveActivitiesForContentObject(
-        ContentObject $contentObject, $offset, $count, OrderBy $orderBy = null
-    )
+    public function retrieveActivitiesForContentObject(ContentObject $contentObject, $offset, $count,
+        OrderBy $orderBy = null)
     {
         $activities = array();
 
@@ -83,8 +79,7 @@ class ActivityService
             foreach ($complex_content_object_path->get_nodes() as $node)
             {
                 $contentObjectActivities = $this->activityRepository->retrieveActivitiesForContentObject(
-                    $node->get_content_object()
-                );
+                    $node->get_content_object());
 
                 foreach ($contentObjectActivities as $activity)
                 {
@@ -94,8 +89,7 @@ class ActivityService
                     if ($path)
                     {
                         $activity_instance->set_content(
-                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content()
-                        );
+                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content());
                     }
 
                     $activities[] = $activity_instance;

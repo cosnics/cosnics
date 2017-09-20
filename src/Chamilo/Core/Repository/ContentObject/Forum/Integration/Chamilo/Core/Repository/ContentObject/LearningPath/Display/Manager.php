@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -23,22 +21,20 @@ abstract class Manager extends Application
     const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
 
     /**
+     *
      * @param ButtonGroup $primaryActions
      * @param ButtonGroup $secondaryActions
      * @param TreeNode $node
      */
-    public function get_node_tabs(
-        ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
-        TreeNode $node
-    )
+    public function get_node_tabs(ButtonGroup $primaryActions, ButtonGroup $secondaryActions, TreeNode $node)
     {
         $translator = Translation::getInstance();
 
         $contentObject = $node->getContentObject();
 
         $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
-            $contentObject->getId(), $this->getUser()->getId()
-        );
+            $contentObject->getId(),
+            $this->getUser()->getId());
 
         if (! $subscribed)
         {
@@ -48,15 +44,9 @@ abstract class Manager extends Application
                     new FontAwesomeGlyph('envelope'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                                $contentObject->getId(),
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE
-                        )
-                    )
-                )
-            );
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE))));
         }
         else
         {
@@ -66,15 +56,9 @@ abstract class Manager extends Application
                     new FontAwesomeGlyph('envelope-o'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                                $contentObject->getId(),
-                            self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE
-                        )
-                    )
-                )
-            );
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                            self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE))));
         }
     }
 }

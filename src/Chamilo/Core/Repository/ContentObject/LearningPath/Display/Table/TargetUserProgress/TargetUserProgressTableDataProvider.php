@@ -1,11 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTableDataProvider;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
@@ -15,6 +12,7 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
 {
+
     /**
      * Returns the data as a resultset
      *
@@ -30,9 +28,12 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
         $this->cleanupOrderProperty($order_property);
 
         return $this->getTrackingService()->getTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(), $this->getCurrentTreeNode(),
-            $condition, $offset, $count, $order_property
-        );
+            $this->getLearningPath(),
+            $this->getCurrentTreeNode(),
+            $condition,
+            $offset,
+            $count,
+            $order_property);
     }
 
     /**
@@ -45,7 +46,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
     public function count_data($condition)
     {
         return $this->getTrackingService()->countTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(), $condition
-        );
+            $this->getLearningPath(),
+            $condition);
     }
 }

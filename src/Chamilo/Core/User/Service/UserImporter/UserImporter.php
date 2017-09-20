@@ -13,7 +13,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Gedmo\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Translator;
 
@@ -313,7 +312,7 @@ class UserImporter
             $importUserResult->setFailed();
             $importUserResult->addMessage($this->translateMessage('ImportUserNoUsernameFound'));
 
-            throw new RuntimeException($this->translateMessage('ImportUserNoUsernameFound'));
+            throw new \RuntimeException($this->translateMessage('ImportUserNoUsernameFound'));
         }
 
         $user = $this->userRepository->findUserByUsername($importUserData->getUsername());
@@ -337,7 +336,7 @@ class UserImporter
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserNoValidActionFound'));
             $importUserResult->setFailed();
-            throw new RuntimeException($this->translateMessage('ImportUserNoValidActionFound'));
+            throw new \RuntimeException($this->translateMessage('ImportUserNoValidActionFound'));
         }
 
         if ($importUserData->isNewOrUpdate())
@@ -359,7 +358,7 @@ class UserImporter
             $importUserResult->setFailed();
             $importUserResult->addMessage($this->translateMessage('ImportUserUserAlreadyExists'));
 
-            throw new RuntimeException($this->translateMessage('ImportUserUserAlreadyExists'));
+            throw new \RuntimeException($this->translateMessage('ImportUserUserAlreadyExists'));
         }
 
         if($importUserData->isNew())
@@ -372,7 +371,7 @@ class UserImporter
             $importUserResult->setFailed();
             $importUserResult->addMessage($this->translateMessage('ImportUserUserDoesNotExist'));
 
-            throw new RuntimeException($this->translateMessage('ImportUserUserDoesNotExist'));
+            throw new \RuntimeException($this->translateMessage('ImportUserUserDoesNotExist'));
         }
 
         if ($importUserData->isDelete() && !$userExists)
@@ -447,7 +446,7 @@ class UserImporter
             $importUserResult->setFailed();
             $importUserResult->addMessage($this->translateMessage('ImportUserEmailRequiredForNewUsers'));
 
-            throw new RuntimeException($this->translateMessage('ImportUserEmailRequiredForNewUsers'));
+            throw new \RuntimeException($this->translateMessage('ImportUserEmailRequiredForNewUsers'));
         }
     }
 

@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Integration\Display\Preview\Storage\Repository;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
@@ -10,22 +8,23 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * Tests the TrackingRepository
- *
  * @group preview
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
 {
+
     /**
+     *
      * @var TrackingRepository
      */
     protected $trackingRepository;
@@ -56,8 +55,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         $chamiloFixtureLoader = new ChamiloFixtureLoader();
 
         $basePath = PathBuilder::getInstance()->namespaceToFullPath(
-                'Chamilo\Core\Repository\ContentObject\LearningPath\Test'
-            ) . 'Fixtures/';
+            'Chamilo\Core\Repository\ContentObject\LearningPath\Test') . 'Fixtures/';
 
         $data = [];
 
@@ -67,8 +65,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         {
             /** @var DummyTreeNodeAttempt $dummyTreeNodeAttempt */
 
-            $dummyTreeNodeAttemptsData[$dummyTreeNodeAttempt->getLearningPathId()]
-            [$dummyTreeNodeAttempt->getUserId()][$dummyTreeNodeAttempt->getId()] = $dummyTreeNodeAttempt;
+            $dummyTreeNodeAttemptsData[$dummyTreeNodeAttempt->getLearningPathId()][$dummyTreeNodeAttempt->getUserId()][$dummyTreeNodeAttempt->getId()] = $dummyTreeNodeAttempt;
         }
 
         $data[DummyTreeNodeAttempt::class] = $dummyTreeNodeAttemptsData;
@@ -79,15 +76,14 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         {
             /** @var DummyQuestionAttempt $dummyQuestionAttempt */
 
-            $dummyQuestionAttemptsData[$dummyQuestionAttempt->getTreeNodeAttemptId()]
-            [$dummyQuestionAttempt->getId()] = $dummyQuestionAttempt;
+            $dummyQuestionAttemptsData[$dummyQuestionAttempt->getTreeNodeAttemptId()][$dummyQuestionAttempt->getId()] = $dummyQuestionAttempt;
         }
 
         $data[DummyQuestionAttempt::class] = $dummyQuestionAttemptsData;
 
         Session::register(
-            'Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository', serialize($data)
-        );
+            'Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository',
+            serialize($data));
     }
 
     public function testResetStorage()
@@ -95,9 +91,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         $this->trackingRepository->resetStorage();
         $this->assertEmpty(
             unserialize(
-                Session::get('Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository')
-            )
-        );
+                Session::get('Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository')));
     }
 
     public function testFindTreeNodeAttempts()
@@ -134,8 +128,8 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         $treeNode = new TreeNode($tree, $learningPath, $lpTreeNodeData);
 
         $this->assertEquals(
-            16, $this->trackingRepository->findActiveTreeNodeAttempt($learningPath, $treeNode, $user)->getId()
-        );
+            16,
+            $this->trackingRepository->findActiveTreeNodeAttempt($learningPath, $treeNode, $user)->getId());
     }
 
     public function testFindActiveTreeNodeAttemptWithoutActiveAttempt()
@@ -181,9 +175,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         $this->assertCount(
             10,
             $this->trackingRepository->findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
-                $learningPath
-            )
-        );
+                $learningPath));
     }
 
     public function testCreateWithTreeNodeAttempt()
@@ -248,8 +240,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
 
         $this->assertEquals(
             $questionAttempt,
-            $this->trackingRepository->findTreeNodeQuestionAttempts($treeNodeAttempt)[$questionAttempt->getId()]
-        );
+            $this->trackingRepository->findTreeNodeQuestionAttempts($treeNodeAttempt)[$questionAttempt->getId()]);
     }
 
     public function testUpdateWithOtherDataClass()
