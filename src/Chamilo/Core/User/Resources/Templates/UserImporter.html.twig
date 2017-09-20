@@ -1,11 +1,8 @@
 {% set appContext = 'Chamilo\\Core\\User' %}
 
-<p>{{ 'ChoosBetweenCSVOrXML'|trans({}, appContext) }}</p>
-
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#upload-form" aria-controls="upload-form" role="tab" data-toggle="tab">{{ 'UploadFile'|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-toggle="tab">{{ 'CSV'|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#xml" aria-controls="csv" role="tab" data-toggle="tab">{{ 'XML'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-toggle="tab">{{ 'CSVExample'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{ 'Details'|trans({}, appContext) }}</a></li>
 </ul>
 
@@ -20,39 +17,6 @@
 <pre>
 <b>action</b>;<b>lastname</b>;<b>firstname</b>;<b>username</b>;<b>official_code</b>;{% if emailRequired %}<b>email</b>{% else %}email{% endif %};language;status;active;phone;activation_date;expiration_date;auth_source;password
 <b>A / U / UA / D</b>;<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;{% if emailRequired %}<b>xxx</b>{% else %}xxx{% endif %};xxx;1/5;1/0;xxx;date/0;date/0;Platform/Ldap;xxx
-</pre>
-        </blockquote>
-    </div>
-
-    <div role="tabpanel" class="tab-pane" id="xml">
-        <p> {{ 'XMLMustLookLike'|trans({}, appContext) }} ({{ 'MandatoryFields'|trans({}, appContext) }})</p>
-
-        <blockquote>
-<pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-
-&lt;Contacts&gt;
-    &lt;Contact&gt;
-        <b>&lt;action&gt;A / U / UA / D&lt;/action&gt;</b>
-        <b>&lt;lastname&gt;xxx&lt;/lastname&gt;</b>
-        <b>&lt;firstname&gt;xxx&lt;/firstname&gt;</b>
-        <b>&lt;username&gt;xxx&lt;/username&gt;</b>
-        <b>&lt;official_code&gt;xxx&lt;/official_code&gt;</b>
-        {% if emailRequired -%}
-            <b>&lt;email&gt;xxx&lt;/email&gt;</b>
-        {% else -%}
-            &lt;email&gt;xxx&lt;/email&gt;
-        {% endif -%}
-        &lt;password&gt;xxx&lt;/password&gt;
-        &lt;language&gt;xxx&lt;/language&gt;
-        &lt;status&gt;1/5&lt;/status&gt;
-        &lt;active&gt;1/0&lt;/active&gt;
-        &lt;phone&gt;xxx&lt;/phone&gt;
-        &lt;activation_date&gt;YYYY-MM-DD HH:MM:SS/0&lt;/activation_date&gt;
-        &lt;expiration_date&gt;YYYY-MM-DD HH:MM:SS/0&lt;/expiration_date&gt;
-        &lt;auth_source&gt;Platform/Ldap/Cas&lt;/auth_source&gt;
-    &lt;/Contact&gt;
-&lt;/Contacts&gt;
 </pre>
         </blockquote>
     </div>

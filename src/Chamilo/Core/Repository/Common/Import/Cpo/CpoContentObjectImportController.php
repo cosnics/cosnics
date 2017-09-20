@@ -185,7 +185,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function get_category_id_cache_id($old_id)
     {
-        return $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        $cachedCategory = $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        return empty($cachedCategory) ? 0 : $cachedCategory;
     }
 
     public function get_content_object_object_number_cache_id($old_object_number)
@@ -728,7 +729,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     {
         if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
         {
-            return $parent_id;
+            return is_null($parent_id) ? 0 : $parent_id;
         }
         else
         {

@@ -42,43 +42,37 @@ class ImporterComponent extends Manager
 
         if ($form->validate())
         {
-            $success = $form->import_users();
-//            $userImporter = new UserImporter(
-//                new ImportParserFactory(), new UserRepository(), $this->getConfigurationConsulter(),
-//                $this->getHashingUtilities(), $this->getMailer(), $this->getTranslator()
-//            );
-//
-//            $uploadedFile = $this->getRequest()->files->get('file');
-//            $userImporterResult = $userImporter->importUsersFromFile($this->getUser(), $uploadedFile);
-//            var_dump($userImporterResult);
-//            exit;
-
-            $message = Translation::get(
-                ($success ? 'CsvUsersProcessed' : 'CsvUsersNotProcessed'),
-                array('COUNT' => $form->count_failed_items())
+            $userImporter = new UserImporter(
+                new ImportParserFactory(), new UserRepository(), $this->getConfigurationConsulter(),
+                $this->getHashingUtilities(), $this->getMailer(), $this->getTranslator()
             );
-            $this->redirect(
-                $message . '<br />' . $form->get_failed_csv(),
-                ($success ? false : true),
-                array(Application::PARAM_ACTION => self::ACTION_IMPORT_USERS)
+
+            $uploadedFile = $this->getRequest()->files->get('file');
+            $userImporterResult = $userImporter->importUsersFromFile(
+                $this->getUser(), $uploadedFile, boolval($form->exportValues()['mail']['send_mail'])
+            );
+
+            $rendition = $this->getTwig()->render(
+                'Chamilo\Core\User:UserImporterResult.html.twig',
+                ['userImporterResult' => $userImporterResult]
             );
         }
         else
         {
             $emailRequired = Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email'));
-            $html = array();
-
-            $html[] = $this->render_header();
-            $html[] = $this->getTwig()->render(
+            $rendition = $this->getTwig()->render(
                 'Chamilo\Core\User:UserImporter.html.twig',
                 ['emailRequired' => $emailRequired, 'form' => $form->toHtml()]
             );
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
         }
 
-        return null;
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = $rendition;
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

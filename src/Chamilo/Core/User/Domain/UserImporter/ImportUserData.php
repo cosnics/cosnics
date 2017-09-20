@@ -270,7 +270,7 @@ class ImportUserData
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
@@ -288,7 +288,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setRawImportData(string $rawImportData): ImportUserData
+    public function setRawImportData($rawImportData): ImportUserData
     {
         $this->rawImportData = $rawImportData;
 
@@ -300,7 +300,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setAction(string $action): ImportUserData
+    public function setAction($action): ImportUserData
     {
         $this->action = $action;
 
@@ -312,7 +312,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setUsername(string $username): ImportUserData
+    public function setUsername($username): ImportUserData
     {
         $this->username = $username;
 
@@ -324,7 +324,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setFirstName(string $firstName): ImportUserData
+    public function setFirstName($firstName): ImportUserData
     {
         $this->firstName = $firstName;
 
@@ -336,7 +336,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setLastName(string $lastName): ImportUserData
+    public function setLastName($lastName): ImportUserData
     {
         $this->lastName = $lastName;
 
@@ -348,7 +348,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setEmail(string $email): ImportUserData
+    public function setEmail($email): ImportUserData
     {
         $this->email = $email;
 
@@ -360,7 +360,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setOfficialCode(string $officialCode): ImportUserData
+    public function setOfficialCode($officialCode): ImportUserData
     {
         $this->officialCode = $officialCode;
 
@@ -372,7 +372,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setLanguage(string $language): ImportUserData
+    public function setLanguage($language): ImportUserData
     {
         $this->language = $language;
 
@@ -384,7 +384,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setStatus(string $status): ImportUserData
+    public function setStatus($status): ImportUserData
     {
         $this->status = $status;
 
@@ -396,7 +396,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setActive(string $active): ImportUserData
+    public function setActive($active): ImportUserData
     {
         $this->active = $active;
 
@@ -408,7 +408,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setPhone(string $phone): ImportUserData
+    public function setPhone($phone): ImportUserData
     {
         $this->phone = $phone;
 
@@ -420,7 +420,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setActivationDate(string $activationDate): ImportUserData
+    public function setActivationDate($activationDate): ImportUserData
     {
         $this->activationDate = $activationDate;
 
@@ -432,7 +432,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setExpirationDate(string $expirationDate): ImportUserData
+    public function setExpirationDate($expirationDate): ImportUserData
     {
         $this->expirationDate = $expirationDate;
 
@@ -444,7 +444,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setAuthSource(string $authSource): ImportUserData
+    public function setAuthSource($authSource): ImportUserData
     {
         $this->authSource = $authSource;
 
@@ -456,7 +456,7 @@ class ImportUserData
      *
      * @return ImportUserData
      */
-    public function setPassword(string $password): ImportUserData
+    public function setPassword($password): ImportUserData
     {
         $this->password = $password;
 
@@ -595,9 +595,9 @@ class ImportUserData
     /**
      * @return bool
      */
-    public function isActiveNotSet()
+    public function isActiveSet()
     {
-        return is_null($this->getActive());
+        return !is_null($this->getActive());
     }
 
     /**

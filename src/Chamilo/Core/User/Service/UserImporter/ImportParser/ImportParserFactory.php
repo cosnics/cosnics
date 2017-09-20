@@ -23,8 +23,7 @@ class ImportParserFactory
     public function __construct()
     {
         $this->importParsers = [
-            new CsvImportParser(StringUtilities::getInstance()),
-            new XmlImportParser()
+            new CsvImportParser(StringUtilities::getInstance())
         ];
     }
 
