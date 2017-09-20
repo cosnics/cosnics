@@ -1,12 +1,10 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
@@ -19,6 +17,7 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class UserProgressTableDataProvider extends RecordTableDataProvider
 {
+
     /**
      * Returns the data as a resultset
      *
@@ -34,9 +33,12 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
         $this->cleanupOrderProperty($order_property);
 
         return $this->getTrackingService()->getLearningPathAttemptsWithUser(
-            $this->getLearningPath(), $this->getCurrentTreeNode(),
-            $condition, $offset, $count, $order_property
-        );
+            $this->getLearningPath(),
+            $this->getCurrentTreeNode(),
+            $condition,
+            $offset,
+            $count,
+            $order_property);
     }
 
     /**
@@ -49,11 +51,13 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     public function count_data($condition)
     {
         return $this->getTrackingService()->countLearningPathAttemptsWithUsers(
-            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition
-        );
+            $this->getLearningPath(),
+            $this->getCurrentTreeNode(),
+            $condition);
     }
 
     /**
+     *
      * @return TrackingService
      */
     protected function getTrackingService()
@@ -62,6 +66,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     }
 
     /**
+     *
      * @return LearningPath
      */
     protected function getLearningPath()
@@ -70,6 +75,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     }
 
     /**
+     *
      * @return TreeNode
      */
     protected function getCurrentTreeNode()
@@ -86,10 +92,8 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     {
         $firstOrderProperty = $order_property[0];
 
-        if (
-            $firstOrderProperty instanceof OrderBy &&
-            $firstOrderProperty->get_property() instanceof StaticColumnConditionVariable
-        )
+        if ($firstOrderProperty instanceof OrderBy &&
+             $firstOrderProperty->get_property() instanceof StaticColumnConditionVariable)
         {
             $value = $firstOrderProperty->get_property()->get_value();
 
@@ -97,9 +101,8 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
             {
                 $firstOrderProperty->get_property()->set_value('nodes_completed');
                 $firstOrderProperty->set_direction(
-                    $value == 'started' ? $firstOrderProperty->get_direction()
-                        : ($firstOrderProperty->get_direction() == SORT_ASC ? SORT_DESC : SORT_ASC)
-                );
+                    $value == 'started' ? $firstOrderProperty->get_direction() : ($firstOrderProperty->get_direction() ==
+                         SORT_ASC ? SORT_DESC : SORT_ASC));
             }
         }
     }

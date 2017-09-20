@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
@@ -16,7 +14,9 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class TreeNodeProgressTableDataProvider extends TableDataProvider
 {
+
     /**
+     *
      * @var array
      */
     protected $data;
@@ -55,7 +55,7 @@ class TreeNodeProgressTableDataProvider extends TableDataProvider
      */
     protected function getAllData()
     {
-        if (!isset($this->data))
+        if (! isset($this->data))
         {
             /** @var TreeNode $treeNode */
             $treeNode = $this->get_component()->getCurrentTreeNode();

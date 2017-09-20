@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
@@ -9,12 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\N
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\TreeTestDataGenerator;
-use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
@@ -25,71 +19,82 @@ use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
  */
 class TreeJSONMapperTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var Tree
      */
     protected $tree;
 
     /**
+     *
      * @var LearningPath[] | Section[] | Page[] | ContentObject[]
      */
     protected $contentObjects;
 
     /**
+     *
      * @var TreeNodeData[]
      */
     protected $treeNodesData;
 
     /**
+     *
      * @var TreeNode[]
      */
     protected $treeNodes;
 
     /**
+     *
      * @var User
      */
     protected $user;
 
     /**
+     *
      * @var TrackingService | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $trackingServiceMock;
 
     /**
+     *
      * @var AutomaticNumberingService | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $automaticNumberingServiceMock;
 
     /**
+     *
      * @var NodeActionGenerator | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $nodeActionGeneratorMock;
 
     /**
+     *
      * @var TreeNode
      */
     protected $currentTreeNode;
 
     /**
+     *
      * @var TreeJSONMapper
      */
     protected $treeJSONMapper;
 
     /**
+     *
      * @var array
      */
     protected $nodesArray;
 
     /**
      * Setup before each test
-     *
      * - Learning Path A - ID: 1
-     *    - Section A - ID: 2
-     *        - Page 1 - ID: 6
-     *    - Section B - ID: 3
-     *    - Section C - ID: 4
-     *        - Section D - ID: 5
-     *            - Page 2 - ID: 7
+     * - Section A - ID: 2
+     * - Page 1 - ID: 6
+     * - Section B - ID: 3
+     * - Section C - ID: 4
+     * - Section D - ID: 5
+     * - Page 2 - ID: 7
      */
     protected function setUp()
     {
@@ -103,43 +108,52 @@ class TreeJSONMapperTest extends ChamiloTestCase
         $this->user = new User();
         $this->user->setId(2);
 
-        $this->trackingServiceMock = $this->getMockBuilder(TrackingService::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->trackingServiceMock = $this->getMockBuilder(TrackingService::class)->disableOriginalConstructor()->getMock();
 
-        $this->automaticNumberingServiceMock = $this->getMockBuilder(AutomaticNumberingService::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->automaticNumberingServiceMock = $this->getMockBuilder(AutomaticNumberingService::class)->disableOriginalConstructor()->getMock();
 
-        $this->nodeActionGeneratorMock = $this->getMockBuilder(NodeActionGenerator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->nodeActionGeneratorMock = $this->getMockBuilder(NodeActionGenerator::class)->disableOriginalConstructor()->getMock();
 
         $currentTreeNode = $this->treeNodes[3];
 
-        $this->trackingServiceMock->expects($this->exactly(14))
-            ->method('isTreeNodeCompleted')
-            ->will(
-                $this->onConsecutiveCalls(
-                    false, false, true, true, true, true, true,
-                    true, false, false, false, false, false, false
-                )
-            );
+        $this->trackingServiceMock->expects($this->exactly(14))->method('isTreeNodeCompleted')->will(
+            $this->onConsecutiveCalls(
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false));
 
-        $this->automaticNumberingServiceMock->expects($this->exactly(7))
-            ->method('getAutomaticNumberingForTreeNode')
-            ->will($this->returnValue(5));
+        $this->automaticNumberingServiceMock->expects($this->exactly(7))->method('getAutomaticNumberingForTreeNode')->will(
+            $this->returnValue(5));
 
         $actions = [new Action('remove', 'Remove', 'fa fa-remove', 'https://remove-url', 'Are you sure?')];
 
-        $this->nodeActionGeneratorMock->expects($this->exactly(7))
-            ->method('generateNodeActions')
-            ->will($this->returnValue($actions));
+        $this->nodeActionGeneratorMock->expects($this->exactly(7))->method('generateNodeActions')->will(
+            $this->returnValue($actions));
 
         $this->contentObjects[1]->set_title('Test Learning Path');
         $this->treeNodes[4]->getTreeNodeData()->setBlocked(true);
 
         $this->treeJSONMapper = new TreeJSONMapper(
-            $this->tree, $this->user, $this->trackingServiceMock, $this->automaticNumberingServiceMock,
-            $this->nodeActionGeneratorMock, 'local/index.php?node=__NODE__', $currentTreeNode, true, true
-        );
+            $this->tree,
+            $this->user,
+            $this->trackingServiceMock,
+            $this->automaticNumberingServiceMock,
+            $this->nodeActionGeneratorMock,
+            'local/index.php?node=__NODE__',
+            $currentTreeNode,
+            true,
+            true);
 
         $this->nodesArray = $this->treeJSONMapper->getNodes();
     }
@@ -234,8 +248,7 @@ class TreeJSONMapperTest extends ChamiloTestCase
             'url' => 'fa fa-remove',
             'image' => 'https://remove-url',
             'confirm' => true,
-            'confirmation_message' => 'Are you sure?'
-        ];
+            'confirmation_message' => 'Are you sure?'];
 
         $this->assertEquals($action, $this->nodesArray[0]['actions']['remove']);
     }

@@ -1,11 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -21,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class TreeNodeDataRepository extends CommonDataClassRepository
 {
+
     /**
      * Retrieves the learning path children for a given learning path
      *
@@ -33,11 +31,12 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition, null, null)
-        );
+            TreeNodeData::class_name(),
+            new DataClassRetrievesParameters($condition, null, null));
     }
 
     /**
+     *
      * @param LearningPath $learningPath
      *
      * @return int
@@ -46,9 +45,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
-        return $this->dataClassRepository->count(
-            TreeNodeData::class_name(), new DataClassCountParameters($condition)
-        );
+        return $this->dataClassRepository->count(TreeNodeData::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
@@ -61,15 +58,12 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     public function findTreeNodesDataByContentObjects($contentObjectIds)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(
-                TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID
-            ),
-            $contentObjectIds
-        );
+            new PropertyConditionVariable(TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID),
+            $contentObjectIds);
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition)
-        );
+            TreeNodeData::class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -82,15 +76,12 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     public function findTreeNodesDataByUserId($userId)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                TreeNodeData::class_name(), TreeNodeData::PROPERTY_USER_ID
-            ),
-            new StaticConditionVariable($userId)
-        );
+            new PropertyConditionVariable(TreeNodeData::class_name(), TreeNodeData::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId));
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class_name(), new DataClassRetrievesParameters($condition)
-        );
+            TreeNodeData::class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -112,9 +103,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      */
     public function clearTreeNodesDataCache()
     {
-        return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
-            TreeNodeData::class_name()
-        );
+        return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(TreeNodeData::class_name());
     }
 
     /**
@@ -140,11 +129,8 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     protected function getConditionForLearningPath(LearningPath $learningPath)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(
-                TreeNodeData::class_name(), TreeNodeData::PROPERTY_LEARNING_PATH_ID
-            ),
-            new StaticConditionVariable($learningPath->getId())
-        );
+            new PropertyConditionVariable(TreeNodeData::class_name(), TreeNodeData::PROPERTY_LEARNING_PATH_ID),
+            new StaticConditionVariable($learningPath->getId()));
     }
 
     /**
@@ -161,11 +147,8 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         $conditions[] = $this->getConditionForLearningPath($learningPath);
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID
-            ),
-            new StaticConditionVariable($learningPath->getId())
-        );
+            new PropertyConditionVariable(TreeNodeData::class_name(), TreeNodeData::PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($learningPath->getId()));
 
         $condition = new AndCondition($conditions);
 

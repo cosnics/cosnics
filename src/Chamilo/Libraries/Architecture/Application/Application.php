@@ -10,7 +10,6 @@ use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
@@ -21,7 +20,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -97,7 +95,7 @@ abstract class Application
      */
     public function checkAuthorization($context, $action = null)
     {
-        if(!$this->getUser() instanceof User)
+        if (! $this->getUser() instanceof User)
         {
             throw new NotAllowedException();
         }
@@ -116,7 +114,7 @@ abstract class Application
      */
     public function isAuthorized($context, $action = null)
     {
-        if(!$this->getUser() instanceof User)
+        if (! $this->getUser() instanceof User)
         {
             return false;
         }

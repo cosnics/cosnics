@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\C
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -17,7 +16,9 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ConfigurerComponent extends Manager implements DelegateComponent
 {
+
     /**
+     *
      * @return string
      */
     public function run()
@@ -25,22 +26,22 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         $configuration = $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
 
         $form = new ConfigurationForm($configuration, $this->get_url());
-        
+
         if ($form->validate())
         {
             $succes = $this->configure_feedback($form->exportValues());
             $message = $succes ? 'FeedbackConfigured' : 'FeedbackNotConfigured';
-            
+
             $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -53,7 +54,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
     public function configure_feedback($values)
     {
         $treeNodeData = $this->getCurrentTreeNode()->getTreeNodeData();
-        
+
         if (isset($values[Configuration::PROPERTY_ALLOW_HINTS]))
         {
             $treeNodeData->setAllowHints((bool) $values[Configuration::PROPERTY_ALLOW_HINTS]);
@@ -62,7 +63,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setAllowHints(false);
         }
-        
+
         if (isset($values[Configuration::PROPERTY_SHOW_SCORE]))
         {
             $treeNodeData->setShowScore((bool) $values[Configuration::PROPERTY_SHOW_SCORE]);
@@ -71,7 +72,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setShowScore(false);
         }
-        
+
         if (isset($values[Configuration::PROPERTY_SHOW_CORRECTION]))
         {
             $treeNodeData->setShowCorrection((bool) $values[Configuration::PROPERTY_SHOW_CORRECTION]);
@@ -80,7 +81,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setShowCorrection(false);
         }
-        
+
         if (isset($values[Configuration::PROPERTY_SHOW_SOLUTION]))
         {
             $treeNodeData->setShowSolution((bool) $values[Configuration::PROPERTY_SHOW_SOLUTION]);
@@ -89,7 +90,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setShowSolution(false);
         }
-        
+
         if (isset($values[ConfigurationForm::PROPERTY_ANSWER_FEEDBACK_OPTION]))
         {
             $treeNodeData->setShowAnswerFeedback((int) $values[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK]);
@@ -98,9 +99,9 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setShowAnswerFeedback(Configuration::ANSWER_FEEDBACK_TYPE_NONE);
         }
-        
-        if ($treeNodeData->getShowScore() || $treeNodeData->getShowCorrection() ||
-             $treeNodeData->getShowSolution() || $treeNodeData->getShowAnswerFeedback())
+
+        if ($treeNodeData->getShowScore() || $treeNodeData->getShowCorrection() || $treeNodeData->getShowSolution() ||
+             $treeNodeData->getShowAnswerFeedback())
         {
             $treeNodeData->setFeedbackLocation((int) $values[Configuration::PROPERTY_FEEDBACK_LOCATION]);
         }
@@ -108,7 +109,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         {
             $treeNodeData->setFeedbackLocation(Configuration::FEEDBACK_LOCATION_TYPE_NONE);
         }
-        
+
         return $treeNodeData->update();
     }
 }

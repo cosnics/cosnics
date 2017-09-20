@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -26,7 +25,7 @@ class DeleterComponent extends Manager
     public function run()
     {
         $selected_steps = $this->getRequest()->get(self::PARAM_CHILD_ID);
-        if (!is_array($selected_steps))
+        if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);
         }
@@ -59,9 +58,7 @@ class DeleterComponent extends Manager
                 Translation::get(
                     'NoObjectsToDelete',
                     array('OBJECTS' => Translation::get('Steps')),
-                    Utilities::COMMON_LIBRARIES
-                )
-            );
+                    Utilities::COMMON_LIBRARIES));
         }
 
         $failures = 0;
@@ -91,12 +88,9 @@ class DeleterComponent extends Manager
                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_DELETE_ITEM,
                         Activity::PROPERTY_USER_ID => $this->get_user_id(),
                         Activity::PROPERTY_DATE => time(),
-                        Activity::PROPERTY_CONTENT_OBJECT_ID => $available_node->getParentNode()->getContentObject()
-                            ->getId(),
-                        Activity::PROPERTY_CONTENT => $available_node->getParentNode()->getContentObject()
-                                ->get_title() . ' > ' . $available_node->getContentObject()->get_title()
-                    )
-                );
+                        Activity::PROPERTY_CONTENT_OBJECT_ID => $available_node->getParentNode()->getContentObject()->getId(),
+                        Activity::PROPERTY_CONTENT => $available_node->getParentNode()->getContentObject()->get_title() .
+                             ' > ' . $available_node->getContentObject()->get_title()));
             }
             else
             {
@@ -109,7 +103,7 @@ class DeleterComponent extends Manager
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        if (!$new_node)
+        if (! $new_node)
         {
             $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getParentNode()->getId();
         }
@@ -122,15 +116,12 @@ class DeleterComponent extends Manager
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted',
                 array('OBJECTS' => Translation::get('Steps')),
-                Utilities::COMMON_LIBRARIES
-            ),
+                Utilities::COMMON_LIBRARIES),
             $failures > 0,
             array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_CHILD_ID => $new_node->getId()
-            ),
-            array(self::PARAM_CONTENT_OBJECT_ID)
-        );
+                self::PARAM_CHILD_ID => $new_node->getId()),
+            array(self::PARAM_CONTENT_OBJECT_ID));
     }
 
     public function get_additional_parameters()

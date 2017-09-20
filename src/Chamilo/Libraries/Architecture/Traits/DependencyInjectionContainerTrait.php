@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -20,7 +19,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * The dependency injection container
-     * 
+     *
      * @var ContainerInterface
      */
     protected $container;
@@ -38,7 +37,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Sets the dependency injection container
-     * 
+     *
      * @param ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container)
@@ -48,7 +47,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns the dependency injection container
-     * 
+     *
      * @return ContainerInterface
      */
     public function getContainer()
@@ -58,7 +57,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns a service from the dependency injection container
-     * 
+     *
      * @param string $service_id
      *
      * @return object
@@ -70,7 +69,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns the request
-     * 
+     *
      * @return \Chamilo\Libraries\Platform\ChamiloRequest | object
      */
     public function getRequest()
@@ -88,6 +87,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return PathBuilder | object
      */
     public function getPathBuilder()
@@ -96,6 +96,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return ConfigurablePathBuilder | object
      */
     public function getConfigurablePathBuilder()
@@ -104,6 +105,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return object | ConfigurationConsulter
      */
     public function getConfigurationConsulter()
@@ -112,6 +114,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
+     *
      * @return ExceptionLoggerInterface | object
      */
     protected function getExceptionLogger()
@@ -198,5 +201,4 @@ trait DependencyInjectionContainerTrait
     {
         return $this->getService('doctrine.orm.entity_manager');
     }
-
 }

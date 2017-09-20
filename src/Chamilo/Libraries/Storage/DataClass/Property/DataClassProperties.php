@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\DataClass\Property;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *
@@ -19,7 +18,7 @@ class DataClassProperties implements Hashable
 
     /**
      * Constructor
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]
      */
     public function __construct($properties = array())
@@ -29,7 +28,7 @@ class DataClassProperties implements Hashable
 
     /**
      * Gets the properties
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]
      */
     public function get()
@@ -53,22 +52,22 @@ class DataClassProperties implements Hashable
     public function getHashParts()
     {
         $hashParts = array();
-        
+
         $hashParts[] = __CLASS__;
-        
+
         foreach ($this->get() as $property)
         {
             $hashParts[] = $property->getHashParts();
         }
-        
+
         sort($hashParts);
-        
+
         return $hashParts;
     }
 
     /**
      * Merges the given dataclass properties into this one
-     * 
+     *
      * @param DataClassProperties $dataClassPropertiesToMerge
      */
     public function merge(DataClassProperties $dataClassPropertiesToMerge = null)
@@ -77,7 +76,7 @@ class DataClassProperties implements Hashable
         {
             return;
         }
-        
+
         foreach ($dataClassPropertiesToMerge->get() as $property)
         {
             $this->add($property);

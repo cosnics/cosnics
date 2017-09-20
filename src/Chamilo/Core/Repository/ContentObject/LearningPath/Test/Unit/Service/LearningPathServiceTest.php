@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
@@ -10,7 +9,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataServi
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -24,22 +22,27 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class LearningPathServiceTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var LearningPathService
      */
     protected $learningPathService;
 
     /**
+     *
      * @var ContentObjectRepository | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $contentObjectRepositoryMock;
 
     /**
+     *
      * @var TreeBuilder | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $treeBuilderMock;
 
     /**
+     *
      * @var TreeNodeDataService | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $treeNodeDataServiceMock;
@@ -49,17 +52,16 @@ class LearningPathServiceTest extends ChamiloTestCase
      */
     protected function setUp()
     {
-        $this->contentObjectRepositoryMock = $this->getMockBuilder(ContentObjectRepository::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->contentObjectRepositoryMock = $this->getMockBuilder(ContentObjectRepository::class)->disableOriginalConstructor()->getMock();
 
         $this->treeBuilderMock = $this->getMockBuilder(TreeBuilder::class)->disableOriginalConstructor()->getMock();
 
-        $this->treeNodeDataServiceMock = $this->getMockBuilder(TreeNodeDataService::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->treeNodeDataServiceMock = $this->getMockBuilder(TreeNodeDataService::class)->disableOriginalConstructor()->getMock();
 
         $this->learningPathService = new LearningPathService(
-            $this->contentObjectRepositoryMock, $this->treeBuilderMock, $this->treeNodeDataServiceMock
-        );
+            $this->contentObjectRepositoryMock,
+            $this->treeBuilderMock,
+            $this->treeNodeDataServiceMock);
     }
 
     /**
@@ -78,10 +80,8 @@ class LearningPathServiceTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $resultSet = new ArrayResultSet([$learningPath]);
 
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('findAll')
-            ->with(LearningPath::class)
-            ->will($this->returnValue($resultSet));
+        $this->contentObjectRepositoryMock->expects($this->once())->method('findAll')->with(LearningPath::class)->will(
+            $this->returnValue($resultSet));
 
         $this->assertEquals([$learningPath], $this->learningPathService->getLearningPaths());
     }
@@ -91,10 +91,8 @@ class LearningPathServiceTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $tree = new Tree();
 
-        $this->treeBuilderMock->expects($this->once())
-            ->method('buildTree')
-            ->with($learningPath)
-            ->will($this->returnValue($tree));
+        $this->treeBuilderMock->expects($this->once())->method('buildTree')->with($learningPath)->will(
+            $this->returnValue($tree));
 
         $this->assertEquals($tree, $this->learningPathService->getTree($learningPath));
     }
@@ -104,14 +102,12 @@ class LearningPathServiceTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $tree = new Tree();
 
-        $this->treeBuilderMock->expects($this->once())
-            ->method('buildTree')
-            ->with($learningPath)
-            ->will($this->returnValue($tree));
+        $this->treeBuilderMock->expects($this->once())->method('buildTree')->with($learningPath)->will(
+            $this->returnValue($tree));
 
         $this->assertEquals(
-            $this->learningPathService->getTree($learningPath), $this->learningPathService->getTree($learningPath)
-        );
+            $this->learningPathService->getTree($learningPath),
+            $this->learningPathService->getTree($learningPath));
     }
 
     public function testBuildTree()
@@ -119,10 +115,8 @@ class LearningPathServiceTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $tree = new Tree();
 
-        $this->treeBuilderMock->expects($this->once())
-            ->method('buildTree')
-            ->with($learningPath)
-            ->will($this->returnValue($tree));
+        $this->treeBuilderMock->expects($this->once())->method('buildTree')->with($learningPath)->will(
+            $this->returnValue($tree));
 
         $this->assertEquals($tree, $this->learningPathService->buildTree($learningPath));
     }
@@ -157,6 +151,7 @@ class LearningPathServiceTest extends ChamiloTestCase
     }
 
     /**
+     *
      * @return TreeNodeData
      */
     protected function addContentObjectToLearningPath()
@@ -177,8 +172,7 @@ class LearningPathServiceTest extends ChamiloTestCase
         $user = new User();
         $user->setId(10);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('createTreeNodeData');
+        $this->treeNodeDataServiceMock->expects($this->once())->method('createTreeNodeData');
 
         return $this->learningPathService->addContentObjectToLearningPath($learningPath, $treeNode, $page, $user);
     }
@@ -200,21 +194,23 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $contentObjectType = Page::class;
 
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('create')
-            ->with($this->callback(function(ContentObject $contentObject) {
-                $contentObject->setId(5);
+        $this->contentObjectRepositoryMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function (ContentObject $contentObject)
+                {
+                    $contentObject->setId(5);
 
-                return $contentObject->get_title() == 'test' && $contentObject->get_owner_id() == 10;
-            }))
-            ->will($this->returnValue(true));
+                    return $contentObject->get_title() == 'test' && $contentObject->get_owner_id() == 10;
+                }))->will($this->returnValue(true));
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('createTreeNodeData');
+        $this->treeNodeDataServiceMock->expects($this->once())->method('createTreeNodeData');
 
         $this->learningPathService->createAndAddContentObjectToLearningPath(
-            $contentObjectType, $learningPath, $treeNode, $user, 'test'
-        );
+            $contentObjectType,
+            $learningPath,
+            $treeNode,
+            $user,
+            'test');
     }
 
     /**
@@ -228,8 +224,11 @@ class LearningPathServiceTest extends ChamiloTestCase
         $user = new User();
 
         $this->learningPathService->createAndAddContentObjectToLearningPath(
-            'test', $learningPath, $treeNode, $user, 'test'
-        );
+            'test',
+            $learningPath,
+            $treeNode,
+            $user,
+            'test');
     }
 
     /**
@@ -243,8 +242,11 @@ class LearningPathServiceTest extends ChamiloTestCase
         $user = new User();
 
         $this->learningPathService->createAndAddContentObjectToLearningPath(
-            self::class, $learningPath, $treeNode, $user, 'test'
-        );
+            self::class,
+            $learningPath,
+            $treeNode,
+            $user,
+            'test');
     }
 
     /**
@@ -258,8 +260,11 @@ class LearningPathServiceTest extends ChamiloTestCase
         $user = new User();
 
         $this->learningPathService->createAndAddContentObjectToLearningPath(
-            Page::class, $learningPath, $treeNode, $user, 'test'
-        );
+            Page::class,
+            $learningPath,
+            $treeNode,
+            $user,
+            'test');
     }
 
     public function testUpdateContentObjectInTreeNode()
@@ -277,11 +282,12 @@ class LearningPathServiceTest extends ChamiloTestCase
         $page = new Page();
         $page->setId(5);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('updateTreeNodeData')
-            ->with($this->callback(function(TreeNodeData $treeNodeData) {
-                return $treeNodeData->getContentObjectId() == 5;
-            }));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('updateTreeNodeData')->with(
+            $this->callback(
+                function (TreeNodeData $treeNodeData)
+                {
+                    return $treeNodeData->getContentObjectId() == 5;
+                }));
 
         $this->learningPathService->updateContentObjectInTreeNode($treeNode, $page);
     }
@@ -306,11 +312,12 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $pageTreeNode = new TreeNode($tree, $page, $pageTreeNodeData);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('updateTreeNodeData')
-            ->with($this->callback(function(TreeNodeData $treeNodeData) {
-                return $treeNodeData->getParentTreeNodeDataId() == 5 && $treeNodeData->getDisplayOrder() == 3;
-            }));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('updateTreeNodeData')->with(
+            $this->callback(
+                function (TreeNodeData $treeNodeData)
+                {
+                    return $treeNodeData->getParentTreeNodeDataId() == 5 && $treeNodeData->getDisplayOrder() == 3;
+                }));
 
         $this->learningPathService->moveContentObjectToNewParent($pageTreeNode, $treeNode, 3);
     }
@@ -327,11 +334,12 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode = new TreeNode($tree, $learningPath, $treeNodeData);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('updateTreeNodeData')
-            ->with($this->callback(function(TreeNodeData $treeNodeData) {
-                return $treeNodeData->isBlocked();
-            }));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('updateTreeNodeData')->with(
+            $this->callback(
+                function (TreeNodeData $treeNodeData)
+                {
+                    return $treeNodeData->isBlocked();
+                }));
 
         $this->learningPathService->toggleContentObjectBlockedStatus($treeNode);
     }
@@ -349,11 +357,12 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode = new TreeNode($tree, $learningPath, $treeNodeData);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('updateTreeNodeData')
-            ->with($this->callback(function(TreeNodeData $treeNodeData) {
-                return !$treeNodeData->isBlocked();
-            }));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('updateTreeNodeData')->with(
+            $this->callback(
+                function (TreeNodeData $treeNodeData)
+                {
+                    return ! $treeNodeData->isBlocked();
+                }));
 
         $this->learningPathService->toggleContentObjectBlockedStatus($treeNode);
     }
@@ -382,12 +391,12 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode = new TreeNode($tree, $learningPath);
 
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('update')
-            ->with($this->callback(function(LearningPath $learningPath) {
-                return $learningPath->getId() == 1 && $learningPath->get_title() == 'New Title';
-            }))
-            ->will($this->returnValue(true));
+        $this->contentObjectRepositoryMock->expects($this->once())->method('update')->with(
+            $this->callback(
+                function (LearningPath $learningPath)
+                {
+                    return $learningPath->getId() == 1 && $learningPath->get_title() == 'New Title';
+                }))->will($this->returnValue(true));
 
         $this->learningPathService->updateContentObjectTitle($treeNode, 'New Title');
     }
@@ -404,9 +413,7 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode = new TreeNode($tree, $learningPath);
 
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('update')
-            ->will($this->returnValue(false));
+        $this->contentObjectRepositoryMock->expects($this->once())->method('update')->will($this->returnValue(false));
 
         $this->learningPathService->updateContentObjectTitle($treeNode, 'New Title');
     }
@@ -456,9 +463,7 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode = new TreeNode($tree, $learningPath, $treeNodeData);
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('deleteTreeNodeData')
-            ->with($treeNodeData);
+        $this->treeNodeDataServiceMock->expects($this->once())->method('deleteTreeNodeData')->with($treeNodeData);
 
         $this->learningPathService->deleteContentObjectFromLearningPath($treeNode);
     }
@@ -485,9 +490,9 @@ class LearningPathServiceTest extends ChamiloTestCase
 
         $treeNode->addChildNode($pageTreeNode);
 
-        $this->treeNodeDataServiceMock->expects($this->exactly(2))
-            ->method('deleteTreeNodeData')
-            ->withConsecutive([$treeNodeData], [$pageTreeNodeData]);
+        $this->treeNodeDataServiceMock->expects($this->exactly(2))->method('deleteTreeNodeData')->withConsecutive(
+            [$treeNodeData],
+            [$pageTreeNodeData]);
 
         $this->learningPathService->deleteContentObjectFromLearningPath($treeNode);
     }
@@ -511,9 +516,8 @@ class LearningPathServiceTest extends ChamiloTestCase
     {
         $learningPath = new LearningPath();
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('deleteTreeNodesFromLearningPath')
-            ->with($learningPath);
+        $this->treeNodeDataServiceMock->expects($this->once())->method('deleteTreeNodesFromLearningPath')->with(
+            $learningPath);
 
         $this->learningPathService->emptyLearningPath($learningPath);
     }
@@ -522,9 +526,8 @@ class LearningPathServiceTest extends ChamiloTestCase
     {
         $learningPath = new LearningPath();
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('countTreeNodesDataForLearningPath')
-            ->will($this->returnValue(0));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('countTreeNodesDataForLearningPath')->will(
+            $this->returnValue(0));
 
         $this->assertTrue($this->learningPathService->isLearningPathEmpty($learningPath));
     }
@@ -533,9 +536,8 @@ class LearningPathServiceTest extends ChamiloTestCase
     {
         $learningPath = new LearningPath();
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('countTreeNodesDataForLearningPath')
-            ->will($this->returnValue(5));
+        $this->treeNodeDataServiceMock->expects($this->once())->method('countTreeNodesDataForLearningPath')->will(
+            $this->returnValue(5));
 
         $this->assertFalse($this->learningPathService->isLearningPathEmpty($learningPath));
     }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -15,7 +14,6 @@ use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
@@ -108,29 +106,26 @@ abstract class Table
      * Constructor
      *
      * @param mixed $component The parent component
-     *
      * @throws \Exception
      */
     public function __construct($component)
     {
-        if (!$component instanceof TableSupport)
+        if (! $component instanceof TableSupport)
         {
             throw new \Exception(
                 ClassnameUtilities::getInstance()->getClassnameFromObject($component) .
-                " doesn't seem to support object tables, please implement the TableSupport interface"
-            );
+                     " doesn't seem to support object tables, please implement the TableSupport interface");
         }
 
         $interface_class = $this->get_class('Interface');
 
         if (interface_exists($interface_class))
         {
-            if (!$component instanceof $interface_class)
+            if (! $component instanceof $interface_class)
             {
                 throw new \Exception(
                     ClassnameUtilities::getInstance()->getClassnameFromObject($component) . ' must implement ' .
-                    $interface_class
-                );
+                         $interface_class);
             }
         }
 
@@ -175,10 +170,9 @@ abstract class Table
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(),
             $this->get_column_model()->get_default_order_direction(),
-            !$this->prohibits_page_selection(),
+            ! $this->prohibits_page_selection(),
             true,
-            $this->get_column_model() instanceof TableMultiColumnSortSupport
-        );
+            $this->get_column_model() instanceof TableMultiColumnSortSupport);
 
         $this->table->setAdditionalParameters($this->get_parameters());
     }
@@ -205,12 +199,12 @@ abstract class Table
 
             $cssClasses = $column->getCssClasses();
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
             {
                 $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
             }
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
             {
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
@@ -220,8 +214,7 @@ abstract class Table
                 Security::remove_XSS($column->get_title()),
                 $column->is_sortable(),
                 $headerAttributes,
-                $contentAttributes
-            );
+                $contentAttributes);
         }
 
         // store the actual direction of the sortable table in the table column
@@ -256,8 +249,7 @@ abstract class Table
             $this->get_condition(),
             $offset,
             $count,
-            $this->determineOrderProperties($orderColumns, $orderDirections)
-        );
+            $this->determineOrderProperties($orderColumns, $orderDirections));
 
         $tableData = array();
 
@@ -269,9 +261,9 @@ abstract class Table
             }
         }
 
-        if($resultSet instanceof DataClassIterator)
+        if ($resultSet instanceof DataClassIterator)
         {
-            foreach($resultSet as $result)
+            foreach ($resultSet as $result)
             {
                 $this->handle_result($tableData, $result);
             }
@@ -296,7 +288,7 @@ abstract class Table
                 $orderProperties[] = $orderProperty;
             }
         }
-        
+
         return $orderProperties;
     }
 
@@ -376,7 +368,7 @@ abstract class Table
         {
             $selected_ids = array();
         }
-        elseif (!is_array($selected_ids))
+        elseif (! is_array($selected_ids))
         {
             $selected_ids = array($selected_ids);
         }
@@ -397,7 +389,7 @@ abstract class Table
      */
     public function get_data_provider()
     {
-        if (!isset($this->data_provider))
+        if (! isset($this->data_provider))
         {
             $classname = $this->get_class('DataProvider');
             $this->data_provider = new $classname($this);
@@ -423,7 +415,7 @@ abstract class Table
      */
     public function get_column_model()
     {
-        if (!isset($this->column_model))
+        if (! isset($this->column_model))
         {
             $classname = $this->get_class('ColumnModel');
             $this->column_model = new $classname($this);
@@ -449,7 +441,7 @@ abstract class Table
      */
     public function get_cell_renderer()
     {
-        if (!isset($this->cell_renderer))
+        if (! isset($this->cell_renderer))
         {
             $classname = $this->get_class('CellRenderer');
             $this->cell_renderer = new $classname($this);
@@ -495,7 +487,7 @@ abstract class Table
      */
     public function get_form_actions()
     {
-        if (!isset($this->form_actions))
+        if (! isset($this->form_actions))
         {
             $this->form_actions = $this->get_implemented_form_actions();
         }
@@ -557,7 +549,7 @@ abstract class Table
     {
         $class_name = get_class($this);
 
-        if (!is_null($type))
+        if (! is_null($type))
         {
             $class_name .= $type;
         }
@@ -603,7 +595,7 @@ abstract class Table
     public function has_form_actions()
     {
         return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
-            $this->get_form_actions()->has_form_actions());
+             $this->get_form_actions()->has_form_actions());
     }
 
     /**
