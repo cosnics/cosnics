@@ -869,7 +869,7 @@ abstract class Manager extends Application
         return $parents;
     }
 
-    public function tool_has_new_publications($tool_name, $course)
+    public function tool_has_new_publications($tool_name, $course = null)
     {
         return $this->get_parent()->tool_has_new_publications($tool_name, $course);
     }
