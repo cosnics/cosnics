@@ -46,6 +46,11 @@ class UserImporterResult
      */
     public function addFailedUserResult(ImportUserResult $importUserResult)
     {
+        if(!$importUserResult->hasFailed())
+        {
+            throw new \RuntimeException('The import result could not be added because the user import did not fail');
+        }
+
         $this->failedUserResults[] = $importUserResult;
     }
 
@@ -54,6 +59,13 @@ class UserImporterResult
      */
     public function addSuccessUserResult(ImportUserResult $importUserResult)
     {
+        if(!$importUserResult->isSuccessful())
+        {
+            throw new \RuntimeException(
+                'The import result could not be added because the user import was not successful'
+            );
+        }
+
         $this->successUserResults[] = $importUserResult;
     }
 
@@ -68,7 +80,7 @@ class UserImporterResult
     {
         if (!$importUserResult->isCompleted())
         {
-            throw new \Exception('The import result could not be added because the user import is not yet completed');
+            throw new \RuntimeException('The import result could not be added because the user import is not yet completed');
         }
 
         if ($importUserResult->isSuccessful())
