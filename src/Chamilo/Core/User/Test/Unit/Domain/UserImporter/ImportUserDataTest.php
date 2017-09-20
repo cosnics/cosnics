@@ -133,7 +133,7 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->importUserData->setAuthSource($authSource);
         $this->assertEquals($authSource, $this->importUserData->getAuthSource());
     }
-    
+
     public function testSetGetPassword()
     {
         $password = 'blablabla';
@@ -331,8 +331,8 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->assertEquals($status, $user->get_status());
         $this->assertEquals($active, $user->get_active());
         $this->assertEquals($phone, $user->get_phone());
-        $this->assertEquals(1483570800, $user->get_activation_date());
-        $this->assertEquals(1483570800, $user->get_expiration_date());
+        $this->assertEquals(1483574400, $user->get_activation_date());
+        $this->assertEquals(1483574400, $user->get_expiration_date());
         $this->assertEquals($authSource, $user->getAuthenticationSource());
         $this->assertEquals($password, $user->get_password());
     }
