@@ -214,7 +214,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
      *
      * @see \core\repository\content_object\assessment\display\AssessmentDisplaySupport::save_assessment_answer()
      */
-    public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
+    public function save_assessment_answer($complex_question_id, $answer, $score, $hint = null)
     {
         $question_attempt = $this->get_assessment_question_attempt($complex_question_id);
         

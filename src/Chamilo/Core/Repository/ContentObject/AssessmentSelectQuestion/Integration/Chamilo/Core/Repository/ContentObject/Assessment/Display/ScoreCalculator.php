@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass\AssessmentSelectQuestionOption;
+
 /**
  * $Id: assessment_select_score_calculator.class.php 200 2009-11-13 12:30:04Z kariboe $
  * 
@@ -25,7 +27,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
             $answers = $question->get_options();
             $selected = $answers[$user_answers];
             
-            if ($selected->is_correct())
+            if ($selected instanceof AssessmentSelectQuestionOption && $selected->is_correct())
             {
                 return $this->make_score_relative($selected->get_score(), $selected->get_score());
             }
@@ -40,7 +42,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
                         break;
                     }
                 }
-                if ($selected && $selected->get_score() < 0)
+                if ($selected instanceof AssessmentSelectQuestionOption && $selected->get_score() < 0)
                 {
                     $score = $selected->get_score();
                 }
