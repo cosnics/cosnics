@@ -680,7 +680,7 @@ class ImportUserData
 
         if(!empty($this->getActive()))
         {
-            $user->set_active($this->getActive());
+            $user->set_active((bool) $this->getActive() != 0);
         }
 
         if(!empty($this->getPhone()))

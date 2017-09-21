@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\User\Test\Service\UserImporter\ImportParser;
+namespace Chamilo\Core\User\Test\Unit\Service\UserImporter\ImportParser;
 
 use Chamilo\Core\User\Service\UserImporter\ImportParser\CsvImportParser;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
@@ -66,4 +66,3 @@ class ImportParserFactoryTest extends ChamiloTestCase
         $this->importParserFactory->getImportParserForUploadedFile($uploadedFile);
     }
 }
-
