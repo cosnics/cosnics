@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -28,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 use DOMXPath;
 
@@ -235,6 +237,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function run()
     {
+        if(empty($this->get_parameters()->get_file()))
+        {
+            throw new NoObjectSelectedException(Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
+        }
+
         if (in_array($this->get_parameters()->get_file()->get_extension(), self::get_allowed_extensions()))
         {
             $this->temporary_directory = $this->unzip();
