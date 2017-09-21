@@ -1,0 +1,2 @@
+action;username;firstname;lastname;email;official_code;language;status;active;phone;activation_date;expiration_date;auth_source;password
+A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla
