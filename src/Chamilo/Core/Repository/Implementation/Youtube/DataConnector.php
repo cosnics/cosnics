@@ -292,13 +292,18 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             }
             
             $object->set_thumbnail($thumbnail);
-            
-            $videoCategory = $this->youtube->videoCategories->listVideoCategories(
-                'id,snippet', 
-                array('id' => $videosResponse['modelData']['items'][0]['snippet']['categoryId']));
-            $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
-            
-            $object->set_category($category);
+
+            $categoryId = $videosResponse['modelData']['items'][0]['snippet']['categoryId'];
+            if($categoryId)
+            {
+                $videoCategory = $this->youtube->videoCategories->listVideoCategories(
+                    'id,snippet',
+                    array('id' => $videosResponse['modelData']['items'][0]['snippet']['categoryId'])
+                );
+                $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
+
+                $object->set_category($category);
+            }
             
             $object->set_tags($videosResponse['modelData']['items'][0]['snippet']['tags']);
             
