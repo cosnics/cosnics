@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common\Import\Cpo;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
@@ -12,15 +13,20 @@ class CpoContentObjectImportForm extends ContentObjectImportForm
     public function build_basic_form()
     {
         parent::build_basic_form();
-        
+
         $this->addElement(
-            'file', 
-            self::IMPORT_FILE_NAME, 
-            Translation::get('FileName', null, Utilities::COMMON_LIBRARIES), 
-            'accept=".cpo"');
+            'file',
+            self::IMPORT_FILE_NAME,
+            Translation::get('FileName', null, Utilities::COMMON_LIBRARIES),
+            'accept=".cpo"'
+        );
+
+        $this->addRule(
+            self::IMPORT_FILE_NAME, Translation::getInstance()->getTranslation('ThisFieldIsRequired'), 'required'
+        );
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         parent::setDefaults(array(self::PROPERTY_TYPE => ContentObjectImport::FORMAT_CPO));
     }
