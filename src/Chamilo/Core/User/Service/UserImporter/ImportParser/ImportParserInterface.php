@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\User\Service\UserImporter\ImportParser;
 
-use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -13,13 +11,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 interface ImportParserInterface
 {
+
     /**
      * Parses an upload file into
      *
-     * @param UploadedFile $file
-     * @param UserImporterResult $userImporterResult
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param \Chamilo\Core\User\Domain\UserImporter\UserImporterResult $userImporterResult
      *
-     * @return ImportUserData[]
+     * @return \Chamilo\Core\User\Domain\UserImporter\ImportUserData[]
      */
     public function parse(UploadedFile $file, UserImporterResult $userImporterResult);
 

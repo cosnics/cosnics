@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -77,7 +77,9 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     {
         if (! isset($this->settingsForm))
         {
-            $this->settingsForm = new SettingsForm($this, $this->get_url(array(self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))));
+            $this->settingsForm = new SettingsForm(
+                $this,
+                $this->get_url(array(self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))));
         }
 
         return $this->settingsForm;
@@ -94,14 +96,17 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Previous', null, Utilities::COMMON_LIBRARIES),
-                new BootstrapGlyph('chevron-left'),
+                new FontAwesomeGlyph('chevron-left'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS))));
 
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Install'),
-                new BootstrapGlyph('ok'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM, self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
+                new FontAwesomeGlyph('check'),
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM,
+                        self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
                 Button::DISPLAY_ICON_AND_LABEL,
                 false,
                 'btn-success'));

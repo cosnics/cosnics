@@ -25,7 +25,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -431,7 +430,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('plus'),
+                        new FontAwesomeGlyph('plus'),
                         $this->get_allowed_content_object_types(),
                         $parameters,
                         array(),
@@ -449,7 +448,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $publishActions->addButton(
                         $this->getPublicationButton(
                             Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('book'),  // new BootstrapGlyph('info-sign'),
+                            new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
                             array(Introduction::class_name()),
                             $parameters));
                 }
@@ -466,7 +465,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $manageActions->addButton(
                     new Button(
                         Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('lock'),
+                        new FontAwesomeGlyph('lock'),
                         $link,
                         Button::DISPLAY_ICON_AND_LABEL));
             }
@@ -476,7 +475,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $manageActions->addButton(
                     new Button(
                         Translation::get('ManageCategories', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('folder-close'),
+                        new FontAwesomeGlyph('folder'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MANAGE_CATEGORIES)),
@@ -493,7 +492,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolActions->setButtons($this->get_parent()->addToolActions($toolActions));
             }
 
-            $filterAction = new DropdownButton(Translation::get('FilterView'), new BootstrapGlyph('th'));
+            $filterAction = new DropdownButton(Translation::get('FilterView'), new FontAwesomeGlyph('th'));
 
             $browser_types = $this->get_parent()->get_available_browser_types();
 

@@ -1,23 +1,18 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
-use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: importer.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component
  */
 class ImporterComponent extends Manager
@@ -32,10 +27,10 @@ class ImporterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $type = $this->getRequest()->getFromUrl(self::PARAM_IMPORT_TYPE, 'cpo');
         $contentObjectImportService = new ContentObjectImportService($type, $this->getWorkspace(), $this);
-        
+
         if ($contentObjectImportService->hasFinished())
         {
             // Session :: register(self :: PARAM_MESSAGES, $controller->get_messages_for_url());

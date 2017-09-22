@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,13 +27,13 @@ abstract class Manager extends Application
     const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
-    
+
     // Available actions
     const ACTION_DISPLAY = 'Display';
     const ACTION_RENDITION = 'Rendition';
     const ACTION_REPORTING = 'Reporting';
     const ACTION_RESET = 'Reset';
-    
+
     // The Default action
     const DEFAULT_ACTION = self::ACTION_DISPLAY;
 
@@ -53,17 +53,17 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
+
         $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
         $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             $content_object_id);
-        
+
         if (! $this->content_object instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
-        
+
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $this->content_object->get_id());
     }
 
@@ -74,19 +74,19 @@ abstract class Manager extends Application
     {
         $page = Page::getInstance();
         $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
-        
+
         $html = array();
-        
+
         $html[] = $page->getHeader()->toHtml();
         $html[] = $this->renderPreviewHeader();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     protected function renderPreviewHeader()
     {
         $html = array();
-        
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
         $html[] = '<div class="alert alert-warning">';
@@ -96,19 +96,19 @@ abstract class Manager extends Application
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     protected function getPreviewModeWarning()
     {
         $translation = Translation::get('PreviewModeWarning', null, $this->get_content_object()->package() . '\Display');
-        
+
         if ($translation == 'PreviewModeWarning')
         {
             $translation = Translation::get('PreviewModeWarning');
         }
-        
+
         return $translation;
     }
 
@@ -118,87 +118,87 @@ abstract class Manager extends Application
         {
             $buttonToolBar = new ButtonToolBar(null, array(), array('pull-right'));
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-            
-            $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new BootstrapGlyph('th'));
+
+            $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new FontAwesomeGlyph('th'));
             $dropdownButton->setDropdownClasses('dropdown-menu-right');
             $buttonToolBar->addItem($dropdownButton);
-            
+
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
             $previewExists = \Chamilo\Core\Repository\Display\Manager::exists(
                 $this->get_content_object()->package() . '\Display\Preview');
-            
+
             if ($previewExists)
             {
                 $classes = ($isDisplayAction ? 'selected' : 'not-selected');
-                
+
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('DisplayPreview'), 
-                        null, 
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)), 
-                        SubButton::DISPLAY_ICON_AND_LABEL, 
-                        false, 
+                        Translation::get('DisplayPreview'),
+                        null,
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        false,
                         $classes));
             }
-            
+
             if ($isDisplayAction && $previewExists && $this->getPreview()->getComponent()->supports_reset())
             {
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('ResetDisplayPreview'), 
-                        new BootstrapGlyph('repeat'), 
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)), 
-                        SubButton::DISPLAY_ICON_AND_LABEL, 
+                        Translation::get('ResetDisplayPreview'),
+                        new FontAwesomeGlyph('repeat'),
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
+                        SubButton::DISPLAY_ICON_AND_LABEL,
                         true));
             }
-            
+
             $dropdownButton->addSubButton(new SubButtonDivider());
-            
+
             $views = array(
-                ContentObjectRendition::VIEW_FULL, 
-                ContentObjectRendition::VIEW_PREVIEW, 
-                ContentObjectRendition::VIEW_THUMBNAIL, 
-                ContentObjectRendition::VIEW_DESCRIPTION, 
-                ContentObjectRendition::VIEW_SHORT, 
-                ContentObjectRendition::VIEW_INLINE, 
+                ContentObjectRendition::VIEW_FULL,
+                ContentObjectRendition::VIEW_PREVIEW,
+                ContentObjectRendition::VIEW_THUMBNAIL,
+                ContentObjectRendition::VIEW_DESCRIPTION,
+                ContentObjectRendition::VIEW_SHORT,
+                ContentObjectRendition::VIEW_INLINE,
                 ContentObjectRendition::VIEW_FORM);
-            
+
             foreach ($views as $view)
             {
                 $isRenditionAction = $this->get_action() == self::ACTION_RENDITION;
                 $classes = ($isRenditionAction && $this->getCurrentView() == $view ? 'selected' : 'not-selected');
-                
+
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('View' . StringUtilities::getInstance()->createString($view)->upperCamelize()), 
-                        null, 
+                        Translation::get('View' . StringUtilities::getInstance()->createString($view)->upperCamelize()),
+                        null,
                         $this->get_url(
                             array(
-                                self::PARAM_ACTION => self::ACTION_RENDITION, 
-                                self::PARAM_FORMAT => $this->getCurrentFormat(), 
-                                self::PARAM_VIEW => $view)), 
-                        SubButton::DISPLAY_ICON_AND_LABEL, 
-                        false, 
+                                self::PARAM_ACTION => self::ACTION_RENDITION,
+                                self::PARAM_FORMAT => $this->getCurrentFormat(),
+                                self::PARAM_VIEW => $view)),
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        false,
                         $classes));
             }
-            
+
             if ($this->has_reporting())
             {
                 $dropdownButton->addSubButton(new SubButtonDivider());
-                
+
                 $classes = (self::PARAM_ACTION == self::ACTION_REPORTING ? 'selected' : 'not-selected');
-                
+
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('ReportingPreview'), 
-                        null, 
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)), 
-                        SubButton::DISPLAY_ICON_AND_LABEL, 
-                        false, 
+                        Translation::get('ReportingPreview'),
+                        null,
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)),
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        false,
                         $classes));
             }
         }
-        
+
         return $this->buttonToolBarRenderer;
     }
 
@@ -230,7 +230,7 @@ abstract class Manager extends Application
     {
         $package = $content_object->package();
         $reporting_manager_class = $package . '\Integration\Chamilo\Core\Reporting\Preview\Manager';
-        
+
         return class_exists($reporting_manager_class);
     }
 
@@ -243,15 +243,15 @@ abstract class Manager extends Application
         if (! $contentObject instanceof ContentObject && is_numeric($contentObject))
         {
             $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class_name(),
                 $contentObject);
         }
-        
+
         if (! $contentObject instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
-        
+
         if (\Chamilo\Core\Repository\Display\Manager::exists($contentObject->package() . '\Display\Preview'))
         {
             $action = self::ACTION_DISPLAY;
@@ -260,13 +260,13 @@ abstract class Manager extends Application
         {
             $action = self::ACTION_RENDITION;
         }
-        
+
         $redirect = new Redirect(
             array(
-                self::PARAM_CONTEXT => self::context(), 
-                self::PARAM_ACTION => $action, 
+                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_ACTION => $action,
                 self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
-        
+
         return $redirect->getUrl();
     }
 
@@ -275,9 +275,9 @@ abstract class Manager extends Application
         $package = $this->get_content_object()->package();
         $context = $package . '\Display\Preview';
         $factory = new ApplicationFactory(
-            $context, 
+            $context,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        
+
         return $factory;
     }
 
