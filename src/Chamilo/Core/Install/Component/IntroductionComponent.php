@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -40,7 +40,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
             $dropDownButton = new DropdownButton(
                 Translation::get('Install'),
-                new BootstrapGlyph('ok'),
+                new FontAwesomeGlyph('check'),
                 Button::DISPLAY_ICON_AND_LABEL,
                 'btn-primary');
 
@@ -57,11 +57,11 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             }
 
             $buttonToolBar->addItem(
-                new Button('Read the installation guide', new BootstrapGlyph('book'), 'documentation/install.txt'));
+                new Button('Read the installation guide', new FontAwesomeGlyph('book'), 'documentation/install.txt'));
             $buttonToolBar->addItem(
-                new Button('Visit cosncis.org', new BootstrapGlyph('globe'), 'http://www.cosnics.org/'));
+                new Button('Visit cosncis.org', new FontAwesomeGlyph('globe'), 'http://www.cosnics.org/'));
             $buttonToolBar->addItem(
-                new Button('Get support', new BootstrapGlyph('question-sign'), 'http://www.cosnics.org/'));
+                new Button('Get support', new FontAwesomeGlyph('question-circle'), 'http://www.cosnics.org/'));
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

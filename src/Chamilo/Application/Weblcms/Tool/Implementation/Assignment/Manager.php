@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Bert De Clercq (Hogeschool Gent)
  * @author Anthony Hurst (Hogeschool Gent)
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
     // Browse actions
@@ -73,7 +73,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     /**
      * Adds extra actions to the toolbar in different components
-     * 
+     *
      * @param $toolbar Toolbar
      * @param $publication Publication
      * @return Toolbar
@@ -82,54 +82,54 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('BrowseSubmitters'), 
-                Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                Translation::get('BrowseSubmitters'),
+                Theme::getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS, 
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])),
                 ToolbarItem::DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('SubmissionSubmit'), 
-                Theme::getInstance()->getCommonImagePath('Action/Add'), 
+                Translation::get('SubmissionSubmit'),
+                Theme::getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
-                        self::PARAM_TARGET_ID => $this->get_user_id(), 
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)), 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        self::PARAM_TARGET_ID => $this->get_user_id(),
+                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)),
                 ToolbarItem::DISPLAY_ICON));
         return $toolbar;
     }
 
-    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup, 
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
         DropdownButton $dropdownButton)
     {
         $buttonGroup->prependButton(
             new Button(
-                Translation::get('BrowseSubmitters'), 
-                new BootstrapGlyph('folder-open'), 
+                Translation::get('BrowseSubmitters'),
+                new FontAwesomeGlyph('folder-open'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS, 
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])), 
-                Button::DISPLAY_ICON, 
-                false, 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMITTERS,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID])),
+                Button::DISPLAY_ICON,
+                false,
                 'btn-link'));
-        
+
         $buttonGroup->prependButton(
             new Button(
-                Translation::get('SubmissionSubmit'), 
-                new BootstrapGlyph('plus'), 
+                Translation::get('SubmissionSubmit'),
+                new FontAwesomeGlyph('plus'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION, 
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
-                        self::PARAM_TARGET_ID => $this->get_user_id(), 
-                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)), 
-                Button::DISPLAY_ICON, 
-                false, 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        self::PARAM_TARGET_ID => $this->get_user_id(),
+                        self::PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)),
+                Button::DISPLAY_ICON,
+                false,
                 'btn-link'));
     }
 }

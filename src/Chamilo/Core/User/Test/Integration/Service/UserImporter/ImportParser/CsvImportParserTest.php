@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\User\Test\Integration\Service\UserImporter\ImportParser;
 
-use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\CsvImportParser;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
@@ -16,17 +14,21 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class CsvImportParserTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var CsvImportParser
      */
     protected $csvImportParser;
 
     /**
+     *
      * @var UserImporterResult
      */
     protected $userImporterResult;
 
     /**
+     *
      * @var ImportUserData[]
      */
     protected $importedUserData;
@@ -41,8 +43,8 @@ class CsvImportParserTest extends ChamiloTestCase
         $this->userImporterResult = new UserImporterResult();
 
         $this->importedUserData = $this->csvImportParser->parse(
-            new UploadedFile(__DIR__ . '/test.csv', 'test.csv', 'text/csv'), $this->userImporterResult
-        );
+            new UploadedFile(__DIR__ . '/test.csv', 'test.csv', 'text/csv'),
+            $this->userImporterResult);
     }
 
     /**
@@ -58,28 +60,25 @@ class CsvImportParserTest extends ChamiloTestCase
     public function testCanParseFile()
     {
         $this->assertTrue(
-            $this->csvImportParser->canParseFile(new UploadedFile(__DIR__ . '/test.csv', 'test.csv', 'text/csv'))
-        );
+            $this->csvImportParser->canParseFile(new UploadedFile(__DIR__ . '/test.csv', 'test.csv', 'text/csv')));
     }
 
     public function testParseSetsImportDataHeader()
     {
         $this->assertEquals(
             'action;username;firstname;lastname;email;official_code;language;status;active;phone;' .
-            'activation_date;expiration_date;auth_source;password',
-            $this->userImporterResult->getRawImportDataHeader()
-        );
+                 'activation_date;expiration_date;auth_source;password',
+                $this->userImporterResult->getRawImportDataHeader());
     }
 
     public function testParseSetsRawImportData()
     {
         $this->assertEquals(
             'A;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;' .
-            '2017-01-05 00:00:00;Platform;blablabla',
-            $this->importedUserData[0]->getRawImportData()
-        );
+                 '2017-01-05 00:00:00;Platform;blablabla',
+                $this->importedUserData[0]->getRawImportData());
     }
-    
+
     public function testParseSetsAction()
     {
         $this->assertEquals('A', $this->importedUserData[0]->getAction());
@@ -149,5 +148,4 @@ class CsvImportParserTest extends ChamiloTestCase
     {
         $this->assertEquals('blablabla', $this->importedUserData[0]->getPassword());
     }
-
 }
