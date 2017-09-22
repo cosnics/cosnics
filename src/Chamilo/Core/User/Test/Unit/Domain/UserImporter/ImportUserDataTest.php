@@ -331,8 +331,8 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->assertEquals($status, $user->get_status());
         $this->assertEquals($active, $user->get_active());
         $this->assertEquals($phone, $user->get_phone());
-        $this->assertEquals(1483574400, $user->get_activation_date());
-        $this->assertEquals(1483574400, $user->get_expiration_date());
+        $this->assertEquals(1483570800, $user->get_activation_date());
+        $this->assertEquals(1483570800, $user->get_expiration_date());
         $this->assertEquals($authSource, $user->getAuthenticationSource());
         $this->assertEquals($password, $user->get_password());
     }
@@ -389,6 +389,43 @@ class ImportUserDataTest extends ChamiloTestCase
 
         $this->assertEmpty($user->get_password());
         $this->assertEmpty($user->get_username());
+    }
+
+    public function testSetPropertiesForUserNotifyReactivate()
+    {
+        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
+        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $user = new User();
+        $user->set_active(false);
+
+        $this->importUserData->setUser($user);
+        $this->importUserData->setAction('U');
+        $this->importUserData->setActive(1);
+
+        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+
+        $this->assertTrue($this->importUserData->mustNotifyUser());
+    }
+
+    public function testSetPropertiesForUserNotifyPasswordChange()
+    {
+        /** @var HashingUtilities | \PHPUnit_Framework_MockObject_MockObject $hashingUtilitiesMock */
+        $hashingUtilitiesMock = $this->getMockBuilder(HashingUtilities::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $user = new User();
+        $user->set_active(true);
+
+        $this->importUserData->setUser($user);
+        $this->importUserData->setAction('U');
+        $this->importUserData->setActive(1);
+        $this->importUserData->setPassword('blablabla');
+
+        $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
+
+        $this->assertTrue($this->importUserData->mustNotifyUser());
     }
 }
 

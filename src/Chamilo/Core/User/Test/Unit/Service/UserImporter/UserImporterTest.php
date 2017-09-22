@@ -407,6 +407,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
+        $this->mockCreateUserSettingForSettingAndUser();
         $this->mockUserUpdate(1, true);
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
@@ -548,6 +549,7 @@ class UserImporterTest extends ChamiloTestCase
         );
 
         $this->mockImportUserData($importUsersData);
+        $this->mockCreateUserSettingForSettingAndUser();
         $this->mockFindUserByUsername(new User());
         $this->mockUserUpdate(1, true);
 
@@ -571,6 +573,26 @@ class UserImporterTest extends ChamiloTestCase
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
+    }
+
+    public function testImportUsersFromFileWithUpdateWillSendMail()
+    {
+        $importUsersData = [];
+
+        $importUsersData[] = new ImportUserData(
+            'U;test001;Eric;Peeters;no-reply@test.com;123456789;nl;5;1;4487965131387;2017-01-05 00:00:00;2017-01-05 00:00:00;Platform;blablabla',
+            'U', 'test001', 'Eric', 'Peeters', 'no-reply@test.com', '123456789', 'nl', '5', '1',
+            '4487965131387', '2017-01-05 00:00:00', '2017-01-05 00:00:00', 'Platform', 'blablabla'
+        );
+
+        $this->mockImportUserData($importUsersData);
+        $this->mockFindUserByUsername(new User());
+        $this->mockUserUpdate(1);
+
+        $this->mailerMock->expects($this->once())
+            ->method('sendMail');
+
+        $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile, true);
     }
 
     /**
