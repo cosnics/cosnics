@@ -188,8 +188,13 @@ class UserImporter
                 }
                 else
                 {
-                    $this->updateLanguageSettingForUser($importUserData);
                     $importUserResult->setSuccessful();
+                    $this->updateLanguageSettingForUser($importUserData);
+
+                    if($sendMailToNewUsers && $importUserData->mustNotifyUser())
+                    {
+                        $this->sendEmailToNewUser($importUserData);
+                    }
                 }
             }
 

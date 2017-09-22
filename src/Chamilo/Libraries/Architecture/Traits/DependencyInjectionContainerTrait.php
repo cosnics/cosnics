@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
