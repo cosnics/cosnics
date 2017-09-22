@@ -103,6 +103,11 @@ class ImportUserData
     protected $user;
 
     /**
+     * @var bool
+     */
+    protected $notifyUser;
+
+    /**
      * @var ImportUserResult
      */
     protected $importUserResult;
@@ -145,6 +150,7 @@ class ImportUserData
         $this->expirationDate = $expirationDate;
         $this->authSource = $authSource;
         $this->password = $password;
+        $this->notifyUser = false;
     }
 
     /**
@@ -621,6 +627,22 @@ class ImportUserData
     }
 
     /**
+     * @return bool
+     */
+    public function mustNotifyUser(): bool
+    {
+        return $this->notifyUser;
+    }
+
+    /**
+     * @param bool $notifyUser
+     */
+    public function setNotifyUser(bool $notifyUser)
+    {
+        $this->notifyUser = $notifyUser;
+    }
+
+    /**
      * Sets the properties for the user associated with this imported data
      *
      * @param HashingUtilities $hashingUtilities
@@ -660,6 +682,7 @@ class ImportUserData
 
         if(!empty($password))
         {
+            $this->setNotifyUser(true);
             $user->set_password($hashingUtilities->hashString($password));
         }
 
@@ -678,9 +701,16 @@ class ImportUserData
             $user->set_status($this->getStatus());
         }
 
-        if(!empty($this->getActive()))
+        if(!is_null($this->getActive()))
         {
-            $user->set_active((bool) $this->getActive() != 0);
+            $nowActive = (bool) $this->getActive() != 0;
+
+            if(!$user->get_active() && $nowActive)
+            {
+                $this->setNotifyUser(true);
+            }
+
+            $user->set_active($nowActive);
         }
 
         if(!empty($this->getPhone()))
