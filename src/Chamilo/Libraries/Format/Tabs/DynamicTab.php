@@ -109,12 +109,12 @@ abstract class DynamicTab
                 $html[] = $this->image->render();
             }
         }
-        
+
         if ($this->image && $this->name && $this->isIconVisible() && $this->isTextVisible())
         {
             $html[] = '&nbsp;&nbsp;';
         }
-        
+
         if ($this->name && $this->isTextVisible())
         {
             $html[] = '<span class="title">' . $this->name . '</span>';
@@ -131,10 +131,10 @@ abstract class DynamicTab
     public function body_header()
     {
         $html = array();
-        
+
         $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
         $html[] = '<div class="list-group-item">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -145,18 +145,18 @@ abstract class DynamicTab
     public function body_footer()
     {
         $html = array();
-        
+
         $html[] = '<div class="clearfix"></div>';
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns whether or not the icon is visible
-     * 
+     *
      * @return bool
      */
     protected function isIconVisible()
@@ -166,7 +166,7 @@ abstract class DynamicTab
 
     /**
      * Returns whether or not the text is visible
-     * 
+     *
      * @return bool
      */
     protected function isTextVisible()
