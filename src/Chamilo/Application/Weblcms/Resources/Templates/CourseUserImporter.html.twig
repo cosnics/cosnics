@@ -1,0 +1,69 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms' %}
+
+<ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#upload-form" aria-controls="upload-form" role="tab" data-toggle="tab">{{ 'ImportUploadFile'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#users-csv" aria-controls="csv" role="tab" data-toggle="tab">{{ 'ImportUsersCSVExample'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#groups-csv" aria-controls="csv" role="tab" data-toggle="tab">{{ 'ImportGroupsCSVExample'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{ 'ImportDetails'|trans({}, appContext) }}</a></li>
+</ul>
+
+<div class="tab-content dynamic-visual-tab-content" style="border: 1px solid #dddddd; padding: 15px 12px; border-top: none;">
+    <div role="tabpanel" class="tab-pane active" id="upload-form">
+        {{ form|raw }}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="users-csv">
+        <p> {{ 'CSVMustLookLikeForUsers'|trans({}, appContext) }} ({{ 'MandatoryFields'|trans({}, appContext) }})</p>
+        <blockquote>
+<pre>
+<b>action</b>;<b>username</b>;<b>coursecode</b>;<b>status</b>
+A;jdoe;course01;Teacher
+U;a.dam;course01;Student
+D;a.dam;course01;Student
+</pre>
+        </blockquote>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="groups-csv">
+        <p> {{ 'CSVMustLookLikeForGroups'|trans({}, appContext) }} ({{ 'MandatoryFields'|trans({}, appContext) }})</p>
+        <blockquote>
+<pre>
+<b>action</b>;<b>groupcode</b>;<b>coursecode</b>;<b>status</b>
+A;group1;course01;Teacher
+U;group1;course01;Student
+D;group2;course01;Student
+</pre>
+        </blockquote>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="details">
+        {#<h4>{{ 'Action'|trans({}, appContext) }}</h4>#}
+        <table class="table table-bordered">
+            <tr style="background-color: #F5F5F5;">
+                <th style="width: 150px;">{{ 'Action'|trans({}, appContext) }}</th>
+                <th>{{ 'Description'|trans({}, 'Chamilo\\Libraries') }}</th>
+            </tr>
+            <tr>
+                <th>A</th>
+                <td>{{ 'Add'|trans({}, 'Chamilo\\Libraries') }}</td>
+            </tr>
+            <tr>
+                <th>U</th>
+                <td>{{ 'Update'|trans({}, 'Chamilo\\Libraries') }}</td>
+            </tr>
+            <tr>
+                <th>D</th>
+                <td>{{ 'Delete'|trans({}, 'Chamilo\\Libraries') }}</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <th style="width: 150px;">{{ 'Status'|trans({}, appContext) }}</th>
+                <th>{{ 'Description'|trans({}, 'Chamilo\\Libraries') }}</th>
+            </tr>
+            <tr>
+                <th>Teacher</th>
+                <td> {{ 'Teacher'|trans({}, appContext) }}</td>
+            </tr>
+            <tr>
+                <th>Student</th>
+                <td> {{ 'Student'|trans({}, appContext) }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
