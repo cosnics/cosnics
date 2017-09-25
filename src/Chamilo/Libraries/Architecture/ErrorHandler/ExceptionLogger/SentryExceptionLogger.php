@@ -39,8 +39,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $this->sentryClient = new \Raven_Client(
             $sentryConnectionString, array('install_default_breadcrumb_handlers' => false)
         );
-
-        $this->configureChamiloParameters();
     }
 
     /**
@@ -61,15 +59,4 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $this->sentryClient->captureException($exception);
     }
 
-    /**
-     * Configures additional chamilo parameters in New Relic
-     */
-    protected function configureChamiloParameters()
-    {
-        $user_id = Session::get_user_id();
-        if (! empty($user_id))
-        {
-            $this->sentryClient->user_context(array('user_id' => $user_id));
-        }
-    }
 }

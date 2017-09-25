@@ -322,6 +322,8 @@ class ImportUserDataTest extends ChamiloTestCase
 
         $this->importUserData->setPropertiesForUser($hashingUtilitiesMock);
 
+        $referenceDate = new \DateTime('2017-01-05 00:00:00');
+
         $this->assertEquals($username, $user->get_username());
         $this->assertEquals(0, $user->get_platformadmin());
         $this->assertEquals($firstName, $user->get_firstname());
@@ -331,8 +333,8 @@ class ImportUserDataTest extends ChamiloTestCase
         $this->assertEquals($status, $user->get_status());
         $this->assertEquals($active, $user->get_active());
         $this->assertEquals($phone, $user->get_phone());
-        $this->assertEquals(1483570800, $user->get_activation_date());
-        $this->assertEquals(1483570800, $user->get_expiration_date());
+        $this->assertEquals($referenceDate->getTimestamp(), $user->get_activation_date());
+        $this->assertEquals($referenceDate->getTimestamp(), $user->get_expiration_date());
         $this->assertEquals($authSource, $user->getAuthenticationSource());
         $this->assertEquals($password, $user->get_password());
     }
