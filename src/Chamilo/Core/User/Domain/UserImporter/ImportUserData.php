@@ -11,25 +11,8 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ImportUserData
+class ImportUserData extends ImportData
 {
-    const ACTION_ADD = 'A';
-    const ACTION_UPDATE = 'U';
-    const ACTION_ADD_UPDATE = 'UA';
-    const ACTION_DELETE = 'D';
-
-    /**
-     * The imported data as a raw string. It is used to give the user the opportunity to retry the failed imports.
-     *
-     * @var string
-     */
-    protected $rawImportData;
-
-    /**
-     * @var string
-     */
-    protected $action;
-
     /**
      * @var string
      */
@@ -156,22 +139,6 @@ class ImportUserData
     /**
      * @return string
      */
-    public function getRawImportData()
-    {
-        return $this->rawImportData;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * @return string
-     */
     public function getUsername()
     {
         return $this->username;
@@ -287,30 +254,6 @@ class ImportUserData
     public function getImportUserResult(): ImportUserResult
     {
         return $this->importUserResult;
-    }
-
-    /**
-     * @param string $rawImportData
-     *
-     * @return ImportUserData
-     */
-    public function setRawImportData($rawImportData): ImportUserData
-    {
-        $this->rawImportData = $rawImportData;
-
-        return $this;
-    }
-
-    /**
-     * @param string $action
-     *
-     * @return ImportUserData
-     */
-    public function setAction($action): ImportUserData
-    {
-        $this->action = $action;
-
-        return $this;
     }
 
     /**
@@ -494,47 +437,6 @@ class ImportUserData
     }
 
     /**
-     * Returns whether or not this user should be created as a new user
-     *
-     * @return bool
-     */
-    public function isNew()
-    {
-        return $this->getAction() == self::ACTION_ADD;
-    }
-
-    /**
-     * Returns whether or not this user should be created if the username is not found or updated if the
-     * username is found
-     *
-     * @return bool
-     */
-    public function isNewOrUpdate()
-    {
-        return $this->getAction() == self::ACTION_ADD_UPDATE;
-    }
-
-    /**
-     * Returns whether or not this user should be updated
-     *
-     * @return bool
-     */
-    public function isUpdate()
-    {
-        return $this->getAction() == self::ACTION_UPDATE;
-    }
-
-    /**
-     * Returns whether or not this user should be deleted
-     *
-     * @return bool
-     */
-    public function isDelete()
-    {
-        return $this->getAction() == self::ACTION_DELETE;
-    }
-
-    /**
      * Returns the list of valid actions
      *
      * @return array
@@ -542,32 +444,6 @@ class ImportUserData
     public function getValidActions()
     {
         return [self::ACTION_ADD, self::ACTION_ADD_UPDATE, self::ACTION_UPDATE, self::ACTION_DELETE];
-    }
-
-    /**
-     * Returns whether or not this imported user has a valid action
-     *
-     * @return bool
-     */
-    public function hasValidAction()
-    {
-        return in_array($this->getAction(), $this->getValidActions());
-    }
-
-    /**
-     * Sets the action to new
-     */
-    public function setActionToNew()
-    {
-        $this->setAction(self::ACTION_ADD);
-    }
-
-    /**
-     * Sets the action to update
-     */
-    public function setActionToUpdate()
-    {
-        $this->setAction(self::ACTION_UPDATE);
     }
 
     /**
