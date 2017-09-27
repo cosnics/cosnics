@@ -1,11 +1,13 @@
 <?php
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
-require __DIR__ . '/../../Architecture/Bootstrap.php';
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
+require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
-Chamilo\Libraries\Architecture\Bootstrap::getInstance();
+$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 
 $packageList = PlatformPackageBundles::getInstance()->get_package_list()->get_all_packages();
 $availablePackages = $packageList['Chamilo\Core\Repository\ContentObject'];
@@ -18,25 +20,25 @@ foreach ($availablePackages as $availablePackage)
     $contentObjectPackage = $availablePackage->get_context();
     $contentObjectName = $classNameUtilities->getPackageNameFromNamespace($contentObjectPackage);
     $contentObjectClass = $contentObjectPackage . '\Storage\DataClass\\' . $contentObjectName;
-    
+
     if ($contentObjectName == 'File')
     {
         continue;
     }
-    
+
     $contentObjectPackagePath = $pathUtilities->namespaceToFullPath($contentObjectPackage);
-    
+
     // Root integration package
     $contentObjectIntegrationNamespace = $contentObjectPackage . '\Integration\Chamilo\Core\Metadata';
     $contentObjectIntegrationPath = $pathUtilities->namespaceToFullPath($contentObjectIntegrationNamespace);
     Filesystem::create_dir($contentObjectIntegrationPath);
-    
+
     // Entity
     $entityNamespace = $contentObjectIntegrationNamespace . '\\Entity';
     $entityPath = $pathUtilities->namespaceToFullPath($entityNamespace);
     Filesystem::create_dir($entityPath);
     $entityFilePath = $entityPath . $contentObjectName . 'Entity.php';
-    
+
     $entityFileContent = <<<EOT
 <?php
 namespace $entityNamespace;
@@ -55,16 +57,16 @@ class $contentObjectName.Entity extends ContentObjectEntity
 {
 }
 EOT;
-    
+
     Filesystem::write_to_file($entityFilePath, $entityFileContent);
     // var_dump($entityFileContent);
-    
+
     // Package
     $packageNamespace = $contentObjectIntegrationNamespace . '\Package';
     $packagePath = $pathUtilities->namespaceToFullPath($packageNamespace);
     Filesystem::create_dir($packagePath);
     $packageInstallerPath = $packagePath . 'Installer.php';
-    
+
     $packageInstallerContent = <<<EOT
 <?php
 namespace $packageNamespace;
@@ -88,16 +90,16 @@ class Installer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metada
     }
 }
 EOT;
-    
+
     Filesystem::write_to_file($packageInstallerPath, $packageInstallerContent);
     // var_dump($packageInstallerContent);
-    
+
     // PropertyProvider
     $propertyProviderNamespace = $contentObjectIntegrationNamespace . '\PropertyProvider';
     $propertyProviderPath = $pathUtilities->namespaceToFullPath($propertyProviderNamespace);
     Filesystem::create_dir($propertyProviderPath);
     $propertyProvideFilePath = $propertyProviderPath . 'ContentObjectPropertyProvider.php';
-    
+
     $propertyProvideFileContent = <<<EOT
 <?php
 namespace $propertyProviderNamespace;
@@ -124,13 +126,13 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
     }
 }
 EOT;
-    
+
     Filesystem::write_to_file($propertyProvideFilePath, $propertyProvideFileContent);
     // var_dump($propertyProvideFileContent);
-    
+
     // Package.info
     $packageInfoPath = $contentObjectIntegrationPath . 'package.info';
-    
+
     $packageInfoContent = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
@@ -158,7 +160,7 @@ EOT;
 	</package>
 </packages>
 EOT;
-    
+
     Filesystem::write_to_file($packageInfoPath, $packageInfoContent);
     // var_dump($packageInfoContent);
 }

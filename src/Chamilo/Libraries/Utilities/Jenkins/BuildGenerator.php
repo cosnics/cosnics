@@ -6,7 +6,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
+require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 class BuildGenerator
 {
 
@@ -108,9 +110,9 @@ class BuildGenerator
     {
         $this->write_build($package_list->get_type());
         $this->write_phpunit($package_list->get_type());
-        
+
         $sub_jobs = array();
-        
+
         if ($package_list->has_children())
         {
             foreach ($package_list->get_children() as $child_list)
@@ -119,10 +121,10 @@ class BuildGenerator
                 $sub_jobs[] = $this->get_job_name($child_list->get_type());
             }
         }
-        
+
         $this->write_configuration(
-            $package_list->get_type(), 
-            $sub_jobs, 
+            $package_list->get_type(),
+            $sub_jobs,
             $this->get_source_repository($package_list->get_type()));
     }
 
@@ -173,7 +175,7 @@ class BuildGenerator
     public function get_source_repository($context)
     {
         $source_repository_path = Path::getInstance()->namespaceToFullPath($context) . '.hg/hgrc';
-        
+
         if (file_exists($source_repository_path))
         {
             $source_repository_configuration = parse_ini_file($source_repository_path);
@@ -196,7 +198,7 @@ class BuildGenerator
     <resolvepath propertyName="package-directory" file="../../"/>
     <import file="' . $this->get_path($context) . 'libraries/php/build/build.xml" />
 </project>';
-        
+
         $path = $this->get_folder($context) . 'build.xml';
         Filesystem::write_to_file($path, $content, false);
     }
@@ -225,7 +227,7 @@ class BuildGenerator
 		</whitelist>
 	</filter>
 </phpunit>';
-        
+
         $path = $this->get_folder($context) . 'phpunit.xml';
         Filesystem::write_to_file($path, $content, false);
     }
@@ -241,10 +243,10 @@ class BuildGenerator
         $chart_url = $this->get_web_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) .
              '/build/chart/';
         $workspace_url = $this->get_system_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/';
-        
+
         $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
         $has_php_classes = is_dir($php_class_path);
-        
+
         $content = '<?xml version="1.0" encoding="UTF-8"?>
 <project>
     <actions/>
@@ -263,7 +265,7 @@ class BuildGenerator
     </logRotator>
     <keepDependencies>false</keepDependencies>
     <properties/>';
-        
+
         if ($source_respository)
         {
             $content .= '
@@ -282,7 +284,7 @@ class BuildGenerator
             $content .= '
     <scm class="hudson.scm.NullSCM"/>';
         }
-        
+
         $content .= '
     <canRoam>true</canRoam>
     <disabled>false</disabled>
@@ -299,7 +301,7 @@ class BuildGenerator
         </hudson.plugins.phing.PhingBuilder>
     </builders>
     <publishers>';
-        
+
         if (count($sub_jobs) > 0)
         {
             $content .= '
@@ -312,7 +314,7 @@ class BuildGenerator
             </threshold>
         </hudson.tasks.BuildTrigger>';
         }
-        
+
         if ($has_php_classes)
         {
             $content .= '
@@ -855,19 +857,19 @@ class BuildGenerator
             </config>
         </hudson.plugins.violations.ViolationsPublisher>';
         }
-        
+
         $content .= '
     </publishers>
     <buildWrappers/>
 </project>';
-        
+
         $path = $this->get_folder($context) . 'config.xml';
         Filesystem::write_to_file($path, $content, false);
     }
 }
 
-require_once __DIR__ . '/../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
+$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 
 $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
 

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\Platform\Session\Session;
-
 /**
  * Logs Exceptions to Sentry (sentry.io)
  *
@@ -37,8 +35,8 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryClient = new \Raven_Client(
-            $sentryConnectionString, array('install_default_breadcrumb_handlers' => false)
-        );
+            $sentryConnectionString,
+            array('install_default_breadcrumb_handlers' => false));
     }
 
     /**
@@ -58,5 +56,4 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
         $this->sentryClient->captureException($exception);
     }
-
 }
