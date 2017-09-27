@@ -837,7 +837,7 @@ abstract class Manager extends Application
         $entities = array();
         $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance($this->get_course_id());
         $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
-        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance();
+        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance($this->get_course_id());
 
         return $entities;
     }

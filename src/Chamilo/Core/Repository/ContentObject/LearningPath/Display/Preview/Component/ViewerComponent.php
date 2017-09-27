@@ -103,7 +103,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      * @param $answer mixed
      * @param $score int
      */
-    function save_assessment_answer($complex_question_id, $answer, $score, $hint)
+    function save_assessment_answer($complex_question_id, $answer, $score, $hint = null)
     {
         $this->trackingService->saveAnswerForQuestion(
             \Chamilo\Core\Repository\Display\Preview::get_root_content_object(), $this->getUser(),
