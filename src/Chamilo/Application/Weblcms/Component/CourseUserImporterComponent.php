@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Form\CourseEntityImportForm;
@@ -43,24 +44,14 @@ class CourseUserImporterComponent extends Manager
 
             $courseEntityImporter = new CourseEntityImporter(
                 new ImportFormatFactory($importers),
-                new WeblcmsRepository());
+                new WeblcmsRepository(),
+                $this->getTranslator()
+            );
 
             $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
 
-            try
-            {
-                $courseEntityImporter->importCourseEntitiesFromFile($file);
-                $success = true;
-            }
-            catch (\Exception $ex)
-            {
-                $success = false;
-                $failedMessage = $ex->getMessage();
-            }
-
-            $this->redirect(
-                Translation::get($success ? 'CsvUsersProcessed' : 'CsvUsersNotProcessed') . '<br />' . $failedMessage,
-                ($success ? false : true));
+            $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
+            var_dump($result); exit;
         }
         else
         {
@@ -70,7 +61,8 @@ class CourseUserImporterComponent extends Manager
 
             $html[] = $this->getTwig()->render(
                 'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
-                ['form' => $form->toHtml()]);
+                ['form' => $form->toHtml()]
+            );
 
             $html[] = $this->render_footer();
 
@@ -85,9 +77,12 @@ class CourseUserImporterComponent extends Manager
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                )
+            );
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
+                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+            );
         }
 
         $breadcrumbtrail->add_help('weblcms_course_user_importer');

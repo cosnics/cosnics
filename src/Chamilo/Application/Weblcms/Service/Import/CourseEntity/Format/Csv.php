@@ -52,12 +52,12 @@ class Csv implements ImportFormatInterface
 
         $importedCourseEntityRelations = array();
 
-        if(empty($importedCourseEntityRelations))
+        if(empty($importedRows))
         {
             return [];
         }
 
-        $keys = array_keys($importedCourseEntityRelations[0]);
+        $keys = array_keys($importedRows[0]);
         $importerResult->setRawImportDataHeader(implode(';', $keys));
 
         if(in_array('username', $keys))

@@ -14,6 +14,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Domain\UserImporter\ImportDataResult;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Service to manage the import of course entities
@@ -22,34 +23,42 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class CourseEntityImporter implements CourseEntityImporterInterface
 {
-
     /**
-     *
      * @var ImportFormatFactory
      */
     protected $importFormatFactory;
 
     /**
-     *
      * @var WeblcmsRepositoryInterface
      */
     protected $weblcmsRepository;
 
     /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
      *
      * @param ImportFormatFactory $importFormatFactory
      * @param WeblcmsRepositoryInterface $weblcmsRepository
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(ImportFormatFactory $importFormatFactory, WeblcmsRepositoryInterface $weblcmsRepository)
+    public function __construct(
+        ImportFormatFactory $importFormatFactory, WeblcmsRepositoryInterface $weblcmsRepository, Translator $translator
+    )
     {
         $this->importFormatFactory = $importFormatFactory;
         $this->weblcmsRepository = $weblcmsRepository;
+        $this->translator = $translator;
     }
 
     /**
      * Imports course entities from a given file
      *
      * @param UploadedFile $file
+     *
+     * @return \Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelationImporterResult
      */
     public function importCourseEntitiesFromFile(UploadedFile $file)
     {
@@ -58,6 +67,8 @@ class CourseEntityImporter implements CourseEntityImporterInterface
         $importerResult = new CourseEntityRelationImporterResult();
         $importedCourseEntityRelations = $importFormat->parseFile($file, $importerResult);
         $this->handleImportedCourseEntityRelations($importedCourseEntityRelations, $importerResult);
+
+        return $importerResult;
     }
 
     /**
@@ -90,47 +101,70 @@ class CourseEntityImporter implements CourseEntityImporterInterface
     {
         $importDataResult = new ImportDataResult($importedCourseEntityRelation);
 
-        $course = $this->getCourseFromImportedCourseEntityRelation($importedCourseEntityRelation);
-
-        $entityType = null;
-        $entityId = null;
-
-        if ($importedCourseEntityRelation instanceof ImportedCourseUserRelation)
+        try
         {
-            $user = $this->getUserFromImportedCourseEntityRelation($importedCourseEntityRelation);
+            $course =
+                $this->getCourseFromImportedCourseEntityRelation($importedCourseEntityRelation, $importDataResult);
 
-            $entityType = CourseEntityRelation::ENTITY_TYPE_USER;
-            $entityId = $user->getId();
-        }
+            $entityType = null;
+            $entityId = null;
 
-        if ($importedCourseEntityRelation instanceof ImportedCourseGroupRelation)
-        {
-            $group = $this->getGroupFromImportedCourseEntityRelation($importedCourseEntityRelation);
+            if ($importedCourseEntityRelation instanceof ImportedCourseUserRelation)
+            {
+                $user =
+                    $this->getUserFromImportedCourseEntityRelation($importedCourseEntityRelation, $importDataResult);
 
-            $entityType = CourseEntityRelation::ENTITY_TYPE_GROUP;
-            $entityId = $group->getId();
-        }
+                $entityType = CourseEntityRelation::ENTITY_TYPE_USER;
+                $entityId = $user->getId();
+            }
 
-        $courseEntityRelation = $this->getCourseEntityRelationFromImported(
-            $importedCourseEntityRelation,
-            $entityType,
-            $entityId,
-            $course
-        );
+            if ($importedCourseEntityRelation instanceof ImportedCourseGroupRelation)
+            {
+                $group =
+                    $this->getGroupFromImportedCourseEntityRelation($importedCourseEntityRelation, $importDataResult);
 
-        $courseEntityRelation->set_status($importedCourseEntityRelation->getStatusInteger());
+                $entityType = CourseEntityRelation::ENTITY_TYPE_GROUP;
+                $entityId = $group->getId();
+            }
 
-        $status = $this->executeCourseEntityRelationAction($importedCourseEntityRelation, $courseEntityRelation);
-        if (!$status)
-        {
-            throw new \Exception(
-                sprintf(
-                    'Failed to handle the course entity relation with course %s, entityType %s and entityId %s',
-                    $courseEntityRelation->get_course_id(),
-                    $courseEntityRelation->getEntityType(),
-                    $courseEntityRelation->getEntityId()
-                )
+            $courseEntityRelation = $this->getCourseEntityRelationFromImported(
+                $importedCourseEntityRelation,
+                $entityType,
+                $entityId,
+                $course,
+                $importDataResult
             );
+
+            $courseEntityRelation->set_status($importedCourseEntityRelation->getStatusInteger());
+
+            if(!$importDataResult->isCompleted())
+            {
+                $status =
+                    $this->executeCourseEntityRelationAction($importedCourseEntityRelation, $courseEntityRelation);
+                if (!$status)
+                {
+                    $importDataResult->addMessage(
+                        $this->translateMessage('ImportCourseEntityRelationFailedDatabaseExecution')
+                    );
+
+                    throw new \Exception(
+                        sprintf(
+                            'Failed to handle the course entity relation with course %s, entityType %s and entityId %s',
+                            $courseEntityRelation->get_course_id(),
+                            $courseEntityRelation->getEntityType(),
+                            $courseEntityRelation->getEntityId()
+                        )
+                    );
+                }
+            }
+
+            $importDataResult->setSuccessful();
+            $importerResult->addSuccessImportDataResult($importDataResult);
+        }
+        catch (\Exception $ex)
+        {
+            $importDataResult->setFailed();
+            $importerResult->addFailedImportDataResult($importDataResult);
         }
     }
 
@@ -169,18 +203,25 @@ class CourseEntityImporter implements CourseEntityImporterInterface
      * Retrieves the course that belongs to a given imported course entity relation
      *
      * @param ImportedCourseEntityRelation $importedCourseEntityRelation
+     * @param \Chamilo\Core\User\Domain\UserImporter\ImportDataResult $importDataResult
      *
-     * @return Course
-     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      * @throws \Exception
      */
     protected function getCourseFromImportedCourseEntityRelation(
-        ImportedCourseEntityRelation $importedCourseEntityRelation
+        ImportedCourseEntityRelation $importedCourseEntityRelation, ImportDataResult $importDataResult
     )
     {
         $course = $this->weblcmsRepository->retrieveCourseByCode($importedCourseEntityRelation->getCourseCode());
         if (!$course instanceof Course)
         {
+            $importDataResult->addMessage(
+                $this->translateMessage(
+                    'ImportCourseEntityRelationCourseNotFound',
+                    ['{COURSE_CODE}' => $importedCourseEntityRelation->getCourseCode()]
+                )
+            );
+
             throw new \Exception(
                 sprintf(
                     'The given course with code "%s" could not be found',
@@ -196,17 +237,26 @@ class CourseEntityImporter implements CourseEntityImporterInterface
      * Retrieves the user that belongs to a given imported course entity relation
      *
      * @param ImportedCourseUserRelation $importedCourseEntityRelation
+     * @param \Chamilo\Core\User\Domain\UserImporter\ImportDataResult $importDataResult
      *
-     * @return User
-     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Exception
      */
-    protected function getUserFromImportedCourseEntityRelation(ImportedCourseUserRelation $importedCourseEntityRelation)
+    protected function getUserFromImportedCourseEntityRelation(
+        ImportedCourseUserRelation $importedCourseEntityRelation, ImportDataResult $importDataResult
+    )
     {
         $user = $this->weblcmsRepository->retrieveUserByUsername($importedCourseEntityRelation->getUsername());
 
         if (!$user instanceof User)
         {
+            $importDataResult->addMessage(
+                $this->translateMessage(
+                    'ImportCourseEntityRelationUserNotFound',
+                    ['{USERNAME}' => $importedCourseEntityRelation->getUsername()]
+                )
+            );
+
             throw new \Exception(
                 sprintf(
                     'The given user with username "%s" could not be found',
@@ -222,18 +272,26 @@ class CourseEntityImporter implements CourseEntityImporterInterface
      * Retrieves the group that belongs to a given imported course entity relation
      *
      * @param ImportedCourseGroupRelation $importedCourseEntityRelation
+     * @param \Chamilo\Core\User\Domain\UserImporter\ImportDataResult $importDataResult
      *
-     * @return Group
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
      * @throws \Exception
      */
     protected function getGroupFromImportedCourseEntityRelation(
-        ImportedCourseGroupRelation $importedCourseEntityRelation
+        ImportedCourseGroupRelation $importedCourseEntityRelation, ImportDataResult $importDataResult
     )
     {
         $group = $this->weblcmsRepository->retrieveGroupByCode($importedCourseEntityRelation->getGroupCode());
 
         if (!$group instanceof Group)
         {
+            $importDataResult->addMessage(
+                $this->translateMessage(
+                    'ImportCourseEntityRelationGroupNotFound',
+                    ['{GROUP_CODE}' => $importedCourseEntityRelation->getGroupCode()]
+                )
+            );
+
             throw new \Exception(
                 sprintf(
                     'The given group with code "%s" could not be found',
@@ -253,14 +311,14 @@ class CourseEntityImporter implements CourseEntityImporterInterface
      * @param int $entityType
      * @param int $entityId
      * @param Course $course
+     * @param \Chamilo\Core\User\Domain\UserImporter\ImportDataResult $importDataResult
      *
-     * @return CourseEntityRelation
-     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation
      * @throws \Exception
      */
     protected function getCourseEntityRelationFromImported(
         ImportedCourseEntityRelation $importedCourseEntityRelation,
-        $entityType, $entityId, $course
+        $entityType, $entityId, $course, ImportDataResult $importDataResult
     )
     {
         $courseEntityRelation = $this->weblcmsRepository->retrieveCourseEntityRelationByEntityAndCourse(
@@ -275,6 +333,16 @@ class CourseEntityImporter implements CourseEntityImporterInterface
             {
                 if ($importedCourseEntityRelation instanceof ImportedCourseUserRelation)
                 {
+                    $importDataResult->addMessage(
+                        $this->translateMessage(
+                            'ImportCourseEntityRelationCourseUserRelationNotFound',
+                            [
+                                '{COURSE_CODE}' => $importedCourseEntityRelation->getCourseCode(),
+                                '{USERNAME}' => $importedCourseEntityRelation->getUsername()
+                            ]
+                        )
+                    );
+
                     throw new \Exception(
                         sprintf(
                             'Could not find a valid relation object for course %s and user %s',
@@ -285,6 +353,16 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                 }
                 elseif ($importedCourseEntityRelation instanceof ImportedCourseGroupRelation)
                 {
+                    $importDataResult->addMessage(
+                        $this->translateMessage(
+                            'ImportCourseEntityRelationCourseGroupRelationNotFound',
+                            [
+                                '{COURSE_CODE}' => $importedCourseEntityRelation->getCourseCode(),
+                                '{GROUP_CODE}' => $importedCourseEntityRelation->getGroupCode()
+                            ]
+                        )
+                    );
+
                     throw new \Exception(
                         sprintf(
                             'Could not find a valid relation object for course %s and group %s',
@@ -301,33 +379,56 @@ class CourseEntityImporter implements CourseEntityImporterInterface
             {
                 if ($importedCourseEntityRelation instanceof ImportedCourseUserRelation)
                 {
-                    throw new \Exception(
-                        sprintf(
-                            'A relation object for course %s and user %s is already created',
-                            $course->get_visual_code(),
-                            $importedCourseEntityRelation->getUsername()
+                    $importDataResult->addMessage(
+                        $this->translateMessage(
+                            'ImportCourseEntityRelationCourseUserRelationAlreadyCreated',
+                            [
+                                '{COURSE_CODE}' => $importedCourseEntityRelation->getCourseCode(),
+                                '{USERNAME}' => $importedCourseEntityRelation->getUsername()
+                            ]
                         )
                     );
+
+                    $importDataResult->setSuccessful();
                 }
                 elseif ($importedCourseEntityRelation instanceof ImportedCourseGroupRelation)
                 {
-                    throw new \Exception(
-                        sprintf(
-                            'A relation object for course %s and group %s is already created',
-                            $course->get_visual_code(),
-                            $importedCourseEntityRelation->getGroupCode()
+                    $importDataResult->addMessage(
+                        $this->translateMessage(
+                            'ImportCourseEntityRelationCourseGroupRelationAlreadyCreated',
+                            [
+                                '{COURSE_CODE}' => $importedCourseEntityRelation->getCourseCode(),
+                                '{GROUP_CODE}' => $importedCourseEntityRelation->getGroupCode()
+                            ]
                         )
                     );
+
+                    $importDataResult->setSuccessful();
                 }
             }
+            else
+            {
+                $courseEntityRelation = new CourseEntityRelation();
 
-            $courseEntityRelation = new CourseEntityRelation();
-
-            $courseEntityRelation->set_course_id($course->getId());
-            $courseEntityRelation->setEntityId($entityId);
-            $courseEntityRelation->setEntityType($entityType);
+                $courseEntityRelation->set_course_id($course->getId());
+                $courseEntityRelation->setEntityId($entityId);
+                $courseEntityRelation->setEntityType($entityType);
+            }
         }
 
         return $courseEntityRelation;
+    }
+
+    /**
+     * Translates a given message, with optionally the given parameters
+     *
+     * @param string $message
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function translateMessage($message, $parameters = [])
+    {
+        return $this->translator->trans($message, $parameters, 'Chamilo\\Application\\Weblcms');
     }
 }
