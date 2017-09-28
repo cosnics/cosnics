@@ -27,6 +27,23 @@ abstract class ImportData
     protected $action;
 
     /**
+     * @var \Chamilo\Core\User\Domain\UserImporter\ImportDataResult
+     */
+    protected $importDataResult;
+
+    /**
+     * ImportData constructor.
+     *
+     * @param string $rawImportData
+     * @param string $action
+     */
+    public function __construct($rawImportData, $action)
+    {
+        $this->rawImportData = $rawImportData;
+        $this->action = $action;
+    }
+
+    /**
      * @return string
      */
     public function getRawImportData()
@@ -129,6 +146,26 @@ abstract class ImportData
     public function setAction($action)
     {
         $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Domain\UserImporter\ImportDataResult
+     */
+    public function getImportDataResult(): ImportDataResult
+    {
+        return $this->importDataResult;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Domain\UserImporter\ImportDataResult $importDataResult
+     *
+     * @return ImportData
+     */
+    public function setImportDataResult(ImportDataResult $importDataResult)
+    {
+        $this->importDataResult = $importDataResult;
 
         return $this;
     }

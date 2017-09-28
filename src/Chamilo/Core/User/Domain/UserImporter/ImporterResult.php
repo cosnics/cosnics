@@ -20,16 +20,16 @@ class ImporterResult
     protected $rawImportDataFooter;
 
     /**
-     * List of import user results that have failed
+     * List of import data results that have failed
      *
-     * @var ImportUserResult[]
+     * @var ImportDataResult[]
      */
     protected $failedUserResults;
 
     /**
-     * List of import user results that are successful
+     * List of import data results that are successful
      *
-     * @var ImportUserResult[]
+     * @var ImportDataResult[]
      */
     protected $successUserResults;
 
@@ -42,60 +42,60 @@ class ImporterResult
     }
 
     /**
-     * @param ImportUserResult $importUserResult
+     * @param ImportDataResult $importDataResult
      */
-    public function addFailedUserResult(ImportUserResult $importUserResult)
+    public function addFailedImportDataResult(ImportDataResult $importDataResult)
     {
-        if(!$importUserResult->hasFailed())
+        if(!$importDataResult->hasFailed())
         {
-            throw new \RuntimeException('The import result could not be added because the user import did not fail');
+            throw new \RuntimeException('The import result could not be added because the import did not fail');
         }
 
-        $this->failedUserResults[] = $importUserResult;
+        $this->failedUserResults[] = $importDataResult;
     }
 
     /**
-     * @param ImportUserResult $importUserResult
+     * @param ImportDataResult $importDataResult
      */
-    public function addSuccessUserResult(ImportUserResult $importUserResult)
+    public function addSuccessImportDataResult(ImportDataResult $importDataResult)
     {
-        if(!$importUserResult->isSuccessful())
+        if(!$importDataResult->isSuccessful())
         {
             throw new \RuntimeException(
-                'The import result could not be added because the user import was not successful'
+                'The import result could not be added because the import was not successful'
             );
         }
 
-        $this->successUserResults[] = $importUserResult;
+        $this->successUserResults[] = $importDataResult;
     }
 
     /**
-     * Adds the result of a single user import.
+     * Adds the result of a single import.
      *
-     * @param ImportUserResult $importUserResult
+     * @param ImportDataResult $importDataResult
      *
      * @throws \Exception
      */
-    public function addImportUserResult(ImportUserResult $importUserResult)
+    public function addImportDataResult(ImportDataResult $importDataResult)
     {
-        if (!$importUserResult->isCompleted())
+        if (!$importDataResult->isCompleted())
         {
-            throw new \RuntimeException('The import result could not be added because the user import is not yet completed');
+            throw new \RuntimeException('The import result could not be added because the import is not yet completed');
         }
 
-        if ($importUserResult->isSuccessful())
+        if ($importDataResult->isSuccessful())
         {
-            $this->addSuccessUserResult($importUserResult);
+            $this->addSuccessImportDataResult($importDataResult);
         }
 
-        if ($importUserResult->hasFailed())
+        if ($importDataResult->hasFailed())
         {
-            $this->addFailedUserResult($importUserResult);
+            $this->addFailedImportDataResult($importDataResult);
         }
     }
 
     /**
-     * @return ImportUserResult[]
+     * @return ImportDataResult[]
      */
     public function getFailedUserResults(): array
     {
@@ -103,7 +103,7 @@ class ImporterResult
     }
 
     /**
-     * @return ImportUserResult[]
+     * @return ImportDataResult[]
      */
     public function getSuccessUserResults(): array
     {
@@ -121,9 +121,9 @@ class ImporterResult
     /**
      * @param string $rawImportDataHeader
      *
-     * @return UserImporterResult
+     * @return $this
      */
-    public function setRawImportDataHeader($rawImportDataHeader): UserImporterResult
+    public function setRawImportDataHeader($rawImportDataHeader)
     {
         $this->rawImportDataHeader = $rawImportDataHeader;
 
@@ -141,9 +141,9 @@ class ImporterResult
     /**
      * @param string $rawImportDataFooter
      *
-     * @return UserImporterResult
+     * @return $this
      */
-    public function setRawImportDataFooter($rawImportDataFooter): UserImporterResult
+    public function setRawImportDataFooter($rawImportDataFooter)
     {
         $this->rawImportDataFooter = $rawImportDataFooter;
 
@@ -161,7 +161,7 @@ class ImporterResult
     }
 
     /**
-     * Counts the successful user results
+     * Counts the successful results
      *
      * @return int
      */
@@ -171,7 +171,7 @@ class ImporterResult
     }
 
     /**
-     * Counts the failed user results
+     * Counts the failed results
      *
      * @return int
      */

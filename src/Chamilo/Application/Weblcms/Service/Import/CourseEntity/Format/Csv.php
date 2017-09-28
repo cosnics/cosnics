@@ -1,14 +1,17 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
-use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseGroupRelation;
-use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseUserRelation;
+use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelationImporterResult;
+use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseGroupRelation;
+use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseUserRelation;
+use Chamilo\Core\User\Domain\UserImporter\ImporterResult;
 use Chamilo\Libraries\File\Import;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Csv based importer for course entities
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Csv implements ImportFormatInterface
@@ -31,53 +34,89 @@ class Csv implements ImportFormatInterface
 
     /**
      * Parses a file and returns CourseEntityRelation classes
-     * 
-     * @param UploadedFile $file
      *
-     * @return ImportedCourseEntityRelation[]
+     * @param UploadedFile $file
+     *@param \Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelationImporterResult $importerResult
+     *
+     * @return \Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseEntityRelation[]
      *
      * @throws \Exception
      */
-    public function parseFile(UploadedFile $file)
+    public function parseFile(UploadedFile $file, CourseEntityRelationImporterResult $importerResult)
     {
         $importedRows = $this->csvImporter->csv_to_array($file->getPathname());
-        if (! is_array($importedRows))
+        if (!is_array($importedRows))
         {
             throw new \Exception('Could not parse the imported file, not a valid csv file.');
         }
-        
+
         $importedCourseEntityRelations = array();
-        
+
+        if(empty($importedCourseEntityRelations))
+        {
+            return [];
+        }
+
+        $keys = array_keys($importedCourseEntityRelations[0]);
+        $importerResult->setRawImportDataHeader(implode(';', $keys));
+
+        if(in_array('username', $keys))
+        {
+            $importerResult->setUserRelationImportType();
+        }
+        elseif(in_array('groupcode', $keys))
+        {
+            $importerResult->setGroupRelationImportType();
+        }
+        else
+        {
+            throw new \Exception('Could not determine whether it\'s a group or a user relation');
+        }
+
+
         foreach ($importedRows as $row)
         {
+            $rawImportData = implode(';', $row);
+
             if (array_key_exists('username', $row))
             {
                 $importedCourseEntityRelations[] = new ImportedCourseUserRelation(
-                    $row['action'], 
-                    $row['coursecode'], 
-                    $row['status'], 
-                    $row['username']);
+                    $rawImportData,
+                    $row['action'],
+                    $row['coursecode'],
+                    $row['status'],
+                    $row['username']
+                );
             }
             elseif (array_key_exists('groupcode', $row))
             {
                 $importedCourseEntityRelations[] = new ImportedCourseGroupRelation(
-                    $row['action'], 
-                    $row['coursecode'], 
-                    $row['status'], 
-                    $row['groupcode']);
+                    $rawImportData,
+                    $row['action'],
+                    $row['coursecode'],
+                    $row['status'],
+                    $row['groupcode']
+                );
             }
         }
-        
+
         return $importedCourseEntityRelations;
     }
 
     /**
-     * Returns the possible import mime types
-     * 
-     * @return string
+     * Checks whether or not the current parser can parse the given file
+     *
+     * @param UploadedFile $file
+     *
+     * @return bool
      */
-    public function getImportMimeTypes()
+    public function canParseFile(UploadedFile $file)
     {
-        return array('application/vnd.ms-excel', 'text/csv', 'text/comma-separated-values');
+        $acceptedMimeTypes = [
+            'text/x-csv', 'text/csv', 'application/vnd.ms-excel', 'application/octet-stream',
+            'application/force-download', 'text/comma-separated-values'
+        ];
+
+        return in_array($file->getClientMimeType(), $acceptedMimeTypes);
     }
 }

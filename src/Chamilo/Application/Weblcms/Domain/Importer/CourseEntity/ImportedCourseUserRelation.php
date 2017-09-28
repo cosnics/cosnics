@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Domain\ValueObject;
+namespace Chamilo\Application\Weblcms\Domain\Importer\CourseEntity;
 
 /**
  * Value object to define an imported course user relation
@@ -8,29 +8,27 @@ namespace Chamilo\Application\Weblcms\Domain\ValueObject;
  */
 class ImportedCourseUserRelation extends ImportedCourseEntityRelation
 {
-
     /**
-     *
      * @var string
      */
     protected $username;
 
     /**
      *
+     * @param string $rawImportData
      * @param string $action
      * @param string $courseCode
      * @param string $entityStatus
      * @param string $username
      */
-    public function __construct($action, $courseCode, $entityStatus, $username)
+    public function __construct($rawImportData, $action, $courseCode, $entityStatus, $username)
     {
-        parent::__construct($action, $courseCode, $entityStatus);
+        parent::__construct($rawImportData, $action, $courseCode, $entityStatus);
         
         $this->username = $username;
     }
 
     /**
-     *
      * @return string
      */
     public function getUsername()

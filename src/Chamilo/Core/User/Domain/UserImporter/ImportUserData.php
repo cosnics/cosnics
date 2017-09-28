@@ -118,7 +118,8 @@ class ImportUserData extends ImportData
         $activationDate = null, $expirationDate = null, $authSource = null, $password = null
     )
     {
-        $this->rawImportData = $rawImportData;
+        parent::__construct($rawImportData, $action);
+
         $this->action = $action;
         $this->username = $username;
         $this->firstName = $firstName;
@@ -249,19 +250,19 @@ class ImportUserData extends ImportData
     }
 
     /**
-     * @return ImportUserResult
+     * @return ImportUserResult | \Chamilo\Core\User\Domain\UserImporter\ImportDataResult
      */
-    public function getImportUserResult(): ImportUserResult
+    public function getImportUserResult()
     {
-        return $this->importUserResult;
+        return $this->importDataResult;
     }
 
     /**
      * @param string $username
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setUsername($username): ImportUserData
+    public function setUsername($username)
     {
         $this->username = $username;
 
@@ -271,9 +272,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $firstName
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setFirstName($firstName): ImportUserData
+    public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
 
@@ -283,9 +284,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $lastName
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setLastName($lastName): ImportUserData
+    public function setLastName($lastName)
     {
         $this->lastName = $lastName;
 
@@ -295,9 +296,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $email
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setEmail($email): ImportUserData
+    public function setEmail($email)
     {
         $this->email = $email;
 
@@ -307,9 +308,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $officialCode
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setOfficialCode($officialCode): ImportUserData
+    public function setOfficialCode($officialCode)
     {
         $this->officialCode = $officialCode;
 
@@ -319,9 +320,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $language
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setLanguage($language): ImportUserData
+    public function setLanguage($language)
     {
         $this->language = $language;
 
@@ -331,9 +332,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $status
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setStatus($status): ImportUserData
+    public function setStatus($status)
     {
         $this->status = $status;
 
@@ -343,9 +344,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $active
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setActive($active): ImportUserData
+    public function setActive($active)
     {
         $this->active = $active;
 
@@ -355,9 +356,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $phone
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setPhone($phone): ImportUserData
+    public function setPhone($phone)
     {
         $this->phone = $phone;
 
@@ -367,9 +368,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $activationDate
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setActivationDate($activationDate): ImportUserData
+    public function setActivationDate($activationDate)
     {
         $this->activationDate = $activationDate;
 
@@ -379,9 +380,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $expirationDate
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setExpirationDate($expirationDate): ImportUserData
+    public function setExpirationDate($expirationDate)
     {
         $this->expirationDate = $expirationDate;
 
@@ -391,9 +392,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $authSource
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setAuthSource($authSource): ImportUserData
+    public function setAuthSource($authSource)
     {
         $this->authSource = $authSource;
 
@@ -403,9 +404,9 @@ class ImportUserData extends ImportData
     /**
      * @param string $password
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setPassword($password): ImportUserData
+    public function setPassword($password)
     {
         $this->password = $password;
 
@@ -415,9 +416,9 @@ class ImportUserData extends ImportData
     /**
      * @param User $user
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setUser(User $user): ImportUserData
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -427,11 +428,11 @@ class ImportUserData extends ImportData
     /**
      * @param ImportUserResult $importUserResult
      *
-     * @return ImportUserData
+     * @return $this
      */
-    public function setImportUserResult(ImportUserResult $importUserResult): ImportUserData
+    public function setImportUserResult(ImportUserResult $importUserResult)
     {
-        $this->importUserResult = $importUserResult;
+        $this->importDataResult = $importUserResult;
 
         return $this;
     }

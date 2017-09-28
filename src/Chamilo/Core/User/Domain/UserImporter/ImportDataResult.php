@@ -25,22 +25,22 @@ class ImportDataResult
     protected $messages;
 
     /**
-     * Reference to the ImportUserData
+     * Reference to the ImportData
      *
-     * @var ImportUserData
+     * @var ImportData
      */
-    protected $importUserData;
+    protected $importData;
 
     /**
      * ImportUserResult constructor.
      *
-     * @param ImportUserData $importUserData
+     * @param ImportData $importData
      */
-    public function __construct(ImportUserData $importUserData)
+    public function __construct(ImportData $importData)
     {
-        $importUserData->setImportUserResult($this);
+        $importData->setImportDataResult($this);
 
-        $this->importUserData = $importUserData;
+        $this->importData = $importData;
         $this->messages = [];
     }
 
@@ -55,9 +55,9 @@ class ImportDataResult
     /**
      * @param int $status
      *
-     * @return ImportUserResult
+     * @return $this
      */
-    public function setStatus(int $status): ImportUserResult
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -75,9 +75,9 @@ class ImportDataResult
     /**
      * @param string[] $messages
      *
-     * @return ImportUserResult
+     * @return $this
      */
-    public function setMessages(array $messages): ImportUserResult
+    public function setMessages(array $messages)
     {
         $this->messages = $messages;
 
@@ -85,21 +85,21 @@ class ImportDataResult
     }
 
     /**
-     * @return ImportUserData
+     * @return ImportData
      */
-    public function getImportUserData(): ImportUserData
+    public function getImportData()
     {
-        return $this->importUserData;
+        return $this->importData;
     }
 
     /**
-     * @param ImportUserData $importUserData
+     * @param ImportData $importData
      *
-     * @return ImportUserResult
+     * @return $this
      */
-    public function setImportUserData(ImportUserData $importUserData): ImportUserResult
+    public function setImportData(ImportData $importData)
     {
-        $this->importUserData = $importUserData;
+        $this->importData = $importData;
 
         return $this;
     }
