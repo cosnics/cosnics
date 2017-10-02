@@ -10,7 +10,8 @@
 
 @import url('../Aqua/Plugin/Fancytree/skin-bootstrap/ui.fancytree.css');
 
-@import url('../Aqua/Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
+@import
+	url('../Aqua/Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
 
 .ui-widget-content {
 	border: 0px;
@@ -35,4 +36,8 @@
 
 .ui-state-active, .ui-widget-content .ui-state-active {
 	border: 1px solid #ebebeb;
+}
+
+.fa-half-transparent {
+	opacity: 0.5;
 }
