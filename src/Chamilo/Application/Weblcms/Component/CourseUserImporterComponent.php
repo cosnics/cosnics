@@ -36,6 +36,9 @@ class CourseUserImporterComponent extends Manager
 
         $form = new CourseEntityImportForm($this->get_url());
 
+        $html = array();
+        $html[] = $this->render_header();
+
         if ($form->validate())
         {
             $importers = array();
@@ -51,23 +54,23 @@ class CourseUserImporterComponent extends Manager
             $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
 
             $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
-            var_dump($result); exit;
+
+            $html[] = $this->getTwig()->render(
+                'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig',
+                ['importerResult' => $result]
+            );
         }
         else
         {
-            $html = array();
-
-            $html[] = $this->render_header();
-
             $html[] = $this->getTwig()->render(
                 'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
                 ['form' => $form->toHtml()]
             );
-
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
         }
+
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
