@@ -97,7 +97,7 @@ class ImporterResult
     /**
      * @return ImportDataResult[]
      */
-    public function getFailedUserResults(): array
+    public function getFailedImportDataResults(): array
     {
         return $this->failedUserResults;
     }
@@ -105,7 +105,7 @@ class ImporterResult
     /**
      * @return ImportDataResult[]
      */
-    public function getSuccessUserResults(): array
+    public function getSuccessImportDataResults(): array
     {
         return $this->successUserResults;
     }
