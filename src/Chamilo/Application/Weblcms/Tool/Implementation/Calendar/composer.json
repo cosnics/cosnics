@@ -1,26 +1,25 @@
 {
-    "name": "chamilo/app-weblcms-tool-calendar",
-        "version": "6.0.0", "description": "Chamilo Calendar Weblcms Tool",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "mobiledetect/mobiledetectlib": "~2.8.22"
-    },
-    "extra": {
-        "install-path": "application/weblcms/tool/calendar"
-    }
-
+	"name": "chamilo/app-weblcms-tool-calendar",
+	"version": "6.0.0",
+	"description": "Chamilo Calendar Weblcms Tool",
+	"keywords": [],
+	"homepage": "http://www.chamilo.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"mobiledetect/mobiledetectlib": "~2.8.22"
+	},
+	"extra": {
+		"install-path": "application/weblcms/tool/calendar"
+	}
 }

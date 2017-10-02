@@ -1,26 +1,25 @@
 {
-    "name": "chamilo/app-weblcms-tool-course-group",
-        "version": "6.0.0", "description": "Chamilo Course Group Weblcms Tool",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "phpoffice/phpexcel" : "1.8.*"
-    },
-    "extra": {
-        "install-path": "application/weblcms/tool/course_group"
-    }
-
+	"name": "chamilo/app-weblcms-tool-course-group",
+	"version": "6.0.0",
+	"description": "Chamilo Course Group Weblcms Tool",
+	"keywords": [],
+	"homepage": "http://www.chamilo.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"phpoffice/phpexcel": "1.8.*"
+	},
+	"extra": {
+		"install-path": "application/weblcms/tool/course_group"
+	}
 }

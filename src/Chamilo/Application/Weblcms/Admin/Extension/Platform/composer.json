@@ -1,26 +1,25 @@
 {
-    "name": "chamilo/app-weblcms-admin",
-        "version": "6.0.0", "description": "Chamilo Weblcms",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "phpoffice/phpexcel" : "1.8.*"
-    },
-    "extra": {
-        "install-path": "application/weblcms/admin"
-    }
-
+	"name": "chamilo/app-weblcms-admin",
+	"version": "6.0.0",
+	"description": "Chamilo Weblcms",
+	"keywords": [],
+	"homepage": "http://www.chamilo.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"phpoffice/phpexcel": "1.8.*"
+	},
+	"extra": {
+		"install-path": "application/weblcms/admin"
+	}
 }

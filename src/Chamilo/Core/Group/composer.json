@@ -1,25 +1,24 @@
 {
-    "name": "chamilo/core-group",
-        "version": "6.0.0", "description": "Chamilo Group Core Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@hogent.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0"
-    },
-    "extra": {
-        "install-path": "group"
-    }
-
+	"name": "chamilo/core-group",
+	"version": "6.0.0",
+	"description": "Chamilo Group Core Application",
+	"keywords": [],
+	"homepage": "http://www.chamilo.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@hogent.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"install-path": "group"
+	}
 }

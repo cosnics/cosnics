@@ -1,23 +1,22 @@
 {
-    "name": "chamilo/ext-repo-office365-video",
-        "version": "6.0.0", "description": "Chamilo Office 365 Video External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Andras Zolnay",
-            "email": "a.zolnay@edufiles.nl"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "zend/gdata" : "1.*",
-        "google/apiclient" : "1.1.*"
-    },
-    "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/Office365Video"
-    }
-
+	"name": "chamilo/ext-repo-office365-video",
+	"version": "6.0.0",
+	"description": "Chamilo Office 365 Video External Repository",
+	"keywords": [],
+	"homepage": "http://www.chamilo.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Andras Zolnay",
+			"email": "a.zolnay@edufiles.nl"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"zend/gdata": "1.*",
+		"google/apiclient": "1.1.*"
+	},
+	"extra": {
+		"install-path": "common/extensions/external_repository_manager/implementation/Office365Video"
+	}
 }
