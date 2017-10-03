@@ -1,24 +1,43 @@
 {
-	"name": "chamilo/co-assessment-select-question",
-	"version": "6.0.0",
-	"description": "Chamilo Assessment Select Question Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/assessment_select_question"
-	}
+    "name": "cosnics/core-repository-content-object-assessment-select-question",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject AssessmentSelectQuestion",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "AssessmentSelectQuestion"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Assessment Select Question",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentSelectQuestion",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

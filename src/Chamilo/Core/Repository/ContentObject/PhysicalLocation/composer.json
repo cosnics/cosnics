@@ -1,24 +1,43 @@
 {
-	"name": "chamilo/co-physical-location",
-	"version": "6.0.0",
-	"description": "Chamilo Physical Location Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/physical_location"
-	}
+    "name": "cosnics/core-repository-content-object-physical-location",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject PhysicalLocation",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "PhysicalLocation"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "PhysicalLocation",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\PhysicalLocation",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
 }

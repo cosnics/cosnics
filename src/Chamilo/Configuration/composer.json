@@ -1,0 +1,38 @@
+{
+    "name": "cosnics/configuration",
+    "version": "1.0.0",
+    "description": "Configuration",
+    "keywords": [
+        "Configuration"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Core Team",
+            "email": null
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Configuration",
+            "context": "Chamilo\\Configuration",
+            "type": "Chamilo",
+            "install": {
+                "core": 1,
+                "default": 0
+            }
+        }
+    }
+}

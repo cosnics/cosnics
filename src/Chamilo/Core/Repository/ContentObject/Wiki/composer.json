@@ -1,24 +1,43 @@
 {
-	"name": "chamilo/co-wiki",
-	"version": "6.0.0",
-	"description": "Chamilo Wiki Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/wiki"
-	}
+    "name": "cosnics/core-repository-content-object-wiki",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Wiki",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Wiki"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Wiki",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Wiki",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

@@ -1,0 +1,51 @@
+{
+    "name": "cosnics/core-repository-content-object-hotspot-question-integration-chamilo-core-metadata",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject HotspotQuestion Integration Chamilo Core Metadata",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "HotspotQuestion",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Metadata"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Metadata",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\HotspotQuestion\\Integration\\Chamilo\\Core\\Metadata",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\HotspotQuestion\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\HotspotQuestion",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Metadata",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

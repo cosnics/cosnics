@@ -5,7 +5,6 @@ namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelationImporterResult;
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseGroupRelation;
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseUserRelation;
-use Chamilo\Core\User\Domain\UserImporter\ImporterResult;
 use Chamilo\Libraries\File\Import;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

@@ -1,0 +1,53 @@
+{
+    "name": "cosnics/core-repository-content-object-section-integration-chamilo-core-repository-content-object-learning-path",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Section Integration Chamilo Core Repository ContentObject LearningPath",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Section",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Repository",
+        "ContentObject",
+        "LearningPath"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Display",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Section\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\Section\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Section",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

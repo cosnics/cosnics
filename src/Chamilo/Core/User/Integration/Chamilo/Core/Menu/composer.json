@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/core-user-integration-chamilo-core-menu",
+    "version": "1.0.0",
+    "description": "Core User Integration Chamilo Core Menu",
+    "keywords": [
+        "Core",
+        "User",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Menu"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Menu",
+            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Core\\Menu",
+            "type": "Chamilo\\Core\\User\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Menu",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

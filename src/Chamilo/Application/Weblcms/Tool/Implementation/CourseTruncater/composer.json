@@ -1,21 +1,44 @@
 {
-	"name": "cosnics/application-weblcms-tool-course-truncater",
-	"version": "6.0.0",
-	"description": "Course Truncater Chamilo Weblcms Tool",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	}
+    "name": "cosnics/application-weblcms-tool-implementation-course-truncater",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Implementation CourseTruncater",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "CourseTruncater"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Course Truncater",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseTruncater",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

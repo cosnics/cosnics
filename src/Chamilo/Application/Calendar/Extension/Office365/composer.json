@@ -1,21 +1,43 @@
 {
-	"name": "cosnics/application-calendar-extension-office365",
-	"version": "6.0.0",
-	"description": "Office365 Calendar Extension",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	}
+    "name": "cosnics/application-calendar-extension-office365",
+    "version": "1.0.0",
+    "description": "Application Calendar Extension Office365",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Extension",
+        "Office365"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office 365",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Office365",
+            "type": "Chamilo\\Application\\Calendar\\Extension",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

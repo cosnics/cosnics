@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/application-weblcms-integration-chamilo-application-calendar",
+    "version": "1.0.0",
+    "description": "Application Weblcms Integration Chamilo Application Calendar",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Calendar",
+            "context": "Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Application\\Calendar",
+            "type": "Chamilo\\Application\\Weblcms\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

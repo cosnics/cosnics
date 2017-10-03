@@ -1,20 +1,43 @@
 {
-	"name": "chamilo/co-office365-video",
-	"version": "6.0.0",
-	"description": "Chamilo Office365 Video Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Andras Zolnay",
-			"email": "a.zolnay@edufiles.nl"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/Office365Video"
-	}
+    "name": "cosnics/core-repository-content-object-office365-video",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Office365Video",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Office365Video"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Andras Zolnay",
+            "email": "a.zolnay@edufiles.nl"
+        },
+        {
+            "name": "Andras Zolnay",
+            "email": "a.zolnayedufiles.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office365 Video",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Office365Video",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

@@ -1,0 +1,51 @@
+{
+    "name": "cosnics/core-repository-content-object-task-integration-chamilo-libraries-calendar",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Task Integration Chamilo Libraries Calendar",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Task",
+        "Integration",
+        "Chamilo",
+        "Libraries",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Event",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Task\\Integration\\Chamilo\\Libraries\\Calendar",
+            "type": "Chamilo\\Core\\Repository\\Task\\CalendarEvent\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Task",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\Integration\\Chamilo\\Libraries\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

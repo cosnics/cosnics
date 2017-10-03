@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/core-admin-integration-chamilo-core-menu",
+    "version": "1.0.0",
+    "description": "Core Admin Integration Chamilo Core Menu",
+    "keywords": [
+        "Core",
+        "Admin",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Menu"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Menu",
+            "context": "Chamilo\\Core\\Admin\\Integration\\Chamilo\\Core\\Menu",
+            "type": "Chamilo\\Core\\Admin\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Admin",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Menu",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

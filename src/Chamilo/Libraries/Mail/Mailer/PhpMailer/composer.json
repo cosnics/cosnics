@@ -1,0 +1,43 @@
+{
+    "name": "cosnics/libraries-mail-mailer-php-mailer",
+    "version": "1.0.0",
+    "description": "Libraries Mail Mailer PhpMailer",
+    "keywords": [
+        "Libraries",
+        "Mail",
+        "Mailer",
+        "PhpMailer"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "PHPMailer",
+            "context": "Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer",
+            "type": "Chamilo\\Libraries\\Mail\\Mailer",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

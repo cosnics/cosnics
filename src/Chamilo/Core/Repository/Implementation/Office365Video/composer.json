@@ -1,22 +1,41 @@
 {
-	"name": "chamilo/ext-repo-office365-video",
-	"version": "6.0.0",
-	"description": "Chamilo Office 365 Video External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Andras Zolnay",
-			"email": "a.zolnay@edufiles.nl"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"zend/gdata": "1.*",
-		"google/apiclient": "1.1.*"
-	},
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/Office365Video"
-	}
+    "name": "cosnics/core-repository-implementation-office365-video",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Office365Video",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Office365Video"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Andras Zolnay",
+            "email": "a.zolnay@edufiles.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "zend/gdata": "1.*",
+        "google/apiclient": "1.1.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office365Video",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Office365Video",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

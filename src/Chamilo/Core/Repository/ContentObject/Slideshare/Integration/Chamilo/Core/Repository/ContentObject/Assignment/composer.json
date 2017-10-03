@@ -1,0 +1,53 @@
+{
+    "name": "cosnics/core-repository-content-object-slideshare-integration-chamilo-core-repository-content-object-assignment",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Slideshare Integration Chamilo Core Repository ContentObject Assignment",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Slideshare",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Assignment"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Assignment Integration",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Slideshare",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Assignment",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

@@ -1,21 +1,44 @@
 {
-	"name": "cosnics/application-weblcms-tool-search",
-	"version": "6.0.0",
-	"description": "Chamilo Search Weblcms Tool",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	}
+    "name": "cosnics/application-weblcms-tool-implementation-search",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Implementation Search",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "Search"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Search",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Search",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

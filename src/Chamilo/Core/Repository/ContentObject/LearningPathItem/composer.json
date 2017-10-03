@@ -1,24 +1,43 @@
 {
-	"name": "chamilo/co-learning-path-item",
-	"version": "6.0.0",
-	"description": "Chamilo Learning Path Item Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/learning_path_item"
-	}
+    "name": "cosnics/core-repository-content-object-learning-path-item",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject LearningPathItem",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "LearningPathItem"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Learning Path Item",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\LearningPathItem",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

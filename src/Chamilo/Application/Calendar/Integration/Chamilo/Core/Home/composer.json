@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/application-calendar-integration-chamilo-core-home",
+    "version": "1.0.0",
+    "description": "Application Calendar Integration Chamilo Core Home",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Home"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Home",
+            "context": "Chamilo\\Application\\Calendar\\Integration\\Chamilo\\Core\\Home",
+            "type": "Chamilo\\Application\\Calendar\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Home",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

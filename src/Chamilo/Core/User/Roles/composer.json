@@ -1,0 +1,42 @@
+{
+    "name": "cosnics/core-user-roles",
+    "version": "1.0.0",
+    "description": "Core User Roles",
+    "keywords": [
+        "Core",
+        "User",
+        "Roles"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "User Roles Management",
+            "context": "Chamilo\\Core\\User\\Roles",
+            "type": "Chamilo\\Core\\User",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

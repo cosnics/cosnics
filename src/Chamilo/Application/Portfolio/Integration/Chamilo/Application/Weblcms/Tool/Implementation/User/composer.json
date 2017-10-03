@@ -1,0 +1,52 @@
+{
+    "name": "cosnics/application-portfolio-integration-chamilo-application-weblcms-tool-implementation-user",
+    "version": "1.0.0",
+    "description": "Application Portfolio Integration Chamilo Application Weblcms Tool Implementation User",
+    "keywords": [
+        "Application",
+        "Portfolio",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "User"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Portfolio integration with weblcms user tool",
+            "context": "Chamilo\\Application\\Portfolio\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\User",
+            "type": "Chamilo\\Application\\Portfolio\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Portfolio",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\User",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}
