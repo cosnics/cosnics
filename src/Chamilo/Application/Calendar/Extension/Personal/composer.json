@@ -1,7 +1,7 @@
 {
-	"name": "cosnics/application-weblcms",
+	"name": "cosnics/application-calendar-extension-personal",
 	"version": "6.0.0",
-	"description": "Chamilo Weblcms",
+	"description": "Personal Calendar Extension",
 	"keywords": [],
 	"homepage": "http://www.cosnics.org",
 	"license": "GPLv3",
@@ -16,10 +16,6 @@
 		}
 	],
 	"require": {
-		"php": ">=7.0.0",
-		"phpoffice/phpexcel": "1.8.*"
-	},
-	"extra": {
-		"install-path": "application/weblcms"
+		"php": ">=7.0.0"
 	}
 }

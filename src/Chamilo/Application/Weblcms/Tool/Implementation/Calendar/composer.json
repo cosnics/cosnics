@@ -1,9 +1,9 @@
 {
-	"name": "chamilo/app-weblcms-tool-calendar",
+	"name": "cosnics/application-weblcms-tool-calendar",
 	"version": "6.0.0",
 	"description": "Chamilo Calendar Weblcms Tool",
 	"keywords": [],
-	"homepage": "http://www.chamilo.org",
+	"homepage": "http://www.cosnics.org",
 	"license": "GPLv3",
 	"authors": [
 		{
@@ -18,8 +18,5 @@
 	"require": {
 		"php": ">=7.0.0",
 		"mobiledetect/mobiledetectlib": "~2.8.22"
-	},
-	"extra": {
-		"install-path": "application/weblcms/tool/calendar"
 	}
 }

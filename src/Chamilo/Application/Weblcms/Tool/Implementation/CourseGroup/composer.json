@@ -1,9 +1,9 @@
 {
-	"name": "chamilo/app-weblcms-tool-course-group",
+	"name": "cosnics/application-weblcms-tool-course-group",
 	"version": "6.0.0",
 	"description": "Chamilo Course Group Weblcms Tool",
 	"keywords": [],
-	"homepage": "http://www.chamilo.org",
+	"homepage": "http://www.cosnics.org",
 	"license": "GPLv3",
 	"authors": [
 		{
@@ -18,8 +18,5 @@
 	"require": {
 		"php": ">=7.0.0",
 		"phpoffice/phpexcel": "1.8.*"
-	},
-	"extra": {
-		"install-path": "application/weblcms/tool/course_group"
 	}
 }

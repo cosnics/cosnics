@@ -1,9 +1,9 @@
 {
-	"name": "chamilo/app-weblcms-tool-forum",
+	"name": "cosnics/application-weblcms-tool-forum",
 	"version": "6.0.0",
 	"description": "Chamilo Forum Weblcms Tool",
 	"keywords": [],
-	"homepage": "http://www.chamilo.org",
+	"homepage": "http://www.cosnics.org",
 	"license": "GPLv3",
 	"authors": [
 		{
@@ -17,8 +17,5 @@
 	],
 	"require": {
 		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "application/weblcms/tool/forum"
 	}
 }
