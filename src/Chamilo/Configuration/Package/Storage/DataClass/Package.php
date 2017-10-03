@@ -21,11 +21,9 @@ class Package extends DataClass
     /**
      * Package properties
      */
-    const PROPERTY_CODE = 'code';
     const PROPERTY_CONTEXT = 'context';
     const PROPERTY_NAME = 'name';
     const PROPERTY_TYPE = 'type';
-    const PROPERTY_CATEGORY = 'category';
     const PROPERTY_AUTHORS = 'authors';
     const PROPERTY_VERSION = 'version';
     const PROPERTY_DESCRIPTION = 'description';
@@ -39,11 +37,9 @@ class Package extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self::PROPERTY_CODE;
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_NAME;
         $extended_property_names[] = self::PROPERTY_TYPE;
-        $extended_property_names[] = self::PROPERTY_CATEGORY;
         $extended_property_names[] = self::PROPERTY_AUTHORS;
         $extended_property_names[] = self::PROPERTY_VERSION;
         $extended_property_names[] = self::PROPERTY_DESCRIPTION;
@@ -71,26 +67,6 @@ class Package extends DataClass
     public function set_extra($extra)
     {
         $this->set_default_property(self::PROPERTY_EXTRA, $extra);
-    }
-
-    /**
-     * Returns the code of this Package.
-     *
-     * @return the code.
-     */
-    public function get_code()
-    {
-        return $this->get_default_property(self::PROPERTY_CODE);
-    }
-
-    /**
-     * Sets the code of this Package.
-     *
-     * @param code
-     */
-    public function set_code($code)
-    {
-        $this->set_default_property(self::PROPERTY_CODE, $code);
     }
 
     /**
@@ -154,26 +130,6 @@ class Package extends DataClass
     }
 
     /**
-     * Returns the category of this Package.
-     *
-     * @return the category.
-     */
-    public function get_category()
-    {
-        return $this->get_default_property(self::PROPERTY_CATEGORY);
-    }
-
-    /**
-     * Sets the category of this Package.
-     *
-     * @param category
-     */
-    public function set_category($category)
-    {
-        $this->set_default_property(self::PROPERTY_CATEGORY, $category);
-    }
-
-    /**
      * Returns the authors of this Package.
      *
      * @return the authors.
@@ -195,7 +151,10 @@ class Package extends DataClass
 
     public function add_author($author)
     {
-        $this->authors[] = $author;
+        $authors = $this->get_authors();
+        $authors[] = $author;
+
+        $this->set_authors($authors);
     }
 
     /**
@@ -284,7 +243,7 @@ class Package extends DataClass
      *
      * @param string $context
      * @throws Exception
-     * @return \configuration\package\storage\data_class\Package
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
      */
     public static function get($context)
     {
@@ -320,11 +279,9 @@ class Package extends DataClass
 
         // Simple properties, containing a singular string or integer
         $simple_properties = array(
-            self::PROPERTY_CODE,
             self::PROPERTY_CONTEXT,
             self::PROPERTY_NAME,
             self::PROPERTY_TYPE,
-            self::PROPERTY_CATEGORY,
             self::PROPERTY_VERSION,
             self::PROPERTY_DESCRIPTION);
 

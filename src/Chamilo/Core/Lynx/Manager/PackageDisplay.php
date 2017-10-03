@@ -6,10 +6,6 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PackageDisplay
@@ -92,45 +88,6 @@ class PackageDisplay
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_update_problems()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Package::class_name(), Package::PROPERTY_CONTEXT),
-            new StaticConditionVariable($this->get_registration()->get_context()));
-
-        $admin = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
-        $order_by = new OrderBy(new PropertyConditionVariable(Package::class_name(), Package::PROPERTY_VERSION));
-
-        $package_remote = $admin->retrieve_remote_packages($condition, $order_by, null, 1);
-        if ($package_remote->size() == 1)
-        {
-            $package_remote = $package_remote->next_result();
-
-            $package_update_dependency = new DependencyVerifier($package_remote);
-            $success = $package_update_dependency->is_updatable();
-            if ($success)
-            {
-                $type = 'finished';
-            }
-            else
-            {
-                $type = 'failed';
-            }
-            $html = array();
-            $html[] = '<h3>' . Translation::get(
-                'UpdateDependencies',
-                array('VERSION' => $package_remote->get_version())) . '</h3>';
-            $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
-                 Theme::getInstance()->getImagePath(__NAMESPACE__, 'Place/' . $type) . ');">';
-            $html[] = '<div class="title">' . Translation::get(DependenciesResultVerification) . '</div>';
-            $html[] = '<div class="description">';
-            $html[] = $package_update_dependency->get_logger()->render();
-            $html[] = '</div>';
-            $html[] = '</div>';
-            return implode(PHP_EOL, $html);
-        }
     }
 
     public function get_install_problems()
