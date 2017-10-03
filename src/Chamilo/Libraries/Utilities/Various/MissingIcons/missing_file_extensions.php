@@ -2,15 +2,18 @@
 namespace Chamilo\Libraries\Utilities\Various\MissingIcons;
 
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
-require_once __DIR__ . '/../../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
+require_once realpath(__DIR__ . '/../../../../../') . '/vendor/autoload.php';
+
+$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 
 $sizes = array(Theme::ICON_MINI, Theme::ICON_SMALL, Theme::ICON_MEDIUM, Theme::ICON_BIG);
 
@@ -18,24 +21,24 @@ $failures = 0;
 $data = array();
 
 $extensions = Filesystem::get_directory_content(
-    Path::getInstance()->getResourcesPath('Chamilo\Configuration', false) . 'File' . DIRECTORY_SEPARATOR . 'Extension', 
+    Path::getInstance()->getResourcesPath('Chamilo\Configuration', false) . 'File' . DIRECTORY_SEPARATOR . 'Extension',
     Filesystem::LIST_DIRECTORIES);
 
 foreach ($extensions as $extension)
 {
     $extension = pathinfo($extension);
     $extension = $extension['basename'];
-    
+
     $data_row = array();
     $data_row[] = $extension;
-    
+
     $row_failures = 0;
-    
+
     foreach ($sizes as $size)
     {
         // Regular
         $size_icon_path = Theme::getInstance()->getFileExtension($extension, $size, false);
-        
+
         if (! file_exists($size_icon_path))
         {
             $row_failures ++;
@@ -46,10 +49,10 @@ foreach ($extensions as $extension)
         {
             $data_row[] = '<img src="' . Theme::getInstance()->getFileExtension($extension, $size) . '" />';
         }
-        
+
         // Not available
         $icon_path = Theme::getInstance()->getFileExtension($extension, $size . 'Na', false);
-        
+
         if (! file_exists($icon_path))
         {
             if (file_exists($size_icon_path) && Request::get('copy'))
@@ -64,10 +67,10 @@ foreach ($extensions as $extension)
         {
             $data_row[] = '<img src="' . Theme::getInstance()->getFileExtension($extension, $size . 'Na') . '" />';
         }
-        
+
         // New
         $icon_path = Theme::getInstance()->getFileExtension($extension, $size . 'New', false);
-        
+
         if (! file_exists($icon_path))
         {
             if (file_exists($size_icon_path) && Request::get('copy'))
@@ -83,7 +86,7 @@ foreach ($extensions as $extension)
             $data_row[] = '<img src="' . Theme::getInstance()->getFileExtension($extension, $size . 'New') . '" />';
         }
     }
-    
+
     if ($row_failures > 0 || Request::get('show_all'))
     {
         $data[] = $data_row;
@@ -112,7 +115,7 @@ if ($failures || Request::get('show_all'))
     $html[] = '<h3>' . count($extensions) . ' extensions</h3>';
     $html[] = $table->toHtml();
     $html[] = '<b>Missing icons: ' . $failures . '</b>';
-    
+
     $total_failures += $failures;
     $total_missing_icons += $failures;
 }

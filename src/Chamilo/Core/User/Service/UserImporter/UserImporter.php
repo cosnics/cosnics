@@ -148,7 +148,7 @@ class UserImporter
             $importUserResult = $importUserData->getImportUserResult();
             if ($importUserResult->isCompleted())
             {
-                $userImporterResult->addImportUserResult($importUserResult);
+                $userImporterResult->addImportDataResult($importUserResult);
                 continue;
             }
 
@@ -213,7 +213,7 @@ class UserImporter
                 }
             }
 
-            $userImporterResult->addImportUserResult($importUserResult);
+            $userImporterResult->addImportDataResult($importUserResult);
         }
     }
 

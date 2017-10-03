@@ -50,18 +50,18 @@
 </style>
 
 <p>
-    {{ 'ImportCourseEntitiesResultDescription'|trans({'{TotalEntities}': userImporterResult.countResults()}, appContext)|raw }}
+    {{ 'ImportCourseEntitiesResultDescription'|trans({'{TotalCourseEntityRelations}': importerResult.countResults()}, appContext)|raw }}
 </p>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation" class="active">
         <a id="success-results-tab" href="#success-results" aria-controls="success-results" role="tab" data-toggle="tab">
-            {{ 'ImportCourseEntitiesSuccessfulResults'|trans({}, appContext) }} ({{ userImporterResult.countSuccessUserResults() }})
+            {{ 'ImportCourseEntitiesSuccessfulResults'|trans({}, appContext) }} ({{ importerResult.countSuccessUserResults() }})
         </a>
     </li>
     <li role="presentation">
         <a id="failed-results-tab" href="#failed-results" aria-controls="failed-results" role="tab" data-toggle="tab">
-            {{ 'ImportCourseEntitiesFailedResults'|trans({}, appContext) }} ({{ userImporterResult.countFailedUserResults() }})
+            {{ 'ImportCourseEntitiesFailedResults'|trans({}, appContext) }} ({{ importerResult.countFailedUserResults() }})
         </a>
     </li>
     <li role="presentation">
@@ -81,7 +81,7 @@
             <tr class="success">
                 <th class="action-column">{{ 'Action'|trans({}, appContext) }}</th>
 
-                {% if type == 'user' %}
+                {% if importerResult.isUserRelationImport() %}
                 <th class="username-column">{{ 'Username'|trans({}, 'Chamilo\Core\User') }}</th>
                 {% else %}
                 <th class="group-column">{{ 'Code'|trans({}, 'Chamilo\Core\Group') }}</th>
@@ -93,24 +93,24 @@
             </tr>
             </thead>
             <tbody>
-            {% if userImporterResult.countSuccessUserResults() == 0 %}
+            {% if importerResult.countSuccessUserResults() == 0 %}
                 <tr>
-                    <td colspan="4" class="text-center">{{ 'ImportCourseEntitiesNoEntitiesImported'|trans({}, appContext) }}</td>
+                    <td colspan="5" class="text-center">{{ 'ImportCourseEntitiesNoEntitiesImported'|trans({}, appContext) }}</td>
                 </tr>
             {% else %}
-                {% for importUserResult in userImporterResult.getSuccessUserResults() %}
+                {% for importDataResult in importerResult.getSuccessImportDataResults() %}
                     <tr>
-                        <td class="action-column">{{ importUserResult.getImportUserData().getAction() }}</td>
+                        <td class="action-column">{{ importDataResult.getImportData().getAction() }}</td>
 
-                        {% if type == 'user' %}
-                            <td class="username-column">{{ importUserResult.getImportUserData().getUsername() }}</td>
+                        {% if importerResult.isUserRelationImport() %}
+                            <td class="username-column">{{ importDataResult.getImportData().getUsername() }}</td>
                         {% else %}
-                            <th class="group-column">{{ importUserResult.getImportUserData().getGroupCode() }}</th>
+                            <th class="group-column">{{ importDataResult.getImportData().getGroupCode() }}</th>
                         {% endif %}
 
-                        <td class="course-column">{{ importUserResult.getImportUserData().getCourseCode() }}</td>
-                        <td>{{ importUserResult.getMessages()|join('<br />')|raw }}</td>
-                        <td class="raw-import-data-column">{{ importUserResult.getImportUserData().getRawImportData() }}</td>
+                        <td class="course-column">{{ importDataResult.getImportData().getCourseCode() }}</td>
+                        <td>{{ importDataResult.getMessages()|join('<br />')|raw }}</td>
+                        <td class="raw-import-data-column">{{ importDataResult.getImportData().getRawImportData() }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -126,7 +126,7 @@
             <tr class="danger">
                 <th class="action-column">{{ 'Action'|trans({}, appContext) }}</th>
 
-                {% if type == 'user' %}
+                {% if importerResult.isUserRelationImport() %}
                     <th class="username-column">{{ 'Username'|trans({}, 'Chamilo\Core\User') }}</th>
                 {% else %}
                     <th class="group-column">{{ 'Code'|trans({}, 'Chamilo\Core\Group') }}</th>
@@ -138,24 +138,24 @@
             </tr>
             </thead>
             <tbody>
-            {% if userImporterResult.countFailedUserResults() == 0 %}
+            {% if importerResult.countFailedUserResults() == 0 %}
                 <tr>
-                    <td colspan="4" class="text-center">{{ 'ImportUsersNoUsersFailed'|trans({}, appContext) }}</td>
+                    <td colspan="5" class="text-center">{{ 'ImportUsersNoUsersFailed'|trans({}, appContext) }}</td>
                 </tr>
             {% else %}
-                {% for importUserResult in userImporterResult.getFailedUserResults() %}
+                {% for importDataResult in importerResult.getFailedImportDataResults() %}
                     <tr>
-                        <td class="action-column">{{ importUserResult.getImportUserData().getAction() }}</td>
+                        <td class="action-column">{{ importDataResult.getImportData().getAction() }}</td>
 
-                        {% if type == 'user' %}
-                            <td class="username-column">{{ importUserResult.getImportUserData().getUsername() }}</td>
+                        {% if importerResult.isUserRelationImport() %}
+                            <td class="username-column">{{ importDataResult.getImportData().getUsername() }}</td>
                         {% else %}
-                            <th class="group-column">{{ importUserResult.getImportUserData().getGroupCode() }}</th>
+                            <th class="group-column">{{ importDataResult.getImportData().getGroupCode() }}</th>
                         {% endif %}
 
-                        <td class="course-column">{{ importUserResult.getImportUserData().getCourseCode() }}</td>
-                        <td>{{ importUserResult.getMessages()|join('<br />')|raw }}</td>
-                        <td class="raw-import-data-column">{{ importUserResult.getImportUserData().getRawImportData() }}</td>
+                        <td class="course-column">{{ importDataResult.getImportData().getCourseCode() }}</td>
+                        <td>{{ importDataResult.getMessages()|join('<br />')|raw }}</td>
+                        <td class="raw-import-data-column">{{ importDataResult.getImportData().getRawImportData() }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -164,11 +164,11 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="retry-failed-results-data">
         <pre>
-{{ userImporterResult.getRawImportDataHeader() }}
-{% for importUserResult in userImporterResult.getFailedUserResults() %}
-{{ importUserResult.getImportUserData().getRawImportData() }}
+{{ importerResult.getRawImportDataHeader() }}
+{% for importDataResult in importerResult.getFailedImportDataResults() %}
+{{ importDataResult.getImportData().getRawImportData() }}
 {% endfor %}
-{{ userImporterResult.getRawImportDataFooter() -}}
+{{ importerResult.getRawImportDataFooter() -}}
         </pre>
     </div>
 </div>

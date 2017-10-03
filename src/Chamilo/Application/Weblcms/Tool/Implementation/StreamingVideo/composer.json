@@ -1,25 +1,21 @@
 {
-    "name": "chamilo/app-weblcms-tool-streaming-video",
-        "version": "6.0.0", "description": "Chamilo Streaming Video Weblcms Tool",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0"
-    },
-    "extra": {
-        "install-path": "application/weblcms/tool/streaming_video"
-    }
-
+	"name": "cosnics/application-weblcms-tool-streaming-video",
+	"version": "6.0.0",
+	"description": "Chamilo Streaming Video Weblcms Tool",
+	"keywords": [],
+	"homepage": "http://www.cosnics.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	}
 }

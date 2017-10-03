@@ -52,7 +52,7 @@ class UserImporterResultTest extends ChamiloTestCase
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setFailed();
-        $this->userImporterResult->addFailedUserResult($importUserResult);
+        $this->userImporterResult->addFailedImportDataResult($importUserResult);
         $this->assertCount(1, $this->userImporterResult->getFailedUserResults());
     }
 
@@ -62,14 +62,14 @@ class UserImporterResultTest extends ChamiloTestCase
     public function testAddFailedUserResultWhenNotFailed()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
-        $this->userImporterResult->addFailedUserResult($importUserResult);
+        $this->userImporterResult->addFailedImportDataResult($importUserResult);
     }
 
     public function testAddSuccessUserResult()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setSuccessful();
-        $this->userImporterResult->addSuccessUserResult($importUserResult);
+        $this->userImporterResult->addSuccessImportDataResult($importUserResult);
         $this->assertCount(1, $this->userImporterResult->getSuccessUserResults());
     }
 
@@ -79,14 +79,14 @@ class UserImporterResultTest extends ChamiloTestCase
     public function testAddSuccessUserResultWhenNotSuccess()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
-        $this->userImporterResult->addSuccessUserResult($importUserResult);
+        $this->userImporterResult->addSuccessImportDataResult($importUserResult);
     }
 
     public function testAddImportUserResultWithSuccessfulResult()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setSuccessful();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
         $this->assertCount(1, $this->userImporterResult->getSuccessUserResults());
     }
 
@@ -94,7 +94,7 @@ class UserImporterResultTest extends ChamiloTestCase
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setFailed();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
         $this->assertCount(1, $this->userImporterResult->getFailedUserResults());
     }
 
@@ -104,14 +104,14 @@ class UserImporterResultTest extends ChamiloTestCase
     public function testAddImportUserResultIncomplete()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
     }
 
     public function testCountSuccessUserResults()
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setSuccessful();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
         $this->assertEquals(1, $this->userImporterResult->countSuccessUserResults());
     }
 
@@ -119,7 +119,7 @@ class UserImporterResultTest extends ChamiloTestCase
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setFailed();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
         $this->assertEquals(1, $this->userImporterResult->countFailedUserResults());
     }
 
@@ -127,11 +127,11 @@ class UserImporterResultTest extends ChamiloTestCase
     {
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setSuccessful();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
 
         $importUserResult = new ImportUserResult(new ImportUserData('test'));
         $importUserResult->setFailed();
-        $this->userImporterResult->addImportUserResult($importUserResult);
+        $this->userImporterResult->addImportDataResult($importUserResult);
 
         $this->assertEquals(2, $this->userImporterResult->countResults());
     }

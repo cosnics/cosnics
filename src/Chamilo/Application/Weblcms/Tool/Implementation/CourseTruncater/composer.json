@@ -1,25 +1,21 @@
 {
-    "name": "chamilo/app-weblcms-tool-course-truncater",
-        "version": "6.0.0", "description": "Course Truncater Chamilo Weblcms Tool",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0"
-    },
-    "extra": {
-        "install-path": "application/weblcms/tool/course_truncater"
-    }
-
+	"name": "cosnics/application-weblcms-tool-course-truncater",
+	"version": "6.0.0",
+	"description": "Course Truncater Chamilo Weblcms Tool",
+	"keywords": [],
+	"homepage": "http://www.cosnics.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	}
 }

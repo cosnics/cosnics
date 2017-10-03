@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Menu;
 
+use Chamilo\Core\Repository\Component\ImporterComponent;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -80,6 +81,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
         $url_param[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_CONTENT_OBJECTS;
         $url_param[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(Manager::TABS_FILTER => Manager::TAB_CATEGORY);
         $url_param[FilterData::FILTER_CATEGORY] = null;
+        $url_param[Manager::PARAM_IMPORT_TYPE] = null;
         
         return $this->parent->get_url($url_param) . '&' . FilterData::FILTER_CATEGORY . '=' . $node_id;
     }

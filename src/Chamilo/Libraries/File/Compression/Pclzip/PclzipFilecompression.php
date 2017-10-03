@@ -30,7 +30,7 @@ class PclzipFilecompression extends Filecompression
     {
         $dir = $this->create_temporary_directory();
         $pclzip = new PclZip($file);
-        if ($pclzip->extract(PCLZIP_OPT_PATH, $dir) == 0)
+        if ($pclzip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_ADD_TEMP_FILE_ON) == 0)
         {
             print_r($pclzip->errorInfo());
             
@@ -64,7 +64,7 @@ class PclzipFilecompression extends Filecompression
         ini_set('memory_limit', '-1');
         
         $pclzip = new PclZip($archiveFile);
-        $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path);
+        $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path, PCLZIP_OPT_ADD_TEMP_FILE_ON);
         
         return $archiveFile;
     }

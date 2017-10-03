@@ -61,6 +61,6 @@ class ImporterComponent extends Manager
 
     public function get_additional_parameters($additionalParameters = array())
     {
-        return [self::PARAM_IMPORT_TYPE];
+        return parent::get_additional_parameters([self::PARAM_IMPORT_TYPE]);
     }
 }

@@ -14,20 +14,15 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 ini_set("max_execution_time", - 1);
 ini_set("memory_limit", - 1);
 
 /**
- * $Id: course_user_importer.class.php 218 2009-11-13 14:21:26Z kariboe $
  *
- * @package application.lib.weblcms.weblcms_manager.component
- */
-
-/**
- * Weblcms component allows the use to import course user relations
+ * @package Chamilo\Application\Weblcms\Component
+ *          Weblcms component allows the use to import course user relations
  */
 class CourseUserImporterComponent extends Manager
 {
@@ -41,6 +36,9 @@ class CourseUserImporterComponent extends Manager
 
         $form = new CourseEntityImportForm($this->get_url());
 
+        $html = array();
+        $html[] = $this->render_header();
+
         if ($form->validate())
         {
             $importers = array();
@@ -49,41 +47,30 @@ class CourseUserImporterComponent extends Manager
 
             $courseEntityImporter = new CourseEntityImporter(
                 new ImportFormatFactory($importers),
-                new WeblcmsRepository()
+                new WeblcmsRepository(),
+                $this->getTranslator()
             );
 
             $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
 
-            try
-            {
-                $courseEntityImporter->importCourseEntitiesFromFile($file);
-                $success = true;
-            }
-            catch (\Exception $ex)
-            {
-                $success = false;
-                $failedMessage = $ex->getMessage();
-            }
+            $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
 
-            $this->redirect(
-                Translation::get($success ? 'CsvUsersProcessed' : 'CsvUsersNotProcessed') . '<br />' . $failedMessage,
-                ($success ? false : true)
+            $html[] = $this->getTwig()->render(
+                'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig',
+                ['importerResult' => $result]
             );
         }
         else
         {
-            $html = array();
-
-            $html[] = $this->render_header();
-
             $html[] = $this->getTwig()->render(
-                'Chamilo\Application\Weblcms:CourseUserImporter.html.twig', ['form' => $form->toHtml()]
+                'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
+                ['form' => $form->toHtml()]
             );
-
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
         }
+
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

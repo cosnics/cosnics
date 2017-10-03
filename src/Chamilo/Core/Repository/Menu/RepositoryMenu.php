@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Menu;
 
 use Chamilo\Configuration\Configuration;
@@ -74,7 +75,8 @@ class RepositoryMenu
         $rightsService = RightsService::getInstance();
         $canAddContentObjects = $rightsService->canAddContentObjects(
             $repositoryManager->get_user(),
-            $repositoryManager->getWorkspace());
+            $repositoryManager->getWorkspace()
+        );
 
         if ($canAddContentObjects)
         {
@@ -86,10 +88,15 @@ class RepositoryMenu
                     new FontAwesomeGlyph('plus'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_CREATE_CONTENT_OBJECTS)),
+                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_CREATE_CONTENT_OBJECTS
+                        ),
+                        array(Manager::PARAM_IMPORT_TYPE)
+                    ),
                     Button::DISPLAY_ICON_AND_LABEL,
                     false,
-                    'btn-primary'));
+                    'btn-primary'
+                )
+            );
 
             $importParameters = $repositoryManager->get_parameters();
             $importParameters[Manager::PARAM_ACTION] = Manager::ACTION_IMPORT_CONTENT_OBJECTS;
@@ -97,7 +104,7 @@ class RepositoryMenu
             $importTypeSelector = new ImportTypeSelector($importParameters, $this->getImportTypes());
             $buttonGroup->addButton($importTypeSelector->getTypeSelectorDropdownButton());
 
-            if (! $repositoryManager->getWorkspace() instanceof PersonalWorkspace)
+            if (!$repositoryManager->getWorkspace() instanceof PersonalWorkspace)
             {
                 $buttonGroup->addButton(
                     new Button(
@@ -109,8 +116,14 @@ class RepositoryMenu
                                 \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_PUBLISH,
                                 FilterData::FILTER_CATEGORY => FilterData::getInstance(
-                                    $repositoryManager->getWorkspace())->get_category())),
-                        Button::DISPLAY_ICON_AND_LABEL));
+                                    $repositoryManager->getWorkspace()
+                                )->get_category()
+                            ),
+                            array(Manager::PARAM_IMPORT_TYPE)
+                        ),
+                        Button::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             $buttonToolBar->addButtonGroup($buttonGroup);
@@ -126,8 +139,12 @@ class RepositoryMenu
                     new FontAwesomeGlyph('list'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_PUBLICATION),
-                        array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION))));
+                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_PUBLICATION
+                        ),
+                        array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE)
+                    )
+                )
+            );
         }
 
         if ($repositoryManager->getWorkspace() instanceof PersonalWorkspace)
@@ -141,7 +158,12 @@ class RepositoryMenu
                             \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
                             \Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID => null,
                             \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
-                            DynamicTabsRenderer::PARAM_SELECTED_TAB => null))));
+                            DynamicTabsRenderer::PARAM_SELECTED_TAB => null
+                        ),
+                        array(Manager::PARAM_IMPORT_TYPE)
+                    )
+                )
+            );
 
             $buttonGroup->addButton(
                 new Button(
@@ -149,13 +171,20 @@ class RepositoryMenu
                     new FontAwesomeGlyph('files-o'),
                     $repositoryManager->get_url(
                         array(
-                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_DOUBLES))));
+                            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_DOUBLES
+                        ),
+                        array(Manager::PARAM_IMPORT_TYPE)
+                    )
+                )
+            );
 
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('RecycleBin'),
                     new FontAwesomeGlyph('trash'),
-                    $repositoryManager->get_recycle_bin_url()));
+                    $repositoryManager->get_recycle_bin_url()
+                )
+            );
         }
 
         $buttonToolBar->addButtonGroup($buttonGroup);
@@ -171,7 +200,8 @@ class RepositoryMenu
     public function getImportTypes()
     {
         $registrations = Configuration::getInstance()->get_registrations_by_type(
-            'Chamilo\Core\Repository\ContentObject');
+            'Chamilo\Core\Repository\ContentObject'
+        );
 
         $types = array();
 
