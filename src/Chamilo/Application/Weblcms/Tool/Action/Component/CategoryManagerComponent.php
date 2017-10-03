@@ -114,7 +114,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         
         if ($category)
         {
-            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
+            if (! $category->get_allow_change())
             {
                 return false;
             }
@@ -142,7 +142,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         
         if ($category)
         {
-            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
+            if (! $category->get_allow_change())
             {
                 return false;
             }

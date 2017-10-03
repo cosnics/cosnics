@@ -54,13 +54,10 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublicationCategory::class_name(), 
             $category_id);
-        
-        if ($category)
+
+        if ($category && !$category->get_allow_change())
         {
-            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
-            {
-                return false;
-            }
+            return false;
         }
         
         $count = $this->count_category_publications($category_id);
@@ -78,12 +75,9 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
             ContentObjectPublicationCategory::class_name(), 
             $category_id);
         
-        if ($category)
+        if ($category && !$category->get_allow_change())
         {
-            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
-            {
-                return false;
-            }
+            return false;
         }
         
         return true;
