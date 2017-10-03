@@ -1,0 +1,32 @@
+{
+    "name": "cosnics/core-repository-content-object-youtube-integration-chamilo-core-repository-content-object-learning-path",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Youtube Integration Chamilo Core Repository ContentObject LearningPath",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Youtube",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Repository",
+        "ContentObject",
+        "LearningPath"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

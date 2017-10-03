@@ -1,0 +1,28 @@
+{
+    "name": "cosnics/core-repository-integration-chamilo-core-tracking",
+    "version": "1.0.0",
+    "description": "Core Repository Integration Chamilo Core Tracking",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Tracking"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

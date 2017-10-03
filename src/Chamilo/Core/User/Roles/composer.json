@@ -1,0 +1,25 @@
+{
+    "name": "cosnics/core-user-roles",
+    "version": "1.0.0",
+    "description": "Core User Roles",
+    "keywords": [
+        "Core",
+        "User",
+        "Roles"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

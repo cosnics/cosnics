@@ -1,0 +1,32 @@
+{
+    "name": "cosnics/core-repository-content-object-link-integration-chamilo-core-repository-content-object-frequently-asked-questions",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Link Integration Chamilo Core Repository ContentObject FrequentlyAskedQuestions",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Link",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Repository",
+        "ContentObject",
+        "FrequentlyAskedQuestions"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

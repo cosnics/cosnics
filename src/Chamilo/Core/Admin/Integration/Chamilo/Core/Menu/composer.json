@@ -1,0 +1,28 @@
+{
+    "name": "cosnics/core-admin-integration-chamilo-core-menu",
+    "version": "1.0.0",
+    "description": "Core Admin Integration Chamilo Core Menu",
+    "keywords": [
+        "Core",
+        "Admin",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Menu"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "name": "cosnics/core-repository-content-object-physical-location-integration-chamilo-core-metadata",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject PhysicalLocation Integration Chamilo Core Metadata",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "PhysicalLocation",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Metadata"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

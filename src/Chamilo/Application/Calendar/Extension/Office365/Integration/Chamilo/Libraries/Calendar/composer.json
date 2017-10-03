@@ -1,0 +1,30 @@
+{
+    "name": "cosnics/application-calendar-extension-office365-integration-chamilo-libraries-calendar",
+    "version": "1.0.0",
+    "description": "Application Calendar Extension Office365 Integration Chamilo Libraries Calendar",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Extension",
+        "Office365",
+        "Integration",
+        "Chamilo",
+        "Libraries",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}
