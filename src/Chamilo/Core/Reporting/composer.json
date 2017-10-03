@@ -22,8 +22,5 @@
         "php": ">=7.0.0",
         "phpoffice/phpexcel": "1.8.*",
         "szymach/c-pchart": "1.*"
-    },
-    "extra": {
-        "install-path": "reporting"
     }
 }

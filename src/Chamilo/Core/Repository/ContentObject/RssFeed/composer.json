@@ -22,8 +22,5 @@
     ],
     "require": {
         "php": ">=7.0.0"
-    },
-    "extra": {
-        "install-path": "repository/content_object/rss_feed"
     }
 }

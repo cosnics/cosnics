@@ -23,8 +23,5 @@
     "require": {
         "php": ">=7.0.0",
         "sabre/vobject": "~3.4.0"
-    },
-    "extra": {
-        "install-path": "repository/content_object/calendar_event"
     }
 }

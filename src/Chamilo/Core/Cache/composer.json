@@ -16,8 +16,5 @@
     ],
     "require": {
         "php": ">=7.0.0"
-    },
-    "extra": {
-        "install-path": "core/cache"
     }
 }

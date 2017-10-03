@@ -23,8 +23,5 @@
     "require": {
         "php": ">=7.0.0",
         "szymach/c-pchart": "1.1.*"
-    },
-    "extra": {
-        "install-path": "repository/content_object/peer_assessment"
     }
 }

@@ -20,8 +20,5 @@
         "php": ">=7.0.0",
         "zend/gdata": "1.*",
         "google/apiclient": "1.1.*"
-    },
-    "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/office365"
     }
 }

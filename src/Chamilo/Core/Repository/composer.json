@@ -21,8 +21,5 @@
     "require": {
         "php": ">=7.0.0",
         "phpspec/php-diff": "=v1.0.2"
-    },
-    "extra": {
-        "install-path": "repository"
     }
 }

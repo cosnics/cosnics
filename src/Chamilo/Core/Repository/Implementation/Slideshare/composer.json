@@ -22,8 +22,5 @@
     ],
     "require": {
         "php": ">=7.0.0"
-    },
-    "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/slideshare"
     }
 }

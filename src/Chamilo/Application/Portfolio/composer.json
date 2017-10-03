@@ -1,27 +1,24 @@
 {
-    "name": "cosnics/application-portfolio",
-    "version": "1.0.0",
-    "description": "Application Portfolio",
-    "keywords": [
-        "Application",
-        "Portfolio"
-    ],
-    "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0"
-    },
-    "extra": {
-        "install-path": "application/portfolio"
-    }
+	"name": "cosnics/application-portfolio",
+	"version": "1.0.0",
+	"description": "Application Portfolio",
+	"keywords": [
+		"Application",
+		"Portfolio"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	}
 }
