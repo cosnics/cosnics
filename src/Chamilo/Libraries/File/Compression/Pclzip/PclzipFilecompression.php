@@ -11,6 +11,17 @@ use PclZip;
 class PclzipFilecompression extends Filecompression
 {
 
+    public function __construct()
+    {
+        $tmpDir = sys_get_temp_dir() . '/zip/';
+        if(!file_exists($tmpDir))
+        {
+            mkdir($tmpDir);
+        }
+
+        define('PCLZIP_TEMPORARY_DIR', $tmpDir);
+    }
+
     public function get_supported_mimetypes()
     {
         return array(
