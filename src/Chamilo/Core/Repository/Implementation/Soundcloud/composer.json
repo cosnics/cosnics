@@ -1,30 +1,35 @@
 {
-	"name": "chamilo/ext-repo-soundcloud",
-	"version": "1.0.0",
-	"description": "Chamilo Soundcloud External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"glenscott/soundcloud": "dev-psr-4"
-	},
-	"repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/mptre/php-soundcloud"
-		}
-	],
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/soundcloud"
-	}
+    "name": "cosnics/core-repository-implementation-soundcloud",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Soundcloud",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Soundcloud"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "glenscott/soundcloud": "dev-psr-4"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mptre/php-soundcloud"
+        }
+    ],
+    "extra": {
+        "install-path": "common/extensions/external_repository_manager/implementation/soundcloud"
+    }
 }

@@ -1,22 +1,28 @@
 {
-	"name": "cosnics/application-weblcms-tool-course-group",
-	"version": "1.0.0",
-	"description": "Chamilo Course Group Weblcms Tool",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"phpoffice/phpexcel": "1.8.*"
-	}
+    "name": "cosnics/application-weblcms-tool-implementation-course-group",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Implementation CourseGroup",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "CourseGroup"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "phpoffice/phpexcel": "1.8.*"
+    }
 }

@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-assessment-multiple-choice-question",
-	"version": "1.0.0",
-	"description": "Chamilo Assessment Multiple Choice Question Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/assessment_multiple_choice_question"
-	}
+    "name": "cosnics/core-repository-content-object-assessment-multiple-choice-question",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject AssessmentMultipleChoiceQuestion",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "AssessmentMultipleChoiceQuestion"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/assessment_multiple_choice_question"
+    }
 }

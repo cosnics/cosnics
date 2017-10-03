@@ -1,24 +1,27 @@
 {
-	"name": "chamilo/core-rights",
-	"version": "1.0.0",
-	"description": "Chamilo Rights Core Application",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "rights"
-	}
+    "name": "cosnics/core-rights",
+    "version": "1.0.0",
+    "description": "Core Rights",
+    "keywords": [
+        "Core",
+        "Rights"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "rights"
+    }
 }

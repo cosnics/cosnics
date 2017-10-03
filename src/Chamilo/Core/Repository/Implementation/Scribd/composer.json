@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/ext-repo-scribd",
-	"version": "1.0.0",
-	"description": "Chamilo Scribd External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/scribd"
-	}
+    "name": "cosnics/core-repository-implementation-scribd",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Scribd",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Scribd"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "common/extensions/external_repository_manager/implementation/scribd"
+    }
 }

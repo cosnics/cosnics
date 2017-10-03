@@ -1,24 +1,27 @@
 {
-	"name": "chamilo/core-admin",
-	"version": "1.0.0",
-	"description": "Chamilo Admin Core Application",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "core/admin"
-	}
+    "name": "cosnics/core-admin",
+    "version": "1.0.0",
+    "description": "Core Admin",
+    "keywords": [
+        "Core",
+        "Admin"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "core/admin"
+    }
 }

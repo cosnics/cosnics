@@ -1,21 +1,27 @@
 {
-	"name": "cosnics/application-weblcms-tool-wiki",
-	"version": "1.0.0",
-	"description": "Chamilo Wiki Weblcms Tool",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	}
+    "name": "cosnics/application-weblcms-tool-implementation-wiki",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Implementation Wiki",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "Wiki"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
 }

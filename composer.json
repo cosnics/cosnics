@@ -1,17 +1,17 @@
 {
-	"name": "chamilo/lcms-connect",
-	"description": "Chamilo LCMS Connect",
+	"name": "cosnics/cosnics",
+	"description": "Cosnics",
 	"license": [
 		"GPL-3.0"
 	],
 	"keywords": [
 		"ELO",
-		"LCMS"
+		"LCMS",
+		"Cosnics"
 	],
 	"support": {
-		"forum": "http://lcms.chamilo.org/phpbbforum",
-		"source": "https://bitbucket.org/chamilo/lcms-connect/src",
-		"issues": "https://support.chamilo.org/projects/lcms-backlog"
+		"source": "https://github.com/cosnics/cosnics",
+		"issues": "https://github.com/cosnics/cosnics/issues"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -53,7 +53,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://bitbucket.org/chamilo/pear-libraries"
+			"url": "https://github.com/cosnics/pear-libraries"
 		}
 	],
 	"autoload": {

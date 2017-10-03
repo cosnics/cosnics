@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-note",
-	"version": "1.0.0",
-	"description": "Chamilo Note Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/note"
-	}
+    "name": "cosnics/core-repository-content-object-note",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Note",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Note"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/note"
+    }
 }

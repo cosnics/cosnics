@@ -1,26 +1,31 @@
 {
-	"name": "chamilo/ext-repo-google-docs",
-	"version": "1.0.0",
-	"description": "Chamilo Google Docs External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"zend/gdata": "1.*",
-		"google/apiclient": "1.1.*"
-	},
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/google_docs"
-	}
+    "name": "cosnics/core-repository-implementation-google-docs",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation GoogleDocs",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "GoogleDocs"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "zend/gdata": "1.*",
+        "google/apiclient": "1.1.*"
+    },
+    "extra": {
+        "install-path": "common/extensions/external_repository_manager/implementation/google_docs"
+    }
 }

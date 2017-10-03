@@ -1,26 +1,29 @@
 {
-	"name": "chamilo/core-reporting",
-	"version": "1.0.0",
-	"description": "Chamilo Reporting Core Application",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"phpoffice/phpexcel": "1.8.*",
-		"szymach/c-pchart": "1.*"
-	},
-	"extra": {
-		"install-path": "reporting"
-	}
+    "name": "cosnics/core-reporting",
+    "version": "1.0.0",
+    "description": "Core Reporting",
+    "keywords": [
+        "Core",
+        "Reporting"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "phpoffice/phpexcel": "1.8.*",
+        "szymach/c-pchart": "1.*"
+    },
+    "extra": {
+        "install-path": "reporting"
+    }
 }

@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-section",
-	"version": "1.0.0",
-	"description": "Chamilo Section Content Object",
-	"keywords": [],
-	"homesection": "http://www.chamilo.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/section"
-	}
+    "name": "cosnics/core-repository-content-object-section",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Section",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Section"
+    ],
+    "homesection": "http://www.chamilo.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/section"
+    }
 }

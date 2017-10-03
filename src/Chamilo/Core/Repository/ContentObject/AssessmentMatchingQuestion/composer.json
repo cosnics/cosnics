@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-assessment-matching-question",
-	"version": "1.0.0",
-	"description": "Chamilo Assessment Matching Question Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/assessment_matching_question"
-	}
+    "name": "cosnics/core-repository-content-object-assessment-matching-question",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject AssessmentMatchingQuestion",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "AssessmentMatchingQuestion"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/assessment_matching_question"
+    }
 }

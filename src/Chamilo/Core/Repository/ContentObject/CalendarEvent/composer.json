@@ -1,25 +1,30 @@
 {
-	"name": "chamilo/co-calendar-event",
-	"version": "1.0.0",
-	"description": "Chamilo Calender Event Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"sabre/vobject": "~3.4.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/calendar_event"
-	}
+    "name": "cosnics/core-repository-content-object-calendar-event",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject CalendarEvent",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "CalendarEvent"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "sabre/vobject": "~3.4.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/calendar_event"
+    }
 }

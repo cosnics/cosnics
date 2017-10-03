@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/ext-repo-slideshare",
-	"version": "1.0.0",
-	"description": "Chamilo Slideshare External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/slideshare"
-	}
+    "name": "cosnics/core-repository-implementation-slideshare",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Slideshare",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Slideshare"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "common/extensions/external_repository_manager/implementation/slideshare"
+    }
 }

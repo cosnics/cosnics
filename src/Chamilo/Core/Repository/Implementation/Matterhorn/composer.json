@@ -1,21 +1,22 @@
 {
-	"name": "chamilo/ext-repo-matterhorn",
-	"version": "1.0.0",
-	"description": "Chamilo Matterhorn External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"guzzlehttp/guzzle": "~6.1"
-	},
-	"require": {
-		"php": ">=7.0.0"
-	}
+    "name": "cosnics/core-repository-implementation-matterhorn",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Matterhorn",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Matterhorn"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    }
 }

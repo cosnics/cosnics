@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-forum",
-	"version": "1.0.0",
-	"description": "Chamilo Forum Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/forum"
-	}
+    "name": "cosnics/core-repository-content-object-forum",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Forum",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Forum"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/forum"
+    }
 }

@@ -1,25 +1,30 @@
 {
-	"name": "chamilo/co-external-calendar",
-	"version": "1.0.0",
-	"description": "Chamilo External Calendar Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"sabre/vobject": "~3.4.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/external_calendar"
-	}
+    "name": "cosnics/core-repository-content-object-external-calendar",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject ExternalCalendar",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "ExternalCalendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "sabre/vobject": "~3.4.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/external_calendar"
+    }
 }

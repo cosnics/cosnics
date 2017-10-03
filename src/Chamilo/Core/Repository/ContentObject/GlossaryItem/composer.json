@@ -1,24 +1,29 @@
 {
-	"name": "chamilo/co-glossary-item",
-	"version": "1.0.0",
-	"description": "Chamilo Glossary Item Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/glossary_item"
-	}
+    "name": "cosnics/core-repository-content-object-glossary-item",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject GlossaryItem",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "GlossaryItem"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "repository/content_object/glossary_item"
+    }
 }

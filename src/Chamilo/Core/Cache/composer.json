@@ -1,20 +1,23 @@
 {
-	"name": "chamilo/core-cache",
-	"version": "1.0.0",
-	"description": "Chamilo Admin Core Application",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "core/cache"
-	}
+    "name": "cosnics/core-cache",
+    "version": "1.0.0",
+    "description": "Core Cache",
+    "keywords": [
+        "Core",
+        "Cache"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "install-path": "core/cache"
+    }
 }
