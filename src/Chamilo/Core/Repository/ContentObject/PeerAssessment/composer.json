@@ -1,26 +1,25 @@
 {
-    "name": "chamilo/co-peer-assessment",
-        "version": "6.0.0", "description": "Chamilo Peer Assessment Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "szymach/c-pchart": "1.1.*"
-    },
-    "extra": {
-        "install-path": "repository/content_object/peer_assessment"
-    }
-
+	"name": "chamilo/co-peer-assessment",
+	"version": "6.0.0",
+	"description": "Chamilo Peer Assessment Content Object",
+	"keywords": [],
+	"homepage": "http://www.cosnics.org",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"szymach/c-pchart": "1.1.*"
+	},
+	"extra": {
+		"install-path": "repository/content_object/peer_assessment"
+	}
 }
