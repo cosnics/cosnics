@@ -22,5 +22,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office 365",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Office365",
+            "type": "Chamilo\\Application\\Calendar\\Extension",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

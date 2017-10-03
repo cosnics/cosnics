@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Repository",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Integration\\Chamilo\\Core\\Repository",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

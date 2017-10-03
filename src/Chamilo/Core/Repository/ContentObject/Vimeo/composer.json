@@ -18,9 +18,34 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Shoira Mukhsinova",
+            "email": "-"
+        },
+        {
+            "name": "Magali Gillard",
+            "email": "magali.gillard@ehb.be"
         }
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Vimeo Video",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Vimeo",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

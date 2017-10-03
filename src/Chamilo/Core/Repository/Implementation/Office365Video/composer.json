@@ -20,5 +20,22 @@
         "php": ">=7.0.0",
         "zend/gdata": "1.*",
         "google/apiclient": "1.1.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office365Video",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Office365Video",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

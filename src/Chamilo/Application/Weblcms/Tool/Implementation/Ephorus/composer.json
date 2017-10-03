@@ -24,5 +24,22 @@
     "require": {
         "php": ">=7.0.0",
         "codecasts/nusoap-php7": "*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Ephorus",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Ephorus",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

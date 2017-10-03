@@ -23,5 +23,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Platform User Picture Provider",
+            "context": "Chamilo\\Core\\User\\Picture\\Provider\\Platform",
+            "type": "Chamilo\\Core\\User\\Picture\\Provider",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

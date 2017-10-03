@@ -24,5 +24,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Menu",
+            "context": "Chamilo\\Application\\Calendar\\Integration\\Chamilo\\Core\\Menu",
+            "type": "Chamilo\\Application\\Calendar\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Menu",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

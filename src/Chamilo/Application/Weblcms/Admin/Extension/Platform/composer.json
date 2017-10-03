@@ -24,5 +24,22 @@
     "require": {
         "php": ">=7.0.0",
         "phpoffice/phpexcel": "1.8.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Admin",
+            "context": "Chamilo\\Application\\Weblcms\\Admin\\Extension\\Platform",
+            "type": "Chamilo\\Application\\Weblcms\\Admin\\Extension",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

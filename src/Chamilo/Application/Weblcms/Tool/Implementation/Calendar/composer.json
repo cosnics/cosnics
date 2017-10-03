@@ -24,5 +24,22 @@
     "require": {
         "php": ">=7.0.0",
         "mobiledetect/mobiledetectlib": "~2.8.22"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Calendar",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Calendar",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

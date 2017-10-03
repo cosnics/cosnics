@@ -24,5 +24,22 @@
         "php": ">=7.0.0",
         "zend/gdata": "1.*",
         "google/apiclient": "1.1.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Picasa",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Picasa",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

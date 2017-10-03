@@ -20,5 +20,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Personal Calendar",
+            "context": "Chamilo\\Application\\Calendar",
+            "type": "Chamilo\\Application",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

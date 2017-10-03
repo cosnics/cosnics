@@ -23,5 +23,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Rights",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Rights",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

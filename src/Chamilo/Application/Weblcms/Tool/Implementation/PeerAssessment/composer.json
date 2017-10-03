@@ -19,9 +19,34 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Renaat De Muynck",
+            "email": "renaat.demuynck@arteveldehs.be"
+        },
+        {
+            "name": "Jens Vanderheyden",
+            "email": "jevdheyd@vub.ac.be"
         }
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Peer Assessment",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\PeerAssessment",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

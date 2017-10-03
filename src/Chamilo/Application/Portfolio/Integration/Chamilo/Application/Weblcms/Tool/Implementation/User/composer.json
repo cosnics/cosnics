@@ -27,5 +27,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Portfolio integration with weblcms user tool",
+            "context": "Chamilo\\Application\\Portfolio\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\User",
+            "type": "Chamilo\\Application\\Portfolio\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Portfolio",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\User",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

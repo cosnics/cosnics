@@ -16,9 +16,34 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Sven Vanpoucke",
+            "email": null
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": null
         }
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Administration",
+            "context": "Chamilo\\Core\\Admin",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

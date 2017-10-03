@@ -22,5 +22,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Open Courses Submanager",
+            "context": "Chamilo\\Application\\Weblcms\\Course\\OpenCourse",
+            "type": "Chamilo\\Application\\Course",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

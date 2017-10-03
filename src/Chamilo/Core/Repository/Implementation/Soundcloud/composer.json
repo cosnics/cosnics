@@ -28,5 +28,22 @@
             "type": "git",
             "url": "https://github.com/mptre/php-soundcloud"
         }
-    ]
+    ],
+    "extra": {
+        "cosnics": {
+            "name": "Soundcloud",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Soundcloud",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
 }

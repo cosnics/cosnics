@@ -65,12 +65,21 @@
 		"bin-dir": "bin/"
 	},
 	"extra": {
-		"install-path": ""
+		"merge-plugin": {
+			"include": [],
+			"recurse": true,
+			"replace": false,
+			"ignore-duplicates": false,
+			"merge-dev": true,
+			"merge-extra": false,
+			"merge-extra-deep": false,
+			"merge-scripts": false
+		}
 	},
 	"scripts": {
 		"pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
 		"pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-		"post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-		"post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
+		"post-update-cmd": "@php console chamilo:process_resources",
+		"post-install-cmd": "@php console chamilo:process_resources"
 	}
 }

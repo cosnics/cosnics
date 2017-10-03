@@ -28,5 +28,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Display",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatrixQuestion\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assessment",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatrixQuestion\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatrixQuestion",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Assessment",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

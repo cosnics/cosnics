@@ -18,11 +18,32 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Magali Gillard",
+            "email": "magali.gillard@ehb.be"
         }
     ],
     "require": {
         "php": ">=7.0.0",
         "zend/gdata": "1.*",
         "google/apiclient": "1.1.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "YouTube",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Youtube",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

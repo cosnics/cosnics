@@ -23,5 +23,22 @@
     "require": {
         "php": ">=7.0.0",
         "sabre/vobject": "~3.4.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Calendar Event",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\CalendarEvent",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

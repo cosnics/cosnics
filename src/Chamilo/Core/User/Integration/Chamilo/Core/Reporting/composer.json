@@ -24,5 +24,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Reporting",
+            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core\\User\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Reporting",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

@@ -21,5 +21,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Structure Rights Management",
+            "context": "Chamilo\\Core\\Rights\\Structure",
+            "type": "Chamilo\\Core\\Rights",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Rights",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

@@ -22,5 +22,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Announcement",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Announcement",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

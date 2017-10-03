@@ -18,9 +18,30 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Renaat De Muynck",
+            "email": "renaat.demuynck@arteveldehs.be"
         }
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Indicator",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Indicator",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

@@ -42,5 +42,22 @@
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
         }
-    ]
+    ],
+    "extra": {
+        "cosnics": {
+            "name": "Libraries",
+            "context": "Chamilo\\Libraries",
+            "type": "Chamilo",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

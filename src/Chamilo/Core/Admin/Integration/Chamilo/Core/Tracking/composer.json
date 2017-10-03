@@ -24,5 +24,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Tracking",
+            "context": "Chamilo\\Core\\Admin\\Integration\\Chamilo\\Core\\Tracking",
+            "type": "Chamilo\\Core\\Admin\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Admin",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Tracking",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

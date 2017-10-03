@@ -18,10 +18,31 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Magali Gillard",
+            "email": "magali.gillard@ehb.be"
         }
     ],
     "require": {
         "php": ">=7.0.0",
         "vimeo/vimeo-api": "1.2.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Vimeo",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Vimeo",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

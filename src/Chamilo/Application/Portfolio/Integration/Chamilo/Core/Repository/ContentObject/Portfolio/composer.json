@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Portfolio",
+            "context": "Chamilo\\Application\\Portfolio\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Portfolio",
+            "type": "Chamilo\\Application\\Portfolio\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Portfolio",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Portfolio",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

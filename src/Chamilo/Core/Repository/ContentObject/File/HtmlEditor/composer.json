@@ -23,5 +23,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Repository",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\File\\HtmlEditor",
+            "type": "Chamilo\\Core\\Repository\\HtmlEditor",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\File",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

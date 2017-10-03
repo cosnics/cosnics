@@ -22,5 +22,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Soundcloud Audio",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Soundcloud",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

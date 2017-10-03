@@ -28,5 +28,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Display",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\RssFeed\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\RssFeed\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\RssFeed",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

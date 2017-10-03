@@ -21,5 +21,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "User Roles Management",
+            "context": "Chamilo\\Core\\User\\Roles",
+            "type": "Chamilo\\Core\\User",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

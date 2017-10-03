@@ -24,5 +24,22 @@
     "require": {
         "php": ">=7.0.0",
         "phpoffice/phpexcel": "1.8.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Course Group",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

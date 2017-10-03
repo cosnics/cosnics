@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Repository",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Personal\\Integration\\Chamilo\\Core\\Repository",
+            "type": "Chamilo\\Application\\Calendar\\Extension\\Personal\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar\\Extension\\Personal",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Menu",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Soundcloud\\Integration\\Chamilo\\Core\\Menu",
+            "type": "Chamilo\\Core\\Repository\\Implementation\\Soundcloud\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\Implementation\\Soundcloud",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Menu",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

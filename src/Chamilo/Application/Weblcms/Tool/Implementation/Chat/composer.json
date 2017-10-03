@@ -23,5 +23,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Chat",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Chat",
+            "type": "Chamilo\\Application\\Weblcms\\Tool",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

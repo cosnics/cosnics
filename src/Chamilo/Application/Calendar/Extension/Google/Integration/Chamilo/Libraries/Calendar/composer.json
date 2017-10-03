@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Event",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Google\\Integration\\Chamilo\\Libraries\\Calendar",
+            "type": "Chamilo\\Application\\Calendar\\Extension\\Google\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries\\Calendar",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Calendar\\Extension\\Google",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

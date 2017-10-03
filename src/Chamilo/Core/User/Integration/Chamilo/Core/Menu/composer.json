@@ -24,5 +24,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Menu",
+            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Core\\Menu",
+            "type": "Chamilo\\Core\\User\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Menu",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }

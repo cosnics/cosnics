@@ -22,5 +22,22 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "PHPMailer",
+            "context": "Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer",
+            "type": "Chamilo\\Libraries\\Mail\\Mailer",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Libraries",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

@@ -22,5 +22,22 @@
         "php": ">=7.0.0",
         "phpoffice/phpexcel": "1.8.*",
         "szymach/c-pchart": "1.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Reporting",
+            "context": "Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

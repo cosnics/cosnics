@@ -26,5 +26,26 @@
     ],
     "require": {
         "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Event",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Task\\Integration\\Chamilo\\Libraries\\Calendar",
+            "type": "Chamilo\\Core\\Repository\\Task\\CalendarEvent\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\Task",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Repository\\Integration\\Chamilo\\Libraries\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
 }
