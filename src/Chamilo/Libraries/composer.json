@@ -1,6 +1,6 @@
 {
 	"name": "chamilo/libraries",
-	"version": "6.0.0",
+	"version": "1.0.0",
 	"description": "Chamilo Libraries",
 	"require": {
 		"php": ">=7.0.0",
