@@ -20,6 +20,7 @@ class Registration extends DataClass
     const PROPERTY_VERSION = 'version';
     const PROPERTY_CONTEXT = 'context';
     const PROPERTY_PRIORITY = 'priority';
+    const PROPERTY_CATEGORY = 'category';
 
     // Types
     const TYPE_APPLICATION = 'Chamilo\Application';
@@ -54,7 +55,8 @@ class Registration extends DataClass
                 self::PROPERTY_STATUS,
                 self::PROPERTY_VERSION,
                 self::PROPERTY_CONTEXT,
-                self::PROPERTY_PRIORITY));
+                self::PROPERTY_PRIORITY,
+                self::PROPERTY_CATEGORY));
     }
 
     /**
@@ -173,6 +175,28 @@ class Registration extends DataClass
     public function set_priority($priority)
     {
         $this->set_default_property(self::PROPERTY_PRIORITY, $priority);
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_category()
+    {
+        return (string) $this->get_default_property(self::PROPERTY_CATEGORY);
+    }
+
+    /**
+     *
+     * @param string $category
+     *
+     * @return $this
+     */
+    public function set_category($category)
+    {
+        $this->set_default_property(self::PROPERTY_CATEGORY, $category);
 
         return $this;
     }
