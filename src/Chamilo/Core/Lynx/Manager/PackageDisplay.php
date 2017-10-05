@@ -76,11 +76,11 @@ class PackageDisplay
 
             $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
 
-            if (! is_null($package_info->get_pre_depends()))
+            if (! is_null($package_info->get_dependencies()))
             {
                 $html[] = '<tr>';
                 $html[] = '<td class="header">' . Translation::get('PreDepends') . '</td>';
-                $html[] = '<td>' . $package_info->get_pre_depends()->as_html() . '</td>';
+                $html[] = '<td>' . $package_info->get_dependencies()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
 
@@ -124,7 +124,7 @@ class PackageDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
         $properties = $package_info->get_default_property_names();
 
-        $hidden_properties = array(Package::PROPERTY_AUTHORS, Package::PROPERTY_VERSION, Package::PROPERTY_PRE_DEPENDS);
+        $hidden_properties = array(Package::PROPERTY_AUTHORS, Package::PROPERTY_VERSION, Package::PROPERTY_DEPENDENCIES);
 
         foreach ($properties as $property)
         {
@@ -142,12 +142,15 @@ class PackageDisplay
         {
 
             $html[] = '<tr><td class="header">';
+
             if ($key == 0)
             {
                 $html[] = Translation::get('Authors');
             }
-            $html[] = '</td><td>' . StringUtilities::getInstance()->encryptMailLink($author['email'], $author['name']) .
-                 ' - ' . $author['company'] . '</td></tr>';
+
+            $html[] = '</td><td>' .
+                 StringUtilities::getInstance()->encryptMailLink($author->get_email(), $author->get_name()) .
+                 '</td></tr>';
         }
 
         $html[] = '</table><br/>';

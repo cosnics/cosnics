@@ -11,10 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class Dependencies
 {
-    const PROPERTY_OPERATOR = 'operator';
     const PROPERTY_DEPENDENCIES = 'dependencies';
-    const OPERATOR_AND = 1;
-    const OPERATOR_OR = 2;
 
     /**
      *
@@ -39,11 +36,10 @@ class Dependencies
      * @param int $operator
      * @param \configuration\package\Dependency $dependencies
      */
-    public function __construct($operator, $dependencies = array())
+    public function __construct($dependencies = array())
     {
-        $this->set_operator($operator);
         $this->set_dependencies($dependencies);
-        
+
         $this->logger = MessageLogger::getInstance($this);
     }
 
@@ -54,24 +50,6 @@ class Dependencies
     public function get_logger()
     {
         return $this->logger;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_operator()
-    {
-        return $this->operator;
-    }
-
-    /**
-     *
-     * @param int $operator
-     */
-    public function set_operator($operator)
-    {
-        $this->operator = $operator;
     }
 
     /**
@@ -108,26 +86,13 @@ class Dependencies
     public function as_html()
     {
         $html = array();
-        
+
         foreach ($this->get_dependencies() as $dependency)
         {
             $html[] = $dependency->as_html();
         }
-        
-        if ($this->get_operator() == self::OPERATOR_AND)
-        {
-            $operator = Translation::get('And');
-        }
-        elseif ($this->get_operator() == self::OPERATOR_OR)
-        {
-            $operator = Translation::get('Or');
-        }
-        else
-        {
-            $operator = '?';
-        }
-        
-        return implode(' ' . $operator . ' ', $html);
+
+        return implode(' ' . Translation::get('And') . ' ', $html);
     }
 
     /**
@@ -138,48 +103,23 @@ class Dependencies
     {
         $success = 0;
         $messages = array();
-        
+
         foreach ($this->get_dependencies() as $dependency)
         {
             if ($dependency->check())
             {
                 $success ++;
             }
-            
+
             $messages[] = $dependency->get_logger()->render();
         }
-        
-        if ($this->get_operator() == self::OPERATOR_AND)
-        {
-            $result = ($success == count($this->get_dependencies()));
-        }
-        elseif ($this->get_operator() == self::OPERATOR_OR)
-        {
-            $result = ($success > 0);
-        }
-        else
-        {
-            $result = false;
-        }
-        
-        // if (! $result)
-        // {
-        if ($this->get_operator() == self::OPERATOR_AND)
-        {
-            $operator = Translation::get('And');
-        }
-        elseif ($this->get_operator() == self::OPERATOR_OR)
-        {
-            $operator = Translation::get('Or');
-        }
-        else
-        {
-            $operator = '?';
-        }
-        
+
+        $result = ($success == count($this->get_dependencies()));
+
+        $operator = Translation::get('And');
+
         $this->get_logger()->add_message(implode(' ' . $operator . ' ', $messages));
-        // }
-        
+
         return $result;
     }
 

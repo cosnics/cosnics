@@ -55,7 +55,7 @@ class DependencyVerifier
 
     public function is_installable()
     {
-        $dependencies = $this->get_package()->get_pre_depends();
+        $dependencies = $this->get_package()->get_dependencies();
 
         if (is_null($dependencies))
         {
@@ -89,7 +89,7 @@ class DependencyVerifier
         while ($registration = $registrations->next_result())
         {
             $package = Package::get($registration->get_context());
-            $dependencies = $package->get_pre_depends();
+            $dependencies = $package->get_dependencies();
 
             if (! is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
             {

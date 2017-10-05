@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Lynx\Manager\Component;
 
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Lynx\Manager\Manager;
