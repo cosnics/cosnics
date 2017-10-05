@@ -1,9 +1,7 @@
 {
 	"name": "cosnics/cosnics",
 	"description": "Cosnics",
-	"license": [
-		"GPL-3.0"
-	],
+	"license": "MIT",
 	"keywords": [
 		"ELO",
 		"LCMS",
