@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: move.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.component
  */
 class MoverComponent extends Manager implements DelegateComponent
@@ -19,35 +18,35 @@ class MoverComponent extends Manager implements DelegateComponent
 
     /**
      * Executes this controller
-     * 
+     *
      * @throws \libraries\architecture\exceptions\NotAllowedException
      */
     public function run()
     {
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class_name(),
             $publication_id);
-        
+
         if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
-        
+
         $move = $this->get_parent()->get_move_direction();
-        
+
         if ($publication->move($move))
         {
             $message = htmlentities(Translation::get('ContentObjectPublicationMoved'));
         }
-        
+
         $this->redirect(
-            $message, 
-            false, 
+            $message,
+            false,
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => Request::get(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE), 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE),
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => Request::get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE)));
     }

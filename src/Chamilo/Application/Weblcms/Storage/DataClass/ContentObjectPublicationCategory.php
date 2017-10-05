@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: content_object_publication_category.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
  * @package application.lib.weblcms.category_manager
  */
@@ -21,8 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke
  */
-class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory
-    implements
+class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory implements
     \Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported, DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_COURSE = 'course_id';
@@ -39,7 +36,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
     public function create($create_in_batch = false)
     {
         $succes = parent::create();
-        if (!$succes)
+        if (! $succes)
         {
             return false;
         }
@@ -49,8 +46,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights::TYPE_COURSE_CATEGORY,
                 $this->get_parent(),
-                $this->get_course()
-            );
+                $this->get_course());
         }
         else
         {
@@ -60,8 +56,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights::TYPE_COURSE_MODULE,
                 $course_tool_id,
-                $this->get_course()
-            );
+                $this->get_course());
         }
 
         $success = WeblcmsRights::getInstance()->create_location_in_courses_subtree(
@@ -69,14 +64,12 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             $this->get_id(),
             $parent,
             $this->get_course(),
-            $create_in_batch
-        );
+            $create_in_batch);
 
-        if (!$success)
+        if (! $success)
         {
             throw new \RuntimeException(
-                sprintf('Could not create the location for the content object publication category %s', $this->getId())
-            );
+                sprintf('Could not create the location for the content object publication category %s', $this->getId()));
         }
 
         return true;
@@ -96,7 +89,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
     public function update($move = false)
     {
         $succes = parent::update();
-        if (!$succes)
+        if (! $succes)
         {
             return false;
         }
@@ -105,29 +98,24 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
         {
             if ($this->get_parent())
             {
-                $new_parent_id =
-                    WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
-                        WeblcmsRights::TYPE_COURSE_CATEGORY,
-                        $this->get_parent(),
-                        $this->get_course()
-                    );
+                $new_parent_id = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+                    WeblcmsRights::TYPE_COURSE_CATEGORY,
+                    $this->get_parent(),
+                    $this->get_course());
             }
             else
             {
                 $course_module_id = DataManager::retrieve_course_tool_by_name($this->get_tool())->get_id();
-                $new_parent_id =
-                    WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
-                        WeblcmsRights::TYPE_COURSE_MODULE,
-                        $course_module_id,
-                        $this->get_course()
-                    );
+                $new_parent_id = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+                    WeblcmsRights::TYPE_COURSE_MODULE,
+                    $course_module_id,
+                    $this->get_course());
             }
 
             $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
                 WeblcmsRights::TYPE_COURSE_CATEGORY,
                 $this->get_id(),
-                $this->get_course()
-            );
+                $this->get_course());
 
             if ($location)
             {
@@ -143,11 +131,10 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_COURSE_CATEGORY,
             $this->get_id(),
-            $this->get_course()
-        );
+            $this->get_course());
         if ($location)
         {
-            if (!$location->delete())
+            if (! $location->delete())
             {
                 return false;
             }
@@ -166,8 +153,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             self::PROPERTY_PARENT,
             self::PROPERTY_DISPLAY_ORDER,
             self::PROPERTY_ALLOW_CHANGE,
-            self::PROPERTY_VISIBLE
-        );
+            self::PROPERTY_VISIBLE);
     }
 
     public function get_course()
@@ -219,7 +205,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
 
     public function toggle_visibility()
     {
-        $this->set_visibility(!$this->get_visibility());
+        $this->set_visibility(! $this->get_visibility());
     }
 
     /**
@@ -235,8 +221,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             {
                 $parent_category = DataManager::retrieve_by_id(
                     ContentObjectPublicationCategory::class_name(),
-                    $this->get_parent()
-                );
+                    $this->get_parent());
 
                 return $parent_category->is_recursive_visible();
             }
@@ -259,9 +244,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
      *
      * @param int $category_id to check visibility of.
      * @param array $category_parent_ids mapping of child categories onto parent categories.
-     *
      * @see DataManager :: retrieve_publication_category_parent_ids_recursive(...)
-     *
      * @param array $visibility Keys: category ID's Values: True or False. @see DataManager ::
      *        retrieve_publication_category_visibility(...)
      */
@@ -272,12 +255,12 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             return true;
         }
 
-        if (!$visibility[$category_id])
+        if (! $visibility[$category_id])
         {
             return false;
         }
 
-        if (!isset($category_parent_ids[$category_id]))
+        if (! isset($category_parent_ids[$category_id]))
         {
             return true;
         }
@@ -285,8 +268,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
         return self::is_recursive_visible_on_arrays(
             $category_parent_ids[$category_id],
             $category_parent_ids,
-            $visibility
-        );
+            $visibility);
     }
 
     // PERFORMANCE-TWEAKS-END
@@ -305,18 +287,13 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             ContentObjectPublicationCategory::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublicationCategory::class_name(),
-                    ContentObjectPublicationCategory::PROPERTY_PARENT
-                ),
-                new StaticConditionVariable($id)
-            ),
+                    ContentObjectPublicationCategory::PROPERTY_PARENT),
+                new StaticConditionVariable($id)),
             ContentObjectPublication::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_CATEGORY_ID
-                ),
-                new StaticConditionVariable($id)
-            )
-        );
+                    ContentObjectPublication::PROPERTY_CATEGORY_ID),
+                new StaticConditionVariable($id)));
     }
 
     /**
@@ -339,7 +316,6 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
         return array(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TOOL)
-        );
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TOOL));
     }
 }

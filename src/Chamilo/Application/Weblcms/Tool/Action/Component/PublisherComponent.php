@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: announcement_publisher.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
  * @package application.lib.weblcms.tool.announcement.component
  */

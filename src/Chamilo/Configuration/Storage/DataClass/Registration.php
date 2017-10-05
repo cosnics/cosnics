@@ -6,7 +6,6 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: registration.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  *
  * @package admin.lib
  * @author Hans De Bisschop

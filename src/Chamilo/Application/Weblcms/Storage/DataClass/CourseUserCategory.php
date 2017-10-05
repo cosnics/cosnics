@@ -4,8 +4,7 @@ namespace Chamilo\Application\Weblcms\Storage\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: course_user_category.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course
  */
 
@@ -23,7 +22,7 @@ class CourseUserCategory extends DataClass
 
     /**
      * Get the default properties of all user course user categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -33,7 +32,7 @@ class CourseUserCategory extends DataClass
 
     /**
      * Returns the title of this course user category object
-     * 
+     *
      * @return string
      */
     public function get_title()
@@ -43,7 +42,7 @@ class CourseUserCategory extends DataClass
 
     /**
      * Sets the title of this course user category object
-     * 
+     *
      * @param $title string
      */
     public function set_title($title)

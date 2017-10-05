@@ -13,8 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: course_importer.class.php 218 2009-11-13 14:21:26Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 /**
@@ -29,27 +28,27 @@ class CourseImporterComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageCourses');
-        
+
         $form = new CourseImportForm(CourseImportForm::TYPE_IMPORT, $this->get_url());
-        
+
         if ($form->validate())
         {
             $success = $form->import_courses();
             $this->redirect(
                 Translation::get($success ? 'CsvCoursesProcessed' : 'CsvCoursesNotProcessed') . '<br />' .
-                     $form->get_failed_csv(), 
+                     $form->get_failed_csv(),
                     ($success ? false : true));
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = '<div class="clear"></div><br />';
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -73,7 +72,7 @@ class CourseImporterComponent extends Manager
         $html[] = '<br />U: ' . Translation::get('Update', null, Utilities::COMMON_LIBRARIES);
         $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</blockquote>';
-        
+
         return implode($html, "\n");
     }
 
@@ -83,15 +82,15 @@ class CourseImporterComponent extends Manager
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
             $breadcrumbtrail->add(
                 new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
-            
+
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER, 
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                         self::package())));
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));

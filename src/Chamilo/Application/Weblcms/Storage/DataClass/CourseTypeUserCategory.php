@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: course_type_user_category.class.php 216 2009-11-13 14:08:06Z Tristan $
- * 
+ *
  * @package application.lib.weblcms.course_type
  */
 class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassListenerSupport
@@ -32,16 +31,16 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
 
     /**
      * Get the default properties of all user course user categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return array(
-            self::PROPERTY_ID, 
-            self::PROPERTY_USER_ID, 
-            self::PROPERTY_COURSE_USER_CATEGORY_ID, 
-            self::PROPERTY_COURSE_TYPE_ID, 
+            self::PROPERTY_ID,
+            self::PROPERTY_USER_ID,
+            self::PROPERTY_COURSE_USER_CATEGORY_ID,
+            self::PROPERTY_COURSE_TYPE_ID,
             self::PROPERTY_SORT);
     }
 
@@ -87,7 +86,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
 
     /**
      * Compares two instances of CourseTypeUserCategory
-     * 
+     *
      * @param $cata type
      * @param $catb type
      * @return int 0 for equal, 1 for not equal
@@ -108,7 +107,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -122,37 +121,37 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     protected function delete_dependencies()
     {
         $success = parent::delete_dependencies();
-        
+
         $course_user_category_id_condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_USER_CATEGORY_ID), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_USER_CATEGORY_ID),
             new StaticConditionVariable($this->get_course_user_category_id()));
         // the link to this course_type shouldn't be counted as it will be deleted after the dependencies are deleted
         $filter_out_this_course_type_id_condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_ID), 
+                new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_ID),
                 new StaticConditionVariable($this->get_course_type_id())));
-        
+
         $condition = new AndCondition($course_user_category_id_condition, $filter_out_this_course_type_id_condition);
-        
+
         $count = DataManager::count(self::class_name(), new DataClassCountParameters($condition));
         // if there are no more links to a course type, then the course user category object itself may be deleted
         if ($count == 0)
         {
             $course_user_category = DataManager::retrieve_by_id(
-                CourseUserCategory::class_name(), 
+                CourseUserCategory::class_name(),
                 $this->get_course_user_category_id());
             if (! $course_user_category->delete())
             {
                 $success = false;
             }
         }
-        
+
         return $success;
     }
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return string[string]
      *
      */
@@ -161,20 +160,20 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
         return array(
             CourseTypeUserCategoryRelCourse::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class_name(), 
-                    CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID), 
+                    CourseTypeUserCategoryRelCourse::class_name(),
+                    CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
                 new StaticConditionVariable($this->get_id())));
     }
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_ID), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_ID),
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID));
     }
 }

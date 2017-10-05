@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: course_sections_tool_selector.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_sections.component
  */
 class ToolSelectorComponent extends Manager
@@ -23,7 +22,7 @@ class ToolSelectorComponent extends Manager
     public function run()
     {
         $trail = BreadcrumbTrail::getInstance();
-        
+
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
@@ -32,22 +31,22 @@ class ToolSelectorComponent extends Manager
         if ($id)
         {
             $course_section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                CourseSection::class_name(), 
+                CourseSection::class_name(),
                 (int) $id);
-            
+
             $form = new CourseSectionToolSelectorForm(
-                $course_section, 
+                $course_section,
                 $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_SELECT_TOOLS_COURSE_SECTION, 
+                        self::PARAM_ACTION => self::ACTION_SELECT_TOOLS_COURSE_SECTION,
                         self::PARAM_COURSE_SECTION_ID => $id)));
-            
+
             if ($form->validate())
             {
                 $success = $form->update_course_modules();
                 $this->redirect(
-                    Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'), 
-                    ($success ? false : true), 
+                    Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'),
+                    ($success ? false : true),
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }
             else
@@ -56,22 +55,22 @@ class ToolSelectorComponent extends Manager
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)), 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)),
                         $course_section->get_name()));
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SELECT_TOOLS_COURSE_SECTION, 
-                                self::PARAM_COURSE_SECTION_ID => $id)), 
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SELECT_TOOLS_COURSE_SECTION,
+                                self::PARAM_COURSE_SECTION_ID => $id)),
                         Translation::get('SelectTools')));
-                
+
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }

@@ -8,7 +8,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package common.html.action_bar $Id: action_bar_search_form.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActionBarSearchForm extends FormValidator
 {
@@ -16,7 +17,7 @@ class ActionBarSearchForm extends FormValidator
      * #@+ Search parameter
      */
     const PARAM_SIMPLE_SEARCH_QUERY = 'query';
-    
+
     /**
      * Name of the search form
      */
@@ -34,22 +35,22 @@ class ActionBarSearchForm extends FormValidator
 
     /**
      * Creates a new search form
-     * 
+     *
      * @param string $url The location to which the search request should be posted.
      */
     public function __construct($url)
     {
         parent::__construct(self::FORM_NAME, 'post', $url);
         $this->renderer = clone $this->defaultRenderer();
-        
+
         $query = $this->get_query();
         if ($query)
         {
             $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));
         }
-        
+
         $this->build_simple_search_form();
-        
+
         $this->accept($this->renderer);
     }
 
@@ -60,13 +61,13 @@ class ActionBarSearchForm extends FormValidator
     {
         $this->renderer->setElementTemplate('<div style="vertical-align: middle; float: left;">{element}</div>');
         $this->addElement(
-            'text', 
-            self::PARAM_SIMPLE_SEARCH_QUERY, 
-            Translation::get('Search', null, Utilities::COMMON_LIBRARIES), 
+            'text',
+            self::PARAM_SIMPLE_SEARCH_QUERY,
+            Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
             'size="20" class="search_query"');
-        
+
         $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
-        
+
         if ($this->get_query())
         {
             $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
@@ -87,7 +88,7 @@ class ActionBarSearchForm extends FormValidator
 
     /**
      * Gets the conditions that this form introduces.
-     * 
+     *
      * @return String the query
      */
     public function get_query()

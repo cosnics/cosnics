@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: group_users_subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 /**
@@ -29,7 +28,7 @@ class GroupUsersSubscribeComponent extends Manager
     {
         $course = $this->get_course();
         $groups = Request::get(self::PARAM_OBJECTS);
-        
+
         if (! is_array($groups))
         {
             $groups = array($groups);
@@ -42,9 +41,9 @@ class GroupUsersSubscribeComponent extends Manager
                 {
                     $this->subscribe_group($group_id, $course);
                 }
-                
+
                 $success = true;
-                
+
                 if (count($groups) == 1)
                 {
                     $message = 'GroupsSubscribedToCourse';
@@ -53,10 +52,10 @@ class GroupUsersSubscribeComponent extends Manager
                 {
                     $message = 'GroupsSubscribedToCourse';
                 }
-                
+
                 $this->redirect(
-                    Translation::get($message), 
-                    ($success ? false : true), 
+                    Translation::get($message),
+                    ($success ? false : true),
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS));
             }
@@ -66,12 +65,12 @@ class GroupUsersSubscribeComponent extends Manager
     public function subscribe_group($group_id, $course)
     {
         $group_users = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-            GroupRelUser::class_name(), 
+            GroupRelUser::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
+                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($group_id))));
-        
+
         while ($user = $group_users->next_result())
         {
             $user_id = $user->get_user_id();
@@ -80,19 +79,19 @@ class GroupUsersSubscribeComponent extends Manager
                 $status = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_STATUS) ? Request::get(
                     \Chamilo\Application\Weblcms\Manager::PARAM_STATUS) : 5;
                 \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                    $course->get_id(), 
-                    $status, 
+                    $course->get_id(),
+                    $status,
                     $user_id);
             }
         }
-        
+
         $groups = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-            Group::class_name(), 
+            Group::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($group_id))));
-        
+
         while ($group = $groups->next_result())
         {
             $this->subscribe_group($group->get_id(), $course);

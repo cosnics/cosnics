@@ -15,8 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- * $Id: user_group_subscribe_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.user.component
  */
 class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
@@ -24,16 +23,16 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
 
     /**
      * Renders the content for the tab
-     * 
+     *
      * @return string
      */
     protected function renderTabContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderGroupDetails();
         $html[] = $this->renderGroupUsersTable();
-        
+
         return implode($html, "\n");
     }
 
@@ -43,9 +42,9 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     protected function renderGroupDetails()
     {
         $group = $this->getCurrentGroup();
-        
+
         $html = array();
-        
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
         $html[] = '<b>' . $this->getTranslation('Code') . ':</b> ' . $group->get_code();
@@ -61,7 +60,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
@@ -71,7 +70,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     protected function renderGroupUsersTable()
     {
         $table = new GroupUsersTable($this);
-        
+
         $html = array();
         $html[] = '<div class="tab-content-header">';
         $html[] = '<h5>' . $this->getTranslation('Users') . '</h5>';
@@ -79,7 +78,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
 
         $html[] = '<div>' . $this->tabButtonToolbarRenderer->render() . '</div>';
         $html[] = $table->as_html();
-        
+
         return implode($html, "\n");
     }
 
@@ -89,36 +88,35 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     protected function getGroupButtonToolbarRenderer(Group $group)
     {
         $buttonToolbar = new ButtonToolBar();
-        
-        $courseManagementRights = CourseManagementRights::getInstance();
-        
-        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
-            CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
-            $group->getId(),
-            $this->get_course_id()
-        );
 
-        if (!$this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
+        $courseManagementRights = CourseManagementRights::getInstance();
+
+        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
+            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+            $group->getId(),
+            $this->get_course_id());
+
+        if (! $this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $this->getTranslation('SubscribeGroup'), 
-                    '', 
+                    $this->getTranslation('SubscribeGroup'),
+                    '',
                     $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS, 
-                            self::PARAM_OBJECTS => $group->getId())), 
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, 
-                    false, 
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
+                            self::PARAM_OBJECTS => $group->getId())),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                    false,
                     'btn-success'));
         }
-        
+
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
     /**
      * Returns the condition for the table
-     * 
+     *
      * @param string $table_class_name
      *
      * @return Condition
@@ -127,25 +125,25 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     {
         $group = $this->getCurrentGroup();
         $subscribedUserIds = $group->get_users();
-        
+
         $conditions = array();
-        
+
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
             $subscribedUserIds);
-        
+
         $conditionProperties = array();
-        $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL);
+        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
 
         $searchCondition = $this->tabButtonToolbarRenderer->getConditions($conditionProperties);
         if ($searchCondition)
         {
             $conditions[] = $searchCondition;
         }
-        
+
         if (count($conditions))
         {
             return new AndCondition($conditions);

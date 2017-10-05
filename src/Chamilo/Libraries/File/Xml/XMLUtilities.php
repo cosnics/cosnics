@@ -5,8 +5,7 @@ use DOMDocument;
 use DOMXPath;
 
 /**
- * $Id: xml.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.xml
  */
 class XMLUtilities
@@ -15,7 +14,7 @@ class XMLUtilities
     /**
      * Returns the first $subnode occurence of a $node.
      * The subnode is identified by its name.
-     * 
+     *
      * @param DOMNode $node
      * @param string $subnode_name
      * @return DOMNode
@@ -36,7 +35,7 @@ class XMLUtilities
     /**
      * Returns the first $subnode occurence value of a $node
      * The subnode is identified by its name.
-     * 
+     *
      * @param DOMNode $node
      * @param string $subnode_name
      * @return string
@@ -57,7 +56,7 @@ class XMLUtilities
     /**
      * Returns the first element found by the XPATH query.
      * The first subnode is searched by using a XPATH query relative to the document containing the $node.
-     * 
+     *
      * @param DOMNode $node
      * @param string $xpath_query
      * @return DOMNode
@@ -69,7 +68,7 @@ class XMLUtilities
         // $dom->appendChild($imported_node);
         $xpath = new DOMXPath($node->ownerDocument);
         $node_list = $xpath->query($xpath_query);
-        
+
         if ($node_list->length > 0)
         {
             return $node_list->item(0);
@@ -83,7 +82,7 @@ class XMLUtilities
     /**
      * Returns the value of the first element found by the XPATH query.
      * The first subnode is searched by using a XPATH query relative to the document containing the $node.
-     * 
+     *
      * @param DOMNode $node
      * @param string $xpath_query
      * @return string
@@ -91,7 +90,7 @@ class XMLUtilities
     public static function get_first_element_value_by_xpath($node, $xpath_query)
     {
         $node = self::get_first_element_by_xpath($node, $xpath_query);
-        
+
         if (isset($node))
         {
             return $node->nodeValue;
@@ -107,7 +106,7 @@ class XMLUtilities
      * The first subnode is searched by using a XPATH query relative to the given $node.
      * NOTE: this function can not be used to retrieve a node that needs to be updated
      * as the returned node is a copy of the original one, and thus is not the same object reference
-     * 
+     *
      * @param mixed DOMNode or DOMNodeList $node
      * @param string $xpath_query
      * @return DOMNode
@@ -128,10 +127,10 @@ class XMLUtilities
                 $dom->appendChild($imported_node);
             }
         }
-        
+
         $xpath = new DOMXPath($dom);
         $node_list = $xpath->query($xpath_query);
-        
+
         if ($node_list->length > 0)
         {
             return $node_list->item(0);
@@ -145,7 +144,7 @@ class XMLUtilities
     /**
      * Returns the value of the first element found by the XPATH query.
      * The first subnode is searched by using a XPATH query relative to the given $node.
-     * 
+     *
      * @param DOMNode $node
      * @param string $xpath_query
      * @return string
@@ -153,7 +152,7 @@ class XMLUtilities
     public static function get_first_element_value_by_relative_xpath($node, $xpath_query)
     {
         $node = self::get_first_element_by_relative_xpath($node, $xpath_query);
-        
+
         if (isset($node))
         {
             return $node->nodeValue;
@@ -167,7 +166,7 @@ class XMLUtilities
     /**
      * Returns all the values of a list of nodes under a given node.
      * The subnodes are searched by using a XPATH query relative to the document containing the $node.
-     * 
+     *
      * @param DOMNode $node
      * @param string $xpath_query
      * @return array of string
@@ -175,9 +174,9 @@ class XMLUtilities
     public static function get_all_values_by_xpath($node, $xpath_query)
     {
         $node_list = self::get_all_element_by_xpath($node, $xpath_query);
-        
+
         $values = array();
-        
+
         if (isset($node_list))
         {
             foreach ($node_list as $node_found)
@@ -185,14 +184,14 @@ class XMLUtilities
                 $values[] = $node_found->nodeValue;
             }
         }
-        
+
         return $values;
     }
 
     /**
      * Returns a nodes list under a given node.
      * The subnodes are searched by using a XPATH query relative to the document containing the $node.
-     * 
+     *
      * @param DOMNode $node
      * @param string $xpath_query
      * @return DOMNodeList
@@ -201,7 +200,7 @@ class XMLUtilities
     {
         $xpath = new DOMXPath($node->ownerDocument);
         $node_list = $xpath->query($xpath_query);
-        
+
         return $node_list;
     }
 
@@ -221,14 +220,14 @@ class XMLUtilities
                 $dom->appendChild($imported_node);
             }
         }
-        
+
         $xpath = new DOMXPath($dom);
         return $xpath->query($xpath_query);
     }
 
     /**
      * Get an attribute value, of the default value if the attribute is null or empty
-     * 
+     *
      * @param DOMNode $node The node to search the attribute on
      * @param string $attribute_name The name of the attribute to get the value from
      * @param string $default_value A default value if the attribute doesn't exist or is empty
@@ -236,18 +235,18 @@ class XMLUtilities
     public static function get_attribute($node, $attribute_name, $default_value = null)
     {
         $value = $node->getAttribute($attribute_name);
-        
+
         if (! isset($value) || strlen($value) == 0)
         {
             $value = $default_value;
         }
-        
+
         return $value;
     }
 
     /**
      * Delete all the nodes from a DOMDocument that are found with the given xpath query
-     * 
+     *
      * @param DOMDocument $dom_document The DOMDocument from which nodes must be removed
      * @param string $xpath_query
      */
@@ -255,7 +254,7 @@ class XMLUtilities
     {
         $xpath = new DOMXPath($dom_document);
         $node_list = $xpath->query($xpath_query);
-        
+
         if ($node_list->length > 0)
         {
             foreach ($node_list as $node_to_delete)

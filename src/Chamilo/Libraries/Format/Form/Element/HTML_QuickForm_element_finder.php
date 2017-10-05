@@ -1,12 +1,10 @@
 <?php
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: element_finder.php 128 2009-11-09 13:13:20Z vanpouckesven $
  *
  * @package common.html.formvalidator.Element
  */
@@ -38,11 +36,8 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
 
     private $defaults;
 
-    public function __construct(
-        $elementName = null, $elementLabel = null, $search_url = null, $locale = array('Display' => 'Display'),
-        $default_values = array(),
-        $options = array()
-    )
+    public function __construct($elementName = null, $elementLabel = null, $search_url = null,
+        $locale = array('Display' => 'Display'), $default_values = array(), $options = array())
     {
         parent::__construct($elementName, $elementLabel);
         $this->_type = 'element_finder';
@@ -60,7 +55,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
 
     public function isCollapsed()
     {
-        return $this->isDefaultCollapsed() && !count($this->getValue());
+        return $this->isDefaultCollapsed() && ! count($this->getValue());
     }
 
     public function isDefaultCollapsed()
@@ -110,23 +105,19 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $this->_elements[] = new HTML_QuickForm_hidden(
             $this->getName() . '_active_hidden',
             null,
-            array('id' => $active_hidden_id)
-        );
+            array('id' => $active_hidden_id));
         $this->_elements[] = new HTML_QuickForm_text(
             $this->getName() . '_search',
             null,
-            array('class' => 'element_query', 'id' => $this->getName() . '_search_field')
-        );
+            array('class' => 'element_query', 'id' => $this->getName() . '_search_field'));
         $this->_elements[] = new HTML_QuickForm_button(
             $this->getName() . '_activate',
             '',
-            array('id' => $activate_button_id, 'disabled' => 'disabled', 'class' => 'activate_elements')
-        );
+            array('id' => $activate_button_id, 'disabled' => 'disabled', 'class' => 'activate_elements'));
         $this->_elements[] = new HTML_QuickForm_button(
             $this->getName() . '_deactivate',
             '',
-            array('id' => $deactivate_button_id, 'disabled' => 'disabled', 'class' => 'deactivate_elements')
-        );
+            array('id' => $deactivate_button_id, 'disabled' => 'disabled', 'class' => 'deactivate_elements'));
     }
 
     public function getValue()
@@ -143,7 +134,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         {
             $value = explode('_', $value['id'], 2);
 
-            if (!isset($results[$value[0]]) || !is_array($results[$value[0]]))
+            if (! isset($results[$value[0]]) || ! is_array($results[$value[0]]))
             {
                 $results[$value[0]] = array();
             }
@@ -185,19 +176,18 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         if ($this->isCollapsed())
         {
             $html[] = '<button id="' . $this->getName() . '_expand_button" class="normal select">' .
-                htmlentities($this->locale['Display']) . '</button>';
+                 htmlentities($this->locale['Display']) . '</button>';
         }
         else
         {
-            $html[] =
-                '<button id="' . $this->getName() . '_expand_button" style="display: none" class="normal select">' .
-                htmlentities($this->locale['Display']) . '</button>';
+            $html[] = '<button id="' . $this->getName() . '_expand_button" style="display: none" class="normal select">' .
+                 htmlentities($this->locale['Display']) . '</button>';
         }
 
         $id = 'tbl_' . $this->getName();
 
         $html[] = '<div class="element_finder" id="' . $id . '" style="margin-top: 5px;' .
-            ($this->isCollapsed() ? ' display: none;' : '') . '">';
+             ($this->isCollapsed() ? ' display: none;' : '') . '">';
         $html[] = $this->_elements[0]->toHTML();
 
         // Search
@@ -208,14 +198,13 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
 
         if ($this->isCollapsed())
         {
-            $html[] =
-                '<button id="' . $this->getName() . '_collapse_button" style="display: none" class="normal hide">' .
-                htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+            $html[] = '<button id="' . $this->getName() . '_collapse_button" style="display: none" class="normal hide">' .
+                 htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
         else
         {
             $html[] = '<button id="' . $this->getName() . '_collapse_button" class="normal hide mini">' .
-                htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+                 htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
 
         $html[] = '</div>';
@@ -228,7 +217,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         // Inactive
         $html[] = '<div class="element_finder_inactive">';
         $html[] = '<div id="elf_' . $this->getName() . '_inactive" class="inactive_elements" style="height: ' .
-            $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
+             $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
@@ -236,7 +225,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         // Active
         $html[] = '<div class="element_finder_active">';
         $html[] = '<div id="elf_' . $this->getName() . '_active" class="active_elements" style="height: ' .
-            $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;"></div>';
+             $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;"></div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
@@ -249,8 +238,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.elementfinder.js'
-        );
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.elementfinder.js');
         $html[] = '<script type="text/javascript">';
 
         $exclude_ids = array();
@@ -266,14 +254,12 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $html[] = 'var ' . $this->getName() . '_excluded = new Array(' . implode(',', $exclude_ids) . ');';
 
         $load_elements = $this->locale['load_elements'];
-        $load_elements =
-            (isset($load_elements) && $load_elements == true ? ', loadElements: true' : ', loadElements: false');
+        $load_elements = (isset($load_elements) && $load_elements == true ? ', loadElements: true' : ', loadElements: false');
         $default_query = $this->locale['default_query'];
-        $default_query =
-            (isset($default_query) && !empty($default_query) ? ', defaultQuery: "' . $default_query . '"' : '');
+        $default_query = (isset($default_query) && ! empty($default_query) ? ', defaultQuery: "' . $default_query . '"' : '');
 
         $html[] = '$("#' . $id . '").elementfinder({ name: "' . $this->getName() . '", search: "' . $this->search_url .
-            '"' . $load_elements . $default_query . ' });';
+             '"' . $load_elements . $default_query . ' });';
         $html[] = '</script>';
 
         return implode(PHP_EOL, $html);

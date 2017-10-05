@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: reporting.class.php 218 2009-11-13 14:21:26Z kariboe $
  *
  * @package application.lib.weblcms.weblcms_manager.component
  */

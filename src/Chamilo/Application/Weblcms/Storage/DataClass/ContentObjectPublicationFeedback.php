@@ -5,9 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: content_object_publication_feedback.class.php 218 2009-11-13 14:21:26Z
- * kariboe $
- * 
+ *
  * @package application.lib.weblcms
  */
 
@@ -22,7 +20,7 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
 
     /**
      * Constructor
-     * 
+     *
      * @param $id int The id of this learning object publiction
      * @param $learningObject ContentObject The learning object which is
      *        published by this publication
@@ -50,24 +48,24 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
      * @param $displayOrder int The display order of this publication in its
      *        location (course - tool - category)
      */
-    public function __construct($id, $learningObject, $course, $tool, $parent_id, $repository_viewer, $publicationDate, 
+    public function __construct($id, $learningObject, $course, $tool, $parent_id, $repository_viewer, $publicationDate,
         $modifiedDate, $hidden, $emailSent)
     {
         parent::__construct(
-            $id, 
-            $learningObject, 
-            $course, 
-            $tool, 
-            0, 
-            array(), 
-            array(), 
-            0, 
-            0, 
-            $repository_viewer, 
-            $publicationDate, 
-            $modifiedDate, 
-            $hidden, 
-            0, 
+            $id,
+            $learningObject,
+            $course,
+            $tool,
+            0,
+            array(),
+            array(),
+            0,
+            0,
+            $repository_viewer,
+            $publicationDate,
+            $modifiedDate,
+            $hidden,
+            0,
             $emailSent);
         $this->set_parent_id($parent_id);
         $this->set_modified_date(time());

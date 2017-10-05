@@ -28,7 +28,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component
  */

@@ -9,8 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
- * $Id: subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 /**
@@ -29,65 +28,65 @@ class GroupSubscribeComponent extends Manager
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-        
+
         $course = $this->get_course();
         $group_ids = $this->getRequest()->get(self::PARAM_OBJECTS);
-        
+
         if (isset($group_ids) && ! is_array($group_ids))
         {
             $group_ids = array($group_ids);
         }
-        
+
         if (isset($course))
         {
             if (isset($group_ids) && count($group_ids) > 0)
             {
                 $failures = 0;
-                
+
                 $course_management_rights = CourseManagementRights::getInstance();
-                
+
                 $parent_group_id = null;
-                
+
                 foreach ($group_ids as $group_id)
                 {
-                    if($this->isGroupSubscribed($group_id))
+                    if ($this->isGroupSubscribed($group_id))
                     {
-                        $failures++;
+                        $failures ++;
                         continue;
                     }
 
                     if (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed_for_platform_group(
-                        CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, 
-                        $group_id, 
+                        CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+                        $group_id,
                         $course->get_id()))
                     {
                         $failures ++;
                         continue;
                     }
-                    
+
                     if (! $this->get_parent()->subscribe_group_to_course(
-                        $course, 
-                        $group_id, 
+                        $course,
+                        $group_id,
                         CourseEntityRelation::STATUS_STUDENT))
                     {
                         $failures ++;
                     }
-                    
+
                     if (! $parent_group_id)
                     {
                         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+                            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
                             $group_id);
                         $parent_group_id = $group->get_parent_id();
                     }
 
                     DataClassCache::truncate(CourseEntityRelation::class_name());
                 }
-                
+
                 if ($failures == 0)
                 {
                     $success = true;
-                    
+
                     if (count($group_ids) == 1)
                     {
                         $message = 'GroupSubscribedToCourse';
@@ -100,7 +99,7 @@ class GroupSubscribeComponent extends Manager
                 elseif ($failures == count($group_ids))
                 {
                     $success = false;
-                    
+
                     if (count($group_ids) == 1)
                     {
                         $message = 'GroupNotSubscribedToCourse';
@@ -117,14 +116,14 @@ class GroupSubscribeComponent extends Manager
                 }
 
                 $returnAction = $this->getRequest()->get(self::PARAM_RETURN_TO_COMPONENT);
-                $returnAction = !empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
+                $returnAction = ! empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
 
                 $this->redirect(
-                    Translation::get($message), 
-                    ($success ? false : true), 
+                    Translation::get($message),
+                    ($success ? false : true),
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $returnAction,
-                        \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP => $parent_group_id));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $returnAction,
+                        \Chamilo\Application\Weblcms\Manager::PARAM_GROUP => $parent_group_id));
             }
             else
             {
