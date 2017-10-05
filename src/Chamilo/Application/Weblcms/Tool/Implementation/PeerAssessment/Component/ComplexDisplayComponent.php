@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\PeerAssessmentDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -26,6 +25,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ComplexDisplayComponent extends Manager implements DelegateComponent, PeerAssessmentDisplaySupport
 {
+
     // TODO optimize database queries
     // TODO cache query results
     function run()
@@ -55,10 +55,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
         // launch
         $context = $this->get_root_content_object()->package() . '\Display';
-        $factory = new ApplicationFactory(
+
+        return $this->getApplicationFactory()->getApplication(
             $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     // region settings
@@ -293,7 +293,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         if (! $status->save())
             return false;
 
-            // get the scores the user has already filled in
+        // get the scores the user has already filled in
         $tracker = new PeerAssessmentScoreTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -436,7 +436,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         if (! $status->save())
             return false;
 
-            // get the feedback items the user has already filled in
+        // get the feedback items the user has already filled in
         $tracker = new PeerAssessmentFeedbackTracker();
         $items = array();
 

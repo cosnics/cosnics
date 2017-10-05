@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -33,7 +32,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     {
         $this->validateSelectedTreeNodeData();
 
-        if (!$this->canEditCurrentTreeNode())
+        if (! $this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -47,20 +46,18 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
             $variable = 'CreatorComponent';
         }
 
-        BreadcrumbTrail:: getInstance()->add(new Breadcrumb($this->get_url(), Translation:: get($variable)));
+        BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $exclude = $this->determine_excluded_content_object_ids();
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
-            $factory = new ApplicationFactory(
+            $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                $applicationConfiguration
-            );
-            $component = $factory->getComponent();
+                $applicationConfiguration);
             $component->set_excluded_objects($exclude);
 
             return $component->run();
@@ -68,7 +65,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
         else
         {
             $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            if (!is_array($object_ids))
+            if (! is_array($object_ids))
             {
                 $object_ids = array($object_ids);
             }
@@ -80,8 +77,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                 /** @var ContentObject $object */
                 $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                     ContentObject::class_name(),
-                    $object_id
-                );
+                    $object_id);
 
                 $learningPathService = $this->getLearningPathService();
 
@@ -90,8 +86,10 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                     $parentNode = $this->getCurrentTreeNode();
 
                     $treeNodeData = $learningPathService->addContentObjectToLearningPath(
-                        $this->get_root_content_object(), $parentNode, $object, $this->getUser()
-                    );
+                        $this->get_root_content_object(),
+                        $parentNode,
+                        $object,
+                        $this->getUser());
 
                     $nextStep = $treeNodeData->getId();
 
@@ -103,10 +101,8 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId(),
-                            Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() .
-                                ' > ' . $object->get_title()
-                        )
-                    );
+                            Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() . ' > ' .
+                                 $object->get_title()));
                 }
                 catch (\Exception $ex)
                 {
@@ -114,7 +110,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                 }
             }
 
-            if(!isset($nextStep))
+            if (! isset($nextStep))
             {
                 $nextStep = $this->getCurrentTreeNodeDataId();
             }
@@ -146,13 +142,9 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                 Translation::get(
                     $message,
                     array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
-                    Utilities::COMMON_LIBRARIES
-                ),
+                    Utilities::COMMON_LIBRARIES),
                 ($failures ? true : false),
-                array(
-                    self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep
-                )
-            );
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep));
         }
     }
 
@@ -167,6 +159,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     }
 
     /**
+     *
      * @return array
      */
     public function get_additional_parameters()
@@ -175,6 +168,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     }
 
     /**
+     *
      * @return array
      */
     public function get_allowed_content_object_types()
@@ -188,6 +182,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     }
 
     /**
+     *
      * @return bool
      */
     public function isFolderCreateMode()
@@ -196,6 +191,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
     }
 
     /**
+     *
      * @return string
      */
     public function render_header()

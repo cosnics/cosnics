@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPageFee
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -25,7 +24,7 @@ use MediawikiParserContext;
 
 /**
  * $Id: wiki_discuss.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.wiki.component
  */
 /*
@@ -43,14 +42,14 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
 
     /**
      * The Wiki Page Wrapper
-     * 
+     *
      * @var ComplexWikiPage
      */
     protected $complexWikiPage;
 
     /**
      * The Wiki Page
-     * 
+     *
      * @var WikiPage
      */
     protected $wikiPage;
@@ -58,66 +57,64 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function run()
     {
         $this->set_parameter(
-            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, 
+            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
             $this->get_selected_complex_content_object_item_id());
-        
+
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $this->complexWikiPage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class_name(),
             $complex_wiki_page_id);
         $this->wikiPage = $this->complexWikiPage->get_ref_object();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        
-        $html[] = $factory->run();
+
+        $html[] = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Feedback\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function render_header()
     {
         $html = array();
-        
+
         $html[] = parent::render_header($this->complexWikiPage);
-        
+
         $parser = new MediawikiParser(
             new MediawikiParserContext(
-                $this->get_root_content_object(), 
-                $this->wikiPage->get_title(), 
-                $this->wikiPage->get_description(), 
+                $this->get_root_content_object(),
+                $this->wikiPage->get_title(),
+                $this->wikiPage->get_description(),
                 $this->get_parameters()));
-        
+
         $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Discuss') . ' ' .
              $this->wikiPage->get_title() . '</div>';
         $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
-            'From', 
-            null, 
+            'From',
+            null,
             Utilities::COMMON_LIBRARIES) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
         $html[] = '<div class="wiki-pane-content-discuss">';
         $html[] = $parser->parse($this->wikiPage->get_description());
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="wiki-pane-content-feedback">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
     {
         $html = array();
-        
+
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = parent::render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -133,7 +130,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedbacks($count, $offset)
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::retrieves(
-            WikiPageFeedback::class_name(), 
+            WikiPageFeedback::class_name(),
             new DataClassRetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset));
     }
 
@@ -144,7 +141,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function count_feedbacks()
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::count(
-            WikiPageFeedback::class_name(), 
+            WikiPageFeedback::class_name(),
             new DataClassCountParameters($this->getWikiPageFeedbackCondition()));
     }
 
@@ -155,7 +152,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedback($feedback_id)
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::retrieve_by_id(
-            WikiPageFeedback::class_name(), 
+            WikiPageFeedback::class_name(),
             $feedback_id);
     }
 
@@ -167,19 +164,19 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     {
         $wikiPageFeedback = new WikiPageFeedback();
         $wikiPageFeedback->setWikiPageId($this->wikiPage->getId());
-        
+
         return $wikiPageFeedback;
     }
 
     /**
      * Returns the condition needed to retrieve / count feedback objects for the current wiki page
-     * 
+     *
      * @return EqualityCondition
      */
     protected function getWikiPageFeedbackCondition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(WikiPageFeedback::class_name(), WikiPageFeedback::PROPERTY_WIKI_PAGE_ID), 
+            new PropertyConditionVariable(WikiPageFeedback::class_name(), WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
             new StaticConditionVariable($this->wikiPage->getId()));
     }
 

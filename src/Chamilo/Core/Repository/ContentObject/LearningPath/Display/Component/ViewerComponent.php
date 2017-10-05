@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
@@ -193,11 +192,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             try
             {
-                $factory = new ApplicationFactory(
+                $application = $this->getApplicationFactory()->getApplication(
                     $integration_class_name::context(),
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-                $component = $factory->getComponent(null, false);
-                $component->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentTreeNode());
+                $application->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentTreeNode());
             }
             catch (\Exception $exception)
             {

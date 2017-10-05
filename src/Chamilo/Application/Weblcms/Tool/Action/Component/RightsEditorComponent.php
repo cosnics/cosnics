@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -41,17 +40,15 @@ class RightsEditorComponent extends Manager
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Rights\Editor\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
         $locations = $this->get_locations();
-        if(empty($locations))
+        if (empty($locations))
         {
             throw new UserException(Translation::getInstance()->getTranslation('NoRightsLocationsFound'));
         }
 
-        $component = $factory->getComponent();
+        $component = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Rights\Editor\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component->set_locations($locations);
         $component->set_entities($this->get_entities());
         $component->set_context('Chamilo\Application\Weblcms');

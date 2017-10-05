@@ -4,15 +4,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 class BrowserComponent extends Manager
 {
@@ -79,10 +78,9 @@ class BrowserComponent extends Manager
     {
         if (! isset($this->defaultComponent))
         {
-            $factory = new ApplicationFactory(
+            $this->defaultComponent = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            $this->defaultComponent = $factory->getComponent();
         }
 
         return $this->defaultComponent;

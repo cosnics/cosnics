@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -15,10 +14,10 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: introduction_publisher.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.component
  */
-class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, 
+class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
     DelegateComponent
 {
 
@@ -28,22 +27,20 @@ class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Re
         {
             throw new NotAllowedException();
         }
-        
+
         if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-            
-            $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager::context(), 
+
+            $component = $this->getApplicationFactory()->getApplication(
+                \Chamilo\Core\Repository\Viewer\Manager::context(),
                 $applicationConfiguration);
-            
-            $component = $factory->getComponent();
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
             $component->set_parameter(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION, 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                 \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION);
-            
+
             return $component->run();
         }
         else
@@ -62,20 +59,20 @@ class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Re
             $pub->set_email_sent(0);
             $pub->set_show_on_homepage(0);
             $pub->set_allow_collaboration(1);
-            
+
             $pub->ignore_display_order();
-            
+
             $pub->create();
-            
+
             $parameters = $this->get_parameters();
             $parameters['tool_action'] = null;
-            
+
             $this->redirect(
                 Translation::get(
-                    'ObjectPublished', 
-                    array('OBJECT' => Translation::get('Introduction')), 
-                    Utilities::COMMON_LIBRARIES), 
-                (false), 
+                    'ObjectPublished',
+                    array('OBJECT' => Translation::get('Introduction')),
+                    Utilities::COMMON_LIBRARIES),
+                (false),
                 $parameters);
         }
     }

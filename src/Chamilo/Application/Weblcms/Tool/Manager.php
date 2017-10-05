@@ -23,7 +23,6 @@ use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -45,6 +44,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  * This is the base class for all tools used in applications.
@@ -172,11 +172,12 @@ abstract class Manager extends Application
             throw new UserException(Translation::get('ToolTypeDoesNotExist', array('type' => $namespace)));
         }
 
-        $factory = new ApplicationFactory(
-            $namespace,
-            new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application));
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $applicationFactory = $container->get('chamilo.libraries.architecture.factory.application_factory');
 
-        return $factory->run();
+        return $applicationFactory->getApplication(
+            $namespace,
+            new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application))->run();
     }
 
     /**
@@ -837,7 +838,8 @@ abstract class Manager extends Application
         $entities = array();
         $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance($this->get_course_id());
         $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
-        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance($this->get_course_id());
+        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance(
+            $this->get_course_id());
 
         return $entities;
     }
@@ -952,11 +954,9 @@ abstract class Manager extends Application
 
     public function run()
     {
-        $factory = new ApplicationFactory(
+        return $this->getApplicationFactory()->getApplication(
             \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
-        return $factory->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     /**

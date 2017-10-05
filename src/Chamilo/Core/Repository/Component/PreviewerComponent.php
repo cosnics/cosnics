@@ -33,8 +33,7 @@ class PreviewerComponent extends Manager
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-            $preview_factory = $this->getPreview();
-            return $preview_factory->run();
+            return $this->getPreview()->run();
         }
         else
         {
@@ -59,6 +58,6 @@ class PreviewerComponent extends Manager
 
         return $this->getApplicationFactory()->getApplication(
             $namespace,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
     }
 }
