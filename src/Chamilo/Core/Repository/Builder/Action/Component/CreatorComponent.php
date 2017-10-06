@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: creator.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_builder.component
  */

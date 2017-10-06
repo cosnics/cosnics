@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: physical_location_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.physical_location
  */
 /**
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class PhysicalLocationForm extends ContentObjectForm
 {
-    
+
     // Inherited
     public function create_content_object()
     {
@@ -37,9 +36,9 @@ class PhysicalLocationForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(
-            PhysicalLocation::PROPERTY_LOCATION, 
-            Translation::get('Location'), 
-            true, 
+            PhysicalLocation::PROPERTY_LOCATION,
+            Translation::get('Location'),
+            true,
             array('size' => '100'));
         $this->addElement('category');
     }
@@ -49,9 +48,9 @@ class PhysicalLocationForm extends ContentObjectForm
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(
-            PhysicalLocation::PROPERTY_LOCATION, 
-            Translation::get('Location'), 
-            true, 
+            PhysicalLocation::PROPERTY_LOCATION,
+            Translation::get('Location'),
+            true,
             array('size' => '100'));
         $this->addElement('category');
     }

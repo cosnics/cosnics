@@ -5,8 +5,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
- * $Id: user_attempt_status_viewer_table_data_provider.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.peer_asessment.component.user_attempt_status_viewer
  */
 /**

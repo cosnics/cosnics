@@ -12,8 +12,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: external_calendar_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.external_calendar
  */
 class ExternalCalendarForm extends ContentObjectForm
@@ -35,60 +34,60 @@ class ExternalCalendarForm extends ContentObjectForm
     {
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
-            'radio', 
-            ExternalCalendar::PROPERTY_PATH_TYPE, 
-            '', 
-            Translation::get('PathTypeRemote'), 
+            'radio',
+            ExternalCalendar::PROPERTY_PATH_TYPE,
+            '',
+            Translation::get('PathTypeRemote'),
             ExternalCalendar::PATH_TYPE_REMOTE);
-        
+
         $path_type_remote_id = ExternalCalendar::PROPERTY_PATH_TYPE . '_' . ExternalCalendar::PATH_TYPE_REMOTE;
-        
+
         $this->addElement(
-            'html', 
+            'html',
             '<div style="padding-left:28px;" id="' . $path_type_remote_id . '" class="' .
                  ExternalCalendar::PROPERTY_PATH_TYPE . '">');
-        
+
         $this->add_textfield(
-            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_REMOTE . ']', 
-            null, 
-            false, 
+            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_REMOTE . ']',
+            null,
+            false,
             array('size' => '100'));
-        
+
         $this->addElement('html', '</div>');
-        
+
         $this->addElement(
-            'radio', 
-            ExternalCalendar::PROPERTY_PATH_TYPE, 
-            '', 
-            Translation::get('PathTypeLocal'), 
+            'radio',
+            ExternalCalendar::PROPERTY_PATH_TYPE,
+            '',
+            Translation::get('PathTypeLocal'),
             ExternalCalendar::PATH_TYPE_LOCAL);
-        
+
         $path_type_local_id = ExternalCalendar::PROPERTY_PATH_TYPE . '_' . ExternalCalendar::PATH_TYPE_LOCAL;
-        
+
         $this->addElement(
-            'html', 
+            'html',
             '<div style="padding-left:28px;" id="' . $path_type_local_id . '" class="' .
                  ExternalCalendar::PROPERTY_PATH_TYPE . '">');
-        
+
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 (int) $this->get_owner_id()));
-        
+
         $calculator->addUploadWarningToForm($this);
-        
+
         $this->addElement('file', ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']');
         $this->addRule(
-            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']', 
-            Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 
+            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']',
+            Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES),
             'disk_quota');
-        
+
         // $this->addFormRule(array($this, 'check_document_form'));
-        
+
         $this->addElement('html', '</div>');
         $this->addElement('category');
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\ExternalCalendar', true) .
                      'ExternalCalendar.js'));
@@ -97,7 +96,7 @@ class ExternalCalendarForm extends ContentObjectForm
     public function setDefaults($defaults = array ())
     {
         $content_object = $this->get_content_object();
-        
+
         if ($content_object instanceof ExternalCalendar)
         {
             if ($content_object->get_path_type() == ExternalCalendar::PATH_TYPE_LOCAL)
@@ -107,7 +106,7 @@ class ExternalCalendarForm extends ContentObjectForm
             else
             {
                 $defaults[ExternalCalendar::PROPERTY_PATH_TYPE] = ExternalCalendar::PATH_TYPE_REMOTE;
-                
+
                 if (StringUtilities::getInstance()->hasValue($content_object->get_path()))
                 {
                     $defaults[ExternalCalendar::PROPERTY_PATH][ExternalCalendar::PATH_TYPE_REMOTE] = $content_object->get_path();
@@ -123,7 +122,7 @@ class ExternalCalendarForm extends ContentObjectForm
             $defaults[ExternalCalendar::PROPERTY_PATH_TYPE] = ExternalCalendar::PATH_TYPE_REMOTE;
             $defaults[ExternalCalendar::PROPERTY_PATH][ExternalCalendar::PATH_TYPE_REMOTE] = 'http://';
         }
-        
+
         parent::setDefaults($defaults);
     }
 
@@ -145,15 +144,15 @@ class ExternalCalendarForm extends ContentObjectForm
     public function set_content_object_properties($object)
     {
         $values = $this->exportValues();
-        
+
         $path_type = $values[ExternalCalendar::PROPERTY_PATH_TYPE];
         $object->set_path_type($path_type);
-        
+
         if ($path_type == ExternalCalendar::PATH_TYPE_REMOTE)
         {
             $url = $values[ExternalCalendar::PROPERTY_PATH][ExternalCalendar::PATH_TYPE_REMOTE];
             $file_properties = FileProperties::from_url($url);
-            
+
             $object->set_path($url);
             $object->set_filename($file_properties->get_name_extension());
             $object->set_filesize($file_properties->get_size());
@@ -162,13 +161,13 @@ class ExternalCalendarForm extends ContentObjectForm
         else
         {
             $file = $_FILES[ExternalCalendar::PROPERTY_PATH];
-            
+
             if (StringUtilities::getInstance()->hasValue($file['name'][ExternalCalendar::PATH_TYPE_LOCAL]))
             {
                 $object->set_filename($file['name'][ExternalCalendar::PATH_TYPE_LOCAL]);
                 $object->set_temporary_file_path($file['tmp_name'][ExternalCalendar::PATH_TYPE_LOCAL]);
             }
-            
+
             if ((isset($values['version']) && $values['version'] == 0) || ! isset($values['version']))
             {
                 $object->set_save_as_new_version(false);

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: forum_topic_creator.class.php 205 2009-11-13 12:57:33Z vanpouckesven $
  *
  * @package repository.lib.complex_display.forum.component
  */

@@ -14,8 +14,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: exporter.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.user_manager.component
  */
 class ExporterComponent extends Manager
@@ -31,20 +30,20 @@ class ExporterComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
-        
+
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-        
+
         $form = new UserExportForm(UserExportForm::TYPE_EXPORT, $this->get_url());
-        
+
         if ($form->validate())
         {
             $export = $form->exportValues();
             $file_type = $export['file_type'];
             $result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 new DataClassRetrievesParameters());
             while ($user = $result->next_result())
             {
@@ -56,10 +55,10 @@ class ExporterComponent extends Manager
                 {
                     $user_array = $this->prepare_for_other_export($user);
                 }
-                
+
                 Event::trigger(
-                    'Export', 
-                    Manager::context(), 
+                    'Export',
+                    Manager::context(),
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                 $data[] = $user_array;
             }
@@ -68,11 +67,11 @@ class ExporterComponent extends Manager
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -103,7 +102,7 @@ class ExporterComponent extends Manager
             (string) StringUtilities::getInstance()->createString(User::PROPERTY_EXPIRATION_DATE)->upperCamelize());
         $auth_source_title = Translation::get(
             (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->uperCamelize());
-        
+
         $user_array[$lastname_title] = $user->get_lastname();
         $user_array[$firstname_title] = $user->get_firstname();
         $user_array[$username_title] = $user->get_username();
@@ -113,17 +112,17 @@ class ExporterComponent extends Manager
         $user_array[$active_title] = $user->get_active();
         $user_array[$official_code_title] = $user->get_official_code();
         $user_array[$phone_title] = $user->get_phone();
-        
+
         $act_date = $user->get_activation_date();
-        
+
         $user_array[$activation_date_title] = $act_date;
-        
+
         $exp_date = $user->get_expiration_date();
-        
+
         $user_array[$expiration_date_title] = $exp_date;
-        
+
         $user_array[$auth_source_title] = $user->get_auth_source();
-        
+
         return $user_array;
     }
 
@@ -131,7 +130,7 @@ class ExporterComponent extends Manager
     {
         // action => needed for import back into chamilo
         $user_array['action'] = $action;
-        
+
         // $user_array[User::PROPERTY_USER_ID] = $user->get_id();
         $user_array[User::PROPERTY_LASTNAME] = $user->get_lastname();
         $user_array[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
@@ -142,17 +141,17 @@ class ExporterComponent extends Manager
         $user_array[User::PROPERTY_ACTIVE] = $user->get_active();
         $user_array[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
         $user_array[User::PROPERTY_PHONE] = $user->get_phone();
-        
+
         $act_date = $user->get_activation_date();
-        
+
         $user_array[User::PROPERTY_ACTIVATION_DATE] = $act_date;
-        
+
         $exp_date = $user->get_expiration_date();
-        
+
         $user_array[User::PROPERTY_EXPIRATION_DATE] = $exp_date;
-        
+
         $user_array[User::PROPERTY_AUTH_SOURCE] = $user->get_auth_source();
-        
+
         return $user_array;
     }
 

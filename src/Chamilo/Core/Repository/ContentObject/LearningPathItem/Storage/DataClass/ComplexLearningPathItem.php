@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: complex_learning_path_item.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.learning_path_item
  */
 class ComplexLearningPathItem extends ComplexContentObjectItem

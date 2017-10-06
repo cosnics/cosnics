@@ -9,7 +9,6 @@ use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: admin_installer.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  *
  * @package admin.install
  */

@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: category_manager.class.php 204 2009-11-13 12:51:30Z kariboe $
  *
  * @package repository.lib.repository_manager.component
  */

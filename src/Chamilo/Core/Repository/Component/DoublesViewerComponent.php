@@ -19,8 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: comparer.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component
  */
 
@@ -39,22 +38,22 @@ class DoublesViewerComponent extends Manager implements TableSupport
     {
         $id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
         $trail = BreadcrumbTrail::getInstance();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
-        
+
         if (isset($id))
         {
             $this->content_object = $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
             $html[] = ContentObjectRenditionImplementation::launch(
-                $content_object, 
-                ContentObjectRendition::FORMAT_HTML, 
-                ContentObjectRendition::VIEW_FULL, 
+                $content_object,
+                ContentObjectRendition::FORMAT_HTML,
+                ContentObjectRendition::VIEW_FULL,
                 $this);
             $html[] = '<br />';
             $html[] = $this->get_detail_table_html();
-            
+
             $params = array(self::PARAM_CONTENT_OBJECT_ID => $this->content_object->get_id());
             $trail->add(new Breadcrumb($this->get_url($params), $this->content_object->get_title()));
         }
@@ -62,9 +61,9 @@ class DoublesViewerComponent extends Manager implements TableSupport
         {
             $html[] = $this->get_full_table_html();
         }
-        
+
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -80,11 +79,11 @@ class DoublesViewerComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
         return new AndCondition($conditions);
     }
@@ -104,12 +103,12 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $conditions[] = $this->get_full_condition();
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
                 new StaticConditionVariable($this->content_object->get_id())));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH),
             new StaticConditionVariable($this->content_object->get_content_hash()));
-        
+
         return new AndCondition($conditions);
     }
 
@@ -117,7 +116,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
                 Translation::get('BrowserComponent')));
         $breadcrumbtrail->add_help('repository_doubles_viewer');
     }
@@ -129,7 +128,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
         {
             $conditions[true] = $this->get_detail_condition();
         }
-        
+
         $conditions[false] = $this->get_full_condition();
         return $conditions;
     }

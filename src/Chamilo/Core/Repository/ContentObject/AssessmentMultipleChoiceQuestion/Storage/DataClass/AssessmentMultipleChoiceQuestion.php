@@ -7,8 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: assessment_multiple_choice_question.class.php$
- * 
+ *
  * @package repository.lib.content_object.multiple_choice_question
  */
 class AssessmentMultipleChoiceQuestion extends ContentObject implements Versionable
@@ -57,7 +56,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -107,7 +106,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     public function get_maximum_score()
     {
         $max = 0;
-        
+
         switch ($this->get_answer_type())
         {
             case self::ANSWER_TYPE_CHECKBOX :
@@ -129,10 +128,10 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
                 }
                 break;
         }
-        
+
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -141,7 +140,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: assessment_merger.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_builder.assessment.component
  */

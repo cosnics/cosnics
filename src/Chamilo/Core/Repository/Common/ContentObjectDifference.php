@@ -5,8 +5,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: content_object_difference.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 /**
@@ -27,7 +26,7 @@ abstract class ContentObjectDifference
 
     /**
      * Constructor.
-     * 
+     *
      * @param $object ContentObject The object to compare.
      * @param $version ContentObject The object to compare with.
      */
@@ -39,7 +38,7 @@ abstract class ContentObjectDifference
 
     /**
      * Returns the object associated with this object.
-     * 
+     *
      * @return ContentObject The object.
      */
     public function get_object()
@@ -49,7 +48,7 @@ abstract class ContentObjectDifference
 
     /**
      * Returns the object associated with this object.
-     * 
+     *
      * @return ContentObject The object version.
      */
     public function get_version()
@@ -67,10 +66,10 @@ abstract class ContentObjectDifference
         $version_string = str_replace('<p>', '', $version_string);
         $version_string = str_replace('</p>', "<br />\n", $version_string);
         $version_string = explode("\n", strip_tags($version_string));
-        
+
         $difference = new \Diff($version_string, $object_string);
         $renderer = new \Diff_Renderer_Html_SideBySide();
-        
+
         $renderedString = $difference->Render($renderer);
 
         $translator = Translation::getInstance();
@@ -82,7 +81,7 @@ abstract class ContentObjectDifference
 
     /**
      * Creates an object that can display the given object in a standardized fashion.
-     * 
+     *
      * @param $object ContentObject The object to display.
      * @return ContentObject
      */

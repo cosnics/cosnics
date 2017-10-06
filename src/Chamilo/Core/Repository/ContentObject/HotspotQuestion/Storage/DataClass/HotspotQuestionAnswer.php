@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass;
 
 /**
- * $Id: hotspot_question_answer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.hotspot_question
  */
 use Chamilo\Libraries\Utilities\StringUtilities;

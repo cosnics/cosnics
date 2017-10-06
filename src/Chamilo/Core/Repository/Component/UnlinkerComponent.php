@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: publication_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component
  */
 class UnlinkerComponent extends Manager
@@ -26,26 +25,26 @@ class UnlinkerComponent extends Manager
     {
         $ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $ids);
-        
+
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-            
+
             $failures = 0;
             foreach ($ids as $object_id)
             {
                 $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
-                
+
                 if (RightsService::getInstance()->canDestroyContentObject(
-                    $this->get_user(), 
-                    $object, 
+                    $this->get_user(),
+                    $object,
                     $this->getWorkspace()))
                 {
                     $versions = $object->get_content_object_versions();
-                    
+
                     foreach ($versions as $version)
                     {
                         if (! $version->delete_links())
@@ -59,7 +58,7 @@ class UnlinkerComponent extends Manager
                     $failures ++;
                 }
             }
-            
+
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -86,21 +85,21 @@ class UnlinkerComponent extends Manager
                     $parameter = array('OBJECTS' => Translation::get('ContentObjects'));
                 }
             }
-            
+
             if (count($ids) == 1)
             {
                 $parameters = array(
-                    Application::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS, 
+                    Application::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
                     self::PARAM_CONTENT_OBJECT_ID => $ids[0]);
             }
             else
             {
                 $parameters = array(Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS);
             }
-            
+
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
-                ($failures ? true : false), 
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
+                ($failures ? true : false),
                 $parameters);
         }
         else
@@ -114,7 +113,7 @@ class UnlinkerComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
                 Translation::get('BrowserComponent')));
         $breadcrumbtrail->add_help('repository_unlinker');
     }

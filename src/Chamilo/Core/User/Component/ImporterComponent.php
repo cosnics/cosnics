@@ -14,7 +14,6 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
- * $Id: importer.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.user_manager.component
  */

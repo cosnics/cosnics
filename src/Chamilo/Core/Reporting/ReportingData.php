@@ -4,7 +4,6 @@ namespace Chamilo\Core\Reporting;
 use Chamilo\Core\Reporting\ReportingDataStyle;
 
 /**
- * $Id: ReportingData.php
  * For details on (PDF) formatting @see ReportingDataStyle
  */
 class ReportingData
@@ -196,7 +195,7 @@ class ReportingData
     public function add_row($value, $style = null)
     {
         $this->rows[] = $value;
-        
+
         if ($style)
         {
             $this->set_row_style($value, $style);
@@ -241,7 +240,7 @@ class ReportingData
 
     /**
      * Set style of given row.
-     * 
+     *
      * @param $style string Row ID,
      * @param $style RepostingDataStyle Null or style of given row.
      *        @note $style is cloned before storing it, so that any change to $style will not influence the stored
@@ -264,7 +263,7 @@ class ReportingData
 
     /**
      * Sets style of category.
-     * 
+     *
      * @param $style RepostingDataStyle Style of category.
      */
     public function set_category_style($style)
@@ -294,10 +293,10 @@ class ReportingData
         {
             return;
         }
-        
+
         // Collect maximum data width per row.
         $max_row_lengths = $this->getMaxRowDataLengths();
-        
+
         // Relative width = Normalized max row lenght.
         $sum_of_max_lengths = array_sum($max_row_lengths);
         $relative_widths = array_map(function ($item) use ($sum_of_max_lengths)
@@ -311,7 +310,7 @@ class ReportingData
             function ($item) use ($min_relative_width)
             {
                 return max($item, $min_relative_width);
-            }, 
+            },
             $relative_widths);
         // Normalize again after clipping.
         $sum_of_relative_widths = array_sum($relative_widths);
@@ -319,15 +318,15 @@ class ReportingData
             function ($item) use ($sum_of_relative_widths)
             {
                 return $item / $sum_of_relative_widths;
-            }, 
+            },
             $relative_widths);
-        
+
         // Set relative width per row.
         foreach ($relative_widths as $row_name => $relative_width)
         {
             $style = new ReportingDataStyle();
             $style->setRelativeWidth($relative_width);
-            
+
             if ($row_name == "#CATEGORY#")
             {
                 $this->set_category_style($style);
@@ -350,7 +349,7 @@ class ReportingData
         {
             return true;
         }
-        
+
         foreach ($this->get_rows() as $row_index => $row_name)
         {
             if (! is_null($this->get_row_style($row_name)))
@@ -358,7 +357,7 @@ class ReportingData
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -366,7 +365,7 @@ class ReportingData
      * Returns an array of maximum data lengths per row.
      * For each row, loops over all categories and finds the maximum data length.
      * Data length: string length after stripping all tags.
-     * 
+     *
      * @return array: keys: row names values: maximum data lengths. If category is visible the key "#CATEGORY#" contains
      *         the maximum
      *         category length.
@@ -375,36 +374,36 @@ class ReportingData
     {
         // Collect maximum data width per row.
         $max_row_lengths = [];
-        
+
         if ($this->is_categories_visible())
         {
             $max_length = 0;
-            
+
             foreach ($this->get_categories() as $category_name)
             {
                 $max_length = max($max_length, strlen($category_name));
             }
-            
+
             $max_row_lengths["#CATEGORY#"] = $max_length;
         }
-        
+
         foreach ($this->get_rows() as $row_index => $row_name)
         {
             $max_length = 0;
-            
+
             if ($this->is_row_heading_visible())
             {
                 $max_length = max($max_length, strlen($row_name));
             }
-            
+
             foreach ($this->get_categories() as $category_index => $category_name)
             {
                 $max_length = max($max_length, strlen(strip_tags($this->data[$category_index][$row_index])));
             }
-            
+
             $max_row_lengths[$row_name] = $max_length;
         }
-        
+
         return $max_row_lengths;
     }
 }

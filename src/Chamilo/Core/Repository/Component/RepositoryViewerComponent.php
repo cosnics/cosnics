@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: restorer.class.php 204 2009-11-13 12:51:30Z kariboe $
  *
  * @package repository.lib.repository_manager.component
  */

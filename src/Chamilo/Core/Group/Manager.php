@@ -22,8 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: group_manager.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib.group_manager
  */
 abstract class Manager extends Application
@@ -77,7 +76,7 @@ abstract class Manager extends Application
 
     /**
      * The currently selected group
-     * 
+     *
      * @var Group
      */
     private $selected_group;
@@ -86,21 +85,21 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
         $this->create_url = $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP));
-        
+
         $this->checkAuthorization(Manager::context());
     }
 
     public function count_groups($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
-        
+
         return DataManager::count(Group::class_name(), $parameters);
     }
 
     public function count_group_rel_users($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
-        
+
         return DataManager::count(GroupRelUser::class_name(), $parameters);
     }
 
@@ -120,7 +119,7 @@ abstract class Manager extends Application
         {
             $this->search_form = new GroupSearchForm($this, $this->get_url());
         }
-        
+
         return $this->search_form;
     }
 
@@ -129,10 +128,10 @@ abstract class Manager extends Application
         if (! isset($this->user_search_form))
         {
             $this->user_search_form = new UserSearchForm(
-                $this, 
+                $this,
                 $this->get_url(array(self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))));
         }
-        
+
         return $this->user_search_form;
     }
 
@@ -148,38 +147,38 @@ abstract class Manager extends Application
 
     /**
      * Gets the parameter list
-     * 
+     *
      * @param boolean $include_search Include the search parameters in the returned list?
      * @return array The list of parameters.
      */
     public function get_parameters($include_search = false, $include_user_search = false)
     {
         $parms = parent::get_parameters();
-        
+
         if ($include_search && isset($this->search_parameters))
         {
             $parms = array_merge($this->search_parameters, $parms);
         }
-        
+
         if ($include_user_search && isset($this->user_search_parameters))
         {
             $parms = array_merge($this->user_search_parameters, $parms);
         }
-        
+
         return $parms;
     }
 
     public function retrieve_groups($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            Group::class_name(), 
+            Group::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public static function retrieve_group_rel_users($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            GroupRelUser::class_name(), 
+            GroupRelUser::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -187,13 +186,13 @@ abstract class Manager extends Application
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id));
         $condition = new AndCondition($conditions);
-        
+
         return DataManager::retrieve(GroupRelUser::class_name(), new DataClassRetrieveParameters($condition));
     }
 
@@ -236,7 +235,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER_FROM_GROUP, 
+                self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
                 self::PARAM_GROUP_REL_USER_ID => $groupreluser->getId()));
     }
 
@@ -244,8 +243,8 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP, 
-                self::PARAM_GROUP_ID => $group->get_id(), 
+                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP,
+                self::PARAM_GROUP_ID => $group->get_id(),
                 self::PARAM_USER_ID => $user->get_id()));
     }
 
@@ -279,7 +278,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the selected group
-     * 
+     *
      * @throws \libraries\architecture\NoObjectSelectedException
      * @throws \libraries\architecture\ObjectNotExistException
      *
@@ -294,22 +293,22 @@ abstract class Manager extends Application
             {
                 throw new NoObjectSelectedException(Translation::get('Group'));
             }
-            
+
             $group = DataManager::retrieve_by_id(Group::class_name(), $group_id);
             if (! $group)
             {
                 throw new ObjectNotExistException(Translation::get('Group', $group_id));
             }
-            
+
             $this->selected_group = $group;
         }
-        
+
         return $this->selected_group;
     }
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

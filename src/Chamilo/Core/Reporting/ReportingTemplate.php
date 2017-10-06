@@ -4,10 +4,9 @@ namespace Chamilo\Core\Reporting;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- * $Id: reporting_template.class.php 215 2009-11-13 14:07:59Z vanpouckesven $ Extendable class for the reporting
  * templates This contains the general shared template properties such as Properties (name, description, etc) Layout
  * (header,menu, footer)
- * 
+ *
  * @package reporting.lib
  * @author Michael Kyndt
  */
@@ -99,7 +98,7 @@ abstract class ReportingTemplate
 
     /**
      * This method allows replacing the last crumb of the breadcrumbtrail with one or more own crumbs
-     * 
+     *
      * @param array custom_breadcrumbs
      */
     public function set_custom_breadcrumb_trail($custom_breadcrumbs)
@@ -107,7 +106,7 @@ abstract class ReportingTemplate
         $breadcrumb_trail = BreadcrumbTrail::getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = $custom_breadcrumbs[0];
-        
+
         for ($i = 0; $i < count($custom_breadcrumbs) - 1; $i ++)
         {
             $breadcrumbs[$breadcrumb_trail->size() + $i] = $custom_breadcrumbs[$i + 1];

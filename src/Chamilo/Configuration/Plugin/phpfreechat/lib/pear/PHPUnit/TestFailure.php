@@ -29,20 +29,19 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestFailure.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
 
 /**
  * A TestFailure collects a failed test together with the caught exception.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -71,7 +70,7 @@ class PHPUnit_TestFailure
 
     /**
      * Constructs a TestFailure with the given test and exception.
-     * 
+     *
      * @param object
      * @param string
      * @access public
@@ -84,7 +83,7 @@ class PHPUnit_TestFailure
 
     /**
      * Gets the failed test.
-     * 
+     *
      * @return object
      * @access public
      */
@@ -95,7 +94,7 @@ class PHPUnit_TestFailure
 
     /**
      * Gets the thrown exception.
-     * 
+     *
      * @return object
      * @access public
      */
@@ -106,13 +105,13 @@ class PHPUnit_TestFailure
 
     /**
      * Returns a short description of the failure.
-     * 
+     *
      * @return string
      * @access public
      */
     function toString()
     {
-        return sprintf("TestCase %s->%s() failed: %s\n", 
+        return sprintf("TestCase %s->%s() failed: %s\n",
 
         get_class($this->_failedTest), $this->_failedTest->getName(), $this->_thrownException);
     }

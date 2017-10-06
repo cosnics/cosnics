@@ -7,8 +7,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment.component.result_viewer
  */
 class QuestionResultDisplay
@@ -39,7 +38,7 @@ class QuestionResultDisplay
      */
     private $questionResultDisplay;
 
-    public function __construct($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers, 
+    public function __construct($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers,
         $score, $hints, $feedback, $can_change)
     {
         $this->complex_content_object_question = $complex_content_object_question;
@@ -105,17 +104,17 @@ class QuestionResultDisplay
             $this->hints);
 
         $this->render_header();
-        
+
         if ($this->add_borders())
         {
             $header = array();
             $header[] = '<div class="with_borders">';
-            
+
             $this->form->addElement('html', implode(PHP_EOL, $header));
         }
 
         $this->form->addElement('html', $this->questionResultDisplay->get_question_result());
-        
+
         if ($this->add_borders())
         {
             $footer = array();
@@ -123,9 +122,9 @@ class QuestionResultDisplay
             $footer[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $footer));
         }
-        
+
         $this->display_feedback();
-        
+
         $this->form->addElement('html', $this->render_footer());
     }
 
@@ -142,17 +141,17 @@ class QuestionResultDisplay
 
         $this->form->addElement('html', implode(PHP_EOL, $html));
         $html = array();
-        
+
         if ($this->hints > 0)
         {
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
             $label = Translation::get($variable, array('COUNT' => $this->hints));
-            
+
             $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme::getInstance()->getImagePath(
-                'Chamilo\Core\Repository\ContentObject\Assessment\Display', 
+                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
                 'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . htmlentities($label) . '" />&nbsp;&nbsp;';
         }
-        
+
         if (! $this->can_change)
         {
             if ($this->get_results_viewer()->get_configuration()->show_score())
@@ -171,9 +170,9 @@ class QuestionResultDisplay
             {
                 $score[$i] = $i;
             }
-            
+
             $renderer = $this->form->defaultRenderer();
-            
+
             $this->form->addElement('select', $this->complex_content_object_question->get_id() . '_score', '', $score);
             $renderer->setElementTemplate('{element}', $this->complex_content_object_question->get_id() . '_score');
             $defaults[$this->complex_content_object_question->get_id() . '_score'] = $this->get_score();
@@ -238,19 +237,19 @@ class QuestionResultDisplay
             $html[] = Translation::get('CourseAdministratorFeedback');
             $html[] = '</div>';
             $html[] = '<div class="feedback">';
-            
+
             if (! $this->feedback)
             {
                 $html[] = '<div class="warning-message">' . Translation::get('NotYetRatedWarning') . '</div>';
             }
-            
+
             $this->form->addElement('html', implode(PHP_EOL, $html));
             $html = array();
-            
+
             $this->form->add_html_editor($this->complex_content_object_question->get_id() . '_feedback', '', false);
             $defaults[$this->complex_content_object_question->get_id() . '_feedback'] = $this->get_feedback();
             $this->form->setDefaults($defaults);
-            
+
             $html[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $html));
         }

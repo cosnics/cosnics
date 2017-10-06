@@ -8,8 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: forum_subforum_deleter.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.forum.component
  */
 class ForumSubforumDeleterComponent extends Manager
@@ -19,11 +18,11 @@ class ForumSubforumDeleterComponent extends Manager
     {
         if ($this->get_parent()->is_allowed(DELETE_RIGHT))
         {
-            
+
             $subforum = $this->get_selected_complex_content_object_item();
-            
+
             $params = array();
-            
+
             if ($subforum->get_parent_object() == $this->get_root_content_object())
             {
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
@@ -36,15 +35,15 @@ class ForumSubforumDeleterComponent extends Manager
                 $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = Request::get('parent_cloi');
             }
             $params[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
-            
+
             $success = $subforum->delete();
-            
+
             $message = htmlentities(
                 Translation::get(
-                    ($success ? 'ObjectDeleted' : 'ObjectNotDeleted'), 
-                    array('OBJECT' => Translation::get('Subforum')), 
+                    ($success ? 'ObjectDeleted' : 'ObjectNotDeleted'),
+                    array('OBJECT' => Translation::get('Subforum')),
                     Utilities::COMMON_LIBRARIES));
-            
+
             $this->redirect($message, ($success ? false : true), $params);
         }
         else

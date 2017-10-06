@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
- * $Id: reporting.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.user_manager.component
  */

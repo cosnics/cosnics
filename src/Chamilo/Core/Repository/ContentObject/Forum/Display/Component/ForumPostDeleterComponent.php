@@ -10,7 +10,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: forum_post_deleter.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.forum.component
  * @author Maarten Volckaert - Hogeschool Gent

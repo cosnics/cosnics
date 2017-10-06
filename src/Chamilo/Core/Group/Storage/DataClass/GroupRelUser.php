@@ -9,8 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: group_rel_user.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib
  */
 /**
@@ -45,7 +44,7 @@ class GroupRelUser extends DataClass
 
     /**
      * Get the default properties of all groups.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -65,14 +64,14 @@ class GroupRelUser extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_group_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return DataManager::deletes(GroupRelUser::class_name(), $condition);
     }
 }

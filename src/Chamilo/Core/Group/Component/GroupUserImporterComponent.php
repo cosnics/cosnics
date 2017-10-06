@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: $
- * 
+ *
  * @author vanpouckesven
  * @package group.lib.group_manager.component
  */
@@ -27,27 +26,27 @@ class GroupUserImporterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $form = new GroupUserImportForm($this->get_url());
-        
+
         if ($form->validate())
         {
             $success = $form->import_group_users();
             $this->redirect(
                 Translation::get($success ? 'GroupUserCSVProcessed' : 'GroupUserCSVNotProcessed') . '<br />' .
-                     $form->get_failed_elements(), 
-                    ($success ? false : true), 
+                     $form->get_failed_elements(),
+                    ($success ? false : true),
                     array(Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS));
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -68,7 +67,7 @@ class GroupUserImporterComponent extends Manager
         $html[] = '<br />A: ' . Translation::get('Add', null, Utilities::COMMON_LIBRARIES);
         $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</blockquote>';
-        
+
         return implode($html, "\n");
     }
 
