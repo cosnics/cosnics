@@ -10,7 +10,7 @@
         "Rights"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -38,7 +38,10 @@
                     "id": "Chamilo\\Application\\Weblcms",
                     "version": ">=1.0.0"
                 }
-            ]
+            ],
+			"extra": {
+				"course-section": "admin"
+			}
         }
     }
 }

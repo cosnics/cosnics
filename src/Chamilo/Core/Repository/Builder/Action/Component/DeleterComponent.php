@@ -8,8 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: deleter.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder.component
  */
 class DeleterComponent extends Manager
@@ -24,22 +23,22 @@ class DeleterComponent extends Manager
             \Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $parent_complex_content_object_item = Request::get(
             \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        
+
         $failures = 0;
-        
+
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-            
+
             foreach ($ids as $complex_content_object_item_id)
             {
                 $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class_name(),
                     $complex_content_object_item_id);
-                
+
                 // if ($complex_content_object_item->get_user_id() == $this->get_user_id())
                 // {
                 // TODO: check if deletion is allowed
@@ -57,7 +56,7 @@ class DeleterComponent extends Manager
                 // $failures ++;
                 // }
             }
-            
+
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -84,13 +83,13 @@ class DeleterComponent extends Manager
                     $parameter = array('OBJECTS' => Translation::get('ContentObjects'));
                 }
             }
-            
+
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
-                $failures > 0, 
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
+                $failures > 0,
                 array(
-                    \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE, 
-                    \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item), 
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE,
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item),
                 array(\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         }
         else
@@ -98,8 +97,8 @@ class DeleterComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', 
-                        array('OBJECT' => Translation::get('ContentObject')), 
+                        'NoObjectSelected',
+                        array('OBJECT' => Translation::get('ContentObject')),
                         Utilities::COMMON_LIBRARIES)));
         }
     }

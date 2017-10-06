@@ -9,7 +9,7 @@
         "AssessmentMatchTextQuestion"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Assessment Match Text Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchTextQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

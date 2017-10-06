@@ -18,8 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: wiki_history.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.wiki.component
  */
 class WikiHistoryComponent extends Manager implements TableSupport
@@ -33,21 +32,21 @@ class WikiHistoryComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-        
+
         $this->complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        
+
         if ($this->complex_wiki_page_id)
         {
             $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class_name(),
                 $this->complex_wiki_page_id);
-            
+
             $compare_object_ids = $this->getRequest()->get(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
-            
+
             $html = array();
-            
+
             $html[] = $this->render_header($complex_wiki_page);
-            
+
             if ($compare_object_ids)
             {
                 if (count($compare_object_ids) < 2)
@@ -56,11 +55,11 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 }
                 $compare_object_id = $compare_object_ids[0];
                 $compare_version_id = $compare_object_ids[1];
-                
+
                 $compare_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
+                    ContentObject::class_name(),
                     $compare_object_id);
-                
+
                 $html[] = $compare_object->get_difference($compare_version_id)->render();
             }
             else
@@ -68,9 +67,9 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 $this->wiki_page = $complex_wiki_page->get_ref_object();
                 $version_parameters = $this->get_parameters();
                 $version_parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->complex_wiki_page_id;
-                
+
                 $version_browser = new VersionTable($this);
-                
+
                 $html[] = '<div class="wiki-pane-content-title">' . Translation::get('RevisionHistory') . ': ' .
                      $this->wiki_page->get_title() . '</div>';
                 $html[] = '<div class="wiki-pane-content-subtitle">' .
@@ -83,9 +82,9 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 $html[] = '<div class="clear"></div>';
                 $html[] = '</div>';
             }
-            
+
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
         else
@@ -97,22 +96,22 @@ class WikiHistoryComponent extends Manager implements TableSupport
     public function get_table_condition($class_name)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->wiki_page->get_object_number()));
     }
 
     public function count_content_object_versions_resultset($condition = null)
     {
         return \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             $condition);
     }
 
-    public function retrieve_content_object_versions_resultset($condition = null, $order_by = array(), $offset = 0, 
+    public function retrieve_content_object_versions_resultset($condition = null, $order_by = array(), $offset = 0,
         $max_objects = -1)
     {
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             $condition);
     }
 
@@ -120,42 +119,42 @@ class WikiHistoryComponent extends Manager implements TableSupport
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE, 
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id, 
+                self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
     }
 
     public function get_content_object_deletion_url($content_object, $type = null)
     {
         $delete_allowed = \Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed(
-            $content_object, 
+            $content_object,
             $type);
-        
+
         if (! $delete_allowed)
         {
             return null;
         }
-        
+
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_VERSION_DELETE, 
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id, 
+                self::PARAM_ACTION => self::ACTION_VERSION_DELETE,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
     }
 
     public function get_content_object_revert_url($content_object)
     {
         $revert_allowed = \Chamilo\Core\Repository\Storage\DataManager::content_object_revert_allowed($content_object);
-        
+
         if (! $revert_allowed)
         {
             return null;
         }
-        
+
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_VERSION_REVERT, 
-                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id, 
+                self::PARAM_ACTION => self::ACTION_VERSION_REVERT,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()));
     }
 

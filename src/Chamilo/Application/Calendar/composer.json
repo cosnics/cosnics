@@ -7,7 +7,7 @@
         "Calendar"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -26,6 +26,7 @@
             "name": "Personal Calendar",
             "context": "Chamilo\\Application\\Calendar",
             "type": "Chamilo\\Application",
+            "category": "social",
             "install": {
                 "default": 1,
                 "core": 0

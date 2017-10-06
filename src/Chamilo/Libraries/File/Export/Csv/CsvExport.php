@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\File\Export\Csv;
 use Chamilo\Libraries\File\Export\Export;
 
 /**
- * $Id: csv_export.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.export.csv
  */
 /**

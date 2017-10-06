@@ -18,8 +18,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * $Id: help_manager.class.php 226 2009-11-13 14:44:03Z chellee $
- * 
+ *
  * @package help.lib.help_manager
  */
 
@@ -38,7 +37,7 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
+
         $this->checkAuthorization(Manager::context());
     }
 
@@ -50,7 +49,7 @@ abstract class Manager extends Application
     public function retrieve_help_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            HelpItem::class_name(), 
+            HelpItem::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -66,16 +65,16 @@ abstract class Manager extends Application
     {
         $hide_empty_pages = Configuration::getInstance()->get_setting(array(self::context(), 'hide_empty_pages'));
         $help_item = self::get_help_item_by_name($help_item[0], $help_item[1]);
-        
+
         if ($help_item instanceof HelpItem && ($help_item->has_url() || $hide_empty_pages == '0'))
         {
             return new ToolbarItem(
-                Translation::get('Help'), 
-                Theme::getInstance()->getCommonImagePath('Action/Help'), 
-                $help_item ? $help_item->get_url() : '', 
-                ToolbarItem::DISPLAY_ICON_AND_LABEL, 
-                false, 
-                'help', 
+                Translation::get('Help'),
+                Theme::getInstance()->getCommonImagePath('Action/Help'),
+                $help_item ? $help_item->get_url() : '',
+                ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                false,
+                'help',
                 'about:blank');
         }
         else
@@ -88,16 +87,16 @@ abstract class Manager extends Application
     {
         $user_id = Session::get_user_id();
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $user_id);
-        
+
         $language = LocalSetting::getInstance()->get('platform_language');
-        
+
         $help_item = DataManager::retrieve_help_item_by_context($context, $identifier, $language);
-        
+
         $autocomplete_page = Configuration::getInstance()->get_setting(
             array(self::context(), 'autocomplete_missing_pages'));
         $autocomplete_languages = Configuration::getInstance()->get_setting(
             array(self::context(), 'autocomplete_all_languages'));
-        
+
         if ($help_item instanceof HelpItem)
         {
             return $help_item;
@@ -107,14 +106,14 @@ abstract class Manager extends Application
             if ($autocomplete_languages)
             {
                 $installed_languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
-                
+
                 foreach ($installed_languages as $iso_code => $installed_language)
                 {
                     $language_item = DataManager::retrieve_help_item_by_context(
-                        $context, 
-                        $identifier, 
+                        $context,
+                        $identifier,
                         $installed_language);
-                    
+
                     if (! $language_item instanceof HelpItem)
                     {
                         $language_item = new HelpItem();
@@ -123,7 +122,7 @@ abstract class Manager extends Application
                         $language_item->set_language($iso_code);
                         $language_item->create();
                     }
-                    
+
                     if ($installed_language == $language)
                     {
                         $help_item = $language_item;
@@ -138,7 +137,7 @@ abstract class Manager extends Application
                 $help_item->set_language($language);
                 $help_item->create();
             }
-            
+
             return $help_item;
         }
         else
@@ -149,7 +148,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

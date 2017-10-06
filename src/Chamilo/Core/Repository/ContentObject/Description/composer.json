@@ -9,7 +9,7 @@
         "Description"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Description",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Description",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "install": {
                 "default": 1,
                 "core": 0

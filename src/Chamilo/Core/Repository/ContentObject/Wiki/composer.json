@@ -9,7 +9,7 @@
         "Wiki"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Wiki",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Wiki",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
             "install": {
                 "default": 1,
                 "core": 0

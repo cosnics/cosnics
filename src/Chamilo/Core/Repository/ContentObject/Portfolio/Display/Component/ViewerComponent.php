@@ -15,7 +15,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -87,12 +86,9 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         if ($this->get_parent()->is_allowed_to_view_feedback($this->get_current_node()) ||
              $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
         {
-
-            $factory = new ApplicationFactory(
+            return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Feedback\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
-            return $factory->run();
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
         }
     }
 

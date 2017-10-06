@@ -9,7 +9,7 @@
         "HotspotQuestion"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Hotspot Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\HotspotQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

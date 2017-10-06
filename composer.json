@@ -1,9 +1,7 @@
 {
 	"name": "cosnics/cosnics",
 	"description": "Cosnics",
-	"license": [
-		"GPL-3.0"
-	],
+	"license": "MIT",
 	"keywords": [
 		"ELO",
 		"LCMS",
@@ -63,18 +61,6 @@
 	},
 	"config": {
 		"bin-dir": "bin/"
-	},
-	"extra": {
-		"merge-plugin": {
-			"include": [],
-			"recurse": true,
-			"replace": false,
-			"ignore-duplicates": false,
-			"merge-dev": true,
-			"merge-extra": false,
-			"merge-extra-deep": false,
-			"merge-scripts": false
-		}
 	},
 	"scripts": {
 		"pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",

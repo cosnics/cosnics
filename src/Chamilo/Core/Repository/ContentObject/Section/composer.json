@@ -9,7 +9,7 @@
         "Section"
     ],
     "homesection": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Section",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Section",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "install": {
                 "default": 1,
                 "core": 0

@@ -9,7 +9,7 @@
         "Task"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -29,6 +29,7 @@
             "name": "Task",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Task",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Agenda",
             "install": {
                 "default": 1,
                 "core": 0

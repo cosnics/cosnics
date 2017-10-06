@@ -201,4 +201,13 @@ trait DependencyInjectionContainerTrait
     {
         return $this->getService('doctrine.orm.entity_manager');
     }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Factory\ApplicationFactory
+     */
+    public function getApplicationFactory()
+    {
+        return $this->getService('chamilo.libraries.architecture.factory.application_factory');
+    }
 }

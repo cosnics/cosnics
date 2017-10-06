@@ -9,7 +9,7 @@
         "Office365Video"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Andras Zolnay",
@@ -28,6 +28,7 @@
             "name": "Office365 Video",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Office365Video",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "install": {
                 "default": 1,
                 "core": 0

@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -141,7 +140,7 @@ abstract class Manager extends Application
                         $classes));
             }
 
-            if ($isDisplayAction && $previewExists && $this->getPreview()->getComponent()->supports_reset())
+            if ($isDisplayAction && $previewExists && $this->getPreview()->supports_reset())
             {
                 $buttonToolBar->addItem(
                     new Button(
@@ -274,11 +273,10 @@ abstract class Manager extends Application
     {
         $package = $this->get_content_object()->package();
         $context = $package . '\Display\Preview';
-        $factory = new ApplicationFactory(
+
+        return $this->getApplicationFactory()->getApplication(
             $context,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
-        return $factory;
     }
 
     public function getCurrentView()

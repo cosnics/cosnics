@@ -17,7 +17,6 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: assessment_select_question_form.class.php $
  *
  * @package repository.lib.content_object.select_question
  */

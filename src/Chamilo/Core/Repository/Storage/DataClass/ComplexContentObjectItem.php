@@ -12,13 +12,12 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: complex_content_object_item.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 /**
  * Instances of this class group generic information about a complex object item
- * 
+ *
  * @author Sven Vanpoucke
  */
 class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
@@ -43,17 +42,17 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     /**
      * Get the default property names
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_REF, 
-                self::PROPERTY_PARENT, 
-                self::PROPERTY_USER_ID, 
-                self::PROPERTY_DISPLAY_ORDER, 
+                self::PROPERTY_REF,
+                self::PROPERTY_PARENT,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_DISPLAY_ORDER,
                 self::PROPERTY_ADD_DATE));
     }
 
@@ -77,7 +76,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         if (! isset($this->reference_object))
         {
             $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class_name(),
                 $this->get_ref());
         }
         return $this->reference_object;
@@ -105,7 +104,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public function get_parent_object()
     {
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             $this->get_parent());
     }
 
@@ -136,7 +135,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     /**
      * Checks this object before saving + adds some default values
-     * 
+     *
      * @return boolean
      */
     public function check_before_save()
@@ -145,12 +144,12 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         {
             $this->set_add_date(time());
         }
-        
+
         if (! $this->get_display_order())
         {
             $this->set_display_order(DataManager::select_next_display_order($this->get_parent()));
         }
-        
+
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_ref()))
         {
             $this->add_error(Translation::get('ReferenceObjectShouldNotBeEmpty'));
@@ -163,7 +162,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
                 $this->add_error(Translation::get('ReferenceObjectDoesNotExist'));
             }
         }
-        
+
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_parent()))
         {
             $this->add_error(Translation::get('ReferenceObjectShouldNotBeEmpty'));
@@ -176,13 +175,13 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
                 $this->add_error(Translation::get('ParentObjectDoesNotExist'));
             }
         }
-        
+
         return ! $this->has_errors();
     }
 
     /**
      * Retrieves the allowed types to add to this complex learning object item
-     * 
+     *
      * @return Array of learning object types
      */
     public function get_allowed_types()
@@ -205,7 +204,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         {
             $class = ClassnameUtilities::getInstance()->getNamespaceFromClassname($class) . '\Complex' . ClassnameUtilities::getInstance()->getClassNameFromNamespace(
                 $class);
-            
+
             return parent::factory($class, $record);
         }
         else
@@ -216,7 +215,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -226,7 +225,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()

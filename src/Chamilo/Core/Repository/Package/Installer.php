@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\Quota\Rights\Rights;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: repository_installer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.install
  */
 /**
@@ -26,7 +25,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(self::TYPE_NORMAL, Translation::get('QuotaLocationCreated'));
         }
-        
+
         return true;
     }
 }

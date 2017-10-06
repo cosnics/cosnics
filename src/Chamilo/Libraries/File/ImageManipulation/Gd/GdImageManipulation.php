@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\File\ImageManipulation\Gd;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 
 /**
- * $Id: gd_image_manipulation.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.image_manipulation.gd
  */
 /**

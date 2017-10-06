@@ -1,20 +1,21 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AssessmentResultViewerComponent extends BaseReportingComponent
 {
+
     /**
+     *
      * @return string
      */
     function build()
@@ -23,18 +24,15 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
 
         $this->getRequest()->query->set(
             \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
-            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
-        );
+            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT);
 
-        $factory = new ApplicationFactory(
+        return $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
-        );
-
-        return $factory->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     /**
+     *
      * @return string
      */
     public function render_header()
@@ -57,28 +55,23 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
-                ), $translator->getTranslation('UserProgressComponent')
-            )
-        );
+                    array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
+                    array(self::PARAM_REPORTING_USER_ID)),
+                $translator->getTranslation('UserProgressComponent')));
 
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)),
                 $translator->getTranslation(
-                    'ReportingComponent', array('USER' => $this->getReportingUser()->get_fullname())
-                )
-            )
-        );
+                    'ReportingComponent',
+                    array('USER' => $this->getReportingUser()->get_fullname()))));
 
         $trail->add(
             new Breadcrumb(
                 $this->get_url(),
                 $translator->getTranslation(
-                    'AssessmentResultViewerComponent', array('USER' => $this->getReportingUser()->get_fullname())
-                )
-            )
-        );
+                    'AssessmentResultViewerComponent',
+                    array('USER' => $this->getReportingUser()->get_fullname()))));
     }
 
     /**
@@ -90,9 +83,10 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $trackingService = $this->getTrackingService();
         $questionAttempts = $trackingService->getQuestionAttempts(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeAttemptId()
-        );
+            parent::get_root_content_object(),
+            $this->getReportingUser(),
+            $this->getCurrentTreeNode(),
+            $this->getTreeNodeAttemptId());
 
         $results = [];
 
@@ -102,8 +96,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
                 'answer' => $questionAttempt->get_answer(),
                 'feedback' => $questionAttempt->get_feedback(),
                 'score' => $questionAttempt->get_score(),
-                'hint' => $questionAttempt->get_hint()
-            );
+                'hint' => $questionAttempt->get_hint());
         }
 
         return $results;
@@ -119,9 +112,13 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_answer_data($question_cid, $score, $feedback)
     {
         $this->trackingService->changeQuestionScoreAndFeedback(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeAttemptId(), $question_cid, $score, $feedback
-        );
+            parent::get_root_content_object(),
+            $this->getReportingUser(),
+            $this->getCurrentTreeNode(),
+            $this->getTreeNodeAttemptId(),
+            $question_cid,
+            $score,
+            $feedback);
     }
 
     /**
@@ -130,12 +127,15 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     public function change_total_score($score)
     {
         $this->trackingService->changeAssessmentScore(
-            parent::get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode(),
-            $this->getTreeNodeAttemptId(), $score
-        );
+            parent::get_root_content_object(),
+            $this->getReportingUser(),
+            $this->getCurrentTreeNode(),
+            $this->getTreeNodeAttemptId(),
+            $score);
     }
 
     /**
+     *
      * @return Configuration
      */
     public function get_assessment_configuration()
@@ -144,6 +144,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     }
 
     /**
+     *
      * @return bool
      */
     public function can_change_answer_data()
@@ -152,6 +153,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     }
 
     /**
+     *
      * @return array
      */
     public function get_assessment_parameters()
@@ -172,6 +174,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     }
 
     /**
+     *
      * @return int
      */
     protected function getTreeNodeAttemptId()

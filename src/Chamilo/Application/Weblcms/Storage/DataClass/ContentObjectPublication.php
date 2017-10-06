@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
@@ -29,7 +28,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use DOMDocument;
 
 /**
- * $Id: content_object_publication.class.php 218 2009-11-13 14:21:26Z kariboe $
  *
  * @package application.lib.weblcms
  */
@@ -93,9 +91,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                 self::PROPERTY_DISPLAY_ORDER_INDEX,
                 self::PROPERTY_EMAIL_SENT,
                 self::PROPERTY_SHOW_ON_HOMEPAGE,
-                self::PROPERTY_ALLOW_COLLABORATION
-            )
-        );
+                self::PROPERTY_ALLOW_COLLABORATION));
     }
 
     /**
@@ -136,7 +132,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
      */
     public function get_target_users()
     {
-        if (!isset($this->target_users))
+        if (! isset($this->target_users))
         {
             $this->target_users = DataManager::retrieve_publication_target_user_ids($this->get_id());
         }
@@ -152,7 +148,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
      */
     public function get_target_course_groups()
     {
-        if (!isset($this->target_course_groups))
+        if (! isset($this->target_course_groups))
         {
             $this->target_course_groups = DataManager::retrieve_publication_target_course_group_ids($this->get_id());
         }
@@ -168,7 +164,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
      */
     public function get_target_groups()
     {
-        if (!isset($this->target_groups))
+        if (! isset($this->target_groups))
         {
             $this->target_groups = DataManager::retrieve_publication_target_platform_group_ids($this->get_id());
         }
@@ -217,7 +213,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
     {
         if (is_null($this->contentObject) || $full)
         {
-            if (!is_null($this->get_optional_property(ContentObject::PROPERTY_TITLE)) && !$full)
+            if (! is_null($this->get_optional_property(ContentObject::PROPERTY_TITLE)) && ! $full)
             {
                 $class = $this->get_optional_property(ContentObject::PROPERTY_TYPE);
                 $this->contentObject = new $class($this->get_optional_properties());
@@ -234,12 +230,11 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
     public function get_publication_publisher()
     {
-        if (!isset($this->publisher))
+        if (! isset($this->publisher))
         {
             $this->publisher = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User::clasS_name(),
-                $this->get_publisher_id()
-            );
+                $this->get_publisher_id());
         }
 
         return $this->publisher;
@@ -311,13 +306,13 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
     public function is_for_everybody()
     {
         return (count($this->get_target_users()) == 0 && count($this->get_target_course_groups()) == 0 &&
-            count($this->get_target_groups()) == 0);
+             count($this->get_target_groups()) == 0);
     }
 
     public function is_visible_for_target_users()
     {
-        return (!$this->is_hidden()) &&
-            ($this->is_forever() || ($this->get_from_date() <= time() && time() <= $this->get_to_date()));
+        return (! $this->is_hidden()) &&
+             ($this->is_forever() || ($this->get_from_date() <= time() && time() <= $this->get_to_date()));
     }
 
     public function get_display_order_index()
@@ -404,7 +399,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
      */
     public function toggle_visibility()
     {
-        $this->set_hidden((integer) !$this->is_hidden());
+        $this->set_hidden((integer) ! $this->is_hidden());
     }
 
     public function get_show_on_homepage()
@@ -437,7 +432,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $this->set_category_id(0);
         }
 
-        if (!parent::create())
+        if (! parent::create())
         {
             return false;
         }
@@ -447,8 +442,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights::TYPE_COURSE_CATEGORY,
                 $this->get_category_id(),
-                $this->get_course_id()
-            );
+                $this->get_course_id());
         }
         else
         {
@@ -461,14 +455,12 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                     $this->get_id(),
                     $parent_id,
                     $this->get_course_id(),
-                    $create_in_batch
-                );
+                    $create_in_batch);
 
-                if (!$success)
+                if (! $success)
                 {
                     throw new \RuntimeException(
-                        sprintf('Could not create the location for the content object publication %s', $this->getId())
-                    );
+                        sprintf('Could not create the location for the content object publication %s', $this->getId()));
                 }
 
                 return true;
@@ -481,8 +473,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                 $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                     WeblcmsRights::TYPE_COURSE_MODULE,
                     $course_tool_id,
-                    $this->get_course_id()
-                );
+                    $this->get_course_id());
             }
         }
 
@@ -491,14 +482,12 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $this->get_id(),
             $parent,
             $this->get_course_id(),
-            $create_in_batch
-        );
+            $create_in_batch);
 
-        if (!$success)
+        if (! $success)
         {
             throw new \RuntimeException(
-                sprintf('Could not create the location for the content object publication %s', $this->getId())
-            );
+                sprintf('Could not create the location for the content object publication %s', $this->getId()));
         }
 
         return true;
@@ -508,7 +497,6 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
      * Moves the publication up or down in the list.
      *
      * @param $places The number of places to move the publication down. A negative number moves it up.
-     *
      * @return int The number of places that the publication was moved down.
      */
     public function move($places)
@@ -524,25 +512,23 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_PUBLICATION,
             $this->get_id(),
-            $this->get_course_id()
-        );
+            $this->get_course_id());
         if ($location)
         {
-            if (!$location->delete())
+            if (! $location->delete())
             {
                 return false;
             }
         }
 
-        if (!parent::delete())
+        if (! parent::delete())
         {
             return false;
         }
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Feedback::class_name(), Feedback::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_id())
-        );
+            new StaticConditionVariable($this->get_id()));
 
         return DataManager::deletes(Feedback::class_name(), $condition);
     }
@@ -557,8 +543,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                 $this->get_id(),
                 WeblcmsRights::TYPE_PUBLICATION,
                 $this->get_course_id(),
-                WeblcmsRights::TREE_TYPE_COURSE
-            );
+                WeblcmsRights::TREE_TYPE_COURSE);
         }
         catch (ErrorException $exception)
         {
@@ -593,8 +578,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         return array(
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_ID),
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_TOOL),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CATEGORY_ID)
-        );
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CATEGORY_ID));
     }
 
     /**
@@ -632,13 +616,12 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         $body = '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
 
-        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
-            $link .
-            '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
+             '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
-            Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
+             Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
         $target_email = array();
@@ -650,7 +633,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         foreach ($target_users as $target_user)
         {
-            if (!array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
+            if (! array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
             {
                 $target_email[] = $target_user[User::PROPERTY_EMAIL];
             }
@@ -677,15 +660,13 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self::TYPE_FILE)
             {
-                $object =
-                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $id);
                 if ($object->is_image())
                 {
                     $mailFiles[] = new MailFile(
                         $object->get_filename(),
                         $object->get_full_path(),
-                        $object->get_mime_type()
-                    );
+                        $object->get_mime_type());
 
                     $elem = $doc->createElement('img');
                     $elem->setAttribute('src', 'cid:' . $index);
@@ -719,8 +700,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         $subject = Translation::get(
             'NewPublicationMailSubject',
-            array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
-        );
+            array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
 
         $mail = new Mail(
             $subject,
@@ -733,8 +713,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $user->get_email(),
             null,
             null,
-            $mailFiles
-        );
+            $mailFiles);
 
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
@@ -756,7 +735,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
 
-            if (!file_exists($dir) and !is_dir($dir))
+            if (! file_exists($dir) and ! is_dir($dir))
             {
                 mkdir($dir);
             }
@@ -779,8 +758,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $params[Manager::PARAM_COURSE] = $this->get_course_id();
         $params[Manager::PARAM_TOOL] = $this->get_tool();
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getId();
 
         $redirect = new Redirect($params);

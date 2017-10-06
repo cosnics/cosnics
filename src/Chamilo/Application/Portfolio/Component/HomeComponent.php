@@ -21,7 +21,6 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
@@ -83,11 +82,10 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         }
 
         $context = Portfolio::package() . '\Display';
-        $factory = new ApplicationFactory(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
-        return $factory->run();
+        return $this->getApplicationFactory()->getApplication(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     /**

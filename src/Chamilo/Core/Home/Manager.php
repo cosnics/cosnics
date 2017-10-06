@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
- * $Id: home_manager.class.php 227 2009-11-13 14:45:05Z kariboe $
- * 
+ *
  * @package home.lib.home_manager
  */
 
@@ -26,7 +25,7 @@ abstract class Manager extends Application
     const PARAM_OBJECT_ID = 'object_id';
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_RENDERER_TYPE = 'renderer_type';
-    
+
     // Actions
     const ACTION_VIEW_HOME = 'Home';
     const ACTION_MANAGE_HOME = 'Manager';
@@ -40,7 +39,7 @@ abstract class Manager extends Application
     const ACTION_PERSONAL = 'Personal';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const DEFAULT_ACTION = self::ACTION_VIEW_HOME;
-    
+
     // Types
     const TYPE_BLOCK = 'block';
     const TYPE_COLUMN = 'column';
@@ -55,7 +54,7 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
+
         if ($this->getUser() instanceof User)
         {
             $this->checkAuthorization(Manager::context());

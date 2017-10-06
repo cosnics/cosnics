@@ -1,52 +1,55 @@
 {
-    "name": "cosnics/application-weblcms-tool-implementation-peer-assessment",
-    "version": "1.0.0",
-    "description": "Application Weblcms Tool Implementation PeerAssessment",
-    "keywords": [
-        "Application",
-        "Weblcms",
-        "Tool",
-        "Implementation",
-        "PeerAssessment"
-    ],
-    "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        },
-        {
-            "name": "Renaat De Muynck",
-            "email": "renaat.demuynck@arteveldehs.be"
-        },
-        {
-            "name": "Jens Vanderheyden",
-            "email": "jevdheyd@vub.ac.be"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0"
-    },
-    "extra": {
-        "cosnics": {
-            "name": "Peer Assessment",
-            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\PeerAssessment",
-            "type": "Chamilo\\Application\\Weblcms\\Tool",
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Application\\Weblcms",
-                    "version": ">=1.0.0"
-                }
-            ],
-            "install": {
-                "default": 0,
-                "core": 0
-            }
-        }
-    }
+	"name": "cosnics/application-weblcms-tool-implementation-peer-assessment",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation PeerAssessment",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"PeerAssessment"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		},
+		{
+			"name": "Renaat De Muynck",
+			"email": "renaat.demuynck@arteveldehs.be"
+		},
+		{
+			"name": "Jens Vanderheyden",
+			"email": "jevdheyd@vub.ac.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Peer Assessment",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\PeerAssessment",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"extra": {
+				"course-section": "tool"
+			}
+		}
+	}
 }

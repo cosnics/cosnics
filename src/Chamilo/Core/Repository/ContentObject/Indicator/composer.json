@@ -9,7 +9,7 @@
         "Indicator"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -32,6 +32,7 @@
             "name": "Indicator",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Indicator",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "PeerAssessment",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

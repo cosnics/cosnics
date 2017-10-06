@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: course_type_user_category.class.php 216 2009-11-13 14:08:06Z Tristan $
- * 
+ *
  * @package application.lib.weblcms.course_type
  */
 class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderDataClassListenerSupport
@@ -31,15 +30,15 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
     /**
      * Get the default properties of all user course user categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return array(
-            self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID, 
-            self::PROPERTY_COURSE_ID, 
-            self::PROPERTY_USER_ID, 
+            self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID,
+            self::PROPERTY_COURSE_ID,
+            self::PROPERTY_USER_ID,
             self::PROPERTY_SORT);
     }
 
@@ -88,7 +87,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
         $this->notify(DataClassListener::BEFORE_UPDATE);
         $success = DataManager::getInstance()->update($this, $this->get_primary_key_conditions());
         $this->notify(DataClassListener::AFTER_UPDATE, array($success));
-        
+
         return $success;
     }
 
@@ -97,37 +96,37 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
         $this->notify(DataClassListener::BEFORE_DELETE);
         $success = DataManager::deletes(self::class_name(), $this->get_primary_key_conditions());
         $this->notify(DataClassListener::AFTER_DELETE, array($success));
-        
+
         return $success;
     }
 
     /**
      * Returns the primary key condition
-     * 
+     *
      * @return \libraries\storage\Condition
      */
     protected function get_primary_key_conditions()
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(), 
-                CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID), 
+                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
-        
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(), 
-                CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID), 
+                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
             new StaticConditionVariable($this->get_course_type_user_category_id()));
-        
+
         return new AndCondition($conditions);
     }
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -137,13 +136,13 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
             new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID));
     }
 }

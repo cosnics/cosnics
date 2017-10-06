@@ -18,14 +18,13 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib
  */
 
 /**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
- * 
+ *
  * @author Pieterjan Broekaert
  */
 class PublicationCategoriesTree extends GenericTree
@@ -40,7 +39,7 @@ class PublicationCategoriesTree extends GenericTree
 
     /**
      * Creates a new category navigation menu.
-     * 
+     *
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
@@ -55,7 +54,7 @@ class PublicationCategoriesTree extends GenericTree
 
     /**
      * Returns the url of a node
-     * 
+     *
      * @param $node_id int
      * @return string
      */
@@ -79,40 +78,40 @@ class PublicationCategoriesTree extends GenericTree
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_PARENT), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_node_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_COURSE), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_TOOL), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
         if (! $this->is_invisible_allowed())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), 
-                    ContentObjectPublicationCategory::PROPERTY_VISIBLE), 
+                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::PROPERTY_VISIBLE),
                 new StaticConditionVariable(true));
         }
         $condition = new AndCondition($conditions);
-        
+
         $children = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), 
+            ContentObjectPublicationCategory::class_name(),
             new DataClassRetrievesParameters(
-                $condition, 
-                null, 
-                null, 
+                $condition,
+                null,
+                null,
                 new OrderBy(
                     new PropertyConditionVariable(
-                        ContentObjectPublicationCategory::class_name(), 
+                        ContentObjectPublicationCategory::class_name(),
                         ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER))));
-        
+
         return $children;
     }
 
@@ -120,30 +119,30 @@ class PublicationCategoriesTree extends GenericTree
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_PARENT), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_PARENT),
             new StaticConditionVariable($node_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_COURSE), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->browser->get_parent()->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
-                ContentObjectPublicationCategory::PROPERTY_TOOL), 
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->browser->get_parent()->get_tool_id()));
         if (! $this->is_invisible_allowed())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), 
-                    ContentObjectPublicationCategory::PROPERTY_VISIBLE), 
+                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::PROPERTY_VISIBLE),
                 new StaticConditionVariable(true));
         }
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return DataManager::count(ContentObjectPublicationCategory::class_name(), $condition) > 0;
     }
 
@@ -159,9 +158,9 @@ class PublicationCategoriesTree extends GenericTree
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::package(), 
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::package(),
                 \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED));
-        
+
         return $searchUrl->getUrl();
     }
 
@@ -169,9 +168,9 @@ class PublicationCategoriesTree extends GenericTree
     {
         $course_id = $this->browser->get_parent()->get_course_id();
         $tool = Request::get(Manager::PARAM_TOOL);
-        
+
         $url_format = '?application=weblcms&course=' . $course_id . '&go=course_viewer&tool=' . $tool;
-        
+
         $tool_action = Request::get(Manager::PARAM_TOOL_ACTION);
         if (! is_null($tool_action))
         {
@@ -182,9 +181,9 @@ class PublicationCategoriesTree extends GenericTree
         {
             $url_format .= '&browser=' . $browser_type;
         }
-        
+
         $url_format .= '&publication_category=%d';
-        
+
         return $url_format;
     }
 

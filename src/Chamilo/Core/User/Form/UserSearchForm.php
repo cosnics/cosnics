@@ -11,8 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: user_search_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.forms
  */
 class UserSearchForm extends FormValidator
@@ -66,7 +65,7 @@ class UserSearchForm extends FormValidator
 
     /**
      * Creates a new search form
-     * 
+     *
      * @param RepositoryManager $manager The repository manager in which this search form will be displayed
      * @param string $url The location to which the search request should be posted.
      */
@@ -76,16 +75,16 @@ class UserSearchForm extends FormValidator
         $this->renderer = clone $this->defaultRenderer();
         $this->manager = $manager;
         $this->frozen_elements = array();
-        
+
         $this->build_simple_search_form();
-        
+
         $this->autofreeze();
         $this->accept($this->renderer);
     }
 
     /**
      * Gets the frozen element values
-     * 
+     *
      * @return array
      */
     public function get_frozen_values()
@@ -120,9 +119,9 @@ class UserSearchForm extends FormValidator
     {
         $this->renderer->setElementTemplate('{element}');
         $this->frozen_elements[] = $this->addElement(
-            'text', 
-            self::PARAM_SIMPLE_SEARCH_QUERY, 
-            Translation::get('Find'), 
+            'text',
+            self::PARAM_SIMPLE_SEARCH_QUERY,
+            Translation::get('Find'),
             'size="20" class="search_query"');
         $this->addElement('submit', 'search', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
     }
@@ -141,7 +140,7 @@ class UserSearchForm extends FormValidator
 
     /**
      * Get the search condition
-     * 
+     *
      * @return Condition The search condition
      */
     public function get_condition()
@@ -151,26 +150,26 @@ class UserSearchForm extends FormValidator
 
     /**
      * Gets the conditions that this form introduces.
-     * 
+     *
      * @return array The conditions.
      */
     private function get_search_conditions()
     {
         $values = $this->exportValues();
-        
+
         $query = $values[self::PARAM_SIMPLE_SEARCH_QUERY];
-        
+
         if (isset($query) && $query != '')
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
                 '*' . $values[self::PARAM_SIMPLE_SEARCH_QUERY] . '*');
-            
+
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
                 '*' . $values[self::PARAM_SIMPLE_SEARCH_QUERY] . '*');
-            
+
             return new OrCondition($conditions);
         }
         else
@@ -181,7 +180,7 @@ class UserSearchForm extends FormValidator
 
     /**
      * Determines if the user is currently searching the repository.
-     * 
+     *
      * @return boolean True if the user is searching.
      */
     public function validate()

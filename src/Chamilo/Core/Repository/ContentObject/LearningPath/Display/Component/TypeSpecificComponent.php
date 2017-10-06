@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
@@ -21,15 +20,14 @@ class TypeSpecificComponent extends BaseHtmlTreeComponent implements Application
     public function build()
     {
         $this->validateSelectedTreeNodeData();
-        
+
         $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .
              '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
-        
-        $factory = new ApplicationFactory(
-            $integration_namespace, 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            $integration_namespace,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     public function get_additional_parameters()

@@ -9,7 +9,7 @@
         "Matterhorn"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -32,6 +32,7 @@
             "name": "Matterhorn",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Matterhorn",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

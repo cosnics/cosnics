@@ -11,8 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: calendar_event.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.calendar_event
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -44,7 +43,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     const PROPERTY_BYDAY = 'byday';
     const PROPERTY_BYMONTHDAY = 'bymonthday';
     const PROPERTY_BYMONTH = 'bymonth';
-    
+
     /**
      * The different frequency types
      */
@@ -69,7 +68,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the start date of this calendar event
-     * 
+     *
      * @return int The start date
      */
     public function get_location()
@@ -79,7 +78,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the start date of this calendar event
-     * 
+     *
      * @param string
      */
     public function set_location($location)
@@ -89,7 +88,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the start date of this calendar event
-     * 
+     *
      * @return int The start date
      */
     public function get_start_date()
@@ -99,7 +98,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the start date of this calendar event
-     * 
+     *
      * @param int The start date
      */
     public function set_start_date($start_date)
@@ -109,7 +108,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the end date of this calendar event
-     * 
+     *
      * @return int The end date
      */
     public function get_end_date()
@@ -119,7 +118,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the end date of this calendar event
-     * 
+     *
      * @param int The end date
      */
     public function set_end_date($end_date)
@@ -129,7 +128,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the frequency of this calendar event
-     * 
+     *
      * @return int The frequency
      */
     public function get_frequency()
@@ -139,7 +138,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the frequency of this calendar event
-     * 
+     *
      * @param int The frequency
      */
     public function set_frequency($frequency)
@@ -149,7 +148,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the end date of this calendar event repetition
-     * 
+     *
      * @return int The repetition end date
      */
     public function get_until()
@@ -159,7 +158,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the end date of this calendar event repetition
-     * 
+     *
      * @param int The repetition end date
      */
     public function set_until($until)
@@ -169,7 +168,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Returns whether or not the calendar event repeats itself
-     * 
+     *
      * @return boolean
      */
     public function has_frequency()
@@ -180,7 +179,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Returns whether or not the calendar event repeats itself indefinately
-     * 
+     *
      * @return boolean
      */
     public function frequency_is_indefinately()
@@ -224,7 +223,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
                 $string = Translation::get('Biweekly');
                 break;
         }
-        
+
         return $string;
     }
 
@@ -281,29 +280,29 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public static function get_frequency_options()
     {
         $options = array();
-        
+
         $options[self::FREQUENCY_DAILY] = Translation::get('Daily');
         $options[self::FREQUENCY_WEEKLY] = Translation::get('Weekly');
         $options[self::FREQUENCY_MONTHLY] = Translation::get('Monthly');
         $options[self::FREQUENCY_YEARLY] = Translation::get('Yearly');
         $options[self::FREQUENCY_WEEKDAYS] = Translation::get('Weekdays');
         $options[self::FREQUENCY_BIWEEKLY] = Translation::get('BiWeekly');
-        
+
         return $options;
     }
 
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_LOCATION, 
-            self::PROPERTY_START_DATE, 
-            self::PROPERTY_END_DATE, 
-            self::PROPERTY_UNTIL, 
-            self::PROPERTY_FREQUENCY, 
-            self::PROPERTY_FREQUENCY_COUNT, 
-            self::PROPERTY_FREQUENCY_INTERVAL, 
-            self::PROPERTY_BYDAY, 
-            self::PROPERTY_BYMONTH, 
+            self::PROPERTY_LOCATION,
+            self::PROPERTY_START_DATE,
+            self::PROPERTY_END_DATE,
+            self::PROPERTY_UNTIL,
+            self::PROPERTY_FREQUENCY,
+            self::PROPERTY_FREQUENCY_COUNT,
+            self::PROPERTY_FREQUENCY_INTERVAL,
+            self::PROPERTY_BYDAY,
+            self::PROPERTY_BYMONTH,
             self::PROPERTY_BYMONTHDAY);
     }
 
@@ -322,9 +321,9 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
         return static::icon_image(
-            ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), 
-            $size, 
-            $this->is_current() && $is_available, 
+            ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
+            $size,
+            $this->is_current() && $is_available,
             $this->has_frequency());
     }
 
@@ -334,7 +333,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         {
             $size = $size . 'Repeat';
         }
-        
+
         return parent::icon_image($context, $size, $is_current);
     }
 
@@ -353,69 +352,69 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public static function get_byday_options()
     {
         $translator = Translation::getInstance();
-        
+
         return $result = array(
-            1 => $translator->getTranslation("Monday", null, Utilities::COMMON_LIBRARIES), 
-            2 => $translator->getTranslation("Tuesday", null, Utilities::COMMON_LIBRARIES), 
-            3 => $translator->getTranslation("Wednesday", null, Utilities::COMMON_LIBRARIES), 
-            4 => $translator->getTranslation("Thursday", null, Utilities::COMMON_LIBRARIES), 
-            5 => $translator->getTranslation("Friday", null, Utilities::COMMON_LIBRARIES), 
-            6 => $translator->getTranslation("Saturday", null, Utilities::COMMON_LIBRARIES), 
+            1 => $translator->getTranslation("Monday", null, Utilities::COMMON_LIBRARIES),
+            2 => $translator->getTranslation("Tuesday", null, Utilities::COMMON_LIBRARIES),
+            3 => $translator->getTranslation("Wednesday", null, Utilities::COMMON_LIBRARIES),
+            4 => $translator->getTranslation("Thursday", null, Utilities::COMMON_LIBRARIES),
+            5 => $translator->getTranslation("Friday", null, Utilities::COMMON_LIBRARIES),
+            6 => $translator->getTranslation("Saturday", null, Utilities::COMMON_LIBRARIES),
             7 => $translator->getTranslation("Sunday", null, Utilities::COMMON_LIBRARIES));
     }
 
     public static function get_bymonthday_options()
     {
         return array(
-            1 => 1, 
-            2 => 2, 
-            3 => 3, 
-            4 => 4, 
-            5 => 5, 
-            6 => 6, 
-            7 => 7, 
-            8 => 8, 
-            9 => 9, 
-            10 => 10, 
-            11 => 11, 
-            12 => 12, 
-            13 => 13, 
-            14 => 14, 
-            15 => 15, 
-            16 => 16, 
-            17 => 17, 
-            18 => 18, 
-            19 => 19, 
-            20 => 20, 
-            21 => 21, 
-            22 => 22, 
-            23 => 23, 
-            24 => 24, 
-            25 => 25, 
-            26 => 26, 
-            27 => 27, 
-            28 => 28, 
-            29 => 29, 
-            30 => 30, 
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+            5 => 5,
+            6 => 6,
+            7 => 7,
+            8 => 8,
+            9 => 9,
+            10 => 10,
+            11 => 11,
+            12 => 12,
+            13 => 13,
+            14 => 14,
+            15 => 15,
+            16 => 16,
+            17 => 17,
+            18 => 18,
+            19 => 19,
+            20 => 20,
+            21 => 21,
+            22 => 22,
+            23 => 23,
+            24 => 24,
+            25 => 25,
+            26 => 26,
+            27 => 27,
+            28 => 28,
+            29 => 29,
+            30 => 30,
             31 => 31);
     }
 
     public static function get_bymonth_options()
     {
         $translator = Translation::getInstance();
-        
+
         return array(
-            1 => $translator->getTranslation("January", null, Utilities::COMMON_LIBRARIES), 
-            2 => $translator->getTranslation("February", null, Utilities::COMMON_LIBRARIES), 
-            3 => $translator->getTranslation("March", null, Utilities::COMMON_LIBRARIES), 
-            4 => $translator->getTranslation("April", null, Utilities::COMMON_LIBRARIES), 
-            5 => $translator->getTranslation("May", null, Utilities::COMMON_LIBRARIES), 
-            6 => $translator->getTranslation("June", null, Utilities::COMMON_LIBRARIES), 
-            7 => $translator->getTranslation("Juli", null, Utilities::COMMON_LIBRARIES), 
-            8 => $translator->getTranslation("August", null, Utilities::COMMON_LIBRARIES), 
-            9 => $translator->getTranslation("September", null, Utilities::COMMON_LIBRARIES), 
-            10 => $translator->getTranslation("October", null, Utilities::COMMON_LIBRARIES), 
-            11 => $translator->getTranslation("November", null, Utilities::COMMON_LIBRARIES), 
+            1 => $translator->getTranslation("January", null, Utilities::COMMON_LIBRARIES),
+            2 => $translator->getTranslation("February", null, Utilities::COMMON_LIBRARIES),
+            3 => $translator->getTranslation("March", null, Utilities::COMMON_LIBRARIES),
+            4 => $translator->getTranslation("April", null, Utilities::COMMON_LIBRARIES),
+            5 => $translator->getTranslation("May", null, Utilities::COMMON_LIBRARIES),
+            6 => $translator->getTranslation("June", null, Utilities::COMMON_LIBRARIES),
+            7 => $translator->getTranslation("Juli", null, Utilities::COMMON_LIBRARIES),
+            8 => $translator->getTranslation("August", null, Utilities::COMMON_LIBRARIES),
+            9 => $translator->getTranslation("September", null, Utilities::COMMON_LIBRARIES),
+            10 => $translator->getTranslation("October", null, Utilities::COMMON_LIBRARIES),
+            11 => $translator->getTranslation("November", null, Utilities::COMMON_LIBRARIES),
             12 => $translator->getTranslation("December", null, Utilities::COMMON_LIBRARIES));
     }
 
@@ -432,7 +431,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         {
             $format[] = $rank;
         }
-        
+
         $format[] = self::get_day_ical_format($day);
         return implode('', $format);
     }
@@ -452,7 +451,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         $ranks[4] = Translation::get('Fourth');
         $ranks[5] = Translation::get('Fifth');
         $ranks[- 1] = Translation::get('Last');
-        
+
         return $ranks;
     }
 
@@ -482,15 +481,15 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     {
         $bydays = explode(',', $bydays);
         $parts = array();
-        
+
         foreach ($bydays as $byday)
         {
-            
+
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byday, $byday_parts);
-            
+
             $parts[] = array($byday_parts[1] == 0 ? 0 : $byday_parts[1][0], $byday_parts[2][0]);
         }
-        
+
         return $parts;
     }
 }

@@ -9,7 +9,7 @@
         "Bookmark"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "Bookmark",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Bookmark",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

@@ -9,7 +9,6 @@ use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -28,15 +27,13 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Metadata\Relation\Instance\Manager::context(), 
+        $component = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Metadata\Relation\Instance\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        
-        $component = $factory->getComponent();
         $component->setTargetEntities($this->getTargetEntities());
         $component->setRelations($this->getRelation());
         $component->setSourceEntities($this->getSourceEntities());
-        
+
         return $component->run();
     }
 
@@ -48,18 +45,18 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     {
         $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
-        
+
         $entities = array();
         $entityFactory = DataClassEntityFactory::getInstance();
-        
+
         foreach ($registrations as $registration)
         {
             $entities[] = $entityFactory->getEntity(
                 $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-                     $registration[Registration::PROPERTY_NAME], 
+                     $registration[Registration::PROPERTY_NAME],
                     DataClassEntity::INSTANCE_IDENTIFIER);
         }
-        
+
         return $entities;
     }
 
@@ -83,16 +80,16 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     {
         $relationService = new RelationService();
         $relation = $relationService->getRelationByName('isAvailableFor');
-        
+
         if (! $relation instanceof Relation)
         {
             throw new \Exception(
                 Translation::get(
-                    'RelationNotAvailable', 
-                    array('TYPE' => 'isAvailableFor'), 
+                    'RelationNotAvailable',
+                    array('TYPE' => 'isAvailableFor'),
                     'Chamilo\Core\Metadata\Relation'));
         }
-        
+
         return array($relation);
     }
 }

@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: RepeatedTest.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -73,7 +72,7 @@ require_once 'PHPUnit/TestDecorator.php';
  * print $result->toString();
  * ?>
  * </code>
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -95,7 +94,7 @@ class PHPUnit_RepeatedTest extends PHPUnit_TestDecorator
 
     /**
      * Constructor.
-     * 
+     *
      * @param object
      * @param integer
      * @access public
@@ -109,7 +108,7 @@ class PHPUnit_RepeatedTest extends PHPUnit_TestDecorator
     /**
      * Counts the number of test cases that
      * will be run by this test.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -121,7 +120,7 @@ class PHPUnit_RepeatedTest extends PHPUnit_TestDecorator
     /**
      * Runs the decorated test and collects the
      * result in a TestResult.
-     * 
+     *
      * @param object
      * @access public
      * @abstract

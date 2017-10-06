@@ -9,7 +9,7 @@
         "PeerAssessment"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -37,6 +37,7 @@
             "name": "Peer Assessment",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\PeerAssessment",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "PeerAssessment",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

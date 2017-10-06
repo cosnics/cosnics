@@ -5,8 +5,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * $Id: whois_online_table_data_provider.class.php 126 2009-11-09 13:11:05Z vanpouckesven $
- * 
+ *
  * @package admin.lib.admin_manager.component.whois_online_table
  */
 /**
@@ -19,7 +18,7 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Gets the users
-     * 
+     *
      * @param $user String
      * @param $category String
      * @param $offset int
@@ -31,19 +30,19 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
             $parameters);
     }
 
     /**
      * Gets the number of users in the table
-     * 
+     *
      * @return int
      */
     public function count_data($condition)
     {
         return \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
             $condition);
     }
 }

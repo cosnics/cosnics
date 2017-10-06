@@ -2,15 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass;
 
 /**
- * $Id: fill_in_blanks_question_answer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.question_types.fill_in_blanks_question
  */
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class FillInBlanksQuestionAnswer
 {
-    
+
     /**
      * If format is:
      * [answer(feedback)=score|answer]{hint}
@@ -42,10 +41,10 @@ class FillInBlanksQuestionAnswer
     public static function parse($text, $default_positive_score = FillInBlanksQuestion :: DEFAULT_POSITIVE_SCORE)
     {
         $result = array();
-        
+
         $questions = array();
         preg_match_all(self::QUESTIONS_REGEX, $text, $questions);
-        
+
         foreach ($questions[1] as $question_id => $question)
         {
             $answers = array();
@@ -54,17 +53,17 @@ class FillInBlanksQuestionAnswer
              * regex question (null otherwise) 3 => feedback 4 => score
              */
             preg_match_all(self::PARTS_REGEX, $question, $answers);
-            
+
             foreach ($answers[1] as $answer_id => $answer)
             {
                 $score = is_numeric($answers[4][$answer_id]) ? $answers[4][$answer_id] : $default_positive_score;
                 $size = is_numeric($answers[2][$answer_id]) ? $answers[2][$answer_id] : '';
                 $result[] = new FillInBlanksQuestionAnswer(
-                    $answer, 
-                    $score, 
-                    $answers[3][$answer_id], 
-                    $size, 
-                    $question_id, 
+                    $answer,
+                    $score,
+                    $answers[3][$answer_id],
+                    $size,
+                    $question_id,
                     $questions[2][$question_id]);
             }
         }
@@ -74,7 +73,7 @@ class FillInBlanksQuestionAnswer
     /**
      * Get the best possible answer for a question,
      * based on it's weight / score
-     * 
+     *
      * @param array $answers
      * @return null FillInBlanksQuestionAnswer
      */
@@ -82,7 +81,7 @@ class FillInBlanksQuestionAnswer
     {
         $best_weight = 0;
         $best_answer = null;
-        
+
         foreach ($answers as $key => $answer)
         {
             if ($answer->get_weight() > $best_weight)
@@ -91,7 +90,7 @@ class FillInBlanksQuestionAnswer
                 $best_answer = $answer;
             }
         }
-        
+
         return $best_answer;
     }
 
@@ -169,7 +168,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Checks if the answer is a regex
-     * 
+     *
      * @return boolean
      */
     public function check_regex()
@@ -180,7 +179,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Returns the regex pattern described inside the {regex}-tags
-     * 
+     *
      * @return String regex pattern
      */
     public function get_regex_pattern()
@@ -193,7 +192,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Returns the size given in the regex, null if no size was set.
-     * 
+     *
      * @return int or null
      */
     private function regex_size()
@@ -205,7 +204,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Evaluates the answer.
-     * 
+     *
      * @param String $answer
      * @param boolean $case_sensitive
      * @return boolean
@@ -226,7 +225,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Evaluates plain text.
-     * 
+     *
      * @param String $answer
      * @param boolean $case_sensitive
      * @return boolean
@@ -244,7 +243,7 @@ class FillInBlanksQuestionAnswer
 
     /**
      * Evaluates regex.
-     * 
+     *
      * @param String $answer
      * @return boolean
      */

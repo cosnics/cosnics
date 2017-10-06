@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Instance\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -22,33 +21,32 @@ class RightsComponent extends Manager
     {
         $identifiers = Request::get(self::PARAM_INSTANCE_ID);
         $this->set_parameter(self::PARAM_INSTANCE_ID, $identifiers);
-        
+
         $locations = array();
-        
+
         if (! $identifiers)
         {
             $locations[] = Rights::getInstance()->get_external_instances_subtree_root();
         }
-        
+
         if ($identifiers && ! is_array($identifiers))
         {
             $identifiers = array($identifiers);
         }
-        
+
         foreach ($identifiers as $identifier)
         {
             $locations[] = Rights::getInstance()->get_location_by_identifier_from_external_instances_subtree(
                 $identifier);
         }
-        
+
         $entities = array();
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Rights\Editor\Manager::context(), 
+
+        $component = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Rights\Editor\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        $component = $factory->getComponent();
         $component->set_locations($locations);
         $component->set_entities($entities);
         return $component->run();

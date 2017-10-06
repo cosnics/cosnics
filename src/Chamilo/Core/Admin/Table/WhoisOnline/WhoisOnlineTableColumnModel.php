@@ -7,8 +7,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 
 /**
- * $Id: whois_online_table_column_model.class.php 166 2009-11-12 11:03:06Z vanpouckesven $
- * 
+ *
  * @package admin.lib.admin_manager.component.whois_online_table
  */
 /**

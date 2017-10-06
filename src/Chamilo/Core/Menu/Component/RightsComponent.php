@@ -6,7 +6,6 @@ use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -23,7 +22,7 @@ class RightsComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->check_allowed();
-        
+
         $item_id = Request::get(self::PARAM_ITEM);
         $this->set_parameter(self::PARAM_ITEM, $item_id);
         if (! $item_id)
@@ -35,21 +34,19 @@ class RightsComponent extends Manager implements DelegateComponent
             $location = array(
                 Rights::getInstance()->get_location_by_identifier(self::package(), Rights::TYPE_ITEM, $item_id));
         }
-        
+
         $entities = array();
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Rights\Editor\Manager::context(), 
+
+        $application = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Rights\Editor\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        
-        $component = $factory->getComponent();
-        $component->set_context(self::package());
-        $component->set_locations($location);
-        $component->set_entities($entities);
-        
-        return $component->run();
+        $application->set_context(self::package());
+        $application->set_locations($location);
+        $application->set_entities($entities);
+
+        return $application->run();
     }
 
     public function get_available_rights($location)

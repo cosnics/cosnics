@@ -4,13 +4,12 @@ namespace Chamilo\Libraries\Platform\Session;
 use Chamilo\Libraries\Platform\Security;
 
 /**
- * $Id: request.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.session
  */
 class Request
 {
-    
+
     // TODO OO design this class
     // when OO designing this class, $security should be considered as a dependency
     public static $security;
@@ -31,7 +30,7 @@ class Request
             // TODO: Add the necessary security filters if and where necessary
             return self::get_security()->remove_XSS($_GET[$variable]);
         }
-        
+
         return $default;
     }
 
@@ -47,7 +46,7 @@ class Request
             // TODO: Add the necessary security filters if and where necessary
             return self::get_security()->remove_XSS($_POST[$variable]);
         }
-        
+
         return null;
     }
 
@@ -58,7 +57,7 @@ class Request
             // TODO: Add the necessary security filters if and where necessary
             return $_SERVER[$variable];
         }
-        
+
         return $default;
     }
 

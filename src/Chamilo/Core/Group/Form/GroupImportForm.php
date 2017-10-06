@@ -14,7 +14,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 
 /**
- * $Id: group_import_form.class.php 224 2009-11-13 14:40:30Z kariboe $
  *
  * @package groups.lib.forms
  */

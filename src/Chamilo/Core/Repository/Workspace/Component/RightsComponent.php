@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -21,24 +20,23 @@ class RightsComponent extends TabComponent implements DelegateComponent
 
     public function build()
     {
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     /**
      * Adds additional breadcrumbs
-     * 
+     *
      * @param BreadcrumbTrail $breadcrumb_trail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
         $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
-        
+
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)), 
+                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)),
                 Translation::get($browserSource . 'Component')));
     }
 

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: package_dependency_verifier.class.php 126 2009-11-09 13:11:05Z vanpouckesven $
  *
  * @package admin.lib.package_installer
  */
@@ -55,7 +54,7 @@ class DependencyVerifier
 
     public function is_installable()
     {
-        $dependencies = $this->get_package()->get_pre_depends();
+        $dependencies = $this->get_package()->get_dependencies();
 
         if (is_null($dependencies))
         {
@@ -89,7 +88,7 @@ class DependencyVerifier
         while ($registration = $registrations->next_result())
         {
             $package = Package::get($registration->get_context());
-            $dependencies = $package->get_pre_depends();
+            $dependencies = $package->get_dependencies();
 
             if (! is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
             {

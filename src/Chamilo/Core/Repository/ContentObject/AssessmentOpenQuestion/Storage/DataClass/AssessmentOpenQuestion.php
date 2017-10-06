@@ -8,8 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: assessment_open_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.assessment_open_question
  */
 
@@ -78,7 +77,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
         $types[self::TYPE_DOCUMENT] = Translation::get('DocumentQuestion');
         return $types;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -87,7 +86,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

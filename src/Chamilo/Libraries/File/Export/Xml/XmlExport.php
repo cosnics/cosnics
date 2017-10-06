@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\File\Export\Xml;
 use Chamilo\Libraries\File\Export\Export;
 
 /**
- * $Id: xml_export.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.export.xml
  */
 
@@ -35,7 +34,7 @@ class XmlExport extends Export
         {
             if (is_numeric($key))
                 $key = 'item';
-            
+
             if (is_array($value))
             {
                 $all .= str_repeat("\t", $this->level) . '<' . $key . '>' . "\n";

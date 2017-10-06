@@ -9,7 +9,7 @@
         "SystemAnnouncement"
     ],
     "homepage": "http://www.cosnics.org",
-    "license": "GPLv3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -28,6 +28,7 @@
             "name": "System Announcement",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\SystemAnnouncement",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "News",
             "install": {
                 "default": 1,
                 "core": 0

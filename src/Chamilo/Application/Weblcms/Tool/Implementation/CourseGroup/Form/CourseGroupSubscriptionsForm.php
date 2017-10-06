@@ -17,8 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: course_group_subscriptions_form.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course_group
  */
 class CourseGroupSubscriptionsForm extends FormValidator
@@ -33,7 +32,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         parent::__construct('course_settings', 'post', $action);
         $this->course_group = $course_group;
         $this->parent = $parent;
-        
+
         $this->build_basic_form();
     }
 
@@ -41,31 +40,31 @@ class CourseGroupSubscriptionsForm extends FormValidator
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax', 
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_COURSE_USER_GROUP_FEED, 
+                Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
+                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_COURSE_USER_GROUP_FEED,
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $this->parent->get_course_id()));
-        
+
         $url = Path::getInstance()->getBasePath(true) .
              'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course=' .
              $this->parent->get_course_id();
-        
+
         // Path :: getInstance()->getBasePath(true) .
         // 'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
-        
+
         $course_group_users = DataManager::retrieve_course_group_users($this->course_group->get_id());
         $defaults = array();
         $current = array();
-        
+
         if ($course_group_users)
         {
             while ($course_group_user = $course_group_users->next_result())
             {
                 $current[$course_group_user->get_id()] = array(
-                    'id' => 'user_' . $course_group_user->get_id(), 
-                    'title' => Utilities::htmlentities($course_group_user->get_fullname()), 
-                    'description' => Utilities::htmlentities($course_group_user->get_username()), 
+                    'id' => 'user_' . $course_group_user->get_id(),
+                    'title' => Utilities::htmlentities($course_group_user->get_fullname()),
+                    'description' => Utilities::htmlentities($course_group_user->get_username()),
                     'classes' => 'type type_user');
-                
+
                 // $defaults[$course_group_user->get_id()] = array('title' =>
                 // htmlspecialchars($course_group_user->get_fullname()),
                 // 'description' =>
@@ -73,59 +72,59 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 // 'user');
             }
         }
-        
+
         $locale = array();
         $locale['Display'] = Translation::get('SelectGroupUsers');
         $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
         $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
         $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
         $locale['load_elements'] = true;
-        
+
         $legend_items = array();
-        
+
         $legend_items[] = new ToolbarItem(
-            Translation::get('CourseUser'), 
-            Theme::getInstance()->getCommonImagePath('Treemenu/User'), 
-            null, 
-            ToolbarItem::DISPLAY_ICON_AND_LABEL, 
-            false, 
+            Translation::get('CourseUser'),
+            Theme::getInstance()->getCommonImagePath('Treemenu/User'),
+            null,
+            ToolbarItem::DISPLAY_ICON_AND_LABEL,
+            false,
             'legend');
-        
+
         $legend_items[] = new ToolbarItem(
-            Translation::get('LinkedUser'), 
-            Theme::getInstance()->getCommonImagePath('Treemenu/UserPlatform'), 
-            null, 
-            ToolbarItem::DISPLAY_ICON_AND_LABEL, 
-            false, 
+            Translation::get('LinkedUser'),
+            Theme::getInstance()->getCommonImagePath('Treemenu/UserPlatform'),
+            null,
+            ToolbarItem::DISPLAY_ICON_AND_LABEL,
+            false,
             'legend');
-        
+
         $legend = new Toolbar();
         $legend->set_items($legend_items);
         $legend->set_type(Toolbar::TYPE_HORIZONTAL);
-        
+
         $elem = $this->addElement(
-            'user_group_finder', 
-            'users', 
-            Translation::get('SubscribeUsers'), 
-            $searchUrl->getUrl(), 
-            $locale, 
-            $current, 
+            'user_group_finder',
+            'users',
+            Translation::get('SubscribeUsers'),
+            $searchUrl->getUrl(),
+            $locale,
+            $current,
             array('load_elements' => true));
         $elem->setDefaults($defaults);
         $this->addElement('static', null, null, $legend->as_html());
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('Subscribe'), 
-            null, 
-            null, 
+            'style_submit_button',
+            'submit',
+            Translation::get('Subscribe'),
+            null,
+            null,
             'log-in');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
+            'style_reset_button',
+            'reset',
             Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -137,40 +136,40 @@ class CourseGroupSubscriptionsForm extends FormValidator
     public function update_course_group_subscriptions()
     {
         $values = $this->exportValues();
-        
+
         $current_members_set = $this->course_group->get_members(false, false, true);
         $current_members = array();
-        
+
         foreach ($current_members_set as $current_member)
         {
             $current_members[] = $current_member->get_id();
         }
         $updated_members = array();
-        
+
         foreach ($values['users']['user'] as $value)
         {
             $updated_members[] = $value;
         }
-        
+
         $members_to_delete = array_diff($current_members, $updated_members);
         $members_to_add = array_diff($updated_members, $current_members);
-        
+
         if (($this->course_group->get_max_number_of_members() > 0) &&
              (count($values['users']['user']) > $this->course_group->get_max_number_of_members()))
         {
             $this->course_group->add_error(Translation::get('MaximumAmountOfMembersReached'));
             return false;
         }
-        
+
         // check for max group subscription per member
-        
+
         $parent_course_group = $this->course_group->get_parent();
         $course_groups = $parent_course_group->get_children(false);
-        
+
         $max_group_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
         $user_number_of_subscriptions = array();
         $not_subscribed_users = array();
-        
+
         if ($max_group_subscriptions > 0)
         {
             // only when it is another course_group than the current one
@@ -179,7 +178,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 // check for each user how many times is he/she subscribed int
                 // he course_group
                 $user_ids = DataManager::retrieve_course_group_user_ids($course_group->get_id());
-                
+
                 $counter = 0;
                 foreach ($members_to_add as $member)
                 {
@@ -195,13 +194,13 @@ class CourseGroupSubscriptionsForm extends FormValidator
                                     $number = $user_number_of_subscriptions[$counter][1];
                                     $user_number_of_subscriptions[$counter][0] = $member;
                                     $user_number_of_subscriptions[$counter][1] = $number + 1;
-                                    
+
                                     $number_after_subscription = $user_number_of_subscriptions[$counter][1] + 1;
-                                    
+
                                     if ($number_after_subscription > $max_group_subscriptions)
                                     {
                                         unset($members_to_add[array_search($member, $members_to_add)]);
-                                        
+
                                         $not_subscribed_users[] = $member;
                                         $counter ++;
                                         break;
@@ -216,7 +215,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                                         if ($number_after_subscription > $max_group_subscriptions)
                                         {
                                             unset($members_to_add[array_search($member, $members_to_add)]);
-                                            
+
                                             $not_subscribed_users[] = $member;
                                         }
                                         else
@@ -239,7 +238,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                             if ($number_after_subscription > $max_group_subscriptions)
                             {
                                 unset($members_to_add[array_search($member, $members_to_add)]);
-                                
+
                                 $not_subscribed_users[] = $member;
                             }
                             else
@@ -252,7 +251,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 }
             }
         }
-        
+
         if (count($not_subscribed_users) > 0)
         {
             foreach ($not_subscribed_users as $user_id)
@@ -270,19 +269,19 @@ class CourseGroupSubscriptionsForm extends FormValidator
         {
             $succes = $this->course_group->unsubscribe_users($members_to_delete);
         }
-        
+
         if (count($members_to_add) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
                 $members_to_add);
             $parameters = new DataClassRetrievesParameters($condition);
             $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 $parameters)->as_array();
             $succes &= $this->course_group->subscribe_users($users_to_add);
         }
-        
+
         return $succes;
     }
 }

@@ -6,8 +6,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: course_request_form.class.php 2 2010-02-25 11:43:06Z Yannick & Tristan $
- * 
+ *
  * @package application.lib.weblcms.course_type
  */
 class CourseCodeForm extends FormValidator
@@ -26,9 +25,9 @@ class CourseCodeForm extends FormValidator
         $this->parent = $parent;
         $this->course = $course;
         $this->user = $user;
-        
+
         $this->build_creating_form();
-        
+
         $this->setDefaults();
         $this->add_progress_bar(2);
     }
@@ -36,38 +35,38 @@ class CourseCodeForm extends FormValidator
     public function build_creating_form()
     {
         $this->build_code_form();
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('Subscribe'), 
-            null, 
-            null, 
+            'style_submit_button',
+            'submit',
+            Translation::get('Subscribe'),
+            null,
+            null,
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
+            'style_reset_button',
+            'reset',
             Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_code_form()
     {
         $this->addElement('category', Translation::get('CourseCodeProperties'));
-        
+
         $course_name = $this->course->get_name();
         $this->addElement('static', 'course', Translation::get('Course'), $course_name);
-        
+
         $user_name = $this->user->get_fullname();
         $this->addElement(
-            'static', 
-            'user', 
-            Translation::get('User', null, \Chamilo\Core\User\Manager::context()), 
+            'static',
+            'user',
+            Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
             $user_name);
-        
+
         $this->add_textfield(self::TEMP_CODE, Translation::get('Code'));
-        
+
         $this->addElement('category');
     }
 
@@ -75,7 +74,7 @@ class CourseCodeForm extends FormValidator
     {
         $temp_code = $this->exportValue(self::TEMP_CODE);
         $code = $this->course->get_code();
-        
+
         if ($temp_code == $code)
         {
             return true;

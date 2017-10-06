@@ -5,8 +5,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: assessment_browser_table_column_model.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder.assessment.component.browser
  */
 

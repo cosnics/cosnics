@@ -7,8 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- * $Id: link.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.link
  */
 class Link extends ContentObject implements Versionable, Includeable
@@ -51,7 +50,7 @@ class Link extends ContentObject implements Versionable, Includeable
      * Validates the url, URL beginning with / are internal URL's and considered complete, URLS that contain :// are
      * considered complete as well.
      * In any other case the URL is appended with 'http://' at the beginning.
-     * 
+     *
      * @param String $url
      * @return String completed url
      */
