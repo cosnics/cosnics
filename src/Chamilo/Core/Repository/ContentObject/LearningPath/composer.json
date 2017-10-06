@@ -28,6 +28,7 @@
             "name": "Learning Path",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
             "install": {
                 "default": 1,
                 "core": 0

@@ -28,6 +28,7 @@
             "name": "Office365 Video",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Office365Video",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "install": {
                 "default": 1,
                 "core": 0

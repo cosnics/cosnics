@@ -36,6 +36,7 @@
             "name": "Vimeo Video",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Vimeo",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

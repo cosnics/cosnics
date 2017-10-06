@@ -310,6 +310,7 @@ abstract class Installer extends Action
 
         $application_registration->set_context($namespace);
         $application_registration->set_type(($package_info->get_type()));
+        $application_registration->set_category(($package_info->get_category()));
         $application_registration->set_name($package_info->get_name());
         $application_registration->set_version($package_info->get_version());
         $application_registration->set_status(Registration::STATUS_ACTIVE);

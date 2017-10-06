@@ -26,6 +26,7 @@
             "name": "Portfolio",
             "context": "Chamilo\\Application\\Portfolio",
             "type": "Chamilo\\Application",
+            "category": "social",
             "install": {
                 "default": 1,
                 "core": 0

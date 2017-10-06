@@ -28,6 +28,7 @@
             "name": "Forum Topic",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\ForumTopic",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
             "install": {
                 "default": 1,
                 "core": 0

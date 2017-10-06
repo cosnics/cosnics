@@ -28,6 +28,7 @@
             "name": "PhysicalLocation",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\PhysicalLocation",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

@@ -28,6 +28,7 @@
             "name": "File",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\File",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "install": {
                 "default": 1,
                 "core": 0

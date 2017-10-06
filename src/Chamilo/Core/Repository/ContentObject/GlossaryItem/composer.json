@@ -28,6 +28,7 @@
             "name": "Glossary Item",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\GlossaryItem",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
             "install": {
                 "default": 1,
                 "core": 0

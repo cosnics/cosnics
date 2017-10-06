@@ -28,6 +28,7 @@
             "name": "Page",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Page",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "install": {
                 "default": 1,
                 "core": 0

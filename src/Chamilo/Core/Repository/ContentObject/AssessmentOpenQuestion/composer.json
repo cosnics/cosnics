@@ -28,6 +28,7 @@
             "name": "Assessment Open Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentOpenQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

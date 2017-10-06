@@ -28,6 +28,7 @@
             "name": "Bookmark",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Bookmark",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

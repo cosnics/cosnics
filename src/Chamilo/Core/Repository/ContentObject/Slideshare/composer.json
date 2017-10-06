@@ -32,6 +32,7 @@
             "name": "Slideshare",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Slideshare",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

@@ -1,17 +1,16 @@
 <?php
 namespace Chamilo\Configuration\Package\Storage\DataClass;
 
-use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Exception;
 
 /**
  *
- * @author Hans De Bisschop
+ * @package Chamilo\Configuration\Package\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Package extends DataClass
 {
@@ -22,9 +21,12 @@ class Package extends DataClass
     const PROPERTY_CONTEXT = 'context';
     const PROPERTY_NAME = 'name';
     const PROPERTY_TYPE = 'type';
+    const PROPERTY_CATEGORY = 'category';
     const PROPERTY_AUTHORS = 'authors';
     const PROPERTY_VERSION = 'version';
     const PROPERTY_DESCRIPTION = 'description';
+    const PROPERTY_CORE_INSTALL = 'core_install';
+    const PROPERTY_DEFAULT_INSTALL = 'default_install';
     const PROPERTY_EXTRA = 'extra';
     const PROPERTY_DEPENDENCIES = 'dependencies';
 
@@ -38,9 +40,12 @@ class Package extends DataClass
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_NAME;
         $extended_property_names[] = self::PROPERTY_TYPE;
+        $extended_property_names[] = self::PROPERTY_CATEGORY;
         $extended_property_names[] = self::PROPERTY_AUTHORS;
         $extended_property_names[] = self::PROPERTY_VERSION;
         $extended_property_names[] = self::PROPERTY_DESCRIPTION;
+        $extended_property_names[] = self::PROPERTY_CORE_INSTALL;
+        $extended_property_names[] = self::PROPERTY_DEFAULT_INSTALL;
         $extended_property_names[] = self::PROPERTY_DEPENDENCIES;
         $extended_property_names[] = self::PROPERTY_EXTRA;
 
@@ -128,6 +133,24 @@ class Package extends DataClass
     }
 
     /**
+     *
+     * @return string
+     */
+    public function get_category()
+    {
+        return $this->get_default_property(self::PROPERTY_CATEGORY);
+    }
+
+    /**
+     *
+     * @param string $category
+     */
+    public function set_category($category)
+    {
+        $this->set_default_property(self::PROPERTY_CATEGORY, $category);
+    }
+
+    /**
      * Returns the authors of this Package.
      *
      * @return the authors.
@@ -197,6 +220,42 @@ class Package extends DataClass
 
     /**
      *
+     * @return integer
+     */
+    public function getCoreInstall()
+    {
+        return $this->get_default_property(self::PROPERTY_CORE_INSTALL);
+    }
+
+    /**
+     *
+     * @param integer $coreInstall
+     */
+    public function setCoreInstall($coreInstall)
+    {
+        $this->set_default_property(self::PROPERTY_CORE_INSTALL, $coreInstall);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultInstall()
+    {
+        return $this->get_default_property(self::PROPERTY_DEFAULT_INSTALL);
+    }
+
+    /**
+     *
+     * @param integer $defaultInstall
+     */
+    public function setDefaultInstall($defaultInstall)
+    {
+        $this->set_default_property(self::PROPERTY_DEFAULT_INSTALL, $defaultInstall);
+    }
+
+    /**
+     *
      * @return Dependencies Dependency
      */
     public function get_dependencies()
@@ -222,19 +281,14 @@ class Package extends DataClass
      *
      * @param string $context
      * @return boolean
+     * @deprecated Use PackageFactory->packageExists($context) now
      */
     public static function exists($context)
     {
-        $path = Path::getInstance()->namespaceToFullPath($context) . 'composer.json';
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        if (file_exists($path))
-        {
-            return $path;
-        }
-        else
-        {
-            return false;
-        }
+        return $packageFactory->packageExists($context);
     }
 
     /**
@@ -242,75 +296,29 @@ class Package extends DataClass
      * @param string $context
      * @throws Exception
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @deprecated Use PackageFactory->getPackage($context) now
      */
     public static function get($context)
     {
-        $path = self::exists($context);
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        if (! $path)
-        {
-            throw new Exception(Translation::get('InvalidPackageContext', array('CONTEXT' => $context)));
-        }
-
-        return self::parse_package(json_decode(file_get_contents($path)));
+        return $packageFactory->getPackage($context);
     }
 
     /**
      *
      * @param \DOMXPath $dom_xpath
      * @param \DOMElement $package_node
-     * @return \configuration\package\storage\data_class\Package
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @deprecated Use PackageFactory->parsePackageFromDom($domXpath, $packageNode) now, or better even don't use this
+     *             anymore at all and use PackageFactory->getPackage($context) instead
      */
-    public static function parse_package(\stdClass $jsonPackageObject)
+    public static function parse_package(\DOMXPath $domXpath, \DOMElement $packageNode)
     {
-        $cosnicsProperties = $jsonPackageObject->extra->cosnics;
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        $package = new Package();
-
-        $package->set_context($cosnicsProperties->context);
-        $package->set_name($cosnicsProperties->name);
-        $package->set_type($cosnicsProperties->type);
-        $package->set_version($jsonPackageObject->version);
-        $package->set_description($jsonPackageObject->description);
-
-        if (! isset($cosnicsProperties->extra))
-        {
-            $extra = array();
-        }
-        else
-        {
-            $extra = $cosnicsProperties->extra;
-        }
-
-        $extra['core-install'] = $cosnicsProperties->install->core;
-        $extra['default-install'] = $cosnicsProperties->install->default;
-
-        $package->set_extra($extra);
-
-        foreach ($jsonPackageObject->authors as $author)
-        {
-            $package->add_author(new Author($author->name, $author->email));
-        }
-
-        if (isset($cosnicsProperties->dependencies) && count($cosnicsProperties->dependencies) > 0)
-        {
-            $dependencies = new Dependencies();
-            foreach ($cosnicsProperties->dependencies as $cosnicsDependency)
-            {
-                $dependency = new Dependency();
-                $dependency->set_id($cosnicsDependency->id);
-                $dependency->set_version($cosnicsDependency->version);
-
-                $dependencies->add_dependency($dependency);
-            }
-
-            $package->set_dependencies($dependencies);
-        }
-        else
-        {
-            $package->set_dependencies(null);
-        }
-
-        return $package;
+        return $packageFactory->parsePackageFromDom($domXpath, $packageNode);
     }
 }

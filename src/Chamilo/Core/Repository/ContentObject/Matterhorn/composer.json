@@ -32,6 +32,7 @@
             "name": "Matterhorn",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Matterhorn",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

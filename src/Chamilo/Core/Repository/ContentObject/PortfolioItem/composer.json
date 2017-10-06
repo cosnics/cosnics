@@ -28,6 +28,7 @@
             "name": "Portfolio Item",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\PortfolioItem",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Helper",
             "install": {
                 "default": 1,
                 "core": 0

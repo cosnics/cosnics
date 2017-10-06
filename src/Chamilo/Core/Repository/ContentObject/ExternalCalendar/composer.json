@@ -29,6 +29,7 @@
             "name": "External Calendar",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\ExternalCalendar",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Agenda",
             "install": {
                 "default": 1,
                 "core": 0

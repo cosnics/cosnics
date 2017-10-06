@@ -28,6 +28,7 @@
             "name": "Announcement",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Announcement",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "News",
             "install": {
                 "default": 1,
                 "core": 0

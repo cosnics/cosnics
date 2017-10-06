@@ -203,6 +203,10 @@ class Dependency
     {
         $dependency = self::factory($dom_node->getAttribute('type'));
         $dependency->set_id(trim($dom_xpath->query('id', $dom_node)->item(0)->nodeValue));
+        $version_node = $dom_xpath->query('version', $dom_node)->item(0);
+        $version = new Version($version_node->nodeValue, $version_node->getAttribute('operator'));
+
+        $dependency->set_version($version);
         return $dependency;
     }
 

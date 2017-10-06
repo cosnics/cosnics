@@ -28,6 +28,7 @@
             "name": "Matching Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchingQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

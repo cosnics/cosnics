@@ -28,6 +28,7 @@
             "name": "Soundcloud Audio",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Soundcloud",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

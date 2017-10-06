@@ -28,6 +28,7 @@
             "name": "Assessment Match numeric Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchNumericQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

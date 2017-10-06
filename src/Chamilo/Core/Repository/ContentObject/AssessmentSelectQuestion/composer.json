@@ -28,6 +28,7 @@
             "name": "Assessment Select Question",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\AssessmentSelectQuestion",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
             "install": {
                 "default": 1,
                 "core": 0

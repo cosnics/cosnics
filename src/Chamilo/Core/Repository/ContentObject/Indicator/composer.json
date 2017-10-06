@@ -32,6 +32,7 @@
             "name": "Indicator",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Indicator",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "PeerAssessment",
             "dependencies": [
                 {
                     "id": "Chamilo\\Core\\Repository",

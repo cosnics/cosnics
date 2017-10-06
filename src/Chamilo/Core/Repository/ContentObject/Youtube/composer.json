@@ -32,6 +32,7 @@
             "name": "YouTube Video",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Youtube",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
             "install": {
                 "default": 1,
                 "core": 0
