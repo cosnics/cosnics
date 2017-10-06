@@ -1,44 +1,47 @@
 {
-    "name": "cosnics/application-weblcms-tool-implementation-chat",
-    "version": "1.0.0",
-    "description": "Application Weblcms Tool Implementation Chat",
-    "keywords": [
-        "Application",
-        "Weblcms",
-        "Tool",
-        "Implementation",
-        "Chat"
-    ],
-    "homepage": "http://www.cosnics.org",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0"
-    },
-    "extra": {
-        "cosnics": {
-            "name": "Chat",
-            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Chat",
-            "type": "Chamilo\\Application\\Weblcms\\Tool",
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Application\\Weblcms",
-                    "version": ">=1.0.0"
-                }
-            ],
-            "install": {
-                "default": 0,
-                "core": 0
-            }
-        }
-    }
+	"name": "cosnics/application-weblcms-tool-implementation-chat",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Chat",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Chat"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Chat",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Chat",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"extra": {
+				"course-section": "tool"
+			}
+		}
+	}
 }

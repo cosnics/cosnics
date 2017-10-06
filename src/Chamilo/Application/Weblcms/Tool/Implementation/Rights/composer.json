@@ -38,7 +38,10 @@
                     "id": "Chamilo\\Application\\Weblcms",
                     "version": ">=1.0.0"
                 }
-            ]
+            ],
+			"extra": {
+				"course-section": "admin"
+			}
         }
     }
 }

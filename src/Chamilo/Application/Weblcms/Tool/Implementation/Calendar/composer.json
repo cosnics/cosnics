@@ -1,45 +1,48 @@
 {
-    "name": "cosnics/application-weblcms-tool-implementation-calendar",
-    "version": "1.0.0",
-    "description": "Application Weblcms Tool Implementation Calendar",
-    "keywords": [
-        "Application",
-        "Weblcms",
-        "Tool",
-        "Implementation",
-        "Calendar"
-    ],
-    "homepage": "http://www.cosnics.org",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0",
-        "mobiledetect/mobiledetectlib": "~2.8.22"
-    },
-    "extra": {
-        "cosnics": {
-            "name": "Calendar",
-            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Calendar",
-            "type": "Chamilo\\Application\\Weblcms\\Tool",
-            "install": {
-                "default": 1,
-                "core": 0
-            },
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Application\\Weblcms",
-                    "version": ">=1.0.0"
-                }
-            ]
-        }
-    }
+	"name": "cosnics/application-weblcms-tool-implementation-calendar",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Calendar",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Calendar"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"mobiledetect/mobiledetectlib": "~2.8.22"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Calendar",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Calendar",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+				"course-section": "tool"
+			}
+		}
+	}
 }

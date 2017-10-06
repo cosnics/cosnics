@@ -125,7 +125,7 @@ class Sequencer
     }
 
     /**
-     * Process the pre-depends property in the package.info
+     * Process the pre-depends property in the package information
      *
      * @param Depencencies $dependency
      */

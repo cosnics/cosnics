@@ -1,42 +1,42 @@
 {
-    "name": "cosnics/application-portfolio",
-    "version": "1.0.0",
-    "description": "Application Portfolio",
-    "keywords": [
-        "Application",
-        "Portfolio"
-    ],
-    "homepage": "http://www.cosnics.org",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0"
-    },
-    "extra": {
-        "cosnics": {
-            "name": "Portfolio",
-            "context": "Chamilo\\Application\\Portfolio",
-            "type": "Chamilo\\Application",
-            "category": "social",
-            "install": {
-                "default": 1,
-                "core": 0
-            },
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Configuration",
-                    "version": ">=1.0.0"
-                }
-            ]
-        }
-    }
+	"name": "cosnics/application-portfolio",
+	"version": "1.0.0",
+	"description": "Application Portfolio",
+	"keywords": [
+		"Application",
+		"Portfolio"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Portfolio",
+			"context": "Chamilo\\Application\\Portfolio",
+			"type": "Chamilo\\Application",
+			"category": "social",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Configuration",
+					"version": ">=1.0.0"
+				}
+			]
+		}
+	}
 }
