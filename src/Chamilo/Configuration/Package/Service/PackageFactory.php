@@ -351,7 +351,6 @@ class PackageFactory
 
         if ($dom_node->tagName == 'dependencies')
         {
-            $dependencies = new Dependencies($dom_node->getAttribute('operator'));
             $child_nodes = $dom_xpath->query('dependencies | dependency', $dom_node);
 
             foreach ($child_nodes as $child_node)
