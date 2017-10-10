@@ -49,10 +49,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     private $publication;
 
-    /*
-     * The question attempts @var QuestionAttempt[]
-     */
-    private $question_attempts;
 
     /**
      *
@@ -320,20 +316,15 @@ public function get_assessment_parameters()
         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID);
 }
 
-/**
- * Returns the assessment question attempts
- *
- * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
- */
-public function get_assessment_question_attempts()
-{
-    if (is_null($this->question_attempts))
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
     {
-        $this->question_attempts = $this->retrieve_question_attempts();
+        return $this->retrieve_question_attempts();
     }
-
-    return $this->question_attempts;
-}
 
 /**
  * Retrieves the question attempts for the selected assessment attempt
@@ -372,10 +363,10 @@ public function get_registered_question_ids()
     return array_keys($this->get_assessment_question_attempts());
 }
 
-public function get_assessment_question_attempt($complex_question_id)
-{
-    return $this->question_attempts[$complex_question_id];
-}
+    public function get_assessment_question_attempt($complex_question_id)
+    {
+        return $this->retrieve_question_attempts()[$complex_question_id];
+    }
 
 public function forum_topic_viewed($complex_topic_id)
 {

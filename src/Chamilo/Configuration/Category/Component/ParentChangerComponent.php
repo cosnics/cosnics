@@ -73,16 +73,15 @@ class ParentChangerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                if ($this->get_parent()->allowed_to_edit_category($id))
-                {
-                    $categories[] = $this->get_parent()->retrieve_categories(
-                        new EqualityCondition(
-                            new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                            new StaticConditionVariable($id)),
-                        null,
-                        null,
-                        array())->next_result();
-                }
+                $categories[] = $this->get_parent()->retrieve_categories(
+                    new EqualityCondition(
+                        new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
+                        new StaticConditionVariable($id)
+                    ),
+                    null,
+                    null,
+                    array()
+                )->next_result();
             }
 
             $form = $this->get_move_form($categories, $parent);

@@ -400,6 +400,15 @@ class TrackingRepository implements TrackingRepositoryInterface
     }
 
     /**
+     * Clears the cache for the LearningPathAttempt data class
+     */
+    public function clearTreeNodeQuestionAttemptCache()
+    {
+    }
+
+
+
+    /**
      * Finds the LearningPathAttempt objects for a given LearningPath with a given condition, offset, count and orderBy
      * Joined with users for searching and sorting
      *
