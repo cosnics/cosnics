@@ -174,7 +174,7 @@ class RightsLocationFixer
             $this->totalLocationsCount ++;
 
             $leftValue = ++ $this->currentValueCounter;
-            $this->fixRightsLocationsInCourseTool($course, $toolLocation, $courseTool);
+            $this->fixRightsLocationsForCategoriesAndPublications($course, $toolLocation, $courseTool);
             $this->currentValueCounter ++;
 
             $this->updateNestedTreeValues($toolLocation, $rootLocation, $leftValue, $this->currentValueCounter);
@@ -189,7 +189,7 @@ class RightsLocationFixer
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool $courseTool
      * @param int $categoryId
      */
-    protected function fixRightsLocationsInCourseTool(
+    protected function fixRightsLocationsForCategoriesAndPublications(
         Course $course, RightsLocation $parentLocation, CourseTool $courseTool, $categoryId = 0
     )
     {
@@ -247,7 +247,7 @@ class RightsLocationFixer
             $this->totalLocationsCount ++;
 
             $leftValue = ++ $this->currentValueCounter;
-            $this->fixRightsLocationsInCourseTool($course, $categoryLocation, $courseTool, $category->getId());
+            $this->fixRightsLocationsForCategoriesAndPublications($course, $categoryLocation, $courseTool, $category->getId());
             $this->currentValueCounter ++;
 
             $this->updateNestedTreeValues($categoryLocation, $parentLocation, $leftValue, $this->currentValueCounter);
