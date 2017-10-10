@@ -66,6 +66,16 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     }
 
     /**
+     * Clears the cache for the LearningPathAttempt data class
+     */
+    public function clearTreeNodeQuestionAttemptCache()
+    {
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncate(
+            $this->trackingParameters->getTreeNodeQuestionAttemptClassName()
+        );
+    }
+
+    /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPath $learningPath

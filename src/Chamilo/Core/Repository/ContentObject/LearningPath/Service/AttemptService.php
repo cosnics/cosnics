@@ -244,8 +244,17 @@ class AttemptService
         $treeNodeQuestionAttempt->set_hint(0);
 
         $this->trackingRepository->create($treeNodeQuestionAttempt);
+        $this->clearTreeNodeQuestionAttemptCache();
 
         return $treeNodeQuestionAttempt;
+    }
+
+    /**
+     * Clears the TreeNodeAttempt cache
+     */
+    public function clearTreeNodeQuestionAttemptCache()
+    {
+        $this->trackingRepository->clearTreeNodeQuestionAttemptCache();
     }
 
     /**

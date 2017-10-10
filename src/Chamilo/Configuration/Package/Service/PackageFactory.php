@@ -84,11 +84,11 @@ class PackageFactory
      */
     public function packageExists($context)
     {
-        $legacyPackagePath = $this->getLegacyPackagePath($context);
+        $legacyPackageExists = $this->legacyPackageExists($context);
 
-        if (file_exists($legacyPackagePath))
+        if ($legacyPackageExists)
         {
-            return $legacyPackagePath;
+            return $legacyPackageExists;
         }
         else
         {
@@ -102,6 +102,25 @@ class PackageFactory
             {
                 return false;
             }
+        }
+    }
+
+    /**
+     *
+     * @param unknown $context
+     * @return string|boolean
+     */
+    public function legacyPackageExists($context)
+    {
+        $legacyPackagePath = $this->getLegacyPackagePath($context);
+
+        if (file_exists($legacyPackagePath))
+        {
+            return $legacyPackagePath;
+        }
+        else
+        {
+            return false;
         }
     }
 

@@ -46,6 +46,11 @@ interface TrackingRepositoryInterface
     public function clearTreeNodeAttemptCache();
 
     /**
+     * Clears the cache for the TreeNodeQuestionAttempt data class
+     */
+    public function clearTreeNodeQuestionAttemptCache();
+
+    /**
      * Finds the learning path child attempts for a given learning path attempt
      *
      * @param LearningPath $learningPath
