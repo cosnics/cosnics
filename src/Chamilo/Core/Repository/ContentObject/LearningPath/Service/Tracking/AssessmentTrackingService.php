@@ -109,6 +109,7 @@ class AssessmentTrackingService
         $treeNodeQuestionAttempt->set_hint($hint);
 
         $this->trackingRepository->update($treeNodeQuestionAttempt);
+        $this->trackingRepository->clearTreeNodeQuestionAttemptCache();
     }
 
     /**
@@ -266,6 +267,7 @@ class AssessmentTrackingService
                     $activeAttempt, $questionIdentifier
                 );
         }
+        $this->trackingRepository->clearTreeNodeQuestionAttemptCache();
 
         return $questionAttemptPerQuestion;
     }

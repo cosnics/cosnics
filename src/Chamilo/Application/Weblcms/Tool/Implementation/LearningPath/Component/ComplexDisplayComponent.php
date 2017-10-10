@@ -51,10 +51,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     private $publication;
 
-    /*
-     * The question attempts @var QuestionAttempt[]
-     */
-    private $question_attempts;
 
     /**
      * @var TrackingService
@@ -350,12 +346,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function get_assessment_question_attempts()
     {
-        if (is_null($this->question_attempts))
-        {
-            $this->question_attempts = $this->retrieve_question_attempts();
-        }
-
-        return $this->question_attempts;
+        return $this->retrieve_question_attempts();
     }
 
     /**
@@ -395,7 +386,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_assessment_question_attempt($complex_question_id)
     {
-        return $this->question_attempts[$complex_question_id];
+        return $this->retrieve_question_attempts()[$complex_question_id];
     }
 
     public function forum_topic_viewed($complex_topic_id)
