@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: assessment_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.assessment
  */
 /**
@@ -48,7 +47,7 @@ class AssessmentForm extends ContentObjectForm
             $defaults[self::UNLIMITED_TIME] = 0;
             $defaults[self::RANDOM_QUESTIONS] = 0;
         }
-        
+
         parent::setDefaults($defaults);
     }
 
@@ -56,7 +55,7 @@ class AssessmentForm extends ContentObjectForm
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
-        
+
         // Number of attempts
         $choices = array();
         $choices[] = $this->createElement(
@@ -66,7 +65,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('UnlimitedAttempts'),
             0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::UNLIMITED_ATTEMPTS));
         $choices[] = $this->createElement(
             'radio',
@@ -75,65 +74,65 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('LimitedAttempts'),
             1,
             array(
-                'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')', 
+                'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS));
         $this->addGroup($choices, null, Translation::get('MaximumAttempts'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_ATTEMPTS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, array('id' => 'attempts'));
         $this->addElement('html', '</div>');
-        
+
         // Number of questions per page
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            self::ALL_QUESTIONS, 
-            '', 
-            Translation::get('AllQuestionsOnOnePage'), 
-            0, 
+            'radio',
+            self::ALL_QUESTIONS,
+            '',
+            Translation::get('AllQuestionsOnOnePage'),
+            0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')',
                 'id' => self::ALL_QUESTIONS));
         $choices[] = $this->createElement(
-            'radio', 
-            self::ALL_QUESTIONS, 
-            '', 
-            Translation::get('LimitedQuestionsOnOnePage'), 
-            1, 
+            'radio',
+            self::ALL_QUESTIONS,
+            '',
+            Translation::get('LimitedQuestionsOnOnePage'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')'));
         $this->addGroup($choices, null, Translation::get('QuestionsPerPage'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::ALL_QUESTIONS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, array('id' => 'questions'));
         $this->addElement('html', '</div>');
-        
+
         // Maximum time allowed
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            self::UNLIMITED_TIME, 
-            '', 
-            Translation::get('Unlimited'), 
-            0, 
+            'radio',
+            self::UNLIMITED_TIME,
+            '',
+            Translation::get('Unlimited'),
+            0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')',
                 'id' => self::UNLIMITED_TIME));
         $choices[] = $this->createElement(
-            'radio', 
-            self::UNLIMITED_TIME, 
-            '', 
-            Translation::get('Limited'), 
-            1, 
+            'radio',
+            self::UNLIMITED_TIME,
+            '',
+            Translation::get('Limited'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')'));
         $this->addGroup($choices, null, Translation::get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_TIME . '_window">');
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, array('id' => 'time'));
         $this->addElement('html', '</div>');
-        
+
         // Random questions
         $choices = array();
         $choices[] = $this->createElement(
@@ -143,26 +142,26 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('NoRandomization'),
             0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS));
         $choices[] = $this->createElement(
-            'radio', 
-            self::RANDOM_QUESTIONS, 
-            '', 
-            Translation::get('RandomQuestions'), 
-            1, 
+            'radio',
+            self::RANDOM_QUESTIONS,
+            '',
+            Translation::get('RandomQuestions'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')'));
         $this->addGroup($choices, null, Translation::get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::RANDOM_QUESTIONS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, array('id' => 'number_random'));
         $this->addElement('html', '</div>');
-        
+
         $this->addElement('category');
-        
+
         $this->addElement(
-            'html', 
+            'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
 					var " .
@@ -203,41 +202,41 @@ class AssessmentForm extends ContentObjectForm
 					}
 					/* ]]> */
 					</script>\n");
-        
+
         $this->addRule(
-            Assessment::PROPERTY_MAXIMUM_ATTEMPTS, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_MAXIMUM_ATTEMPTS,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_QUESTIONS_PER_PAGE, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_QUESTIONS_PER_PAGE,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_MAXIMUM_TIME, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_MAXIMUM_TIME,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_RANDOM_QUESTIONS, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_RANDOM_QUESTIONS,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
                      'AssessmentForm.js'));
     }
-    
+
     // Inherited
     protected function build_editing_form()
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
-        
+
         // Number of attempts
         $choices = array();
         $choices[] = $this->createElement(
@@ -256,65 +255,65 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('LimitedAttempts'),
             1,
             array(
-                'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')', 
+                'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS));
         $this->addGroup($choices, null, Translation::get('MaximumAttempts'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_ATTEMPTS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, array('id' => 'attempts'));
         $this->addElement('html', '</div>');
-        
+
         // Number of questions per page
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            self::ALL_QUESTIONS, 
-            '', 
-            Translation::get('AllQuestionsOnOnePage'), 
-            0, 
+            'radio',
+            self::ALL_QUESTIONS,
+            '',
+            Translation::get('AllQuestionsOnOnePage'),
+            0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')',
                 'id' => self::ALL_QUESTIONS));
         $choices[] = $this->createElement(
-            'radio', 
-            self::ALL_QUESTIONS, 
-            '', 
-            Translation::get('LimitedQuestionsOnOnePage'), 
-            1, 
+            'radio',
+            self::ALL_QUESTIONS,
+            '',
+            Translation::get('LimitedQuestionsOnOnePage'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')'));
         $this->addGroup($choices, null, Translation::get('QuestionsPerPage'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::ALL_QUESTIONS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, array('id' => 'questions'));
         $this->addElement('html', '</div>');
-        
+
         // Maximum time allowed
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            self::UNLIMITED_TIME, 
-            '', 
-            Translation::get('Unlimited'), 
-            0, 
+            'radio',
+            self::UNLIMITED_TIME,
+            '',
+            Translation::get('Unlimited'),
+            0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')',
                 'id' => self::UNLIMITED_TIME));
         $choices[] = $this->createElement(
-            'radio', 
-            self::UNLIMITED_TIME, 
-            '', 
-            Translation::get('Limited'), 
-            1, 
+            'radio',
+            self::UNLIMITED_TIME,
+            '',
+            Translation::get('Limited'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')'));
         $this->addGroup($choices, null, Translation::get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_TIME . '_window">');
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, array('id' => 'time'));
         $this->addElement('html', '</div>');
-        
+
         // Random questions
         $choices = array();
         $choices[] = $this->createElement(
@@ -324,26 +323,26 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('NoRandomization'),
             0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')', 
+                'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS));
         $choices[] = $this->createElement(
-            'radio', 
-            self::RANDOM_QUESTIONS, 
-            '', 
-            Translation::get('RandomQuestions'), 
-            1, 
+            'radio',
+            self::RANDOM_QUESTIONS,
+            '',
+            Translation::get('RandomQuestions'),
+            1,
             array('onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')'));
         $this->addGroup($choices, null, Translation::get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
-            'html', 
+            'html',
             '<div style="margin-left: 25px; display: block;" id="' . self::RANDOM_QUESTIONS . '_window">');
         $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, array('id' => 'number_random'));
         $this->addElement('html', '</div>');
-        
+
         $this->addElement('category');
-        
+
         $this->addElement(
-            'html', 
+            'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
 					var " .
@@ -384,35 +383,35 @@ class AssessmentForm extends ContentObjectForm
 					}
 					/* ]]> */
 					</script>\n");
-        
+
         $this->addRule(
-            Assessment::PROPERTY_MAXIMUM_ATTEMPTS, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_MAXIMUM_ATTEMPTS,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_QUESTIONS_PER_PAGE, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_QUESTIONS_PER_PAGE,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_MAXIMUM_TIME, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_MAXIMUM_TIME,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
         $this->addRule(
-            Assessment::PROPERTY_RANDOM_QUESTIONS, 
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 
-            'regex', 
+            Assessment::PROPERTY_RANDOM_QUESTIONS,
+            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            'regex',
             '/^[0-9]*$/');
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
                      'AssessmentForm.js'));
     }
-    
+
     // Inherited
     public function create_content_object()
     {
@@ -421,19 +420,19 @@ class AssessmentForm extends ContentObjectForm
         $object->set_maximum_attempts($values[Assessment::PROPERTY_MAXIMUM_ATTEMPTS]);
         if ($object->get_maximum_attempts() == null)
             $object->set_maximum_attempts(0);
-        
+
         $object->set_questions_per_page($values[Assessment::PROPERTY_QUESTIONS_PER_PAGE]);
         if ($object->get_questions_per_page() == null)
             $object->set_questions_per_page(0);
-        
+
         $object->set_maximum_time($values[Assessment::PROPERTY_MAXIMUM_TIME]);
         if ($object->get_maximum_time() == null)
             $object->set_maximum_time(0);
-        
+
         $object->set_random_questions($values[Assessment::PROPERTY_RANDOM_QUESTIONS]);
         if ($object->get_random_questions() == null)
             $object->set_random_questions(0);
-        
+
         $this->set_content_object($object);
         return parent::create_content_object();
     }
@@ -442,22 +441,22 @@ class AssessmentForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        
+
         if ($values[self::UNLIMITED_ATTEMPTS] == 0)
             $object->set_maximum_attempts(0);
         else
             $object->set_maximum_attempts($values[Assessment::PROPERTY_MAXIMUM_ATTEMPTS]);
-        
+
         if ($values[self::ALL_QUESTIONS] == 0)
             $object->set_questions_per_page(0);
         else
             $object->set_questions_per_page($values[Assessment::PROPERTY_QUESTIONS_PER_PAGE]);
-        
+
         if ($values[self::UNLIMITED_TIME] == 0)
             $object->set_maximum_time(0);
         else
             $object->set_maximum_time($values[Assessment::PROPERTY_MAXIMUM_TIME]);
-        
+
         if ($values[self::RANDOM_QUESTIONS])
         {
             if (is_null($values[Assessment::PROPERTY_RANDOM_QUESTIONS]) ||
@@ -480,7 +479,7 @@ class AssessmentForm extends ContentObjectForm
         {
             $object->set_random_questions(0);
         }
-        
+
         $this->set_content_object($object);
         return parent::update_content_object();
     }

@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- * $Id: hotspot_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.hotspot_question
  */
 /**
@@ -70,7 +69,7 @@ class HotspotQuestion extends ContentObject implements Versionable
     public function get_image_object()
     {
         $image = $this->get_image();
-        
+
         if (isset($image) && $image != 0)
         {
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $image);
@@ -94,7 +93,7 @@ class HotspotQuestion extends ContentObject implements Versionable
         }
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {

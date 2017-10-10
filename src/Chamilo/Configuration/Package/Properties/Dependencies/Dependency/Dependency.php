@@ -5,6 +5,8 @@ use Chamilo\Libraries\Format\MessageLogger;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -13,15 +15,22 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Dependency
+class Dependency
 {
     const PROPERTY_ID = 'id';
+    const PROPERTY_VERSION = 'version';
     const TYPE_PACKAGE = 'package';
     const TYPE_EXTENSIONS = 'extensions';
     const TYPE_SERVER = 'server';
     const TYPE_SETTINGS = 'settings';
 
     private $id;
+
+    /**
+     *
+     * @var string
+     */
+    private $version;
 
     protected $logger;
 
@@ -46,6 +55,24 @@ abstract class Dependency
 
     /**
      *
+     * @return string
+     */
+    public function get_version()
+    {
+        return $this->version;
+    }
+
+    /**
+     *
+     * @param string $version
+     */
+    public function set_version($version)
+    {
+        $this->version = $version;
+    }
+
+    /**
+     *
      * @param string $type
      * @throws Exception
      * @return Dependency
@@ -54,12 +81,12 @@ abstract class Dependency
     {
         $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Dependency';
-        
+
         if (! class_exists($class))
         {
             throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
         }
-        
+
         return new $class();
     }
 
@@ -68,9 +95,75 @@ abstract class Dependency
         return $this->logger;
     }
 
-    abstract public function check();
+    /**
+     * Checks the dependency in the registration table of the administration
+     *
+     * @return boolean
+     */
+    public function check()
+    {
+        $parameters = array();
+        $parameters['REQUIREMENT'] = $this->as_html();
 
-    abstract public function as_html();
+        $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
+            'Found',
+            array(),
+            Utilities::COMMON_LIBRARIES) . ': ';
+        $registration = \Chamilo\Configuration\Configuration::registration($this->get_id());
+
+        if (empty($registration))
+        {
+            $parameters['CURRENT'] = '--' . Translation::get('Nothing', array(), Utilities::COMMON_LIBRARIES) . '--';
+            $this->logger->add_message(Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR);
+            return false;
+        }
+        else
+        {
+            $target_version = \Composer\Semver\Semver::satisfies(
+                $registration[Registration::PROPERTY_VERSION],
+                $this->get_version());
+
+            if (! $target_version)
+            {
+                $parameters['CURRENT'] = '--' . Translation::get('WrongVersion', array(), Utilities::COMMON_LIBRARIES) . '--';
+                $this->logger->add_message(
+                    Translation::get('CurrentDependency', $parameters),
+                    MessageLogger::TYPE_ERROR);
+                return false;
+            }
+            else
+            {
+                if (! $registration[Registration::PROPERTY_STATUS])
+                {
+                    $parameters['CURRENT'] = '--' .
+                         Translation::get('InactiveObject', array(), Utilities::COMMON_LIBRARIES) . '--';
+                    $this->logger->add_message(
+                        Translation::get('CurrentDependency', $parameters),
+                        MessageLogger::TYPE_ERROR);
+                    return false;
+                }
+                else
+                {
+                    $this->logger->add_message($parameters['REQUIREMENT']);
+                    return true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a dependency information string as html
+     *
+     * @return String
+     */
+    public function as_html()
+    {
+        $parameters = array();
+        $parameters['ID'] = $this->get_id();
+        $parameters['VERSION'] = $this->get_version();
+
+        return Translation::get('Dependency', $parameters);
+    }
 
     public function compare($type, $reference, $value)
     {
@@ -110,11 +203,25 @@ abstract class Dependency
     {
         $dependency = self::factory($dom_node->getAttribute('type'));
         $dependency->set_id(trim($dom_xpath->query('id', $dom_node)->item(0)->nodeValue));
+        $version_node = $dom_xpath->query('version', $dom_node)->item(0);
+        $version = new Version($version_node->nodeValue, $version_node->getAttribute('operator'));
+
+        $dependency->set_version($version);
         return $dependency;
     }
 
     public static function type($type)
     {
         return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
+    }
+
+    /**
+     *
+     * @param string $context
+     * @return boolean
+     */
+    public function needs($context)
+    {
+        return $this->get_id() == $context;
     }
 }

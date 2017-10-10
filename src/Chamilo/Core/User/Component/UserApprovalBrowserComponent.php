@@ -21,8 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: admin_user_browser.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.user_manager.component
  */
 class UserApprovalBrowserComponent extends Manager implements TableSupport
@@ -40,22 +39,22 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
-        
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-        
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $this->get_user_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -63,31 +62,31 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
     {
         $parameters = $this->get_parameters(true);
         $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
+
         $table = new UserApprovalTable($this);
-        
+
         $html = array();
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
     public function get_table_condition($object_table_class_name)
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
                 '*' . $query . '*');
             return new OrCondition($or_conditions);
         }
@@ -99,18 +98,18 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
+
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 

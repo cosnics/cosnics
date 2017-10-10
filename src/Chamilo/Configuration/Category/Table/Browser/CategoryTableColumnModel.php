@@ -9,8 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: category_browser_table_column_model.class.php 191 2009-11-13 11:50:28Z chellee $
- * 
+ *
  * @package application.common.category_manager.component.category_browser
  */
 
@@ -27,8 +26,7 @@ class CategoryTableColumnModel extends DataClassTableColumnModel implements Tabl
         $category_class_name = get_class($this->get_component()->get_parent()->get_category());
 
         $this->add_column(new StaticTableColumn(Translation::get(self::CATEGORY)));
-        $this->add_column(
-            new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));
         if ($this->get_component()->get_subcategories_allowed())
         {
             $this->add_column(new StaticTableColumn(Translation::get(self::SUBCATEGORIES)));

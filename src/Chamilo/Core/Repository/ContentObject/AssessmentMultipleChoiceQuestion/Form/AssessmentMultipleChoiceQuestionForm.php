@@ -18,7 +18,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: assessment_multiple_choice_question_form.class.php $
  *
  * @package repository.lib.content_object.multiple_choice_question
  */

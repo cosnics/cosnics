@@ -1,10 +1,16 @@
 {
-	"name": "cosnics/application-weblcms-tool-note",
-	"version": "6.0.0",
-	"description": "Chamilo Note Weblcms Tool",
-	"keywords": [],
+	"name": "cosnics/application-weblcms-tool-implementation-note",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Note",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Note"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -17,5 +23,25 @@
 	],
 	"require": {
 		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Note",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Note",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+				"course-section": "tool"
+			}
+		}
 	}
 }

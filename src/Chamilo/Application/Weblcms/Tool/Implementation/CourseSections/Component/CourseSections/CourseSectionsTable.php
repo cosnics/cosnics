@@ -9,8 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: course_sections_browser_table.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_sections.component.course_sections_browser
  */
 /**
@@ -25,8 +24,7 @@ class CourseSectionsTable extends DataClassTable implements TableFormActionsSupp
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(
-                    array(Manager::PARAM_ACTION => Manager::ACTION_REMOVE_COURSE_SECTION)), 
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_REMOVE_COURSE_SECTION)),
                 Translation::get('RemoveSelected')));
         return $actions;
     }

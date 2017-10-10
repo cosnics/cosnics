@@ -16,8 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: category_form.class.php 191 2009-11-13 11:50:28Z chellee $
- * 
+ *
  * @package application.common.category_manager
  */
 class CategoryForm extends FormValidator
@@ -41,14 +40,14 @@ class CategoryForm extends FormValidator
     public function __construct($form_type, $action, $category, $user, $manager)
     {
         parent::__construct('category_form', 'post', $action);
-        
+
         $this->category = $category;
         $this->user = $user;
         $this->form_type = $form_type;
         $this->manager = $manager;
-        
+
         $this->build_header();
-        
+
         if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
@@ -57,7 +56,7 @@ class CategoryForm extends FormValidator
         {
             $this->build_creation_form();
         }
-        
+
         $this->setDefaults();
     }
 
@@ -65,7 +64,7 @@ class CategoryForm extends FormValidator
     {
         $this->addElement('html', '<div class="configuration_form">');
         $this->addElement(
-            'html', 
+            'html',
             '<span class="category">' . Translation::get('Required', null, Utilities::COMMON_LIBRARIES) . '</span>');
     }
 
@@ -73,19 +72,19 @@ class CategoryForm extends FormValidator
     {
         $this->addElement('html', '<div style="clear: both;"></div>');
         $this->addElement('html', '</div>');
-        
+
         // Submit button
         // $this->addElement('submit', 'submit', 'OK');
-        
+
         $buttons[] = $this->createElement('style_submit_button', 'create', Translation::get($action_name));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
+            'style_reset_button',
+            'reset',
             Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CategoryForm.js'));
     }
@@ -93,9 +92,9 @@ class CategoryForm extends FormValidator
     public function add_name_field($number = null)
     {
         $element = $this->createElement(
-            'text', 
-            PlatformCategory::PROPERTY_NAME . $number, 
-            Translation::get('Name'), 
+            'text',
+            PlatformCategory::PROPERTY_NAME . $number,
+            Translation::get('Name'),
             array("size" => "50"));
         // $this->addRule(PlatformCategory :: PROPERTY_NAME . $number,
         // Translation :: get('ThisFieldIsRequired'), 'required');
@@ -113,17 +112,17 @@ class CategoryForm extends FormValidator
             unset($_SESSION[$context]['number_of_categories']);
             unset($_SESSION[$context]['skipped_categories']);
         }
-        
+
         if (! isset($_SESSION[$context]['number_of_categories']))
         {
             $_SESSION[$context]['number_of_categories'] = 1;
         }
-        
+
         if (! isset($_SESSION[$context]['skipped_categories']))
         {
             $_SESSION[$context]['skipped_categories'] = array();
         }
-        
+
         if (isset($_POST['add']))
         {
             $_SESSION[$context]['number_of_categories'] = $_SESSION[$context]['number_of_categories'] + 1;
@@ -133,9 +132,9 @@ class CategoryForm extends FormValidator
             $indexes = array_keys($_POST['remove']);
             $_SESSION[$context]['skipped_categories'][] = $indexes[0];
         }
-        
+
         $number_of_categories = intval($_SESSION[$context]['number_of_categories']);
-        
+
         for ($category_number = 0; $category_number < $number_of_categories; $category_number ++)
         {
             if (! in_array($category_number, $_SESSION[$context]['skipped_categories']))
@@ -145,28 +144,28 @@ class CategoryForm extends FormValidator
                 if ($number_of_categories - count($_SESSION[$context]['skipped_categories']) > 1)
                 {
                     $group[] = $this->createElement(
-                        'image', 
-                        'remove[' . $category_number . ']', 
-                        Theme::getInstance()->getCommonImagePath('Action/ListRemove'), 
+                        'image',
+                        'remove[' . $category_number . ']',
+                        Theme::getInstance()->getCommonImagePath('Action/ListRemove'),
                         array('style' => 'border: 0px;'));
                 }
                 $this->addGroup(
-                    $group, 
-                    PlatformCategory::PROPERTY_NAME . $category_number, 
-                    Translation::get('CategoryName'), 
-                    '', 
+                    $group,
+                    PlatformCategory::PROPERTY_NAME . $category_number,
+                    Translation::get('CategoryName'),
+                    '',
                     false);
                 $this->addRule(
-                    PlatformCategory::PROPERTY_NAME . $category_number, 
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+                    PlatformCategory::PROPERTY_NAME . $category_number,
+                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                     'required');
             }
         }
-        
+
         $this->addElement(
-            'image', 
-            'add[]', 
-            Theme::getInstance()->getCommonImagePath('Action/ListAdd'), 
+            'image',
+            'add[]',
+            Theme::getInstance()->getCommonImagePath('Action/ListAdd'),
             array('style' => 'border: 0px;'));
         $this->build_footer('Create');
     }
@@ -194,9 +193,9 @@ class CategoryForm extends FormValidator
     {
         $values = $this->exportValues();
         // dump($values);
-        
+
         $result = true;
-        
+
         foreach ($values as $key => $value)
         {
             if (strpos($key, 'name') !== false)
@@ -206,17 +205,17 @@ class CategoryForm extends FormValidator
                 $category->set_parent($this->category->get_parent());
                 $category->set_display_order(
                     $this->manager->get_parent()->get_next_category_display_order($this->category->get_parent()));
-                
+
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME), 
+                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME),
                     new StaticConditionVariable($category->get_name()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT), 
+                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT),
                     new StaticConditionVariable($category->get_parent()));
                 $condition = new AndCondition($conditions);
                 $cats = $this->manager->get_parent()->count_categories($condition);
-                
+
                 if ($cats > 0)
                 {
                     $result = false;
@@ -234,32 +233,32 @@ class CategoryForm extends FormValidator
     {
         $category = $this->category;
         $category->set_name($this->exportValue(PlatformCategory::PROPERTY_NAME));
-        
+
         $conditions = array();
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable($category::class_name(), $category::PROPERTY_ID), 
+                new PropertyConditionVariable($category::class_name(), $category::PROPERTY_ID),
                 new StaticConditionVariable($category->get_id())));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME), 
+            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME),
             new StaticConditionVariable($category->get_name()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT), 
+            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT),
             new StaticConditionVariable($category->get_parent()));
         $condition = new AndCondition($conditions);
         $cats = $this->manager->get_parent()->count_categories($condition);
-        
+
         if ($cats > 0)
         {
             return false;
         }
-        
+
         return $category->update();
     }
 
     /**
      * Sets default values.
-     * 
+     *
      * @param $defaults array Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())

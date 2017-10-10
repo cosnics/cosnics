@@ -29,8 +29,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: user_group_subscribe_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.user.component
  */
 class GroupSubscribeBrowserComponent extends Manager implements TableSupport
@@ -44,35 +43,35 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
 
     /**
      * The currently selected group id
-     * 
+     *
      * @var int
      */
     private $groupId;
 
     /**
      * The root group
-     * 
+     *
      * @var Group
      */
     private $rootGroup;
 
     /**
      * The subscribed group ids
-     * 
+     *
      * @var int[]
      */
     private $subscribedGroups;
 
     /**
      * The translator service
-     * 
+     *
      * @var Translation
      */
     private $translator;
 
     /**
      * Runs this component
-     * 
+     *
      * @return string
      *
      * @throws NotAllowedException
@@ -84,61 +83,61 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-        
+
         $this->translator = Translation::getInstance();
-        
+
         $this->subscribedGroups = $this->get_subscribed_platformgroup_ids($this->get_course_id());
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        
+
         $html[] = $this->renderInformationMessage();
-        
+
         $html[] = '<div class="row">';
         $html[] = $this->renderGroupMenu();
         $html[] = $this->renderCurrentGroup();
         $html[] = '</div>';
-        
+
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     protected function renderInformationMessage()
     {
         $html = array();
-        
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
-        
+
         $html[] = '<div class="alert alert-info">';
         $html[] = $this->getTranslation('SubscribeGroupsInformationMessage');
         $html[] = '</div>';
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
     /**
      * Renders the currently selected group
-     * 
+     *
      * @return string
      */
     protected function renderCurrentGroup()
     {
         $html = array();
-        
+
         $html[] = '<div class="col-sm-10">';
         $html[] = $this->renderGroupDetails();
         $html[] = $this->renderGroupSubgroupTable();
-        
+
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
@@ -148,9 +147,9 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     protected function renderGroupDetails()
     {
         $group = $this->getCurrentGroup();
-        
+
         $html = array();
-        
+
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $group->get_name() . '</h3>';
@@ -173,13 +172,13 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
     /**
      * Helper function to get translations in the current context
-     * 
+     *
      * @param $variable
      * @param array $parameters
      *
@@ -196,7 +195,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     protected function renderGroupSubgroupTable()
     {
         $table = new UnsubscribedGroupTable($this, $this->get_parameters(), $this->get_table_condition(''));
-        
+
         $html = array();
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
@@ -206,30 +205,30 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = $table->as_html();
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
     /**
      * Renders the group menu
-     * 
+     *
      * @return string
      */
     protected function renderGroupMenu()
     {
         $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
-        
+
         $html = array();
         $html[] = '<div class="col-sm-2">';
         $html[] = $tree->render_as_tree();
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
     /**
      * Builds and returns the toolbar renderer
-     * 
+     *
      * @return ButtonToolBarRenderer
      */
     protected function getButtonToolbarRenderer()
@@ -238,25 +237,25 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ViewSubscribedUsers'), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)), 
+                    Translation::get('ViewSubscribedUsers'),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
+
             $buttonToolbar->addButtonGroup($commonActions);
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 
     /**
      * Builds the group button toolbar for the management of a single group
-     * 
+     *
      * @param Group $group
      *
      * @return ButtonToolBarRenderer
@@ -264,35 +263,35 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     protected function getGroupButtonToolbarRenderer(Group $group)
     {
         $buttonToolbar = new ButtonToolBar();
-        
+
         $courseManagementRights = CourseManagementRights::getInstance();
-        
+
         $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
-            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, 
-            $group->getId(), 
+            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+            $group->getId(),
             $this->get_course_id());
-        
+
         if (! in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $this->getTranslation('SubscribeGroup'), 
-                    '', 
+                    $this->getTranslation('SubscribeGroup'),
+                    '',
                     $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS, 
-                            self::PARAM_OBJECTS => $group->getId())), 
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, 
-                    false, 
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
+                            self::PARAM_OBJECTS => $group->getId())),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                    false,
                     'btn-success'));
         }
-        
+
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
     /**
      * Retrieves the currently selected group
-     * 
+     *
      * @return Group
      */
     protected function getCurrentGroup()
@@ -302,13 +301,13 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             return null;
         }
-        
+
         return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
     }
 
     /**
      * Returns the id of the currently selected group, or the root group
-     * 
+     *
      * @return int
      */
     protected function getGroupId()
@@ -316,19 +315,19 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         if (! $this->groupId)
         {
             $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-            
+
             if (! $this->groupId)
             {
                 $this->groupId = $this->getRootGroup()->get_id();
             }
         }
-        
+
         return $this->groupId;
     }
 
     /**
      * Retrieves the root group
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function getRootGroup()
@@ -336,20 +335,20 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         if (! $this->rootGroup)
         {
             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-                Group::class_name(), 
+                Group::class_name(),
                 new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
+                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0))));
             $this->rootGroup = $group;
         }
-        
+
         return $this->rootGroup;
     }
 
     /**
      * Returns the condition for the table
-     * 
+     *
      * @param string $table_class_name
      *
      * @return Condition
@@ -357,36 +356,36 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId()));
-        
+
         // filter already subscribed groups
         if ($this->subscribedGroups)
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
                     $this->subscribedGroups));
         }
-        
+
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), 
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
                 '*' . $query . '*');
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $conditions[] = new OrCondition($conditions2);
         }
-        
+
         return new AndCondition($conditions);
     }
 
     /**
      * Returns additional parameters that need to be registered
-     * 
+     *
      * @return array
      */
     public function get_additional_parameters()

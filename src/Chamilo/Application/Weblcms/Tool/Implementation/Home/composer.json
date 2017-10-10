@@ -1,10 +1,16 @@
 {
-	"name": "cosnics/application-weblcms-tool-home",
-	"version": "6.0.0",
-	"description": "Chamilo Home Weblcms Tool",
-	"keywords": [],
+	"name": "cosnics/application-weblcms-tool-implementation-home",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Home",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Home"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -17,5 +23,25 @@
 	],
 	"require": {
 		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Home",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Home",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+				"course-section": "custom"
+			}
+		}
 	}
 }

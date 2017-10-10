@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
@@ -23,17 +22,17 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $context = \Chamilo\Core\Repository\Workspace\Manager::context();
-        $applicationFactory = new ApplicationFactory(
-            $context, 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $applicationFactory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     public function get_additional_parameters()
     {
         $parameters = parent::get_additional_parameters();
         $parameters[] = FilterData::FILTER_CATEGORY;
-        
+
         return $parameters;
     }
 }

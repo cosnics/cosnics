@@ -1,10 +1,16 @@
 {
-	"name": "cosnics/application-weblcms-tool-course-group",
-	"version": "6.0.0",
-	"description": "Chamilo Course Group Weblcms Tool",
-	"keywords": [],
+	"name": "cosnics/application-weblcms-tool-implementation-course-group",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation CourseGroup",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"CourseGroup"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -18,5 +24,25 @@
 	"require": {
 		"php": ">=7.0.0",
 		"phpoffice/phpexcel": "1.8.*"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Course Group",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+				"course-section": "tool"
+			}
+		}
 	}
 }

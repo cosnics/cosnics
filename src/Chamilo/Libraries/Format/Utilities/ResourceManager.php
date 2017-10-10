@@ -2,8 +2,7 @@
 namespace Chamilo\Libraries\Format\Utilities;
 
 /**
- * $Id: resource_manager.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common
  */
 use Chamilo\Libraries\File\Path;
@@ -12,7 +11,7 @@ use Chamilo\Libraries\File\Path;
  * Manages resources, ensuring that they are only loaded when necessary.
  * Currently only relevant for JavaScript and CSS
  * files.
- * 
+ *
  * @author Tim De Pauw
  * @package common
  */
@@ -55,13 +54,13 @@ class ResourceManager
     private function _get_resource_html($path)
     {
         $pathUtil = Path::getInstance();
-        
+
         $webPath = $pathUtil->getBasePath(true);
         $basePath = $pathUtil->getBasePath();
-        
+
         $systemPath = str_replace($webPath, $basePath, $path);
         $modificationTime = filemtime($systemPath);
-        
+
         $matches = array();
         preg_match('/[^.]*$/', $path, $matches);
         $extension = $matches[0];

@@ -1,21 +1,44 @@
 {
-	"name": "chamilo/ext-repo-matterhorn",
-	"version": "6.0.0",
-	"description": "Chamilo Matterhorn External Repository",
-	"keywords": [],
+	"name": "cosnics/core-repository-implementation-matterhorn",
+	"version": "1.0.0",
+	"description": "Core Repository Implementation Matterhorn",
+	"keywords": [
+		"Core",
+		"Repository",
+		"Implementation",
+		"Matterhorn"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Hans De Bisschop",
 			"email": "hans.de.bisschop@ehb.be"
+		},
+		{
+			"name": "Magali Gillard",
+			"email": "magali.gillard@ehb.be"
 		}
 	],
 	"require": {
-		"php": ">=7.0.0",
-		"guzzlehttp/guzzle": "~6.1"
-	},
-	"require": {
 		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Opencast Matterhorn",
+			"context": "Chamilo\\Core\\Repository\\Implementation\\Matterhorn",
+			"type": "Chamilo\\Core\\Repository\\Implementation",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Core\\Repository",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"multiple": 1
+		}
 	}
 }

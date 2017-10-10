@@ -1,10 +1,15 @@
 {
-	"name": "chamilo/ext-repo-bitbucket",
-	"version": "6.0.0",
-	"description": "Chamilo Bitbucket External Repository",
-	"keywords": [],
+	"name": "cosnics/core-repository-implementation-bitbucket",
+	"version": "1.0.0",
+	"description": "Core Repository Implementation Bitbucket",
+	"keywords": [
+		"Core",
+		"Repository",
+		"Implementation",
+		"Bitbucket"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -13,12 +18,31 @@
 		{
 			"name": "Hans De Bisschop",
 			"email": "hans.de.bisschop@ehb.be"
+		},
+		{
+			"name": "Magali Gillard",
+			"email": "magali.gillard@ehb.be"
 		}
 	],
 	"require": {
 		"php": ">=7.0.0"
 	},
 	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/bitbucket"
+		"cosnics": {
+			"name": "Bitbucket",
+			"context": "Chamilo\\Core\\Repository\\Implementation\\Bitbucket",
+			"type": "Chamilo\\Core\\Repository\\Implementation",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Core\\Repository",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"multiple": 1
+		}
 	}
 }

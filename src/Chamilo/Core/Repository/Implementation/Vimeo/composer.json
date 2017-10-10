@@ -1,25 +1,48 @@
 {
-	"name": "chamilo/ext-repo-vimeo",
-	"version": "6.0.0",
-	"description": "Chamilo Vimeo External Repository",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"vimeo/vimeo-api": "1.2.*"
-	},
-	"extra": {
-		"install-path": "common/extensions/external_repository_manager/implementation/vimeo"
-	}
+    "name": "cosnics/core-repository-implementation-vimeo",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Vimeo",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Vimeo"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Magali Gillard",
+            "email": "magali.gillard@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "vimeo/vimeo-api": "1.2.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Vimeo",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Vimeo",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
 }

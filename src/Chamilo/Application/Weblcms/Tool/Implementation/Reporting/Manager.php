@@ -6,8 +6,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: reporting_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.reporting
  * @author Michael Kyndt
  */
@@ -20,14 +19,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     /**
      * Adds a breadcrumb to the browser component
-     * 
+     *
      * @param BreadcrumbTrail $breadcrumbTrail
      */
     protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_REPORT)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_REPORT)),
                 Translation::getInstance()->getTranslation('ViewerComponent', array(), $this->context())));
     }
 }

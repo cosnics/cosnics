@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: course_group.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course_group
  */
 
@@ -38,7 +37,7 @@ class CourseGroup extends NestedTreeNode
     // random registration = randomly selects from the subscribed users of the
     // course and registers for the course_group
     const PROPERTY_RANDOM_REG = 'random_registration_allowed';
-    
+
     /**
      * If this course group has child course groups, this setting determines to how many of its direct children members
      * can be subscribed to at any one time.
@@ -47,34 +46,34 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Stores the members of this course group in a cache variable for multiple use
-     * 
+     *
      * @var <type>
      */
     private $members_cache;
 
     /**
      * Get the default properties of all course_groups.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_ID, 
-                self::PROPERTY_COURSE_CODE, 
-                self::PROPERTY_NAME, 
-                self::PROPERTY_DESCRIPTION, 
-                self::PROPERTY_MAX_NUMBER_OF_MEMBERS, 
-                self::PROPERTY_SELF_REG, 
-                self::PROPERTY_SELF_UNREG, 
-                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, 
+                self::PROPERTY_ID,
+                self::PROPERTY_COURSE_CODE,
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_MAX_NUMBER_OF_MEMBERS,
+                self::PROPERTY_SELF_REG,
+                self::PROPERTY_SELF_UNREG,
+                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
                 self::PROPERTY_RANDOM_REG));
     }
 
     /**
      * Gets the id of this course_group
-     * 
+     *
      * @return int
      */
     public function get_id()
@@ -89,7 +88,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the group_id of this course_group
-     * 
+     *
      * @return int
      */
     public function get_group_id()
@@ -105,7 +104,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the course code of the course in which this course_group was created
-     * 
+     *
      * @return string
      */
     public function get_course_code()
@@ -120,7 +119,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the name of this course_group
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -130,7 +129,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets the name of this course_group
-     * 
+     *
      * @param $name string
      */
     public function set_name($name)
@@ -140,7 +139,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the description of this course_group
-     * 
+     *
      * @return string
      */
     public function get_description()
@@ -150,7 +149,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets the description of this course_group
-     * 
+     *
      * @param $description string
      */
     public function set_description($description)
@@ -160,7 +159,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the maximum number of members than can be subscribed to this course_group
-     * 
+     *
      * @return int null null, no limit is set to the number of members
      */
     public function get_max_number_of_members()
@@ -182,7 +181,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the document_category_id for the course_group
-     * 
+     *
      * @return int null null no document category exist
      */
     public function get_document_category_id()
@@ -204,7 +203,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Gets the forum_category_id for the course_group
-     * 
+     *
      * @return int null null no forum categories exist
      */
     public function get_forum_category_id()
@@ -215,7 +214,7 @@ class CourseGroup extends NestedTreeNode
     /**
      * Sets the maximum number of members of this course_group If the new value is smaller than the number of members
      * currently subscribed, no changes are made.
-     * 
+     *
      * @param $max_number_of_members int|null If null, no limit is set to the number of members.
      */
     public function set_max_number_of_members($max_number_of_members)
@@ -226,7 +225,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Determines if self registration is allowed
-     * 
+     *
      * @return boolean
      */
     public function is_self_registration_allowed()
@@ -236,7 +235,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets if self registration is allowed
-     * 
+     *
      * @param $self_reg boolean
      */
     public function set_self_registration_allowed($self_reg)
@@ -250,7 +249,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Determines if self unregistration is allowed
-     * 
+     *
      * @return boolean
      */
     public function is_self_unregistration_allowed()
@@ -260,7 +259,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Determines if the course group users were randomly subscribed
-     * 
+     *
      * @return boolean
      */
     public function is_random_registration_done()
@@ -270,7 +269,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets if the course group users were randomly subscribed
-     * 
+     *
      * @param $self_reg boolean
      */
     public function set_random_registration_done($random_registration_done)
@@ -280,7 +279,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets if self unregistration is allowed
-     * 
+     *
      * @param $self_unreg boolean
      */
     public function set_self_unregistration_allowed($self_unreg)
@@ -294,7 +293,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Get the maximum amount of child course groups that users can be subscribed to.
-     * 
+     *
      * @return int null null, no limit is set to the number of child course groups
      */
     public function get_max_number_of_course_group_per_member()
@@ -304,20 +303,20 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Sets the maximum number of child course groups that users can be subscribed to.
-     * 
+     *
      * @param $max_number_of_course_group_per_member int|null If null, no limit is set to the number of child course
      *        groups.
      */
     public function set_max_number_of_course_group_per_member($max_number_of_course_group_per_member)
     {
         return $this->set_default_property(
-            self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, 
+            self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
             $max_number_of_course_group_per_member);
     }
 
     /**
      * Retrieves the users subscribed to this course_group and/or it's children
-     * 
+     *
      * @param $include_subgroups boolean - Include the children of the subgroups
      * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
      * @param $include_users boolean - Includes the users as real user objects
@@ -329,19 +328,19 @@ class CourseGroup extends NestedTreeNode
             $this->members_cache[(int) $this->get_id()][(int) $include_subgroups][(int) $recursive_subgroups][(int) $include_users]))
         {
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
-            
+
             $course_group_user_relations = DataManager::retrieves(
-                CourseGroupUserRelation::class_name(), 
+                CourseGroupUserRelation::class_name(),
                 new DataClassRetrievesParameters($condition));
-            
+
             $users = array();
-            
+
             while ($relation = $course_group_user_relations->next_result())
             {
                 if ($include_users)
                 {
                     $users[$relation->get_user()] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                        \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                         $relation->get_user());
                 }
                 else
@@ -354,13 +353,13 @@ class CourseGroup extends NestedTreeNode
                 $this->members_cache[(int) $this->get_id()][(int) $include_subgroups][(int) $recursive_subgroups][(int) $include_users] = $users;
             }
         }
-        
+
         return $this->members_cache[(int) $this->get_id()][(int) $include_subgroups][(int) $recursive_subgroups][(int) $include_users];
     }
 
     /**
      * Returns the condition to retrieve the members of the subgroups
-     * 
+     *
      * @param $include_subgroups boolean - Include the children of the subgroups
      * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
      * @return InCondition
@@ -369,27 +368,27 @@ class CourseGroup extends NestedTreeNode
     {
         $groups = array();
         $groups[] = $this->get_id();
-        
+
         if ($include_subgroups)
         {
             $subgroups = $this->get_children($recursive_subgroups);
-            
+
             while ($subgroup = $subgroups->next_result())
             {
                 $groups[] = $subgroup->get_id();
             }
         }
-        
+
         return new InCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), 
-                CourseGroupUserRelation::PROPERTY_COURSE_GROUP), 
+                CourseGroupUserRelation::class_name(),
+                CourseGroupUserRelation::PROPERTY_COURSE_GROUP),
             $groups);
     }
 
     /**
      * Checks if a user is a member of this group
-     * 
+     *
      * @param $user User
      * @return boolean
      */
@@ -406,7 +405,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Subscribes users to this course_group
-     * 
+     *
      * @param array|User A single user or an array of users
      */
     public function subscribe_users($users)
@@ -416,7 +415,7 @@ class CourseGroup extends NestedTreeNode
 
     /**
      * Unsubscribes users from this course_group
-     * 
+     *
      * @param array|User A single user or an array of users
      */
     public function unsubscribe_users($users)
@@ -439,7 +438,7 @@ class CourseGroup extends NestedTreeNode
                 $this->set_parent_id($root_group->get_id());
             }
         }
-        
+
         return parent::create();
     }
 
@@ -449,13 +448,13 @@ class CourseGroup extends NestedTreeNode
         {
             return parent::update();
         }
-        
+
         return false;
     }
 
     /**
      * Get the dependencies for this object
-     * 
+     *
      * @param array $dependencies
      *
      * @return bool
@@ -465,21 +464,21 @@ class CourseGroup extends NestedTreeNode
         return array(
             CourseGroupUserRelation::class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupUserRelation::class_name(), 
-                    CourseGroupUserRelation::PROPERTY_COURSE_GROUP), 
+                    CourseGroupUserRelation::class_name(),
+                    CourseGroupUserRelation::PROPERTY_COURSE_GROUP),
                 new StaticConditionVariable($this->get_id())));
     }
 
     public function check_before_save()
     {
         $children = DataManager::count_course_group_users($this->get_id());
-        
+
         if ($this->get_max_number_of_members() > 0 && $children > $this->get_max_number_of_members())
         {
             $this->add_error(Translation::get('MaximumMembersToSmall'));
             return false;
         }
-        
+
         return true;
     }
 
@@ -492,7 +491,7 @@ class CourseGroup extends NestedTreeNode
     {
         $conditions = parent::get_nested_set_condition_array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->get_course_code()));
         return $conditions;
     }

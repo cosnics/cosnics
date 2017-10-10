@@ -9,8 +9,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 
 /**
- * $Id: user_installer.class.php 187 2009-11-13 10:31:25Z vanpouckesven $
- * 
+ *
  * @package user.install
  */
 /**
@@ -25,22 +24,22 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function extra()
     {
         $values = $this->get_form_values();
-        
+
         $settings[] = array(Manager::context(), 'allow_registration', $values['self_reg']);
-        
+
         foreach ($settings as $setting)
         {
             $setting_object = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-                $setting[1], 
+                $setting[1],
                 $setting[0]);
             $setting_object->set_value($setting[2]);
-            
+
             if (! $setting_object->update())
             {
                 return false;
             }
         }
-        
+
         if (! $this->create_anonymous_user())
         {
             return false;
@@ -49,7 +48,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(self::TYPE_NORMAL, Translation::get('AnonymousAccountCreated'));
         }
-        
+
         if (! $this->create_admin_account())
         {
             return false;
@@ -58,7 +57,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(self::TYPE_NORMAL, Translation::get('AdminAccountCreated'));
         }
-        
+
         if (! $this->create_test_user_account())
         {
             return false;
@@ -67,14 +66,14 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(self::TYPE_NORMAL, Translation::get('TestUserAccountCreated'));
         }
-        
+
         return true;
     }
 
     public function create_admin_account()
     {
         $values = $this->get_form_values();
-        
+
         $user = new User();
         $user->set_lastname($values['admin_surname']);
         $user->set_firstname($values['admin_firstname']);
@@ -89,7 +88,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_disk_quota('209715200');
         $user->set_database_quota('300');
         $user->set_expiration_date(0);
-        
+
         if (! $user->create())
         {
             return false;
@@ -103,7 +102,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function create_anonymous_user()
     {
         $values = $this->get_form_values();
-        
+
         $user = new User();
         $user->set_lastname(Translation::get('Anonymous'));
         $user->set_firstname(Translation::get('Mr'));
@@ -119,7 +118,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_disk_quota('0');
         $user->set_database_quota('0');
         $user->set_expiration_date(0);
-        
+
         if (! $user->create())
         {
             return false;
@@ -142,7 +141,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_disk_quota('209715200');
         $user->set_database_quota('300');
         $user->set_expiration_date(0);
-        
+
         if (! $user->create())
         {
             return false;

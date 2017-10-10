@@ -1,7 +1,6 @@
 <?php
 /**
- * $Id: option_orderer.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.formvalidator.Element
  */
 use Chamilo\Libraries\Format\Utilities\ResourceManager;

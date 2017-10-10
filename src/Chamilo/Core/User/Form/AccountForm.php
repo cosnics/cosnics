@@ -18,7 +18,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: account_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.forms
  */
@@ -265,7 +264,7 @@ class AccountForm extends FormValidator
                 Translation::getInstance()->getTranslation('EnterCurrentPassword', null, 'Chamilo\Core\User'),
                 'checkAllowedToChangePassword'
             );
-            
+
             $this->addElement(
                 'html',
                 ResourceManager::getInstance()->get_resource_html(

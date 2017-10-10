@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Common;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 
 /**
- * $Id: wiki_difference.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.wiki
  */
 /**

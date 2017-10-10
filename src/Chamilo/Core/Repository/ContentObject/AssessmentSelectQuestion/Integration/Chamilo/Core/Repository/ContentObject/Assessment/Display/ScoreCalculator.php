@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integra
 use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass\AssessmentSelectQuestionOption;
 
 /**
- * $Id: assessment_select_score_calculator.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.score_calculator
  */
 class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator
@@ -15,7 +14,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         $user_answers = $this->get_answer();
         $user_answers = $user_answers[0];
-        
+
         $question = $this->get_question();
         if ($question->get_answer_type() == 'radio')
         {
@@ -23,10 +22,10 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
             {
                 return 0;
             }
-            
+
             $answers = $question->get_options();
             $selected = $answers[$user_answers];
-            
+
             if ($selected instanceof AssessmentSelectQuestionOption && $selected->is_correct())
             {
                 return $this->make_score_relative($selected->get_score(), $selected->get_score());
@@ -50,7 +49,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
                 {
                     $score = 0;
                 }
-                
+
                 return $this->make_score_relative($score, $total_weight);
             }
         }
@@ -59,14 +58,14 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
             $answers = $question->get_options();
             $score = 0;
             $total_weight = 0;
-            
+
             foreach ($answers as $i => $answer)
             {
                 if (in_array($i, $user_answers) && ($answer->is_correct() || $answer->get_score() <= 0))
                 {
                     $score += $answer->get_score();
                 }
-                
+
                 if ($answer->is_correct())
                 {
                     $total_weight += $answer->get_score();

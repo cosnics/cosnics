@@ -64,26 +64,26 @@ class BuildUtilities
     {
         $packageBundles = new BasicBundles(PackageList::ROOT);
         $packageNamespaces = $packageBundles->getPackageNamespaces();
-        
+
         $composer = $event->getComposer();
         $package = $event->getComposer()->getPackage();
-        
+
         $requires = $package->getRequires();
         $devRequires = $package->getDevRequires();
         $autoload = $package->getAutoload();
         $repositories = $package->getRepositories();
-        
+
         $repositoryManager = $composer->getRepositoryManager();
-        
+
         foreach ($packageNamespaces as $packageNamespace)
         {
             $packageComposerPath = Path::getInstance()->namespaceToFullPath($packageNamespace) . 'composer.json';
-            
+
             if (file_exists($packageComposerPath))
             {
                 $jsonLoader = new JsonLoader(new ArrayLoader());
                 $completePackage = $jsonLoader->load($packageComposerPath);
-                
+
                 // Process require
                 foreach ($completePackage->getRequires() as $requireName => $requirePackage)
                 {
@@ -92,7 +92,7 @@ class BuildUtilities
                         $requires[$requireName] = $requirePackage;
                     }
                 }
-                
+
                 // Process require-dev
                 foreach ($completePackage->getDevRequires() as $requireName => $requirePackage)
                 {
@@ -101,10 +101,10 @@ class BuildUtilities
                         $devRequires[$requireName] = $requirePackage;
                     }
                 }
-                
+
                 // Process PSR-4 autoload
                 $packageAutoloaders = $completePackage->getAutoload();
-                
+
                 if (isset($packageAutoloaders['psr-4']))
                 {
                     foreach ($packageAutoloaders['psr-4'] as $autoloaderKey => $autoloaderValue)
@@ -115,7 +115,7 @@ class BuildUtilities
                         }
                     }
                 }
-                
+
                 // Process repositories
                 foreach ((array) $completePackage->getRepositories() as $repositoryConfig)
                 {
@@ -125,7 +125,7 @@ class BuildUtilities
                 }
             }
         }
-        
+
         $package->setRequires($requires);
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);

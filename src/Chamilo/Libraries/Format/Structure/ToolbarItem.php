@@ -6,7 +6,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- * $Id: toolbar_item.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
  *
  * @package common.html.toolbar
  */

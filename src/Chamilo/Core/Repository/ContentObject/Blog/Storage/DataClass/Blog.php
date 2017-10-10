@@ -10,8 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: blog.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.blog
  */
 /**
@@ -51,18 +50,18 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     public static function get_available_blog_layouts()
     {
         $blog_layouts = array();
-        
+
         $dir = Path::getInstance()->namespaceToFullPath(self::package() . '\Display\Component\Viewer\BlogLayout');
         $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
-        
+
         foreach ($files as $file)
         {
             $variable = str_replace('.php', '', $file);
             $type = str_replace('BlogLayout.php', '', $file);
-            
+
             $blog_layouts[$type] = Translation::get($variable);
         }
-        
+
         return $blog_layouts;
     }
 }

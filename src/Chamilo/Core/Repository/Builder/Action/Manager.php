@@ -8,15 +8,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- * $Id: complex_builder_component.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder
  */
 /**
  * This class represents a basic complex builder structure.
  * When a builder is needed for a certain type of complex
  * object an extension should be written. We will make use of the repoviewer for selection, creation of objects
- * 
+ *
  * @author vanpouckesven
  */
 abstract class Manager extends Application
@@ -37,12 +36,12 @@ abstract class Manager extends Application
     {
         $class = __NAMESPACE__ . '\Component\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Component';
-        
+
         if (! class_exists($class))
         {
             throw new Exception(Translation::get('ComponentTypeDoesNotExist', array('TYPE' => $type)));
         }
-        
+
         return new $class($application);
     }
 
@@ -92,14 +91,14 @@ abstract class Manager extends Application
     public function get_complex_content_object_item_view_url($complex_content_object_item, $root_content_object_id)
     {
         return $this->get_parent()->get_complex_content_object_item_view_url(
-            $complex_content_object_item, 
+            $complex_content_object_item,
             $root_content_object_id);
     }
 
     public function get_complex_content_object_parent_changer_url($complex_content_object_item, $root_content_object_id)
     {
         return $this->get_complex_content_object_parent_changer_url(
-            $complex_content_object_item, 
+            $complex_content_object_item,
             $root_content_object_id);
     }
 
@@ -120,16 +119,16 @@ abstract class Manager extends Application
 
     /**
      * Builds the attachment url
-     * 
+     *
      * @param $attachment ContentObject
      * @param $selected_complex_content_object_item_id int [OPTIONAL] default null
      * @return string
      */
-    public function get_content_object_display_attachment_url($attachment, 
+    public function get_content_object_display_attachment_url($attachment,
         $selected_complex_content_object_item_id = null)
     {
         return $this->get_parent()->get_content_object_display_attachment_url(
-            $attachment, 
+            $attachment,
             $selected_complex_content_object_item_id);
     }
 

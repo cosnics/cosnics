@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Rights\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -18,17 +17,15 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         {
             throw new NotAllowedException();
         }
-        
+
         $request = $this->getRequest();
         $request->query->set(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager::PARAM_ACTION, 
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::PARAM_ACTION,
             \Chamilo\Application\Weblcms\Tool\Action\Manager::RIGHTS_EDITOR_COMPONENT);
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager::context(), 
-            new ApplicationConfiguration($request, $this->get_user(), $this));
-        
-        return $factory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
+            new ApplicationConfiguration($request, $this->get_user(), $this))->run();
     }
 
     public function get_available_rights($location)

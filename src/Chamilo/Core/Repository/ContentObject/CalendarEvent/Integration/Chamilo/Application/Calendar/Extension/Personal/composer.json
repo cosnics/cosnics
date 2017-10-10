@@ -1,0 +1,53 @@
+{
+    "name": "cosnics/core-repository-content-object-calendar-event-integration-chamilo-application-calendar-extension-personal",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject CalendarEvent Integration Chamilo Application Calendar Extension Personal",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "CalendarEvent",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Calendar",
+        "Extension",
+        "Personal"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Personal",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\CalendarEvent\\Integration\\Chamilo\\Application\\Calendar\\Extension\\Personal",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\CalendarEvent\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\CalendarEvent",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Calendar\\Extension\\Personal",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

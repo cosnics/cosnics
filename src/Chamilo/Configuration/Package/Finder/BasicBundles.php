@@ -107,7 +107,7 @@ class BasicBundles
      */
     protected function getBlacklistedFolders()
     {
-        return array('.hg', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
+        return array('.hg', '.git', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
     }
 
     /**
@@ -118,7 +118,7 @@ class BasicBundles
     protected function verifyPackage($folderNamespace)
     {
         $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
-        $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/package.info';
+        $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/composer.json';
         return file_exists($packageInfoPath);
     }
 }

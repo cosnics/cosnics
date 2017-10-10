@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: vimeo.class.php 2010-06-08 package repository.lib.content_object.vimeo
- * 
+ *
  * @author Shoira Mukhsinova
  */
 class Vimeo extends ContentObject implements Versionable, Includeable
@@ -30,7 +29,7 @@ class Vimeo extends ContentObject implements Versionable, Includeable
     public function get_video_url()
     {
         $video_url_custom = sprintf(self::VIMEO_PLAYER_URI, $this->get_synchronization_data()->get_external_object_id());
-        
+
         return $video_url_custom;
     }
 
@@ -38,15 +37,15 @@ class Vimeo extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
             new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager::get_namespace('Vimeo')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-            Instance::class_name(), 
+            Instance::class_name(),
             new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;
     }

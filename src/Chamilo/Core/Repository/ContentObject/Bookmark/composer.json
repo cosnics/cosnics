@@ -1,24 +1,44 @@
 {
-	"name": "chamilo/co-bookmark",
-	"version": "6.0.0",
-	"description": "Chamilo Bookmark Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/bookmark"
-	}
+    "name": "cosnics/core-repository-content-object-bookmark",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Bookmark",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Bookmark"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Bookmark",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Bookmark",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
 }

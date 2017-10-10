@@ -6,8 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 
 /**
- * $Id: wiki_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.wiki
  */
 

@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass;
 
 /**
- * $Id: assessment_matching_question_option.class.php $
- * 
+ *
  * @package repository.lib.content_object.matching_question
  */
 
@@ -27,7 +26,7 @@ class AssessmentMatchingQuestionOption
 
     /**
      * Creates a new option for a matching question
-     * 
+     *
      * @param string $value The value of the option
      * @param int $match The index of the match corresponding to this option
      * @param int $score The score of this answer in the question
@@ -42,7 +41,7 @@ class AssessmentMatchingQuestionOption
 
     /**
      * Gets the value of this option
-     * 
+     *
      * @return string
      */
     public function get_value()
@@ -65,7 +64,7 @@ class AssessmentMatchingQuestionOption
 
     /**
      * Gets the index of the match corresponding to this option
-     * 
+     *
      * @return int
      */
     public function get_match()

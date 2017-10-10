@@ -70,9 +70,7 @@ abstract class Installer extends Action
             }
             else
             {
-                $this->add_message(
-                    self::TYPE_NORMAL,
-                    Translation::get('VariousFinished', null, 'Chamilo\Core\Install'));
+                $this->add_message(self::TYPE_NORMAL, Translation::get('VariousFinished', null, 'Chamilo\Core\Install'));
             }
             $this->add_message(self::TYPE_NORMAL, '');
         }
@@ -221,7 +219,7 @@ abstract class Installer extends Action
         $prefix = $data_manager::PREFIX;
         $table_name = $storage_unit_info['name'];
 
-        if(strpos($table_name, $prefix) !== 0)
+        if (strpos($table_name, $prefix) !== 0)
         {
             $table_name = $prefix . $table_name;
         }
@@ -309,12 +307,13 @@ abstract class Installer extends Action
         $package_info = Package::get($namespace);
 
         $application_registration = new Registration();
+
+        $application_registration->set_context($namespace);
         $application_registration->set_type(($package_info->get_type()));
-        $application_registration->set_name($package_info->get_code());
-        $application_registration->set_category($package_info->get_category());
+        $application_registration->set_category(($package_info->get_category()));
+        $application_registration->set_name($package_info->get_name());
         $application_registration->set_version($package_info->get_version());
         $application_registration->set_status(Registration::STATUS_ACTIVE);
-        $application_registration->set_context($namespace);
 
         if (! $application_registration->create())
         {

@@ -1,24 +1,44 @@
 {
-	"name": "chamilo/co-system-announcement",
-	"version": "6.0.0",
-	"description": "Chamilo System Announcement Content Object",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"extra": {
-		"install-path": "repository/content_object/system_announcement"
-	}
+    "name": "cosnics/core-repository-content-object-system-announcement",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject SystemAnnouncement",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "SystemAnnouncement"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "System Announcement",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\SystemAnnouncement",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "News",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

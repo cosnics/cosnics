@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\File\ImageManipulation;
 use Chamilo\Libraries\File\ImageManipulation\Gd\GdImageManipulation;
 
 /**
- * $Id: image_manipulation.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.image_manipulation
  */
 /**
@@ -42,7 +41,7 @@ abstract class ImageManipulation
 
     /**
      * Constructor
-     * 
+     *
      * @param string $source_file Full path of the image file on which the
      *        manipulations should be done
      */
@@ -58,7 +57,7 @@ abstract class ImageManipulation
      * Resize an image maintaining the original aspect-ratio.
      * Images which are
      * allready smaller than the given width and height won't be scaled.
-     * 
+     *
      * @param int $width
      * @param int $height
      * @param int $type
@@ -72,7 +71,7 @@ abstract class ImageManipulation
 
     /**
      * Static function to calculate resized image dimensions
-     * 
+     *
      * @param int $original_width
      * @param int $original_height
      * @param int $width
@@ -105,7 +104,7 @@ abstract class ImageManipulation
             $height = (int) min($height, $original_height);
             $width = (int) round($height / $aspect);
         }
-        
+
         return array(self::DIMENSION_WIDTH => $width, self::DIMENSION_HEIGHT => $height);
     }
 
@@ -115,7 +114,7 @@ abstract class ImageManipulation
      * After this, the resulting
      * image will be cropped. The result is an image which the exact given with
      * and height.
-     * 
+     *
      * @param int $width With of the resulting image
      * @param int $height Height of the resulting image (if null, the height
      *        will be the same as the width, resulting in a square image)
@@ -137,7 +136,7 @@ abstract class ImageManipulation
     /**
      * Crop an image to the rectangle specified by the given offsets and
      * dimensions.
-     * 
+     *
      * @param int $width The width of the image after cropping
      * @param int $height The height of the image after cropping
      * @param int $offset_x
@@ -148,7 +147,7 @@ abstract class ImageManipulation
 
     /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.
-     * 
+     *
      * @param int $width The width of the image after resizing
      * @param int $height The height of the image after resizing
      * @return boolean True if successfull, false if not
@@ -157,7 +156,7 @@ abstract class ImageManipulation
 
     /**
      * Write the resulting image (after some manipulations to a file)
-     * 
+     *
      * @param string $source_file Full path of the file to which the image should be
      *        written. If null, the original image will be overwritten.
      * @return boolean True if successfull, false if not
@@ -166,7 +165,7 @@ abstract class ImageManipulation
 
     /**
      * Create an imagemanipulation instance
-     * 
+     *
      * @todo At the moment this returns the class using GD. The class to return
      *       should be configurable
      * @param string $source_file Full path of the image file on which the
@@ -179,7 +178,7 @@ abstract class ImageManipulation
 
     /**
      * Gets the image extension from the source file.
-     * 
+     *
      * @return string
      */
     protected function get_image_extension()

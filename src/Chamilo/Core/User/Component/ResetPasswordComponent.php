@@ -24,7 +24,6 @@ use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: reset_password.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.user_manager.component
  */

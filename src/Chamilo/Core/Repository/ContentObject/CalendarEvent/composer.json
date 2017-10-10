@@ -1,10 +1,15 @@
 {
-	"name": "chamilo/co-calendar-event",
-	"version": "6.0.0",
-	"description": "Chamilo Calender Event Content Object",
-	"keywords": [],
+	"name": "cosnics/core-repository-content-object-calendar-event",
+	"version": "1.0.0",
+	"description": "Core Repository ContentObject CalendarEvent",
+	"keywords": [
+		"Core",
+		"Repository",
+		"ContentObject",
+		"CalendarEvent"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -20,6 +25,21 @@
 		"sabre/vobject": "~3.4.0"
 	},
 	"extra": {
-		"install-path": "repository/content_object/calendar_event"
+		"cosnics": {
+			"name": "Calendar Event",
+			"context": "Chamilo\\Core\\Repository\\ContentObject\\CalendarEvent",
+			"type": "Chamilo\\Core\\Repository\\ContentObject",
+			"category": "Agenda",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Core\\Repository",
+					"version": ">=1.0.0"
+				}
+			]
+		}
 	}
 }

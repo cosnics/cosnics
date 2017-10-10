@@ -9,15 +9,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- * $Id: tool_component.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool
  */
 
 /**
  * ============================================================================== This is the base class component for
  * all tool components used in applications.
- * 
+ *
  * @author Sven Vanpoucke
  * @author Hans De Bisschop ==============================================================================
  */
@@ -45,18 +44,18 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Component';
-        
+
         if (! class_exists($class))
         {
             throw new Exception(Translation::get('ToolComponentTypeDoesNotExist', array('type' => $type)));
         }
-        
+
         return new $class($tool_component);
     }
 
     /**
      * Check if the current user has a given right in this tool
-     * 
+     *
      * @param $right int
      * @param ContentObjectPublication $publication
      *

@@ -107,6 +107,7 @@ class ApplicationFactory
      *
      * @param string $context
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication($context, ApplicationConfiguration $applicationConfiguration)
     {
@@ -220,8 +221,7 @@ class ApplicationFactory
         if (! class_exists($managerClass))
         {
             throw new UserException(
-                Translation::get('InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries')
-            );
+                Translation::get('InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries'));
         }
 
         return $managerClass;

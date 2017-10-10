@@ -2,16 +2,14 @@
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList;
 
 /**
- * $Id: content_object_publication_browser.class.php 218 2009-11-13 14:21:26Z
- * kariboe $
- * 
+ *
  * @package application.lib.weblcms
  */
 
 /**
  * ==============================================================================
  * This class allows the user to browse through learning object publications.
- * 
+ *
  * @author Tim De Pauw
  *         ==============================================================================
  */
@@ -48,7 +46,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Constructor.
-     * 
+     *
      * @param $parent Tool The tool that instantiated this browser.
      * @param $types mixed The types of learning objects for which
      *        publications need to be displayed.
@@ -61,7 +59,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Returns the publication browser's content in HTML format.
-     * 
+     *
      * @return string The HTML.
      */
     public function as_html()
@@ -78,7 +76,7 @@ abstract class ContentObjectPublicationBrowser
     /**
      * Returns the learning object publication list renderer associated with
      * this object.
-     * 
+     *
      * @return ContentObjectPublicationRenderer The renderer.
      */
     public function get_publication_list_renderer()
@@ -88,7 +86,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Sets the renderer for the publication list.
-     * 
+     *
      * @param $renderer ContentObjectPublicationRenderer The renderer.
      */
     public function set_publication_list_renderer($renderer)
@@ -98,7 +96,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Gets the publication category tree.
-     * 
+     *
      * @return ContentObjectPublicationCategoryTree The category tree.
      */
     public function get_publication_category_tree()
@@ -118,7 +116,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Sets the publication category tree.
-     * 
+     *
      * @param $tree ContentObjectPublicationCategoryTree The category tree.
      */
     public function set_publication_category_tree($tree)
@@ -128,7 +126,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Returns the repository tool that this browser is associated with.
-     * 
+     *
      * @return Tool The tool.
      */
     public function get_parent()
@@ -138,7 +136,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Returns the ID of the current category.
-     * 
+     *
      * @return int The category ID.
      */
     public function get_category()
@@ -239,7 +237,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Returns the learning object publications to display.
-     * 
+     *
      * @param $from int The index of the first publication to return.
      * @param $count int The maximum number of publications to return.
      * @param $column int The index of the column to sort the table on.
@@ -251,7 +249,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      * Returns the number of learning object publications to display.
-     * 
+     *
      * @return int The number of publications.
      */
     abstract public function get_publication_count();

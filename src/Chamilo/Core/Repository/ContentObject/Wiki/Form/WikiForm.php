@@ -7,8 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: wiki_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.wiki
  */
 class WikiForm extends ContentObjectForm
@@ -60,13 +59,13 @@ class WikiForm extends ContentObjectForm
         if (isset($lo))
         {
             $defaults[ContentObject::PROPERTY_ID] = $lo->get_id();
-            
+
             $defaults[ContentObject::PROPERTY_TITLE] = $lo->get_title();
             $defaults[ContentObject::PROPERTY_DESCRIPTION] = $lo->get_description();
             $defaults[Wiki::PROPERTY_LOCKED] = $lo->get_locked();
             $defaults[Wiki::PROPERTY_LINKS] = $lo->get_links();
         }
-        
+
         parent::setDefaults($defaults);
     }
 }

@@ -2,8 +2,7 @@
 namespace Chamilo\Libraries\Format\Form;
 
 /**
- * $Id: foprm_tab.class.php 6 2010-03-03 9:30:20Z tristan $
- * 
+ *
  * @package common.html.formvalidator
  */
 class FormValidatorTab

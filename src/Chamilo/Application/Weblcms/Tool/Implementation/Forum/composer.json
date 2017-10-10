@@ -1,10 +1,16 @@
 {
-	"name": "cosnics/application-weblcms-tool-forum",
-	"version": "6.0.0",
-	"description": "Chamilo Forum Weblcms Tool",
-	"keywords": [],
+	"name": "cosnics/application-weblcms-tool-implementation-forum",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Forum",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Forum"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -17,5 +23,25 @@
 	],
 	"require": {
 		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Forum",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"extra": {
+				"course-section": "tool"
+			}
+		}
 	}
 }

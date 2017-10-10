@@ -1,17 +1,15 @@
 {
-	"name": "chamilo/lcms-connect",
-	"description": "Chamilo LCMS Connect",
-	"license": [
-		"GPL-3.0"
-	],
+	"name": "cosnics/cosnics",
+	"description": "Cosnics",
+	"license": "MIT",
 	"keywords": [
 		"ELO",
-		"LCMS"
+		"LCMS",
+		"Cosnics"
 	],
 	"support": {
-		"forum": "http://lcms.chamilo.org/phpbbforum",
-		"source": "https://bitbucket.org/chamilo/lcms-connect/src",
-		"issues": "https://support.chamilo.org/projects/lcms-backlog"
+		"source": "https://github.com/cosnics/cosnics",
+		"issues": "https://github.com/cosnics/cosnics/issues"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -53,7 +51,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://bitbucket.org/chamilo/pear-libraries"
+			"url": "https://github.com/cosnics/pear-libraries"
 		}
 	],
 	"autoload": {
@@ -64,13 +62,12 @@
 	"config": {
 		"bin-dir": "bin/"
 	},
-	"extra": {
-		"install-path": ""
-	},
 	"scripts": {
 		"pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
 		"pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
 		"post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-		"post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
+		"post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+		"new-post-update-cmd": "@php console chamilo:process_resources",
+		"new-post-install-cmd": "@php console chamilo:process_resources"
 	}
 }

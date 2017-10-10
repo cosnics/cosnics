@@ -8,8 +8,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- * $Id: user_manager.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.user_manager
  */
 
@@ -26,7 +25,7 @@ abstract class Manager extends Application
     const PARAM_CHOICE = 'choice';
     const PARAM_FIRSTLETTER = 'firstletter';
     const PARAM_REFER = 'refer';
-    
+
     // Actions
     const ACTION_CREATE_USER = 'Creator';
     const ACTION_BROWSE_USERS = 'AdminUserBrowser';
@@ -59,7 +58,7 @@ abstract class Manager extends Application
     const ACTION_MANAGE_METADATA = 'MetadataManager';
     const ACTION_QUICK_LANG = 'QuickLanguage';
     const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
 
@@ -75,7 +74,7 @@ abstract class Manager extends Application
 
     /**
      * gets the user editing url
-     * 
+     *
      * @param return the requested url
      */
     public function get_user_editing_url($user)
@@ -92,7 +91,7 @@ abstract class Manager extends Application
 
     /**
      * gets the user delete url
-     * 
+     *
      * @param return the requested url
      */
     public function get_user_delete_url($user)
@@ -122,9 +121,9 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_CONTEXT => self::context(), 
-                self::PARAM_ACTION => self::ACTION_USER_APPROVER, 
-                self::PARAM_USER_USER_ID => $user->get_id(), 
+                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_ACTION => self::ACTION_USER_APPROVER,
+                self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE));
     }
 
@@ -132,9 +131,9 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_CONTEXT => self::context(), 
-                self::PARAM_ACTION => self::ACTION_USER_APPROVER, 
-                self::PARAM_USER_USER_ID => $user->get_id(), 
+                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_ACTION => self::ACTION_USER_APPROVER,
+                self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY));
     }
 
@@ -152,7 +151,7 @@ abstract class Manager extends Application
 
     /**
      * get the text for the terms and conditions
-     * 
+     *
      * @return <string> terms & conditions
      */
     public static function get_terms_and_conditions()
@@ -162,7 +161,7 @@ abstract class Manager extends Application
 
     /**
      * Updates the terms and conditions set the text for the terms and conditions
-     * 
+     *
      * @param string $text
      *
      * @return bool
@@ -170,39 +169,39 @@ abstract class Manager extends Application
     public static function set_terms_and_conditions($text)
     {
         $success = true;
-        
+
         $ConditionsFile = Path::getInstance()->getBasePath() . 'files/documentation/license.txt';
         $fh = fopen($ConditionsFile, 'w') or die("can't open file");
         $stringData = $text;
         $success &= fwrite($fh, $stringData);
-        
+
         $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', 
+            'date_terms_and_conditions_update',
             self::context());
-        
+
         $platform_setting->set_value(time());
         $success &= $platform_setting->update();
-        
+
         return $success;
     }
 
     /**
      * Returns the last modification date for the terms and conditions
-     * 
+     *
      * @return mixed
      */
     public static function get_date_terms_and_conditions_last_modified()
     {
         $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', 
+            'date_terms_and_conditions_update',
             self::context());
-        
+
         return $platform_setting->get_value();
     }
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

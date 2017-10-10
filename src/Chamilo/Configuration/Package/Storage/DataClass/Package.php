@@ -1,19 +1,16 @@
 <?php
 namespace Chamilo\Configuration\Package\Storage\DataClass;
 
-use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use DOMDocument;
-use DOMXPath;
 use Exception;
 
 /**
  *
- * @author Hans De Bisschop
+ * @package Chamilo\Configuration\Package\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Package extends DataClass
 {
@@ -21,7 +18,6 @@ class Package extends DataClass
     /**
      * Package properties
      */
-    const PROPERTY_CODE = 'code';
     const PROPERTY_CONTEXT = 'context';
     const PROPERTY_NAME = 'name';
     const PROPERTY_TYPE = 'type';
@@ -29,8 +25,10 @@ class Package extends DataClass
     const PROPERTY_AUTHORS = 'authors';
     const PROPERTY_VERSION = 'version';
     const PROPERTY_DESCRIPTION = 'description';
+    const PROPERTY_CORE_INSTALL = 'core_install';
+    const PROPERTY_DEFAULT_INSTALL = 'default_install';
     const PROPERTY_EXTRA = 'extra';
-    const PROPERTY_PRE_DEPENDS = 'pre_depends';
+    const PROPERTY_DEPENDENCIES = 'dependencies';
 
     /**
      * Get the default properties
@@ -39,7 +37,6 @@ class Package extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self::PROPERTY_CODE;
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_NAME;
         $extended_property_names[] = self::PROPERTY_TYPE;
@@ -47,7 +44,9 @@ class Package extends DataClass
         $extended_property_names[] = self::PROPERTY_AUTHORS;
         $extended_property_names[] = self::PROPERTY_VERSION;
         $extended_property_names[] = self::PROPERTY_DESCRIPTION;
-        $extended_property_names[] = self::PROPERTY_PRE_DEPENDS;
+        $extended_property_names[] = self::PROPERTY_CORE_INSTALL;
+        $extended_property_names[] = self::PROPERTY_DEFAULT_INSTALL;
+        $extended_property_names[] = self::PROPERTY_DEPENDENCIES;
         $extended_property_names[] = self::PROPERTY_EXTRA;
 
         return parent::get_default_property_names($extended_property_names);
@@ -71,26 +70,6 @@ class Package extends DataClass
     public function set_extra($extra)
     {
         $this->set_default_property(self::PROPERTY_EXTRA, $extra);
-    }
-
-    /**
-     * Returns the code of this Package.
-     *
-     * @return the code.
-     */
-    public function get_code()
-    {
-        return $this->get_default_property(self::PROPERTY_CODE);
-    }
-
-    /**
-     * Sets the code of this Package.
-     *
-     * @param code
-     */
-    public function set_code($code)
-    {
-        $this->set_default_property(self::PROPERTY_CODE, $code);
     }
 
     /**
@@ -154,9 +133,8 @@ class Package extends DataClass
     }
 
     /**
-     * Returns the category of this Package.
      *
-     * @return the category.
+     * @return string
      */
     public function get_category()
     {
@@ -164,9 +142,8 @@ class Package extends DataClass
     }
 
     /**
-     * Sets the category of this Package.
      *
-     * @param category
+     * @param string $category
      */
     public function set_category($category)
     {
@@ -195,7 +172,10 @@ class Package extends DataClass
 
     public function add_author($author)
     {
-        $this->authors[] = $author;
+        $authors = $this->get_authors();
+        $authors[] = $author;
+
+        $this->set_authors($authors);
     }
 
     /**
@@ -240,168 +220,105 @@ class Package extends DataClass
 
     /**
      *
-     * @return Dependencies Dependency
+     * @return integer
      */
-    public function get_pre_depends()
+    public function getCoreInstall()
     {
-        return unserialize($this->get_default_property(self::PROPERTY_PRE_DEPENDS));
+        return $this->get_default_property(self::PROPERTY_CORE_INSTALL);
     }
 
     /**
      *
-     * @param $pre_depends Dependencies|Dependency
+     * @param integer $coreInstall
      */
-    public function set_pre_depends($pre_depends)
+    public function setCoreInstall($coreInstall)
     {
-        $this->set_default_property(self::PROPERTY_PRE_DEPENDS, serialize($pre_depends));
+        $this->set_default_property(self::PROPERTY_CORE_INSTALL, $coreInstall);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultInstall()
+    {
+        return $this->get_default_property(self::PROPERTY_DEFAULT_INSTALL);
+    }
+
+    /**
+     *
+     * @param integer $defaultInstall
+     */
+    public function setDefaultInstall($defaultInstall)
+    {
+        $this->set_default_property(self::PROPERTY_DEFAULT_INSTALL, $defaultInstall);
+    }
+
+    /**
+     *
+     * @return Dependencies Dependency
+     */
+    public function get_dependencies()
+    {
+        return unserialize($this->get_default_property(self::PROPERTY_DEPENDENCIES));
+    }
+
+    /**
+     *
+     * @param $dependencies Dependencies|Dependency
+     */
+    public function set_dependencies($dependencies)
+    {
+        $this->set_default_property(self::PROPERTY_DEPENDENCIES, serialize($dependencies));
     }
 
     public function has_dependencies()
     {
-        return (! is_null($this->get_pre_depends()));
+        return (! is_null($this->get_dependencies()));
     }
 
     /**
      *
      * @param string $context
      * @return boolean
+     * @deprecated Use PackageFactory->packageExists($context) now
      */
     public static function exists($context)
     {
-        $path = Path::getInstance()->namespaceToFullPath($context) . 'package.info';
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        if (file_exists($path))
-        {
-            return $path;
-        }
-        else
-        {
-            return false;
-        }
+        return $packageFactory->packageExists($context);
     }
 
     /**
      *
      * @param string $context
      * @throws Exception
-     * @return \configuration\package\storage\data_class\Package
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @deprecated Use PackageFactory->getPackage($context) now
      */
     public static function get($context)
     {
-        $path = self::exists($context);
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        if (! $path)
-        {
-            throw new Exception(Translation::get('InvalidPackageContext', array('CONTEXT' => $context)));
-        }
-
-        $dom_document = new DOMDocument('1.0', 'UTF-8');
-        $dom_document->load($path);
-        $dom_xpath = new DOMXPath($dom_document);
-
-        $package_list = $dom_xpath->query('/packages/package');
-
-        if ($package_list->length > 1)
-        {
-            throw new Exception(Translation::get('MultipackageFileNotAllowed', array('CONTEXT' => $context)));
-        }
-        return self::parse_package($dom_xpath, $package_list->item(0));
+        return $packageFactory->getPackage($context);
     }
 
     /**
      *
      * @param \DOMXPath $dom_xpath
      * @param \DOMElement $package_node
-     * @return \configuration\package\storage\data_class\Package
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @deprecated Use PackageFactory->parsePackageFromDom($domXpath, $packageNode) now, or better even don't use this
+     *             anymore at all and use PackageFactory->getPackage($context) instead
      */
-    public static function parse_package(\DOMXPath $dom_xpath, \DOMElement $package_node)
+    public static function parse_package(\DOMXPath $domXpath, \DOMElement $packageNode)
     {
-        $package = new static();
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
 
-        // Simple properties, containing a singular string or integer
-        $simple_properties = array(
-            self::PROPERTY_CODE,
-            self::PROPERTY_CONTEXT,
-            self::PROPERTY_NAME,
-            self::PROPERTY_TYPE,
-            self::PROPERTY_CATEGORY,
-            self::PROPERTY_VERSION,
-            self::PROPERTY_DESCRIPTION);
-
-        foreach ($simple_properties as $simple_property)
-        {
-            $node = $dom_xpath->query($simple_property, $package_node)->item(0);
-
-            if ($node instanceof \DOMNode && $node->hasChildNodes())
-            {
-                $package->set_default_property($simple_property, trim($node->nodeValue));
-            }
-            else
-            {
-                $package->set_default_property($simple_property, null);
-            }
-        }
-
-        $extra = $dom_xpath->query('extra/*', $package_node);
-        $extras = array();
-        foreach ($extra as $extra_node)
-        {
-            $extras[$extra_node->nodeName] = $extra_node->nodeValue;
-        }
-        $package->set_extra($extras);
-
-        // Authors
-        $author_nodes = $dom_xpath->query('authors/author', $package_node);
-        foreach ($author_nodes as $author_node)
-        {
-            $name = $dom_xpath->query('name', $author_node)->item(0);
-            $email = $dom_xpath->query('email', $author_node)->item(0);
-            $company = $dom_xpath->query('company', $author_node)->item(0);
-
-            $package->add_author(
-                new Author(
-                    $name instanceof \DOMNode && $name->hasChildNodes() ? $name->nodeValue : null,
-                    $email instanceof \DOMNode && $email->hasChildNodes() ? $email->nodeValue : null,
-                    $company instanceof \DOMNode && $company->hasChildNodes() ? $company->nodeValue : null));
-        }
-
-        // Dependencies
-        $package->set_pre_depends(
-            self::parse_dependencies(
-                $dom_xpath,
-                $dom_xpath->query('pre-depends/dependencies | pre-depends/dependency', $package_node)->item(0)));
-
-        return $package;
-    }
-
-    /**
-     *
-     * @param \DOMXPath $dom_xpath
-     * @param \DOMElement $dom_node
-     * @return void \configuration\package\Dependencies
-     */
-    private static function parse_dependencies(\DOMXPath $dom_xpath, \DOMElement $dom_node = null)
-    {
-        if (is_null($dom_node))
-        {
-            return null;
-        }
-
-        if ($dom_node->tagName == 'dependencies')
-        {
-            $dependencies = new Dependencies($dom_node->getAttribute('operator'));
-            $child_nodes = $dom_xpath->query('dependencies | dependency', $dom_node);
-
-            foreach ($child_nodes as $child_node)
-            {
-                $dependencies->add_dependency(self::parse_dependencies($dom_xpath, $child_node));
-            }
-
-            return $dependencies;
-        }
-        elseif ($dom_node->tagName == 'dependency')
-        {
-            return Dependency::from_dom_node($dom_xpath, $dom_node);
-        }
+        return $packageFactory->parsePackageFromDom($domXpath, $packageNode);
     }
 }

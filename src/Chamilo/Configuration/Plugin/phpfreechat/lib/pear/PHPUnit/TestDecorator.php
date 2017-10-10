@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestDecorator.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -52,7 +51,7 @@ if (! function_exists('is_a'))
  * Use TestDecorator as the base class for defining new
  * test decorators. Test decorator subclasses can be introduced
  * to add behaviour before or after a test is run.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -67,7 +66,7 @@ class PHPUnit_TestDecorator
 
     /**
      * The Test to be decorated.
-     * 
+     *
      * @var object
      * @access protected
      */
@@ -75,7 +74,7 @@ class PHPUnit_TestDecorator
 
     /**
      * Constructor.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -83,7 +82,7 @@ class PHPUnit_TestDecorator
     {
         if (is_object($test) && (is_a($test, 'PHPUnit_TestCase') || is_a($test, 'PHPUnit_TestSuite')))
         {
-            
+
             $this->_test =$test;
         }
     }
@@ -91,7 +90,7 @@ class PHPUnit_TestDecorator
     /**
      * Runs the test and collects the
      * result in a TestResult.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -103,7 +102,7 @@ class PHPUnit_TestDecorator
     /**
      * Counts the number of test cases that
      * will be run by this test.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -114,7 +113,7 @@ class PHPUnit_TestDecorator
 
     /**
      * Returns the test to be run.
-     * 
+     *
      * @return object
      * @access public
      */
@@ -126,7 +125,7 @@ class PHPUnit_TestDecorator
     /**
      * Runs the decorated test and collects the
      * result in a TestResult.
-     * 
+     *
      * @param object
      * @access public
      * @abstract
@@ -137,7 +136,7 @@ class PHPUnit_TestDecorator
 
     /**
      * Returns a string representation of the test.
-     * 
+     *
      * @return string
      * @access public
      */

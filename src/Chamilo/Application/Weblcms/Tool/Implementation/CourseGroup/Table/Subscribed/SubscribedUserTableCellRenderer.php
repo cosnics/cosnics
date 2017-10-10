@@ -14,13 +14,12 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
- * $Id: course_group_subscribed_user_browser_table_cell_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $user)
     {
@@ -32,24 +31,24 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                 return '<a href="mailto:' . $user[User::PROPERTY_EMAIL] . '">' . $user[User::PROPERTY_EMAIL] . '</a>';
             case CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME :
                 $subscriptionTime = $user[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME];
-                
+
                 if ($subscriptionTime)
                 {
                     return DatetimeUtilities::format_locale_date(
-                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()), 
+                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
                         $subscriptionTime);
                 }
-                
+
                 return null;
         }
-        
+
         return parent::render_cell($column, $user);
     }
 
     public function get_actions($userArray)
     {
         $user = new User($userArray);
-        
+
         $toolbar = new Toolbar();
         $browser = $this->get_component();
         if ($browser->is_allowed(WeblcmsRights::EDIT_RIGHT))
@@ -61,15 +60,15 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             $unsubscribe_url = $browser->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Unsubscribe'), 
-                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'), 
-                    $unsubscribe_url, 
-                    ToolbarItem::DISPLAY_ICON, 
+                    Translation::get('Unsubscribe'),
+                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    $unsubscribe_url,
+                    ToolbarItem::DISPLAY_ICON,
                     true));
         }
-        
+
         $course_group = $browser->get_course_group();
-        
+
         if (! $browser->is_allowed(WeblcmsRights::EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
              $course_group->is_member($user) && $browser->get_user()->get_id() == $user->getId())
         {
@@ -79,12 +78,12 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             $unsubscribe_url = $browser->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Unsubscribe'), 
-                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'), 
-                    $unsubscribe_url, 
+                    Translation::get('Unsubscribe'),
+                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    $unsubscribe_url,
                     ToolbarItem::DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

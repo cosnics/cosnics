@@ -1,10 +1,13 @@
 {
 	"name": "cosnics/application-portfolio",
-	"version": "6.0.0",
-	"description": "Chamilo Portfolio",
-	"keywords": [],
+	"version": "1.0.0",
+	"description": "Application Portfolio",
+	"keywords": [
+		"Application",
+		"Portfolio"
+	],
 	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Sven Vanpoucke",
@@ -19,6 +22,21 @@
 		"php": ">=7.0.0"
 	},
 	"extra": {
-		"install-path": "application/portfolio"
+		"cosnics": {
+			"name": "Portfolio",
+			"context": "Chamilo\\Application\\Portfolio",
+			"type": "Chamilo\\Application",
+			"category": "social",
+			"install": {
+				"default": 1,
+				"core": 0
+			},
+			"dependencies": [
+				{
+					"id": "Chamilo\\Configuration",
+					"version": ">=1.0.0"
+				}
+			]
+		}
 	}
 }

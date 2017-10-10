@@ -1,25 +1,45 @@
 {
-	"name": "cosnics/application-weblcms-admin-extension-platform",
-	"version": "6.0.0",
-	"description": "Chamilo Weblcms",
-	"keywords": [],
-	"homepage": "http://www.cosnics.org",
-	"license": "GPLv3",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.0.0",
-		"phpoffice/phpexcel": "1.8.*"
-	},
-	"extra": {
-		"install-path": "application/weblcms/admin"
-	}
+    "name": "cosnics/application-weblcms-admin-extension-platform",
+    "version": "1.0.0",
+    "description": "Application Weblcms Admin Extension Platform",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Admin",
+        "Extension",
+        "Platform"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "phpoffice/phpexcel": "1.8.*"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Admin",
+            "context": "Chamilo\\Application\\Weblcms\\Admin\\Extension\\Platform",
+            "type": "Chamilo\\Application\\Weblcms\\Admin\\Extension",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
 }

@@ -12,8 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
- * $Id: hotpotatoes.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.hotpotatoes
  */
 
@@ -90,7 +89,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         {
             $this->delete_file();
         }
-        
+
         return parent::delete($only_version);
     }
 
@@ -108,14 +107,14 @@ class Hotpotatoes extends ContentObject implements Versionable
         $content = $this->read_file_content();
         $js_content = $this->replace_javascript($content, $postback_url, $goback_url, $tracker_id);
         $path = $this->write_file_content($js_content);
-        
+
         return $path;
     }
 
     private function read_file_content()
     {
         $full_file_path = $this->get_full_path();
-        
+
         if (is_file($full_file_path))
         {
             if (! ($fp = fopen(urldecode($full_file_path), "r")))
@@ -133,13 +132,13 @@ class Hotpotatoes extends ContentObject implements Versionable
         $full_file_path = $this->get_full_path() . '.t.htm';
         $full_web_path = $this->get_full_url() . '.t.htm';
         Filesystem::remove($full_file_path);
-        
+
         if (($fp = fopen(urldecode($full_file_path), "w")))
         {
             fwrite($fp, $content);
             fclose($fp);
         }
-        
+
         return $full_web_path;
     }
 
@@ -152,7 +151,7 @@ class Hotpotatoes extends ContentObject implements Versionable
              "			var result=jQuery.ajax({type: 'POST', url:'" . $postback_url . "', data: {id: " . $tracker_id .
              ", score: Score}, async: false}).responseText;\n";
         // " alert(result);";
-        
+
         if ($goback_url)
         {
             $js_content .= "		if (C.ie)\n" . "			{\n" . // " window.alert(Score);\n".
@@ -160,24 +159,24 @@ class Hotpotatoes extends ContentObject implements Versionable
                                                                                                                     // window.alert(Score);\n".
                 "				window.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n";
         }
-        
+
         $js_content .= "		}\n" . " }\n" . "// Must be included \n" . "function Finish(){\n" . " mySaveScore();";
         $newcontent = str_replace($mit, $js_content, $content);
         $prehref = "<!-- BeginTopNavButtons -->";
         $posthref = "<!-- BeginTopNavButtons --><!-- edited by Chamilo -->";
         $newcontent = str_replace($prehref, $posthref, $newcontent);
-        
+
         $jquery_content = "<head>\n<script src='" . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
              "Plugin/Jquery/jquery.min.js' type='text/javascript'></script>";
         $add_to = '<head>';
         $newcontent = str_replace($add_to, $jquery_content, $newcontent);
-        
+
         return $newcontent;
     }
 
     /**
      * This function 'loads' the hotpotatoes excercise.
-     * 
+     *
      * @param String $path_to_zip
      */
     public function load_from_zip($path_to_zip)
@@ -186,23 +185,23 @@ class Hotpotatoes extends ContentObject implements Versionable
         $file_name_parts = explode('.', $zip_file_name);
         array_pop($file_name_parts);
         $file_name = implode(' ', $file_name_parts);
-        
+
         $this->set_title($file_name);
         $this->set_description($file_name);
-        
+
         $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::package()) . Session::get_user_id() . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
-        
+
         $filecompression = Filecompression::factory();
         $dir = $filecompression->extract_file($full_path . $zip_file_name);
         $entries = Filesystem::get_directory_content($dir);
-        
+
         foreach ($entries as $entry)
         {
             $filename = substr($entry, strlen($dir));
             $full_new_path = $full_path . $filename;
             $new_path = substr($full_new_path, strlen($hotpot_path));
-            
+
             Filesystem::move_file($entry, $full_new_path, false);
             if (substr($filename, - 4) == '.htm' || substr($filename, - 5) == '.html')
             {

@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- * $Id: assessment_matching_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.matching_question
  */
 class AssessmentMatchingQuestion extends ContentObject implements Versionable
@@ -107,7 +106,7 @@ class AssessmentMatchingQuestion extends ContentObject implements Versionable
         }
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {

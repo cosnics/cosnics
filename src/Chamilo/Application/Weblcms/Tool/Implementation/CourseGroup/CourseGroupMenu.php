@@ -17,14 +17,13 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib
  */
 
 /**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
- * 
+ *
  * @author Sven Vanpoucke
  */
 class CourseGroupMenu extends HtmlMenu
@@ -43,20 +42,21 @@ class CourseGroupMenu extends HtmlMenu
 
     /**
      * The selected group
-     * 
+     *
      * @var CourseGroup
      */
     private $current_group;
 
     /**
      * The current course
-     * 
+     *
      * @var Course
      */
     private $course;
 
     /**
      * CourseGroupMenu constructor.
+     *
      * @param Course $course
      * @param $current_group
      * @param string $url_format
@@ -67,7 +67,7 @@ class CourseGroupMenu extends HtmlMenu
     {
         $this->course = $course;
         $this->urlFmt = $url_format;
-        
+
         if ($current_group == '0' || is_null($current_group))
         {
             $this->current_group = DataManager::retrieve_course_group_root($course->getId());
@@ -76,15 +76,18 @@ class CourseGroupMenu extends HtmlMenu
         else
         {
             $this->current_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $current_group);
-            if(empty($this->current_group)) {
+            if (empty($this->current_group))
+            {
                 throw new ObjectNotExistException(
-                    Translation::get('TypeNameSingle', array(), 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'),
-                    $current_group
-                );
+                    Translation::get(
+                        'TypeNameSingle',
+                        array(),
+                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'),
+                    $current_group);
             }
             $url = $this->get_url($this->current_group->get_id());
         }
-        
+
         $menu = $this->get_menu();
         parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
@@ -94,19 +97,19 @@ class CourseGroupMenu extends HtmlMenu
     public function get_menu()
     {
         $course_group = DataManager::retrieve_course_group_root($this->course->getId());
-        
+
         $menu = array();
-        
+
         $menu_item = array();
         $menu_item['title'] = $course_group->get_name();
         $menu_item['url'] = $this->get_home_url();
-        
+
         $sub_menu_items = $this->get_menu_items($course_group->get_id());
         if (count($sub_menu_items) > 0)
         {
             $menu_item['sub'] = $sub_menu_items;
         }
-        
+
         $menu_item['class'] = 'home';
         $menu_item[OptionsMenuRenderer::KEY_ID] = $course_group->get_id();
         $menu[$course_group->get_id()] = $menu_item;
@@ -115,7 +118,7 @@ class CourseGroupMenu extends HtmlMenu
 
     /**
      * Returns the menu items.
-     * 
+     *
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -123,34 +126,34 @@ class CourseGroupMenu extends HtmlMenu
     private function get_menu_items($parent_id = 0)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id));
         $groups = DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
-        
+
         // $current_group = $this->current_group;
-        
+
         while ($group = $groups->next_result())
         {
             $menu_item = array();
             $menu_item['title'] = $group->get_name();
             $menu_item['url'] = $this->get_url($group->get_id());
-            
+
             if ($group->has_children())
             {
                 $menu_item['sub'] = $this->get_menu_items($group->get_id());
             }
-            
+
             $menu_item['class'] = 'category';
             $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
             $menu[$group->get_id()] = $menu_item;
         }
-        
+
         return $menu;
     }
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param $category int The id of the category
      * @return string The requested URL
      */
@@ -164,15 +167,15 @@ class CourseGroupMenu extends HtmlMenu
         return htmlentities(
             sprintf(
                 str_replace(
-                    'tool_action=Details', 
-                    'tool_action=Browser', 
-                    str_replace('&course_group=%s', '', $this->urlFmt)), 
+                    'tool_action=Details',
+                    'tool_action=Browser',
+                    str_replace('&course_group=%s', '', $this->urlFmt)),
                 $this->course->getId()));
     }
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -189,7 +192,7 @@ class CourseGroupMenu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
