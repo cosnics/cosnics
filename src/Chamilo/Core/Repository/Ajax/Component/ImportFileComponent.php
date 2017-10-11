@@ -4,6 +4,11 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -11,6 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
     const PARAM_PARENT_ID = 'parentId';
+    const PARAM_WORKSPACE_ID = 'workspaceId';
     const PROPERTY_CONTENT_OBJECT_ID = 'contentObjectId';
     const PROPERTY_VIEW_BUTTON = 'viewButton';
     const PROPERTY_UPLOADED_MESSAGE = 'uploadedMessage';
@@ -48,12 +54,22 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $document = new File();
 
         $categoryId = $this->getPostDataValue(self::PARAM_PARENT_ID);
+
+        $workspaceId = $this->getRequest()->getFromPost(self::PARAM_WORKSPACE_ID);
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceId);
+
+        if(!$workspace instanceof Workspace)
+        {
+            $document->set_parent_id($categoryId);
+        }
+
         $title = substr($file->getClientOriginalName(), 0, - (strlen($file->getClientOriginalExtension()) + 1));
 
         $document->set_title($title);
         $document->set_description($file->getClientOriginalName());
         $document->set_owner_id($this->get_user_id());
-        $document->set_parent_id($categoryId);
+
         $document->set_filename($file->getClientOriginalName());
 
         // $hash = md5_file($file->getRealPath());
@@ -62,6 +78,14 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         if ($document->create())
         {
+            if($workspace instanceof Workspace)
+            {
+                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+                $contentObjectRelationService->createContentObjectRelation(
+                    $workspace->getId(), $document->get_object_number(), $categoryId
+                );
+            }
+
             $previewLink = \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($document);
             $onclick = 'onclick="javascript:openPopup(\'' . $previewLink . '\'); return false;';
 
