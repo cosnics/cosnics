@@ -360,7 +360,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
 
             self::$helper_types = array(
-                'Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem',
                 'Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem');
             ;
         }
