@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 /**
  * Interface for services that can handle errors
- * 
- * @package Chamilo\Libraries\Architecture\ErrorHandler
+ *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  */
 interface ExceptionLoggerInterface
 {
@@ -17,14 +17,11 @@ interface ExceptionLoggerInterface
 
     /**
      * Logs an exception
-     * 
+     *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
-     *
-     * @return
-     *
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0);
 }

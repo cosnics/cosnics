@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 /**
  * Logs errors to a file
- * 
+ *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FileExceptionLogger implements ExceptionLoggerInterface
@@ -11,14 +12,14 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 
     /**
      * The path to the log directory
-     * 
+     *
      * @var string
      */
     protected $logPath;
 
     /**
      * FileLoggerErrorHandler constructor.
-     * 
+     *
      * @param $logPath
      * @throws \Exception
      */
@@ -28,19 +29,19 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         {
             throw new \Exception('The given log path can not be empty');
         }
-        
+
         if (! file_exists($logPath) || ! is_dir($logPath) || ! is_writable($logPath))
         {
             throw new \Exception(
                 sprintf('The given log path either does not exist or is not a valid directory. (%s)', $logPath));
         }
-        
+
         $this->logPath = $logPath;
     }
 
     /**
      * Logs an exception
-     * 
+     *
      * @param \Exception $exception
      * @param int $exceptionLevel
      * @param string $file
@@ -52,26 +53,26 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         {
             return;
         }
-        
+
         $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'FatalErrors.log';
         $fileHandler = fopen($logFile, 'a');
-        
+
         $type = $this->determineExceptionLevelString($exceptionLevel);
-        
+
         $message = date('[d/m/Y - H:i:s] ', time()) . ' - [' . $type . '] ' . $exception->getMessage();
-        
+
         if (! is_null($file))
         {
             $message .= ' - FILE: ' . $file . ' - LINE: ' . $line;
         }
-        
+
         fwrite($fileHandler, $message . "\n");
         fclose($fileHandler);
     }
 
     /**
      * Determines the exception level string
-     * 
+     *
      * @param int $exceptionLevel
      *
      * @return string

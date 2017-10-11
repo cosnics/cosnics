@@ -75,7 +75,7 @@ class Kernel
 
     /**
      *
-     * @var SessionUtilities
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     protected $sessionUtilities;
 
@@ -90,7 +90,7 @@ class Kernel
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
-     * @param SessionUtilities $sessionUtilities
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param integer $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -272,9 +272,8 @@ class Kernel
             $html[] = $page->getHeader()->toHtml();
             $html[] = '<br />';
             $html[] = '<div class="alert alert-danger text-center">';
-            $html[] = $this->configurationConsulter->getSetting([
-                'Chamilo\Core\Admin',
-                'maintenance_warning_message']);
+            $html[] = $this->configurationConsulter->getSetting(
+                ['Chamilo\Core\Admin', 'maintenance_warning_message']);
             $html[] = '</div>';
             $html[] = $page->getFooter()->toHtml();
 
@@ -293,7 +292,7 @@ class Kernel
     /**
      * Returns a response that renders the not authenticated message
      *
-     * @return NotAuthenticatedResponse
+     * @return \Chamilo\Libraries\Format\Response\NotAuthenticatedResponse
      */
     protected function getNotAuthenticatedResponse()
     {
@@ -336,7 +335,7 @@ class Kernel
     /**
      * Returns a list of the available fallback contexts
      *
-     * @return array
+     * @return string[]
      */
     protected function getFallbackContexts()
     {
@@ -378,6 +377,8 @@ class Kernel
 
     /**
      * Executes the application's component
+     *
+     * @throws \Exception
      */
     protected function runApplication()
     {
@@ -401,9 +402,8 @@ class Kernel
     /**
      * Checks if the platform is available for the given user
      *
-     * @return $this
-     *
-     * @throws PlatformNotAvailableException
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException
      */
     protected function checkPlatformAvailability()
     {
@@ -463,7 +463,7 @@ class Kernel
 
     /**
      *
-     * @throws NotAuthenticatedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
      */
     protected function checkAuthentication()
