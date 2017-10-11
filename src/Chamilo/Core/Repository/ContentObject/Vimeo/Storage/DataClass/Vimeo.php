@@ -28,9 +28,13 @@ class Vimeo extends ContentObject implements Versionable, Includeable
 
     public function get_video_url()
     {
-        $video_url_custom = sprintf(self::VIMEO_PLAYER_URI, $this->get_synchronization_data()->get_external_object_id());
+        $sync_data = $this->get_synchronization_data();
 
-        return $video_url_custom;
+        if(empty($sync_data)) {
+            return false;
+        }
+
+        return sprintf(self::VIMEO_PLAYER_URI, $sync_data->get_external_object_id());
     }
 
     public static function is_type_available()

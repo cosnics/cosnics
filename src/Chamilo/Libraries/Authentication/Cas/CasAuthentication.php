@@ -82,7 +82,7 @@ class CasAuthentication extends ExternalAuthentication
                         array(
                             'PLATFORM' => Configuration::getInstance()->get_setting(
                                 'Chamilo\Core\Admin',
-                                'platform_name'))));
+                                'site_name'))));
             }
         }
         else
@@ -106,7 +106,7 @@ class CasAuthentication extends ExternalAuthentication
                         array(
                             'PLATFORM' => Configuration::getInstance()->get_setting(
                                 'Chamilo\Core\Admin',
-                                'platform_name'))));
+                                'site_name'))));
             }
         }
     }

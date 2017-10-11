@@ -184,9 +184,9 @@ class SettingsForm extends FormValidator
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Platform'));
-        $this->addElement('text', 'platform_name', Translation::get("CampusName"), array('size' => '40'));
+        $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
         $this->addRule(
-            'platform_name',
+            'site_name',
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
@@ -536,7 +536,7 @@ class SettingsForm extends FormValidator
             $defaults['admin_surname'] = 'Doe';
             $defaults['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
             $defaults['admin_username'] = 'admin';
-            $defaults['platform_name'] = Translation::get('MyChamilo');
+            $defaults['site_name'] = Translation::get('MyChamilo');
             $defaults['organization_name'] = Translation::get('Chamilo');
             $defaults['organization_url'] = 'http://www.cosnics.org';
             $defaults['self_reg'] = 0;

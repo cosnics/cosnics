@@ -215,11 +215,13 @@ class HtmlFilterRenderer extends FilterRenderer
             $user_view = DataManager::retrieve_by_id(
                 UserView::class_name(), 
                 $filter_data->get_filter_property(FilterData::FILTER_USER_VIEW));
-            $html[] = $this->renderParameter(
-                $this->get_parameter_name(FilterData::FILTER_USER_VIEW), 
-                Translation::get('UserViewFilter', array('VIEW' => $user_view->get_name())));
+            if(!empty($user_view)) {
+                $html[] = $this->renderParameter(
+                    $this->get_parameter_name(FilterData::FILTER_USER_VIEW),
+                    Translation::get('UserViewFilter', array('VIEW' => $user_view->get_name())));
+            }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
