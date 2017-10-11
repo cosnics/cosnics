@@ -110,7 +110,9 @@ class ContentObjectPublicationMailer
         $parameters['modified'] = time();
         $redirect = new Redirect($parameters);
 
-        $body = '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body = '<!DOCTYPE html><html lang="en"><head>';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
              $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
@@ -130,7 +132,9 @@ class ContentObjectPublicationMailer
         {
             $body .= '<br ><br >' . $this->getTranslation('AttachmentWarning', array('LINK' => $link));
         }
-        
+
+        $body .= '</div></body></html>';
+
         $log = '';
         $log .= "mail for publication " . $contentObjectPublication->getId() . " in course ";
         $log .= $course->get_title();

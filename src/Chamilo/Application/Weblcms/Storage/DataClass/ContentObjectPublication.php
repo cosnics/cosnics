@@ -614,7 +614,9 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $parameters['modified'] = time();
         $redirect = new Redirect($parameters);
 
-        $body = '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body = '<!DOCTYPE html><html lang="en"><head>';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
              '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
@@ -692,6 +694,8 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         {
             $body .= '<br ><br >' . Translation::get('AttachmentWarning', array('LINK' => $link));
         }
+
+        $body .= '</div></body></html>';
 
         $log = '';
         $log .= "mail for publication " . $this->get_id() . " in course ";
