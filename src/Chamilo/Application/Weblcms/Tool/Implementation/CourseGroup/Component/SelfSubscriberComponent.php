@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -15,6 +17,13 @@ class SelfSubscriberComponent extends Manager
     public function run()
     {
         $course_group = $this->get_course_group();
+
+        if(empty($course_group)) {
+            throw new ObjectNotExistException(
+                Translation::getInstance()->getTranslation('CourseGroup'),
+                Request::get(self::PARAM_COURSE_GROUP)
+            );
+        }
 
         if ($course_group->is_self_registration_allowed() && ($course_group->count_members() <
              $course_group->get_max_number_of_members() || $course_group->get_max_number_of_members() == 0) &&
