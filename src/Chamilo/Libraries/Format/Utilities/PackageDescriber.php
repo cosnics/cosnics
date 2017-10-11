@@ -210,25 +210,10 @@ class PackageDescriber
         $composerJsonInstance->extra->cosnics->context = $legacyPackage->get_context();
         $composerJsonInstance->extra->cosnics->type = $legacyPackage->get_type();
 
-        $packageExtras = $legacyPackage->get_extra();
+        $composerJsonInstance->extra->cosnics->install->default = (integer) $legacyPackage->getDefaultInstall();
+        $composerJsonInstance->extra->cosnics->install->core = (integer) $legacyPackage->getCoreInstall();
 
-        if (key_exists('default-install', $packageExtras))
-        {
-            $composerJsonInstance->extra->cosnics->install->default = 1;
-        }
-        else
-        {
-            $composerJsonInstance->extra->cosnics->install->default = 0;
-        }
-
-        if (key_exists('core-install', $packageExtras))
-        {
-            $composerJsonInstance->extra->cosnics->install->core = 1;
-        }
-        else
-        {
-            $composerJsonInstance->extra->cosnics->install->core = 0;
-        }
+        $composerJsonInstance->extra->cosnics->extra = $legacyPackage->get_extra();
 
         // Authors
         $this->processAuthors($composerJsonInstance, $legacyPackage->get_authors());

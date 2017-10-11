@@ -316,7 +316,7 @@ class PackageFactory
 
         $package->set_extra($extras);
 
-        $coreInstallNode = $domXpath->query('extra/core-install', $packageNode);
+        $coreInstallNode = $domXpath->query('extra/core-install', $packageNode)->item(0);
 
         if ($coreInstallNode instanceof \DOMNode && $node->hasChildNodes())
         {
@@ -327,7 +327,7 @@ class PackageFactory
             $package->setCoreInstall(0);
         }
 
-        $defaultInstallNode = $domXpath->query('extra/default-install', $packageNode);
+        $defaultInstallNode = $domXpath->query('extra/default-install', $packageNode)->item(0);
 
         if ($defaultInstallNode instanceof \DOMNode && $node->hasChildNodes())
         {
