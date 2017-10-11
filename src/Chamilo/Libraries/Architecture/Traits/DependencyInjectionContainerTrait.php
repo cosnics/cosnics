@@ -60,7 +60,7 @@ trait DependencyInjectionContainerTrait
      */
     public function getService($serviceId)
     {
-        return $this->getContainer()->get(serviceId);
+        return $this->getContainer()->get($serviceId);
     }
 
     /**
