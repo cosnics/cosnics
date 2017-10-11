@@ -10,7 +10,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Domain;
 class UserExportParameters
 {
     /**
-     * @var User[]
+     * @var \Chamilo\Core\User\Storage\DataClass\User[]
      */
     protected $users;
 
