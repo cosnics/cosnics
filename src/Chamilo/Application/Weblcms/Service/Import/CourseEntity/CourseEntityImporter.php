@@ -196,6 +196,8 @@ class CourseEntityImporter implements CourseEntityImporterInterface
             $status = $courseEntityRelation->delete();
         }
 
+        $this->weblcmsRepository->clearCourseEntityRelationCache();
+
         return $status;
     }
 

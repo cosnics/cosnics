@@ -41,24 +41,34 @@ class CourseUserImporterComponent extends Manager
 
         if ($form->validate())
         {
-            $importers = array();
+            try
+            {
+                $importers = array();
 
-            $importers[] = new Csv(new Import());
+                $importers[] = new Csv(new Import());
 
-            $courseEntityImporter = new CourseEntityImporter(
-                new ImportFormatFactory($importers),
-                new WeblcmsRepository(),
-                $this->getTranslator()
-            );
+                $courseEntityImporter = new CourseEntityImporter(
+                    new ImportFormatFactory($importers),
+                    new WeblcmsRepository(),
+                    $this->getTranslator()
+                );
 
-            $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
+                $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
 
-            $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
+                $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
 
-            $html[] = $this->getTwig()->render(
-                'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig',
-                ['importerResult' => $result]
-            );
+                $html[] = $this->getTwig()->render(
+                    'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig',
+                    ['importerResult' => $result]
+                );
+            }
+            catch(\Exception $ex)
+            {
+                $html[] = $this->getTwig()->render(
+                    'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
+                    ['form' => $form->toHtml(), 'error' => $ex->getMessage()]
+                );
+            }
         }
         else
         {

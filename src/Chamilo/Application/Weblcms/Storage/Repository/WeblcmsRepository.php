@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryI
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -91,5 +92,13 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
             CourseEntityRelation::class_name(), 
             new DataClassRetrieveParameters($condition));
+    }
+
+    /**
+     * Clears the cache for the CourseEntityRelation class
+     */
+    public function clearCourseEntityRelationCache()
+    {
+        DataClassCache::truncate(CourseEntityRelation::class);
     }
 }

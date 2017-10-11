@@ -1,5 +1,11 @@
 {% set appContext = 'Chamilo\\Application\\Weblcms' %}
 
+{% if error %}
+
+    <div class="alert alert-danger">{{ error }}</div>
+
+{% endif %}
+
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#upload-form" aria-controls="upload-form" role="tab" data-toggle="tab">{{ 'ImportUploadFile'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#users-csv" aria-controls="csv" role="tab" data-toggle="tab">{{ 'ImportUsersCSVExample'|trans({}, appContext) }}</a></li>
