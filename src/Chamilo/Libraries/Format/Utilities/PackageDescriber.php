@@ -2,13 +2,15 @@
 namespace Chamilo\Libraries\Format\Utilities;
 
 use Chamilo\Configuration\Package\Finder\LegacyBasicBundles;
+use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
+use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Console\Output\OutputInterface;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 
 /**
  * Processes resources from one or multiple packages
@@ -208,28 +210,68 @@ class PackageDescriber
         $composerJsonInstance->extra->cosnics->context = $legacyPackage->get_context();
         $composerJsonInstance->extra->cosnics->type = $legacyPackage->get_type();
 
-        $packageExtras = $legacyPackage->get_extra();
+        $composerJsonInstance->extra->cosnics->install->default = (integer) $legacyPackage->getDefaultInstall();
+        $composerJsonInstance->extra->cosnics->install->core = (integer) $legacyPackage->getCoreInstall();
 
-        if (key_exists('default-install', $packageExtras))
-        {
-            $composerJsonInstance->extra->cosnics->install->default = 1;
-        }
-        else
-        {
-            $composerJsonInstance->extra->cosnics->install->default = 0;
-        }
-
-        if (key_exists('core-install', $packageExtras))
-        {
-            $composerJsonInstance->extra->cosnics->install->core = 1;
-        }
-        else
-        {
-            $composerJsonInstance->extra->cosnics->install->core = 0;
-        }
+        $composerJsonInstance->extra->cosnics->extra = $legacyPackage->get_extra();
 
         // Authors
         $this->processAuthors($composerJsonInstance, $legacyPackage->get_authors());
+
+        // Dependencies
+        $this->processDependencies($composerJsonInstance, $legacyPackage->get_dependencies());
+    }
+
+    /**
+     *
+     * @param \stdClass $composerJsonInstance
+     * @param RegistrationDependency|Depencencies $dependencies
+     */
+    protected function processDependencies($composerJsonInstance, $dependencies)
+    {
+        if ($dependencies instanceof Dependencies)
+        {
+            foreach ($dependencies->get_dependencies() as $dependency)
+            {
+                $this->processDependency($composerJsonInstance, $dependency);
+            }
+        }
+        elseif ($dependencies instanceof Dependency)
+        {
+            $this->processDependency($composerJsonInstance, $dependencies);
+        }
+    }
+
+    /**
+     *
+     * @param \stdClass $composerJsonInstance
+     * @param RegistrationDependency $dependencies
+     */
+    protected function processDependency($composerJsonInstance, Dependency $dependency)
+    {
+        $existingDependencies = array();
+
+        if (! isset($composerTemplateInstance->extra->cosnics->dependencies) ||
+             $composerJsonInstance->extra->cosnics->dependencies instanceof \stdClass)
+        {
+            $composerJsonInstance->extra->cosnics->dependencies = array();
+        }
+        else
+        {
+            foreach ($composerJsonInstance->extra->cosnics->dependencies as $existingDependencyObject)
+            {
+                $existingDependencies[] = $existingDependencyObject->id;
+            }
+        }
+
+        if (! in_array($dependency->get_id(), $existingDependencies))
+        {
+            $dependencyObject = new \stdClass();
+            $dependencyObject->id = $dependency->get_id();
+            $dependencyObject->version = '>=1.0.0';
+
+            $composerJsonInstance->extra->cosnics->dependencies[] = $dependencyObject;
+        }
     }
 
     /**

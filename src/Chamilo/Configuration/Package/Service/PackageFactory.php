@@ -220,6 +220,7 @@ class PackageFactory
         if (isset($cosnicsProperties->dependencies) && count($cosnicsProperties->dependencies) > 0)
         {
             $dependencies = new Dependencies();
+
             foreach ($cosnicsProperties->dependencies as $cosnicsDependency)
             {
                 $dependency = new Dependency();
@@ -294,14 +295,28 @@ class PackageFactory
         }
 
         $extra = $domXpath->query('extra/*', $packageNode);
-        $extras = array();
+
+        $extras = new \stdClass();
+
         foreach ($extra as $extra_node)
         {
-            $extras[$extra_node->nodeName] = $extra_node->nodeValue;
+            $nodeName = $extra_node->nodeName;
+            if (! (in_array($nodeName, array('core-install', 'default-install'))))
+            {
+                $extras->$nodeName = $extra_node->nodeValue;
+            }
         }
+
+        // Catch tools course section property
+        $node = $domXpath->query('course_section', $packageNode)->item(0);
+        if ($node instanceof \DOMNode && $node->hasChildNodes())
+        {
+            $extras->course_section = trim($node->nodeValue);
+        }
+
         $package->set_extra($extras);
 
-        $coreInstallNode = $domXpath->query('extra/core-install', $packageNode);
+        $coreInstallNode = $domXpath->query('extra/core-install', $packageNode)->item(0);
 
         if ($coreInstallNode instanceof \DOMNode && $node->hasChildNodes())
         {
@@ -312,7 +327,7 @@ class PackageFactory
             $package->setCoreInstall(0);
         }
 
-        $defaultInstallNode = $domXpath->query('extra/default-install', $packageNode);
+        $defaultInstallNode = $domXpath->query('extra/default-install', $packageNode)->item(0);
 
         if ($defaultInstallNode instanceof \DOMNode && $node->hasChildNodes())
         {

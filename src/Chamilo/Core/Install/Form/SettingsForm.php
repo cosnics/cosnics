@@ -303,9 +303,7 @@ class SettingsForm extends FormValidator
 
             foreach ($packages as $package)
             {
-                $extra = $package->get_extra();
-
-                if ($extra['core-install'])
+                if ($package->getCoreInstall())
                 {
                     $numberOfCorePackages ++;
                 }
@@ -360,12 +358,10 @@ class SettingsForm extends FormValidator
 
             foreach ($packages as $package)
             {
-                $extraPackageInfo = $package->get_extra();
-
                 $title = Translation::get('TypeName', null, $package->get_context());
                 $packageClasses = $this->getPackageClasses($package);
 
-                if ($extraPackageInfo['core-install'])
+                if ($package->getCoreInstall())
                 {
                     $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22Na');
                     $disabled = ' disabled="disabled"';
@@ -393,7 +389,7 @@ class SettingsForm extends FormValidator
 
                 $extra = $package->get_extra();
 
-                if ($extra['core-install'] || $extra['default-install'])
+                if ($package->getCoreInstall() || $package->getDefaultInstall())
                 {
                     $defaults['install'][$package->get_context()] = 1;
                 }
@@ -453,15 +449,13 @@ class SettingsForm extends FormValidator
     {
         $classes = array('btn');
 
-        $extra = $package->get_extra();
-
-        if ($extra['core-install'])
+        if ($package->getCoreInstall())
         {
             $classes[] = 'btn-default';
         }
         else
         {
-            if ($extra['default-install'])
+            if ($package->getDefaultInstall())
             {
                 $sessionSettings = $this->getSessionSettings();
 
