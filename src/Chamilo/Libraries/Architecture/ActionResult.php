@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
- * @package Chamilo\Libraries\Architecture\Exceptions$ActionResult
+ * @package Chamilo\Libraries\Architecture\Exceptions
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -58,7 +58,7 @@ class ActionResult
         $this->context = $context;
         $this->actionType = $actionType;
         $this->entityType = $entityType;
-        
+
         if ($this->hasFailed())
         {
             throw new \Exception($this->getMessage());
@@ -163,14 +163,14 @@ class ActionResult
     {
         $parameters = array();
         $parameters['ACTION'] = Translation::get('ActionResultAction' . $this->getActionType(), array(), $this->getContext());
-        
+
         if ($this->isSingleAction())
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultSingleEntity' . $this->getEntityType(), 
-                array(), 
+                'ActionResultSingleEntity' . $this->getEntityType(),
+                array(),
                 $this->getContext());
-            
+
             if ($this->hasFailed())
             {
                 return Translation::get('ActionResultSingleFailureMessage', $parameters);
@@ -183,10 +183,10 @@ class ActionResult
         else
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultMultipleEntity' . $this->getEntityType(), 
-                array(), 
+                'ActionResultMultipleEntity' . $this->getEntityType(),
+                array(),
                 $this->getContext());
-            
+
             if ($this->hasSucceeded())
             {
                 return Translation::get('ActionResultMultipleSuccessMessage', $parameters);

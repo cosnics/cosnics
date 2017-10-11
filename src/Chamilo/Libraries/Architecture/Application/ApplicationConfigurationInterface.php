@@ -39,15 +39,15 @@ interface ApplicationConfigurationInterface
     /**
      *
      * @param string $key
-     * @param mixed $defaultValue
-     * @return mixed
+     * @param string $defaultValue
+     * @return string
      */
     public function get($key, $defaultValue = null);
 
     /**
      *
      * @param string $key
-     * @param mixed $value
+     * @param string $value
      */
     public function set($key, $value);
 }

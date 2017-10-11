@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 /**
  * Logs Exceptions to Sentry (sentry.io)
  *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
@@ -19,7 +20,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * SentryExceptionLogger constructor.
      *
      * @param string $sentryConnectionString
-     *
      * @throws \Exception
      */
     public function __construct($sentryConnectionString = '')
@@ -43,9 +43,9 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * Logs an exception
      *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {

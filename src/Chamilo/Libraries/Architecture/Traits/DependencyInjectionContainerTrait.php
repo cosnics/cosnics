@@ -2,15 +2,12 @@
 namespace Chamilo\Libraries\Architecture\Traits;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  *
- * @package Chamilo\Libraries\Architecture\Traits$DependencyInjectionContainerTrait
+ * @package Chamilo\Libraries\Architecture\Traits
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -20,7 +17,7 @@ trait DependencyInjectionContainerTrait
     /**
      * The dependency injection container
      *
-     * @var ContainerInterface
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
@@ -38,7 +35,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Sets the dependency injection container
      *
-     * @param ContainerInterface $container
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container)
     {
@@ -48,7 +45,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the dependency injection container
      *
-     * @return ContainerInterface
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
     public function getContainer()
     {
@@ -58,19 +55,18 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns a service from the dependency injection container
      *
-     * @param string $service_id
-     *
-     * @return object
+     * @param string serviceId
+     * @return \stdClass
      */
-    public function getService($service_id)
+    public function getService($serviceId)
     {
-        return $this->getContainer()->get($service_id);
+        return $this->getContainer()->get(serviceId);
     }
 
     /**
      * Returns the request
      *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest | object
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -79,7 +75,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return AuthorizationCheckerInterface | object
+     * @return AuthorizationCheckerInterface
      */
     public function getAuthorizationChecker()
     {
@@ -88,7 +84,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return PathBuilder | object
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
     public function getPathBuilder()
     {
@@ -97,7 +93,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return ConfigurablePathBuilder | object
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
      */
     public function getConfigurablePathBuilder()
     {
@@ -106,7 +102,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return object | ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
     public function getConfigurationConsulter()
     {
@@ -115,7 +111,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return ExceptionLoggerInterface | object
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     protected function getExceptionLogger()
     {
@@ -125,7 +121,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the validator form the dependency injection container
      *
-     * @return \Symfony\Component\Validator\Validator | object
+     * @return \Symfony\Component\Validator\Validator
      */
     public function getValidator()
     {
@@ -135,7 +131,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the symfony form builder and renderer
      *
-     * @return \Symfony\Component\Form\FormFactory | object
+     * @return \Symfony\Component\Form\FormFactory
      */
     public function getForm()
     {
@@ -145,7 +141,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the Twig_Environment
      *
-     * @return \Twig_Environment | object
+     * @return \Twig_Environment
      */
     public function getTwig()
     {
@@ -155,7 +151,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the Monolog Logger
      *
-     * @return \Monolog\Logger | object
+     * @return \Monolog\Logger
      */
     public function getLogger()
     {
@@ -165,7 +161,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the translator
      *
-     * @return \Symfony\Component\Translation\Translator | object
+     * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator()
     {
@@ -175,7 +171,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the event dispatcher
      *
-     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher | object
+     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
      */
     public function getEventDispatcher()
     {
@@ -185,7 +181,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the serializer service
      *
-     * @return \JMS\Serializer\Serializer | object
+     * @return \JMS\Serializer\Serializer
      */
     public function getSerializer()
     {
@@ -195,7 +191,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the entity manager from the dependency injection container
      *
-     * @return \Doctrine\ORM\EntityManager | object
+     * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {
