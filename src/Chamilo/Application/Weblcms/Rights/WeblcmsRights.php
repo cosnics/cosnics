@@ -153,25 +153,17 @@ class WeblcmsRights extends RightsUtil
         $entities[] = CourseUserEntity::getInstance();
         $entities[] = CoursePlatformGroupEntity::getInstance($course_id);
 
-        try
-        {
-            return parent::is_allowed(
-                $right,
-                Manager::context(),
-                $user_id,
-                $entities,
-                $identifier,
-                $type,
-                $tree_identifier,
-                WeblcmsRights::TREE_TYPE_COURSE,
-                true);
-        }
-        catch (Exception $exception)
-        {
-            error_log($exception->getMessage());
-
-            return false;
-        }
+        return parent::is_allowed(
+            $right,
+            Manager::context(),
+            $user_id,
+            $entities,
+            $identifier,
+            $type,
+            $tree_identifier,
+            WeblcmsRights::TREE_TYPE_COURSE,
+            true
+        );
     }
 
     public function render_target_entities_as_string($entities)
