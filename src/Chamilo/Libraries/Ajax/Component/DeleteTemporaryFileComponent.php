@@ -27,17 +27,21 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
         return array(self::PARAM_FILE);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $temporaryFileName = $this->getPostDataValue(self::PARAM_FILE);
-        
+
         $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
         $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
-        
+
         $temporaryFilePath = $temporaryPath . $temporaryFileName;
-        
+
         $result = Filesystem::remove($temporaryFilePath);
-        
+
         if (! $result)
         {
             JsonAjaxResult::general_error(Translation::get('FileNotRemoved'));

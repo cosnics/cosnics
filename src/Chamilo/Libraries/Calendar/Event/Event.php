@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
@@ -81,6 +80,7 @@ class Event
      * @param integer $id
      * @param integer $startDate
      * @param integer $endDate
+     * @param RecurrenceRules $recurrenceRules
      * @param string $url
      * @param string $title
      * @param string $content
@@ -88,11 +88,8 @@ class Event
      * @param string $source
      * @param string $context
      */
-    public function __construct(
-        $id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
-        $title = null, $content = null,
-        $location = null, $source = null, $context = null
-    )
+    public function __construct($id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
+        $title = null, $content = null, $location = null, $source = null, $context = null)
     {
         $this->id = $id;
         $this->startDate = $startDate;
@@ -108,7 +105,7 @@ class Event
 
     /**
      *
-     * @param int $id
+     * @param integer $id
      */
     public function setId($id)
     {
@@ -117,7 +114,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -126,7 +123,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getStartDate()
     {
@@ -135,7 +132,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getEndDate()
     {
@@ -207,7 +204,7 @@ class Event
 
     /**
      *
-     * @param int $startDate
+     * @param integer $startDate
      */
     public function setStartDate($startDate)
     {
@@ -216,7 +213,7 @@ class Event
 
     /**
      *
-     * @param int $endDate
+     * @param integer $endDate
      */
     public function setEndDate($endDate)
     {
@@ -252,7 +249,7 @@ class Event
 
     /**
      *
-     * @return the $location
+     * @return string
      */
     public function getLocation()
     {

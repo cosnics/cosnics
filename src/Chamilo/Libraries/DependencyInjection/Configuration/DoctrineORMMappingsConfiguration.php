@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -8,14 +7,16 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Configuration class to validate the configuration for this package
  *
+ * @package Chamilo\Libraries\DependencyInjection\Configuration
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineORMMappingsConfiguration implements ConfigurationInterface
 {
+
     /**
      * The Tree Builder
      *
-     * @var TreeBuilder
+     * @var \Symfony\Component\Config\Definition\Builder\TreeBuilder
      */
     private $treeBuilder;
 
@@ -37,42 +38,18 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
     }
 
     /**
-     * Builds the root node for the tree builder
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
      */
     public function buildRootNode()
     {
         $rootNode = $this->treeBuilder->root('mappings');
 
-        $rootNode->children()
-            ->arrayNode('default')
-                ->requiresAtLeastOneElement()
-                ->prototype('scalar')
-                    ->cannotBeEmpty()
-                    ->end()
-            ->end()
-            ->arrayNode('custom')
-                ->prototype('array')
-                    ->cannotBeEmpty()
-                    ->children()
-                    ->enumNode('type')
-                        ->values(array('annotation', 'xml', 'yaml', 'php', 'staticphp'))
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('namespace')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->arrayNode('paths')
-                        ->requiresAtLeastOneElement()
-                        ->prototype('scalar')
-                            ->cannotBeEmpty()
-                        ->end()
-                        ->isRequired()
-                    ->end()
-                ->end()
-            ->end()
-        ->end();
+        $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()->end()->end()->arrayNode(
+            'custom')->prototype('array')->cannotBeEmpty()->children()->enumNode('type')->values(
+            array('annotation', 'xml', 'yaml', 'php', 'staticphp'))->isRequired()->cannotBeEmpty()->end()->scalarNode(
+            'namespace')->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
+            'scalar')->cannotBeEmpty()->end()->isRequired()->end()->end()->end()->end();
 
         return $rootNode;
     }

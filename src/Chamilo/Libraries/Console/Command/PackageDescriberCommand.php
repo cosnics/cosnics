@@ -25,15 +25,15 @@ class PackageDescriberCommand extends ChamiloCommand
 
     /**
      *
-     * @var CacheManager
+     * @var \Chamilo\Libraries\Cache\CacheManagement\CacheManager
      */
     protected $cacheManager;
 
     /**
      *
-     * @param Translator $translator
-     * @param PackageDescriber $packageDescriber
-     * @param CacheManager $cacheManager
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Format\Utilities\PackageDescriber $packageDescriber
+     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
      */
     public function __construct(Translator $translator, PackageDescriber $packageDescriber, CacheManager $cacheManager)
     {
@@ -57,15 +57,14 @@ class PackageDescriberCommand extends ChamiloCommand
 
     /**
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|null|void
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $packages = $input->getArgument(self::ARG_CONTEXT);
         $this->packageDescriber->processPackages($packages, $output);
+        // TODO: Check which caches should be cleared?
         $this->cacheManager->clear(['chamilo_stylesheets', 'chamilo_javascript']);
     }
 }

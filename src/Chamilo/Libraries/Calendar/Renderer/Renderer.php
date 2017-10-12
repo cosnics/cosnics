@@ -16,13 +16,14 @@ abstract class Renderer
 
     /**
      *
-     * @var CalendarRendererProviderInterface
+     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
      */
     private $dataProvider;
 
     /**
      *
-     * @param CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @throws \Exception
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
@@ -30,13 +31,13 @@ abstract class Renderer
         {
             throw new \Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
         }
-        
+
         $this->dataProvider = $dataProvider;
     }
 
     /**
      *
-     * @return CalendarRendererProviderInterface
+     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
      */
     public function getDataProvider()
     {
@@ -45,7 +46,7 @@ abstract class Renderer
 
     /**
      * Render the calendar
-     * 
+     *
      * @return string
      */
     abstract public function render();

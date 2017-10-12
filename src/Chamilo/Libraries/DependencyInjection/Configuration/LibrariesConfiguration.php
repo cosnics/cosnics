@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -8,14 +7,16 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Configuration class to validate the configuration for this package
  *
+ * @package Chamilo\Libraries\DependencyInjection\Configuration
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class LibrariesConfiguration implements ConfigurationInterface
 {
+
     /**
      * Generates the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
@@ -39,20 +40,9 @@ class LibrariesConfiguration implements ConfigurationInterface
 
         $mappingsConfiguration = new DoctrineORMMappingsConfiguration();
 
-        $node->children()
-            ->arrayNode('orm')
-                ->children()
-                    ->arrayNode('resolve_target_entities')
-                        ->useAttributeAsKey('baseEntity')
-                        ->requiresAtLeastOneElement()
-                        ->prototype('scalar')
-                            ->cannotBeEmpty()
-                        ->end()
-                    ->end()
-                ->end()
-                ->append($mappingsConfiguration->buildRootNode())
-            ->end()
-        ->end();
+        $node->children()->arrayNode('orm')->children()->arrayNode('resolve_target_entities')->useAttributeAsKey(
+            'baseEntity')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()->end()->end()->end()->append(
+            $mappingsConfiguration->buildRootNode())->end()->end();
 
         return $node;
     }

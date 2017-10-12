@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command to generate the phpunit configuration file for all the chamilo packages individually
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Console\Command
  */
 class PackagesPHPUnitGeneratorCommand extends Command
 {
@@ -44,8 +45,8 @@ class PackagesPHPUnitGeneratorCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
+     * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
+     * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
      * @return null
      *
      * @see Command::execute()

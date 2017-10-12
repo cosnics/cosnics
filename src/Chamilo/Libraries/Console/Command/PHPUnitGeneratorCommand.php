@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command to generate the global phpunit configuration file for Chamilo
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Console\Command
  */
 class PHPUnitGeneratorCommand extends Command
 {

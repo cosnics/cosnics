@@ -47,6 +47,8 @@ abstract class ViewRenderer extends Renderer
 
     /**
      * The time of the moment to render
+     *
+     * @var integer
      */
     private $displayTime;
 
@@ -70,11 +72,11 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
-     * @param CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $display_time
+     * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     * @param string $link_target
+     * @param string $linkTarget
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
         $viewActions = array(), $linkTarget = '')
@@ -170,10 +172,9 @@ abstract class ViewRenderer extends Renderer
     /**
      * Get the events between $start_time and $end_time which should be displayed in the calendar
      *
-     * @param Renderer $renderer
      * @param int $startTime
      * @param int $endTime
-     * @return Event[]
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents($startTime, $endTime)
     {
@@ -203,8 +204,8 @@ abstract class ViewRenderer extends Renderer
     /**
      * Get the actions available in the renderer for the given event
      *
-     * @param Event $event
-     * @return \libraries\format\ToolbarItem[]
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
     public function getActions(Event $event)
     {
@@ -219,7 +220,8 @@ abstract class ViewRenderer extends Renderer
     /**
      *
      * @param string[] $types
-     * @param string $url
+     * @param string $typeUrl
+     * @param string $todayUrl
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
     public static function getToolbarItems($types, $typeUrl, $todayUrl)
@@ -245,7 +247,8 @@ abstract class ViewRenderer extends Renderer
     /**
      *
      * @param string[] $types
-     * @param string $url
+     * @param string $typeUrl
+     * @param string $todayUrl
      * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
      */
     public static function getTabs($types, $typeUrl, $todayUrl)

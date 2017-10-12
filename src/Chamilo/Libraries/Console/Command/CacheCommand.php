@@ -10,7 +10,7 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * Abstract cache command for clear and warmup cache
- * 
+ *
  * @package Chamilo\Libraries\Console\Command
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -23,16 +23,16 @@ abstract class CacheCommand extends ChamiloCommand
 
     /**
      * The CacheDirector
-     * 
-     * @var CacheManager
+     *
+     * @var \Chamilo\Libraries\Cache\CacheManagement\CacheManager
      */
     protected $cacheManager;
 
     /**
      * Constructor
-     * 
-     * @param Translator $translator
-     * @param CacheManager $cacheManager
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
      */
     public function __construct(Translator $translator, CacheManager $cacheManager)
     {
@@ -46,20 +46,20 @@ abstract class CacheCommand extends ChamiloCommand
     protected function configure()
     {
         $this->addOption(
-            self::OPT_LIST, 
-            self::OPT_LIST_SHORT, 
-            InputOption::VALUE_NONE, 
+            self::OPT_LIST,
+            self::OPT_LIST_SHORT,
+            InputOption::VALUE_NONE,
             $this->translator->trans('ListCacheServices', array(), 'Chamilo\Libraries'))->addArgument(
-            self::ARG_CACHE_SERVICES, 
-            InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 
+            self::ARG_CACHE_SERVICES,
+            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
             $this->translator->trans('CacheServices', array(), 'Chamilo\Libraries'));
     }
 
     /**
      * Executes this command
-     * 
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int
      */
@@ -69,15 +69,14 @@ abstract class CacheCommand extends ChamiloCommand
         {
             return null;
         }
-        
+
         return $this->executeCacheCommand($input, $output);
     }
 
     /**
      * Returns the selected cache services from the interface
-     * 
-     * @param InputInterface $input
      *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @return string[]
      */
     protected function getSelectedCacheServices(InputInterface $input)
@@ -87,11 +86,11 @@ abstract class CacheCommand extends ChamiloCommand
 
     /**
      * Lists the cache services if the option is selected and returns whether or not they were listed
-     * 
-     * @param InputInterface $input
-     * @param OutputInterface $output
      *
-     * @return bool
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return boolean
      */
     protected function listCacheServices(InputInterface $input, OutputInterface $output)
     {
@@ -100,23 +99,23 @@ abstract class CacheCommand extends ChamiloCommand
             $output->writeln(
                 '<comment>' . $this->translator->trans('AvailableCacheServices', array(), 'Chamilo\Libraries') . '</comment>');
             $output->writeln('');
-            
+
             foreach ($this->cacheManager->getCacheServiceAliases() as $serviceAlias)
             {
                 $output->writeln('<info>' . $serviceAlias . '</info>');
             }
-            
+
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Clears the cache
-     * 
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function clearCache(InputInterface $input, OutputInterface $output)
     {
@@ -126,9 +125,9 @@ abstract class CacheCommand extends ChamiloCommand
 
     /**
      * Warms up the cache
-     * 
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function warmUpCache(InputInterface $input, OutputInterface $output)
     {
@@ -138,11 +137,9 @@ abstract class CacheCommand extends ChamiloCommand
 
     /**
      * Executes the specific cache code for this command
-     * 
-     * @param InputInterface $input
-     * @param OutputInterface $output
      *
-     * @return int|null
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     abstract protected function executeCacheCommand(InputInterface $input, OutputInterface $output);
 }

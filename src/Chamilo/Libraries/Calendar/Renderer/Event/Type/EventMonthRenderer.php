@@ -5,8 +5,6 @@ namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EventMonthRenderer extends EventTableRenderer
 {
@@ -19,7 +17,7 @@ class EventMonthRenderer extends EventTableRenderer
     {
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
-        
+
         return ($startDate >= $configuration->getStartDate() &&
              $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
              $startDate != $configuration->getStartDate());
@@ -52,7 +50,7 @@ class EventMonthRenderer extends EventTableRenderer
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         return ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
              $startDate < $configuration->getStartDate());
     }
@@ -66,7 +64,7 @@ class EventMonthRenderer extends EventTableRenderer
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         return ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()));
     }
 
@@ -87,10 +85,10 @@ class EventMonthRenderer extends EventTableRenderer
     {
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
         $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
-        
+
         return (($startDate < $fromDate || $startDate > $toDate) ? true : false);
     }
 }

@@ -9,10 +9,8 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View\Table
+ * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MonthRenderer extends FullTableRenderer
 {
@@ -27,55 +25,55 @@ class MonthRenderer extends FullTableRenderer
         $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
         $dayUrlTemplate = new Redirect($displayParameters);
-        
+
         return new MonthCalendar($this->getDisplayTime(), $dayUrlTemplate->getUrl(), array('table-calendar-month'));
     }
 
     /**
      *
-     * @see \libraries\calendar\renderer\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
      */
     public function renderFullCalendar()
     {
         $calendar = $this->getCalendar();
-        
+
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
-        
+
         $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
-        
+
         while ($tableDate <= $endTime)
         {
             $nextTableDate = strtotime('+1 Day', $tableDate);
-            
+
             foreach ($events as $index => $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
-                
+
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-                    
+
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
-                    
+
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-            
+
             $tableDate = $nextTableDate;
         }
-        
+
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::renderTitle()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
      */
     public function renderTitle()
     {
