@@ -13,11 +13,15 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 class ToolbarMemoryComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $state = $_POST['state'];
         $_SESSION['toolbar_state'] = $state;
-        
+
         JsonAjaxResult::success();
     }
 }

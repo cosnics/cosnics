@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -10,20 +9,22 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Extension of the LatestCommand to automatically configure this command based on the given package
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
 class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand
 {
+
     /**
      * The configurator for doctrine migration commands
      *
-     * @var DoctrineMigrationsCommandConfigurator
+     * @var \Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator
      */
     private $doctrineMigrationsCommandConfigurator;
 
     /**
      * Constructor
      *
-     * @param DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator
+     * @param \Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator
      */
     public function __construct(DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator)
     {
@@ -33,7 +34,8 @@ class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Late
     }
 
     /**
-     * Configures the current command.
+     *
+     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand::configure()
      */
     protected function configure()
     {
@@ -43,20 +45,8 @@ class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Late
     }
 
     /**
-     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return null|int     null or 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract method is not implemented
-     * @see    setCode()
+     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand::execute()
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

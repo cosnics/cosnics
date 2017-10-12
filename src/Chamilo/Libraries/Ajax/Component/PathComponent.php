@@ -13,6 +13,10 @@ use Chamilo\Libraries\File\Path;
 class PathComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         echo Path::get($_POST['Path']);

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -10,20 +9,22 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Extension of the GenerateCommand to automatically configure this command based on the given package
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
 class GenerateCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand
 {
+
     /**
      * The configurator for doctrine migration commands
      *
-     * @var DoctrineMigrationsCommandConfigurator
+     * @var \Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator
      */
     private $doctrineMigrationsCommandConfigurator;
 
     /**
      * Constructor
      *
-     * @param DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator
+     * @param \Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator
      */
     public function __construct(DoctrineMigrationsCommandConfigurator $doctrineMigrationsCommandConfigurator)
     {
@@ -33,7 +34,8 @@ class GenerateCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Ge
     }
 
     /**
-     * Configures the current command.
+     *
+     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand::configure()
      */
     protected function configure()
     {
@@ -41,7 +43,8 @@ class GenerateCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Ge
         parent::configure();
         $this->setName('doctrine:migrations:generate');
 
-        $this->setHelp(<<<EOT
+        $this->setHelp(
+            <<<EOT
 The <info>%command.name%</info> command generates a blank migration class:
 
     <info>%command.full_name% package_path</info>
@@ -50,24 +53,12 @@ You can optionally specify a <comment>--editor-cmd</comment> option to open the 
 
     <info>%command.full_name% package_path --editor-cmd=mate</info>
 EOT
-        );
+);
     }
 
     /**
-     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return null|int     null or 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract method is not implemented
-     * @see    setCode()
+     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand::execute()
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
