@@ -13,7 +13,8 @@ abstract class ExternalAuthentication extends Authentication
 
     /**
      *
-     * @throws AuthenticationException
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     abstract public function login();
 }

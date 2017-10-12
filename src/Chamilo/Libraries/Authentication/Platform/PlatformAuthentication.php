@@ -27,7 +27,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
     {
         if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing::hash($password))
         {
-            
+
             return true;
         }
         else
@@ -38,11 +38,11 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
 
     /**
      *
-     * @param User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $oldPassword
      * @param string $newPassword
      *
-     * @return bool
+     * @return boolean
      */
     public function changePassword(User $user, $oldPassword, $newPassword)
     {
@@ -51,25 +51,29 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
         {
             return false;
         }
-        
+
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword)
         {
             return false;
         }
-        
+
         // Verify that the entered old password matches the stored password
         if (Hashing::hash($oldPassword) != $user->get_password())
         {
             return false;
         }
-        
+
         // Set the password
         $user->set_password(Hashing::hash($newPassword));
-        
+
         return $user->update();
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword::getPasswordRequirements()
+     */
     public function getPasswordRequirements()
     {
         return Translation::get('GeneralPasswordRequirements');

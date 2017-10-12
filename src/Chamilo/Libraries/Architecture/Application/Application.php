@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
- * @package libraries\architecture
+ * @package Chamilo\Libraries\Architecture\Application
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -85,13 +85,12 @@ abstract class Application
 
     /**
      * Helper function to call the authorization checker with the current logged in user.
-     * Throws the
-     * NotAllowedException when not valid.
+     * Throws the NotAllowedException when not valid.
      *
      * @param string $context
      * @param string $action
      *
-     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function checkAuthorization($context, $action = null)
     {
@@ -110,7 +109,7 @@ abstract class Application
      * @param string $context
      * @param string $action
      *
-     * @return bool
+     * @return boolean
      */
     public function isAuthorized($context, $action = null)
     {
@@ -125,7 +124,7 @@ abstract class Application
     /**
      * Get the parent application
      *
-     * @return Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      * @deprecated User get_application() now
      */
     public function get_parent()
@@ -136,7 +135,7 @@ abstract class Application
     /**
      * Get the parent application
      *
-     * @return Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_application()
     {
@@ -145,20 +144,19 @@ abstract class Application
 
     /**
      * Gets the URL of the current page in the application.
-     * Optionally takes an associative array of name/value pairs
-     * representing additional query string parameters; these will either be added to the parameters already present, or
-     * override them if a value with the same name exists.
+     * Optionally takes an associative array of name/value pairs representing additional query string parameters; these
+     * will either be added to the parameters already present, or override them if a value with the same name exists.
      *
-     * @param multitype:string $parameters
-     * @param multitype:string $filter
-     * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
+     * @param string[] $parameters
+     * @param string[] $filter
+     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
      * @return string
      */
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = array(), $filter = array(), $encodeEntities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
 
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        $redirect = new Redirect($parameters, $filter, $encodeEntities);
         return $redirect->getUrl();
     }
 
@@ -166,10 +164,10 @@ abstract class Application
      * Redirect the end user to another location.
      * The current url will be used as the basis.
      *
-     * @param multitype:string $parameters
-     * @param multitype:string $filter
-     * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
-     * @param string $redirect_type
+     * @param string[] $parameters
+     * @param string[] $filter
+     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
+     * @param string $anchor
      */
     public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false, $anchor = null)
     {
@@ -187,26 +185,25 @@ abstract class Application
      *
      * @param string $message
      * @param boolean $error_message
-     * @param multitype:string $parameters
-     * @param multitype:string $filter
-     * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
-     * @param string $redirect_type
+     * @param string[] $parameters
+     * @param string[] $filter
+     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
+     * @param string $anchor
      */
-    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false,
+    public function redirect($message = '', $errorMessage = false, $parameters = array(), $filter = array(), $encodeEntities = false,
         $anchor = null)
     {
         if ($message != null)
         {
 
-            $message_type = (! $error_message) ? \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_INFO : \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_DANGER;
+            $messageType = (! $errorMessage) ? NotificationMessage::TYPE_INFO : NotificationMessage::TYPE_DANGER;
 
             $notificationMessageManager = new NotificationMessageManager();
 
-            $notificationMessageManager->addMessage(
-                new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage($message, $message_type));
+            $notificationMessageManager->addMessage(new NotificationMessage($message, $messageType));
         }
 
-        $this->simple_redirect($parameters, $filter, $encode_entities, $anchor);
+        $this->simple_redirect($parameters, $filter, $encodeEntities, $anchor);
     }
 
     /**
@@ -245,7 +242,6 @@ abstract class Application
      * Displays the header
      *
      * @param string $pageTitle
-     *
      * @return string
      */
     public function render_header($pageTitle = '')
@@ -359,6 +355,8 @@ abstract class Application
 
     /**
      * Displays the footer
+     *
+     * @return string
      */
     public function render_footer()
     {
@@ -389,7 +387,6 @@ abstract class Application
      * Displays a normal message.
      *
      * @param string $message
-     *
      * @return string
      */
     public function display_message($message)
@@ -402,8 +399,8 @@ abstract class Application
 
     /**
      *
-     * @param array $messages
-     * @param array $types
+     * @param string[] $messages
+     * @param string[] $types
      *
      * @return string
      */
@@ -424,7 +421,6 @@ abstract class Application
      * Displays an error message.
      *
      * @param string $message
-     *
      * @return string
      */
     public function display_error_message($message)
@@ -439,7 +435,6 @@ abstract class Application
      * Displays a warning message.
      *
      * @param string $message
-     *
      * @return string
      */
     public function display_warning_message($message)
@@ -454,7 +449,6 @@ abstract class Application
      * Displays an error page.
      *
      * @param string $message
-     *
      * @return string
      */
     public function display_error_page($message)
@@ -477,6 +471,7 @@ abstract class Application
      * Displays a warning page.
      *
      * @param string $message
+     * @return string
      */
     public function display_warning_page($message)
     {
@@ -496,7 +491,8 @@ abstract class Application
 
     /**
      *
-     * @param boolean $showLoginForm
+     * @param string $showLoginForm
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function not_allowed($showLoginForm = true)
     {
@@ -506,7 +502,7 @@ abstract class Application
     /**
      * Gets the user id of this personal calendars owner
      *
-     * @return int
+     * @return integer
      * @deprecated Use getUser()->getId() now
      */
     public function get_user_id()
@@ -567,6 +563,10 @@ abstract class Application
         return $this->set_parameter(static::PARAM_ACTION, $action);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function get_application_name()
     {
         return ClassnameUtilities::getInstance()->getPackageNameFromNamespace(static::context());
@@ -608,37 +608,37 @@ abstract class Application
 
     /**
      *
-     * @param int $failures
-     * @param int $count
-     * @param string $fail_message_single
-     * @param string $fail_message_multiple
-     * @param string $succes_message_single
-     * @param string $succes_message_multiple
+     * @param integer $failures
+     * @param integer $count
+     * @param string $failMessageSingle
+     * @param string $failMessageMultiple
+     * @param string $succesMessageSingle
+     * @param string $succesMessageMultiple
      * @return string
      */
-    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
-        $succes_message_multiple)
+    public function get_result($failures, $count, $failMessageSingle, $failMessageMultiple, $succesMessageSingle,
+        $succesMessageMultiple)
     {
         if ($failures)
         {
             if ($count == 1)
             {
-                $message = $fail_message_single;
+                $message = $failMessageSingle;
             }
             else
             {
-                $message = $fail_message_multiple;
+                $message = $failMessageMultiple;
             }
         }
         else
         {
             if ($count == 1)
             {
-                $message = $succes_message_single;
+                $message = $succesMessageSingle;
             }
             else
             {
-                $message = $succes_message_multiple;
+                $message = $succesMessageMultiple;
             }
         }
 
@@ -648,19 +648,19 @@ abstract class Application
     /**
      * Generates a general results message like ObjectCreated, ObjectUpdated, ObjectDeleted
      *
-     * @param int $failures
-     * @param int $count
-     * @param string $single_object
-     * @param string $multiple_object
+     * @param integer $failures
+     * @param integer $count
+     * @param string $singleObject
+     * @param string $multipleObject
      * @param string $type
      * @return string
      */
-    public function get_general_result($failures, $count, $single_object, $multiple_object,
+    public function get_general_result($failures, $count, $singleObject, $multipleObject,
         $type = Application :: RESULT_TYPE_CREATED)
     {
         if ($count == 1)
         {
-            $param = array('OBJECT' => $single_object);
+            $param = array('OBJECT' => $singleObject);
 
             if ($failures)
             {
@@ -673,7 +673,7 @@ abstract class Application
         }
         else
         {
-            $param = array('OBJECTS' => $multiple_object);
+            $param = array('OBJECTS' => $multipleObject);
 
             if ($failures)
             {
@@ -691,7 +691,7 @@ abstract class Application
     /**
      * Returns the breadcrumb generator
      *
-     * @return BreadcrumbGeneratorInterface
+     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
      */
     public function get_breadcrumb_generator()
     {
@@ -700,7 +700,7 @@ abstract class Application
 
     /**
      *
-     * @param \libraries\format\BreadcrumbTrail $breadcrumbtrail
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
@@ -708,7 +708,7 @@ abstract class Application
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_additional_parameters()
     {
@@ -741,14 +741,14 @@ abstract class Application
 
     /**
      *
-     * @param multitype:string $parameters
-     * @param multitype:string $filter
+     * @param string[] $parameters
+     * @param string[] $filter
      * @param boolean $encode_entities
      * @return string
      */
-    public function get_link($parameters = array (), $filter = array(), $encode_entities = false)
+    public function get_link($parameters = array (), $filter = array(), $encodeEntities = false)
     {
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        $redirect = new Redirect($parameters, $filter, $encodeEntities);
         return $redirect->getUrl();
     }
 
@@ -769,29 +769,29 @@ abstract class Application
 
     /**
      *
-     * @param string $application_name
+     * @param string $applicationName
      * @return string
      * @deprecated Fallback in case we still have an application name somewhere which can't be changed to
      */
-    public static function get_application_namespace($application_name)
+    public static function get_application_namespace($applicationName)
     {
-        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core') . $application_name . '/';
+        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core') . $applicationName . '/';
 
         if (is_dir($path))
         {
-            return 'Chamilo\Core\\' . $application_name;
+            return 'Chamilo\Core\\' . $applicationName;
         }
         else
         {
-            $path = Path::getInstance()->namespaceToFullPath('Chamilo\Application') . $application_name . '/';
+            $path = Path::getInstance()->namespaceToFullPath('Chamilo\Application') . $applicationName . '/';
 
             if (is_dir($path))
             {
-                return 'Chamilo\Application\\' . $application_name;
+                return 'Chamilo\Application\\' . $applicationName;
             }
             else
             {
-                return $application_name;
+                return $applicationName;
             }
         }
     }
@@ -799,7 +799,8 @@ abstract class Application
     /**
      * Get a list of core and web applications from the filesystem as an array
      *
-     * @return multitype:string
+     * @param string $type
+     * @return string[]
      */
     public static function get_packages_from_filesystem($type = null)
     {
@@ -846,7 +847,8 @@ abstract class Application
 
     /**
      *
-     * @return multitype:string
+     * @param string $type
+     * @return string[]
      */
     public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
     {
@@ -866,6 +868,13 @@ abstract class Application
         return $active_applications;
     }
 
+    /**
+     *
+     * @param string $context
+     * @param string[] $fallbackContexts
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public static function context_fallback($context, array $fallbackContexts)
     {
         // Check if the context exists
@@ -907,18 +916,6 @@ abstract class Application
                 $query = $_GET;
                 $query[self::PARAM_CONTEXT] = $context;
 
-                // $notificationMessageManager = new NotificationMessageManager();
-                // $notificationMessageManager->addMessage(
-                // new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
-                // Translation :: get(
-                // 'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
-                // ),
-                // \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
-                // 'old_application_parameter'
-                // ),
-                // 1
-                // );
-
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
 
@@ -935,7 +932,7 @@ abstract class Application
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function get_level()
     {
@@ -969,5 +966,9 @@ abstract class Application
         }
     }
 
+    /**
+     *
+     * @return string
+     */
     abstract function run();
 }

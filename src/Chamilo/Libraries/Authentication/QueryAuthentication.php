@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -50,7 +51,7 @@ abstract class QueryAuthentication extends Authentication
     /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     abstract public function login();
 
@@ -60,7 +61,7 @@ abstract class QueryAuthentication extends Authentication
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @return \Chamilo\Libraries\Authentication\QueryAuthentication
      */
-    public static function factory($authenticationMethod, \Chamilo\Libraries\Platform\ChamiloRequest $request)
+    public static function factory($authenticationMethod, ChamiloRequest $request)
     {
         $authenticationClass = __NAMESPACE__ . '\\' . $authenticationMethod . '\\' . $authenticationMethod .
              'Authentication';
@@ -69,21 +70,20 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      * Retrieves a user by a given security token
-     * 
-     * @param $securityToken
-     * @return User
      *
-     * @throws AuthenticationException
+     * @param $securityToken
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     protected function retrieveUserBySecurityToken($securityToken)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_security_token($securityToken);
-        
+
         if (! $user instanceof User)
         {
             throw new AuthenticationException(Translation::get('InvalidSecurityToken'));
         }
-        
+
         return $user;
     }
 }

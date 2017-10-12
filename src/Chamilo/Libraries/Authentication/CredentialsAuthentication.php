@@ -6,7 +6,7 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package Chamilo\Libraries\Authentication$CredentialsAuthentication
+ * @package Chamilo\Libraries\Authentication
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -35,7 +35,7 @@ abstract class CredentialsAuthentication extends Authentication
     public function __construct($userName = null)
     {
         $this->userName = $userName;
-        
+
         if ($userName)
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieveUserByUsername($userName);
@@ -71,10 +71,10 @@ abstract class CredentialsAuthentication extends Authentication
 
     /**
      * Checks if the given username and password are valid
-     * 
+     *
      * @param string $password
      * @return boolean
-     * @throws AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     abstract public function login($password);
 
@@ -98,7 +98,7 @@ abstract class CredentialsAuthentication extends Authentication
     public function logout($user)
     {
         parent::logout($user);
-        
+
         $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
