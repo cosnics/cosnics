@@ -11,10 +11,8 @@ use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Service
+ * @package Chamilo\Libraries\Cache\Assetic
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class AsseticCacheService implements CacheResetterInterface
 {
@@ -211,7 +209,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
     /**
      * Returns the last modification time of the resource
      *
-     * @return int
+     * @return integer
      */
     public function getLastModificationTime()
     {
