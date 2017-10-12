@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Visibility extends DataClass
 {
-    
+
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SOURCE = 'source';
@@ -25,21 +25,21 @@ abstract class Visibility extends DataClass
 
     /**
      * Get the default properties of a Visibility DataClass
-     * 
-     * @return array The property names.
+     *
+     * @param string[] $extendedPropertyNames
+     * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extendedPropertyNames = array())
     {
-        return parent::get_default_property_names(array(self::PROPERTY_USER_ID, self::PROPERTY_SOURCE));
-    }
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_SOURCE;
 
-    public function get_data_manager()
-    {
+        return parent::get_default_property_names($extendedPropertyNames);
     }
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getUserId()
     {
@@ -57,7 +57,7 @@ abstract class Visibility extends DataClass
 
     /**
      *
-     * @param int $id
+     * @param integer $id
      */
     public function setUserId($id)
     {
@@ -82,10 +82,10 @@ abstract class Visibility extends DataClass
         if (isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 (int) $this->getUserId());
         }
-        
+
         return $this->user;
     }
 }

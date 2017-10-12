@@ -8,16 +8,12 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class EventTableRenderer extends EventRenderer
 {
 
     /**
      *
-     * @param integer $startDate
-     * @param boolean $isFadedEvent
      * @return string
      */
     public function determineEventClasses()

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
@@ -28,7 +29,7 @@ class ICalRenderer extends Renderer
 
     /**
      *
-     * @param CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
@@ -76,11 +77,18 @@ class ICalRenderer extends Renderer
         }
     }
 
+    /**
+     * Render the iCal calendar and send it
+     */
     public function renderAndSend()
     {
         $this->sendResponse($this->render());
     }
 
+    /**
+     *
+     * @param string $serializedCalendar
+     */
     private function sendResponse($serializedCalendar)
     {
         $headers = array();
@@ -109,7 +117,7 @@ class ICalRenderer extends Renderer
      *
      * @param \Chamilo\Libraries\Calendar\Event\Event $providedEvent
      */
-    private function addEvent(\Chamilo\Libraries\Calendar\Event\Event $providedEvent)
+    private function addEvent(Event $providedEvent)
     {
         $event = $this->getCalendar()->add('VEVENT');
 

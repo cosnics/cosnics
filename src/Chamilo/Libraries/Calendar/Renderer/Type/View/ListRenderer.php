@@ -15,8 +15,6 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ListRenderer extends FullRenderer
 {
@@ -85,7 +83,7 @@ class ListRenderer extends FullRenderer
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
      */
     public function renderFullCalendar()
     {
@@ -147,9 +145,8 @@ class ListRenderer extends FullRenderer
     }
 
     /**
-     * Adds a navigation bar to the calendar
      *
-     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderNavigation()
      */
     public function renderNavigation()
     {
@@ -168,7 +165,7 @@ class ListRenderer extends FullRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::renderTitle()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
      */
     public function renderTitle()
     {
