@@ -53,45 +53,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $configuration = $this->getViewerApplication()->get_configuration();
         
         $html = array();
-        $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
-        $html[] = '<thead>';
+
+        $html[] = '<table class="table table-bordered table-hover table-data take_assessment"' .
+            ' style="border-top: 2px solid #dddddd; border-bottom: 1px solid #dddddd;">';
+
+        $html[] = '<thead style="background-color: #f5f5f5; border-bottom: 2px solid #dddddd;">';
         $html[] = '<tr>';
         $html[] = '<th class="list"></th>';
-        $html[] = '<th>' . Translation::get('PossibleMatches') . '</th>';
-        $html[] = '</tr>';
-        $html[] = '</thead>';
-        $html[] = '<tbody>';
-        
-        $label = 'A';
-        $matches = $this->get_question()->get_matches();
-        foreach ($matches as $i => $match)
-        {
-            $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
-            $html[] = '<td>' . $label . '.</td>';
-            
-            if ($this->get_question()->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
-            {
-                
-                $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $match);
-                $html[] = '<td>' . $object_renderer->run() . '</td>';
-            }
-            else
-            {
-                $html[] = '<td>' . strip_tags($match) . '</td>';
-            }
-            $html[] = '</tr>';
-            $label ++;
-        }
-        
-        $html[] = '</tbody>';
-        $html[] = '</table>';
-        
-        $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
-        $html[] = '<thead>';
-        $html[] = '<tr>';
-        $html[] = '<th class="list"></th>';
-        $html[] = '<th>' . Translation::get('Option') . '</th>';
-        $html[] = '<th>' . Translation::get('YourMatch') . '</th>';
+        $html[] = '<th>' . Translation::get('Question') . '</th>';
+        $html[] = '<th>' . Translation::get('YourAnswer') . '</th>';
         
         if ($configuration->show_solution())
         {
@@ -170,6 +140,40 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $html[] = '</tr>';
         }
         
+        $html[] = '</tbody>';
+        $html[] = '</table>';
+
+        $html[] = '<table class="table table-bordered table-hover table-data take_assessment"' .
+            ' style="margin-top: 30px; border-top: 2px solid #dddddd;">';
+        $html[] = '<thead style="background-color: #f5f5f5; border-bottom: 2px solid #dddddd;">';
+        $html[] = '<tr>';
+        $html[] = '<th class="list"></th>';
+        $html[] = '<th>' . Translation::get('PossibleAnswers') . '</th>';
+        $html[] = '</tr>';
+        $html[] = '</thead>';
+        $html[] = '<tbody>';
+
+        $label = 'A';
+        $matches = $this->get_question()->get_matches();
+        foreach ($matches as $i => $match)
+        {
+            $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
+            $html[] = '<td>' . $label . '.</td>';
+
+            if ($this->get_question()->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
+            {
+
+                $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $match);
+                $html[] = '<td>' . $object_renderer->run() . '</td>';
+            }
+            else
+            {
+                $html[] = '<td>' . strip_tags($match) . '</td>';
+            }
+            $html[] = '</tr>';
+            $label ++;
+        }
+
         $html[] = '</tbody>';
         $html[] = '</table>';
         
