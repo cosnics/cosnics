@@ -38,20 +38,13 @@ class Display extends QuestionDisplay
 
         $table_header = array();
 
-        $table_header[] = '<table class="table take_assessment">';
-        $table_header[] = '<thead>';
+        $table_header[] = '<table class="table take_assessment" style="border-top: 2px solid #dddddd;">';
+        $table_header[] = '<thead style="background-color: #f5f5f5;">';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="cell-stat-x2"></th>';
-        $table_header[] = '<th>' . Translation::get('PossibleMatches') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Questions') . '</th>';
         $table_header[] = '<th class="cell-stat" style="text-align:center;">' . Translation::get('MakeASelection') .
              '</th>';
-
-        if ($question->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
-        {
-            $table_header[] = '<th class="cell-stat-x2"></th>';
-            $table_header[] = '<th class="cell-stat-x2"></th>';
-            $table_header[] = '<th>' . Translation::get('MatchOptionAnswer') . '</th>';
-        }
 
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -65,6 +58,32 @@ class Display extends QuestionDisplay
 
         $table_header[] = '</tbody>';
         $table_header[] = '</table>';
+
+        if ($question->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
+        {
+            $table_header[] = '<table class="table take_assessment" style="border-top: 2px solid #dddddd; margin-top: 20px;">';
+            $table_header[] = '<thead style="background-color: #f5f5f5;">';
+            $table_header[] = '<th class="cell-stat-x2"></th>';
+            $table_header[] = '<th>' . Translation::get('PossibleAnswers') . '</th>';
+            $table_header[] = '</thead>';
+            $table_header[] = '<tbody>';
+
+            $matchLabel = 'A';
+            foreach($this->matches as $match)
+            {
+                $object_renderer = new ContentObjectResourceRenderer(
+                    $this->get_formvalidator()->get_assessment_viewer(),
+                    $match);
+                $table_header[] = '<tr>';
+                $table_header[] = '<td style="width: 10px">' . $matchLabel . '.</td>';
+                $table_header[] = '<td>' . $object_renderer->run() . '</td>';
+                $table_header[] = '</tr>';
+                $matchLabel++;
+            }
+
+            $table_header[] = '</tbody>';
+            $table_header[] = '</table>';
+        }
 
         $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
     }
@@ -97,14 +116,7 @@ class Display extends QuestionDisplay
             $match_label ++;
         }
 
-        if ($question->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
-        {
-            $maximum = count($matches) > count($answers) ? count($matches) : count($answers);
-        }
-        else
-        {
-            $maximum = count($answers);
-        }
+        $maximum = count($answers);
 
         $match_label = 'A';
         for ($i = 0; $i < $maximum; $i ++)
@@ -132,31 +144,6 @@ class Display extends QuestionDisplay
             else
             {
                 $formvalidator->addElement('html', '<td colspan="3"></td>');
-            }
-
-            if ($question->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
-            {
-                $formvalidator->addElement('html', '<td></td>');
-
-                $match = current($matches);
-                next($matches);
-
-                if ($match)
-                {
-                    $formvalidator->addElement('html', '<td style="width: 10px">' . $match_label . '.</td>');
-
-                    $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_formvalidator()->get_assessment_viewer(),
-                        $match);
-                    $formvalidator->addElement('html', '<td>' . $object_renderer->run() . '</td>');
-                }
-                else
-                {
-                    if ($i <= count($matches))
-                    {
-                        $formvalidator->addElement('html', '<td colspan="2" rowspan="' . ($maximum - $i) . '"></td>');
-                    }
-                }
             }
 
             $formvalidator->addElement('html', '</tr>');
