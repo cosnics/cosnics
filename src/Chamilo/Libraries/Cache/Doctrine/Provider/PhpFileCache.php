@@ -26,7 +26,6 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
     /**
      *
      * @param string $id
-     *
      * @return string
      */
     protected function getFilename($id)
@@ -37,9 +36,8 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
 
     /**
      * Extension of the doDelete function to invalidate the opcache
-     * 
-     * @param string $identifier
      *
+     * @param string $identifier
      * @return bool
      */
     protected function doDelete($identifier)
@@ -49,7 +47,7 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
         {
             opcache_invalidate($filename, true);
         }
-        
+
         return parent::doDelete($identifier);
     }
 }

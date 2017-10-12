@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
- * @package Chamilo\Libraries\Architecture\Bootstrap$Kernel
+ * @package Chamilo\Libraries\Architecture\Bootstrap
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */

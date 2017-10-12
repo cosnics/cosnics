@@ -26,7 +26,6 @@ class FilesystemCache extends \Doctrine\Common\Cache\FilesystemCache
     /**
      *
      * @param string $id
-     *
      * @return string
      */
     protected function getFilename($id)

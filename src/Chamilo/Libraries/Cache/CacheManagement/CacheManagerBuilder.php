@@ -3,30 +3,30 @@ namespace Chamilo\Libraries\Cache\CacheManagement;
 
 /**
  * Builds the cache manager by adding custom cache services directly (through code) and indirectly
- * (through dependency injection). Uses CacheServiceConstructor classes so multiple packages can provide
+ * (through dependency injection).
+ * Uses CacheServiceConstructor classes so multiple packages can provide
  * their own cache services
  *
- * @package Chamilo\Libraries\Cache
- *
+ * @package Chamilo\Libraries\Cache\CacheManagement
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CacheManagerBuilder
 {
+
     /**
-     * @var CacheServicesConstructorInterface[]
+     *
+     * @var \Chamilo\Libraries\Cache\CacheManagement\CacheServicesConstructorInterface[]
      */
     protected $cacheServicesConstructors;
 
-    /**
-     * CacheManagerBuilder constructor.
-     */
     public function __construct()
     {
         $this->cacheServicesConstructors = [];
     }
 
     /**
-     * @param CacheServicesConstructorInterface $cacheServicesConstructor
+     *
+     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheServicesConstructorInterface $cacheServicesConstructor
      */
     public function addCacheServiceConstructor(CacheServicesConstructorInterface $cacheServicesConstructor)
     {
@@ -36,13 +36,13 @@ class CacheManagerBuilder
     /**
      * Builds the cache director and adds the chamilo cache services through code
      *
-     * @return CacheManager
+     * @return \Chamilo\Libraries\Cache\CacheManagement\CacheManager
      */
     public function buildCacheManager()
     {
         $cacheManager = new CacheManager();
 
-        foreach($this->cacheServicesConstructors as $cacheServicesConstructor)
+        foreach ($this->cacheServicesConstructors as $cacheServicesConstructor)
         {
             $cacheServicesConstructor->createCacheServices($cacheManager);
         }

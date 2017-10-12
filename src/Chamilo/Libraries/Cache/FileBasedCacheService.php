@@ -6,7 +6,8 @@ use Chamilo\Libraries\File\Filesystem;
 
 /**
  * Abstract service class to manage caches that are file based
- * 
+ *
+ * @package Chamilo\Libraries\Cache
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class FileBasedCacheService implements CacheResetterInterface
@@ -18,7 +19,7 @@ abstract class FileBasedCacheService implements CacheResetterInterface
     public function clear()
     {
         $cachePath = $this->getCachePath();
-        
+
         if (file_exists($cachePath))
         {
             if (! Filesystem::remove($cachePath))
@@ -26,12 +27,14 @@ abstract class FileBasedCacheService implements CacheResetterInterface
                 throw new \RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
             }
         }
-        
+
         return $this;
     }
 
     /**
-     * Clears the cache and warms it up again.
+     * Clears the cache and warms it up again
+     *
+     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
      */
     public function clearAndWarmUp()
     {
@@ -39,7 +42,9 @@ abstract class FileBasedCacheService implements CacheResetterInterface
     }
 
     /**
-     * Warms up the cache.
+     * Warms up the cache
+     *
+     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
      */
     public function warmUp()
     {
@@ -48,7 +53,7 @@ abstract class FileBasedCacheService implements CacheResetterInterface
 
     /**
      * Returns the path to the cache directory or file
-     * 
+     *
      * @return string
      */
     abstract function getCachePath();

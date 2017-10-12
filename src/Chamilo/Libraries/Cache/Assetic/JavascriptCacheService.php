@@ -5,17 +5,15 @@ use Chamilo\Libraries\Format\Utilities\FileAsset;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Service
+ * @package Chamilo\Libraries\Cache\Assetic
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class JavascriptCacheService extends AsseticCacheService
 {
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getCachePath()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getCachePath()
      */
     protected function getCachePath()
     {
@@ -24,7 +22,7 @@ class JavascriptCacheService extends AsseticCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getAssets()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssets()
      */
     protected function getAssets()
     {
@@ -71,7 +69,7 @@ class JavascriptCacheService extends AsseticCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getAssetFilters()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssetFilters()
      */
     protected function getAssetFilters()
     {
