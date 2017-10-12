@@ -73,7 +73,7 @@ class TreeNode
      */
     public function __construct(
         Tree $tree, ContentObject $contentObject = null,
-            TreeNodeData $treeNodeData = null
+        TreeNodeData $treeNodeData = null
     )
     {
         $this->tree = $tree;
@@ -153,7 +153,7 @@ class TreeNode
     public function setContentObject(ContentObject $contentObject)
     {
         $this->contentObject = $contentObject;
-        
+
         return $this;
     }
 
@@ -411,7 +411,7 @@ class TreeNode
 
         $treeNodeDataIds[] = $this->getId();
 
-        foreach($this->getDescendantNodes() as $descendantNode)
+        foreach ($this->getDescendantNodes() as $descendantNode)
         {
             $treeNodeDataIds[] = $descendantNode->getId();
         }
@@ -429,5 +429,21 @@ class TreeNode
     public function isChildOf(TreeNode $possibleParentNode)
     {
         return in_array($possibleParentNode, $this->getParentNodes());
+    }
+
+    /**
+     * Returns whether or not the score is supported
+     *
+     * @return bool
+     */
+    public function supportsScore()
+    {
+        $contentObject = $this->getContentObject();
+
+        return is_a(
+                $contentObject, 'Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment'
+            ) || is_a(
+                $contentObject, 'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes'
+            );
     }
 }
