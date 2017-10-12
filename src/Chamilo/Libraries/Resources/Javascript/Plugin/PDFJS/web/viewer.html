@@ -419,17 +419,9 @@ See https://github.com/adobe-type-tools/cmap-resources
   </div>
 </div>
 
-  <!--<script type="text/javascript">-->
-      <!--$(document).on('keydown', function(e) {-->
-          <!--if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){-->
-              <!--alert("Please use the Print PDF button below for a better rendering on the document");-->
-              <!--e.cancelBubble = true;-->
-              <!--e.preventDefault();-->
-
-              <!--e.stopImmediatePropagation();-->
-          <!--}-->
-      <!--});-->
-  <!--</script>-->
+    <style type="text/css" media="print">
+      body { visibility: hidden; display: none }
+    </style>
 
   </body>
 </html>
