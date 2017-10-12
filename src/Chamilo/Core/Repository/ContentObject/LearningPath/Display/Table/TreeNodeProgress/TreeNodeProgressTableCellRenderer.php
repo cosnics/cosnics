@@ -59,7 +59,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                     $learningPath, $user, $record
                 ) ? $translator->getTranslation('Completed') : $translator->getTranslation('Incomplete');
             case 'score':
-                if(!$content_object instanceof Assessment)
+                if(!$record->supportsScore())
                 {
                     return null;
                 }

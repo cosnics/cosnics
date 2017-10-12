@@ -44,7 +44,7 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $reporting_data = new ReportingData();
 
-        $showScore = $treeNode->getContentObject() instanceof Assessment;
+        $showScore = $treeNode->supportsScore();
 
         $rows = array(
             Translation::get('LastStartTime'),
