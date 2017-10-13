@@ -4,16 +4,18 @@ namespace Chamilo\Libraries\File\Export\Csv;
 use Chamilo\Libraries\File\Export\Export;
 
 /**
- *
- * @package common.export.csv
- */
-/**
  * Exports data to CSV-format
+ *
+ * @package Chamilo\Libraries\File\Export\Csv
  */
 class CsvExport extends Export
 {
     const EXPORT_TYPE = 'csv';
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     */
     public function render_data()
     {
         $data = $this->get_data();
@@ -26,6 +28,10 @@ class CsvExport extends Export
         return ($all);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     */
     public function get_type()
     {
         return self::EXPORT_TYPE;

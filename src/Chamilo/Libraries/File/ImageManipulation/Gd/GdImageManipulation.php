@@ -4,79 +4,104 @@ namespace Chamilo\Libraries\File\ImageManipulation\Gd;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 
 /**
- *
- * @package common.image_manipulation.gd
- */
-/**
  * This class provide image manipulation using php's GD-extension
+ *
+ * @package Chamilo\Libraries\File\ImageManipulation\Gd$GdImageManipulation
  */
 class GdImageManipulation extends ImageManipulation
 {
 
-    private $gd_image = null;
+    private $gdImage = null;
 
-    public function __construct($source_file)
+    /**
+     *
+     * @param string $sourceFile
+     */
+    public function __construct($sourceFile)
     {
-        parent::__construct($source_file);
+        parent::__construct($sourceFile);
         $this->load_gd_image();
     }
 
-    public function crop($width, $height, $offset_x = ImageManipulation::CROP_CENTER, $offset_y = ImageManipulation::CROP_CENTER)
+    /**
+     *
+     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::crop()
+     */
+    public function crop($width, $height, $offsetX = ImageManipulation::CROP_CENTER, $offsetY = ImageManipulation::CROP_CENTER)
     {
         if (! function_exists('imagecopy'))
         {
             return FALSE;
         }
-        if ($offset_x == ImageManipulation::CROP_CENTER)
+
+        if ($offsetX == ImageManipulation::CROP_CENTER)
         {
-            $offset_x = ($this->width - $width) / 2;
+            $offsetX = ($this->width - $width) / 2;
         }
-        if ($offset_y == ImageManipulation::CROP_CENTER)
+
+        if ($offsetY == ImageManipulation::CROP_CENTER)
         {
-            $offset_y = ($this->height - $height) / 2;
+            $offsetY = ($this->height - $height) / 2;
         }
+
         $result = imagecreatetruecolor($width, $height);
-        if (imagecopy($result, $this->gd_image, 0, 0, $offset_x, $offset_y, $width, $height))
+
+        if (imagecopy($result, $this->gdImage, 0, 0, $offsetX, $offsetY, $width, $height))
         {
-            $this->gd_image = $result;
+            $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
             return true;
         }
+
         return false;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::resize()
+     */
     public function resize($width, $height)
     {
         if (! function_exists('imagecopyresampled'))
         {
             return FALSE;
         }
+
         $result = imagecreatetruecolor($width, $height);
-        if (imagecopyresampled($result, $this->gd_image, 0, 0, 0, 0, $width, $height, $this->width, $this->height))
+
+        if (imagecopyresampled($result, $this->gdImage, 0, 0, 0, 0, $width, $height, $this->width, $this->height))
         {
-            $this->gd_image = $result;
+            $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
             return true;
         }
+
         return false;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::write_to_file()
+     */
     public function write_to_file($file = null)
     {
         if (is_null($file))
         {
-            $file = $this->source_file;
+            $file = $this->sourceFile;
         }
+
         $extension = $this->get_image_extension();
         $extension = str_replace('jpg', 'jpeg', $extension);
-        $create_function = 'image' . $extension;
-        if (! function_exists($create_function))
+        $createFunction = 'image' . $extension;
+
+        if (! function_exists($createFunction))
         {
             return FALSE;
         }
-        return $create_function($this->gd_image, $file);
+
+        return $createFunction($this->gdImage, $file);
     }
 
     /**
@@ -86,11 +111,13 @@ class GdImageManipulation extends ImageManipulation
     {
         $extension = $this->get_image_extension();
         $extension = str_replace('jpg', 'jpeg', $extension);
-        $create_function = 'imagecreatefrom' . $extension;
-        if (! function_exists($create_function))
+        $createFunction = 'imagecreatefrom' . $extension;
+
+        if (! function_exists($createFunction))
         {
-            return FALSE;
+            return false;
         }
-        $this->gd_image = $create_function($this->source_file);
+
+        $this->gdImage = $createFunction($this->sourceFile);
     }
 }

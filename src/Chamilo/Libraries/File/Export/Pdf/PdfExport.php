@@ -8,11 +8,17 @@ use HTML2PDF;
 
 /**
  * Exports data to Pdf
+ *
+ * @package Chamilo\Libraries\File\Export\Pdf
  */
 class PdfExport extends Export
 {
     const EXPORT_TYPE = 'pdf';
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     */
     public function render_data()
     {
         $data = $this->get_data();
@@ -37,6 +43,10 @@ class PdfExport extends Export
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     */
     public function get_type()
     {
         return self::EXPORT_TYPE;

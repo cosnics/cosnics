@@ -6,31 +6,25 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 
 /**
- *
- * @package common.filecompression
- */
-/**
  * An abstract class for handling file compression.
  * Impement new compression methods by creating a class which extends
  * this abstract class.
+ *
+ * @package Chamilo\Libraries\File\Compression
  */
 abstract class Filecompression
 {
 
-    private $filename;
-
     /**
-     * Constructor
+     *
+     * @var string
      */
-    public function __construct()
-    {
-    }
+    private $filename;
 
     /**
      * Creates a temporary directory in which the file can be extracted
      *
      * @return string The full path to the created directory
-     * @todo Put this function in filesystem class
      */
     protected function create_temporary_directory()
     {
@@ -42,7 +36,7 @@ abstract class Filecompression
     /**
      * Retrieves an array of all supported mimetypes for this file compression implementation.
      *
-     * @return array
+     * @return string[]
      */
     abstract public function get_supported_mimetypes();
 
@@ -76,18 +70,27 @@ abstract class Filecompression
     /**
      * Create a filecompression instance
      *
-     * @todo At the moment this returns the class using pclzip. The class to return should be configurable
+     * @return \Chamilo\Libraries\File\Compression\Pclzip\PclzipFilecompression
      */
     public static function factory()
     {
         return new PclzipFilecompression();
     }
 
-    public function set_filename($filename, $file_extension = 'cpo')
+    /**
+     *
+     * @param string $filename
+     * @param string $file_extension
+     */
+    public function set_filename($filename, $fileExtension = 'cpo')
     {
-        $this->filename = Filesystem::create_safe_name($filename) . '.' . $file_extension;
+        $this->filename = Filesystem::create_safe_name($filename) . '.' . $fileExtension;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function get_filename()
     {
         return $this->filename;

@@ -6,17 +6,18 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 
 /**
- *
- * @package common.export.excel
- */
-
-/**
  * Exports data to Excel
+ *
+ * @package Chamilo\Libraries\File\Export\Excel
  */
 class ExcelExport extends Export
 {
     const EXPORT_TYPE = 'xlsx';
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     */
     public function render_data()
     {
         $excel = new PHPExcel();
@@ -121,19 +122,34 @@ class ExcelExport extends Export
         unset($excel);
     }
 
+    /**
+     *
+     * @param PHPExcel $excel
+     * @param string $cell
+     */
     public function wrap_text($excel, $cell)
     {
         $excel->getActiveSheet()->getStyle($cell)->getAlignment()->setWrapText(true);
     }
 
+    /**
+     *
+     * @param string $string
+     * @return string
+     */
     static public function transcode_string($string)
     {
-        $stripped_answer = trim(strip_tags(html_entity_decode($string, ENT_QUOTES, 'UTF-8')));
-        $stripped_answer = str_replace(html_entity_decode('&nbsp;', ENT_COMPAT, 'UTF-8'), ' ', $stripped_answer);
-        $stripped_answer = preg_replace('/[ \n\r\t]{2,}/', ' ', $stripped_answer);
-        return $stripped_answer;
+        $strippedAnswer = trim(strip_tags(html_entity_decode($string, ENT_QUOTES, 'UTF-8')));
+        $strippedAnswer = str_replace(html_entity_decode('&nbsp;', ENT_COMPAT, 'UTF-8'), ' ', $strippedAnswer);
+        $strippedAnswer = preg_replace('/[ \n\r\t]{2,}/', ' ', $strippedAnswer);
+
+        return $strippedAnswer;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     */
     public function get_type()
     {
         return self::EXPORT_TYPE;
