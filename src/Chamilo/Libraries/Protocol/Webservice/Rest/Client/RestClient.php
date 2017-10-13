@@ -6,29 +6,61 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class RestClient
 {
 
+    /**
+     * @var string
+     */
     private $mode;
 
-    private $base_url;
+    /**
+     * @var string
+     */
+    private $baseUrl;
 
+    /**
+     * @var string
+     */
     private $method;
 
+    /**
+     * @var \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData
+     */
     private $data;
 
-    private $data_mimetype;
+    /**
+     * @var string
+     */
+    private $dataMimeType;
 
+    /**
+     * @var string[]
+     */
     private $headers = array();
 
+    /**
+     * @var string
+     */
     private $endpoint;
 
-    private $query_parameters;
+    /**
+     * @var string[]
+     */
+    private $queryParameters;
 
-    private $curl;
-
+    /**
+     * @var RestAuthentication
+     */
     private $authentication;
 
-    private $check_target_certificate;
+    /**
+     * @var string
+     */
+    private $checkTargetCertificate;
 
-    private $target_ca_file;
+    /**
+     * @var string
+     */
+    private $targetCAFile;
+
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
     const METHOD_DELETE = 'DELETE';
@@ -36,14 +68,18 @@ abstract class RestClient
     const MODE_PEAR = 'pear';
     const MODE_CURL = 'curl';
 
-    public function __construct($base_url)
+    /**
+     * RestClient constructor.
+     *
+     * @param string $baseUrl
+     */
+    public function __construct($baseUrl)
     {
-        $this->set_base_url($base_url);
+        $this->set_base_url($baseUrl);
     }
 
     /**
-     *
-     * @return the $mode
+     * @return string
      */
     public function get_mode()
     {
@@ -51,8 +87,7 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $mode the $mode to set
+     * @param string $mode
      */
     public function set_mode($mode)
     {
@@ -60,26 +95,23 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @return the $base_url
+     * @return string
      */
     public function get_base_url()
     {
-        return $this->base_url;
+        return $this->baseUrl;
     }
 
     /**
-     *
-     * @param $base_url the $base_url to set
+     * @param string $baseUrl
      */
-    public function set_base_url($base_url)
+    public function set_base_url($baseUrl)
     {
-        $this->base_url = $base_url;
+        $this->baseUrl = $baseUrl;
     }
 
     /**
-     *
-     * @return the $method
+     * @return string
      */
     public function get_method()
     {
@@ -87,8 +119,7 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $method the $method to set
+     * @param string $method
      */
     public function set_method($method)
     {
@@ -96,8 +127,7 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @return the $data
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData
      */
     public function get_data()
     {
@@ -105,45 +135,47 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $data the $data to set
+     * @param \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData $data
      */
     public function set_data(RestData $data)
     {
         $this->data = $data;
     }
 
+    /**
+     * @return bool
+     */
     public function has_data()
     {
         return isset($this->data);
     }
 
     /**
-     *
-     * @return the $data_mimetype
+     * @return string
      */
-    public function get_data_mimetype()
+    public function get_data_mimeType()
     {
-        return $this->data_mimetype;
+        return $this->dataMimeType;
     }
 
     /**
-     *
-     * @param $data_mimetype the $data_mimetype to set
+     * @param string $dataMimeType
      */
-    public function set_data_mimetype($data_mimetype)
+    public function set_data_mimeType($dataMimeType)
     {
-        $this->data_mimetype = $data_mimetype;
+        $this->dataMimeType = $dataMimeType;
     }
 
+    /**
+     * @return bool
+     */
     public function has_data_mimetype()
     {
-        return isset($this->data_mimetype);
+        return isset($this->dataMimeType);
     }
 
     /**
-     *
-     * @return the $header
+     * @return string[]
      */
     public function get_headers()
     {
@@ -151,27 +183,32 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $header the $header to set
+     * @param string[] $headers
      */
     public function set_headers($headers)
     {
         $this->headers = $headers;
     }
 
+    /**
+     * @param string $field
+     * @param string $value
+     */
     public function add_header($field, $value)
     {
         $this->headers[$field] = $value;
     }
 
+    /**
+     * @param string $field
+     */
     public function remove_header($field)
     {
         unset($this->headers[$field]);
     }
 
     /**
-     *
-     * @return the $endpoint
+     * @return string
      */
     public function get_endpoint()
     {
@@ -179,8 +216,7 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $endpoint the $endpoint to set
+     * @param string $endpoint
      */
     public function set_endpoint($endpoint)
     {
@@ -188,63 +224,84 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @return the $endpoint
+     * @return string
      */
     public function get_query_parameters()
     {
-        return $this->query_parameters;
+        return $this->queryParameters;
     }
 
     /**
-     *
-     * @param $endpoint the $endpoint to set
+     * @param string[] $queryParameters
      */
-    public function set_query_parameters($query_parameters)
+    public function set_query_parameters($queryParameters)
     {
-        $this->query_parameters = $query_parameters;
+        $this->queryParameters = $queryParameters;
     }
 
+    /**
+     * @return bool
+     */
     public function has_query_parameters()
     {
-        return (isset($this->query_parameters)) && (count($this->query_parameters) > 0);
+        return (isset($this->queryParameters)) && (count($this->queryParameters) > 0);
     }
 
+    /**
+     * @return string
+     */
     public function get_resource_url()
     {
-        $url = $this->base_url . $this->endpoint;
+        $url = $this->baseUrl . $this->endpoint;
         if ($this->has_query_parameters())
         {
-            $url .= '?' . http_build_query($this->query_parameters);
+            $url .= '?' . http_build_query($this->queryParameters);
         }
         return $url;
     }
 
+    /**
+     * @param string $parameter
+     * @param string $value
+     */
     public function add_query_parameter($parameter, $value)
     {
-        $this->query_parameters[$parameter] = $value;
-    }
-
-    public function remove_query_parameter($parameter)
-    {
-        unset($this->query_parameters[$parameter]);
+        $this->queryParameters[$parameter] = $value;
     }
 
     /**
-     *
+     * @param string $parameter
+     */
+    public function remove_query_parameter($parameter)
+    {
+        unset($this->queryParameters[$parameter]);
+    }
+
+    /**
      * @param string $base_url
      * @param string $mode
-     * @return \libraries\protocol\RestClient
+     *
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
      */
-    public static function factory($base_url = '', $mode = self :: MODE_CURL)
+    public static function factory($base_url = '', $mode = self::MODE_CURL)
     {
         $rest_client_class = __NAMESPACE__ . '\Client\\' .
              (string) StringUtilities::getInstance()->createString($mode)->upperCamelize();
         return new $rest_client_class($base_url);
     }
 
-    abstract public function request($response_mime_type = false);
+    /**
+     * @param bool $responseMimeType
+     *
+     * @return mixed
+     */
+    abstract public function request($responseMimeType = false);
 
+    /**
+     * @param string $http_code
+     *
+     * @return string
+     */
     public function get_http_code_translation($http_code)
     {
         switch ($http_code)
@@ -321,7 +378,7 @@ abstract class RestClient
      * @param string[] $query_parameters
      * @param RestData $data
      */
-    public function configure($method = self :: METHOD_GET, $endpoint = '', $query_parameters = array(), $data)
+    public function configure($method = self::METHOD_GET, $endpoint = '', $query_parameters = array(), $data)
     {
         $this->set_method($method);
         $this->set_endpoint($endpoint);
@@ -334,8 +391,7 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @return the $authentication
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication
      */
     public function get_authentication()
     {
@@ -343,37 +399,51 @@ abstract class RestClient
     }
 
     /**
-     *
-     * @param $authentication the $authentication to set
+     * @param \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication $authentication
      */
     public function set_authentication(RestAuthentication $authentication)
     {
         $this->authentication = $authentication;
     }
 
+    /**
+     * @return bool
+     */
     public function has_authentication()
     {
         return isset($this->authentication);
     }
 
+    /**
+     * @return string
+     */
     public function get_check_target_certificate()
     {
-        return $this->check_target_certificate;
+        return $this->checkTargetCertificate;
     }
 
-    public function set_check_target_certificate($check_target_certificate)
+    /**
+     * @param string $checkTargetCertificate
+     */
+    public function set_check_target_certificate($checkTargetCertificate)
     {
-        $this->check_target_certificate = $check_target_certificate;
+        $this->checkTargetCertificate = $checkTargetCertificate;
     }
 
+    /**
+     * @return string
+     */
     public function get_target_ca_file()
     {
-        return $this->target_ca_file;
+        return $this->targetCAFile;
     }
 
-    public function set_target_ca_file($target_ca_file)
+    /**
+     * @param string $targetCAFile
+     */
+    public function set_target_ca_file($targetCAFile)
     {
-        $this->target_ca_file = $target_ca_file;
+        $this->targetCAFile = $targetCAFile;
     }
 
     /**

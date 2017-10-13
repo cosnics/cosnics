@@ -5,7 +5,9 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  * Initializes and handles the login procedure for the Google Client
- * 
+ *
+ * @package Chamilo\Libraries\Protocol\GoogleClient
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GoogleClientService

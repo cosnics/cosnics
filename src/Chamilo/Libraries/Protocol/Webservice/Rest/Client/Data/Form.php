@@ -5,14 +5,24 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData;
 use Exception;
 
+/**
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class Form extends RestData
 {
 
+    /**
+     * @return string
+     *
+     * @throws \Exception
+     */
     public function prepare()
     {
-        if (is_array($this->get_data()))
+        if (is_array($this->getData()))
         {
-            return $this->get_data();
+            return $this->getData();
         }
         else
         {

@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Protocol\GoogleClient;
 
 /**
  * Settings provider to support the google client service
- * 
+ *
+ * @package Chamilo\Libraries\Protocol\GoogleClient
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface GoogleClientSettingsProviderInterface

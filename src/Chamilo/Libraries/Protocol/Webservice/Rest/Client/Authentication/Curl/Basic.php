@@ -3,16 +3,27 @@ namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl;
 
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication;
 
+/**
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class Basic extends RestAuthentication
 {
 
+    /**
+     * @var string
+     */
     private $login;
 
+    /**
+     * @var string
+     */
     private $password;
 
     /**
      *
-     * @return the $login
+     * @return string
      */
     public function get_login()
     {
@@ -21,7 +32,7 @@ class Basic extends RestAuthentication
 
     /**
      *
-     * @return the $password
+     * @return string
      */
     public function get_password()
     {
@@ -30,7 +41,7 @@ class Basic extends RestAuthentication
 
     /**
      *
-     * @param $login the $login to set
+     * @param string $login
      */
     public function set_login($login)
     {
@@ -39,7 +50,7 @@ class Basic extends RestAuthentication
 
     /**
      *
-     * @param $password the $password to set
+     * @param string $password
      */
     public function set_password($password)
     {

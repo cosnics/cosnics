@@ -13,23 +13,51 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class RestResult
 {
 
-    private $request_method;
+    /**
+     * @var string
+     */
+    private $requestMethod;
 
+    /**
+     * @var string
+     */
     private $request_data;
 
+    /**
+     * @var string
+     */
     private $request_url;
 
+    /**
+     * @var string
+     */
     private $request_port;
 
+    /**
+     * @var string
+     */
     private $response_code;
 
+    /**
+     * @var string
+     */
     private $response_content;
 
+    /**
+     * @var string
+     */
     private $response_error;
 
+    /**
+     * @var string
+     */
     private $response_header;
 
+    /**
+     * @var string
+     */
     private $response_cookies;
+    
     const TYPE_XML = 'xml';
     const TYPE_JSON = 'json';
     const TYPE_PLAIN = 'plain';
@@ -40,15 +68,28 @@ abstract class RestResult
     const FORMAT_XML = 'application/xml';
     const FORMAT_XML_DEPRECATED = 'text/xml';
 
+    /**
+     * @var string[]
+     */
     private static $xml_format = array(self::FORMAT_XML, self::FORMAT_XML_DEPRECATED);
 
-    public static function factory($type = self :: TYPE_PLAIN)
+    /**
+     * @param string $type
+     *
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
+     */
+    public static function factory($type = self::TYPE_PLAIN)
     {
         $rest_result_class = __NAMESPACE__ . '\Result\\' .
              StringUtilities::getInstance()->createString($type)->upperCamelize();
         return new $rest_result_class();
     }
 
+    /**
+     * @param string $content_type
+     *
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
+     */
     public static function content_type_factory($content_type)
     {
         switch ($content_type)
@@ -72,26 +113,23 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $request_method
+     * @return string
      */
     public function get_request_method()
     {
-        return $this->request_method;
+        return $this->requestMethod;
     }
 
     /**
-     *
-     * @param $request_method the $request_method to set
+     * @param string $request_method
      */
     public function set_request_method($request_method)
     {
-        $this->request_method = $request_method;
+        $this->requestMethod = $request_method;
     }
 
     /**
-     *
-     * @return the $request_data
+     * @return string
      */
     public function get_request_data()
     {
@@ -99,8 +137,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $request_data the $request_data to set
+     * @param string $request_data
      */
     public function set_request_data($request_data)
     {
@@ -108,8 +145,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $request_url
+     * @return string
      */
     public function get_request_url()
     {
@@ -117,8 +153,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $request_url the $request_url to set
+     * @param string $request_url
      */
     public function set_request_url($request_url)
     {
@@ -126,8 +161,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $request_port
+     * @return string
      */
     public function get_request_port()
     {
@@ -135,8 +169,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $request_port the $request_port to set
+     * @param string $request_port
      */
     public function set_request_port($request_port)
     {
@@ -144,8 +177,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $response_code
+     * @return string
      */
     public function get_response_code()
     {
@@ -153,8 +185,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $response_code the $response_code to set
+     * @param string $response_code
      */
     public function set_response_code($response_code)
     {
@@ -162,6 +193,7 @@ abstract class RestResult
     }
 
     /**
+     * @param bool $parse
      *
      * @return string
      */
@@ -171,8 +203,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $response_content the $response_content to set
+     * @param string  $response_content
      */
     public function set_response_content($response_content)
     {
@@ -180,8 +211,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $response_error
+     * @return string
      */
     public function get_response_error()
     {
@@ -189,8 +219,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $response_error the $response_error to set
+     * @param string $response_error
      */
     public function set_response_error($response_error)
     {
@@ -198,8 +227,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $response_header
+     * @return string
      */
     public function get_response_header()
     {
@@ -207,8 +235,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $response_header the $response_header to set
+     * @param string $response_header
      */
     public function set_response_header($response_header)
     {
@@ -216,8 +243,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @return the $response_cookies
+     * @return string
      */
     public function get_response_cookies()
     {
@@ -225,8 +251,7 @@ abstract class RestResult
     }
 
     /**
-     *
-     * @param $response_cookies the $response_cookies to set
+     * @param string $response_cookies
      */
     public function set_response_cookies($response_cookies)
     {
