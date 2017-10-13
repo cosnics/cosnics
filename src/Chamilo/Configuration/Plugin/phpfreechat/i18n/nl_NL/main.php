@@ -2,7 +2,7 @@
 /**
  * i18n/nl_NL/main.php
  * Copyright © 2006 Stephane Gully <stephane.gully@gmail.com>
- * Dit is vrij beschikbare software; u kunt dit verspreiden en/of
+ * Dit is vrij beschikbare software; u kunt dit verspreiden of
  * aanpassen onder de voorwaarden van het GNU Lesser General Public
  * License zoals gepubliceerd door de Free Software Foundation; zowel
  * versie 2.1 van de License, of een latere versie.
