@@ -6,7 +6,9 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Factory to instantiate the mailer
- * 
+ *
+ * @package Chamilo\Libraries\Mail\Mailer
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MailerFactory
@@ -15,14 +17,14 @@ class MailerFactory
     /**
      * The configuration
      * 
-     * @var Configuration
+     * @var \Chamilo\Configuration\Configuration
      */
     protected $configuration;
 
     /**
      * Constructor
      * 
-     * @param Configuration $configuration
+     * @param \Chamilo\Configuration\Configuration $configuration
      */
     public function __construct(Configuration $configuration = null)
     {
@@ -62,7 +64,7 @@ class MailerFactory
     /**
      * Returns the active mailer
      * 
-     * @return MailerInterface
+     * @return \Chamilo\Libraries\Mail\Mailer\MailerInterface
      *
      * @throws \Exception
      */

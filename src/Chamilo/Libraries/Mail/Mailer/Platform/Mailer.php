@@ -7,7 +7,9 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
  * Default platform mailer
- * 
+ *
+ * @package Chamilo\Libraries\Mail\Mailer\Platform
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
@@ -16,7 +18,7 @@ class Mailer extends AbstractMailer
     /**
      * Sends a single mail
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @throws \RuntimeException
      */
@@ -58,7 +60,7 @@ class Mailer extends AbstractMailer
     /**
      * Sends the actual mail to the given recipients
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      * @param string $recipients
      * @param array $headers
      */
