@@ -118,7 +118,7 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function testGetTreeNodeDataByIdWithTreeNodeNotFound()
     {

@@ -142,7 +142,7 @@ class TreeTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function testGetTreeNodeByIdWithInexistingId()
     {
