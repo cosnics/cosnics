@@ -9,6 +9,8 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 /**
  * PHPMailer mailer service
  *
+ * @package Chamilo\Libraries\Mail\Mailer\PhpMailer
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
@@ -16,7 +18,7 @@ class Mailer extends AbstractMailer
 
     /**
      *
-     * @var Configuration
+     * @var \Chamilo\Configuration\Configuration
      */
     protected $configuration;
 
@@ -29,7 +31,7 @@ class Mailer extends AbstractMailer
     /**
      * Mailer constructor.
      *
-     * @param Configuration $configuration
+     * @param \Chamilo\Configuration\Configuration $configuration
      * @param \PHPMailer $phpMailer
      */
     public function __construct(Configuration $configuration = null, \PHPMailer $phpMailer = null)
@@ -42,7 +44,7 @@ class Mailer extends AbstractMailer
     /**
      * Sends a single mail
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     public function sendMail(Mail $mail)
     {
@@ -68,7 +70,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds the information about the sender
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     protected function addSenderInformation(Mail $mail)
     {
@@ -80,7 +82,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds optionally reply information
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     protected function addReplyInformation(Mail $mail)
     {
@@ -98,7 +100,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds the embedded images
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     protected function addEmbeddedImages(Mail $mail)
     {
@@ -116,7 +118,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds the attachments
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @throws \phpmailerException
      */
@@ -131,7 +133,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds the content
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     protected function addContent(Mail $mail)
     {
@@ -142,7 +144,7 @@ class Mailer extends AbstractMailer
     /**
      * Adds the recipients
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     protected function addRecipients(Mail $mail)
     {
@@ -165,7 +167,7 @@ class Mailer extends AbstractMailer
     /**
      * Sends the actual mail
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @throws \phpmailerException
      */
@@ -185,7 +187,7 @@ class Mailer extends AbstractMailer
     /**
      * Sends the mail individually
      *
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @throws \Exception
      */

@@ -6,6 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
+ * @package Chamilo\Libraries\Mail\Mailer
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -21,7 +22,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Mailer constructor.
      * 
-     * @param Configuration $configuration
+     * @param \Chamilo\Configuration\Configuration $configuration
      */
     public function __construct(Configuration $configuration = null)
     {
@@ -36,7 +37,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Sends multiple mails
      * 
-     * @param Mail[] $mails
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
     public function sendMails($mails = array())
     {
@@ -49,7 +50,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Determines the sender name for the given mail
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
@@ -66,7 +67,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Determines the sender e-mail for the given mail
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
@@ -83,7 +84,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Determines the reply name for the given mail
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
@@ -100,7 +101,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Determines the reply e-mail for the given mail
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
@@ -133,7 +134,7 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * Logs a send (or not send) mail to the database
      * 
-     * @param Mail $mail
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      * @param int $state
      * @param string $message
      *
