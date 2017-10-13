@@ -4,16 +4,23 @@ namespace Chamilo\Libraries\Platform\Session;
 use Chamilo\Libraries\Platform\Security;
 
 /**
+ * @package Chamilo\Libraries\Platform\Session
  *
- * @package common.session
+ * @deprecated
+ *
+ * @see \Chamilo\Libraries\Platform\ChamiloRequest (use service)
  */
 class Request
 {
 
-    // TODO OO design this class
-    // when OO designing this class, $security should be considered as a dependency
+    /**
+     * @var \Chamilo\Libraries\Platform\Security
+     */
     public static $security;
 
+    /**
+     * @return \Chamilo\Libraries\Platform\Security
+     */
     public static function get_security()
     {
         if (self::$security === null)
@@ -23,6 +30,12 @@ class Request
         return self::$security;
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $default
+     *
+     * @return mixed
+     */
     public static function get($variable, $default = null)
     {
         if (isset($_GET[$variable]))
@@ -34,11 +47,20 @@ class Request
         return $default;
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $value
+     */
     public static function set_get($variable, $value)
     {
         $_GET[$variable] = $value;
     }
 
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
     public static function post($variable)
     {
         if (isset($_POST[$variable]))
@@ -50,6 +72,12 @@ class Request
         return null;
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $default
+     *
+     * @return mixed
+     */
     public static function server($variable, $default = null)
     {
         if (isset($_SERVER[$variable]))
@@ -61,6 +89,11 @@ class Request
         return $default;
     }
 
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
     public static function file($variable)
     {
         $value = $_FILES[$variable];
@@ -68,6 +101,11 @@ class Request
         return $value;
     }
 
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
     public static function environment($variable)
     {
         $value = $_ENV[$variable];

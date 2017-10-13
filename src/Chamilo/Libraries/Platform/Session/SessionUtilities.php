@@ -74,7 +74,7 @@ class SessionUtilities
 
     /**
      *
-     * @param Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
+     * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
      */
     public function setSessionHandler(SessionHandler $sessionHandler = null)
     {
@@ -142,11 +142,19 @@ class SessionUtilities
         }
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $value
+     */
     public function register($variable, $value)
     {
         $_SESSION[$variable] = $value;
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $value
+     */
     public function registerIfNotSet($variable, $value)
     {
         $sessionValue = $this->retrieve($variable);
@@ -157,6 +165,9 @@ class SessionUtilities
         }
     }
 
+    /**
+     * @param string $variable
+     */
     public function unregister($variable)
     {
         if (array_key_exists($variable, $_SESSION))
@@ -180,14 +191,27 @@ class SessionUtilities
         session_destroy();
     }
 
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
     public static function retrieve($variable)
     {
         if (array_key_exists($variable, $_SESSION))
         {
             return $_SESSION[$variable];
         }
+
+        return null;
     }
 
+    /**
+     * @param string $variable
+     * @param mixed $default
+     *
+     * @return mixed
+     */
     public function get($variable, $default = null)
     {
         if (array_key_exists($variable, $_SESSION))
@@ -200,8 +224,23 @@ class SessionUtilities
         }
     }
 
-    public function get_user_id()
+    /**
+     * @return int
+     *
+     * @deprecated
+     *
+     * @see getUserId
+     */
+    public static function get_user_id()
     {
-        return $this->retrieve('_uid');
+        return self::getUserId();
+    }
+
+    /**
+     * @return int
+     */
+    public static function getUserId()
+    {
+        return self::retrieve('_uid');
     }
 }

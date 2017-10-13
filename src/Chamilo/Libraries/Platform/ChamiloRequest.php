@@ -5,6 +5,8 @@ namespace Chamilo\Libraries\Platform;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * @package Chamilo\Libraries\Platform
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloRequest extends Request

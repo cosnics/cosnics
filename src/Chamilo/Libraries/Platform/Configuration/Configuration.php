@@ -4,12 +4,9 @@ namespace Chamilo\Libraries\Platform\Configuration;
 use Chamilo\Libraries\File\Path;
 
 /**
- *
- * @package common.configuration
- */
-
-/**
  * This class represents the current configuration.
+ *
+ * @package Chamilo\Libraries\Platform\Configuration
  *
  * @author Tim De Pauw
  */
@@ -24,6 +21,8 @@ class Configuration
     /**
      * Parameters defined in the configuration.
      * Stored as an associative array.
+     *
+     * @var string[]
      */
     private $params;
 
@@ -38,7 +37,7 @@ class Configuration
     /**
      * Returns the instance of this class.
      *
-     * @return Configuration The instance.
+     * @return \Chamilo\Libraries\Platform\Configuration\Configuration The instance.
      */
     public static function getInstance()
     {
@@ -54,9 +53,27 @@ class Configuration
      *
      * @param string $section The name of the section in which the parameter is located.
      * @param string $name The parameter name.
-     * @return mixed The parameter value.
+     *
+     * @return string The parameter value.
+     *
+     * @deprecated
+     *
+     * @see getParameter
      */
     public function get_parameter($section, $name)
+    {
+        return $this->getParameter($section, $name);
+    }
+
+    /**
+     * Gets a parameter from the configuration.
+     *
+     * @param string $section The name of the section in which the parameter is located.
+     * @param string $name The parameter name.
+     *
+     * @return string The parameter value.
+     */
+    public function getParameter($section, $name)
     {
         if (! isset($this->params[$section]))
             return null;
@@ -70,8 +87,26 @@ class Configuration
      * Load the config from a given file.
      *
      * @param string $file the php file which must be loaded.
+     *
+     * @throws \Exception
+     *
+     * @deprecated
+     *
+     * @see loadFile
      */
     public function load_file($file)
+    {
+        $this->load_file($file);
+    }
+
+    /**
+     * Load the config from a given file.
+     *
+     * @param string $file the php file which must be loaded.
+     *
+     * @throws \Exception
+     */
+    public function loadFile($file)
     {
         if (! is_file($file))
         {

@@ -5,17 +5,25 @@ use Chamilo\Libraries\File\Path;
 
 /**
  *
- * @package common.session
+ * @package Chamilo\Libraries\Platform\Session
  */
 class Cookie
 {
 
+    /**
+     * @param string $variable
+     * @param mixed $value
+     * @param string $expiration
+     */
     public function register($variable, $value, $expiration = '900')
     {
         setcookie($variable, $value, time() + $expiration, "", Path::getInstance()->getBasePath(true));
         $_COOKIE[$variable] = $value;
     }
 
+    /**
+     * @param string $variable
+     */
     public function unregister($variable)
     {
         setcookie($variable, "", time() - 3600);
@@ -33,12 +41,32 @@ class Cookie
         $_COOKIE = array();
     }
 
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
     public function retrieve($variable)
     {
         return $_COOKIE[$variable];
     }
 
+    /**
+     * @return int
+     *
+     * @deprecated
+     *
+     * @see getUserId
+     */
     public function get_user_id()
+    {
+        return $this->getUserId();
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
     {
         return self::retrieve('_uid');
     }
