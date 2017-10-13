@@ -49,6 +49,6 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
      */
     public function getRequiredPostParameters()
     {
-        return array('rss_feed_url', 'number_entries');
+        return array('rss_feed_url', 'number_of_entries');
     }
 }
