@@ -28,7 +28,7 @@ class Security
      */
     public function remove_XSS($variable, $isAdmin = null)
     {
-        return $this->removeXSS($variable, $isAdmin);
+        return self::removeXSS($variable, $isAdmin);
     }
 
     /**
@@ -121,7 +121,7 @@ class Security
      */
     public function remove_XSS_recursive($array, $isAdmin = null)
     {
-        return $this->removeXSSRecursive($array, $isAdmin);
+        return self::removeXSSRecursive($array, $isAdmin);
     }
 
     /**
@@ -155,7 +155,7 @@ class Security
      */
     public function get_ua()
     {
-        $this->getUa();
+        self::getUa();
     }
 
     /**
@@ -178,7 +178,7 @@ class Security
      */
     public function check_ua()
     {
-        return $this->checkUa();
+        return self::checkUa();
     }
 
     /**
@@ -256,7 +256,7 @@ class Security
      */
     public function check_token($array = 'post')
     {
-        return $this->checkToken($array);
+        return self::checkToken($array);
     }
 
     /**
