@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
+
 /**
  * Full in memory tree of a learning path. This class can be used to traverse through the nested tree in memory
  *
@@ -61,7 +63,9 @@ class Tree
      *
      * @param int $id
      *
-     * @return TreeNode
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function getTreeNodeById($id)
     {
@@ -77,9 +81,7 @@ class Tree
 
         if (!array_key_exists($id, $this->treeNodes))
         {
-            throw new \InvalidArgumentException(
-                sprintf('The learning path three node with id %s could not be found', $id)
-            );
+            throw new TreeNodeNotFoundException($id);
         }
 
         return $this->treeNodes[$id];
