@@ -52,7 +52,7 @@ class Path
 
     /**
      * Return 'this' as singleton
-     * 
+     *
      * @return \Chamilo\Libraries\File\Path
      */
     static public function getInstance()
@@ -61,16 +61,16 @@ class Path
         {
             self::$instance = new static(ClassnameUtilities::getInstance());
         }
-        
+
         return static::$instance;
     }
 
     /**
      * Constructor
-     * 
+     *
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    public function __construct(\Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities)
+    public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
     }
@@ -103,12 +103,12 @@ class Path
         if ($web)
         {
             $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] . 'x'));
-            
+
             if ($dir !== '/')
             {
                 $dir .= '/';
             }
-            
+
             $protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
             $path = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . $dir;
         }
@@ -116,7 +116,7 @@ class Path
         {
             $path = realpath(__DIR__ . '/../../../') . DIRECTORY_SEPARATOR;
         }
-        
+
         return $this->cache[self::BASE][(string) $web] = $path;
     }
 
@@ -129,11 +129,17 @@ class Path
     public function getStoragePath($namespace = null)
     {
         $basePath = realpath($this->getBasePath() . '../files/');
-        
+
         return $this->cache[self::STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
              ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
 
+    /**
+     *
+     * @param string $namespace
+     * @param boolean $web
+     * @return string
+     */
     public function getPublicStoragePath($namespace = null, $web = false)
     {
         if ($web)
@@ -142,13 +148,12 @@ class Path
         }
         else
         {
-            $basePath = realpath(
-                $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web'
-            ) . DIRECTORY_SEPARATOR . 'Files';
+            $basePath = realpath($this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web') . DIRECTORY_SEPARATOR .
+                 'Files';
         }
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
              ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-                $namespace, 
+                $namespace,
                 $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
@@ -163,7 +168,7 @@ class Path
         {
             throw new \Exception('Storage is not directly accessible');
         }
-        
+
         return $this->cache[self::VENDOR][(string) $web] = realpath($this->getBasePath($web) . '../vendor/') .
              ($web ? '/' : DIRECTORY_SEPARATOR);
     }
@@ -171,7 +176,6 @@ class Path
     /**
      *
      * @param string $namespace
-     * @param boolean $web
      * @return string
      * @deprecated Use the ConfigurablePath service now
      */
@@ -179,15 +183,14 @@ class Path
     {
         $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
         return $this->cache[self::TEMPORARY][(string) $completeNamespace] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'temp_path') . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
      *
      * @param string $namespace
-     * @param boolean $web
      * @return string
      * @deprecated Use the ConfigurablePath service now
      */
@@ -195,22 +198,21 @@ class Path
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
         return $this->cache[self::CACHE][(string) $completeNamespace] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'cache_path') . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      * @deprecated Use the ConfigurablePath service now
      */
     public function getLogPath()
     {
         return $this->cache[self::LOG] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'logs_path');
     }
 
@@ -222,22 +224,21 @@ class Path
     public function getArchivePath()
     {
         return $this->cache[self::ARCHIVE] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'archive_path');
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      * @deprecated Use the ConfigurablePath service now
      */
     public function getRepositoryPath()
     {
         return $this->cache[self::REPOSITORY] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'repository_path');
     }
 
@@ -250,8 +251,8 @@ class Path
     public function getProfilePicturePath($web = false)
     {
         return $this->cache[self::REPOSITORY] = Configuration::getInstance()->get(
-            'Chamilo\Configuration', 
-            'storage', 
+            'Chamilo\Configuration',
+            'storage',
             'userpictures_path');
     }
 
@@ -264,7 +265,7 @@ class Path
     public function getPluginPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::PLUGIN][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
-            $namespace, 
+            $namespace,
             $web) . 'Plugin' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -277,7 +278,7 @@ class Path
     public function getResourcesPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::RESOURCE][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
-            $namespace, 
+            $namespace,
             $web) . 'Resources' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -290,7 +291,7 @@ class Path
     public function getJavascriptPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::JAVASCRIPT][(string) $namespace][(string) $web] = $this->getResourcesPath(
-            $namespace, 
+            $namespace,
             $web) . 'Javascript' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -315,7 +316,7 @@ class Path
     public function getConfigurationPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::CONFIGURATION][(string) $namespace][(string) $web] = $this->getResourcesPath(
-            $namespace, 
+            $namespace,
             $web) . 'Configuration' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -328,12 +329,15 @@ class Path
     public function namespaceToFullPath($namespace = null, $web = false)
     {
         return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-            $namespace, 
+            $namespace,
             $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
-    /*
-     * Checks if string is HTTP or FTP uri @param string $uri @return boolean
+    /**
+     * Checks if string is HTTP or FTP uri
+     *
+     * @param string $uri
+     * @return boolean
      */
     public function isWebUri($uri)
     {

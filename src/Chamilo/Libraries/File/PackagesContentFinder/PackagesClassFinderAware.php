@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\File\PackagesContentFinder;
 
 /**
  * Base class that can be used by other classes to include the PackagesClassFinder
- * 
- * @package common\libraries
+ *
+ * @package Chamilo\Libraries\File\PackagesContentFinder
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class PackagesClassFinderAware
@@ -12,25 +12,24 @@ abstract class PackagesClassFinderAware
 
     /**
      * The class finder for packages
-     * 
-     * @var PackagesClassFinder
+     *
+     * @var \Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder
      */
     private $packagesClassFinder;
 
     /**
      * Constructor
-     * 
-     * @param PackagesClassFinder $packages_class_finder
+     *
+     * @param \Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder $packagesClassFinder
      */
-    public function __construct(PackagesClassFinder $packages_class_finder = null)
+    public function __construct(PackagesClassFinder $packagesClassFinder = null)
     {
-        $this->setPackagesClassFinder($packages_class_finder);
+        $this->setPackagesClassFinder($packagesClassFinder);
     }
 
     /**
      *
-     * @param PackagesClassFinder $packagesClassFinder
-     *
+     * @param \Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder $packagesClassFinder
      * @throws \InvalidArgumentException
      */
     public function setPackagesClassFinder(PackagesClassFinder $packagesClassFinder)
@@ -42,12 +41,13 @@ abstract class PackagesClassFinderAware
                      ' "\common\libraries\PackagesClassFinder", instead "' . get_class($packagesClassFinder) .
                      '" was given');
         }
+
         $this->packagesClassFinder = $packagesClassFinder;
     }
 
     /**
      *
-     * @return PackagesClassFinder
+     * @return \Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder
      */
     public function getPackagesClassFinder()
     {

@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
- * @package common
+ * @package Chamilo\Libraries\File
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Redirect
 {
@@ -31,6 +32,10 @@ class Redirect
      */
     private $encodeEntities;
 
+    /**
+     *
+     * @var string
+     */
     private $anchor;
 
     /**
@@ -38,6 +43,7 @@ class Redirect
      * @param string[] $parameters
      * @param string[] $filterParameters
      * @param boolean $encodeEntities
+     * @param string $anchor
      */
     public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false, $anchor = null)
     {
@@ -49,7 +55,7 @@ class Redirect
 
     /**
      *
-     * @return the $anchor
+     * @return string
      */
     public function getAnchor()
     {
@@ -119,6 +125,9 @@ class Redirect
         $this->encodeEntities = $encodeEntities;
     }
 
+    /**
+     * Redirect to the Url
+     */
     public function toUrl()
     {
         $this->writeHeader($this->getUrl());
@@ -166,10 +175,9 @@ class Redirect
      *
      * @param string $url
      * @param array $parameters
-     * @param boolean $encode_entities
      * @return string
      */
-    private function getWebLink($url, $parameters = array (), $encode_entities = false)
+    private function getWebLink($url, $parameters = array ())
     {
         $parameters = $this->getFilteredParameters();
 
@@ -233,7 +241,8 @@ class Redirect
      * (on|off|) $_SERVER['HTTP_HOST'] = value of the Host: header $_SERVER['SERVER_PORT'] = port number (only used if
      * not http/80,https/443) $_SERVER['REQUEST_URI'] = the URI after the method of the HTTP request
      *
-     * @return string Current URL
+     * @param boolean $includeRequest
+     * @return string
      */
     public function getCurrentUrl($includeRequest = true)
     {
