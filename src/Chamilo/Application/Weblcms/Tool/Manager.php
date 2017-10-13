@@ -19,10 +19,12 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -45,6 +47,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Dropbox\Exception;
 
 /**
  * This is the base class for all tools used in applications.
@@ -447,151 +450,169 @@ abstract class Manager extends Application
      */
     public function is_allowed($right, $publication = null, $category_id = null)
     {
-        $studentview = Session::retrieve('studentview');
-        if ($studentview == 1)
+        try
         {
-            return false;
-        }
-        // add check for student view/login as
-        $id = Session::get_user_id();
-        $va_id = Session::get(self::PARAM_VIEW_AS_ID);
-        $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
-
-        // fake the id with the set "login as id" only if we're in the right
-        // course
-        if (isset($va_id) && isset($course_id))
-        {
-            if ($course_id == $this->get_course_id())
-            {
-                $id = $va_id;
-            }
-        }
-
-        if ($this->get_parent()->is_teacher()) // also checks "view as" id.
-        {
-            return true;
-        }
-
-        if ($publication)
-        {
-            if ($publication instanceof ContentObjectPublication)
-            {
-                $category_id = $publication->get_category_id();
-                $publication_id = $publication->get_id();
-                $publisher_id = $publication->get_publisher_id();
-                $hidden = ! $publication->is_visible_for_target_users();
-            }
-            else
-            {
-                $category_id = $publication[ContentObjectPublication::PROPERTY_CATEGORY_ID];
-                $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
-                $publisher_id = $publication[ContentObjectPublication::PROPERTY_PUBLISHER_ID];
-                $hidden = $publication[ContentObjectPublication::PROPERTY_HIDDEN];
-
-                $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
-                $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
-                if (! empty($fromDate) && ! empty($toDate))
-                {
-                    $hidden = $hidden || $fromDate > time() || $toDate < time();
-                }
-            }
-
-            if ($category_id != 0)
-            {
-                $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                    ContentObjectPublicationCategory::class_name(),
-                    $category_id);
-
-                if (! $category->is_recursive_visible())
-                {
-                    return false;
-                }
-            }
-
-            if ($publisher_id == $id)
-            {
-                return true; // the publisher has all the rights
-            }
-
-            if ($hidden && $right == WeblcmsRights::VIEW_RIGHT)
-            {
-                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
-                    WeblcmsRights::EDIT_RIGHT,
-                    $publication_id,
-                    WeblcmsRights::TYPE_PUBLICATION,
-                    $this->get_course_id(),
-                    $id);
-            }
-
-            return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
-                $right,
-                $publication_id,
-                WeblcmsRights::TYPE_PUBLICATION,
-                $this->get_course_id(),
-                $id);
-        }
-        else
-        {
-            if (is_null($category_id))
-            {
-                $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
-            }
-
-            if ($category_id && $category_id !== 0)
-            {
-                $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                    ContentObjectPublicationCategory::class_name(),
-                    $category_id);
-
-                if (empty($category))
-                {
-                    throw new ObjectNotExistException(Translation::get('ContentObjectPublicationCategory'), $category_id);
-                }
-
-                if ($category->is_recursive_visible())
-                {
-                    return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
-                        $right,
-                        $category_id,
-                        WeblcmsRights::TYPE_COURSE_CATEGORY,
-                        $this->get_course_id(),
-                        $id);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            if ($this->get_tool_id() == 'home')
-            {
-                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
-                    $right,
-                    0,
-                    RightsUtil::TYPE_ROOT,
-                    $this->get_course_id(),
-                    $id);
-            }
-
-            $tool_registration = $this->get_tool_registration();
-            $course_settings_controller = CourseSettingsController::getInstance();
-
-            $module_visible = $course_settings_controller->get_course_setting(
-                $this->get_course(),
-                CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
-                $tool_registration->get_id());
-
-            if (! $module_visible)
+            $studentview = Session::retrieve('studentview');
+            if ($studentview == 1)
             {
                 return false;
             }
+            // add check for student view/login as
+            $id = Session::get_user_id();
+            $va_id = Session::get(self::PARAM_VIEW_AS_ID);
+            $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
 
-            return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
-                $right,
-                $tool_registration->get_id(),
-                WeblcmsRights::TYPE_COURSE_MODULE,
-                $this->get_course_id(),
-                $id);
+            // fake the id with the set "login as id" only if we're in the right
+            // course
+            if (isset($va_id) && isset($course_id))
+            {
+                if ($course_id == $this->get_course_id())
+                {
+                    $id = $va_id;
+                }
+            }
+
+            if ($this->get_parent()->is_teacher()) // also checks "view as" id.
+            {
+                return true;
+            }
+
+            if ($publication)
+            {
+                if ($publication instanceof ContentObjectPublication)
+                {
+                    $category_id = $publication->get_category_id();
+                    $publication_id = $publication->get_id();
+                    $publisher_id = $publication->get_publisher_id();
+                    $hidden = !$publication->is_visible_for_target_users();
+                }
+                else
+                {
+                    $category_id = $publication[ContentObjectPublication::PROPERTY_CATEGORY_ID];
+                    $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
+                    $publisher_id = $publication[ContentObjectPublication::PROPERTY_PUBLISHER_ID];
+                    $hidden = $publication[ContentObjectPublication::PROPERTY_HIDDEN];
+
+                    $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
+                    $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
+                    if (!empty($fromDate) && !empty($toDate))
+                    {
+                        $hidden = $hidden || $fromDate > time() || $toDate < time();
+                    }
+                }
+
+                if ($category_id != 0)
+                {
+                    $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                        ContentObjectPublicationCategory::class_name(),
+                        $category_id
+                    );
+
+                    if (!$category->is_recursive_visible())
+                    {
+                        return false;
+                    }
+                }
+
+                if ($publisher_id == $id)
+                {
+                    return true; // the publisher has all the rights
+                }
+
+                if ($hidden && $right == WeblcmsRights::VIEW_RIGHT)
+                {
+                    return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
+                        WeblcmsRights::EDIT_RIGHT,
+                        $publication_id,
+                        WeblcmsRights::TYPE_PUBLICATION,
+                        $this->get_course_id(),
+                        $id
+                    );
+                }
+
+                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
+                    $right,
+                    $publication_id,
+                    WeblcmsRights::TYPE_PUBLICATION,
+                    $this->get_course_id(),
+                    $id
+                );
+            }
+            else
+            {
+                if (is_null($category_id))
+                {
+                    $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+                }
+
+                if ($category_id && $category_id !== 0)
+                {
+                    $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                        ContentObjectPublicationCategory::class_name(),
+                        $category_id
+                    );
+
+                    if (empty($category))
+                    {
+                        throw new ObjectNotExistException(
+                            Translation::get('ContentObjectPublicationCategory'), $category_id
+                        );
+                    }
+
+                    if ($category->is_recursive_visible())
+                    {
+                        return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
+                            $right,
+                            $category_id,
+                            WeblcmsRights::TYPE_COURSE_CATEGORY,
+                            $this->get_course_id(),
+                            $id
+                        );
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if ($this->get_tool_id() == 'home')
+                {
+                    return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
+                        $right,
+                        0,
+                        RightsUtil::TYPE_ROOT,
+                        $this->get_course_id(),
+                        $id
+                    );
+                }
+
+                $tool_registration = $this->get_tool_registration();
+                $course_settings_controller = CourseSettingsController::getInstance();
+
+                $module_visible = $course_settings_controller->get_course_setting(
+                    $this->get_course(),
+                    CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
+                    $tool_registration->get_id()
+                );
+
+                if (!$module_visible)
+                {
+                    return false;
+                }
+
+                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
+                    $right,
+                    $tool_registration->get_id(),
+                    WeblcmsRights::TYPE_COURSE_MODULE,
+                    $this->get_course_id(),
+                    $id
+                );
+            }
+        }
+        catch(RightsLocationNotFoundException $ex)
+        {
+            $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+            return false;
         }
     }
 

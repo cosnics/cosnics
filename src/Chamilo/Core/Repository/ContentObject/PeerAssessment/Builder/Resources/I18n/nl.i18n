@@ -63,7 +63,7 @@ PeerAssessmentBuilderGroupCreatorComponent = "Beheer groepen"
 PeerAssessmentBuilderGroupUpdaterComponent = "Bewerk groep"
 PeerAssessmentGroupAlreadyActive="Groepen wissen of wijzigen is niet toegelaten wanneer er reeds scores voor deze groepen ingevoerd zijn"
 NoUsersEnrolled="Opgelet, er zijn geen gebruikers ingeschreven"
-SelectUsersOrGroups="Selecteer gebruikers en/of groepen"
+SelectUsersOrGroups="Selecteer gebruikers of groepen"
 NoGroupsDefined="Maak eerst groepen aan" 
 [Overzicht]
 Overview = "Overzicht"
