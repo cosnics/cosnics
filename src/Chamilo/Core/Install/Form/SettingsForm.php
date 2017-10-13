@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Core\Install\Form;
 
-use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Install\ValidateDatabaseConnection;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Core\Install\Manager;
+use Chamilo\Core\Install\ValidateDatabaseConnection;
+use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Core\Install\Manager;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -223,7 +223,7 @@ class SettingsForm extends FormValidator
             'select',
             'hashing_algorithm',
             Translation::get('HashingAlgorithm'),
-            Hashing::get_available_types());
+            HashingUtilities::get_available_types());
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Storage'));

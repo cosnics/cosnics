@@ -7,8 +7,8 @@ namespace Chamilo\Libraries\Authentication\Ldap;
  * be adapted for your company to work. Connection information can be added in the administrator settings of chamilo
  */
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,6 +18,16 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class LdapParser
 {
+    use DependencyInjectionContainerTrait;
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+    }
 
     /**
      *
@@ -33,7 +43,7 @@ class LdapParser
         $userProperties[User::PROPERTY_LASTNAME] = $info[0]['sn'][0];
         $userProperties[User::PROPERTY_FIRSTNAME] = $info[0]['givenname'][0];
         $userProperties[User::PROPERTY_USERNAME] = $username;
-        $userProperties[User::PROPERTY_PASSWORD] = Hashing::hash('PLACEHOLDER');
+        $userProperties[User::PROPERTY_PASSWORD] = $this->getHashingUtilities()->hashString('PLACEHOLDER');
         $userProperties[User::PROPERTY_AUTH_SOURCE] = 'ldap';
         $userProperties[User::PROPERTY_EMAIL] = $info[0]['mail'][0];
 

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Translation;
@@ -23,6 +22,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class MultiPasswordResetterComponent extends Manager
 {
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+    }
 
     /**
      * Runs this component and displays its output.
@@ -53,7 +61,7 @@ class MultiPasswordResetterComponent extends Manager
                     (int) $id);
 
                 $password = Text::generate_password();
-                $user->set_password(Hashing::hash($password));
+                $user->set_password($this->getHashingUtilities()->hashString($password));
 
                 if ($user->update())
                 {
