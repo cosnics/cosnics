@@ -13,6 +13,8 @@ class Json extends RestResult
 
     /**
      *
+     * @param bool $parse
+     *
      * @return \stdClass
      */
     public function get_response_content($parse = true)

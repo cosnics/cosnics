@@ -21,42 +21,42 @@ abstract class RestResult
     /**
      * @var string
      */
-    private $request_data;
+    private $requestData;
 
     /**
      * @var string
      */
-    private $request_url;
+    private $requestUrl;
 
     /**
      * @var string
      */
-    private $request_port;
+    private $requestPort;
 
     /**
      * @var string
      */
-    private $response_code;
+    private $responseCode;
 
     /**
      * @var string
      */
-    private $response_content;
+    private $responseContent;
 
     /**
      * @var string
      */
-    private $response_error;
+    private $responseError;
 
     /**
      * @var string
      */
-    private $response_header;
+    private $responseHeader;
 
     /**
      * @var string
      */
-    private $response_cookies;
+    private $responseCookies;
     
     const TYPE_XML = 'xml';
     const TYPE_JSON = 'json';
@@ -121,11 +121,11 @@ abstract class RestResult
     }
 
     /**
-     * @param string $request_method
+     * @param string $requestMethod
      */
-    public function set_request_method($request_method)
+    public function set_request_method($requestMethod)
     {
-        $this->requestMethod = $request_method;
+        $this->requestMethod = $requestMethod;
     }
 
     /**
@@ -133,15 +133,15 @@ abstract class RestResult
      */
     public function get_request_data()
     {
-        return $this->request_data;
+        return $this->requestData;
     }
 
     /**
-     * @param string $request_data
+     * @param string $requestData
      */
-    public function set_request_data($request_data)
+    public function set_request_data($requestData)
     {
-        $this->request_data = $request_data;
+        $this->requestData = $requestData;
     }
 
     /**
@@ -149,15 +149,15 @@ abstract class RestResult
      */
     public function get_request_url()
     {
-        return $this->request_url;
+        return $this->requestUrl;
     }
 
     /**
-     * @param string $request_url
+     * @param string $requestUrl
      */
-    public function set_request_url($request_url)
+    public function set_request_url($requestUrl)
     {
-        $this->request_url = $request_url;
+        $this->requestUrl = $requestUrl;
     }
 
     /**
@@ -165,15 +165,15 @@ abstract class RestResult
      */
     public function get_request_port()
     {
-        return $this->request_port;
+        return $this->requestPort;
     }
 
     /**
-     * @param string $request_port
+     * @param string $requestPort
      */
-    public function set_request_port($request_port)
+    public function set_request_port($requestPort)
     {
-        $this->request_port = $request_port;
+        $this->requestPort = $requestPort;
     }
 
     /**
@@ -181,15 +181,15 @@ abstract class RestResult
      */
     public function get_response_code()
     {
-        return $this->response_code;
+        return $this->responseCode;
     }
 
     /**
-     * @param string $response_code
+     * @param string $responseCode
      */
-    public function set_response_code($response_code)
+    public function set_response_code($responseCode)
     {
-        $this->response_code = $response_code;
+        $this->responseCode = $responseCode;
     }
 
     /**
@@ -199,15 +199,15 @@ abstract class RestResult
      */
     public function get_response_content($parse = true)
     {
-        return $this->response_content;
+        return $this->responseContent;
     }
 
     /**
-     * @param string  $response_content
+     * @param string  $responseContent
      */
-    public function set_response_content($response_content)
+    public function set_response_content($responseContent)
     {
-        $this->response_content = $response_content;
+        $this->responseContent = $responseContent;
     }
 
     /**
@@ -215,15 +215,15 @@ abstract class RestResult
      */
     public function get_response_error()
     {
-        return $this->response_error;
+        return $this->responseError;
     }
 
     /**
-     * @param string $response_error
+     * @param string $responseError
      */
-    public function set_response_error($response_error)
+    public function set_response_error($responseError)
     {
-        $this->response_error = $response_error;
+        $this->responseError = $responseError;
     }
 
     /**
@@ -231,15 +231,15 @@ abstract class RestResult
      */
     public function get_response_header()
     {
-        return $this->response_header;
+        return $this->responseHeader;
     }
 
     /**
-     * @param string $response_header
+     * @param string $responseHeader
      */
-    public function set_response_header($response_header)
+    public function set_response_header($responseHeader)
     {
-        $this->response_header = $response_header;
+        $this->responseHeader = $responseHeader;
     }
 
     /**
@@ -247,14 +247,14 @@ abstract class RestResult
      */
     public function get_response_cookies()
     {
-        return $this->response_cookies;
+        return $this->responseCookies;
     }
 
     /**
-     * @param string $response_cookies
+     * @param string $responseCookies
      */
-    public function set_response_cookies($response_cookies)
+    public function set_response_cookies($responseCookies)
     {
-        $this->response_cookies = $response_cookies;
+        $this->responseCookies = $responseCookies;
     }
 }
