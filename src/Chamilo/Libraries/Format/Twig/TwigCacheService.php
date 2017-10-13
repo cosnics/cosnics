@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Twig;
 
 use Chamilo\Configuration\Configuration;
@@ -12,16 +11,20 @@ use Symfony\Component\Form\FormFactoryInterface;
 /**
  * Manages the cache for the twig templates
  *
+ * @package Chamilo\Libraries\Format\Twig
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class TwigCacheService extends FileBasedCacheService
 {
+
     /**
+     *
      * @var \Twig_Environment
      */
     protected $twig;
 
     /**
+     *
      * @param \Twig_Environment $twig
      * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
      */
@@ -31,9 +34,8 @@ class TwigCacheService extends FileBasedCacheService
     }
 
     /**
-     * Returns the path to the cache directory or file
      *
-     * @return string
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
      */
     function getCachePath()
     {
@@ -41,7 +43,8 @@ class TwigCacheService extends FileBasedCacheService
     }
 
     /**
-     * Clears the cache and warms it up again.
+     *
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::clearAndWarmUp()
      */
     public function clearAndWarmUp()
     {
@@ -49,14 +52,14 @@ class TwigCacheService extends FileBasedCacheService
     }
 
     /**
-     * Warms up the cache.
+     *
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
      */
     public function warmUp()
     {
-        $packagesFilesFinder =
-            new PackagesFilesFinder(
-                PathBuilder::getInstance(), Configuration::getInstance()->get_registration_contexts()
-            );
+        $packagesFilesFinder = new PackagesFilesFinder(
+            PathBuilder::getInstance(),
+            Configuration::getInstance()->get_registration_contexts());
 
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 

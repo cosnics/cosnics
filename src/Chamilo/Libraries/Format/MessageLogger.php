@@ -3,6 +3,10 @@ namespace Chamilo\Libraries\Format;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format
+ */
 class MessageLogger
 {
     const TYPE_NORMAL = '1';
@@ -10,25 +14,47 @@ class MessageLogger
     const TYPE_WARNING = '3';
     const TYPE_ERROR = '4';
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\MessageLogger[]
+     */
     private static $instances;
 
+    /**
+     *
+     * @var string[]
+     */
     private $messages;
 
-    public static function get_instance_by_name($instance_name)
+    /**
+     *
+     * @param string $instanceName
+     * @return \Chamilo\Libraries\Format\MessageLogger
+     */
+    public static function get_instance_by_name($instanceName)
     {
-        if (! isset(self::$instances[$instance_name]))
+        if (! isset(self::$instances[$instanceName]))
         {
-            self::$instances[$instance_name] = new MessageLogger();
+            self::$instances[$instanceName] = new MessageLogger();
         }
-        
-        return self::$instances[$instance_name];
+
+        return self::$instances[$instanceName];
     }
 
+    /**
+     *
+     * @param \stdClass $object
+     * @return \Chamilo\Libraries\Format\MessageLogger
+     */
     public static function getInstance($object)
     {
         return self::get_instance_by_name(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\MessageLogger[]
+     */
     public static function get_instances()
     {
         return self::$instances;
@@ -39,6 +65,11 @@ class MessageLogger
         $this->messages = array();
     }
 
+    /**
+     *
+     * @param string $message
+     * @param integer $type
+     */
     public function add_message($message, $type = self :: TYPE_NORMAL)
     {
         switch ($type)
@@ -61,11 +92,19 @@ class MessageLogger
         }
     }
 
+    /**
+     *
+     * @param string[] $messages
+     */
     public function set_messages($messages)
     {
         $this->messages = $messages;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_messages()
     {
         return $this->messages;
@@ -76,6 +115,10 @@ class MessageLogger
         $this->set_messages(array());
     }
 
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         $message = implode('<br />' . "\n", $this->get_messages());
@@ -83,6 +126,10 @@ class MessageLogger
         return $message;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function render_for_cli()
     {
         $message = strip_tags(implode(PHP_EOL, $this->get_messages()));

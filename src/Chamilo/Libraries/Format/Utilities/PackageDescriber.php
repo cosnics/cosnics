@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Processes resources from one or multiple packages
  *
+ * @package Chamilo\Libraries\Format\Utilities
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PackageDescriber
@@ -135,8 +136,8 @@ class PackageDescriber
     /**
      * Processes the resources for all (or a given set) of packages
      *
-     * @param array $packageNamespaces
-     * @param OutputInterface $output
+     * @param string[] $packageNamespaces
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     public function processPackages($packageNamespaces = array(), OutputInterface $output)
     {
@@ -225,7 +226,7 @@ class PackageDescriber
     /**
      *
      * @param \stdClass $composerJsonInstance
-     * @param RegistrationDependency|Depencencies $dependencies
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependencies|\Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency $dependencies
      */
     protected function processDependencies($composerJsonInstance, $dependencies)
     {
@@ -245,7 +246,7 @@ class PackageDescriber
     /**
      *
      * @param \stdClass $composerJsonInstance
-     * @param RegistrationDependency $dependencies
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency $dependencies
      */
     protected function processDependency($composerJsonInstance, Dependency $dependency)
     {
@@ -310,6 +311,7 @@ class PackageDescriber
 
     /**
      *
+     * @param string $packageNamespace
      * @return \stdClass
      */
     protected function getComposerJsonInstanceForNamespace($packageNamespace)

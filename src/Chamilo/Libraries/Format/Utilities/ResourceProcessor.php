@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Utilities;
 
 use Chamilo\Configuration\Package\Finder\ResourceBundles;
@@ -11,19 +10,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Processes resources from one or multiple packages
  *
+ * @package Chamilo\Libraries\Format\Utilities
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ResourceProcessor
 {
+
     /**
-     * @var PathBuilder
+     *
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
     protected $pathBuilder;
 
     /**
      * ResourceProcessor constructor.
      *
-     * @param PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
     public function __construct(PathBuilder $pathBuilder)
     {
@@ -33,8 +35,8 @@ class ResourceProcessor
     /**
      * Processes the resources for all (or a given set) of packages
      *
-     * @param array $packageNamespaces
-     * @param OutputInterface $output
+     * @param string[] $packageNamespaces
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     public function processResources($packageNamespaces = array(), OutputInterface $output)
     {
@@ -52,11 +54,10 @@ class ResourceProcessor
         foreach ($packageNamespaces as $packageNamespace)
         {
             $resourcesPath = $this->pathBuilder->getResourcesPath($packageNamespace);
-            if (!is_dir($resourcesPath))
+            if (! is_dir($resourcesPath))
             {
                 throw new \InvalidArgumentException(
-                    sprintf('The given package %s does not have a valid resources path', $packageNamespace)
-                );
+                    sprintf('The given package %s does not have a valid resources path', $packageNamespace));
             }
 
             $this->processImages($packageNamespace, $basePath, $baseWebPath);
@@ -65,7 +66,7 @@ class ResourceProcessor
             $output->writeln('Processed resources for: ' . $packageNamespace);
         }
 
-        if($processAll)
+        if ($processAll)
         {
             $this->processFileExtensions($basePath, $baseWebPath);
             $output->writeln('Processed file extension resources');
@@ -75,14 +76,14 @@ class ResourceProcessor
     /**
      * Processes the images for a given package
      *
-     * @param $packageNamespace
-     * @param $basePath
-     * @param $baseWebPath
+     * @param string $packageNamespace
+     * @param string $basePath
+     * @param string $baseWebPath
      */
     protected function processImages($packageNamespace, $basePath, $baseWebPath)
     {
         $sourceResourceImagePath = $this->pathBuilder->getResourcesPath($packageNamespace) . 'Images' .
-            DIRECTORY_SEPARATOR;
+             DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
 
         $this->recurseCopy($sourceResourceImagePath, $webResourceImagePath, true);
@@ -91,14 +92,13 @@ class ResourceProcessor
     /**
      * Processes the css for a given package
      *
-     * @param $packageNamespace
-     * @param $basePath
-     * @param $baseWebPath
+     * @param string $packageNamespace
+     * @param string $basePath
+     * @param string $baseWebPath
      */
     protected function processCss($packageNamespace, $basePath, $baseWebPath)
     {
-        $sourceResourceImagePath = $this->pathBuilder->getResourcesPath($packageNamespace) . 'Css' .
-            DIRECTORY_SEPARATOR;
+        $sourceResourceImagePath = $this->pathBuilder->getResourcesPath($packageNamespace) . 'Css' . DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
 
         $this->recurseCopy($sourceResourceImagePath, $webResourceImagePath, true);
@@ -107,14 +107,14 @@ class ResourceProcessor
     /**
      * Processes the javascript for a given package
      *
-     * @param $packageNamespace
-     * @param $basePath
-     * @param $baseWebPath
+     * @param string $packageNamespace
+     * @param string $basePath
+     * @param string $baseWebPath
      */
     protected function processJavascript($packageNamespace, $basePath, $baseWebPath)
     {
         $sourceResourceJavascriptPath = $this->pathBuilder->getResourcesPath($packageNamespace) . 'Javascript' .
-            DIRECTORY_SEPARATOR;
+             DIRECTORY_SEPARATOR;
         $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
 
         $this->recurseCopy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
@@ -123,13 +123,13 @@ class ResourceProcessor
     /**
      * Processes the file extensions for a given package
      *
-     * @param $basePath
-     * @param $baseWebPath
+     * @param string $basePath
+     * @param string $baseWebPath
      */
     protected function processFileExtensions($basePath, $baseWebPath)
     {
         $sourceResourceImagePath = $this->pathBuilder->getResourcesPath('Chamilo\Configuration') . 'File' .
-            DIRECTORY_SEPARATOR;
+             DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
 
         $this->recurseCopy($sourceResourceImagePath, $webResourceImagePath, true);
@@ -137,7 +137,7 @@ class ResourceProcessor
 
     /**
      * Wrapper method for recurse copy
-     * 
+     *
      * @param string $sourcePath
      * @param string $targetPath
      * @param bool $overwrite

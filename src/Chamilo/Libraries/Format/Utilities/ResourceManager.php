@@ -1,25 +1,28 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-/**
- *
- * @package common
- */
 use Chamilo\Libraries\File\Path;
 
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
- * Currently only relevant for JavaScript and CSS
- * files.
+ * Currently only relevant for JavaScript and CSS files.
  *
  * @author Tim De Pauw
- * @package common
+ * @package Chamilo\Libraries\Format\Utilities
  */
 class ResourceManager
 {
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Utilities\ResourceManager
+     */
     private static $instance;
 
+    /**
+     *
+     * @var string[]
+     */
     private $resources;
 
     private function __construct()
@@ -27,17 +30,31 @@ class ResourceManager
         $this->resources = array();
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_resources()
     {
         return $this->resources;
     }
 
+    /**
+     *
+     * @param strin $path
+     * @return boolean
+     */
     public function resource_loaded($path)
     {
         // return false;
         return in_array($path, $this->resources);
     }
 
+    /**
+     *
+     * @param string $path
+     * @return string
+     */
     public function get_resource_html($path)
     {
         if ($this->resource_loaded($path))
@@ -51,6 +68,11 @@ class ResourceManager
         }
     }
 
+    /**
+     *
+     * @param string $path
+     * @return string
+     */
     private function _get_resource_html($path)
     {
         $pathUtil = Path::getInstance();
@@ -79,7 +101,7 @@ class ResourceManager
 
     /**
      *
-     * @return ResourceManager
+     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
      */
     public static function getInstance()
     {

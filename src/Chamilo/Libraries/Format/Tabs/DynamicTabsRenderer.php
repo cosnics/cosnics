@@ -3,16 +3,33 @@ namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Platform\Session\Request;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Tabs
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DynamicTabsRenderer
 {
     const PARAM_SELECTED_TAB = 'tab';
     const TYPE_CONTENT = 1;
     const TYPE_ACTIONS = 2;
 
+    /**
+     *
+     * @var string
+     */
     private $name;
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Tabs\DynamicTab[]
+     */
     private $tabs;
 
+    /**
+     *
+     * @param string $name
+     */
     public function __construct($name)
     {
         $this->name = $name;
@@ -21,7 +38,7 @@ class DynamicTabsRenderer
 
     /**
      *
-     * @return the $name
+     * @return string
      */
     public function get_name()
     {
@@ -30,13 +47,17 @@ class DynamicTabsRenderer
 
     /**
      *
-     * @return the $tabs
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicTab[]
      */
     public function get_tabs()
     {
         return $this->tabs;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function hasTabs()
     {
         return count($this->get_tabs()) > 0;
@@ -44,7 +65,7 @@ class DynamicTabsRenderer
 
     /**
      *
-     * @param $name the $name to set
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -53,7 +74,7 @@ class DynamicTabsRenderer
 
     /**
      *
-     * @param $tabs the $tabs to set
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicTab[] $tabs
      */
     public function set_tabs($tabs)
     {
@@ -61,7 +82,8 @@ class DynamicTabsRenderer
     }
 
     /**
-     * Retrieves the number of tabs
+     *
+     * @return integer
      */
     public function size()
     {
@@ -70,7 +92,7 @@ class DynamicTabsRenderer
 
     /**
      *
-     * @param DynamicTab $tab
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicTab $tab
      */
     public function add_tab(DynamicTab $tab)
     {
@@ -78,6 +100,10 @@ class DynamicTabsRenderer
         $this->tabs[] = $tab;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function header()
     {
         $tabs = $this->get_tabs();
@@ -100,6 +126,10 @@ class DynamicTabsRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function get_selected_tab()
     {
         $selected_tabs = Request::get(self::PARAM_SELECTED_TAB);
@@ -129,15 +159,14 @@ class DynamicTabsRenderer
     /**
      * Checks if a tab is active in this tabs renderer by a given tab name
      *
-     * @param string $tab_name
-     *
-     * @return bool
+     * @param string $tabName
+     * @return boolean
      */
-    protected function is_tab_name_active($tab_name)
+    protected function is_tab_name_active($tabName)
     {
         foreach ($this->get_tabs() as $tab)
         {
-            if ($tab->get_name() == $tab_name)
+            if ($tab->get_name() == $tabName)
             {
                 return true;
             }
@@ -146,6 +175,11 @@ class DynamicTabsRenderer
         return false;
     }
 
+    /**
+     *
+     * @param string $tabIdentifier
+     * @return boolean
+     */
     protected function is_tab_active($tabIdentifier)
     {
         $tabId = $this->get_name() . '-' . $tabIdentifier;
@@ -161,6 +195,10 @@ class DynamicTabsRenderer
         return false;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function footer()
     {
         $html = array();
@@ -189,6 +227,10 @@ class DynamicTabsRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         if ($this->hasTabs())

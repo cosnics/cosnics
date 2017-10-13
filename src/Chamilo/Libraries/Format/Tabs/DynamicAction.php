@@ -1,19 +1,52 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Tabs
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DynamicAction
 {
 
+    /**
+     *
+     * @var string
+     */
     private $title;
 
+    /**
+     *
+     * @var string
+     */
     private $description;
 
+    /**
+     *
+     * @var string
+     */
     private $image;
 
+    /**
+     *
+     * @var string
+     */
     private $url;
 
+    /**
+     *
+     * @var boolean
+     */
     private $confirm;
 
+    /**
+     *
+     * @param string $title
+     * @param string $description
+     * @param string $image
+     * @param string $url
+     * @param boolean $confirm
+     */
     public function __construct($title, $description, $image, $url = null, $confirm = false)
     {
         $this->title = $title;
@@ -25,7 +58,7 @@ class DynamicAction
 
     /**
      *
-     * @return the $title
+     * @return string
      */
     public function get_title()
     {
@@ -34,7 +67,7 @@ class DynamicAction
 
     /**
      *
-     * @param $title the $title to set
+     * @param string $title
      */
     public function set_title($title)
     {
@@ -43,7 +76,7 @@ class DynamicAction
 
     /**
      *
-     * @return the $description
+     * @return string
      */
     public function get_description()
     {
@@ -52,7 +85,7 @@ class DynamicAction
 
     /**
      *
-     * @param $description the $description to set
+     * @param string $description
      */
     public function set_description($description)
     {
@@ -61,7 +94,7 @@ class DynamicAction
 
     /**
      *
-     * @return the $image
+     * @return string
      */
     public function get_image()
     {
@@ -70,7 +103,7 @@ class DynamicAction
 
     /**
      *
-     * @param $image the $image to set
+     * @param string $image
      */
     public function set_image($image)
     {
@@ -79,7 +112,7 @@ class DynamicAction
 
     /**
      *
-     * @return the $url
+     * @return string
      */
     public function get_url()
     {
@@ -88,7 +121,7 @@ class DynamicAction
 
     /**
      *
-     * @param $url the $url to set
+     * @param string $url
      */
     public function set_url($url)
     {
@@ -97,7 +130,7 @@ class DynamicAction
 
     /**
      *
-     * @return the $confirm
+     * @return boolean
      */
     public function get_confirm()
     {
@@ -106,7 +139,7 @@ class DynamicAction
 
     /**
      *
-     * @param $confirm the $confirm to set
+     * @param boolean $confirm
      */
     public function set_confirm($confirm)
     {
@@ -115,7 +148,7 @@ class DynamicAction
 
     /**
      *
-     * @return boolean the $confirm
+     * @return boolean
      */
     public function needs_confirmation()
     {
@@ -123,10 +156,15 @@ class DynamicAction
         return $confirmation ? true : false;
     }
 
+    /**
+     *
+     * @param boolean $is_first
+     * @return string
+     */
     public function render($is_first = false)
     {
         $html = array();
-        
+
         if ($this->needs_confirmation())
         {
             $onclick = 'onclick = "return confirm(\'' . $this->get_confirm() . '\')"';
@@ -135,30 +173,30 @@ class DynamicAction
         {
             $onclick = '';
         }
-        
+
         $html[] = '<div class="list-group-item vertical-action">';
-        
+
         $html[] = '<div class="pull-left icon">';
         $html[] = '<a href="' . $this->get_url() . '" ' . $onclick . '><img src="' . $this->get_image() . '" alt="' .
              $this->get_title() . '" title="' . htmlentities($this->get_title()) . '"/></a>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="pull-left">';
-        
+
         $title = $this->get_title();
-        
+
         if (isset($title))
         {
             $html[] = '<h5 class="list-group-item-heading"><a href="' . $this->get_url() . '" ' . $onclick . '>' .
                  $this->get_title() . '</a></h5>';
         }
-        
+
         $html[] = '<p class="list-group-item-text">' . $this->get_description() . '</p>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

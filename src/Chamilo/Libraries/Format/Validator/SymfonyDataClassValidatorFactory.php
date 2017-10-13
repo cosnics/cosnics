@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Validator;
 
 use Chamilo\Libraries\File\Path;
@@ -8,26 +7,25 @@ use Symfony\Component\Validator\ValidatorBuilder;
 
 /**
  * Builds the Symfony Validator for use with annotaded data-classes
- *
  * More information can be found at the Symfony Validator Component manual:
- * @link http://symfony.com/doc/current/book/validation.html
  *
+ * @link http://symfony.com/doc/current/book/validation.html
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Format\Validator
  */
 class SymfonyDataClassValidatorFactory
 {
+
     /**
-     * Initializes the validator
+     *
+     * @return \Symfony\Component\Validator\ValidatorInterface
      */
     public function createValidator()
     {
         $vendorPath = Path::getInstance()->getVendorPath();
 
         AnnotationRegistry::registerAutoloadNamespaces(
-            array(
-                'Symfony\Component\Validator\Constraints' => $vendorPath . 'symfony/validator'
-            )
-        );
+            array('Symfony\Component\Validator\Constraints' => $vendorPath . 'symfony/validator'));
 
         $validator_builder = new ValidatorBuilder();
         $validator_builder->enableAnnotationMapping();
