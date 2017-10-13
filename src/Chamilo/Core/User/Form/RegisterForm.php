@@ -7,12 +7,12 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
 /**
  *
@@ -20,6 +20,9 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class RegisterForm extends FormValidator
 {
+    use DependencyInjectionContainerTrait;
+
+    // Constants
     const TYPE_CREATE = 1;
     const TYPE_EDIT = 2;
     const RESULT_SUCCESS = 'UserUpdated';
@@ -44,6 +47,15 @@ class RegisterForm extends FormValidator
         $this->user = $user;
         $this->build_creation_form();
         $this->setDefaults();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
     }
 
     /**
@@ -207,7 +219,7 @@ class RegisterForm extends FormValidator
             $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
             $user->set_email($values[User::PROPERTY_EMAIL]);
             $user->set_username($values[User::PROPERTY_USERNAME]);
-            $user->set_password(Hashing::hash($password));
+            $user->set_password($this->getHashingUtilities()->hashString($password));
             $this->unencryptedpass = $password;
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
             $user->set_phone($values[User::PROPERTY_PHONE]);

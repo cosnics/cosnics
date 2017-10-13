@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Authentication\Platform;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,6 +18,16 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class PlatformAuthentication extends CredentialsAuthentication implements ChangeablePassword, ChangeableUsername
 {
+    use DependencyInjectionContainerTrait;
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+    }
 
     /**
      *
@@ -25,7 +35,9 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      */
     public function login($password)
     {
-        if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing::hash($password))
+        $passwordHash = $this->getHashingUtilities()->hashString($password);
+
+        if ($this->getUser() instanceof User && $this->getUser()->get_password() == $passwordHash)
         {
 
             return true;
@@ -58,14 +70,16 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
             return false;
         }
 
+        $oldPasswordHash = $this->getHashingUtilities()->hashString($oldPassword);
+
         // Verify that the entered old password matches the stored password
-        if (Hashing::hash($oldPassword) != $user->get_password())
+        if ($oldPasswordHash != $user->get_password())
         {
             return false;
         }
 
         // Set the password
-        $user->set_password(Hashing::hash($newPassword));
+        $user->set_password($this->getHashingUtilities()->hashString($newPassword));
 
         return $user->update();
     }
