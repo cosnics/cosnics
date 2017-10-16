@@ -55,8 +55,9 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns a service from the dependency injection container
      *
-     * @param string serviceId
-     * @return \stdClass
+     * @param string $serviceId
+     *
+     * @return mixed
      */
     public function getService($serviceId)
     {

@@ -22,6 +22,16 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
 
     /**
      *
+     * @param string $userName
+     */
+    public function __construct($userName = null)
+    {
+        parent::__construct($userName);
+        $this->initializeContainer();
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
     public function getHashingUtilities()
