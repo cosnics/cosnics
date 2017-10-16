@@ -5,7 +5,8 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRender
 
 /**
  * This class represents a cell renderer for a DataClass gallery table
- * 
+ *
+ * @package Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop>
  */
@@ -13,21 +14,14 @@ abstract class DataClassGalleryTableCellRenderer extends GalleryTableCellRendere
 {
 
     /**
-     * **************************************************************************************************************
-     * Implemented Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Define the unique identifier for the DataClass needed for e.g.
      * checkboxes
-     * 
-     * @param DataClass $data_class
      *
-     * @return int
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @return integer
      */
-    public function render_id_cell($data_class)
+    public function render_id_cell($dataClass)
     {
-        return $data_class->get_id();
+        return $dataClass->get_id();
     }
 }

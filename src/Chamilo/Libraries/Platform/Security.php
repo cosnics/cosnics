@@ -6,6 +6,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
+ *
  * @package Chamilo\Libraries\Platform
  */
 class Security
@@ -21,7 +22,6 @@ class Security
      * @param bool $isAdmin
      *
      * @return string string
-     *
      * @deprecated
      *
      * @see removeXSS
@@ -110,6 +110,7 @@ class Security
     }
 
     /**
+     *
      * @param string[] $array
      * @param bool $isAdmin
      *
@@ -125,6 +126,7 @@ class Security
     }
 
     /**
+     *
      * @param string[] $array
      * @param bool $isAdmin
      *
@@ -144,7 +146,6 @@ class Security
         }
         return $array;
     }
-
 
     /**
      * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
@@ -204,9 +205,9 @@ class Security
      */
     public function getHashingUtilities()
     {
+        $this->initializeContainer();
         return $this->getService('chamilo.libraries.hashing.hashing_utilities');
     }
-
 
     /**
      * This function sets a random token to be included in a form as a hidden field and saves it into the user's
@@ -249,7 +250,6 @@ class Security
      * @param string $array
      *
      * @return bool if it's the right token, false otherwise
-     *
      * @deprecated
      *
      * @see checkToken

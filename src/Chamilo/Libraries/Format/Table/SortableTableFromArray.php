@@ -6,6 +6,8 @@ use Chamilo\Libraries\Platform\Security;
 
 /**
  * Sortable table which can be used for data available in an array
+ *
+ * @package Chamilo\Libraries\Format\Table
  */
 class SortableTableFromArray extends SortableTable
 {
@@ -120,8 +122,18 @@ class SortableTableFromArray extends SortableTable
     /**
      *
      * @return string
+     * @deprecated Use render() now
      */
     public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function render()
     {
         $this->initializeTable();
 
@@ -129,8 +141,7 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\SortableTable
+     * Initialize the table
      */
     protected function initializeTable()
     {
@@ -167,8 +178,7 @@ class SortableTableFromArray extends SortableTable
      * @param integer $count
      * @param integer $orderColumn
      * @param integer $orderDirection
-     *
-     * @return string[]
+     * @return string[][]
      */
     public function getData($offset = null, $count = null, $orderColumn = 0, $orderDirection = SORT_ASC)
     {
@@ -208,7 +218,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param string[] $tableData
+     * @param string[][] $tableData
      */
     public function setTableData($tableData)
     {
@@ -244,7 +254,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @return multitype:\Chamilo\Libraries\Format\Table\string
+     * @return string[]
      */
     public function getAdditionalParameters()
     {
@@ -253,7 +263,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param multitype :\Chamilo\Libraries\Format\Table\string $additionalParameters
+     * @param string[] $additionalParameters
      */
     public function setAdditionalParameters($additionalParameters)
     {

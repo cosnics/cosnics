@@ -38,6 +38,7 @@ class InvitationRegistrationForm extends FormValidator
     {
         parent::__construct('user_settings', 'post', $action);
 
+        $this->initializeContainer();
         $this->build_basic_form();
         $this->invitation = $invitation;
         $this->setDefaults();
