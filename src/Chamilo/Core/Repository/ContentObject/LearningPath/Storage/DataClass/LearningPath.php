@@ -163,7 +163,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 
     /**
      *
-     * @return object | TreeNodeDataService
+     * @return object | \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      */
     protected function getTreeNodeDataService()
     {
@@ -175,7 +175,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 
     /**
      *
-     * @return object | LearningPathService
+     * @return object |  \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      */
     protected function getLearningPathService()
     {
