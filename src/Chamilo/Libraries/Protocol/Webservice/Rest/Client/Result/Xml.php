@@ -5,6 +5,11 @@ use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
 use DOMDocument;
 use SimpleXMLElement;
 
+/**
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Result
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class Xml extends RestResult
 {
     const PARSE_DOM = 'DOM';
@@ -12,9 +17,11 @@ class Xml extends RestResult
 
     /**
      *
-     * @return DOMDocument
+     * @param string $parse
+     *
+     * @return \DOMDocument|\SimpleXMLElement
      */
-    public function get_response_content($parse = self :: PARSE_DOM)
+    public function get_response_content($parse = self::PARSE_DOM)
     {
         if ($parse == self::PARSE_DOM)
         {

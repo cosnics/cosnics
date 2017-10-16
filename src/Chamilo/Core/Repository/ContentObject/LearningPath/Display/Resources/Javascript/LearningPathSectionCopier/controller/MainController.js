@@ -123,6 +123,29 @@
 
             var treeSelector = $("#sectionSelectorTree");
 
+            this.canChangeCopyMode = function() {
+                var workspace = this.getSelectedWorkspace();
+                return workspace === undefined || (workspace !== undefined && workspace.copy_right === true && workspace.use_right === true);
+            };
+
+            this.isCopyModeSelectedByDefault = function() {
+                var workspace = this.getSelectedWorkspace();
+                return workspace !== undefined && workspace.copy_right === true && workspace.use_right === false;
+            };
+
+            this.getSelectedWorkspace = function() {
+                var main = this;
+                var selectedWorkspace = undefined;
+
+                this.workspaces.forEach(function(workspace) {
+                    if(workspace.id == main.selectedWorkspace) {
+                        selectedWorkspace = workspace;
+                    }
+                });
+
+                return selectedWorkspace;
+            };
+
             treeSelector.fancytree({
                 keyboard: false,
                 source: this.treeData,

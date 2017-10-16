@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -22,8 +20,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $activity_condition = new EqualityCondition(
             new PropertyConditionVariable(Activity::class_name(), Activity::PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($content_object->get_id())
-        );
+            new StaticConditionVariable($content_object->get_id()));
 
         return new $type($activity_condition);
     }
@@ -39,15 +36,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             foreach ($complex_content_object_path->get_nodes() as $node)
             {
                 $content_object_activity_count += self::countDirectActivitiesForContentObject(
-                    $node->get_content_object()
-                );
+                    $node->get_content_object());
             }
         }
         else
         {
-            $content_object_activity_count += self::countDirectActivitiesForContentObject(
-                $current_content_object
-            );
+            $content_object_activity_count += self::countDirectActivitiesForContentObject($current_content_object);
         }
 
         return $content_object_activity_count;
@@ -76,16 +70,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieveDirectActivitiesForContentObject(ContentObject $contentObject)
     {
-        $activity_parameters =
-            self::get_activity_parameters(DataClassRetrievesParameters::class_name(), $contentObject);
+        $activity_parameters = self::get_activity_parameters(DataClassRetrievesParameters::class_name(), $contentObject);
 
         return self::retrieves(Activity::class_name(), $activity_parameters);
     }
 
-    public static function retrieve_activities(
-        ContentObject $current_content_object, $condition, $offset, $count,
-        $order_property = null
-    )
+    public static function retrieve_activities(ContentObject $current_content_object, $condition, $offset, $count,
+        $order_property = null)
     {
         $content_object_activities = array();
 
@@ -105,8 +96,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     if ($path)
                     {
                         $activity_instance->set_content(
-                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content()
-                        );
+                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content());
                     }
 
                     $content_object_activities[] = $activity_instance;
@@ -129,20 +119,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     *
      * @param Activity[] $content_object_activities
      * @param $offset
      * @param $count
      * @param $order_property
-     *
      * @return ArrayResultSet
      */
-    public static function filterActivities(
-        $content_object_activities, $offset, $count, OrderBy $order_property
-    ): ArrayResultSet
+    public static function filterActivities($content_object_activities, $offset, $count, OrderBy $order_property): ArrayResultSet
     {
         usort(
             $content_object_activities,
-            function (Activity $activity_a, Activity $activity_b) use ($order_property) {
+            function (Activity $activity_a, Activity $activity_b) use ($order_property)
+            {
                 switch ($order_property->get_property()->get_property())
                 {
                     case Activity::PROPERTY_TYPE :
@@ -178,8 +167,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
 
                 return 1;
-            }
-        );
+            });
 
         $content_object_activities = array_splice($content_object_activities, $offset, $count);
 

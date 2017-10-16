@@ -140,7 +140,7 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('platform_name'));
+        $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('site_name'));
 
         $html[] = $this->renderSetting(
             Translation::get('InstituteShortName'),

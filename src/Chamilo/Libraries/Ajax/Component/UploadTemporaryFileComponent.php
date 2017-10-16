@@ -18,27 +18,30 @@ use Chamilo\Libraries\Platform\Translation;
 class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $file = $this->getFile();
 
-        if (!$file->isValid())
+        if (! $file->isValid())
         {
             JsonAjaxResult::bad_request(
-                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
-            );
+                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES));
         }
 
         $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
         $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
-        
+
         Filesystem::create_dir($temporaryPath);
-        
+
         $fileName = md5(UUID::v4());
         $temporaryFilePath = $temporaryPath . $fileName;
-        
+
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
-        
+
         if (! $result)
         {
             JsonAjaxResult::general_error(Translation::get('FileNotUploaded'));
@@ -54,22 +57,24 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
     /**
      *
      * @throws \Exception
-     *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function getFile()
     {
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
-        if(empty($filePropertyName)) {
+        if (empty($filePropertyName))
+        {
             throw new \Exception('filePropertyName parameter not available in request');
         }
 
         $file = $this->getRequest()->files->get($filePropertyName);
-        if(empty($file)) {
+        if (empty($file))
+        {
             $errorMessage = "File with key " . $filePropertyName . "not found in request.";
 
             $availableKeys = $this->getRequest()->files->keys();
-            if(!empty($availableKeys)) {
+            if (! empty($availableKeys))
+            {
                 $errorMessage .= " Available file keys: " . implode(', ', $availableKeys) . ".";
             }
 

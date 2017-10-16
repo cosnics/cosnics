@@ -1,70 +1,73 @@
 {
-    "name" : "chamilo/lcms-connect",
-    "description" : "Chamilo LCMS Connect",
-    "license" : [ "GPL-3.0" ],
-    "keywords" : [ "ELO", "LCMS" ],
-    "support" : {
-        "forum" : "http://lcms.chamilo.org/phpbbforum",
-        "source" : "https://bitbucket.org/chamilo/lcms-connect/src",
-        "issues" : "https://support.chamilo.org/projects/lcms-backlog"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require" : {
-        "symfony/dependency-injection": "2.*",
-        "symfony/console": "2.*",
-        "symfony/http-foundation" : "2.*",
-        "symfony/validator": "2.*",
-        "symfony/form" : "2.*",
-        "symfony/twig-bridge": "2.*",
-        "symfony/translation": "2.*",
-        "symfony/filesystem": "2.*",
-        "symfony/event-dispatcher": "2.*",
-        "symfony/config": "2.*",
-        "symfony/yaml": "2.*",
-        "symfony/finder": "2.*",
-        "twig/twig" : "1.*",
-        "doctrine/dbal" : "2.5.4",
-        "doctrine/cache" : "1.5.*",
-        "chamilo/pear-libraries" : "*",
-        "google/apiclient": "1.*",
-        "monolog/monolog": "1.*",
-        "jms/serializer": "*",
-        "guzzlehttp/guzzle": "^6.0",
-        "doctrine/orm": "2.*",
-        "doctrine/migrations": "1.0.*@dev"
-    },
-    "require-dev" : {
-        "phpunit/phpunit" : "6.2.*",
-        "nelmio/alice": "^3.0@RC",
-        "behat/behat" : "*",
-        "behat/mink" : "*",
-        "behat/mink-extension" : "*",
-        "behat/mink-goutte-driver" : "*",
-        "fabpot/goutte" : "<3",
-        "composer/composer": "*@dev"
-    },
-    "repositories" : [
-        {
-            "type": "vcs",
-            "url": "https://bitbucket.org/chamilo/pear-libraries"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Chamilo\\": "src/Chamilo/"
-        }
-    },
-    "config" : {
-        "bin-dir" : "bin/"
-    },
-    "extra" : {
-        "install-path" : ""
-    },
-    "scripts":{
-        "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-        "pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
-        "post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
-        "post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
-    }
+	"name": "cosnics/cosnics",
+	"description": "Cosnics",
+	"license": "MIT",
+	"keywords": [
+		"ELO",
+		"LCMS",
+		"Cosnics"
+	],
+	"support": {
+		"source": "https://github.com/cosnics/cosnics",
+		"issues": "https://github.com/cosnics/cosnics/issues"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": ">=7.0.0",
+		"symfony/dependency-injection": "2.*",
+		"symfony/console": "2.*",
+		"symfony/http-foundation": "2.*",
+		"symfony/validator": "2.*",
+		"symfony/form": "2.*",
+		"symfony/twig-bridge": "2.*",
+		"symfony/translation": "2.*",
+		"symfony/filesystem": "2.*",
+		"symfony/event-dispatcher": "2.*",
+		"symfony/config": "2.*",
+		"symfony/yaml": "2.*",
+		"symfony/finder": "2.*",
+		"twig/twig": "1.*",
+		"doctrine/dbal": "2.5.4",
+		"doctrine/cache": "1.5.*",
+		"chamilo/pear-libraries": "*",
+		"google/apiclient": "1.*",
+		"monolog/monolog": "1.*",
+		"jms/serializer": "*",
+		"guzzlehttp/guzzle": "^6.0",
+		"doctrine/orm": "2.*",
+		"doctrine/migrations": "1.0.*@dev"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "6.2.*",
+		"nelmio/alice": "^3.0@RC",
+		"behat/behat": "*",
+		"behat/mink": "*",
+		"behat/mink-extension": "*",
+		"behat/mink-goutte-driver": "*",
+		"fabpot/goutte": "<3",
+		"composer/composer": "*@dev"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/cosnics/pear-libraries"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Chamilo\\": "src/Chamilo/"
+		}
+	},
+	"config": {
+		"bin-dir": "bin/"
+	},
+	"scripts": {
+		"pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+		"pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+		"post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+		"post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+		"new-post-update-cmd": "@php console chamilo:process_resources",
+		"new-post-install-cmd": "@php console chamilo:process_resources"
+	}
 }

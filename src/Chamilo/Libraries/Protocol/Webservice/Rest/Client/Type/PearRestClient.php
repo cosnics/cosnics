@@ -8,19 +8,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class PearRestClient extends RestClient
 {
 
-    private $pear;
-
-    public function __construct($base_url)
+    public function __construct($baseUrl)
     {
-        parent::__construct($base_url);
+        parent::__construct($baseUrl);
         $this->set_mode(self::MODE_PEAR);
         
-        $this->set_check_target_certificate(false);
+        $this->set_check_targetCertificate(false);
     }
 
-    public function request($response_mime_type = false)
+    /**
+     * @param bool $responseMimeType
+     *
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
+     */
+    public function request($responseMimeType = false)
     {
-        $result = new RestResult();
+        $result = $result = RestResult::content_type_factory($responseMimeType);
         $result->set_request_connexion_mode($this->get_mode());
         $result->set_request_http_method($this->get_method());
         $result->set_request_sent_data($this->get_data());
@@ -141,23 +144,5 @@ class PearRestClient extends RestClient
         }
         
         return $result;
-    }
-
-    /**
-     *
-     * @return the $pear
-     */
-    public function get_pear()
-    {
-        return $this->pear;
-    }
-
-    /**
-     *
-     * @param $pear the $curl to set
-     */
-    public function set_pear($pear)
-    {
-        $this->pear = $pear;
     }
 }

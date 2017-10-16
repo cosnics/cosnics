@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/core-repository-integration-chamilo-core-reporting",
+    "version": "1.0.0",
+    "description": "Core Repository Integration Chamilo Core Reporting",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Reporting"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Reporting",
+            "context": "Chamilo\\Core\\Repository\\Integration\\Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core\\Repository\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Reporting",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

@@ -9,14 +9,12 @@ namespace Chamilo\Libraries\Format\Form;
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
- * $Id: form_validator_page.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.formvalidator
  * @author Alexey Borzov <avb@php.net>
  * @author Bertrand Mansion <bmansion@mamasam.com>
  * @copyright 2003-2007 The PHP Group
  * @license http://www.php.net/license/3_01.txt PHP License 3.01
- * @version CVS: $Id: form_validator_page.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
  * @link http://pear.php.net/package/HTML_QuickForm_Controller
  */
 
@@ -29,7 +27,7 @@ namespace Chamilo\Libraries\Format\Form;
  * Generally you'll need to subclass this and define your buildForm()
  * method that will build the form. While it is also possible to instantiate
  * this class and build the form manually, this is not the recommended way.
- * 
+ *
  * @category HTML
  * @author Alexey Borzov <avb@php.net>
  * @author Bertrand Mansion <bmansion@mamasam.com>
@@ -40,14 +38,14 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Contains the mapping of actions to corresponding HTML_QuickForm_Action objects
-     * 
+     *
      * @var array
      */
     public $_actions = array();
 
     /**
      * Contains a reference to a Controller object containing this page
-     * 
+     *
      * @var HTML_QuickForm_Controller
      * @access public
      */
@@ -55,14 +53,14 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Should be set to true on first call to buildForm()
-     * 
+     *
      * @var bool
      */
     public $_formBuilt = false;
 
     /**
      * Class constructor
-     * 
+     *
      * @access public
      */
     public function __construct($formName, $method = 'post', $target = '', $attributes = null)
@@ -72,7 +70,7 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Registers a handler for a specific action.
-     * 
+     *
      * @access public
      * @param string name of the action
      * @param HTML_QuickForm_Action the handler for the action
@@ -86,7 +84,7 @@ class FormValidatorPage extends FormValidator
      * Handles an action.
      * If an Action object was not registered here, controller's handle()
      * method will be called.
-     * 
+     *
      * @access public
      * @param string Name of the action
      * @throws PEAR_Error
@@ -105,7 +103,7 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Returns a name for a submit button that will invoke a specific action.
-     * 
+     *
      * @access public
      * @param string Name of the action
      * @return string "name" attribute for a submit button
@@ -118,7 +116,7 @@ class FormValidatorPage extends FormValidator
     /**
      * Loads the submit values from the array.
      * The method is NOT intended for general usage.
-     * 
+     *
      * @param array 'submit' values
      * @access public
      */
@@ -139,7 +137,7 @@ class FormValidatorPage extends FormValidator
      * and possibly setDefaults() and setConstants() calls. The method will be
      * called on demand, so please be sure to set $_formBuilt property to true to
      * assure that the method works only once.
-     * 
+     *
      * @access public
      * @abstract
      *
@@ -151,7 +149,7 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Checks whether the form was already built.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -165,7 +163,7 @@ class FormValidatorPage extends FormValidator
      * This is necessary as the user may just press Enter instead of
      * clicking one of the named submit buttons and then no action name will
      * be passed to the script.
-     * 
+     *
      * @access public
      * @param string default action name
      */
@@ -184,7 +182,7 @@ class FormValidatorPage extends FormValidator
 
     /**
      * Returns 'safe' elements' values
-     * 
+     *
      * @param mixed Array/string of element names, whose values we want. If not set then return all elements.
      * @param bool Whether to remove internal (_qf_...) values from the resultant array
      */

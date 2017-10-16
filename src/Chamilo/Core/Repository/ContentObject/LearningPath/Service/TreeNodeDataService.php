@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
@@ -75,16 +76,16 @@ class TreeNodeDataService
      *
      * @param int $treeNodeDataId
      *
-     * @return TreeNodeData
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function getTreeNodeDataById($treeNodeDataId)
     {
         $treeNodeData = $this->treeNodeDataRepository->findTreeNodeData($treeNodeDataId);
         if (!$treeNodeData)
         {
-            throw new \RuntimeException(
-                sprintf('The given learning path child with id %s could not be found', $treeNodeDataId)
-            );
+            throw new TreeNodeNotFoundException($treeNodeDataId);
         }
 
         return $treeNodeData;

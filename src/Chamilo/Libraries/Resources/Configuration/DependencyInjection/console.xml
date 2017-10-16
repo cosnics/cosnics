@@ -62,6 +62,21 @@
                     id="chamilo.libraries.cache.cache_management.cache_manager" />
             <tag name="chamilo.libraries.console.command" />
         </service>
+        
+        <service
+                id="chamilo.libraries.console.command.package_describer_command"
+                class="Chamilo\Libraries\Console\Command\PackageDescriberCommand">
+            <argument
+                    type="service"
+                    id="symfony.component.translation.translator" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.format.utilities.package_describer" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.cache.cache_management.cache_manager" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
 
         <service id="chamilo.libraries.console.command.generate_php_unit_config"
                  class="Chamilo\Libraries\Console\Command\PHPUnitGeneratorCommand">

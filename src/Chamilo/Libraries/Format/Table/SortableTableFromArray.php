@@ -6,13 +6,15 @@ use Chamilo\Libraries\Platform\Security;
 
 /**
  * Sortable table which can be used for data available in an array
+ *
+ * @package Chamilo\Libraries\Format\Table
  */
 class SortableTableFromArray extends SortableTable
 {
 
     /**
      * The array containing all data for this table
-     * 
+     *
      * @var string[]
      */
     private $tableData;
@@ -84,22 +86,22 @@ class SortableTableFromArray extends SortableTable
      * @param boolean $enableSorting
      * @param boolean $allowPageNavigation
      */
-    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1, 
-        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true, 
+    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
+        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
         $allowPageNavigation = true)
     {
         $this->tableName = $tableName;
-        
+
         parent::__construct(
-            $tableName, 
-            array($this, 'countData'), 
-            array($this, 'getData'), 
-            $defaultOrderColumn, 
-            $defaultPerPage, 
-            $defaultOrderDirection, 
-            $allowPageSelection, 
+            $tableName,
+            array($this, 'countData'),
+            array($this, 'getData'),
+            $defaultOrderColumn,
+            $defaultPerPage,
+            $defaultOrderDirection,
+            $allowPageSelection,
             $allowPageNavigation);
-        
+
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
         $this->additionalParameters = $additionalParameters;
@@ -110,7 +112,7 @@ class SortableTableFromArray extends SortableTable
         $this->allowPageSelection = $allowPageSelection;
         $this->enableSorting = $enableSorting;
         $this->allowPageNavigation = $allowPageNavigation;
-        
+
         if (! $allowPageSelection)
         {
             $this->defaultPerPage = count($tableData);
@@ -120,43 +122,52 @@ class SortableTableFromArray extends SortableTable
     /**
      *
      * @return string
+     * @deprecated Use render() now
      */
     public function toHtml()
     {
-        $this->initializeTable();
-        
-        return parent::toHtml();
+        return $this->render();
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Table\SortableTable
+     * @return string
+     */
+    public function render()
+    {
+        $this->initializeTable();
+
+        return parent::toHtml();
+    }
+
+    /**
+     * Initialize the table
      */
     protected function initializeTable()
     {
         $this->setAdditionalParameters($this->getAdditionalParameters());
-        
+
         foreach ($this->getTableColumns() as $key => $tableColumn)
         {
             $headerAttributes = $contentAttributes = array();
-            
+
             $cssClasses = $tableColumn->getCssClasses();
-            
+
             if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
             {
                 $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
             }
-            
+
             if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
             {
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
-            
+
             $this->setColumnHeader(
-                $key, 
-                Security::remove_XSS($tableColumn->get_title()), 
-                $tableColumn->is_sortable(), 
-                $headerAttributes, 
+                $key,
+                Security::remove_XSS($tableColumn->get_title()),
+                $tableColumn->is_sortable(),
+                $headerAttributes,
                 $contentAttributes);
         }
     }
@@ -167,23 +178,23 @@ class SortableTableFromArray extends SortableTable
      * @param integer $count
      * @param integer $orderColumn
      * @param integer $orderDirection
-     *
-     * @return string[]
+     * @return string[][]
      */
     public function getData($offset = null, $count = null, $orderColumn = 0, $orderDirection = SORT_ASC)
     {
         $content = $this->getTableData();
-        
+
         if ($this->getEnableSorting())
         {
-            $content = TableSort::sort_table($content, $orderColumn, $orderDirection);
+            $tableSorter = new TableSort($content, $orderColumn, $orderDirection);
+            $content = $tableSorter->sort();
         }
-        
+
         if ($this->getAllowPageSelection())
         {
             $content = array_slice($content, $offset, $count);
         }
-        
+
         return $content;
     }
 
@@ -207,7 +218,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param string[] $tableData
+     * @param string[][] $tableData
      */
     public function setTableData($tableData)
     {
@@ -243,7 +254,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @return multitype:\Chamilo\Libraries\Format\Table\string
+     * @return string[]
      */
     public function getAdditionalParameters()
     {
@@ -252,7 +263,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param multitype :\Chamilo\Libraries\Format\Table\string $additionalParameters
+     * @param string[] $additionalParameters
      */
     public function setAdditionalParameters($additionalParameters)
     {

@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -426,8 +427,15 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
                     $this->get_parameters()->getWorkspace(), 
                     $content_object);
-                
-                $parent_id = $contentObjectRelation->getCategoryId();
+
+                if($contentObjectRelation instanceof WorkspaceContentObjectRelation)
+                {
+                    $parent_id = $contentObjectRelation->getCategoryId();
+                }
+                else
+                {
+                    $parent_id = 0;
+                }
             }
             
             if (! $this->in_category_id_cache($parent_id))

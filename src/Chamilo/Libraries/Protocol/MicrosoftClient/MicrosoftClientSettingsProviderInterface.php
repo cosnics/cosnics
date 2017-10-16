@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Protocol\MicrosoftClient;
 
 /**
  * Settings provider to support the microsoft client service
- * 
+ *
+ * @package Chamilo\Libraries\Protocol\MicrosoftClient
+ *
  * @author Andras Zolnay - edufiles
  */
 interface MicrosoftClientSettingsProviderInterface
@@ -24,9 +26,11 @@ interface MicrosoftClientSettingsProviderInterface
      * This string concatenated with 'https://login.microsoftonline.com/<tenant>/oauth2/' makes up the Microsoft
      * authentication service URL.
      * 
-     * @return Derived classes should return one of the following values.
+     * Derived classes should return one of the following values.
      *         - OAUTH2: ''
      *         - OAUTH2 v2.0: 'v2.0'
+     *
+     * @return string
      */
     public function getOauth2Version();
 
@@ -47,12 +51,14 @@ interface MicrosoftClientSettingsProviderInterface
     /**
      * Array of scopes or resource that you want the user to consent to.
      * 
-     * @return - Mircosoft OAUTH2: string containing the resource. The App ID URI of the web API. To find the App ID URI
+     * Mircosoft OAUTH2: string containing the resource. The App ID URI of the web API. To find the App ID URI
      *         of the web API, in the
      *         Azure Management Portal, click Active Directory, click the directory, click the application and then
      *         click Configure.
      *         E.g. 'https://<company>.sharepoint.com'
      *         - Mircosoft OAUTH2 v2.0: scopes in string array e.g. array('https://graph.microsoft.com/Files.Read')
+     *
+     * @return string[]
      */
     public function getScopeOrResource();
 

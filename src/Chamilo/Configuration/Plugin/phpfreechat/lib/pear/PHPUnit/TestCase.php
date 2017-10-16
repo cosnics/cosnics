@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestCase.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -77,7 +76,7 @@ require_once 'PHPUnit/TestResult.php';
  * }
  * ?>
  * </code>
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -99,7 +98,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * The name of the test case.
-     * 
+     *
      * @var string
      * @access private
      */
@@ -107,7 +106,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * PHPUnit_TestResult object
-     * 
+     *
      * @var object
      * @access private
      */
@@ -115,7 +114,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Constructs a test case with the given name.
-     * 
+     *
      * @param string
      * @access public
      */
@@ -129,7 +128,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Counts the number of test cases executed by run(TestResult result).
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -140,7 +139,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Gets the name of a TestCase.
-     * 
+     *
      * @return string
      * @access public
      */
@@ -151,7 +150,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Runs the test case and collects the results in a given TestResult object.
-     * 
+     *
      * @param object
      * @return object
      * @access public
@@ -160,13 +159,13 @@ class PHPUnit_TestCase extends PHPUnit_Assert
     {
         $this->_result =$result;
         $this->_result->run($this);
-        
+
         return $this->_result;
     }
 
     /**
      * Runs the bare test sequence.
-     * 
+     *
      * @access public
      */
     function runBare()
@@ -179,7 +178,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Override to run the test and assert its state.
-     * 
+     *
      * @access protected
      */
     function runTest()
@@ -189,7 +188,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Sets the name of a TestCase.
-     * 
+     *
      * @param string
      * @access public
      */
@@ -200,7 +199,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Returns a string representation of the test case.
-     * 
+     *
      * @return string
      * @access public
      */
@@ -211,7 +210,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Creates a default TestResult object.
-     * 
+     *
      * @return object
      * @access protected
      */
@@ -222,7 +221,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
 
     /**
      * Fails a test with the given message.
-     * 
+     *
      * @param string
      * @access protected
      */
@@ -231,22 +230,22 @@ class PHPUnit_TestCase extends PHPUnit_Assert
         if (function_exists('debug_backtrace'))
         {
             $trace = debug_backtrace();
-            
+
             if (isset($trace['1']['file']))
             {
-                $message = sprintf("%s in %s:%s", 
+                $message = sprintf("%s in %s:%s",
 
                 $message, $trace['1']['file'], $trace['1']['line']);
             }
         }
-        
+
         $this->_result->addFailure($this, $message);
         $this->_failed = TRUE;
     }
 
     /**
      * Passes a test.
-     * 
+     *
      * @access protected
      */
     function pass()
@@ -260,7 +259,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
-     * 
+     *
      * @access protected
      * @abstract
      *
@@ -271,7 +270,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
     /**
      * Tears down the fixture, for example, close a network connection.
      * This method is called after a test is executed.
-     * 
+     *
      * @access protected
      * @abstract
      *

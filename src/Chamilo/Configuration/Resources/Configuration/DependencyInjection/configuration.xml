@@ -78,5 +78,16 @@
                 type="service"
                 id="chamilo.configuration.service.file_configuration_loader" />
         </service>
+        
+                <service
+                id="chamilo.configuration.package.service.package_factory"
+                class="Chamilo\Configuration\Package\Service\PackageFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path_builder" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.platform.translation"/>
+        </service>
     </services>
 </container>

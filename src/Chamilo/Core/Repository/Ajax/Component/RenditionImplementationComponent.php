@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
@@ -7,7 +6,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 
 class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
@@ -16,7 +14,6 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
     const PARAM_PARAMETERS = 'parameters';
-
     const PROPERTY_RENDITION = 'rendition';
 
     /*
@@ -29,8 +26,7 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
             self::PARAM_FORMAT,
             self::PARAM_VIEW,
             self::PARAM_SECURITY_CODE,
-            self::PARAM_PARAMETERS
-        );
+            self::PARAM_PARAMETERS);
     }
 
     /*
@@ -41,12 +37,12 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
         try
         {
             /**
+             *
              * @var ContentObject $object
              */
-            $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                ContentObject:: class_name(),
-                $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID)
-            );
+            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID));
 
             $security_code = $this->getPostDataValue(self::PARAM_SECURITY_CODE);
             if ($security_code != $object->calculate_security_code())
@@ -54,19 +50,18 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
                 throw new NotAllowedException();
             }
 
-            $display = ContentObjectRenditionImplementation:: factory(
+            $display = ContentObjectRenditionImplementation::factory(
                 $object,
                 $this->getPostDataValue(self::PARAM_FORMAT),
                 $this->getPostDataValue(self::PARAM_VIEW),
-                $this
-            );
+                $this);
 
             $rendition = $display->render($this->getPostDataValue(self::PARAM_PARAMETERS));
         }
         catch (NotAllowedException $ex)
         {
             $result = new JsonAjaxResult(401);
-            $result->display(); //contains exit.
+            $result->display(); // contains exit.
         }
         catch (\Exception $ex)
         {

@@ -1,9 +1,13 @@
 {
-    "name": "chamilo/core-group",
-        "version": "6.0.0", "description": "Chamilo Group Core Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-group",
+    "version": "1.0.0",
+    "description": "Core Group",
+    "keywords": [
+        "Core",
+        "Group"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +18,24 @@
             "email": "hans.de.bisschop@hogent.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "group"
+        "cosnics": {
+            "name": "Group",
+            "context": "Chamilo\\Core\\Group",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

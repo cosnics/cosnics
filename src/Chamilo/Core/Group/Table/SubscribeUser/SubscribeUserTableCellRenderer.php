@@ -11,8 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: subscribe_user_browser_table_cell_renderer.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package groups.lib.group_manager.component.subscribe_user_browser
  */
 /**
@@ -20,17 +19,17 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $user)
     {
-        
+
         // Add special features here
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
             case User::PROPERTY_STATUS :
-                
+
                 if ($user->get_status() == 1)
                 {
                     return Translation::get('CourseAdmin', null, \Chamilo\Core\User\Manager::context());
@@ -56,22 +55,22 @@ class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implemen
 
     /**
      * Gets the action links to display
-     * 
+     *
      * @param User $user The user for which the action links should be returned
      * @return string A HTML representation of the action links
      */
     public function get_actions($user)
     {
         $group = $this->get_component()->get_group();
-        
+
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Subscribe'), 
-                Theme::getInstance()->getCommonImagePath('Action/Subscribe'), 
-                $this->get_component()->get_group_rel_user_subscribing_url($group, $user), 
+                Translation::get('Subscribe'),
+                Theme::getInstance()->getCommonImagePath('Action/Subscribe'),
+                $this->get_component()->get_group_rel_user_subscribing_url($group, $user),
                 ToolbarItem::DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

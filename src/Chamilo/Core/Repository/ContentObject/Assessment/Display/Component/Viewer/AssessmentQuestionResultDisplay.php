@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc
  */

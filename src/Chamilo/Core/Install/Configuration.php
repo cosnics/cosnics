@@ -106,7 +106,7 @@ class Configuration
         $values['admin_username'] = $this->get_admin_login();
         $values['admin_password'] = $this->get_admin_password();
 
-        $values['platform_name'] = $this->get_campus_name();
+        $values['site_name'] = $this->get_campus_name();
         $values['organization_name'] = $this->get_institution_name();
         $values['organization_url'] = $this->get_institution_webpage();
 
@@ -198,8 +198,8 @@ class Configuration
         if (isset($values['admin_password']))
             $this->set_admin_password($values['admin_password']);
 
-        if (isset($values['platform_name']))
-            $this->set_campus_name($values['platform_name']);
+        if (isset($values['site_name']))
+            $this->set_campus_name($values['site_name']);
         if (isset($values['organization_name']))
             $this->set_institution_name($values['organization_name']);
         if (isset($values['organization_url']))

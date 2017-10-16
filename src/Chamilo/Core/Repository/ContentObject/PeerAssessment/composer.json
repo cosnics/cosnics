@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-peer-assessment",
-        "version": "6.0.0", "description": "Chamilo Peer Assessment Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-peer-assessment",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject PeerAssessment",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "PeerAssessment"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -12,15 +18,36 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Renaat De Muynck",
+            "email": "renaat.demuynck@arteveldehs.be"
+        },
+        {
+            "name": "jens vanderheyden",
+            "email": "jevdheyd@vub.ac.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.0.0",
         "szymach/c-pchart": "1.1.*"
     },
     "extra": {
-        "install-path": "repository/content_object/peer_assessment"
+        "cosnics": {
+            "name": "Peer Assessment",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\PeerAssessment",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "PeerAssessment",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

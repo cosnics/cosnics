@@ -7,7 +7,8 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
- * 
+ *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -16,7 +17,7 @@ class ErrorHandler
 
     /**
      * The Exception Logger
-     * 
+     *
      * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     protected $exceptionLogger;
@@ -35,12 +36,12 @@ class ErrorHandler
 
     /**
      * ErrorHandlerManager constructor.
-     * 
+     *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Platform\Translation $translator
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
-    public function __construct(ExceptionLoggerInterface $exceptionLogger, Translation $translator, 
+    public function __construct(ExceptionLoggerInterface $exceptionLogger, Translation $translator,
         Theme $themeUtilities)
     {
         $this->exceptionLogger = $exceptionLogger;
@@ -108,13 +109,13 @@ class ErrorHandler
     public function handleShutdown()
     {
         $error = error_get_last();
-        
+
         if (! is_null($error) && $error['type'] == E_ERROR)
         {
             $this->getExceptionLogger()->logException(
                 new \Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
-                ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR, 
-                $error['file'], 
+                ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
+                $error['file'],
                 $error['line']);
             $this->displayGeneralErrorPage();
         }
@@ -122,20 +123,20 @@ class ErrorHandler
 
     /**
      * General error handler for (catchable) errors in PHP
-     * 
-     * @param int $errorNumber
+     *
+     * @param integer $errorNumber
      * @param string $errorString
      * @param string $file
-     * @param int $line
+     * @param integer $line
      *
-     * @return bool
+     * @return boolean
      */
     public function handleError($errorNumber, $errorString, $file, $line)
     {
         $exceptionTypes = array(
-            E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR, 
-            E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING, 
-            E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING, 
+            E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR,
+            E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
+            E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
             E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR);
 
         if (! array_key_exists($errorNumber, $exceptionTypes))
@@ -144,15 +145,15 @@ class ErrorHandler
         }
 
         $exceptionLevel = $exceptionTypes[$errorNumber];
-        
+
         $this->getExceptionLogger()->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
-        
+
         return true;
     }
 
     /**
      * General exception handler for exceptions in PHP
-     * 
+     *
      * @param \Exception $exception
      */
     public function handleException($exception)
@@ -168,7 +169,7 @@ class ErrorHandler
     {
         set_exception_handler(array($this, 'handleException'));
         set_error_handler(array($this, 'handleError'));
-        
+
         register_shutdown_function(array($this, 'handleShutdown'));
     }
 
@@ -178,28 +179,28 @@ class ErrorHandler
     protected function displayGeneralErrorPage()
     {
         $path = $this->getThemeUtilities()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
-        
+
         $template = file_get_contents($path);
-        
+
         $variables = array(
-            'error_code' => 500, 
-            'error_title' => $this->getTranslation('FatalErrorTitle'), 
-            'error_content' => $this->getTranslation('FatalErrorContent'), 
+            'error_code' => 500,
+            'error_title' => $this->getTranslation('FatalErrorTitle'),
+            'error_content' => $this->getTranslation('FatalErrorContent'),
             'return_button_content' => $this->getTranslation('ReturnToPreviousPage'));
-        
+
         foreach ($variables as $variable => $value)
         {
             $template = str_replace('{ ' . $variable . ' }', $value, $template);
         }
-        
+
         echo $template;
     }
 
     /**
      * Helper function for translations
-     * 
+     *
      * @param string $variable
-     * @param array $parameters
+     * @param string[] $parameters
      * @param string $context
      *
      * @return string

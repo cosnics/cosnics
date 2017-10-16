@@ -1,6 +1,11 @@
 <?php
 namespace Chamilo\Libraries\File\Rss\Parser;
 
+/**
+ *
+ * @package Chamilo\Libraries\File\Rss\Parser
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class RssFeedParserFactory
 {
     const SIMPLE_PIE_FEED_PARSER = 'simplePie';
@@ -8,19 +13,19 @@ class RssFeedParserFactory
     /**
      *
      * @param \HTMLPurifier $purifier
-     * @param String $type
+     * @param string $type
      *
      * @return RssFeedParserInterface
      */
     public static function create(\HTMLPurifier $purifier, $type)
     {
-        $feed_parser = null;
-        
+        $feedParser = null;
+
         if ($type == self::SIMPLE_PIE_FEED_PARSER)
         {
-            $feed_parser = new SimplePieRssFeedParser(new \SimplePie(), $purifier);
+            $feedParser = new SimplePieRssFeedParser(new \SimplePie(), $purifier);
         }
-        
-        return $feed_parser;
+
+        return $feedParser;
     }
-} 
+}

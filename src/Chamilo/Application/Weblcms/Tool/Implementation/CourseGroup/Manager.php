@@ -6,8 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: course_group_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group
  */
 /**
@@ -37,9 +36,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function get_course_group()
     {
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
-        
+
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            CourseGroup::class_name(), 
+            CourseGroup::class_name(),
             $course_group_id);
     }
 

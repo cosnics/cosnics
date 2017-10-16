@@ -53,4 +53,6 @@ interface WeblcmsRepositoryInterface
      * @return CourseEntityRelation
      */
     public function retrieveCourseEntityRelationByEntityAndCourse($entityType, $entityId, $courseId);
+
+    public function clearCourseEntityRelationCache();
 }

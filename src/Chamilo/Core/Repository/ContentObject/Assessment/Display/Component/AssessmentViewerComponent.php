@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- * $Id: assessment_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component
  */

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribed;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
@@ -29,7 +30,14 @@ class AllSubscribedUserTableColumnModel extends RecordTableColumnModel implement
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
+
+        $showEmail = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'show_email_addresses'));
+
+        if($showEmail)
+        {
+            $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
+        }
+
         $this->add_column(new SortableStaticTableColumn(self::SUBSCRIPTION_STATUS));
         $this->add_column(new StaticTableColumn(self::SUBSCRIPTION_TYPE));
     }

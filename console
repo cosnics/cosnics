@@ -1,17 +1,15 @@
 <?php
-use Chamilo\Configuration\Configuration;
+
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
-require_once __DIR__ . '/src/Chamilo/Libraries/Architecture/Bootstrap.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
-
-$containerBuilder = new DependencyInjectionContainerBuilder();
-$container = $containerBuilder->createContainer();
+$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 
 /** @var \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter */
 $configurationConsulter = $container->get('chamilo.configuration.service.configuration_consulter');

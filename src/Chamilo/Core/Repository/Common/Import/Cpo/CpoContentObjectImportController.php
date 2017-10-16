@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -28,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 use DOMXPath;
 
@@ -185,7 +187,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function get_category_id_cache_id($old_id)
     {
-        return $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        $cachedCategory = $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        return empty($cachedCategory) ? 0 : $cachedCategory;
     }
 
     public function get_content_object_object_number_cache_id($old_object_number)
@@ -234,6 +237,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function run()
     {
+        if(empty($this->get_parameters()->get_file()))
+        {
+            throw new NoObjectSelectedException(Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
+        }
+
         if (in_array($this->get_parameters()->get_file()->get_extension(), self::get_allowed_extensions()))
         {
             $this->temporary_directory = $this->unzip();
@@ -728,7 +736,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     {
         if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
         {
-            return $parent_id;
+            return is_null($parent_id) ? 0 : $parent_id;
         }
         else
         {

@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Authentication\Platform;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,6 +18,26 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class PlatformAuthentication extends CredentialsAuthentication implements ChangeablePassword, ChangeableUsername
 {
+    use DependencyInjectionContainerTrait;
+
+    /**
+     *
+     * @param string $userName
+     */
+    public function __construct($userName = null)
+    {
+        parent::__construct($userName);
+        $this->initializeContainer();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+    }
 
     /**
      *
@@ -25,9 +45,11 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      */
     public function login($password)
     {
-        if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing::hash($password))
+        $passwordHash = $this->getHashingUtilities()->hashString($password);
+
+        if ($this->getUser() instanceof User && $this->getUser()->get_password() == $passwordHash)
         {
-            
+
             return true;
         }
         else
@@ -38,11 +60,11 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
 
     /**
      *
-     * @param User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $oldPassword
      * @param string $newPassword
      *
-     * @return bool
+     * @return boolean
      */
     public function changePassword(User $user, $oldPassword, $newPassword)
     {
@@ -51,25 +73,31 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
         {
             return false;
         }
-        
+
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword)
         {
             return false;
         }
-        
+
+        $oldPasswordHash = $this->getHashingUtilities()->hashString($oldPassword);
+
         // Verify that the entered old password matches the stored password
-        if (Hashing::hash($oldPassword) != $user->get_password())
+        if ($oldPasswordHash != $user->get_password())
         {
             return false;
         }
-        
+
         // Set the password
-        $user->set_password(Hashing::hash($newPassword));
-        
+        $user->set_password($this->getHashingUtilities()->hashString($newPassword));
+
         return $user->update();
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword::getPasswordRequirements()
+     */
     public function getPasswordRequirements()
     {
         return Translation::get('GeneralPasswordRequirements');

@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestResult.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -49,7 +48,7 @@ if (! function_exists('is_a'))
 
 /**
  * A TestResult collects the results of executing a test case.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -107,7 +106,7 @@ class PHPUnit_TestResult
     /**
      * Adds an error to the list of errors.
      * The passed in exception caused the error.
-     * 
+     *
      * @param object
      * @param object
      * @access public
@@ -115,7 +114,7 @@ class PHPUnit_TestResult
     function addError(&$test, &$t)
     {
         $this->_errors[] = new PHPUnit_TestFailure($test, $t);
-        
+
         for ($i = 0; $i < sizeof($this->_listeners); $i ++)
         {
             $this->_listeners[$i]->addError($test, $t);
@@ -125,7 +124,7 @@ class PHPUnit_TestResult
     /**
      * Adds a failure to the list of failures.
      * The passed in exception caused the failure.
-     * 
+     *
      * @param object
      * @param object
      * @access public
@@ -133,7 +132,7 @@ class PHPUnit_TestResult
     function addFailure(&$test, &$t)
     {
         $this->_failures[] = new PHPUnit_TestFailure($test, $t);
-        
+
         for ($i = 0; $i < sizeof($this->_listeners); $i ++)
         {
             $this->_listeners[$i]->addFailure($test, $t);
@@ -142,7 +141,7 @@ class PHPUnit_TestResult
 
     /**
      * Registers a TestListener.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -156,7 +155,7 @@ class PHPUnit_TestResult
 
     /**
      * Adds a passed test to the list of passed tests.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -167,7 +166,7 @@ class PHPUnit_TestResult
 
     /**
      * Informs the result that a test was completed.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -181,7 +180,7 @@ class PHPUnit_TestResult
 
     /**
      * Gets the number of detected errors.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -192,7 +191,7 @@ class PHPUnit_TestResult
 
     /**
      * Returns an Enumeration for the errors.
-     * 
+     *
      * @return array
      * @access public
      */
@@ -203,7 +202,7 @@ class PHPUnit_TestResult
 
     /**
      * Gets the number of detected failures.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -214,7 +213,7 @@ class PHPUnit_TestResult
 
     /**
      * Returns an Enumeration for the failures.
-     * 
+     *
      * @return array
      * @access public
      */
@@ -225,7 +224,7 @@ class PHPUnit_TestResult
 
     /**
      * Returns an Enumeration for the passed tests.
-     * 
+     *
      * @return array
      * @access public
      */
@@ -237,7 +236,7 @@ class PHPUnit_TestResult
     /**
      * Unregisters a TestListener.
      * This requires the Zend Engine 2 (to work properly).
-     * 
+     *
      * @param object
      * @access public
      */
@@ -254,7 +253,7 @@ class PHPUnit_TestResult
 
     /**
      * Runs a TestCase.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -268,7 +267,7 @@ class PHPUnit_TestResult
 
     /**
      * Gets the number of run tests.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -279,7 +278,7 @@ class PHPUnit_TestResult
 
     /**
      * Checks whether the test run should stop.
-     * 
+     *
      * @access public
      */
     function shouldStop()
@@ -289,7 +288,7 @@ class PHPUnit_TestResult
 
     /**
      * Informs the result that a test will be started.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -303,7 +302,7 @@ class PHPUnit_TestResult
 
     /**
      * Marks that the test run should stop.
-     * 
+     *
      * @access public
      */
     function stop()
@@ -313,7 +312,7 @@ class PHPUnit_TestResult
 
     /**
      * Returns a HTML representation of the test result.
-     * 
+     *
      * @return string
      * @access public
      */
@@ -324,32 +323,32 @@ class PHPUnit_TestResult
 
     /**
      * Returns a text representation of the test result.
-     * 
+     *
      * @return string
      * @access public
      */
     function toString()
     {
         $result = '';
-        
+
         foreach ($this->_passedTests as $passedTest)
         {
-            $result .= sprintf("TestCase %s->%s() passed\n", 
+            $result .= sprintf("TestCase %s->%s() passed\n",
 
             get_class($passedTest), $passedTest->getName());
         }
-        
+
         foreach ($this->_failures as $failedTest)
         {
             $result .= $failedTest->toString();
         }
-        
+
         return $result;
     }
 
     /**
      * Returns whether the entire test was successful or not.
-     * 
+     *
      * @return boolean
      * @access public
      */

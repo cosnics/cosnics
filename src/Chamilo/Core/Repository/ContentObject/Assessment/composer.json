@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-assessment",
-        "version": "6.0.0", "description": "Chamilo Assessment Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-assessment",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Assessment",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Assessment"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +20,25 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/assessment"
+        "cosnics": {
+            "name": "Assessment",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Assessment",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assessment",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

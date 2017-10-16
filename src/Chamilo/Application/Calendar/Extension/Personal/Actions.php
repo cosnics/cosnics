@@ -6,7 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -28,16 +28,16 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE;
-        
+
         $actionSelector = new ActionSelector(
-            $application, 
-            $application->getUser()->getId(), 
-            $this->getAllowedContentObjectTypes(), 
+            $application,
+            $application->getUser()->getId(),
+            $this->getAllowedContentObjectTypes(),
             $parameters);
-        
-        $createButton = $actionSelector->getActionButton(Translation::get('AddEvent'), new BootstrapGlyph('plus'));
+
+        $createButton = $actionSelector->getActionButton(Translation::get('AddEvent'), new FontAwesomeGlyph('plus'));
         $createButton->setClasses('btn-primary');
-        
+
         return array($createButton);
     }
 
@@ -48,19 +48,19 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
     public function getAllowedContentObjectTypes()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package(), 
+            Manager::package(),
             \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $registration[Registration::PROPERTY_CONTEXT], 
+                $registration[Registration::PROPERTY_CONTEXT],
                 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
-        
+
         return $types;
     }
 

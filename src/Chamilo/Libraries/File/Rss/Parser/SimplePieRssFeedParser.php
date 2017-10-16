@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\File\Rss\Parser;
 
 use Chamilo\Libraries\File\Filesystem;
@@ -9,6 +8,7 @@ use Chamilo\Libraries\File\Path;
  * Parses Rss Feeds with SimplePie
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\File\Rss\Parser
  */
 class SimplePieRssFeedParser implements RssFeedParserInterface
 {
@@ -34,7 +34,7 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
     public function __construct(\SimplePie $simplePie, \HTMLPurifier $purifier)
     {
         $cachePath = Path::getInstance()->getCachePath() . 'rss';
-        if (!is_dir($cachePath))
+        if (! is_dir($cachePath))
         {
             Filesystem::create_dir($cachePath);
         }
@@ -46,24 +46,24 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
     }
 
     /**
-     * Parses a given url with a given amount of entries
+     *
+     * @see \Chamilo\Libraries\File\Rss\Parser\RssFeedParserInterface::parse()
      */
-    public function parse($url, $number_entries = 5)
+    public function parse($url, $numberOfEntries = 5)
     {
-        if (!$url || empty($url) || !$number_entries || $number_entries < 1)
+        if (! $url || empty($url) || ! $numberOfEntries || $numberOfEntries < 1)
         {
             throw new \InvalidArgumentException(
-                sprintf('URL %s or number of entries %s invalid', $url, $number_entries)
-            );
+                sprintf('URL %s or number of entries %s invalid', $url, $numberOfEntries));
         }
 
         $this->simplePie->set_feed_url($url);
-        $this->simplePie->set_item_limit($number_entries);
+        $this->simplePie->set_item_limit($numberOfEntries);
         $this->simplePie->init();
 
         $feed_items = array();
 
-        for ($i = 0; $i < $this->simplePie->get_item_quantity($number_entries); $i ++)
+        for ($i = 0; $i < $this->simplePie->get_item_quantity($numberOfEntries); $i ++)
         {
             $item = array();
             $feed_item = $this->simplePie->get_item($i);
@@ -77,4 +77,4 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
 
         return $feed_items;
     }
-} 
+}

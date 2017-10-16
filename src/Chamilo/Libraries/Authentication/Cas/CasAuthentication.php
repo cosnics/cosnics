@@ -80,9 +80,7 @@ class CasAuthentication extends ExternalAuthentication
                     Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration::getInstance()->get_setting(
-                                'Chamilo\Core\Admin',
-                                'platform_name'))));
+                            'PLATFORM' => Configuration::getInstance()->get_setting('Chamilo\Core\Admin', 'site_name'))));
             }
         }
         else
@@ -104,16 +102,14 @@ class CasAuthentication extends ExternalAuthentication
                     Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration::getInstance()->get_setting(
-                                'Chamilo\Core\Admin',
-                                'platform_name'))));
+                            'PLATFORM' => Configuration::getInstance()->get_setting('Chamilo\Core\Admin', 'site_name'))));
             }
         }
     }
 
     /**
      *
-     * @throws AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function registerUser()
@@ -227,7 +223,6 @@ class CasAuthentication extends ExternalAuthentication
     /**
      *
      * @throws \Exception
-     * @throws AuthenticationException
      */
     public function initializeClient()
     {

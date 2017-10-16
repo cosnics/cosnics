@@ -1,23 +1,41 @@
 {
-    "name": "chamilo/ext-repo-office365",
-        "version": "6.0.0", "description": "Chamilo Office365 External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-implementation-office365",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Office365",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Office365"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Andras Zolnay",
             "email": "a.zolnay@edufiles.nl"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
-        "zend/gdata" : "1.*",
-        "google/apiclient" : "1.1.*"
+        "php": ">=7.0.0",
+        "zend/gdata": "1.*",
+        "google/apiclient": "1.1.*"
     },
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/office365"
+        "cosnics": {
+            "name": "Microsoft Office 365",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Office365",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

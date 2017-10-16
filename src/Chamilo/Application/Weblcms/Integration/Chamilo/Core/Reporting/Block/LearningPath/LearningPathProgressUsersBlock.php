@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\LearningPath;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
@@ -17,7 +16,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -44,32 +42,24 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($course_id)
-        );
+                ContentObjectPublication::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_TOOL
-            ),
+                ContentObjectPublication::PROPERTY_TOOL),
             new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name())
-            )
-        );
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name())));
         $condition = new AndCondition($conditions);
 
         $order_by = new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_MODIFIED_DATE
-            )
-        );
+                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
 
         $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
             $condition,
-            $order_by
-        );
+            $order_by);
 
         $publications = array();
         $headings = array();
@@ -79,8 +69,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
             $publications[] = $publication;
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class_name(),
-                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-            );
+                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
             if ($publication_resultset->size() > 5)
             {
@@ -102,17 +91,14 @@ class LearningPathProgressUsersBlock extends ToolBlock
                 Translation::get('Name'),
                 \Chamilo\Core\User\Storage\DataClass\User::fullname(
                     $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME],
-                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]
-                )
-            );
+                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]));
 
             foreach ($publications as $publication)
             {
                 /** @var LearningPath $content_object */
                 $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                     ContentObject::class_name(),
-                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-                );
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
                 if ($publication_resultset->size() > 5)
                 {
@@ -125,8 +111,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
                 $trackingService = $this->createTrackingServiceForPublicationAndCourse(
                     $publication[ContentObjectPublication::PROPERTY_ID],
-                    $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
-                );
+                    $publication[ContentObjectPublication::PROPERTY_COURSE_ID]);
 
                 $userObject = new User();
                 $userObject->setId($user[User::PROPERTY_ID]);
@@ -136,8 +121,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
                 $progressBarRenderer = new ProgressBarRenderer();
 
                 $progress = $progressBarRenderer->render(
-                    $trackingService->getLearningPathProgress($content_object, $userObject, $tree->getRoot())
-                );
+                    $trackingService->getLearningPathProgress($content_object, $userObject, $tree->getRoot()));
 
                 $reporting_data->add_data_category_row($key, $title, $progress);
             }
@@ -169,12 +153,11 @@ class LearningPathProgressUsersBlock extends ToolBlock
     {
         $trackingServiceBuilder = $this->getTrackingServiceBuilder();
 
-        return $trackingServiceBuilder->buildTrackingService(
-            new TrackingParameters((int) $publicationId)
-        );
+        return $trackingServiceBuilder->buildTrackingService(new TrackingParameters((int) $publicationId));
     }
 
     /**
+     *
      * @return TrackingServiceBuilder | object
      */
     protected function getTrackingServiceBuilder()
@@ -191,20 +174,17 @@ class LearningPathProgressUsersBlock extends ToolBlock
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $container->get(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
-        );
+        return $container->get('chamilo.core.repository.content_object.learning_path.service.learning_path_service');
     }
 
     /**
+     *
      * @return object | DataClassRepository
      */
     protected function getDataClassRepository()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $container->get(
-            'chamilo.libraries.storage.data_manager.doctrine.data_class_repository'
-        );
+        return $container->get('chamilo.libraries.storage.data_manager.doctrine.data_class_repository');
     }
 }

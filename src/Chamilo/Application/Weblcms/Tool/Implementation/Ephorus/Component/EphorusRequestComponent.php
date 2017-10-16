@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -18,7 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class executes the ephorus submanager
- * 
+ *
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -31,13 +30,13 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
 
     /**
      * Initializes this component
-     * 
+     *
      * @param $parent Application - The component in which this tool runs @codeCoverageIgnore
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
+
         $this->initialize_dependencies($this->get_dependency_container());
     }
 
@@ -49,24 +48,20 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $request = $this->getRequest();
-            
-            $requestAction = $request->get(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION
-            );
 
-            if(!isset($requestAction))
+            $requestAction = $request->get(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION);
+
+            if (! isset($requestAction))
             {
                 $request->query->set(
                     \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE
-                );
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE);
             }
 
-            $factory = new ApplicationFactory(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::context(), 
-                new ApplicationConfiguration($request, $this->get_user(), $this));
-            
-            return $factory->run();
+            return $this->getApplicationFactory()->getApplication(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::context(),
+                new ApplicationConfiguration($request, $this->get_user(), $this))->run();
         }
         else
         {
@@ -76,7 +71,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
 
     /**
      * Initializes the dependencies
-     * 
+     *
      * @param DependencyContainer $dependency_container @codeCoverageIgnore
      */
     public function initialize_dependencies(DependencyContainer $dependency_container)
@@ -88,7 +83,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
     public function get_base_request()
     {
         $requests = $this->get_base_requests();
-        
+
         return $requests[0];
     }
 
@@ -98,38 +93,38 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
 
     /**
      * Returns base requests containing the author ids
-     * 
+     *
      * @return array
      */
     public function get_base_requests()
     {
         $content_object_translation = Translation::get(
-            'ContentObject', 
-            null, 
+            'ContentObject',
+            null,
             \Chamilo\Core\Repository\Manager::context());
-        
+
         $request_class = $this->get_request_class();
-        
+
         $ids = $request_class::get(self::PARAM_CONTENT_OBJECT_IDS);
-        
+
         if (! $ids)
         {
             throw new NoObjectSelectedException($content_object_translation);
         }
         $ids = (array) $ids;
-        
+
         $data_manager_class = $this->get_data_manager_class();
-        
+
         $requests = array();
         foreach ($ids as $id)
         {
             $content_object = $data_manager_class::retrieve_by_id(ContentObject::class_name(), $id);
-            
+
             if (! $content_object)
             {
                 throw new ObjectNotExistException($content_object_translation, $id);
             }
-            
+
             $request = new Request();
             $request->set_process_type(Request::PROCESS_TYPE_CHECK_AND_INVISIBLE);
             $request->set_course_id($this->get_course_id());
@@ -138,13 +133,13 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
             $request->set_request_user_id($this->get_user_id());
             $requests[] = $request;
         }
-        
+
         return $requests;
     }
 
     /**
      * Redirects after create
-     * 
+     *
      * @param string $message
      * @param boolean $is_error @codeCoverageIgnore
      */
@@ -159,7 +154,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      * Dependency container *
      * **************************************************************************************************************
      */
-    
+
     /*
      * Gets the dependency container for this class
      */
@@ -169,7 +164,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         {
             $this->dependency_container = new DependencyContainer();
         }
-        
+
         return $this->dependency_container;
     }
 
@@ -186,7 +181,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      * Dependency properties *
      * **************************************************************************************************************
      */
-    
+
     /*
      * Gets the data manager class dependency
      */

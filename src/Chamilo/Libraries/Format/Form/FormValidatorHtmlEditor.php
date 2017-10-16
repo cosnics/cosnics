@@ -68,7 +68,8 @@ class FormValidatorHtmlEditor
 
     public function render()
     {
-        return FormValidator::createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
+        $formValidator = new FormValidator('test');
+        return $formValidator->createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
     }
 
     public function get_form()

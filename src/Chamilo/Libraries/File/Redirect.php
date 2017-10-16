@@ -5,9 +5,9 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * $Id: redirect.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
- * @package common
+ *
+ * @package Chamilo\Libraries\File
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Redirect
 {
@@ -32,6 +32,10 @@ class Redirect
      */
     private $encodeEntities;
 
+    /**
+     *
+     * @var string
+     */
     private $anchor;
 
     /**
@@ -39,6 +43,7 @@ class Redirect
      * @param string[] $parameters
      * @param string[] $filterParameters
      * @param boolean $encodeEntities
+     * @param string $anchor
      */
     public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false, $anchor = null)
     {
@@ -50,7 +55,7 @@ class Redirect
 
     /**
      *
-     * @return the $anchor
+     * @return string
      */
     public function getAnchor()
     {
@@ -120,6 +125,9 @@ class Redirect
         $this->encodeEntities = $encodeEntities;
     }
 
+    /**
+     * Redirect to the Url
+     */
     public function toUrl()
     {
         $this->writeHeader($this->getUrl());
@@ -143,15 +151,15 @@ class Redirect
     {
         $parameters = $this->getParameters();
         $filterParameters = $this->getFilterParameters();
-        
+
         if (empty($filterParameters))
         {
             return $parameters;
         }
-        
+
         $filterParameters = is_array($filterParameters) ? $filterParameters : array($filterParameters);
         $filteredParameters = array();
-        
+
         foreach ($parameters as $key => $value)
         {
             if (! in_array($key, $filterParameters))
@@ -159,7 +167,7 @@ class Redirect
                 $filteredParameters[$key] = $value;
             }
         }
-        
+
         return $filteredParameters;
     }
 
@@ -167,13 +175,12 @@ class Redirect
      *
      * @param string $url
      * @param array $parameters
-     * @param boolean $encode_entities
      * @return string
      */
-    private function getWebLink($url, $parameters = array (), $encode_entities = false)
+    private function getWebLink($url, $parameters = array ())
     {
         $parameters = $this->getFilteredParameters();
-        
+
         if (count($parameters))
         {
             // remove anchor
@@ -203,12 +210,12 @@ class Redirect
                 $url .= $anchor;
             }
         }
-        
+
         if ($this->getEncodeEntities())
         {
             $url = htmlentities($url);
         }
-        
+
         return $url;
     }
 
@@ -222,10 +229,10 @@ class Redirect
         {
             throw new Exception('headers already sent in ' . $filename . ' on line ' . $line);
         }
-        
+
         $response = new RedirectResponse($url);
         $response->send();
-        
+
         exit();
     }
 
@@ -233,8 +240,9 @@ class Redirect
      * Returns the full URL of the current page, based upon env variables Env variables used: $_SERVER['HTTPS'] =
      * (on|off|) $_SERVER['HTTP_HOST'] = value of the Host: header $_SERVER['SERVER_PORT'] = port number (only used if
      * not http/80,https/443) $_SERVER['REQUEST_URI'] = the URI after the method of the HTTP request
-     * 
-     * @return string Current URL
+     *
+     * @param boolean $includeRequest
+     * @return string
      */
     public function getCurrentUrl($includeRequest = true)
     {
@@ -247,27 +255,27 @@ class Redirect
             $protocol = 'http://';
         }
         $host = $_SERVER['HTTP_HOST'];
-        
+
         $parts = array();
-        
+
         $parts[] = $protocol;
         $parts[] = $host;
-        
+
         if ($includeRequest)
         {
             /**
              * Filter php_self to avoid a security vulnerability.
              */
             $requestUri = substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], "\n\r"));
-            
+
             if ($this->getEncodeEntities())
             {
                 $requestUri = htmlentities($requestUri, ENT_QUOTES);
             }
-            
+
             $parts[] = $requestUri;
         }
-        
+
         return implode('', $parts);
     }
 }

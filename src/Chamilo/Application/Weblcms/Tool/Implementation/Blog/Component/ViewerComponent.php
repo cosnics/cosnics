@@ -7,8 +7,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: blog_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.blog.component
  */
 class ViewerComponent extends Manager
@@ -20,7 +19,7 @@ class ViewerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE)), 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE)),
                 Translation::get('BlogToolBrowserComponent')));
     }
 

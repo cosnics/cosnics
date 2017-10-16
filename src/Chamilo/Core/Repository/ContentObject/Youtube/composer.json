@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-youtube",
-        "version": "6.0.0", "description": "Chamilo Youtube Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-youtube",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Youtube",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Youtube"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -12,14 +18,31 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Magali Gillard",
+            "email": "magali.gillard@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/youtube"
+        "cosnics": {
+            "name": "YouTube Video",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Youtube",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

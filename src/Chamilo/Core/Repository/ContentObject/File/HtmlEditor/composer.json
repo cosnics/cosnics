@@ -1,0 +1,44 @@
+{
+    "name": "cosnics/core-repository-content-object-file-html-editor",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject File HtmlEditor",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "File",
+        "HtmlEditor"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Repository",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\File\\HtmlEditor",
+            "type": "Chamilo\\Core\\Repository\\HtmlEditor",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\File",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

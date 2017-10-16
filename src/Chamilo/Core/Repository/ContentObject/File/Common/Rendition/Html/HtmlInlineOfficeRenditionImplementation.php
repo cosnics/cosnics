@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -21,7 +21,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     // View type
     const VIEW_TYPE_FULL = 'full';
     const VIEW_TYPE_EMBED = 'embed';
-    
+
     // Viewer URL
     const VIEWER_URL_FULL = 'https://view.officeapps.live.com/op/view.aspx?src=';
     const VIEWER_URL_EMBED = 'https://view.officeapps.live.com/op/embed.aspx?src=';
@@ -33,12 +33,12 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getViewerType()
     {
         $viewerType = Configuration::getInstance()->get_setting(array(File::package(), 'office_viewer_type'));
-        
+
         if (is_null($viewerType))
         {
             return self::VIEW_TYPE_FULL;
         }
-        
+
         return $viewerType;
     }
 
@@ -75,35 +75,35 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function render($parameters)
     {
         $html = array();
-        
+
         if ($this->canBeDisplayed())
         {
             $html[] = '<div class="office-viewer-container">';
-            
+
             $html[] = '<div class="office-viewer-content">';
             $html[] = '<div class="alert alert-info office-viewer-sidebar center-block">';
-            
+
             $alertText = array();
-            
+
             $alertText[] = '<span class="glyphicon glyphicon-lock"></span>';
             $alertText[] = '<span class="office-viewer-full-screen-message">' .
                  Translation::get('OfficeViewerFullScreen') . '</span>';
             $alertText[] = '<a class="btn btn-default btn-office-viewer-minimize">' .
                  Translation::get('OfficeViewerExitFullScreen') . '</a>';
-            
+
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
-            
+
             $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" data-url="' .
                  $this->getIFrameSource() . '">';
             $html[] = '</iframe>';
-            
+
             $html[] = '</div>';
-            
+
             $html[] = $this->renderActions();
-            
+
             $html[] = '</div>';
-            
+
             $html[] = ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js');
             $html[] = ResourceManager::getInstance()->get_resource_html(
@@ -114,7 +114,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         {
             $html[] = $this->getErrorMessage();
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -125,12 +125,12 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getViewerFrameClasses()
     {
         $classes = array('office-viewer-frame');
-        
+
         if ($this->getViewerType() == self::VIEW_TYPE_EMBED)
         {
             $classes[] = 'office-viewer-frame-embed';
         }
-        
+
         return $classes;
     }
 
@@ -151,19 +151,19 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getButtonToolbar($classes = '')
     {
         $buttonToolBar = parent::getButtonToolBar($classes);
-        
+
         if ($this->allowsFullScreen())
         {
             $buttonToolBar->addItem(
                 new Button(
-                    Translation::get('ViewFullScreen'), 
-                    new BootstrapGlyph('fullscreen'), 
-                    '#', 
-                    Button::DISPLAY_ICON_AND_LABEL, 
-                    false, 
+                    Translation::get('ViewFullScreen'),
+                    new FontAwesomeGlyph('arrows-alt'),
+                    '#',
+                    Button::DISPLAY_ICON_AND_LABEL,
+                    false,
                     'btn-office-viewer-full-screen'));
         }
-        
+
         return $buttonToolBar;
     }
 
@@ -175,14 +175,14 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getErrorMessage()
     {
         $html = array();
-        
+
         $html[] = '<div class="alert alert-info">';
         $html[] = '<h4>' . Translation::get('LiveViewNotSupportedTitle') . '</h4>';
         $html[] = Translation::get('LiveViewNotSupported');
         $html[] = '<br />';
         $html[] = $this->renderActions('btn-info');
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 

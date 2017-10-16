@@ -1,9 +1,13 @@
 {
-    "name": "chamilo/calendar",
-        "version": "6.0.0", "description": "Chamilo Personal Calendar Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/application-calendar",
+    "version": "1.0.0",
+    "description": "Application Calendar",
+    "keywords": [
+        "Application",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,8 +18,25 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Personal Calendar",
+            "context": "Chamilo\\Application\\Calendar",
+            "type": "Chamilo\\Application",
+            "category": "social",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
 }

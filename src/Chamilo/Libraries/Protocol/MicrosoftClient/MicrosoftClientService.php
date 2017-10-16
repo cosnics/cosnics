@@ -13,6 +13,9 @@ use Chamilo\Libraries\File\Redirect;
  * - OAUTH2 v2.0: https://apps.dev.microsoft.com/
  * use the base URL of the Chamilo site, i.e my.chamilo.com/index.php.
  *
+ *
+ * @package Chamilo\Libraries\Protocol\MicrosoftClient
+ *
  * @author Andras Zolnay - edufiles
  */
 class MicrosoftClientService
@@ -103,6 +106,8 @@ class MicrosoftClientService
 
     /**
      * Returns whether user has an access token.
+     *
+     * @return bool
      */
     public function isUserLoggedIn()
     {
@@ -113,6 +118,8 @@ class MicrosoftClientService
 
     /**
      * Removes the access token stored by the setting provider.
+     *
+     * @return bool
      */
     public function logout()
     {
@@ -137,8 +144,9 @@ class MicrosoftClientService
      * Refreshes access token and sends given request.
      *
      * @param \Guzzle\Http\Message\Request $request
-     * @return - If $shouldDecodeContent is true: \stdClass or false if fails.
-     *         - Else body of response.
+     * @param bool $shouldDecodeContent
+     *
+     * @return bool|\Guzzle\Http\EntityBodyInterface|mixed|string
      */
     public function sendRequest(\Guzzle\Http\Message\Request $request, $shouldDecodeContent = true)
     {
@@ -173,6 +181,8 @@ class MicrosoftClientService
      * Example URL's:
      * - Authorization endpoint for tenant 'common': https://login.microsoftonline.com/common/oauth2/v2.0/authorize
      * - Token endpoint for tenant 'organizations': https://login.microsoftonline.com/organizations/oauth2/v2.0/token
+     *
+     * @return \Guzzle\Http\Client
      */
     private function getAzureActiveDirectoryClient()
     {
@@ -196,6 +206,8 @@ class MicrosoftClientService
 
     /**
      * Creates on demand and returns a Guzzle HTTP client with base URL provided by the setting provider.
+     *
+     * @return \Guzzle\Http\Client
      */
     private function getMicrosoftServiceClient()
     {
@@ -244,9 +256,7 @@ class MicrosoftClientService
     /**
      * Returns the URI of Chamilo to which Microsoft login page returns after successful login.
      *
-     * @return Base URL of the Chamnilo site, e.g. my.chamilo.com/index.php. Function Kernel::handleOAuth2() will route
-     *         the redirect back
-     *         to component calling function login(...).
+     * @return string
      */
     private function getRedirectUri()
     {
@@ -258,6 +268,8 @@ class MicrosoftClientService
      * - OAUTH2: Returns resource provided by MicrosoftClientSettingsProvider.
      * - OAUTH2 v2.0: Extends the scopes provided by MicrosoftClientSettingsProvider by scope 'offline_access' which
      * enables refreshing of access tokens.
+     *
+     * @return string
      */
     private function getScopeOrResource()
     {

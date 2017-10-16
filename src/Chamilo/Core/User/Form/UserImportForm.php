@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
@@ -17,18 +16,18 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
-/**
- * $Id: user_import_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
- * @package user.lib.forms
- */
 set_time_limit(0);
 ini_set("memory_limit", - 1);
 
+/**
+ *
+ * @package Chamilo\Core\User\Form
+ */
 class UserImportForm extends FormValidator
 {
-    const TYPE_IMPORT = 1;
+    use DependencyInjectionContainerTrait;
 
     private $failedcsv;
 
@@ -44,6 +43,9 @@ class UserImportForm extends FormValidator
 
     private $udm;
 
+    // Constants
+    const TYPE_IMPORT = 1;
+
     /**
      * Creates a new UserImportForm Used to import users from a file
      */
@@ -51,6 +53,7 @@ class UserImportForm extends FormValidator
     {
         parent::__construct('user_import', 'post', $action);
 
+        $this->initializeContainer();
         $this->form_user = $form_user;
         $this->form_type = $form_type;
         $this->failedcsv = array();
@@ -60,11 +63,20 @@ class UserImportForm extends FormValidator
         }
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService('chamilo.libraries.hashing.hashing_utilities');
+    }
+
     public function build_importing_form()
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
         $allowed_upload_types = array('xml', 'csv');
-        $this->addRule('file', Translation::get('OnlyXMLCSVAllowed'), 'filetype', $allowed_upload_types);
+        $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $group = array();
         $group[] = &$this->createElement(
@@ -72,15 +84,13 @@ class UserImportForm extends FormValidator
             'send_mail',
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
-            1
-        );
+            1);
         $group[] = &$this->createElement(
             'radio',
             'send_mail',
             null,
             Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES),
-            0
-        );
+            0);
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '');
 
         $buttons[] = $this->createElement(
@@ -89,8 +99,7 @@ class UserImportForm extends FormValidator
             Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
             null,
             null,
-            'import'
-        );
+            'import');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
@@ -110,7 +119,7 @@ class UserImportForm extends FormValidator
         {
             $validuser = $this->validate_data($csvuser);
 
-            if (!$validuser)
+            if (! $validuser)
             {
                 $failures ++;
                 $this->failedcsv[] = Translation::get('Invalid') . ': ' . implode($csvuser, ';');
@@ -139,12 +148,12 @@ class UserImportForm extends FormValidator
                 $user->set_username($csvuser[User::PROPERTY_USERNAME]);
 
                 $password = $csvuser[User::PROPERTY_PASSWORD];
-                if (!$password || $password == "")
+                if (! $password || $password == "")
                 {
                     $password = uniqid();
                 }
 
-                $user->set_password(Hashing::hash($password));
+                $user->set_password($this->getHashingUtilities()->hashString($password));
 
                 $user->set_email($csvuser[User::PROPERTY_EMAIL]);
                 $user->set_status($csvuser[User::PROPERTY_STATUS]);
@@ -171,7 +180,7 @@ class UserImportForm extends FormValidator
 
                 $user->set_platformadmin(0);
 
-                if (!$user->create())
+                if (! $user->create())
                 {
                     $failures ++;
                     $this->failedcsv[] = Translation::get('CreateFailed') . ': ' . implode($csvuser, ';');
@@ -190,15 +199,13 @@ class UserImportForm extends FormValidator
                     Event::trigger(
                         'Import',
                         Manager::context(),
-                        array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id())
-                    );
+                        array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()));
                 }
             }
             elseif ($action == 'U')
             {
                 $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
-                    $csvuser[User::PROPERTY_USERNAME]
-                );
+                    $csvuser[User::PROPERTY_USERNAME]);
 
                 if (array_key_exists(User::PROPERTY_FIRSTNAME, $csvuser))
                 {
@@ -252,11 +259,11 @@ class UserImportForm extends FormValidator
                 $pass = $csvuser[User::PROPERTY_PASSWORD];
                 if ($pass)
                 {
-                    $pass = Hashing::hash($pass);
+                    $pass = $this->getHashingUtilities()->hashString($pass);
                     $user->set_password($pass);
                 }
 
-                if (!$user->update())
+                if (! $user->update())
                 {
                     $failures ++;
                     $this->failedcsv[] = Translation::get('UpdateFailed') . ': ' . implode($csvuser, ';');
@@ -270,12 +277,11 @@ class UserImportForm extends FormValidator
             elseif ($action == 'D')
             {
                 $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
-                    $csvuser[User::PROPERTY_USERNAME]
-                );
+                    $csvuser[User::PROPERTY_USERNAME]);
 
                 $user->set_active(0);
 
-                if (!$user->update())
+                if (! $user->update())
                 {
                     $failures ++;
                     $this->failedcsv[] = Translation::get('DeleteFailed') . ': ' . implode($csvuser, ';');
@@ -348,10 +354,8 @@ class UserImportForm extends FormValidator
 
         // 1. Check if username exists
         if (($action == 'A' &&
-                !\Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) ||
-            ($action !=
-                'A' && \Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME]))
-        )
+             ! \Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) || ($action !=
+             'A' && \Chamilo\Core\User\Storage\DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])))
         {
             $failures ++;
         }
@@ -375,36 +379,34 @@ class UserImportForm extends FormValidator
             $csvuser[User::PROPERTY_PHONE] = $csvuser['phone_number'];
         }
 
-        if (!isset($csvuser[User::PROPERTY_ACTIVE]))
+        if (! isset($csvuser[User::PROPERTY_ACTIVE]))
         {
             $csvuser[User::PROPERTY_ACTIVE] = 1;
         }
 
-        if (!$csvuser[User::PROPERTY_ACTIVATION_DATE])
+        if (! $csvuser[User::PROPERTY_ACTIVATION_DATE])
         {
             $csvuser[User::PROPERTY_ACTIVATION_DATE] = 0;
         }
 
-        if (!$csvuser[User::PROPERTY_EXPIRATION_DATE])
+        if (! $csvuser[User::PROPERTY_EXPIRATION_DATE])
         {
             $csvuser[User::PROPERTY_EXPIRATION_DATE] = 0;
         }
 
-        if (!$csvuser[User::PROPERTY_AUTH_SOURCE])
+        if (! $csvuser[User::PROPERTY_AUTH_SOURCE])
         {
             $csvuser[User::PROPERTY_AUTH_SOURCE] = 'Platform';
         }
 
-        if (!$csvuser['language'])
+        if (! $csvuser['language'])
         {
             $csvuser['language'] = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'platform_language')
-            );
+                array('Chamilo\Core\Admin', 'platform_language'));
         }
 
         if ($action == 'C' && Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')) &&
-            (!$email || $email == '')
-        )
+             (! $email || $email == ''))
         {
             $failures ++;
         }
@@ -422,9 +424,8 @@ class UserImportForm extends FormValidator
     {
         $this->users = array();
         if ($file_type == 'text/x-csv' || $file_type == 'text/csv' || $file_type == 'application/vnd.ms-excel' ||
-            $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
-            $file_type = 'text/comma-separated-values'
-        )
+             $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
+             $file_type = 'text/comma-separated-values')
         {
             $this->users = Import::csv_to_array($file_name);
         }
@@ -441,9 +442,9 @@ class UserImportForm extends FormValidator
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
-                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), Utilities::COMMON_LIBRARIES
-                )
-            );
+                    'InvalidImportFormat',
+                    array('FILE_TYPE' => $file_type),
+                    Utilities::COMMON_LIBRARIES));
         }
 
         return $this->users;
@@ -515,17 +516,13 @@ class UserImportForm extends FormValidator
         $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
         $options['site_url'] = Path::getInstance()->getBasePath(true);
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
-        );
+            array('Chamilo\Core\Admin', 'administrator_firstname'));
         $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
-        );
+            array('Chamilo\Core\Admin', 'administrator_surname'));
         $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
-        );
+            array('Chamilo\Core\Admin', 'administrator_telephone'));
         $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email')
-        );
+            array('Chamilo\Core\Admin', 'administrator_email'));
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
@@ -543,8 +540,7 @@ class UserImportForm extends FormValidator
             array(),
             array(),
             $options['admin_firstname'] . ' ' . $options['admin_surname'],
-            $options['admin_email']
-        );
+            $options['admin_email']);
 
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
@@ -559,15 +555,13 @@ class UserImportForm extends FormValidator
     }
 
     /**
-     * @param $csvuser
      *
+     * @param $csvuser
      * @return string
      */
     protected function determineRealAction($csvuser)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
-            $csvuser[User::PROPERTY_USERNAME]
-        );
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($csvuser[User::PROPERTY_USERNAME]);
 
         if ($user instanceof User)
         {

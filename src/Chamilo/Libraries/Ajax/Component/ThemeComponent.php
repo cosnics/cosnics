@@ -13,6 +13,10 @@ use Chamilo\Libraries\Format\Theme;
 class ThemeComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         echo Theme::get_theme();

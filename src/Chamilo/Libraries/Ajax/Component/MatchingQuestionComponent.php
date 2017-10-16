@@ -14,11 +14,15 @@ use Chamilo\Libraries\Platform\Session\Request;
 class MatchingQuestionComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $value = Request::post('value');
         $action = Request::post('action');
-        
+
         switch ($action)
         {
             case 'skip_option' :
@@ -28,7 +32,7 @@ class MatchingQuestionComponent extends \Chamilo\Libraries\Ajax\Manager
                 $_SESSION['mq_skip_matches'][] = $value;
                 break;
         }
-        
+
         JsonAjaxResult::success();
     }
 }

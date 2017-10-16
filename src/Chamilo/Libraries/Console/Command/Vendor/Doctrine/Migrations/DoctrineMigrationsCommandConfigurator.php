@@ -1,35 +1,33 @@
 <?php
-
 namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations;
 
 use Chamilo\Libraries\File\Filesystem;
-
 use Chamilo\Libraries\File\Path;
+use Doctrine\DBAL\Configuration;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This class configures the doctrine migrations based on the namespace of a package
- *
  * Class DoctrineMigrationsCommandConfigurer
  *
- * @package common\libraries
- *
+ * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineMigrationsCommandConfigurator
 {
+
     /**
      * The Dependency Injection Container
      *
-     * @var ContainerInterface
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
 
     /**
      * Constructor
      *
-     * @param ContainerInterface $container
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -43,11 +41,11 @@ class DoctrineMigrationsCommandConfigurator
      * @param \Doctrine\DBAL\Migrations\Configuration\Configuration $configuration
      * @param string $packagePath
      */
-    public function configure(\Doctrine\DBAL\Migrations\Configuration\Configuration $configuration, $packagePath)
+    public function configure(Configuration $configuration, $packagePath)
     {
         $migrationsFolder = $packagePath . '/migrations';
 
-        if(!file_exists($migrationsFolder))
+        if (! file_exists($migrationsFolder))
         {
             Filesystem::create_dir($migrationsFolder);
         }
@@ -84,7 +82,6 @@ class DoctrineMigrationsCommandConfigurator
      * Returns the namespace from a given package path
      *
      * @param string $packagePath
-     *
      * @return string
      */
     protected function getNamespaceFromPackagePath($packagePath)

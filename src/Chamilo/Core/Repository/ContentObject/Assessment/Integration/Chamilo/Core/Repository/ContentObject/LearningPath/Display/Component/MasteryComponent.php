@@ -1,11 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -29,7 +26,7 @@ class MasteryComponent extends Manager
         {
             $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
-            $this->redirect(Translation::get($message), !$succes, $this->get_application()->get_parameters());
+            $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
         }
         else
         {
@@ -57,11 +54,10 @@ class MasteryComponent extends Manager
     {
         $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
 
-        if (!file_exists($templatePath))
+        if (! file_exists($templatePath))
         {
             throw new \InvalidArgumentException(
-                sprintf('The given template %s in context %s could not be found', $template, $context)
-            );
+                sprintf('The given template %s in context %s could not be found', $template, $context));
         }
 
         $contents = file_get_contents($templatePath);
@@ -69,11 +65,10 @@ class MasteryComponent extends Manager
         if ($contents === false)
         {
             throw new \RuntimeException(
-                sprintf('The given template %s in context %s could not be loaded', $template, $context)
-            );
+                sprintf('The given template %s in context %s could not be loaded', $template, $context));
         }
 
-        foreach($parameters as $variable => $value)
+        foreach ($parameters as $variable => $value)
         {
             $contents = str_replace('{ ' . $variable . ' }', $value, $contents);
             $contents = str_replace('{' . $variable . '}', $value, $contents);

@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -12,11 +10,14 @@ use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface TrackingRepositoryInterface
 {
+
     /**
+     *
      * @param DataClass $dataClass
      *
      * @return bool
@@ -24,6 +25,7 @@ interface TrackingRepositoryInterface
     public function create(DataClass $dataClass);
 
     /**
+     *
      * @param DataClass $dataClass
      *
      * @return bool
@@ -31,6 +33,7 @@ interface TrackingRepositoryInterface
     public function update(DataClass $dataClass);
 
     /**
+     *
      * @param DataClass $dataClass
      *
      * @return bool
@@ -41,6 +44,11 @@ interface TrackingRepositoryInterface
      * Clears the cache for the TreeNodeAttempt data class
      */
     public function clearTreeNodeAttemptCache();
+
+    /**
+     * Clears the cache for the TreeNodeQuestionAttempt data class
+     */
+    public function clearTreeNodeQuestionAttemptCache();
 
     /**
      * Finds the learning path child attempts for a given learning path attempt
@@ -70,9 +78,7 @@ interface TrackingRepositoryInterface
      *
      * @return TreeNodeAttempt|DataClass
      */
-    public function findActiveTreeNodeAttempt(
-        LearningPath $learningPath, TreeNode $treeNode, User $user
-    );
+    public function findActiveTreeNodeAttempt(LearningPath $learningPath, TreeNode $treeNode, User $user);
 
     /**
      * Finds a TreeNodeAttempt by a given ID
@@ -105,10 +111,8 @@ interface TrackingRepositoryInterface
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithUser(
-        LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
-    );
+    public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
 
     /**
      * Counts the learning path attempts joined with users for searching
@@ -119,9 +123,8 @@ interface TrackingRepositoryInterface
      *
      * @return int
      */
-    public function countLearningPathAttemptsWithUser(
-        LearningPath $learningPath, $treeNodeDataIds = array(), Condition $condition = null
-    );
+    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
+        Condition $condition = null);
 
     /**
      * Finds the targeted users (left) joined with the learning path attempts
@@ -135,10 +138,8 @@ interface TrackingRepositoryInterface
      *
      * @return RecordIterator
      */
-    public function findTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
-    );
+    public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = array(),
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
 
     /**
      * Counts the targeted users for the given learning path (with a condition)
@@ -158,7 +159,5 @@ interface TrackingRepositoryInterface
      *
      * @return RecordIterator
      */
-    public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
-        LearningPath $learningPath
-    );
+    public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(LearningPath $learningPath);
 }

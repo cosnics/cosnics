@@ -10,9 +10,18 @@ use Chamilo\Libraries\Format\Utilities\ArrayLoader;
 use Composer\Package\Loader\JsonLoader;
 use Composer\Script\Event;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Utilities
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class BuildUtilities
 {
 
+    /**
+     *
+     * @param \Composer\Script\Event $event
+     */
     public static function processResources(Event $event)
     {
         $resourceBundles = new ResourceBundles(PackageList::ROOT);
@@ -26,19 +35,19 @@ class BuildUtilities
         {
             // Images
             $sourceResourceImagePath = Path::getInstance()->getResourcesPath($packageNamespace) . 'Images' .
-                DIRECTORY_SEPARATOR;
+                 DIRECTORY_SEPARATOR;
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
             Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
             // Css
             $sourceResourceImagePath = Path::getInstance()->getResourcesPath($packageNamespace) . 'Css' .
-                DIRECTORY_SEPARATOR;
+                 DIRECTORY_SEPARATOR;
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
             Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
             // Javascript
             $sourceResourceJavascriptPath = Path::getInstance()->getResourcesPath($packageNamespace) . 'Javascript' .
-                DIRECTORY_SEPARATOR;
+                 DIRECTORY_SEPARATOR;
             $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
             Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
 
@@ -47,43 +56,47 @@ class BuildUtilities
 
         // Copy the file extensions
         $sourceResourceImagePath = Path::getInstance()->getResourcesPath('Chamilo\Configuration') . 'File' .
-            DIRECTORY_SEPARATOR;
+             DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
         Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
         $event->getIO()->write('Processed file extension resources');
 
         // Copy the error pages
         $sourceResourceImagePath = Path::getInstance()->getResourcesPath('Chamilo\Configuration') . 'ErrorPages' .
-            DIRECTORY_SEPARATOR;
+             DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
         Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
         $event->getIO()->write('Processed error pages');
     }
 
+    /**
+     *
+     * @param \Composer\Script\Event $event
+     */
     public static function processComposer(Event $event)
     {
         $packageBundles = new BasicBundles(PackageList::ROOT);
         $packageNamespaces = $packageBundles->getPackageNamespaces();
-        
+
         $composer = $event->getComposer();
         $package = $event->getComposer()->getPackage();
-        
+
         $requires = $package->getRequires();
         $devRequires = $package->getDevRequires();
         $autoload = $package->getAutoload();
         $repositories = $package->getRepositories();
-        
+
         $repositoryManager = $composer->getRepositoryManager();
-        
+
         foreach ($packageNamespaces as $packageNamespace)
         {
             $packageComposerPath = Path::getInstance()->namespaceToFullPath($packageNamespace) . 'composer.json';
-            
+
             if (file_exists($packageComposerPath))
             {
                 $jsonLoader = new JsonLoader(new ArrayLoader());
                 $completePackage = $jsonLoader->load($packageComposerPath);
-                
+
                 // Process require
                 foreach ($completePackage->getRequires() as $requireName => $requirePackage)
                 {
@@ -92,7 +105,7 @@ class BuildUtilities
                         $requires[$requireName] = $requirePackage;
                     }
                 }
-                
+
                 // Process require-dev
                 foreach ($completePackage->getDevRequires() as $requireName => $requirePackage)
                 {
@@ -101,10 +114,10 @@ class BuildUtilities
                         $devRequires[$requireName] = $requirePackage;
                     }
                 }
-                
+
                 // Process PSR-4 autoload
                 $packageAutoloaders = $completePackage->getAutoload();
-                
+
                 if (isset($packageAutoloaders['psr-4']))
                 {
                     foreach ($packageAutoloaders['psr-4'] as $autoloaderKey => $autoloaderValue)
@@ -115,7 +128,7 @@ class BuildUtilities
                         }
                     }
                 }
-                
+
                 // Process repositories
                 foreach ((array) $completePackage->getRepositories() as $repositoryConfig)
                 {
@@ -125,7 +138,7 @@ class BuildUtilities
                 }
             }
         }
-        
+
         $package->setRequires($requires);
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);

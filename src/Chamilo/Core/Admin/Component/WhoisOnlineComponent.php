@@ -22,7 +22,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: whois_online.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  *
  * @package admin.lib.admin_manager.component
  */
@@ -37,9 +36,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
     {
         $this->checkAuthorization(Manager::context(), 'ViewWhoisOnline');
 
-        $world = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'whoisonlineaccess'));
-
-        if ($world == "1" || ($this->get_user_id() && $world == "2"))
+        if($this->getUser() instanceof User)
         {
             $user_id = Request::get('uid');
             if (isset($user_id))

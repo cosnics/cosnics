@@ -15,8 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: register.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.user_manager.component
  */
 class RegisterComponent extends Manager implements NoAuthenticationSupport
@@ -32,52 +31,52 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
         {
             throw new NotAllowedException();
         }
-        
+
         $user = new User();
         $user->set_platformadmin(0);
         $user->set_password(1);
         // $user->set_creator_id($user_info['user_id']);
-        
+
         $form = new RegisterForm($user, $this->get_url());
-        
+
         if ($form->validate())
         {
             $success = $form->create_user();
             if ($success == 1)
             {
                 $parameters = array();
-                
+
                 if (Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration')) == 2)
                 {
                     $parameters['message'] = Translation::get('UserAwaitingApproval');
                 }
-                
+
                 $parameters[Application::PARAM_CONTEXT] = '';
-                
+
                 $redirect = new Redirect($parameters);
                 $redirect->toUrl();
             }
             else
             {
                 Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
-                
+
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -89,7 +88,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

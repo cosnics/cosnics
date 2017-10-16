@@ -6,15 +6,14 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
- * $Id: announcement_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.announcement.component
  */
 
 /**
  * This tool allows a user to publish announcements in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
 
@@ -25,8 +24,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             'Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo',
             'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube',
             'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa',
-            'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video'
-        );
+            'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video');
 
         $allowedTypes = [];
 
@@ -37,7 +35,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $allowedTypes[] = $allowedTypeString;
             }
         }
-        
+
         return $allowedTypes;
     }
 

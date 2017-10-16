@@ -2,8 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment;
 
 /**
- * $Id: survey_invitation.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.assessment
  */
 class SurveyInvitation
@@ -27,11 +26,11 @@ class SurveyInvitation
     public function get_default_property_names()
     {
         return array(
-            self::PROPERTY_ID, 
-            self::PROPERTY_USER_ID, 
-            self::PROPERTY_SURVEY_ID, 
-            self::PROPERTY_INVITATION_CODE, 
-            self::PROPERTY_EMAIL, 
+            self::PROPERTY_ID,
+            self::PROPERTY_USER_ID,
+            self::PROPERTY_SURVEY_ID,
+            self::PROPERTY_INVITATION_CODE,
+            self::PROPERTY_EMAIL,
             self::PROPERTY_VALID);
     }
 

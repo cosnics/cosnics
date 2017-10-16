@@ -14,17 +14,21 @@ use Chamilo\Libraries\Platform\Session\Request;
 class CriteriaComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $value = Request::post('value');
         $action = Request::post('action');
-        
+
         switch ($action)
         {
             case 'skip_criteria' :
                 $_SESSION['criteria_skip_options'][] = $value;
         }
-        
+
         JsonAjaxResult::success();
     }
 }

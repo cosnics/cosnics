@@ -6,45 +6,37 @@ use Chamilo\Libraries\Format\Table\TableCellRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * This class represents a cell renderer for a record table Refactoring from ObjectTable to split between a table based
- * on a record and based on an object
- * 
+ * This class represents a cell renderer for a record table
+ *
+ * @package Chamilo\Libraries\Format\Table\Extension\RecordTable
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class RecordTableCellRenderer extends TableCellRenderer
 {
 
     /**
-     * **************************************************************************************************************
-     * Implemented Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Renders a single cell
-     * 
-     * @param RecordTableColumn $column
-     * @param string[] $learningPathChildAttempt
      *
-     * @return String
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param string[] $record
+     * @return string
      */
-    public function render_cell($column, $learningPathChildAttempt)
+    public function render_cell($column, $record)
     {
         if ($column instanceof ActionsTableColumn)
         {
-            return parent::render_cell($column, $learningPathChildAttempt);
+            return parent::render_cell($column, $record);
         }
-        
-        return $learningPathChildAttempt[$column->get_name()];
+
+        return $record[$column->get_name()];
     }
 
     /**
      * Define the unique identifier for the row needed for e.g.
      * checkboxes
-     * 
-     * @param string[] $row
      *
-     * @return int
+     * @param string[] $row
+     * @return integer
      */
     public function render_id_cell($row)
     {

@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Format\Menu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
- * $Id: options_menu_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.menu
  */
 /**
@@ -19,7 +18,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 
     /**
      * Create a new OptionsMenuRenderer
-     * 
+     *
      * @param array $exclude Which items should be excluded (based on the $key
      *        value in the menu items). The whole submenu of which the elements of the
      *        exclude array are the root elements will be excluded.

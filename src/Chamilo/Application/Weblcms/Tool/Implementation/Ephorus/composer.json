@@ -1,26 +1,48 @@
 {
-    "name": "chamilo/app-weblcms-tool-ephorus",
-        "version": "6.0.0", "description": "Chamilo Ephorus Weblcms Tool",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0",
-        "codecasts/nusoap-php7" : "*"
-    },
-    "extra": {
-        "install-path": "application/weblcms/tool/ephorus"
-    }
-
+	"name": "cosnics/application-weblcms-tool-implementation-ephorus",
+	"version": "1.0.0",
+	"description": "Application Weblcms Tool Implementation Ephorus",
+	"keywords": [
+		"Application",
+		"Weblcms",
+		"Tool",
+		"Implementation",
+		"Ephorus"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"codecasts/nusoap-php7": "*"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Ephorus",
+			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Ephorus",
+			"type": "Chamilo\\Application\\Weblcms\\Tool",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Application\\Weblcms",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"extra": {
+				"course-section": "tool"
+			}
+		}
+	}
 }

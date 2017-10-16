@@ -8,8 +8,6 @@
 
 @import url('Bootstrap/css/bootstrap-toggle.min.css');
 
-@import url('Bootstrap/css/bootstrap-toggle.min.css');
-
 @import url('Plugin/Fancytree/skin-bootstrap/ui.fancytree.css');
 
 @import url('Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
@@ -37,4 +35,8 @@
 
 .ui-state-active, .ui-widget-content .ui-state-active {
 	border: 1px solid #ebebeb;
+}
+
+.fa-half-transparent {
+	opacity: 0.5;
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\SiteMap\Item;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\SiteMap\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\SiteMap\SiteMap;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -18,12 +18,12 @@ class ApplicationItem extends SiteMap
     public function get_item_url()
     {
         $application = $this->getItem()->get_application();
-        
+
         if (Application::is_active($application))
         {
             return;
         }
-        
+
         if ($application == 'root')
         {
             $url = 'index.php';
@@ -32,7 +32,7 @@ class ApplicationItem extends SiteMap
         {
             $url = 'index.php?application=' . $this->getItem()->get_application();
         }
-        
+
         $html = array();
         if ($this->getItem()->get_use_translation())
         {
@@ -42,11 +42,11 @@ class ApplicationItem extends SiteMap
         {
             $title = $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());
         }
-        
+
         $html[] = '<a href="' . $url . '">' . $title;
-        
+
         $html[] = '</a>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

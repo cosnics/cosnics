@@ -20,8 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: browser.class.php 226 2009-11-13 14:44:03Z chellee $
- * 
+ *
  * @package help.lib.help_manager.component
  */
 /**
@@ -45,17 +44,17 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-        
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_html();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = '<br />' . $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $output;
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -63,14 +62,14 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $parameters = $this->get_parameters();
         $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
+
         $table = new HelpItemTable($this);
-        
+
         $html = array();
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-        
+
         return implode($html, "\n");
     }
 
@@ -85,10 +84,10 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_NAME), 
+                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_NAME),
                 '*' . $query . '*');
         }
-        
+
         return $condition;
     }
 
@@ -99,19 +98,19 @@ class BrowserComponent extends Manager implements TableSupport
             $buttonToolbar = new ButtonToolBar(
                 $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())));
             $commonActions = new ButtonGroup();
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
-            
+
             $buttonToolbar->addButtonGroup($commonActions);
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 

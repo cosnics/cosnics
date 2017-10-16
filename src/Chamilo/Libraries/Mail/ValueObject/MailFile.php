@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Mail\ValueObject;
 
 /**
  * Describes a file that can be embedded inline or attached to an e-mail.
- * 
+ *
+ * @package Chamilo\Libraries\Mail\ValueObject
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MailFile

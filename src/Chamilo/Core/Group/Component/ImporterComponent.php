@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: importer.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib.group_manager.component
  */
 class ImporterComponent extends Manager
@@ -26,27 +25,27 @@ class ImporterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $form = new GroupImportForm($this->get_url());
-        
+
         if ($form->validate())
         {
             $success = $form->import_groups();
             $this->redirect(
                 Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
-                     $form->get_failed_elements(), 
-                    ($success ? false : true), 
+                     $form->get_failed_elements(),
+                    ($success ? false : true),
                     array(Application::PARAM_ACTION => self::ACTION_IMPORT));
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -84,7 +83,7 @@ class ImporterComponent extends Manager
         $html[] = '<br />U: ' . Translation::get('Update', null, Utilities::COMMON_LIBRARIES);
         $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</blockquote>';
-        
+
         return implode($html, "\n");
     }
 

@@ -1,18 +1,18 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Application\Routing;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * This service will be used to generate urls using the current url as a base
  *
+ * @package Chamilo\Libraries\Architecture\Application\Routing
  * @author Sven
  */
 class UrlGenerator
 {
+
     /**
      * The parameters of the url in a parameter bag
      *
@@ -31,18 +31,18 @@ class UrlGenerator
     }
 
     /**
+     *
      * @param \Symfony\Component\HttpFoundation\ParameterBag $url_parameter_bag
      *
      * @throws \InvalidArgumentException
      */
     public function setUrlParameterBag($url_parameter_bag)
     {
-        if(!$url_parameter_bag instanceof ParameterBag)
+        if (! $url_parameter_bag instanceof ParameterBag)
         {
             throw new \InvalidArgumentException(
                 'The given url parameter bag is not an instance of "\Symfony\Component\HttpFoundation\ParameterBag", ' .
-                'instead "' . get_class($url_parameter_bag) . '" was given.'
-            );
+                     'instead "' . get_class($url_parameter_bag) . '" was given.');
         }
 
         $this->url_parameter_bag = $url_parameter_bag;
@@ -51,9 +51,8 @@ class UrlGenerator
     /**
      * Generates a url based on the current url from the request, with the given parameters and filters
      *
-     * @param array $parameters - This array must be used to define new or update existing parameters
-     * @param array $filters - This array must be used to filter out parameters from the current url
-     *
+     * @param string[] $parameters - This array must be used to define new or update existing parameters
+     * @param string[] $filters - This array must be used to filter out parameters from the current url
      * @return string
      */
     public function generateURL($parameters = array(), $filters = array())
@@ -61,7 +60,7 @@ class UrlGenerator
         $base_parameters = $this->url_parameter_bag->all();
         $this->url_parameter_bag->add($parameters);
 
-        foreach($filters as $filter)
+        foreach ($filters as $filter)
         {
             $this->url_parameter_bag->remove($filter);
         }
@@ -79,19 +78,19 @@ class UrlGenerator
      *
      * @param string $context
      * @param string $component
-     * @param array $parameters
-     * @param array $filters
+     * @param string[] $parameters
+     * @param string[] $filters
      *
      * @return string
      */
     public function generateContextURL($context, $component, $parameters = array(), $filters = array())
     {
-        if($context)
+        if ($context)
         {
             $parameters[Application::PARAM_CONTEXT] = $context;
         }
 
-        if($component)
+        if ($component)
         {
             $parameters[Application::PARAM_ACTION] = $component;
         }

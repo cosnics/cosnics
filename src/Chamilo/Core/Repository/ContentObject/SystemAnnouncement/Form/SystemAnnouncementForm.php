@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: system_announcement_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.system_announcement
  */
 /**
@@ -21,9 +20,9 @@ class SystemAnnouncementForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
-            'select', 
-            SystemAnnouncement::PROPERTY_ICON, 
-            Translation::get('Icon'), 
+            'select',
+            SystemAnnouncement::PROPERTY_ICON,
+            Translation::get('Icon'),
             SystemAnnouncement::get_possible_icons());
         $this->addElement('category');
     }
@@ -33,9 +32,9 @@ class SystemAnnouncementForm extends ContentObjectForm
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
-            'select', 
-            SystemAnnouncement::PROPERTY_ICON, 
-            Translation::get('Icon'), 
+            'select',
+            SystemAnnouncement::PROPERTY_ICON,
+            Translation::get('Icon'),
             SystemAnnouncement::get_possible_icons());
         $this->addElement('category');
     }

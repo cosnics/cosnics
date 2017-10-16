@@ -197,16 +197,21 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      */
     function toHtml()
     {
-        $html = array();
-        
-        $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
-        $html[] = HTML_QuickForm_input::toHtml();
-        $html[] = '<label>';
-        $html[] = $this->_text;
-        $html[] = '</label>';
-        $html[] = '</div>';
-        
-        return implode(PHP_EOL, $html);
+        if(!$this->isFrozen())
+        {
+            $html = array();
+
+            $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
+            $html[] = HTML_QuickForm_input::toHtml();
+            $html[] = '<label>';
+            $html[] = $this->_text;
+            $html[] = '</label>';
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
+        }
+
+        return parent::toHtml();
     }
 
     function getCheckboxClasses()

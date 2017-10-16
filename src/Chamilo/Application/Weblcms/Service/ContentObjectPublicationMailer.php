@@ -10,9 +10,12 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
@@ -98,8 +101,20 @@ class ContentObjectPublicationMailer
         $tool = $contentObjectPublication->get_tool();
         $link = $this->getContentObjectPublicationUrl($contentObjectPublication);
         $course = $this->courseRepository->findCourse($contentObjectPublication->get_course_id());
-        
-        $body = $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
+
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'resource';
+        $parameters[ResourceUtilities::PARAM_THEME] = Theme::getInstance()->getTheme();
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
+        $parameters['modified'] = time();
+        $redirect = new Redirect($parameters);
+
+        $body = '<!DOCTYPE html><html lang="en"><head>';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
+
+        $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
              $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         
         $body .= $content_object->get_description();
@@ -117,7 +132,9 @@ class ContentObjectPublicationMailer
         {
             $body .= '<br ><br >' . $this->getTranslation('AttachmentWarning', array('LINK' => $link));
         }
-        
+
+        $body .= '</div></body></html>';
+
         $log = '';
         $log .= "mail for publication " . $contentObjectPublication->getId() . " in course ";
         $log .= $course->get_title();

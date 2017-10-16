@@ -8,8 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * $Id: admin_course_type_browser_table_data_provider.class.php 218 2010-03-10 14:21:26Z yannick $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component.admin_course_type_browser
  */
 /**
@@ -22,7 +21,7 @@ class AdminRequestTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Gets the coursetypes
-     * 
+     *
      * @param $offset int
      * @param $count int
      * @param $order_property string
@@ -31,13 +30,13 @@ class AdminRequestTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieves(
-            CourseRequest::class_name(), 
+            CourseRequest::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Gets the number of coursetypes in the table
-     * 
+     *
      * @return int
      */
     public function count_data($condition)

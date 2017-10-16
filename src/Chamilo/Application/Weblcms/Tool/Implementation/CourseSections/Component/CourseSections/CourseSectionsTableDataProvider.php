@@ -8,8 +8,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- * $Id: course_sections_browser_table_data_provider.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_sections.component.course_sections_browser
  */
 /**
@@ -22,7 +21,7 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Gets the courses
-     * 
+     *
      * @param $offset int
      * @param $count int
      * @param $order_property string
@@ -33,15 +32,15 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
         $order_property = array(
             new OrderBy(
                 new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)));
-        
+
         return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            CourseSection::class_name(), 
+            CourseSection::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Gets the number of courses in the table
-     * 
+     *
      * @return int
      */
     public function count_data($condition)

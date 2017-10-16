@@ -16,7 +16,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: content_object_import_form.class.php 204 2009-11-13 12:51:30Z kariboe $
  *
  * @package repository.lib
  */
@@ -145,7 +144,8 @@ abstract class ContentObjectImportForm extends FormValidator
     {
         $class = Manager::package() . '\Common\Import\\' .
              StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
-             '\\' . (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
+             '\\' .
+             (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
              'ContentObjectImportForm';
 
         if (! class_exists($class))

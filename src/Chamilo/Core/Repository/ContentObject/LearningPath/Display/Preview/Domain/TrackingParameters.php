@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
@@ -17,7 +15,9 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class TrackingParameters implements TrackingParametersInterface
 {
+
     /**
+     *
      * @return string
      */
     public function getTreeNodeAttemptClassName()
@@ -26,6 +26,7 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @return string
      */
     public function getTreeNodeQuestionAttemptClassName()
@@ -34,6 +35,7 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @return Condition
      */
     public function getTreeNodeAttemptConditions()
@@ -70,7 +72,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        if(empty(Session::get_user_id()))
+        if (empty(Session::get_user_id()))
         {
             return [];
         }

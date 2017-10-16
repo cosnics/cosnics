@@ -1,9 +1,13 @@
 {
-    "name": "chamilo/core-tracking",
-        "version": "6.0.0", "description": "Chamilo Tracking Core Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-tracking",
+    "version": "1.0.0",
+    "description": "Core Tracking",
+    "keywords": [
+        "Core",
+        "Tracking"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +18,24 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "tracking"
+        "cosnics": {
+            "name": "Tracking",
+            "context": "Chamilo\\Core\\Tracking",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

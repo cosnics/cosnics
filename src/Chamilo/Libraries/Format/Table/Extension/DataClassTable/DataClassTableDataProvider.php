@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Table\TableDataProvider;
 
 /**
  *
+ * @package Chamilo\Libraries\Format\Table\Extension\DataClassTable
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop>
  */

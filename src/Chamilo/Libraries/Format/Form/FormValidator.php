@@ -1359,7 +1359,7 @@ EOT;
         $dropzoneOptions['successCallbackFunction'] = 'chamilo.libraries.single.processUploadedFile';
         $dropzoneOptions['removedfileCallbackFunction'] = 'chamilo.libraries.single.deleteUploadedFile';
 
-        $this->addFileDropzone($elementName, $dropzoneOptions, $includeLabel);
+        $this->addFileDropzone($elementName, $dropzoneOptions, $includeLabel, true);
 
         $this->disableSubmitButton();
 
@@ -1374,11 +1374,16 @@ EOT;
 
     /**
      *
-     * @param string $uploadType
      * @param string $elementName
      * @param string[] $dropzoneOptions
+     * @param bool $includeLabel
+     * @param bool $markRequired
+     *
+     * @internal param string $uploadType
      */
-    public function addFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true)
+    public function addFileDropzone(
+        $elementName, $dropzoneOptions = array(), $includeLabel = true, $markRequired = false
+    )
     {
         $autoProcess = true;
         if (array_key_exists('autoProcessQueue', $dropzoneOptions))
@@ -1460,6 +1465,12 @@ EOT;
         else
         {
             $label = '';
+        }
+
+        if($markRequired)
+        {
+            $label .= '<span class="form_required"><img src="' .
+                Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
         }
 
         $this->addElement('static', null, $label, implode(PHP_EOL, $dropzoneHtml));

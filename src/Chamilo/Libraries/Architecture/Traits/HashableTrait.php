@@ -45,7 +45,7 @@ trait HashableTrait
         {
             $this->setHash(md5(json_encode($this->getHashParts())));
         }
-        
+
         return $this->getHash();
     }
 

@@ -13,15 +13,15 @@ interface TableSupportedSearchFormInterface
 
     /**
      * Registers the table parameters in the form
-     * 
-     * @param array $tableParameters
+     *
+     * @param string[] $tableParameters
      */
     public function registerTableParametersInSearchForm(array $tableParameters = array());
 
     /**
      * Registers the form parameters in the table
-     * 
-     * @param Table $table
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
      */
     public function registerSearchFormParametersInTable(Table $table);
 }

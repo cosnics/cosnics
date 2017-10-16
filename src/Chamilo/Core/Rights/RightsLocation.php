@@ -14,8 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: location.class.php 214 2009-11-13 13:57:37Z vanpouckesven $
- * 
+ *
  * @package rights.lib
  * @author Hans de Bisschop
  */
@@ -32,18 +31,18 @@ class RightsLocation extends NestedTreeNode
 
     /**
      * Get the default properties of all users.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_TYPE, 
-                self::PROPERTY_IDENTIFIER, 
-                self::PROPERTY_TREE_IDENTIFIER, 
-                self::PROPERTY_TREE_TYPE, 
-                self::PROPERTY_INHERIT, 
+                self::PROPERTY_TYPE,
+                self::PROPERTY_IDENTIFIER,
+                self::PROPERTY_TREE_IDENTIFIER,
+                self::PROPERTY_TREE_TYPE,
+                self::PROPERTY_INHERIT,
                 self::PROPERTY_LOCKED));
     }
 
@@ -53,7 +52,7 @@ class RightsLocation extends NestedTreeNode
         {
             $this->context = $this->package();
         }
-        
+
         return $this->context;
     }
 
@@ -190,27 +189,27 @@ class RightsLocation extends NestedTreeNode
     public function get_locked_parent()
     {
         $locked_parent_conditions = $this->get_nested_set_condition_array();
-        
+
         $locked_parent_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LOCKED), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LOCKED),
             new StaticConditionVariable(true));
-        
+
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), 
-            ComparisonCondition::LESS_THAN, 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+            ComparisonCondition::LESS_THAN,
             new StaticConditionVariable($this->get_left_value()));
-        
+
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE), 
-            ComparisonCondition::GREATER_THAN, 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+            ComparisonCondition::GREATER_THAN,
             new StaticConditionVariable($this->get_right_value()));
-        
+
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
         $order = array(new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE)));
-        
+
         $datamanager = self::package() . '\Storage\DataManager';
         return $datamanager::retrieve(
-            self::class_name(), 
+            self::class_name(),
             new DataClassRetrieveParameters($locked_parent_condition, $order));
     }
 
@@ -229,29 +228,29 @@ class RightsLocation extends NestedTreeNode
 
     /**
      * Retrieves the rights entities linked to this location
-     * 
+     *
      * @param int $right_id - [OPTIONAL] default null
      * @return ResultSet
      */
     public function get_rights_entities($right_id = null)
     {
         $conditions = array();
-        
+
         $class_name = static::package() . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID), 
+            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         if (! is_null($right_id))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_RIGHT_ID), 
+                new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_RIGHT_ID),
                 new StaticConditionVariable($right_id));
         }
-        
+
         $condition = new AndCondition($conditions);
-        
+
         $entity_rights = DataManager::retrieve_rights_location_rights($this->get_context(), $condition);
         if ($entity_rights)
         {
@@ -276,15 +275,15 @@ class RightsLocation extends NestedTreeNode
     public function get_nested_set_condition_array()
     {
         $conditions = parent::get_nested_set_condition_array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_TYPE), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_TYPE),
             new StaticConditionVariable($this->get_tree_type()));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_IDENTIFIER), 
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_IDENTIFIER),
             new StaticConditionVariable($this->get_tree_identifier()));
-        
+
         return $conditions;
     }
 }

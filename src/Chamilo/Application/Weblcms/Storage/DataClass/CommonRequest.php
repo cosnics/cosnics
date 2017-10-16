@@ -4,8 +4,7 @@ namespace Chamilo\Application\Weblcms\Storage\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: course_request.class.php 216 2010-02-25 11:06:00Z Yannick & Tristan$
- * 
+ *
  * @package application.lib.weblcms.course
  */
 class CommonRequest extends DataClass
@@ -25,13 +24,13 @@ class CommonRequest extends DataClass
     {
         return parent::get_default_property_names(
             array_merge(
-                $extended_property_names, 
+                $extended_property_names,
                 array(
-                    self::PROPERTY_USER_ID, 
-                    self::PROPERTY_SUBJECT, 
-                    self::PROPERTY_MOTIVATION, 
-                    self::PROPERTY_CREATION_DATE, 
-                    self::PROPERTY_DECISION_DATE, 
+                    self::PROPERTY_USER_ID,
+                    self::PROPERTY_SUBJECT,
+                    self::PROPERTY_MOTIVATION,
+                    self::PROPERTY_CREATION_DATE,
+                    self::PROPERTY_DECISION_DATE,
                     self::PROPERTY_DECISION)));
     }
 

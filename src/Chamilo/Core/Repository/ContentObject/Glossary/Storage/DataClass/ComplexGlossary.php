@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\Glossar
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- * $Id: complex_glossary.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.glossary
  */
 class ComplexGlossary extends ComplexContentObjectItem

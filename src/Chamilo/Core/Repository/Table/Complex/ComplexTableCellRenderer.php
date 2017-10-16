@@ -17,18 +17,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: complex_browser_table_cell_renderer.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component.complex_browser
  */
 class ComplexTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $cloi)
     {
         $content_object = $cloi->get_ref_object();
-        
+
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_TYPE :
@@ -38,18 +37,18 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     Translation::get('TypeName', null, ContentObject::get_content_object_type_namespace($type))) . '"/>';
                 return $url;
             case Theme::getInstance()->getCommonImage(
-                'Action/Category', 
-                'png', 
-                Translation::get('Type'), 
-                null, 
+                'Action/Category',
+                'png',
+                Translation::get('Type'),
+                null,
                 ToolbarItem::DISPLAY_ICON) :
                 return $content_object->get_icon_image(Theme::ICON_MINI);
-            
+
             case ContentObject::PROPERTY_TITLE :
                 $title = htmlspecialchars($content_object->get_title());
                 $title_short = $title;
                 $title_short = StringUtilities::getInstance()->truncate($title_short, 53, false);
-                
+
                 if ($content_object instanceof ComplexContentObjectSupport)
                 {
                     $title_short = '<a href="' .
@@ -62,7 +61,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 {
                     $title_short = '<a href="' . $this->getTitleLink($cloi) . '">' . $title_short . '</a>';
                 }
-                
+
                 return $title_short;
             case ContentObject::PROPERTY_DESCRIPTION :
                 $description = $content_object->get_description();
@@ -71,16 +70,16 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 if ($cloi->is_complex())
                 {
                     $condition = new EqualityCondition(
-                        ComplexContentObjectItem::PROPERTY_PARENT, 
-                        $cloi->get_ref(), 
+                        ComplexContentObjectItem::PROPERTY_PARENT,
+                        $cloi->get_ref(),
                         ComplexContentObjectItem::get_table_name());
                     return DataManager::count_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class_name(),
                         $condition);
                 }
                 return 0;
         }
-        
+
         return parent::render_cell($column, $cloi);
     }
 
@@ -99,81 +98,81 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
     public function get_actions($cloi)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
-                $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()), 
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Copy'), 
-                $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()), 
-                ToolbarItem::DISPLAY_ICON, 
+                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Copy'),
+                $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()),
+                ToolbarItem::DISPLAY_ICON,
                 true));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
-                $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()), 
-                ToolbarItem::DISPLAY_ICON, 
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()),
+                ToolbarItem::DISPLAY_ICON,
                 true));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ChangeParent', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Move'), 
-                $this->get_component()->get_complex_content_object_parent_changer_url($cloi->get_id()), 
+                Translation::get('ChangeParent', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Move'),
+                $this->get_component()->get_complex_content_object_parent_changer_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON));
-        
+
         $allowed = $this->check_move_allowed($cloi);
-        
+
         if ($allowed["moveup"])
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Up'), 
+                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Up'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $cloi->get_id(), 
-                        Manager::PARAM_DIRECTION_UP), 
+                        $cloi->get_id(),
+                        Manager::PARAM_DIRECTION_UP),
                     ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNotAvailable', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/UpNa'), 
-                    null, 
+                    Translation::get('MoveUpNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/UpNa'),
+                    null,
                     ToolbarItem::DISPLAY_ICON));
         }
-        
+
         if ($allowed["movedown"])
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Down'), 
+                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Down'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $cloi->get_id(), 
-                        Manager::PARAM_DIRECTION_DOWN), 
+                        $cloi->get_id(),
+                        Manager::PARAM_DIRECTION_DOWN),
                     ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNotAvailable', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/DownNa'), 
-                    null, 
+                    Translation::get('MoveDownNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/DownNa'),
+                    null,
                     ToolbarItem::DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 
@@ -181,9 +180,9 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $moveup_allowed = true;
         $movedown_allowed = true;
-        
+
         $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class_name(),
             $this->get_component()->get_table_condition(__CLASS__));
         if ($count == 1)
         {
@@ -204,7 +203,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 }
             }
         }
-        
+
         return array('moveup' => $moveup_allowed, 'movedown' => $movedown_allowed);
     }
 }

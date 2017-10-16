@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  *
  * @package Chamilo\Libraries\Architecture\Application
@@ -40,9 +43,9 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param string[] $configurationParameters
      */
-    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request, $user = null, $application = null,
-        $configurationParameters = array())
+    public function __construct(ChamiloRequest $request, $user = null, $application = null, $configurationParameters = array())
     {
         $this->request = $request;
         $this->user = $user;
@@ -82,7 +85,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function setUser(\Chamilo\Core\User\Storage\DataClass\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -90,8 +93,8 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     /**
      *
      * @param string $key
-     * @param mixed $defaultValue
-     * @return mixed
+     * @param string $defaultValue
+     * @return string
      */
     public function get($key, $defaultValue = null)
     {
@@ -101,7 +104,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     /**
      *
      * @param string $key
-     * @param mixed $value
+     * @param string $value
      */
     public function set($key, $value)
     {

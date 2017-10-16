@@ -2,9 +2,17 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 
+require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
+
+/**
+ *
+ * @package Chamilo\Libraries\Utilities\Jenkins
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class SourceCodeTestGenerator
 {
 
@@ -53,7 +61,7 @@ class SourceCodeTestGenerator
     public function process(PackageList $package_list)
     {
         $this->write_source_code_test($package_list->get_type());
-        
+
         if ($package_list->has_children())
         {
             foreach ($package_list->get_children() as $child_list)
@@ -80,7 +88,7 @@ class SourceCodeTestGenerator
     public function write_source_code_test($context)
     {
         $manager_class_name = $context . '\Manager';
-        
+
         if (class_exists($manager_class_name) &&
              is_subclass_of($manager_class_name, '\Chamilo\Libraries\Architecture\Application\Application'))
         {
@@ -113,10 +121,10 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 {
 }';
         }
-        
+
         $path = $this->get_folder($context) . 'check_source_code_test.class.php';
         $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
-        
+
         if (! file_exists($path) && is_dir($php_class_path))
         {
             echo $context . "\n";
@@ -125,8 +133,8 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
     }
 }
 
-require_once __DIR__ . '/../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
+$container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
 
 $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
 

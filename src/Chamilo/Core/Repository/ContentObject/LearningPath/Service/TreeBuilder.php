@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -20,17 +18,21 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class TreeBuilder
 {
+
     /**
+     *
      * @var TreeNodeDataRepository
      */
     protected $treeNodeDataRepository;
 
     /**
+     *
      * @var ContentObjectRepository
      */
     protected $contentObjectRepository;
 
     /**
+     *
      * @var TreeNode[][]
      */
     protected $treeNodesPerContentObjectId;
@@ -41,10 +43,8 @@ class TreeBuilder
      * @param TreeNodeDataRepository $treeNodeDataRepository
      * @param ContentObjectRepository $contentObjectRepository
      */
-    public function __construct(
-        TreeNodeDataRepository $treeNodeDataRepository,
-        ContentObjectRepository $contentObjectRepository
-    )
+    public function __construct(TreeNodeDataRepository $treeNodeDataRepository,
+        ContentObjectRepository $contentObjectRepository)
     {
         $this->treeNodeDataRepository = $treeNodeDataRepository;
         $this->contentObjectRepository = $contentObjectRepository;
@@ -63,15 +63,13 @@ class TreeBuilder
 
         $tree = new Tree();
 
-        $treeNodesData = $this->treeNodeDataRepository
-            ->findTreeNodesDataForLearningPath($learningPath);
+        $treeNodesData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath($learningPath);
 
         $orderedTreeNodesData = array();
 
         foreach ($treeNodesData as $treeNodeData)
         {
-            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()]
-            [$treeNodeData->getDisplayOrder()] = $treeNodeData;
+            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] = $treeNodeData;
         }
 
         $this->addChildrenForSection(0, $orderedTreeNodesData, $tree);
@@ -84,15 +82,14 @@ class TreeBuilder
     }
 
     /**
+     *
      * @param int $parentTreeNodeDataId
      * @param TreeNodeData[][] $orderedTreeNodesData
      * @param Tree $tree
      * @param TreeNode $parentTreeNode
      */
-    protected function addChildrenForSection(
-        $parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
-        TreeNode $parentTreeNode = null
-    )
+    protected function addChildrenForSection($parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
+        TreeNode $parentTreeNode = null)
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];
         ksort($treeNodeDataForSection);
@@ -101,18 +98,14 @@ class TreeBuilder
         {
             $treeNode = new TreeNode($tree, null, $treeNodeData);
 
-            if($parentTreeNode instanceof TreeNode)
+            if ($parentTreeNode instanceof TreeNode)
             {
                 $parentTreeNode->addChildNode($treeNode);
             }
 
-            $this->treeNodesPerContentObjectId[$treeNodeData->getContentObjectId()][] =
-                $treeNode;
+            $this->treeNodesPerContentObjectId[$treeNodeData->getContentObjectId()][] = $treeNode;
 
-            $this->addChildrenForSection(
-                $treeNodeData->getId(), $orderedTreeNodesData, $tree,
-                $treeNode
-            );
+            $this->addChildrenForSection($treeNodeData->getId(), $orderedTreeNodesData, $tree, $treeNode);
         }
     }
 
@@ -128,16 +121,13 @@ class TreeBuilder
             new DataClassRetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                    $contentObjectIds
-                )
-            )
-        );
+                    $contentObjectIds)));
 
-        while($contentObject = $contentObjects->next_result())
+        while ($contentObject = $contentObjects->next_result())
         {
             /** @var ContentObject $contentObject */
             $nodes = $this->treeNodesPerContentObjectId[$contentObject->getId()];
-            foreach($nodes as $node)
+            foreach ($nodes as $node)
             {
                 $node->setContentObject($contentObject);
             }

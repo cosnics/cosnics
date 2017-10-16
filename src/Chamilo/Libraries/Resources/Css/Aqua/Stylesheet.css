@@ -67,3 +67,7 @@ figcaption {
     max-width: 1920px;
     margin:0 auto;
 }
+
+.text-maintenance {
+    font-weight: bold;
+}

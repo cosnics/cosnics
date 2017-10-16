@@ -272,7 +272,16 @@ DELETE FROM `repository_complex_content_object_item` WHERE parent_id IN
 (SELECT id FROM repository_content_object CO WHERE CO.type = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Storage\\DataClass\\LearningPath');
 
 DELETE FROM `repository_complex_learning_path_item`;
+DELETE FROM `repository_content_object` WHERE `type` LIKE '%LearningPathItem%';
+
+/** NEW **/
+
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Core\\Admin', 'maintenance_warning_show', '0', '0'),
+  (NULL, 'Chamilo\\Core\\Admin', 'maintenance_warning_message', NULL, '0'),
+  (NULL, 'Chamilo\\Core\\Admin', 'maintenance_block_access', 0, '0');
+
+DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND context LIKE 'Chamilo\\\\Core\\\\Admin';
 
 
-
-
+/** 16 OCT 2017 **/
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');

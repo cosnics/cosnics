@@ -1,10 +1,8 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeQuestionAttempt;
-use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManagerWrapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -20,17 +18,21 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class TrackingParameters implements TrackingParametersInterface
 {
+
     /**
+     *
      * @var int
      */
     protected $publicationId;
 
     /**
+     *
      * @var int[]
      */
     protected $targetUserIds;
 
     /**
+     *
      * @var DataManagerWrapper
      */
     protected $dataManagerWrapper;
@@ -45,7 +47,7 @@ class TrackingParameters implements TrackingParametersInterface
     {
         $this->setPublicationId($publicationId);
 
-        if(empty($dataManagerWrapper))
+        if (empty($dataManagerWrapper))
         {
             $dataManagerWrapper = new DataManagerWrapper();
         }
@@ -54,17 +56,17 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @param int $publicationId
      *
      * @return $this
      */
     public function setPublicationId($publicationId)
     {
-        if (empty($publicationId) || !is_int($publicationId))
+        if (empty($publicationId) || ! is_int($publicationId))
         {
             throw new \InvalidArgumentException(
-                'The given publicationId should be a valid integer and should not be empty'
-            );
+                'The given publicationId should be a valid integer and should not be empty');
         }
 
         $this->publicationId = $publicationId;
@@ -73,6 +75,7 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @return string
      */
     public function getTreeNodeAttemptClassName()
@@ -81,6 +84,7 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @return string
      */
     public function getTreeNodeQuestionAttemptClassName()
@@ -89,6 +93,7 @@ class TrackingParameters implements TrackingParametersInterface
     }
 
     /**
+     *
      * @return Condition
      */
     public function getTreeNodeAttemptConditions()
@@ -96,10 +101,8 @@ class TrackingParameters implements TrackingParametersInterface
         return new EqualityCondition(
             new PropertyConditionVariable(
                 $this->getTreeNodeAttemptClassName(),
-                LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
-            ),
-            new StaticConditionVariable($this->publicationId)
-        );
+                LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($this->publicationId));
     }
 
     /**
@@ -133,7 +136,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        if(!isset($this->targetUserIds))
+        if (! isset($this->targetUserIds))
         {
             $this->targetUserIds = $this->dataManagerWrapper->getPublicationTargetUserIds($this->publicationId);
         }

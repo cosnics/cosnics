@@ -3,51 +3,33 @@ namespace Chamilo\Libraries\Format\Table;
 
 /**
  * This class represents a component for a table (this can be a cell renderer, a column model, a data provider...)
- * 
+ *
+ * @package Chamilo\Libraries\Format\Table
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableComponent
 {
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * The table in which this data provider is used
-     * 
-     * @var Table
+     *
+     * @var \Chamilo\Libraries\Format\Table\Table
      */
     private $table;
 
     /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Constructor
-     * 
-     * @param Table $table
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
      */
-    public function __construct($table)
+    public function __construct(Table $table)
     {
         $this->table = $table;
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * Returns the table
-     * 
-     * @return Table
+     *
+     * @return \Chamilo\Libraries\Format\Table\Table
      */
     public function get_table()
     {
@@ -55,25 +37,18 @@ abstract class TableComponent
     }
 
     /**
-     * Sets the table
-     * 
-     * @param Table $table
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
      */
-    public function set_table($table)
+    public function set_table(Table $table)
     {
         $this->table = $table;
     }
 
     /**
-     * **************************************************************************************************************
-     * Delegation Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the component of the object table
-     * 
-     * @return mixed <Application, SubManager>
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_component()
     {

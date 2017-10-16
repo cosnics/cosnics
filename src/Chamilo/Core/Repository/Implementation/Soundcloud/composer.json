@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/ext-repo-soundcloud",
-        "version": "6.0.0", "description": "Chamilo Soundcloud External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-implementation-soundcloud",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Soundcloud",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Soundcloud"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -13,18 +19,31 @@
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
         }
-    ],    
-    "require" : {
+    ],
+    "require": {
         "glenscott/soundcloud": "dev-psr-4"
-    },  
-    "repositories" : [
-                      {
-                          "type": "git",
-                          "url": "https://github.com/mptre/php-soundcloud"
-                      }
-                  ],
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mptre/php-soundcloud"
+        }
+    ],
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/soundcloud"
+        "cosnics": {
+            "name": "Soundcloud",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Soundcloud",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

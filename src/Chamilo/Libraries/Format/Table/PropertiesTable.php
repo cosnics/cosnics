@@ -5,29 +5,38 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class PropertiesTable extends HTML_Table
 {
 
+    /**
+     *
+     * @var string[]
+     */
     private $properties;
 
     /**
      * Constructor creates the table
-     * 
-     * @param array $properties
+     *
+     * @param string[] $properties
      */
     public function __construct(array $properties)
     {
         parent::__construct(
             array('class' => 'table table-striped table-bordered table-hover table-responsive table-properties'));
         $this->properties = $properties;
-        
-        $this->build_table();
+
+        $this->buildTable();
     }
 
     /**
      * Builds the table with given properties
      */
-    public function build_table()
+    public function buildTable()
     {
         if (count($this->properties) > 0)
         {
@@ -35,12 +44,12 @@ class PropertiesTable extends HTML_Table
             {
                 $contents = array();
                 $contents[] = $property;
-                
+
                 if (! is_array($values))
                 {
                     $values = array($values);
                 }
-                
+
                 if (count($values) > 0)
                 {
                     foreach ($values as $value)
@@ -48,10 +57,10 @@ class PropertiesTable extends HTML_Table
                         $contents[] = $value;
                     }
                 }
-                
+
                 $this->addRow($contents);
             }
-            
+
             $this->setColAttributes(0, array('class' => 'header'));
         }
         else
@@ -81,3 +90,4 @@ class PropertiesTable extends HTML_Table
         $this->properties = $properties;
     }
 }
+

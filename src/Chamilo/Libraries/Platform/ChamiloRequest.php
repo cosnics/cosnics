@@ -5,6 +5,8 @@ namespace Chamilo\Libraries\Platform;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * @package Chamilo\Libraries\Platform
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloRequest extends Request
@@ -14,16 +16,16 @@ class ChamiloRequest extends Request
      *
      * @param string $key
      * @param mixed $default
+     * @param bool $deep
      *
      * @return mixed
-     *
      * @deprecated
      *
      * @see getFromUrl
      * @see getFromPost
      * @see getFromPostOrUrl
      */
-    public function get($key, $default = null)
+    public function get($key, $default = null, $deep = false)
     {
         return $this->getFromPOSTOrURL($key, $default);
     }

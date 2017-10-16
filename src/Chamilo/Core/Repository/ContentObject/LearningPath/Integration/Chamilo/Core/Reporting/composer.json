@@ -1,0 +1,51 @@
+{
+    "name": "cosnics/core-repository-content-object-learning-path-integration-chamilo-core-reporting",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject LearningPath Integration Chamilo Core Reporting",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "LearningPath",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Reporting"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Display",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Integration\\Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository\\ContentObject\\LearningPath",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Reporting",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

@@ -14,17 +14,21 @@ use Chamilo\Libraries\Platform\Session\Request;
 class McQuestionComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $value = Request::post('value');
         $action = Request::post('action');
-        
+
         switch ($action)
         {
             case 'skip_option' :
                 $_SESSION['mc_skip_options'][] = $value;
         }
-        
+
         JsonAjaxResult::success();
     }
 }

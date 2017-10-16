@@ -1,5 +1,4 @@
 <?php
-
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -9,7 +8,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: element_finder.php 128 2009-11-09 13:13:20Z vanpouckesven $
  *
  * @package common.html.formvalidator.Element
  */
@@ -40,11 +38,8 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
     private $defaults;
 
-    public function __construct(
-        $elementName = null, $elementLabel = null, $search_url = null, $locale = array('Display' => 'Display'),
-        $default = array(),
-        $options = array('rescale_image' => true, 'allow_change' => false)
-    )
+    public function __construct($elementName = null, $elementLabel = null, $search_url = null,
+        $locale = array('Display' => 'Display'), $default = array(), $options = array('rescale_image' => true, 'allow_change' => false))
     {
         HTML_QuickForm_group::__construct($elementName, $elementLabel);
         $this->_type = 'image_selecter';
@@ -62,7 +57,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
     public function isCollapsed()
     {
-        return $this->isDefaultCollapsed() && !count($this->getValue());
+        return $this->isDefaultCollapsed() && ! count($this->getValue());
     }
 
     public function isDefaultCollapsed()
@@ -107,8 +102,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $this->_elements[] = new \HTML_QuickForm_text(
             $this->getName() . '_search',
             null,
-            array('class' => 'element_query', 'id' => $this->getName() . '_search_field')
-        );
+            array('class' => 'element_query', 'id' => $this->getName() . '_search_field'));
     }
 
     public function getValue()
@@ -136,17 +130,12 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $calculator = new \Chamilo\Core\Repository\Quota\Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                (int) Session::get_user_id()
-            )
-        );
+                (int) Session::get_user_id()));
 
         $uploadUrl = new Redirect(
             array(
-                \Chamilo\Libraries\Architecture\Application\Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(
-                ),
-                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-            )
-        );
+                \Chamilo\Libraries\Architecture\Application\Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE));
 
         $dropZoneParameters = array(
             'name' => 'attachments_importer',
@@ -154,8 +143,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
             'uploadUrl' => $uploadUrl->getUrl(),
             'successCallbackFunction' => 'chamilo.core.repository.importImage.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importImage.prepareRequest',
-            'removedfileCallbackFunction' => 'chamilo.core.repository.importImage.deleteUploadedFile'
-        );
+            'removedfileCallbackFunction' => 'chamilo.core.repository.importImage.deleteUploadedFile');
 
         /*
          * 0 hidden 1 search
@@ -167,28 +155,23 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) .
-            'Plugin/jquery.file.upload.import.js'
-        );
+                 'Plugin/jquery.file.upload.import.js');
 
         if ($this->isCollapsed())
         {
             $html[] = '<button id="' . $this->getName() . '_expand_button" class="normal select">' . htmlentities(
-                    $this->locale['Display']
-                ) . '</button>';
+                $this->locale['Display']) . '</button>';
         }
         else
         {
-            $html[] =
-                '<button id="' . $this->getName() . '_expand_button" style="display: none" class="normal select">' .
-                htmlentities(
-                    $this->locale['Display']
-                ) . '</button>';
+            $html[] = '<button id="' . $this->getName() . '_expand_button" style="display: none" class="normal select">' . htmlentities(
+                $this->locale['Display']) . '</button>';
         }
 
         $id = 'tbl_' . $this->getName();
 
         $html[] = '<div class="element_finder" id="' . $id . '" style="margin-top: 5px;' .
-            ($this->isCollapsed() ? ' display: none;' : '') . '">';
+             ($this->isCollapsed() ? ' display: none;' : '') . '">';
 
         // Search
         $html[] = '<div class="element_finder_search">';
@@ -198,17 +181,13 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
         if ($this->isCollapsed())
         {
-            $html[] =
-                '<button id="' . $this->getName() . '_collapse_button" style="display: none" class="normal hide">' .
-                htmlentities(
-                    Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)
-                ) . '</button>';
+            $html[] = '<button id="' . $this->getName() . '_collapse_button" style="display: none" class="normal hide">' . htmlentities(
+                Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
         else
         {
             $html[] = '<button id="' . $this->getName() . '_collapse_button" class="normal hide mini">' . htmlentities(
-                    Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)
-                ) . '</button>';
+                Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
 
         $html[] = '</div>';
@@ -220,7 +199,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         // Inactive
         $html[] = '<div class="element_finder_inactive">';
         $html[] = '<div id="elf_' . $this->getName() . '_inactive" class="inactive_elements" style="height: ' .
-            $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
+             $this->getHeight() . 'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
@@ -237,7 +216,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = $this->_elements[0]->toHTML();
 
         $object_id = $this->getValue();
-        $is_object_set = !empty($object_id);
+        $is_object_set = ! empty($object_id);
 
         $html[] = '<div id="image_container" ' . ($is_object_set ? '' : ' style="display: none;"') . '>';
 
@@ -245,8 +224,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         {
             $image_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class_name(),
-                $object_id
-            );
+                $object_id);
 
             $dimensions = getimagesize($image_object->get_full_path());
 
@@ -257,8 +235,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
                 $scaledDimensions = Utilities::scaleDimensions(
                     600,
                     450,
-                    array('width' => $dimensions[0], 'height' => $dimensions[1])
-                );
+                    array('width' => $dimensions[0], 'height' => $dimensions[1]));
             }
             else
             {
@@ -266,9 +243,9 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
             }
 
             $html[] = '<div id="selected_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
-                $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] .
-                'px ' . $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-                \Chamilo\Core\Repository\Manager::get_document_downloader_url($image_object->get_id()) . ')"></div>';
+                 $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] .
+                 'px ' . $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
+                 \Chamilo\Core\Repository\Manager::get_document_downloader_url($image_object->get_id()) . ')"></div>';
         }
         else
         {
@@ -281,16 +258,14 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         if ($allow_change)
         {
             $html[] = '<button id="change_image" class="negative delete">' . htmlentities(
-                    Translation::get('SelectAnotherImage')
-                ) . '</button>';
+                Translation::get('SelectAnotherImage')) . '</button>';
             $html[] = '<div class="clear">&nbsp;</div>';
         }
 
         $html[] = '</div>';
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js'
-        );
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js');
         $html[] = '<script type="text/javascript">';
 
         $exclude_ids = array();
@@ -306,24 +281,20 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = 'var ' . $this->getName() . '_excluded = new Array(' . implode(',', $exclude_ids) . ');';
 
         $load_elements = $this->options['load_elements'];
-        $load_elements =
-            (isset($load_elements) && $load_elements == false ? ', loadElements: false' : ', loadElements: true');
+        $load_elements = (isset($load_elements) && $load_elements == false ? ', loadElements: false' : ', loadElements: true');
 
         $rescale_image = $this->options['rescale_image'];
-        $rescale_image =
-            (isset($rescale_image) && $rescale_image == false ? ', rescaleImage: false' : ', rescaleImage: true');
+        $rescale_image = (isset($rescale_image) && $rescale_image == false ? ', rescaleImage: false' : ', rescaleImage: true');
 
         $default_query = $this->options['default_query'];
-        $default_query =
-            (isset($default_query) && !empty($default_query) ? ', defaultQuery: "' . $default_query . '"' : '');
+        $default_query = (isset($default_query) && ! empty($default_query) ? ', defaultQuery: "' . $default_query . '"' : '');
 
         $html[] = '$(function () {';
         $html[] = '	$(document).ready(function ()';
         $html[] = '	{';
         $html[] = '		$("#' . $id . '").elementselecter({
         	name: "' . $this->getName() . '",
-        	search: "' .
-            $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
+        	search: "' . $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
         $html[] = '	});';
         $html[] = '});';
 
@@ -366,20 +337,18 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $dropzoneHtml[] = '<strong class="error text-danger" data-dz-errormessage></strong>';
         $dropzoneHtml[] = '<p class="size" data-dz-size></p>';
         $dropzoneHtml[] = '<div>';
-        $dropzoneHtml[] =
-            '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
-        $dropzoneHtml[] =
-            '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
+        $dropzoneHtml[] = '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
+        $dropzoneHtml[] = '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') .
-            '</span>';
+             '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
-            '</span>';
+             '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
@@ -389,8 +358,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $dropzoneHtml[] = '<div class="clearfix"></div>';
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body">';
-        $dropzoneHtml[] =
-            '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
+        $dropzoneHtml[] = '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
 
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="panel-footer">';
@@ -407,13 +375,12 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         }
 
         $dropzoneHtml[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'
-        );
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js');
 
         $dropzoneHtml[] = '<script type="text/javascript">';
         $dropzoneHtml[] = '$(document).ready(function() {';
         $dropzoneHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({' .
-            implode(', ', $dropzoneOptionsString) . '});';
+             implode(', ', $dropzoneOptionsString) . '});';
         $dropzoneHtml[] = '});';
         $dropzoneHtml[] = '</script>';
 

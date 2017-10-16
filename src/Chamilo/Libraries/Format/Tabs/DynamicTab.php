@@ -3,26 +3,47 @@ namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Tabs
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 abstract class DynamicTab
 {
-
-    private $id;
-
-    private $name;
-
-    private $image;
-
-    protected $display;
     const DISPLAY_ICON = 1;
     const DISPLAY_TITLE = 2;
     const DISPLAY_ICON_AND_TITLE = 3;
 
     /**
      *
-     * @param integer $id
+     * @var string
+     */
+    private $id;
+
+    /**
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     *
+     * @var string
+     */
+    private $image;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $display;
+
+    /**
+     *
+     * @param string $id
      * @param string $name
-     * @param string $image
-     * @param int $display
+     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
+     * @param integer $display
      */
     public function __construct($id, $name, $image, $display = self::DISPLAY_ICON_AND_TITLE)
     {
@@ -34,7 +55,7 @@ abstract class DynamicTab
 
     /**
      *
-     * @return the $id
+     * @return string
      */
     public function get_id()
     {
@@ -43,7 +64,7 @@ abstract class DynamicTab
 
     /**
      *
-     * @param $id the $id to set
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -52,7 +73,7 @@ abstract class DynamicTab
 
     /**
      *
-     * @return the $name
+     * @return string
      */
     public function get_name()
     {
@@ -61,7 +82,7 @@ abstract class DynamicTab
 
     /**
      *
-     * @param $name the $name to set
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -70,7 +91,7 @@ abstract class DynamicTab
 
     /**
      *
-     * @return the $image
+     * @return string
      */
     public function get_image()
     {
@@ -79,13 +100,35 @@ abstract class DynamicTab
 
     /**
      *
-     * @param $image the $image to set
+     * @param string $image
      */
     public function set_image($image)
     {
         $this->image = $image;
     }
 
+    /**
+     *
+     * @return integer
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    /**
+     *
+     * @param integer $display
+     */
+    public function setDisplay($display)
+    {
+        $this->display = $display;
+    }
+
+    /**
+     *
+     * @return string
+     */
     abstract public function get_link();
 
     /**
@@ -97,30 +140,33 @@ abstract class DynamicTab
         $html = array();
         $html[] = '<li><a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '">';
         $html[] = '<span class="category">';
-        if ($this->image && $this->isIconVisible())
+
+        if ($this->get_image() && $this->isIconVisible())
         {
-            if (! $this->image instanceof InlineGlyph)
+            if (! $this->get_image() instanceof InlineGlyph)
             {
-                $html[] = '<img src="' . $this->image . '" border="0" style="vertical-align: middle; " alt="' .
-                     strip_tags($this->name) . '" title="' . htmlentities(strip_tags($this->name)) . '"/>';
+                $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle; " alt="' .
+                     strip_tags($this->get_name()) . '" title="' . htmlentities(strip_tags($this->get_name())) . '"/>';
             }
             else
             {
-                $html[] = $this->image->render();
+                $html[] = $this->get_image()->render();
             }
         }
-        
-        if ($this->image && $this->name && $this->isIconVisible() && $this->isTextVisible())
+
+        if ($this->get_image() && $this->get_name() && $this->isIconVisible() && $this->isTextVisible())
         {
             $html[] = '&nbsp;&nbsp;';
         }
-        
-        if ($this->name && $this->isTextVisible())
+
+        if ($this->get_name() && $this->isTextVisible())
         {
-            $html[] = '<span class="title">' . $this->name . '</span>';
+            $html[] = '<span class="title">' . $this->get_name() . '</span>';
         }
+
         $html[] = '</span>';
         $html[] = '</a></li>';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -131,10 +177,10 @@ abstract class DynamicTab
     public function body_header()
     {
         $html = array();
-        
+
         $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
         $html[] = '<div class="list-group-item">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -145,38 +191,38 @@ abstract class DynamicTab
     public function body_footer()
     {
         $html = array();
-        
+
         $html[] = '<div class="clearfix"></div>';
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns whether or not the icon is visible
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isIconVisible()
     {
-        return $this->display == self::DISPLAY_ICON_AND_TITLE || $this->display == self::DISPLAY_ICON;
+        return $this->getDisplay() == self::DISPLAY_ICON_AND_TITLE || $this->getDisplay() == self::DISPLAY_ICON;
     }
 
     /**
      * Returns whether or not the text is visible
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isTextVisible()
     {
-        return $this->display == self::DISPLAY_ICON_AND_TITLE || $this->display == self::DISPLAY_TITLE;
+        return $this->getDisplay() == self::DISPLAY_ICON_AND_TITLE || $this->getDisplay() == self::DISPLAY_TITLE;
     }
 
     /**
      *
-     * @param string $tab_name
+     * @param boolean $isOnlyTab
      * @return string
      */
     abstract public function body($isOnlyTab);

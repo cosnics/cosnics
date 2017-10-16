@@ -163,7 +163,7 @@ class Pager
 
     /**
      *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @return integer
      */
     public function getPreviousRangeEnd()
@@ -171,21 +171,21 @@ class Pager
         if (! isset($this->previousRangeEnd))
         {
             $calculatedRangeEnd = ($this->getCurrentPageNumber() - 1) * $this->getNumberOfItemsPerPage();
-            
+
             if ($calculatedRangeEnd > $this->getNumberOfItems())
             {
                 throw new InvalidPageNumberException();
             }
-            
+
             $this->previousRangeEnd = $calculatedRangeEnd;
         }
-        
+
         return $this->previousRangeEnd;
     }
 
     /**
      *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @return integer
      */
     public function getCurrentRangeStart()
@@ -194,20 +194,23 @@ class Pager
         {
             if (! isset($this->currentRangeStart))
             {
-                try {
+                try
+                {
                     $calculatedRangeStart = $this->getPreviousRangeEnd() + 1;
-                } catch (InvalidPageNumberException $exception) {
+                }
+                catch (InvalidPageNumberException $exception)
+                {
                     $calculatedRangeStart = 0;
                 }
-                
+
                 if ($calculatedRangeStart > $this->getNumberOfItems())
                 {
                     throw new \Exception('Invalid page number');
                 }
-                
+
                 $this->currentRangeStart = $calculatedRangeStart;
             }
-            
+
             return $this->currentRangeStart;
         }
         catch (\Exception $exception)
@@ -227,7 +230,7 @@ class Pager
 
     /**
      *
-     * @throws Exception
+     * @throws \Exception
      * @return integer
      */
     public function getCurrentRangeEnd()
@@ -238,15 +241,15 @@ class Pager
             {
                 $currentRangeStart = $this->getCurrentRangeStart();
                 $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage() - 1;
-                
+
                 if ($calculatedRangeEnd > $this->getNumberOfItems())
                 {
                     return $this->getNumberOfItems();
                 }
-                
+
                 $this->currentRangeEnd = $calculatedRangeEnd;
             }
-            
+
             return $this->currentRangeEnd;
         }
         catch (\Exception $exception)
@@ -272,7 +275,7 @@ class Pager
                 $this->numberOfPages = ceil($this->getNumberOfItems() / $this->getNumberOfItemsPerPage());
             }
         }
-        
+
         return $this->numberOfPages;
     }
 }

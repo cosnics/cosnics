@@ -1,9 +1,13 @@
 {
-    "name": "chamilo/core-repository",
-        "version": "6.0.0", "description": "Chamilo Repository Core Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository",
+    "version": "1.0.0",
+    "description": "Core Repository",
+    "keywords": [
+        "Core",
+        "Repository"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,13 +18,25 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
-        "phpspec/php-diff" : "=v1.0.2"
+        "php": ">=7.0.0",
+        "phpspec/php-diff": "=v1.0.2"
     },
     "extra": {
-        "install-path": "repository"
+        "cosnics": {
+            "name": "Repository",
+            "context": "Chamilo\\Core\\Repository",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

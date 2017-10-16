@@ -1,0 +1,180 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms' %}
+
+<style>
+    #import-success-table tr td, #import-success-table tr th {
+        border: 1px solid #BDD0AD;
+    }
+
+    #import-success-table thead {
+        color: #3c763d;
+    }
+
+    #success-results-tab {
+        font-weight: bold;
+        color: green;
+    }
+
+    #failed-results-tab {
+        font-weight: bold;
+        color: red;
+    }
+
+    #import-failed-table tr td, #import-failed-table tr th {
+        border: 1px solid #D2B3B8;
+    }
+
+    #import-failed-table thead {
+        color: #a94442;
+    }
+
+    .import-table .action-column {
+        width: 75px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .import-table .username-column,
+    .import-table .group-column,
+    .import-table .course-column {
+        width: 150px;
+        text-align: center;
+    }
+
+    .raw-import-data-toggle {
+        margin-bottom: 20px;
+    }
+
+    .raw-import-data-column {
+        display: none;
+    }
+</style>
+
+<p>
+    {{ 'ImportCourseEntitiesResultDescription'|trans({'{TotalCourseEntityRelations}': importerResult.countResults()}, appContext)|raw }}
+</p>
+
+<ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a id="success-results-tab" href="#success-results" aria-controls="success-results" role="tab" data-toggle="tab">
+            {{ 'ImportCourseEntitiesSuccessfulResults'|trans({}, appContext) }} ({{ importerResult.countSuccessUserResults() }})
+        </a>
+    </li>
+    <li role="presentation">
+        <a id="failed-results-tab" href="#failed-results" aria-controls="failed-results" role="tab" data-toggle="tab">
+            {{ 'ImportCourseEntitiesFailedResults'|trans({}, appContext) }} ({{ importerResult.countFailedUserResults() }})
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="#retry-failed-results-data" aria-controls="retry-failed-results-data" role="tab" data-toggle="tab">
+            {{ 'ImportCourseEntitiesRetryFailedResultsData'|trans({}, appContext) }}
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content dynamic-visual-tab-content" style="border: 1px solid #dddddd; padding: 15px 12px; border-top: none;">
+    <div role="tabpanel" class="tab-pane active" id="success-results">
+        <div class="text-right">
+            <button type="button" class="btn btn-default raw-import-data-toggle">{{ 'ToggleRawImportData'|trans({}, appContext) }}</button>
+        </div>
+        <table id="import-success-table" class="table table-bordered import-table">
+            <thead>
+            <tr class="success">
+                <th class="action-column">{{ 'Action'|trans({}, appContext) }}</th>
+
+                {% if importerResult.isUserRelationImport() %}
+                <th class="username-column">{{ 'Username'|trans({}, 'Chamilo\Core\User') }}</th>
+                {% else %}
+                <th class="group-column">{{ 'Code'|trans({}, 'Chamilo\Core\Group') }}</th>
+                {% endif %}
+
+                <th class="course-column">{{ 'Course'|trans({}, appContext) }}</th>
+                <th>{{ 'Messages'|trans({}, appContext) }}</th>
+                <th class="raw-import-data-column">{{ 'RawImportData'|trans({}, appContext) }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if importerResult.countSuccessUserResults() == 0 %}
+                <tr>
+                    <td colspan="5" class="text-center">{{ 'ImportCourseEntitiesNoEntitiesImported'|trans({}, appContext) }}</td>
+                </tr>
+            {% else %}
+                {% for importDataResult in importerResult.getSuccessImportDataResults() %}
+                    <tr>
+                        <td class="action-column">{{ importDataResult.getImportData().getAction() }}</td>
+
+                        {% if importerResult.isUserRelationImport() %}
+                            <td class="username-column">{{ importDataResult.getImportData().getUsername() }}</td>
+                        {% else %}
+                            <th class="group-column">{{ importDataResult.getImportData().getGroupCode() }}</th>
+                        {% endif %}
+
+                        <td class="course-column">{{ importDataResult.getImportData().getCourseCode() }}</td>
+                        <td>{{ importDataResult.getMessages()|join('<br />')|raw }}</td>
+                        <td class="raw-import-data-column">{{ importDataResult.getImportData().getRawImportData() }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="failed-results">
+        <div class="text-right">
+            <button type="button" class="btn btn-default raw-import-data-toggle">{{ 'ToggleRawImportData'|trans({}, appContext) }}</button>
+        </div>
+        <table id="import-failed-table" class="table table-bordered table-striped import-table">
+            <thead>
+            <tr class="danger">
+                <th class="action-column">{{ 'Action'|trans({}, appContext) }}</th>
+
+                {% if importerResult.isUserRelationImport() %}
+                    <th class="username-column">{{ 'Username'|trans({}, 'Chamilo\Core\User') }}</th>
+                {% else %}
+                    <th class="group-column">{{ 'Code'|trans({}, 'Chamilo\Core\Group') }}</th>
+                {% endif %}
+
+                <th class="course-column">{{ 'Course'|trans({}, appContext) }}</th>
+                <th>{{ 'Messages'|trans({}, appContext) }}</th>
+                <th class="raw-import-data-column">{{ 'RawImportData'|trans({}, appContext) }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if importerResult.countFailedUserResults() == 0 %}
+                <tr>
+                    <td colspan="5" class="text-center">{{ 'ImportUsersNoUsersFailed'|trans({}, appContext) }}</td>
+                </tr>
+            {% else %}
+                {% for importDataResult in importerResult.getFailedImportDataResults() %}
+                    <tr>
+                        <td class="action-column">{{ importDataResult.getImportData().getAction() }}</td>
+
+                        {% if importerResult.isUserRelationImport() %}
+                            <td class="username-column">{{ importDataResult.getImportData().getUsername() }}</td>
+                        {% else %}
+                            <th class="group-column">{{ importDataResult.getImportData().getGroupCode() }}</th>
+                        {% endif %}
+
+                        <td class="course-column">{{ importDataResult.getImportData().getCourseCode() }}</td>
+                        <td>{{ importDataResult.getMessages()|join('<br />')|raw }}</td>
+                        <td class="raw-import-data-column">{{ importDataResult.getImportData().getRawImportData() }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="retry-failed-results-data">
+        <pre>
+{{ importerResult.getRawImportDataHeader() }}
+{% for importDataResult in importerResult.getFailedImportDataResults() %}
+{{ importDataResult.getImportData().getRawImportData() }}
+{% endfor %}
+{{ importerResult.getRawImportDataFooter() -}}
+        </pre>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.raw-import-data-toggle').on('click', function() {
+        $(this).parents('.tab-pane').find('.raw-import-data-column').toggle();
+    })
+</script>

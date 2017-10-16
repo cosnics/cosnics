@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
@@ -8,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Generates a tree with test data
@@ -17,36 +15,40 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class TreeTestDataGenerator
 {
+
     /**
+     *
      * @var Tree
      */
     protected $tree;
 
     /**
+     *
      * @var LearningPath[] | Section[] | Page[] | ContentObject[]
      */
     protected $contentObjects;
 
     /**
+     *
      * @var TreeNodeData[]
      */
     protected $treeNodesData;
 
     /**
+     *
      * @var TreeNode[]
      */
     protected $treeNodes;
 
     /**
      * Builds a complex learning path for testing purposes
-     *
      * - Learning Path A - ID: 1
-     *    - Section A - ID: 2
-     *        - Page 1 - ID: 6
-     *    - Section B - ID: 3
-     *    - Section C - ID: 4
-     *        - Section D - ID: 5
-     *            - Page 2 - ID: 7
+     * - Section A - ID: 2
+     * - Page 1 - ID: 6
+     * - Section B - ID: 3
+     * - Section C - ID: 4
+     * - Section D - ID: 5
+     * - Page 2 - ID: 7
      */
     public function __construct()
     {
@@ -95,6 +97,7 @@ class TreeTestDataGenerator
     }
 
     /**
+     *
      * @return LearningPath[] | Section[] | Page[] | ContentObject[]
      */
     public function getContentObjects()
@@ -103,6 +106,7 @@ class TreeTestDataGenerator
     }
 
     /**
+     *
      * @return TreeNodeData[]
      */
     public function getTreeNodesData(): array
@@ -111,6 +115,7 @@ class TreeTestDataGenerator
     }
 
     /**
+     *
      * @return TreeNode[]
      */
     public function getTreeNodes(): array

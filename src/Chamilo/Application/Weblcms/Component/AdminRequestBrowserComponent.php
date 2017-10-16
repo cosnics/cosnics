@@ -32,8 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: admin_course_type_browser.class.php 218 2010-03-11 14:21:26Z Yannick & Tristan $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 /**
@@ -61,10 +60,10 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageCourses');
-        
+
         $this->request_type = Request::get(self::PARAM_REQUEST_TYPE);
         $this->request_view = Request::get(self::PARAM_REQUEST_VIEW);
-        
+
         if (is_null($this->request_type))
         {
             $this->request_type = CommonRequest::SUBSCRIPTION_REQUEST;
@@ -73,15 +72,15 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $this->request_view = self::PENDING_REQUEST_VIEW;
         }
-        
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->get_request_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -111,18 +110,18 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $buttonToolbar->addButtonGroup($commonActions);
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 
@@ -132,58 +131,58 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $parameters[self::PARAM_CONTEXT] = self::context();
         $parameters[self::PARAM_ACTION] = self::ACTION_ADMIN_REQUEST_BROWSER;
         $parameters[self::PARAM_REQUEST_TYPE] = $this->request_type;
-        
+
         $table = new AdminRequestTable($this);
-        
+
         $html = array();
         $html[] = $table->as_html();
-        
+
         return implode($html, "\n");
     }
 
     public function get_condition()
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
+
         $conditions = array();
-        
+
         if (isset($query) && $query != '')
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_MOTIVATION), 
+                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_MOTIVATION),
                 '*' . $query . '*');
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_SUBJECT), 
+                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_SUBJECT),
                 '*' . $query . '*');
-            
+
             $search_conditions = new OrCondition($conditions);
         }
-        
+
         if (count($search_conditions))
         {
             $conditions[] = $search_conditions;
         }
-        
+
         switch ($this->request_view)
         {
             case self::PENDING_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION), 
+                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::NO_DECISION));
                 break;
             case self::ALLOWED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION), 
+                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::ALLOWED_DECISION));
                 break;
             case self::DENIED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION), 
+                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::DENIED_DECISION));
                 break;
         }
-        
+
         $condition = null;
         if (count($conditions) > 1)
         {
@@ -196,7 +195,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
                 $condition = $conditions[0];
             }
         }
-        
+
         return $condition;
     }
 
@@ -216,22 +215,22 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
-            
+
             $breadcrumbtrail->add(
                 new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
-            
+
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER, 
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                         self::package())));
-            
+
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
         }
-        
+
         if ($this->category)
         {
             $category = DataManager::retrieve_by_id(CourseCategory::class_name(), $this->category);

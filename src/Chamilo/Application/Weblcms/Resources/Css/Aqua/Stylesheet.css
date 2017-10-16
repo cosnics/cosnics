@@ -170,6 +170,11 @@ div.announcements {
 	overflow: auto;
 }
 
+div.announcements del {
+	background-color: white !important;
+	text-decoration: line-through !important;
+}
+
 .toolSortHelper {
 	border: 1px dashed #c0c0c0;
 	background-color: #F2F2F2;

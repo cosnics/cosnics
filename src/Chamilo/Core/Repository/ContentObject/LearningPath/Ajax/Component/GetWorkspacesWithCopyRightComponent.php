@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -24,25 +25,47 @@ class GetWorkspacesWithCopyRightComponent extends Manager
         try
         {
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $workspaces = $workspaceService->getWorkspacesForUser($this->getUser(), RightsService::RIGHT_COPY);
+            $workspacesDataArray = array();
 
-            $workspacesArray = array();
+            $workspaces = $workspaceService->getWorkspacesForUser($this->getUser(), RightsService::RIGHT_VIEW);
+            $this->processWorkspaces($workspacesDataArray, $workspaces);
 
-            while($workspace = $workspaces->next_result())
-            {
-                /** @var Workspace $workspace */
-
-                $workspacesArray[] = array(
-                    'id' => $workspace->getId(),
-                    'name' => $workspace->getName()
-                );
-            }
-
-            return new JsonResponse($workspacesArray);
+            return new JsonResponse($workspacesDataArray);
         }
         catch (\Exception $ex)
         {
             return $this->handleException($ex);
+        }
+    }
+
+    /**
+     * Processes the workspaces to an array
+     *
+     * @param array $workspacesDataArray
+     * @param ResultSet $workspaces
+     */
+    protected function processWorkspaces(&$workspacesDataArray = [], ResultSet $workspaces)
+    {
+        $rightService = RightsService::getInstance();
+
+        while($workspace = $workspaces->next_result())
+        {
+            $canUse = $rightService->canUseContentObjects($this->getUser(), $workspace);
+            $canCopy = $rightService->canCopyContentObjects($this->getUser(), $workspace);
+
+            if(!$canUse && !$canCopy)
+            {
+                continue;
+            }
+
+            /** @var Workspace $workspace */
+
+            $workspacesDataArray[] = array(
+                'id' => $workspace->getId(),
+                'name' => $workspace->getName(),
+                'use_right' => $canUse,
+                'copy_right' => $canCopy
+            );
         }
     }
 

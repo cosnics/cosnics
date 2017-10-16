@@ -1,13 +1,10 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\Cpo;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Common\Export\CpoExportImplementation;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 class CpoDefaultExportImplementation extends CpoExportImplementation
@@ -37,9 +34,8 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
      * @param \DOMElement $contentObjectNode
      * @param \DOMDocument $document
      */
-    protected function exportTreeNodesData(
-        LearningPath $learningPath, \DOMElement $contentObjectNode, \DOMDocument $document
-    )
+    protected function exportTreeNodesData(LearningPath $learningPath, \DOMElement $contentObjectNode,
+        \DOMDocument $document)
 
     {
         $childrenNode = $document->createElement('children');
@@ -50,27 +46,27 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
         $treeNodesData = $treeNodeDataService->getTreeNodesDataForLearningPath($learningPath);
 
-        foreach($treeNodesData as $treeNodeData)
+        foreach ($treeNodesData as $treeNodeData)
         {
             try
             {
                 $contentObject = $contentObjectRepository->findById($treeNodeData->getContentObjectId());
-                if ($contentObject instanceof ContentObject && !$contentObject instanceof LearningPath)
+                if ($contentObject instanceof ContentObject && ! $contentObject instanceof LearningPath)
                 {
-                    if(!$this->get_context()->in_id_cache($contentObject->getId()))
+                    if (! $this->get_context()->in_id_cache($contentObject->getId()))
                     {
                         $this->get_context()->process($contentObject);
                     }
                 }
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
                 continue;
             }
 
             $treeNodeDataNode = $document->createElement('child');
 
-            foreach($treeNodeData->get_default_properties() as $propertyName => $propertyValue)
+            foreach ($treeNodeData->get_default_properties() as $propertyName => $propertyValue)
             {
                 $propertyNode = $document->createElement($propertyName);
                 $propertyNode->appendChild($document->createTextNode($propertyValue));
@@ -83,6 +79,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
     }
 
     /**
+     *
      * @return object | TreeNodeDataService
      */
     protected function getTreeNodeDataService()
@@ -90,19 +87,17 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
-        );
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
     }
 
     /**
+     *
      * @return object | ContentObjectRepository
      */
     protected function getContentObjectRepository()
     {
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $serviceContainer->get(
-            'chamilo.core.repository.workspace.repository.content_object_repository'
-        );
+        return $serviceContainer->get('chamilo.core.repository.workspace.repository.content_object_repository');
     }
 }

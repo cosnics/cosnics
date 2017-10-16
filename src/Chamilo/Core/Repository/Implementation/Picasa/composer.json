@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/ext-repo-picasa",
-        "version": "6.0.0", "description": "Chamilo Picasa External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-implementation-picasa",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Picasa",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Picasa"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,14 +20,26 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
-        "zend/gdata" : "1.*",
-        "google/apiclient" : "1.1.*"
+        "php": ">=7.0.0",
+        "zend/gdata": "1.*",
+        "google/apiclient": "1.1.*"
     },
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/picasa"
+        "cosnics": {
+            "name": "Picasa",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Picasa",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

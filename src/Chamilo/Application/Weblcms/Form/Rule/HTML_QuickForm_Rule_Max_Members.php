@@ -4,8 +4,7 @@ namespace Chamilo\Application\Weblcms\Form\Rule;
 use HTML_QuickForm_Rule;
 
 /**
- * $Id: Max_Members_rule.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.formvalidator.Rule
  */
 /**

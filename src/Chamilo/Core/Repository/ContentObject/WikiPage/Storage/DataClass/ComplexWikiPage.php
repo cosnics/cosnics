@@ -10,8 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: complex_wiki_page.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.wiki_page
  */
 class ComplexWikiPage extends ComplexContentObjectItem
@@ -51,24 +50,24 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
-                    ComplexContentObjectItem::PROPERTY_PARENT), 
-                new StaticConditionVariable($this->get_parent()), 
+                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
+                new StaticConditionVariable($this->get_parent()),
                 ComplexContentObjectItem::get_table_name());
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
-                        ComplexContentObjectItem::PROPERTY_ID), 
-                    new StaticConditionVariable($this->get_id()), 
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_ID),
+                    new StaticConditionVariable($this->get_id()),
                     ComplexContentObjectItem::get_table_name()));
-            
+
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
-            
+
             $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class_name(),
                 $parameters);
-            
+
             while ($child = $children->next_result())
             {
                 if ($child->get_is_homepage())
@@ -79,7 +78,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
                 }
             }
         }
-        
+
         return parent::update();
     }
 }

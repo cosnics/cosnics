@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
@@ -36,38 +35,38 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
     public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
-            Translation::get('TypeName', null, __NAMESPACE__), 
+            Translation::get('TypeName', null, __NAMESPACE__),
             new FontAwesomeGlyph('google'));
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
-        
+
         $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager::context();
         $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
-        
+
         if (! $accessToken)
         {
             $parameters = array();
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGIN;
-            
+
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-            
+
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogin'), new BootstrapGlyph('log-in'), $link));
+                new SubButton(Translation::get('GoogleCalendarLogin'), new FontAwesomeGlyph('sign-in'), $link));
         }
         else
         {
             $parameters = array();
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGOUT;
-            
+
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-            
+
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogout'), new BootstrapGlyph('log-out'), $link));
+                new SubButton(Translation::get('GoogleCalendarLogout'), new FontAwesomeGlyph('sign-out'), $link));
         }
-        
+
         return array($dropdownButton);
     }
 }

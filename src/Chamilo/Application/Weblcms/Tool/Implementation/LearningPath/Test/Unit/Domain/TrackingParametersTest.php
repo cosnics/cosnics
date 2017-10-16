@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Test\Unit\Domain;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
@@ -11,7 +10,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQ
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Money\InvalidArgumentException;
 
 /**
  * Tests the TrackingParameters
@@ -20,27 +18,27 @@ use Money\InvalidArgumentException;
  */
 class TrackingParametersTest extends ChamiloTestCase
 {
-//    /**
-//     * @var TrackingParameters
-//     */
-//    protected $trackingParameters;
-//
-//    /**
-//     * Setup before each test
-//     */
-//    public function setUp()
-//    {
-//        $this->trackingParameters = new TrackingParameters();
-//    }
-//
-//    /**
-//     * Tear down after each test
-//     */
-//    public function tearDown()
-//    {
-//        unset($this->trackingParameters);
-//    }
 
+    // /**
+    // * @var TrackingParameters
+    // */
+    // protected $trackingParameters;
+    //
+    // /**
+    // * Setup before each test
+    // */
+    // public function setUp()
+    // {
+    // $this->trackingParameters = new TrackingParameters();
+    // }
+    //
+    // /**
+    // * Tear down after each test
+    // */
+    // public function tearDown()
+    // {
+    // unset($this->trackingParameters);
+    // }
     public function testCreateTrackingParameters()
     {
         $this->assertInstanceOf(TrackingParametersInterface::class, new TrackingParameters(6));
@@ -82,8 +80,8 @@ class TrackingParametersTest extends ChamiloTestCase
     {
         $trackingParameters = new TrackingParameters(6);
         $this->assertEquals(
-            LearningPathTreeNodeQuestionAttempt::class, $trackingParameters->getTreeNodeQuestionAttemptClassName()
-        );
+            LearningPathTreeNodeQuestionAttempt::class,
+            $trackingParameters->getTreeNodeQuestionAttemptClassName());
     }
 
     public function testGetTreeNodeAttemptConditions()
@@ -113,19 +111,16 @@ class TrackingParametersTest extends ChamiloTestCase
     {
         $trackingParameters = new TrackingParameters(6);
         $this->assertInstanceOf(
-            TreeNodeQuestionAttempt::class, $trackingParameters->createTreeNodeQuestionAttemptInstance()
-        );
+            TreeNodeQuestionAttempt::class,
+            $trackingParameters->createTreeNodeQuestionAttemptInstance());
     }
 
     public function testGetLearningPathTargetUserIds()
     {
-        $dataManagerWrapperMock = $this->getMockBuilder(DataManagerWrapper::class)
-            ->disableOriginalConstructor()->getMock();
+        $dataManagerWrapperMock = $this->getMockBuilder(DataManagerWrapper::class)->disableOriginalConstructor()->getMock();
 
-        $dataManagerWrapperMock->expects($this->once())
-            ->method('getPublicationTargetUserIds')
-            ->with(6)
-            ->will($this->returnValue([2, 4, 6]));
+        $dataManagerWrapperMock->expects($this->once())->method('getPublicationTargetUserIds')->with(6)->will(
+            $this->returnValue([2, 4, 6]));
 
         $trackingParameters = new TrackingParameters(6, $dataManagerWrapperMock);
         $this->assertEquals([2, 4, 6], $trackingParameters->getLearningPathTargetUserIds(new LearningPath()));
@@ -133,13 +128,10 @@ class TrackingParametersTest extends ChamiloTestCase
 
     public function testGetLearningPathTargetUserIdsUsesCache()
     {
-        $dataManagerWrapperMock = $this->getMockBuilder(DataManagerWrapper::class)
-            ->disableOriginalConstructor()->getMock();
+        $dataManagerWrapperMock = $this->getMockBuilder(DataManagerWrapper::class)->disableOriginalConstructor()->getMock();
 
-        $dataManagerWrapperMock->expects($this->once())
-            ->method('getPublicationTargetUserIds')
-            ->with(6)
-            ->will($this->returnValue([2, 4, 6]));
+        $dataManagerWrapperMock->expects($this->once())->method('getPublicationTargetUserIds')->with(6)->will(
+            $this->returnValue([2, 4, 6]));
 
         $trackingParameters = new TrackingParameters(6, $dataManagerWrapperMock);
         $trackingParameters->getLearningPathTargetUserIds(new LearningPath());

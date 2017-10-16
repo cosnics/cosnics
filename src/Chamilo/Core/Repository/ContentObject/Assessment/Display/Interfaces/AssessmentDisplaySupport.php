@@ -32,7 +32,7 @@ interface AssessmentDisplaySupport extends \Chamilo\Core\Repository\Display\Disp
      * @param int $score
      * @param int $hint The number of times a hint was used
      */
-    public function save_assessment_answer($complex_question_id, $answer, $score, $hint);
+    public function save_assessment_answer($complex_question_id, $answer, $score, $hint = null);
 
     /**
      * Write the total score to persistent storage

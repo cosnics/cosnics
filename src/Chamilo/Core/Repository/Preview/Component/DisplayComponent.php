@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Preview\Component;
 
 use Chamilo\Core\Repository\Preview\Manager;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -18,10 +19,12 @@ class DisplayComponent extends Manager
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
-        
-        $factory = $this->getPreview();
-        
-        return $factory->run();
+
+        $context = $this->get_content_object()->package() . '\Display\Preview';
+
+        return $this->getApplicationFactory()->getApplication(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     /**

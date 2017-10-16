@@ -4,19 +4,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: reporting_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
  * @package application.lib.weblcms.tool.reporting.component
- */
-
-/**
- *
  * @author Michael Kyndt
  */
 class ViewerComponent extends Manager
@@ -33,10 +27,9 @@ class ViewerComponent extends Manager
 
         if (! isset($template_id))
         {
-            $factory = new ApplicationFactory(
+            $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            $component = $factory->getComponent();
             $component->set_template_by_name(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseStudentTrackerTemplate::class_name());
             return $component->run();
@@ -50,10 +43,9 @@ class ViewerComponent extends Manager
 
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID, $template_id);
 
-            $factory = new ApplicationFactory(
+            $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            $component = $factory->getComponent();
             $component->set_template_by_name($template_id);
             return $component->run();
         }

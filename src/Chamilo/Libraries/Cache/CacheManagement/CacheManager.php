@@ -6,8 +6,8 @@ use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 
 /**
  * Cache director to clear and / or warmup caches
- * 
- * @package Chamilo\Libraries\Cache
+ *
+ * @package Chamilo\Libraries\Cache\CacheManagement
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -16,14 +16,11 @@ class CacheManager
 
     /**
      * The cache services which have the possibility to be reset (clear and warmup)
-     * 
-     * @var CacheResetterInterface[]
+     *
+     * @var \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
      */
     protected $cacheServices;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->cacheServices = array();
@@ -31,9 +28,9 @@ class CacheManager
 
     /**
      * Adds a cache service to the list of cache warmers
-     * 
+     *
      * @param string $alias
-     * @param CacheResetterInterface $cacheService
+     * @param \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface $cacheService
      */
     public function addCacheService($alias, CacheResetterInterface $cacheService)
     {
@@ -42,7 +39,7 @@ class CacheManager
 
     /**
      * Returns a list of cache service aliases
-     * 
+     *
      * @return string[]
      */
     public function getCacheServiceAliases()
@@ -52,8 +49,8 @@ class CacheManager
 
     /**
      * Returns the cache warmers
-     * 
-     * @return CacheResetterInterface[]
+     *
+     * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
      */
     public function getCacheServices()
     {
@@ -62,11 +59,13 @@ class CacheManager
 
     /**
      * Clears the cache
+     *
+     * @param string[] $cacheServiceAliases
      */
     public function clear($cacheServiceAliases = array())
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-        
+
         foreach ($cacheServices as $cacheService)
         {
             $cacheService->clear();
@@ -75,11 +74,13 @@ class CacheManager
 
     /**
      * Warm up the cache
+     *
+     * @param string[] $cacheServiceAliases
      */
     public function warmUp($cacheServiceAliases = array())
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-        
+
         foreach ($cacheServices as $cacheService)
         {
             if (! $cacheService instanceof UserBasedCacheInterface)
@@ -92,9 +93,8 @@ class CacheManager
     /**
      * Retrieves cache services by a given array of aliasses, throws an exception if an alias is used that does not
      * exist
-     * 
-     * @param array $cacheServiceAliases
      *
+     * @param string[] $cacheServiceAliases
      * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
      */
     protected function getCacheServicesByAliases($cacheServiceAliases = array())
@@ -103,9 +103,9 @@ class CacheManager
         {
             return $this->cacheServices;
         }
-        
+
         $cacheServices = array();
-        
+
         foreach ($cacheServiceAliases as $cacheServiceAlias)
         {
             if (! array_key_exists($cacheServiceAlias, $this->cacheServices))
@@ -113,10 +113,10 @@ class CacheManager
                 throw new \InvalidArgumentException(
                     sprintf('The given cache service alias %s does not exist', $cacheServiceAlias));
             }
-            
+
             $cacheServices[$cacheServiceAlias] = $this->cacheServices[$cacheServiceAlias];
         }
-        
+
         return $cacheServices;
     }
 }

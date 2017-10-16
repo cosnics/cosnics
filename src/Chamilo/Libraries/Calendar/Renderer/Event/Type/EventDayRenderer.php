@@ -5,8 +5,6 @@ namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EventDayRenderer extends EventTableRenderer
 {
@@ -27,10 +25,10 @@ class EventDayRenderer extends EventTableRenderer
         {
             $configuration = $this->getConfiguration();
             $this->tableEndDate = strtotime(
-                '+' . $configuration->getHourStep() . ' hours', 
+                '+' . $configuration->getHourStep() . ' hours',
                 $configuration->getStartDate());
         }
-        
+
         return $this->tableEndDate;
     }
 
@@ -43,7 +41,7 @@ class EventDayRenderer extends EventTableRenderer
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         return ($startDate >= $configuration->getStartDate() && $startDate <= $this->getTableEndDate() &&
              ($startDate != $configuration->getStartDate() || $endDate < $this->getTableEndDate()));
     }
@@ -75,7 +73,7 @@ class EventDayRenderer extends EventTableRenderer
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         return ($startDate != $endDate) &&
              ($endDate < $this->getTableEndDate() && $startDate < $configuration->getStartDate());
     }
@@ -89,7 +87,7 @@ class EventDayRenderer extends EventTableRenderer
         $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
-        
+
         return ($startDate != $endDate) && ($endDate > $this->getTableEndDate());
     }
 

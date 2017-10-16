@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -15,24 +14,19 @@ use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class represents a table with the use of a column model, a data provider and a cell renderer Refactoring from
  * ObjectTable to split between a table based on a record and based on an object
  *
+ * @package Chamilo\Libraries\Format\Table
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Table
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
-    /**
-     * **************************************************************************************************************
-     * Constants *
-     * **************************************************************************************************************
-     */
 
     /**
      * The default row count
@@ -50,87 +44,71 @@ abstract class Table
     const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Application or submanager component calling the Table
      *
-     * @var mixed <Application, SubManager>
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $component;
 
     /**
-     * The column model assigned to this table
+     *
+     * @var \Chamilo\Libraries\Format\Table\TableColumnModel
      */
     private $column_model;
 
     /**
-     * The data provider assigned to this table
+     *
+     * @var \Chamilo\Libraries\Format\Table\TableDataProvider
      */
     private $data_provider;
 
     /**
-     * The cell renderer assigned to this table
+     *
+     * @var \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
     private $cell_renderer;
 
     /**
-     * Caching of form actions
      *
-     * @var TableFormActions
+     * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     private $form_actions;
 
     /**
-     * The search form that supports this table
      *
-     * @var TableSupportedSearchFormInterface
+     * @var \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface
      */
     protected $searchForm;
 
     /**
-     * The sortable table implementation
      *
-     * @var SortableTable
+     * @var \Chamilo\Libraries\Format\Table\SortableTable
      */
     protected $table;
 
     /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Constructor
      *
-     * @param mixed $component The parent component
-     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @throws \Exception
      */
     public function __construct($component)
     {
-        if (!$component instanceof TableSupport)
+        if (! $component instanceof TableSupport)
         {
             throw new \Exception(
                 ClassnameUtilities::getInstance()->getClassnameFromObject($component) .
-                " doesn't seem to support object tables, please implement the TableSupport interface"
-            );
+                     " doesn't seem to support object tables, please implement the TableSupport interface");
         }
 
-        $interface_class = $this->get_class('Interface');
+        $interfaceClass = $this->get_class('Interface');
 
-        if (interface_exists($interface_class))
+        if (interface_exists($interfaceClass))
         {
-            if (!$component instanceof $interface_class)
+            if (! $component instanceof $interfaceClass)
             {
                 throw new \Exception(
                     ClassnameUtilities::getInstance()->getClassnameFromObject($component) . ' must implement ' .
-                    $interface_class
-                );
+                         $interfaceClass);
             }
         }
 
@@ -140,28 +118,27 @@ abstract class Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Render Functionality *
-     * **************************************************************************************************************
+     * Creates an HTML representation of the table.
+     *
+     * @return string
+     * @deprecated User render() now
      */
+    public function as_html()
+    {
+        return $this->render();
+    }
 
     /**
      * Creates an HTML representation of the table.
      *
-     * @return string The HTML.
+     * @return string
      */
-    public function as_html()
+    public function render()
     {
         $this->initialize_table();
 
         return $this->table->toHtml();
     }
-
-    /**
-     * **************************************************************************************************************
-     * Render Helper Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Constructs the sortable table
@@ -175,10 +152,9 @@ abstract class Table
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(),
             $this->get_column_model()->get_default_order_direction(),
-            !$this->prohibits_page_selection(),
+            ! $this->prohibits_page_selection(),
             true,
-            $this->get_column_model() instanceof TableMultiColumnSortSupport
-        );
+            $this->get_column_model() instanceof TableMultiColumnSortSupport);
 
         $this->table->setAdditionalParameters($this->get_parameters());
     }
@@ -194,23 +170,23 @@ abstract class Table
         }
 
         // refactored the column model out of the loop.
-        $column_model = &$this->get_column_model();
-        $column_count = $column_model->get_column_count();
+        $columnModel = &$this->get_column_model();
+        $columnCount = $columnModel->get_column_count();
 
-        for ($i = 0; $i < $column_count; $i ++)
+        for ($i = 0; $i < $columnCount; $i ++)
         {
-            $column = $column_model->get_column($i);
+            $column = $columnModel->get_column($i);
 
             $headerAttributes = $contentAttributes = array();
 
             $cssClasses = $column->getCssClasses();
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
             {
                 $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
             }
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
             {
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
@@ -220,34 +196,26 @@ abstract class Table
                 Security::remove_XSS($column->get_title()),
                 $column->is_sortable(),
                 $headerAttributes,
-                $contentAttributes
-            );
+                $contentAttributes);
         }
 
         // store the actual direction of the sortable table in the table column
         // model, to be used for a correct mover action implementation.
         // The prefix 'default_' is not relevant.
         $direction = intval($this->table->getOrderDirection());
-        $column_model->set_default_order_direction($direction);
+        $columnModel->set_default_order_direction($direction);
 
-        $column_model->set_default_order_column($this->table->getOrderColumn());
+        $columnModel->set_default_order_column($this->table->getOrderColumn());
     }
-
-    /**
-     * **************************************************************************************************************
-     * Data Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Retrieves the data from the data provider, parses the data through the cell renderer and returns the data as an
      * array
      *
-     * @param int $offset
-     * @param int $count
-     * @param int $order_column
-     * @param string $order_direction
-     *
+     * @param integer $offset
+     * @param integer $count
+     * @param integer $orderColumns
+     * @param integer $orderDirections
      * @return string[][]
      */
     public function getData($offset, $count, $orderColumns, $orderDirections)
@@ -256,8 +224,7 @@ abstract class Table
             $this->get_condition(),
             $offset,
             $count,
-            $this->determineOrderProperties($orderColumns, $orderDirections)
-        );
+            $this->determineOrderProperties($orderColumns, $orderDirections));
 
         $tableData = array();
 
@@ -269,9 +236,9 @@ abstract class Table
             }
         }
 
-        if($resultSet instanceof DataClassIterator)
+        if ($resultSet instanceof DataClassIterator)
         {
-            foreach($resultSet as $result)
+            foreach ($resultSet as $result)
             {
                 $this->handle_result($tableData, $result);
             }
@@ -280,6 +247,12 @@ abstract class Table
         return $tableData;
     }
 
+    /**
+     *
+     * @param integer[] $orderColumns
+     * @param integer[] $orderDirections
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     */
     protected function determineOrderProperties($orderColumns, $orderDirections)
     {
         $orderProperties = array();
@@ -296,14 +269,14 @@ abstract class Table
                 $orderProperties[] = $orderProperty;
             }
         }
-        
+
         return $orderProperties;
     }
 
     /**
      * Counts the number of rows that a full retrieve would provide
      *
-     * @return int
+     * @return integer
      */
     public function countData()
     {
@@ -311,93 +284,75 @@ abstract class Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Data Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the order property as ObjectTableOrder
      *
-     * @param int $order_index
-     * @param int $order_direction
+     * @param integer $orderIndex
+     * @param integer $orderDirection
      *
-     * @return ObjectTableOrder
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      */
-    protected function get_order_property($order_index, $order_direction)
+    protected function get_order_property($orderIndex, $orderDirection)
     {
-        $column_model = $this->get_column_model();
-        $column_model->addCurrentOrderedColumn($order_index, $order_direction);
+        $columnModel = $this->get_column_model();
+        $columnModel->addCurrentOrderedColumn($orderIndex, $orderDirection);
 
-        return $column_model->get_column_object_table_order($order_index, $order_direction);
+        return $columnModel->get_column_object_table_order($orderIndex, $orderDirection);
     }
 
     /**
      * Handles a single result of the data and adds it to the table data
      *
-     * @param $table_data
-     * @param $result
+     * @param string[][] $table_data
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array[] $result
      */
-    protected function handle_result(&$table_data, $result)
+    protected function handle_result(&$tableData, $result)
     {
-        $column_count = $this->get_column_model()->get_column_count();
+        $columnCount = $this->get_column_model()->get_column_count();
 
-        $row_data = array();
+        $rowData = array();
 
         if ($this->has_form_actions())
         {
-            $row_data[] = $this->get_cell_renderer()->render_id_cell($result);
+            $rowData[] = $this->get_cell_renderer()->render_id_cell($result);
         }
 
-        for ($i = 0; $i < $column_count; $i ++)
+        for ($i = 0; $i < $columnCount; $i ++)
         {
-            $row_data[] = $this->get_cell_renderer()->render_cell($this->get_column_model()->get_column($i), $result);
+            $rowData[] = $this->get_cell_renderer()->render_cell($this->get_column_model()->get_column($i), $result);
         }
 
-        $table_data[] = $row_data;
+        $tableData[] = $rowData;
     }
-
-    /**
-     * **************************************************************************************************************
-     * Table action functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the selected ids
      *
-     * @return int[]
+     * @return integer[]
      */
     public static function get_selected_ids()
     {
-        $selected_ids = Request::post(static::get_name() . self::CHECKBOX_NAME_SUFFIX);
+        $selectedIds = Request::post(static::get_name() . self::CHECKBOX_NAME_SUFFIX);
 
-        if (empty($selected_ids))
+        if (empty($selectedIds))
         {
-            $selected_ids = array();
+            $selectedIds = array();
         }
-        elseif (!is_array($selected_ids))
+        elseif (! is_array($selectedIds))
         {
-            $selected_ids = array($selected_ids);
+            $selectedIds = array($selectedIds);
         }
 
-        return $selected_ids;
+        return $selectedIds;
     }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Gets the table's data provider or builds one if it is not set
      *
-     * @return TableDataProvider The data provider
+     * @return \Chamilo\Libraries\Format\Table\TableDataProvider
      */
     public function get_data_provider()
     {
-        if (!isset($this->data_provider))
+        if (! isset($this->data_provider))
         {
             $classname = $this->get_class('DataProvider');
             $this->data_provider = new $classname($this);
@@ -409,21 +364,21 @@ abstract class Table
     /**
      * Sets the data provider
      *
-     * @param TableDataProvider $data_provider
+     * @param \Chamilo\Libraries\Format\Table\TableDataProvider $dataProvider
      */
-    public function set_data_provider($data_provider)
+    public function set_data_provider($dataProvider)
     {
-        $this->data_provider = $data_provider;
+        $this->data_provider = $dataProvider;
     }
 
     /**
      * Gets the table's column model or builds one if it is not set
      *
-     * @return TableColumnModel The column model
+     * @return \Chamilo\Libraries\Format\Table\TableColumnModel
      */
     public function get_column_model()
     {
-        if (!isset($this->column_model))
+        if (! isset($this->column_model))
         {
             $classname = $this->get_class('ColumnModel');
             $this->column_model = new $classname($this);
@@ -435,21 +390,21 @@ abstract class Table
     /**
      * Sets the column model
      *
-     * @param TableColumnModel $column_model
+     * @param \Chamilo\Libraries\Format\Table\TableColumnModel $columnModel
      */
-    public function set_column_model($column_model)
+    public function set_column_model($columnModel)
     {
-        $this->column_model = $column_model;
+        $this->column_model = $columnModel;
     }
 
     /**
      * Gets the table's cell renderer or builds one if it is not set
      *
-     * @return TableCellRenderer The cell renderer
+     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
     public function get_cell_renderer()
     {
-        if (!isset($this->cell_renderer))
+        if (! isset($this->cell_renderer))
         {
             $classname = $this->get_class('CellRenderer');
             $this->cell_renderer = new $classname($this);
@@ -461,17 +416,17 @@ abstract class Table
     /**
      * Sets the cell renderer
      *
-     * @param TableCellRenderer $cell_renderer
+     * @param \Chamilo\Libraries\Format\Table\TableCellRenderer $cellRenderer
      */
-    public function set_cell_renderer($cell_renderer)
+    public function set_cell_renderer($cellRenderer)
     {
-        $this->cell_renderer = $cell_renderer;
+        $this->cell_renderer = $cellRenderer;
     }
 
     /**
      * Returns the component
      *
-     * @return mixed
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_component()
     {
@@ -481,9 +436,9 @@ abstract class Table
     /**
      * Sets the component
      *
-     * @param mixed $component
+     * @param \Chamilo\Libraries\Architecture\Application\Application $component
      */
-    public function set_component($component)
+    public function set_component(Application $component)
     {
         $this->component = $component;
     }
@@ -491,11 +446,11 @@ abstract class Table
     /**
      * Gets the actions for the mass-update form at the bottom of the table.
      *
-     * @return TableFormActions The actions as an associative array.
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     public function get_form_actions()
     {
-        if (!isset($this->form_actions))
+        if (! isset($this->form_actions))
         {
             $this->form_actions = $this->get_implemented_form_actions();
         }
@@ -507,7 +462,7 @@ abstract class Table
      * Connects a table supported search form to this table to share the parameters of the search form and the
      * table
      *
-     * @param TableSupportedSearchFormInterface $searchForm
+     * @param \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface $searchForm
      */
     public function setSearchForm(TableSupportedSearchFormInterface $searchForm)
     {
@@ -540,29 +495,21 @@ abstract class Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Builds a class name starting from this class name and extending it with the given type
      *
      * @param string $type
-     *
-     * @example get_class('DataProvider') returns TableDataProvider
      * @return string
      */
     protected function get_class($type = null)
     {
-        $class_name = get_class($this);
+        $className = get_class($this);
 
-        if (!is_null($type))
+        if (! is_null($type))
         {
-            $class_name .= $type;
+            $className .= $type;
         }
 
-        return $class_name;
+        return $className;
     }
 
     /**
@@ -588,7 +535,7 @@ abstract class Table
     /**
      * Gets the default row count of the table
      *
-     * @return int The number of rows
+     * @return integer
      */
     protected function get_default_row_count()
     {
@@ -603,13 +550,13 @@ abstract class Table
     public function has_form_actions()
     {
         return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
-            $this->get_form_actions()->has_form_actions());
+             $this->get_form_actions()->has_form_actions());
     }
 
     /**
      * Returns the condition for this table
      *
-     * @return mixed
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     protected function get_condition()
     {
@@ -619,7 +566,7 @@ abstract class Table
     /**
      * Returns the parameters for this table
      *
-     * @return array
+     * @return string[]
      */
     protected function get_parameters()
     {
@@ -627,15 +574,9 @@ abstract class Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Static Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Gets the name of the HTML table element
      *
-     * @return string The name
+     * @return string
      */
     public static function get_name()
     {

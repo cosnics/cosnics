@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 
 /**
- *
- * @package common.html.action_bar $Id: action_bar_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- */
-
-/**
  * Class that renders an action bar divided in 3 parts, a left menu for actions, a middle menu for actions and a right
  * menu for a search bar.
  */
@@ -30,8 +25,8 @@ class ActionBarRenderer
     private $name;
 
     private $actions = array(
-        self::ACTION_BAR_COMMON => array(), 
-        self::ACTION_BAR_TOOL => array(), 
+        self::ACTION_BAR_COMMON => array(),
+        self::ACTION_BAR_TOOL => array(),
         self::ACTION_BAR_SEARCH => array());
 
     private $search_form;
@@ -113,7 +108,7 @@ class ActionBarRenderer
     public function as_html()
     {
         $type = $this->type;
-        
+
         switch ($type)
         {
             case self::TYPE_HORIZONTAL :
@@ -132,21 +127,21 @@ class ActionBarRenderer
     {
         $common_actions = $this->get_common_actions();
         $tool_actions = $this->get_tool_actions();
-        
+
         if (count($common_actions) == 0 && count($tool_actions) == 0 && is_null($this->search_form))
         {
             return '';
         }
-        
+
         $html = array();
         $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
         $html[] = '<div id="' . $this->get_name() . '_action_bar" class="action_bar">';
         $html[] = '<div class="bevel">';
-        
+
         $html[] = '<table cellspacing="0">';
         $html[] = '<tr>';
         $html[] = '<td class="common_menu split">';
-        
+
         if ($common_actions && count($common_actions) >= 0)
         {
             $toolbar = new Toolbar();
@@ -155,9 +150,9 @@ class ActionBarRenderer
             $html[] = $toolbar->as_html();
         }
         $html[] = '</td>';
-        
+
         $html[] = '<td class="tool_menu split split_bevel">';
-        
+
         if ($tool_actions && count($tool_actions) >= 0)
         {
             $toolbar = new Toolbar();
@@ -165,9 +160,9 @@ class ActionBarRenderer
             $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
             $html[] = $toolbar->as_html();
         }
-        
+
         $html[] = '</td>';
-        
+
         $html[] = '<td class="search_menu split_bevel">';
         if (! is_null($this->search_form))
         {
@@ -187,18 +182,18 @@ class ActionBarRenderer
                 $html[] = '</div>';
             }
         }
-        
+
         $html[] = '</td>';
-        
+
         $html[] = '</tr>';
         $html[] = '</table>';
-        
+
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -211,60 +206,60 @@ class ActionBarRenderer
     {
         $common_actions = $this->get_common_actions();
         $tool_actions = $this->get_tool_actions();
-        
+
         if (count($common_actions) == 0 && count($tool_actions) == 0 && is_null($this->search_form))
         {
             return '';
         }
-        
+
         $html = array();
-        
+
         $html[] = '<div id="' . $this->get_name() . '_action_bar_left" class="action_bar_left">';
         $html[] = '<h3>' . Translation::get('ActionBar') . '</h3>';
-        
+
         $action_bar_has_search_form = ! is_null($this->search_form);
         $action_bar_has_common_actions = (count($common_actions) > 0);
         $action_bar_has_tool_actions = (count($tool_actions) > 0);
         $action_bar_has_common_and_tool_actions = (count($common_actions) > 0) && (count($tool_actions) > 0);
-        
+
         if (! is_null($this->search_form))
         {
             $search_form = $this->search_form;
             $html[] = $search_form->as_html();
         }
-        
+
         if ($action_bar_has_search_form && ($action_bar_has_common_actions || $action_bar_has_tool_actions))
         {
             $html[] = '<div class="divider"></div>';
         }
-        
+
         if ($action_bar_has_common_actions)
         {
             $html[] = '<div class="clear"></div>';
-            
+
             $toolbar = new Toolbar();
             $toolbar->set_items($common_actions);
             $toolbar->set_type(Toolbar::TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
         }
-        
+
         if ($action_bar_has_common_and_tool_actions)
         {
             $html[] = '<div class="divider"></div>';
         }
-        
+
         if ($action_bar_has_tool_actions)
         {
             $html[] = '<div class="clear"></div>';
-            
+
             $toolbar = new Toolbar();
             $toolbar->set_items($tool_actions);
             $toolbar->set_type(Toolbar::TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
         }
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         $html[] = '<div id="' . $this->get_name() .
              '_action_bar_left_hide_container" class="action_bar_left_hide_container hide">';
         $html[] = '<a id="' . $this->get_name() .
@@ -275,12 +270,12 @@ class ActionBarRenderer
              Theme::getInstance()->getCommonImagePath('Action/ActionBar/Show') . '" /></a>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarVertical.js');
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -298,7 +293,7 @@ class ActionBarRenderer
 
     /**
      * Returns the search query conditions
-     * 
+     *
      * @param array $properties
      * @return Condition
      * @uses Utilities :: query_to_condition() (deprecated)
@@ -310,15 +305,15 @@ class ActionBarRenderer
         {
             $properties = array($properties);
         }
-        
+
         // get query
         $query = $this->get_query();
-        
+
         // only process if we have a search query and properties
         if (isset($query) && count($properties))
         {
             $search_conditions = Utilities::query_to_condition($query, $properties);
-            
+
             $condition = $search_conditions;
         }
         return $condition;

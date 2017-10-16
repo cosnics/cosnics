@@ -1,14 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Integration\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
-use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
-use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloStorageUnitCreator;
-use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloFixturesBasedTestCase;
-use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Tests the TreeNodeDataRepository
@@ -17,7 +12,9 @@ use Chamilo\Libraries\File\PathBuilder;
  */
 class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
 {
+
     /**
+     *
      * @var TreeNodeDataRepository
      */
     protected $treeNodeDataRepository;
@@ -43,9 +40,9 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     }
 
     /**
-     * Returns the storage units that need to be created. This method requires a multidimensional array with the
+     * Returns the storage units that need to be created.
+     * This method requires a multidimensional array with the
      * names of the storage units per context
-     *
      * [ $context => [$storageUnit1, $storageUnit2] ]
      *
      * @return array
@@ -56,9 +53,9 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     }
 
     /**
-     * Returns the fixture files that need to be inserted. This method requires a multidimensional array with the
+     * Returns the fixture files that need to be inserted.
+     * This method requires a multidimensional array with the
      * names of the fixture files per context
-     *
      * [ $context => [$storageUnit1, $storageUnit2] ]
      *
      * @return array

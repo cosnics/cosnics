@@ -51,7 +51,7 @@ class Bootstrap
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     * @param ErrorHandler $errorHandler
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
      * @param bool $showErrors
      */
     public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
@@ -130,7 +130,7 @@ class Bootstrap
 
     /**
      *
-     * @param ErrorHandler $errorHandler
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
      */
     public function setExceptionLogger(ErrorHandler $errorHandler)
     {
@@ -158,7 +158,7 @@ class Bootstrap
     /**
      * Check if the system has been installed, if not display message accordingly
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     protected function checkInstallation()
     {
@@ -174,6 +174,10 @@ class Bootstrap
         return $this;
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
+     */
     protected function startSession()
     {
         $this->getSessionUtilities()->start();
@@ -184,7 +188,7 @@ class Bootstrap
     /**
      * Registers the error handler by using the error handler manager
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     protected function registerErrorHandlers()
     {
@@ -198,7 +202,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     public function setup()
     {

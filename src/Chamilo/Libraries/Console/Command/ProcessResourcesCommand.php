@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Cache\CacheManagement\CacheManager;
@@ -13,31 +12,32 @@ use Symfony\Component\Translation\Translator;
  * Command to process resources of all (or a given) package(s)
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Console\Command
  */
 class ProcessResourcesCommand extends ChamiloCommand
 {
     const ARG_CONTEXT = 'context';
 
     /**
-     * @var ResourceProcessor
+     *
+     * @var \Chamilo\Libraries\Format\Utilities\ResourceProcessor
      */
     protected $resourceProcessor;
 
     /**
-     * @var CacheManager
+     *
+     * @var \Chamilo\Libraries\Cache\CacheManagement\CacheManager
      */
     protected $cacheManager;
 
     /**
      * ProcessResourcesCommand constructor.
      *
-     * @param Translator $translator
-     * @param ResourceProcessor $resourceProcessor
-     * @param CacheManager $cacheManager
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Libraries\Format\Utilities\ResourceProcessor $resourceProcessor
+     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
      */
-    public function __construct(
-        Translator $translator, ResourceProcessor $resourceProcessor, CacheManager $cacheManager
-    )
+    public function __construct(Translator $translator, ResourceProcessor $resourceProcessor, CacheManager $cacheManager)
     {
         $this->resourceProcessor = $resourceProcessor;
         $this->cacheManager = $cacheManager;
@@ -50,21 +50,17 @@ class ProcessResourcesCommand extends ChamiloCommand
      */
     protected function configure()
     {
-        $this->setName('chamilo:process_resources')
-            ->setDescription(
-                $this->translator->trans('ProcessResourcesCommandDescription', array(), 'Chamilo\Libraries')
-            )
-            ->addArgument(
-                self::ARG_CONTEXT, InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-                $this->translator->trans('ProcessResourcesContextDescription', array(), 'Chamilo\Libraries')
-            );
+        $this->setName('chamilo:process_resources')->setDescription(
+            $this->translator->trans('ProcessResourcesCommandDescription', array(), 'Chamilo\Libraries'))->addArgument(
+            self::ARG_CONTEXT,
+            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
+            $this->translator->trans('ProcessResourcesContextDescription', array(), 'Chamilo\Libraries'));
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
      *
-     * @return int|null|void
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

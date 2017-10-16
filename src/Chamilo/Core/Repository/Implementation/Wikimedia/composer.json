@@ -1,25 +1,44 @@
 {
-    "name": "chamilo/ext-repo-wikimedia",
-        "version": "6.0.0", "description": "Chamilo Wikimedia External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
-        }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0"
-    },
-    "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/wikimedia"
-    }
-
+	"name": "cosnics/core-repository-implementation-wikimedia",
+	"version": "1.0.0",
+	"description": "Core Repository Implementation Wikimedia",
+	"keywords": [
+		"Core",
+		"Repository",
+		"Implementation",
+		"Wikimedia"
+	],
+	"homepage": "http://www.cosnics.org",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sven Vanpoucke",
+			"email": "sven.vanpoucke@hogent.be"
+		},
+		{
+			"name": "Hans De Bisschop",
+			"email": "hans.de.bisschop@ehb.be"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"extra": {
+		"cosnics": {
+			"name": "Wikimedia",
+			"context": "Chamilo\\Core\\Repository\\Implementation\\Wikimedia",
+			"type": "Chamilo\\Core\\Repository\\Implementation",
+			"dependencies": [
+				{
+					"id": "Chamilo\\Core\\Repository",
+					"version": ">=1.0.0"
+				}
+			],
+			"install": {
+				"default": 0,
+				"core": 0
+			},
+			"multiple": 1
+		}
+	}
 }

@@ -12,13 +12,12 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: document_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
  * @package application.lib.weblcms.tool.document
  */
@@ -104,7 +103,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $buttonGroup->prependButton(
                 new Button(
                     Translation::get('Download'),
-                    new BootstrapGlyph('download'),
+                    new FontAwesomeGlyph('download'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,

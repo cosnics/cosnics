@@ -45,10 +45,8 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param string $context
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct($context, ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -102,7 +100,8 @@ class ApplicationFactory
     }
 
     /**
-     * Constructs the application and runs it
+     *
+     * @return string
      */
     public function run()
     {
@@ -112,15 +111,14 @@ class ApplicationFactory
     /**
      *
      * @param string $action
-     * @param bool $generateBreadcrumbs
-     *
-     * @return Application
+     * @param boolean $generateBreadcrumbs
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getComponent($action = null, $generateBreadcrumbs = true)
     {
         $component = $this->createComponent($action);
 
-        if($generateBreadcrumbs)
+        if ($generateBreadcrumbs)
         {
             $component->get_breadcrumb_generator()->generate_breadcrumbs();
         }
@@ -137,13 +135,12 @@ class ApplicationFactory
     {
         $managerClass = $this->getContext() . '\Manager';
 
-        if (!class_exists($managerClass))
+        if (! class_exists($managerClass))
         {
             throw new UserException(
-                Translation::get('InvalidApplication', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries')
-            );
+                Translation::get('InvalidApplication', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
         }
-        
+
         return $managerClass;
     }
 
@@ -161,7 +158,6 @@ class ApplicationFactory
     /**
      *
      * @param string $action
-     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     private function createComponent($action = null)
@@ -177,7 +173,7 @@ class ApplicationFactory
 
         $component->set_parameter($this->getActionParameter(), $action);
 
-        if (!$this->getApplication() instanceof Application)
+        if (! $this->getApplication() instanceof Application)
         {
             $component->set_parameter(Application::PARAM_CONTEXT, $this->getContext());
         }
@@ -246,19 +242,17 @@ class ApplicationFactory
     /**
      *
      * @param string $actionParameter
-     * @param string $defaultAction
-     *
      * @return string
      */
     private function getRequestedAction($actionParameter)
     {
         $getAction = $this->getRequest()->query->get($actionParameter);
 
-        if (!$getAction)
+        if (! $getAction)
         {
             $postAction = $this->getRequest()->request->get($actionParameter);
 
-            if (!$postAction)
+            if (! $postAction)
             {
                 // TODO: Catch the fact that there might not be a default action
                 $managerClass = $this->getManagerClass();
@@ -279,7 +273,6 @@ class ApplicationFactory
     /**
      *
      * @param string $action
-     *
      * @return string
      */
     public function getClassName($action = null)
@@ -292,17 +285,23 @@ class ApplicationFactory
         return $this->buildClassName($action);
     }
 
+    /**
+     *
+     * @param string $action
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @return string
+     */
     private function buildClassName($action)
     {
         $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 
-        if (!class_exists($classname))
+        if (! class_exists($classname))
         {
             // TODO: Temporary fallback for backwards compatibility
             $classname = $this->getContext() . '\Component\\' .
-                (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
+                 (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
 
-            if (!class_exists($classname))
+            if (! class_exists($classname))
             {
                 $trail = BreadcrumbTrail::getInstance();
                 $trail->add(new Breadcrumb('#', Translation::get($classname)));

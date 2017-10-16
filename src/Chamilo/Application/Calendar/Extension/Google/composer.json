@@ -1,0 +1,43 @@
+{
+    "name": "cosnics/application-calendar-extension-google",
+    "version": "1.0.0",
+    "description": "Application Calendar Extension Google",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Extension",
+        "Google"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Google Calendar",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Google",
+            "type": "Chamilo\\Application\\Calendar\\Extension",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

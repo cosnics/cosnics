@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
@@ -8,11 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\TreeTestDataGenerator;
-use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Gedmo\Exception\RuntimeException;
 
 /**
  * Tests the AutomaticNumberingService class
@@ -21,41 +16,46 @@ use Gedmo\Exception\RuntimeException;
  */
 class AutomaticNumberingServiceTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var AutomaticNumberingService
      */
     protected $automaticNumberingService;
 
     /**
+     *
      * @var Tree
      */
     protected $tree;
 
     /**
+     *
      * @var LearningPath[] | Section[] | Page[] | ContentObject[]
      */
     protected $contentObjects;
 
     /**
+     *
      * @var TreeNodeData[]
      */
     protected $treeNodesData;
 
     /**
+     *
      * @var TreeNode[]
      */
     protected $treeNodes;
 
     /**
      * Setup before each test
-     *
      * - Learning Path A - ID: 1
-     *    - Section A - ID: 2
-     *        - Page 1 - ID: 6
-     *    - Section B - ID: 3
-     *    - Section C - ID: 4
-     *        - Section D - ID: 5
-     *            - Page 2 - ID: 7
+     * - Section A - ID: 2
+     * - Page 1 - ID: 6
+     * - Section B - ID: 3
+     * - Section C - ID: 4
+     * - Section D - ID: 5
+     * - Page 2 - ID: 7
      */
     public function setUp()
     {
@@ -76,8 +76,8 @@ class AutomaticNumberingServiceTest extends ChamiloTestCase
     public function testGetAutomaticNumberingForTreeNode()
     {
         $this->assertEquals(
-            '1.1.', $this->automaticNumberingService->getAutomaticNumberingForTreeNode($this->treeNodes[6])
-        );
+            '1.1.',
+            $this->automaticNumberingService->getAutomaticNumberingForTreeNode($this->treeNodes[6]));
     }
 
     public function testGetAutomaticNumberedTitleForTreeNode()
@@ -87,8 +87,7 @@ class AutomaticNumberingServiceTest extends ChamiloTestCase
 
         $this->assertEquals(
             '3.1.1. Test Title 001',
-            $this->automaticNumberingService->getAutomaticNumberedTitleForTreeNode($this->treeNodes[7])
-        );
+            $this->automaticNumberingService->getAutomaticNumberedTitleForTreeNode($this->treeNodes[7]));
     }
 
     public function testGetAutomaticNumberingForTreeNodeWithoutAutomaticNumbering()

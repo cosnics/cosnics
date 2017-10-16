@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Core\Install\Form;
 
-use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Install\ValidateDatabaseConnection;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Core\Install\Manager;
+use Chamilo\Core\Install\ValidateDatabaseConnection;
+use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Core\Install\Manager;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -184,9 +184,9 @@ class SettingsForm extends FormValidator
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Platform'));
-        $this->addElement('text', 'platform_name', Translation::get("CampusName"), array('size' => '40'));
+        $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
         $this->addRule(
-            'platform_name',
+            'site_name',
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
@@ -223,7 +223,7 @@ class SettingsForm extends FormValidator
             'select',
             'hashing_algorithm',
             Translation::get('HashingAlgorithm'),
-            Hashing::get_available_types());
+            HashingUtilities::get_available_types());
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Storage'));
@@ -303,9 +303,7 @@ class SettingsForm extends FormValidator
 
             foreach ($packages as $package)
             {
-                $extra = $package->get_extra();
-
-                if ($extra['core-install'])
+                if ($package->getCoreInstall())
                 {
                     $numberOfCorePackages ++;
                 }
@@ -360,12 +358,10 @@ class SettingsForm extends FormValidator
 
             foreach ($packages as $package)
             {
-                $extraPackageInfo = $package->get_extra();
-
                 $title = Translation::get('TypeName', null, $package->get_context());
                 $packageClasses = $this->getPackageClasses($package);
 
-                if ($extraPackageInfo['core-install'])
+                if ($package->getCoreInstall())
                 {
                     $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22Na');
                     $disabled = ' disabled="disabled"';
@@ -393,7 +389,7 @@ class SettingsForm extends FormValidator
 
                 $extra = $package->get_extra();
 
-                if ($extra['core-install'] || $extra['default-install'])
+                if ($package->getCoreInstall() || $package->getDefaultInstall())
                 {
                     $defaults['install'][$package->get_context()] = 1;
                 }
@@ -453,15 +449,13 @@ class SettingsForm extends FormValidator
     {
         $classes = array('btn');
 
-        $extra = $package->get_extra();
-
-        if ($extra['core-install'])
+        if ($package->getCoreInstall())
         {
             $classes[] = 'btn-default';
         }
         else
         {
-            if ($extra['default-install'])
+            if ($package->getDefaultInstall())
             {
                 $sessionSettings = $this->getSessionSettings();
 
@@ -542,7 +536,7 @@ class SettingsForm extends FormValidator
             $defaults['admin_surname'] = 'Doe';
             $defaults['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
             $defaults['admin_username'] = 'admin';
-            $defaults['platform_name'] = Translation::get('MyChamilo');
+            $defaults['site_name'] = Translation::get('MyChamilo');
             $defaults['organization_name'] = Translation::get('Chamilo');
             $defaults['organization_url'] = 'http://www.cosnics.org';
             $defaults['self_reg'] = 0;

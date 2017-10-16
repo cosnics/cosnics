@@ -8,17 +8,20 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
+use Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
- * @package Chamilo\Libraries\Architecture\Bootstrap$Kernel
+ * @package Chamilo\Libraries\Architecture\Bootstrap
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
@@ -72,6 +75,12 @@ class Kernel
 
     /**
      *
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
+     *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $user;
@@ -81,17 +90,19 @@ class Kernel
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param integer $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, $version, User $user = null)
+        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger, $version, User $user = null)
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
+        $this->sessionUtilities = $sessionUtilities;
         $this->exceptionLogger = $exceptionLogger;
         $this->version = $version;
         $this->user = $user;
@@ -245,11 +256,28 @@ class Kernel
     {
         try
         {
-            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()->runApplication();
         }
         catch (NotAuthenticatedException $exception)
         {
             $response = $this->getNotAuthenticatedResponse();
+            $response->send();
+        }
+        catch (PlatformNotAvailableException $exception)
+        {
+            $page = Page::getInstance();
+            $page->setApplication($this->getApplication());
+
+            $html = array();
+            $html[] = $page->getHeader()->toHtml();
+            $html[] = '<br />';
+            $html[] = '<div class="alert alert-danger text-center">';
+            $html[] = $this->configurationConsulter->getSetting(
+                ['Chamilo\Core\Admin', 'maintenance_warning_message']);
+            $html[] = '</div>';
+            $html[] = $page->getFooter()->toHtml();
+
+            $response = new Response(implode("\n", $html));
             $response->send();
         }
         catch (UserException $exception)
@@ -264,7 +292,7 @@ class Kernel
     /**
      * Returns a response that renders the not authenticated message
      *
-     * @return NotAuthenticatedResponse
+     * @return \Chamilo\Libraries\Format\Response\NotAuthenticatedResponse
      */
     protected function getNotAuthenticatedResponse()
     {
@@ -307,7 +335,7 @@ class Kernel
     /**
      * Returns a list of the available fallback contexts
      *
-     * @return array
+     * @return string[]
      */
     protected function getFallbackContexts()
     {
@@ -349,6 +377,8 @@ class Kernel
 
     /**
      * Executes the application's component
+     *
+     * @throws \Exception
      */
     protected function runApplication()
     {
@@ -370,12 +400,23 @@ class Kernel
     }
 
     /**
+     * Checks if the platform is available for the given user
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException
      */
-    protected function setup()
+    protected function checkPlatformAvailability()
     {
-        return $this->registerErrorHandlers()->configureTimezone();
+        if ($this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
+        {
+            $asAdmin = $this->sessionUtilities->get('_as_admin');
+            if ($this->getUser() instanceof User && ! $this->getUser()->is_platform_admin() && ! $asAdmin)
+            {
+                throw new PlatformNotAvailableException();
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -422,7 +463,7 @@ class Kernel
 
     /**
      *
-     * @throws NotAuthenticatedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
      */
     protected function checkAuthentication()

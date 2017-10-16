@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: rss_feed_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.rss_feed
  */
 class RssFeedForm extends ContentObjectForm
@@ -39,9 +38,9 @@ class RssFeedForm extends ContentObjectForm
             $default_number_entries = $lo->get_number_of_entries();
         }
         $defaults[RssFeed::PROPERTY_URL] = is_null($default_url) ? self::DEFAULT_FEED_URL : $default_url;
-        
+
         $defaults[RssFeed::PROPERTY_NUMBER_OF_ENTRIES] = is_null($default_number_entries) ? self::DEFAULT_NUMBER_OF_ENTRIES : $default_number_entries;
-        
+
         parent::setDefaults($defaults);
     }
 
@@ -50,9 +49,9 @@ class RssFeedForm extends ContentObjectForm
         $content_object = new RssFeed();
         $content_object->set_url($this->exportValue(RssFeed::PROPERTY_URL));
         $content_object->set_number_of_entries($this->exportValue(RssFeed::PROPERTY_NUMBER_OF_ENTRIES));
-        
+
         $this->set_content_object($content_object);
-        
+
         return parent::create_content_object();
     }
 
@@ -61,25 +60,25 @@ class RssFeedForm extends ContentObjectForm
         $content_object = $this->get_content_object();
         $content_object->set_url($this->exportValue(RssFeed::PROPERTY_URL));
         $content_object->set_number_of_entries($this->exportValue(RssFeed::PROPERTY_NUMBER_OF_ENTRIES));
-        
+
         return parent::update_content_object();
     }
 
     protected function buildElements()
     {
         $this->addElement('category', Translation::get('Properties'));
-        
+
         $this->add_textfield(RssFeed::PROPERTY_URL, Translation::get('URL'), true, ' size="100" style="width: 100%;"');
-        
+
         $this->add_textfield(
-            RssFeed::PROPERTY_NUMBER_OF_ENTRIES, 
+            RssFeed::PROPERTY_NUMBER_OF_ENTRIES,
             Translation::getInstance()->getTranslation(
-                'NumberOfEntries', 
-                array(), 
-                'Chamilo\Core\Repository\ContentObject\RssFeed'), 
-            true, 
+                'NumberOfEntries',
+                array(),
+                'Chamilo\Core\Repository\ContentObject\RssFeed'),
+            true,
             ' size="100" style="width: 100%;"');
-        
+
         $this->addElement('category');
     }
 
@@ -89,7 +88,7 @@ class RssFeedForm extends ContentObjectForm
         {
             return false;
         }
-        
+
         return true;
     }
 }

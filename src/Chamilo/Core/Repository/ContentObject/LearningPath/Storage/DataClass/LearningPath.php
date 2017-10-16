@@ -1,11 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -14,7 +11,6 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- * $Id: learning_path.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.content_object.learning_path
  */
@@ -22,15 +18,15 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 {
     const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
     const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
-
     const AUTOMATIC_NUMBERING_NONE = 'none';
     const AUTOMATIC_NUMBERING_DIGITS = 'digits';
 
     // Currently not implemented options
-    //const AUTOMATIC_NUMBERING_ALPHABETICAL = 'alphabetical';
-    //const AUTOMATIC_NUMBERING_MIX = 'mix';
+    // const AUTOMATIC_NUMBERING_ALPHABETICAL = 'alphabetical';
+    // const AUTOMATIC_NUMBERING_MIX = 'mix';
 
     /**
+     *
      * @return string[]
      */
     public static function get_additional_property_names()
@@ -55,7 +51,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function usesAutomaticNumbering()
     {
-        if(!in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
+        if (! in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
         {
             return false;
         }
@@ -70,14 +66,12 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function setAutomaticNumbering($automaticNumberingOption)
     {
-        if (!in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
+        if (! in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
         {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The given automaticNumberingOption must be one of %s',
-                    explode(',', self::getAutomaticNumberingOptions())
-                )
-            );
+                    explode(',', self::getAutomaticNumberingOptions())));
         }
 
         $this->set_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
@@ -90,9 +84,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public static function getAutomaticNumberingOptions()
     {
-        return array(
-            self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS
-        );
+        return array(self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS);
     }
 
     /**
@@ -102,7 +94,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
     {
-        if(!is_bool($enforceDefaultTraversingOrder))
+        if (! is_bool($enforceDefaultTraversingOrder))
         {
             throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
@@ -129,7 +121,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function create($create_in_batch = false)
     {
-        if(!parent::create($create_in_batch))
+        if (! parent::create($create_in_batch))
         {
             return false;
         }
@@ -170,6 +162,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
+     *
      * @return object | TreeNodeDataService
      */
     protected function getTreeNodeDataService()
@@ -177,11 +170,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service'
-        );
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
     }
 
     /**
+     *
      * @return object | LearningPathService
      */
     protected function getLearningPathService()
@@ -189,11 +182,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $serviceContainer->get(
-            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
-        );
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service');
     }
 
     /**
+     *
      * @return array
      */
     public function get_allowed_types()
@@ -204,9 +197,12 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $registrations = $configuration->getIntegrationRegistrations(self::package());
         $types = array();
 
-        usort($registrations, function($registrationA, $registrationB) {
-           return $registrationA[Registration::PROPERTY_PRIORITY] < $registrationB[Registration::PROPERTY_PRIORITY];
-        });
+        usort(
+            $registrations,
+            function ($registrationA, $registrationB)
+            {
+                return $registrationA[Registration::PROPERTY_PRIORITY] < $registrationB[Registration::PROPERTY_PRIORITY];
+            });
 
         foreach ($registrations as $registration)
         {
@@ -214,21 +210,19 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
             $parentContext = $classNameUtilities->getNamespaceParent($type);
             $parentRegistration = $configuration->get_registration($parentContext);
 
-            if($parentContext == 'Chamilo\Core\Repository\ContentObject\Section')
+            if ($parentContext == 'Chamilo\Core\Repository\ContentObject\Section')
             {
                 continue;
             }
 
             if ($parentRegistration[Registration::PROPERTY_TYPE] ==
-                \Chamilo\Core\Repository\Manager::context() . '\ContentObject'
-            )
+                 \Chamilo\Core\Repository\Manager::context() . '\ContentObject')
             {
                 $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                     $registration[Registration::PROPERTY_CONTEXT],
-                    6
-                );
+                    6);
                 $types[] = $namespace . '\Storage\DataClass\\' .
-                    ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+                     ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             }
         }
 

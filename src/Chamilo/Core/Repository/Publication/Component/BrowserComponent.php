@@ -7,13 +7,12 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
- * $Id: publication_browser.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component
  */
 /**
  * Repository manager component which displays user's publications.
- * 
+ *
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
@@ -26,13 +25,13 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function run()
     {
         $output = $this->get_publications_html();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $output;
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -42,7 +41,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     private function get_publications_html()
     {
         $parameters = $this->get_parameters(true);
-        
+
         $table = new PublicationTable($this);
         return $table->as_html();
     }
