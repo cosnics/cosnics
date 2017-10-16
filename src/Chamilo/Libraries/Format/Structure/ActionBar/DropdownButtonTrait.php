@@ -34,8 +34,8 @@ trait DropdownButtonTrait
 
     /**
      * Returns whether or not this dropdown button has sub buttons
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasButtons()
     {

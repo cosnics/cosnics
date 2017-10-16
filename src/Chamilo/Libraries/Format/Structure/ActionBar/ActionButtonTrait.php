@@ -22,7 +22,7 @@ trait ActionButtonTrait
 
     /**
      *
-     * @var string
+     * @var boolean
      */
     private $confirmation;
 
@@ -36,9 +36,9 @@ trait ActionButtonTrait
      * Initialize method as replacement for constructor due to PHP issue
      * https://bugs.php.net/bug.php?id=65576
      * TODO: fix this once everyone moves to PHP 5.6
-     * 
+     *
      * @param string $action
-     * @param string $confirmation
+     * @param boolean|string $confirmation
      * @param string $target
      */
     public function initialize($action = null, $confirmation = null, $target = null)
@@ -68,7 +68,7 @@ trait ActionButtonTrait
 
     /**
      *
-     * @return string
+     * @return boolean|string
      */
     public function getConfirmation()
     {
@@ -77,7 +77,7 @@ trait ActionButtonTrait
 
     /**
      *
-     * @param string $confirmation
+     * @param boolean|string $confirmation
      */
     public function setConfirmation($confirmation)
     {

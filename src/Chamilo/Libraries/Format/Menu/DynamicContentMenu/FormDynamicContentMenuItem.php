@@ -3,23 +3,17 @@ namespace Chamilo\Libraries\Format\Menu\DynamicContentMenu;
 
 /**
  * Extension on the dynamic content menu item to display this menu item in a form
- * 
- * @package \libraries
+ *
+ * @package Chamilo\Libraries\Format\Menu\DynamicContentMenu
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FormDynamicContentMenuItem extends DynamicContentMenuItem
 {
 
     /**
-     * **************************************************************************************************************
-     * Render Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Adds the menu to the form
-     * 
-     * @param FormValidator $form
+     *
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      */
     public function add_to_form($form)
     {

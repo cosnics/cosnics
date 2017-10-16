@@ -4,13 +4,11 @@ namespace Chamilo\Libraries\Format\Menu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
- *
- * @package common.html.menu
- */
-/**
  * Renderer which can be used to create an array of options to use in a select
  * list.
  * The options are displayed in a hierarchical way in the select list.
+ *
+ * @package Chamilo\Libraries\Format\Menu
  */
 class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 {
@@ -19,9 +17,8 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     /**
      * Create a new OptionsMenuRenderer
      *
-     * @param array $exclude Which items should be excluded (based on the $key
-     *        value in the menu items). The whole submenu of which the elements of the
-     *        exclude array are the root elements will be excluded.
+     * @param string[] $exclude Which items should be excluded (based on the $key value in the menu items). The whole
+     *        submenu of which the elements of the exclude array are the root elements will be excluded.
      */
     public function __construct($exclude = array())
     {
@@ -29,8 +26,9 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
         $this->exclude = $exclude;
     }
 
-    /*
-     * Inherited
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer::renderEntry()
      */
     public function renderEntry($node, $level, $type)
     {
@@ -55,22 +53,26 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     }
 
     /**
-     * Returns an array which can be used as a list of options in a select-list
-     * of a form.
+     *
+     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer::toArray()
      */
     public function toArray()
     {
         $array = parent::toArray();
         $choices = array();
+
         foreach ($array as $index => $item)
         {
             $prefix = '';
+
             if ($item['level'] > 0)
             {
                 $prefix = str_repeat('&nbsp;&nbsp;&nbsp;', $item['level'] - 1) . '&mdash; ';
             }
+
             $choices[$item[self::KEY_ID]] = $prefix . $item['title'];
         }
+
         return $choices;
     }
 }

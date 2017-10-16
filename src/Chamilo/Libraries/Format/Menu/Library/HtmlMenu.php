@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Menu\Library;
 
 /**
  * Originaly a PEAR library
- * 
+ *
  * @package Chamilo\Libraries\Format\Menu\Library
  * @author Alex Vorobiev <sasha@mathforum.com>
  * @author Ulf Wendel <ulf.wendel@phpdoc.de>
@@ -28,7 +28,7 @@ class HtmlMenu
 
     /**
      * Mapping from URL to menu path.
-     * 
+     *
      * @var array
      * @see getPath()
      */
@@ -36,14 +36,14 @@ class HtmlMenu
 
     /**
      * Path to the current menu item.
-     * 
+     *
      * @var array
      */
     var $_path = array();
 
     /**
      * Menu type: tree, rows, you-are-here.
-     * 
+     *
      * @var array
      */
     var $_menuType = 'tree';
@@ -61,21 +61,21 @@ class HtmlMenu
 
     /**
      * The renderer being used to output the menu
-     * 
+     *
      * @var HTML_Menu_Renderer
      */
     var $_renderer = null;
 
     /**
      * Prefix for menu URLs
-     * 
+     *
      * @var string
      */
     var $_urlPrefix = '';
 
     /**
      * Initializes the menu, sets the type and menu structure.
-     * 
+     *
      * @param array menu structure
      * @param string menu type
      */
@@ -104,7 +104,7 @@ class HtmlMenu
     public function setMenuType($menuType)
     {
         $menuType = strtolower($menuType);
-        
+
         if (in_array($menuType, array('tree', 'rows', 'urhere', 'prevnext', 'sitemap')))
         {
             $this->_menuType = $menuType;
@@ -126,33 +126,33 @@ class HtmlMenu
         {
             $this->setMenuType($menuType);
         }
-        
+
         $this->_renderer = $renderer;
         // the renderer will throw an error if it is unable to process this menu type
         $res = $this->_renderer->setMenuType($this->_menuType);
-        
+
         if (is_object($res) && is_a($res, 'PEAR_Error'))
         {
             return $res;
         }
-        
+
         // storing to a class variable saves some recursion overhead
         $this->_path = $this->getPath();
-        
+
         switch ($this->_menuType)
         {
             case 'rows' :
                 $this->_renderRows($this->_menu);
                 break;
-            
+
             case 'prevnext' :
                 $this->_renderPrevNext($this->_menu);
                 break;
-            
+
             case 'urhere' :
                 $this->_renderURHere($this->_menu);
                 break;
-            
+
             default :
                 $this->_renderTree($this->_menu);
         }
@@ -186,7 +186,7 @@ class HtmlMenu
 
     /**
      * Renders the tree menu ('tree' and 'sitemap')
-     * 
+     *
      * @param array (sub)menu being rendered
      * @param int current depth in the tree structure
      */
@@ -195,22 +195,22 @@ class HtmlMenu
         foreach ($menu as $node_id => $node)
         {
             $type = $this->_findNodeType($node_id, $node['url'], $level);
-            
+
             $this->_renderer->renderEntry($node, $level, $type);
             $this->_renderer->finishRow($level);
-            
+
             // follow the subtree if the active menu item is in it or if we
             // want the full menu or if node expansion is forced (request #4391)
             if (isset($node['sub']) && ('sitemap' == $this->_menuType || self::HTML_MENU_ENTRY_INACTIVE != $type ||
                  ! empty($node['forceExpand'])))
             {
-                
+
                 $this->_renderTree($node['sub'], $level + 1);
             }
         }
-        
+
         $this->_renderer->finishLevel($level);
-        
+
         if (0 == $level)
         {
             $this->_renderer->finishMenu($level);
@@ -219,7 +219,7 @@ class HtmlMenu
 
     /**
      * Renders the 'urhere' menu
-     * 
+     *
      * @param array (sub)menu being rendered
      * @param int current depth in the tree structure
      */
@@ -228,7 +228,7 @@ class HtmlMenu
         foreach ($menu as $node_id => $node)
         {
             $type = $this->_findNodeType($node_id, $node['url'], $level);
-            
+
             if (self::HTML_MENU_ENTRY_INACTIVE != $type)
             {
                 $this->_renderer->renderEntry($node, $level, $type);
@@ -239,7 +239,7 @@ class HtmlMenu
                 }
             }
         }
-        
+
         if (0 == $level)
         {
             $this->_renderer->finishRow($level);
@@ -249,31 +249,31 @@ class HtmlMenu
 
     /**
      * Renders the 'rows' menu
-     * 
+     *
      * @param array (sub)menu being rendered
      * @param int current depth in the tree structure
      */
     private function _renderRows($menu, $level = 0)
     {
         $submenu = false;
-        
+
         foreach ($menu as $node_id => $node)
         {
             $type = $this->_findNodeType($node_id, $node['url'], $level);
-            
+
             $this->_renderer->renderEntry($node, $level, $type);
-            
+
             // follow the subtree if the active menu item is in it
             if (self::HTML_MENU_ENTRY_INACTIVE != $type && isset($node['sub']))
             {
                 $submenu = $node['sub'];
             }
         }
-        
+
         // every (sub)menu has its own table
         $this->_renderer->finishRow($level);
         $this->_renderer->finishMenu($level);
-        
+
         // go deeper if neccessary
         if ($submenu)
         {
@@ -283,7 +283,7 @@ class HtmlMenu
 
     /**
      * Renders the 'prevnext' menu
-     * 
+     *
      * @param array (sub)menu being rendered
      * @param int current depth in the tree structure
      * @param int flag indicating whether to finish processing
@@ -292,7 +292,7 @@ class HtmlMenu
     private function _renderPrevNext($menu, $level = 0, $flagStop = 0)
     {
         static $last_node = array(), $up_node = array();
-        
+
         foreach ($menu as $node_id => $node)
         {
             if (0 != $flagStop)
@@ -303,7 +303,7 @@ class HtmlMenu
                     $this->_renderer->renderEntry($node, $level, self::HTML_MENU_ENTRY_NEXT);
                     $flagStop = 2;
                 }
-                
+
                 break;
             }
             else
@@ -312,73 +312,73 @@ class HtmlMenu
                 if (self::HTML_MENU_ENTRY_ACTIVE == $type)
                 {
                     $flagStop = 1;
-                    
+
                     // WARNING: if there's no previous take the first menu entry - you might not like this rule!
                     if (0 == count($last_node))
                     {
                         reset($this->_menu);
                         list($node_id, $last_node) = each($this->_menu);
                     }
-                    
+
                     $this->_renderer->renderEntry($last_node, $level, self::HTML_MENU_ENTRY_PREVIOUS);
-                    
+
                     // WARNING: if there's no up take the first menu entry - you might not like this rule!
                     if (0 == count($up_node))
                     {
                         reset($this->_menu);
                         list($node_id, $up_node) = each($this->_menu);
                     }
-                    
+
                     $this->_renderer->renderEntry($up_node, $level, self::HTML_MENU_ENTRY_UPPER);
                 }
             }
-            
+
             // remember the last (<< prev) node
             $last_node = $node;
-            
+
             if (isset($node['sub']))
             {
                 if (self::HTML_MENU_ENTRY_INACTIVE != $type)
                 {
                     $up_node = $node;
                 }
-                
+
                 $flagStop = $this->_renderPrevNext($node['sub'], $level + 1, $flagStop);
             }
         }
-        
+
         if (0 == $level)
         {
             $this->_renderer->finishRow($level);
             $this->_renderer->finishMenu($level);
         }
-        
+
         return $flagStop;
     }
 
     /**
      * Returns the path of the current page in the menu 'tree'.
-     * 
+     *
      * @return array path to the selected menu item
      */
     public function getPath()
     {
         $this->_currentUrl = $this->getCurrentURL();
         $this->_buildUrlMap($this->_menu, array());
-        
+
         // If there is no match for the current URL, try to come up with
         // the best approximation by shortening the url
         while ($this->_currentUrl && ! isset($this->_urlMap[$this->_currentUrl]))
         {
             $this->_currentUrl = substr($this->_currentUrl, 0, - 1);
         }
-        
+
         return isset($this->_urlMap[$this->_currentUrl]) ? $this->_urlMap[$this->_currentUrl] : array();
     }
 
     /**
      * Builds the mappings from node url to the 'path' in the menu
-     * 
+     *
      * @param array (sub)menu being processed
      * @param array path to the (sub)menu
      * @return boolean true if the path to the current page was found, otherwise false.
@@ -390,18 +390,18 @@ class HtmlMenu
         {
             $url = $node['url'];
             $this->_urlMap[$url] = $path;
-            
+
             if ($url == $this->_currentUrl)
             {
                 return true;
             }
-            
+
             if (isset($node['sub']) && $this->_buildUrlMap($node['sub'], array_merge($path, array($nodeId))))
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 

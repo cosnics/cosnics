@@ -43,5 +43,5 @@ interface HeaderInterface
      *
      * @return string
      */
-    public function toHtml();
+    public function render();
 }

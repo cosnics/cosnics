@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Menu\DynamicContentMenu;
 
 /**
  * This class describes a dynamic content menu item.
- * 
+ *
  * @package \libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -12,45 +12,47 @@ class DynamicContentMenuItem
 
     /**
      * The id of the menu
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $id;
 
     /**
      * The name of the menu
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $name;
 
     /**
      * The image of the menu
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $image;
 
     /**
      * The function that renders the content
-     * 
-     * @var String[]
+     *
+     * @var string[]
      */
     private $content_function;
 
     /**
      * The selected variable
-     * 
+     *
      * @var boolean
      */
     private $selected;
 
     /**
      * Constructor
-     * 
-     * @param $id String
-     * @param $name String
-     * @param $image String
+     *
+     * @param string $id
+     * @param string $name
+     * @param string $image
+     * @param string[] $content_function
+     * @param boolean $selected
      */
     public function __construct($id, $name, $image, $content_function, $selected = false)
     {
@@ -62,68 +64,56 @@ class DynamicContentMenuItem
     }
 
     /**
-     * **************************************************************************************************************
-     * Render Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Renders the menu item
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function render_menu_item()
     {
         $html = array();
-        
+
         $html[] = '<li id="' . $this->get_id() . '" class="dynamic_content_menu_item">';
         $html[] = $this->get_name();
         $html[] = '</li>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the menu content
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function render_content()
     {
         $html = array();
-        
+
         $html[] = $this->render_content_header();
         $html[] = call_user_func($this->get_content_function(), $this);
         $html[] = $this->render_content_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Renders the header for the content box
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_content_header()
     {
         $html = array();
-        
+
         $html[] = '<div id="' . $this->get_id() . '" class="dynamic_content_menu_item_content">';
         $html[] = '<div class="dynamic_content_menu_item_content_header"><h3>' . $this->get_name() . '</h3></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the footer for the content box
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_content_footer()
     {
@@ -135,11 +125,11 @@ class DynamicContentMenuItem
      * Getters / Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the id of this menu item
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_id()
     {
@@ -148,8 +138,8 @@ class DynamicContentMenuItem
 
     /**
      * Returns the name of this menu item
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_name()
     {
@@ -158,8 +148,8 @@ class DynamicContentMenuItem
 
     /**
      * Returns the image of this menu item
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_image()
     {
@@ -168,8 +158,8 @@ class DynamicContentMenuItem
 
     /**
      * Returns the function that renders the content
-     * 
-     * @return String[]
+     *
+     * @return string[]
      */
     public function get_content_function()
     {
@@ -178,7 +168,7 @@ class DynamicContentMenuItem
 
     /**
      * Returns the selected of this menu item
-     * 
+     *
      * @return boolean
      */
     public function is_selected()
@@ -188,8 +178,8 @@ class DynamicContentMenuItem
 
     /**
      * Sets the id of this menu item
-     * 
-     * @param $id String
+     *
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -198,8 +188,8 @@ class DynamicContentMenuItem
 
     /**
      * Sets the name of this menu item
-     * 
-     * @param $name String
+     *
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -208,8 +198,8 @@ class DynamicContentMenuItem
 
     /**
      * Sets the image of this menu item
-     * 
-     * @param $image String
+     *
+     * @param string $image
      */
     public function set_image($image)
     {
@@ -218,8 +208,8 @@ class DynamicContentMenuItem
 
     /**
      * Sets the content function that renders the content
-     * 
-     * @param $content_function String[]
+     *
+     * @param string[] $content_function
      */
     public function set_content_function($content_function)
     {
@@ -228,8 +218,8 @@ class DynamicContentMenuItem
 
     /**
      * Sets the selected status of this menu item
-     * 
-     * @param $selected boolean
+     *
+     * @param boolean $selected
      */
     public function set_selected($selected)
     {

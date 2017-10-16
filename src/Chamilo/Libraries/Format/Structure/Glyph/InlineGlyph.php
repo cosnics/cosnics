@@ -33,6 +33,7 @@ abstract class InlineGlyph
      *
      * @param string $type
      * @param string[] $extraClasses
+     * @param string $title
      */
     public function __construct($type, $extraClasses = array(), $title = null)
     {
@@ -112,7 +113,7 @@ abstract class InlineGlyph
     public function getBaseClassNames()
     {
         $baseClassNames[] = 'inline-glyph';
-        
+
         return $baseClassNames;
     }
 

@@ -1,37 +1,104 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
-/*
- * To change this template, choose Tools | Templates and open the template in the editor. @author Pieterjan Broekaert
+/**
+ *
+ * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @author Pieterjan Broekaert
  */
 interface GenericTreeInterface
 {
 
-    public function get_node_url($node_id);
+    /**
+     *
+     * @param integer $nodeId
+     * @return string
+     */
+    public function get_node_url($nodeId);
 
+    /**
+     *
+     * @return integer
+     */
     public function get_current_node_id();
 
-    public function get_node($node_id);
+    /**
+     *
+     * @param unknown $nodeId
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function get_node($nodeId);
 
-    public function node_has_children($node_id);
+    /**
+     *
+     * @param unknown $nodeId
+     * @return boolean
+     */
+    public function node_has_children($nodeId);
 
-    public function get_node_children($node_id);
+    /**
+     *
+     * @param integer $nodeId
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function get_node_children($nodeId);
 
+    /**
+     *
+     * @return string
+     */
     public function get_search_url();
 
+    /**
+     *
+     * @return string
+     */
     public function get_url_format();
 
+    /**
+     *
+     * @return string
+     */
     public function get_root_node_class();
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     * @return string
+     */
     public function get_node_class($node);
 
+    /**
+     *
+     * @return string
+     */
     public function get_root_node_title();
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     * @return string
+     */
     public function get_node_title($node);
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     * @return string
+     */
     public function get_node_safe_title($node);
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     * @return string
+     */
     public function get_node_id($node);
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $node
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
     public function get_node_parent($node);
 }

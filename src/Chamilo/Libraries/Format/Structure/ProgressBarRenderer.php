@@ -1,10 +1,10 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Structure;
 
 /**
  * Renders a progressbar
  *
+ * @package Chamilo\Libraries\Format\Structure
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ProgressBarRenderer
@@ -18,11 +18,10 @@ class ProgressBarRenderer
     /**
      * Renders a progressbar for a given percentage
      *
-     * @param int $progress - progress between 0 and 100
+     * @param integer $progress - progress between 0 and 100
      * @param string $mode
-     * @param int $maxWidth
-     * @param bool $striped
-     *
+     * @param integer $maxWidth
+     * @param boolean $striped
      * @return string
      */
     public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150, $striped = false)
@@ -34,7 +33,7 @@ class ProgressBarRenderer
 
         $contextualClass = $mode == self::MODE_DEFAULT ? '' : 'progress-bar-' . $mode;
 
-        if($striped)
+        if ($striped)
         {
             $contextualClass .= ' progress-bar-striped';
         }
@@ -64,15 +63,14 @@ class ProgressBarRenderer
     /**
      * Validates the progress parameter
      *
-     * @param int $progress
+     * @param integer $progress
      */
     protected function validateProgress($progress)
     {
-        if (!is_int($progress) || $progress < 0 || $progress > 100)
+        if (! is_int($progress) || $progress < 0 || $progress > 100)
         {
             throw new \InvalidArgumentException(
-                'The given progress must be a valid integer and must be between 0 and 100'
-            );
+                'The given progress must be a valid integer and must be between 0 and 100');
         }
     }
 
@@ -83,14 +81,12 @@ class ProgressBarRenderer
      */
     protected function validateMode($mode = self::MODE_DEFAULT)
     {
-        if (!in_array($mode, $this->getAllowedModes()))
+        if (! in_array($mode, $this->getAllowedModes()))
         {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The given mode must be a valid string and must be one of (%s)',
-                    implode(', ', $this->getAllowedModes())
-                )
-            );
+                    implode(', ', $this->getAllowedModes())));
         }
     }
 }

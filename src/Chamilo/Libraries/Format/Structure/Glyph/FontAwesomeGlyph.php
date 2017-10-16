@@ -18,10 +18,10 @@ class FontAwesomeGlyph extends InlineGlyph
     public function getBaseClassNames()
     {
         $baseClassNames = parent::getBaseClassNames();
-        
+
         $baseClassNames[] = 'fa';
         $baseClassNames[] = 'fa-' . $this->getType();
-        
+
         return $baseClassNames;
     }
 }

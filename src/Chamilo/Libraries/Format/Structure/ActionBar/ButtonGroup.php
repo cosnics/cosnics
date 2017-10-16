@@ -25,7 +25,7 @@ class ButtonGroup extends AbstractButtonToolBarItem
     public function __construct($buttons = array(), $classes = array())
     {
         parent::__construct($classes);
-        
+
         $this->buttons = $buttons;
     }
 
@@ -91,8 +91,8 @@ class ButtonGroup extends AbstractButtonToolBarItem
 
     /**
      * Returns whether or not the button group has buttons
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasButtons()
     {

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -72,13 +71,11 @@ class BaseHeader implements HeaderInterface
     /**
      *
      * @param integer $viewMode
+     * @param string $containerMode
      * @param string $languageCode
      * @param string $textDirection
      */
-    public function __construct(
-        $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
-        $textDirection = 'ltr'
-    )
+    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en', $textDirection = 'ltr')
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
@@ -223,13 +220,10 @@ class BaseHeader implements HeaderInterface
 
         $fileConfigurationConsulter = new ConfigurationConsulter(
             new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
-            )
-        );
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
-        );
+            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
 
         $theme = Theme::getInstance()->getTheme();
 
@@ -246,8 +240,7 @@ class BaseHeader implements HeaderInterface
         $stylesheetCacheService = new StylesheetCacheService(
             $pathBuilder,
             $configurablePathBuilder,
-            Theme::getInstance()
-        );
+            Theme::getInstance());
 
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
@@ -262,12 +255,10 @@ class BaseHeader implements HeaderInterface
             Theme::getInstance()->getCommonImagePath('Favicon', 'ico'),
             'shortcut icon',
             null,
-            'image/x-icon'
-        );
+            'image/x-icon');
 
         $this->addHtmlHeader(
-            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
-        );
+            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>');
 
         $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
 
@@ -315,8 +306,7 @@ class BaseHeader implements HeaderInterface
     public function addJavascriptCDNFiles()
     {
         $this->addJavascriptFile(
-            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML'
-        );
+            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML');
     }
 
     /**
@@ -333,11 +323,22 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Creates the HTML output for the header.
-     * This function will send all http headers to the browser and return the
-     * head-tag of the html document
+     *
+     * @return string
+     * @deprecated Use render() now
      */
     public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Creates the HTML output for the header.
+     * This function will send all http headers to the browser and return the head-tag of the html document
+     *
+     * @return string
+     */
+    public function render()
     {
         $this->addDefaultHeaders();
 
@@ -345,7 +346,7 @@ class BaseHeader implements HeaderInterface
 
         $html[] = '<!DOCTYPE html>';
         $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->getLanguageCode() . '" lang="' .
-            $this->getLanguageCode() . '">';
+             $this->getLanguageCode() . '">';
         $html[] = '<head>';
 
         $htmlHeaders = $this->getHtmlHeaders();

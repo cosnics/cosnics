@@ -3,23 +3,40 @@ namespace Chamilo\Libraries\Format\Structure;
 
 /**
  * A standard panel containing HTML content.
- * 
+ *
+ * @package Chamilo\Libraries\Format\Structure
  * @author Tom Goethals
  */
 class Panel
 {
 
+    /**
+     *
+     * @var string
+     */
     private $id;
 
+    /**
+     *
+     * @var string
+     */
     private $content;
 
+    /**
+     *
+     * @var integer
+     */
     private $width;
 
+    /**
+     *
+     * @var string
+     */
     private $unit;
 
     /**
      *
-     * @param integer $id The id of this panel
+     * @param string $id The id of this panel
      * @param string $content The HTML content for this panel
      * @param integer $width The starting width of this panel, in the same unit as $unit
      * @param string $unit The unit for the width, default %
@@ -34,7 +51,7 @@ class Panel
 
     /**
      *
-     * @return the $id
+     * @return string
      */
     public function get_id()
     {
@@ -43,7 +60,7 @@ class Panel
 
     /**
      *
-     * @param $id the $id to set
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -52,7 +69,7 @@ class Panel
 
     /**
      *
-     * @return the $content
+     * @return string
      */
     public function get_content()
     {
@@ -61,7 +78,7 @@ class Panel
 
     /**
      *
-     * @param $content the $content to set
+     * @param string $content
      */
     public function set_content($content)
     {
@@ -70,7 +87,7 @@ class Panel
 
     /**
      *
-     * @return the $unit
+     * @return string
      */
     public function get_unit()
     {
@@ -79,7 +96,7 @@ class Panel
 
     /**
      *
-     * @param $unit the $unit to set
+     * @param string $unit
      */
     public function set_unit($unit)
     {
@@ -88,7 +105,7 @@ class Panel
 
     /**
      *
-     * @return the $width
+     * @return integer
      */
     public function get_width()
     {
@@ -97,7 +114,7 @@ class Panel
 
     /**
      *
-     * @param $width the $width to set
+     * @param integer $width
      */
     public function set_width($width)
     {
@@ -108,7 +125,7 @@ class Panel
      * Creates the header HTML.
      * $last indicates whether or not this is the last panel in the sequence.
      * The last panel should not get the "resizable" css.
-     * 
+     *
      * @param boolean $last
      * @return string
      */
@@ -136,7 +153,7 @@ class Panel
 
     /**
      * Returns the HTML for the panel and its content.
-     * 
+     *
      * @param boolean $last = false
      * @return string
      */

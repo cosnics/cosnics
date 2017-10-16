@@ -3,20 +3,29 @@ namespace Chamilo\Libraries\Format\Structure;
 
 /**
  * This renderer shows a collection of panels as resizable elements in an accordeon-like construction.
- * 
+ *
+ * @package Chamilo\Libraries\Format\Structure
  * @author Tom Goethals
  */
 class SplitPanelRenderer
 {
 
+    /**
+     *
+     * @var string
+     */
     private $name;
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Structure\Panel[]
+     */
     private $panels;
 
     /**
      * Constructs a new SplitPanelRenderer.
-     * 
-     * @param string name The name for this renderer.
+     *
+     * @param string name
      */
     public function __construct($name)
     {
@@ -26,7 +35,7 @@ class SplitPanelRenderer
 
     /**
      *
-     * @return the $name
+     * @return string
      */
     public function get_name()
     {
@@ -35,7 +44,7 @@ class SplitPanelRenderer
 
     /**
      *
-     * @return the $panels
+     * @return \Chamilo\Libraries\Format\Structure\Panel[]
      */
     public function get_panels()
     {
@@ -44,7 +53,7 @@ class SplitPanelRenderer
 
     /**
      *
-     * @param $name the $name to set
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -53,7 +62,7 @@ class SplitPanelRenderer
 
     /**
      *
-     * @param $panels the $panels to set
+     * @param \Chamilo\Libraries\Format\Structure\Panel[] $panels
      */
     public function set_panels($panels)
     {
@@ -61,48 +70,51 @@ class SplitPanelRenderer
     }
 
     /**
-     * Retrieves the number of panels
+     *
+     * @return integer
      */
     public function size()
     {
-        return count($this - panels);
+        return count($this->panels);
     }
 
     /**
      *
-     * @param Panel $panel
+     * @param \Chamilo\Libraries\Format\Structure\Panel $panel
      */
-    public function add_panel(Panel $pnl)
+    public function add_panel(Panel $panel)
     {
-        $pnl->set_id($this->name . '_' . count($this->panels)); // $pnl->get_id());
-        $this->panels[] = $pnl;
+        $panel->set_id($this->name . '_' . count($this->panels));
+        $this->panels[] = $panel;
     }
 
     /**
      * Creates the header html for this renderer.
-     * 
-     * @return type
+     *
+     * @return string
      */
     public function header()
     {
         $html = array();
-        
+
         $html[] = '<div id="' . $this->name . '_panels">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Creates the footer html for this renderer, also includes javascript for the panels.
+     *
+     * @return string
      */
     public function footer()
     {
         $html = array();
         $html[] = '</div>';
-        
+
         $totalwidth = $this->get_panel_widths();
         $baseid = $this->get_name() . '_';
-        
+
         // TODO: replace this with a decent include once the chamilo included jquery ui has been updated to the right
         // version
         $html[] = '<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>';
@@ -117,10 +129,11 @@ class SplitPanelRenderer
                 leftpanel.resizable({
                     resize: function (event, ui) {
                         var leftid = event.target.id;
-                        var rightid = "' . $baseid . '" + (parseInt(leftid.substring(' . strlen($baseid) . ')) + 1);
+                        var rightid = "' .
+             $baseid . '" + (parseInt(leftid.substring(' . strlen($baseid) . ')) + 1);
                         var left = $("#" + leftid);
                         var right = $("#" + rightid);';
-        
+
         if ($this->panels[0]->get_unit() == '%')
         {
             $html[] = '                 var w = getPanelWidth(rightid, ' . $totalwidth .
@@ -130,7 +143,7 @@ class SplitPanelRenderer
         {
             $html[] = '                 var w = getPanelWidth(rightid, ' . $totalwidth . ');';
         }
-        
+
         $html[] = '
                         var minW = 15 * left.offsetParent().width() / 100;
                         if (w < minW) {
@@ -142,13 +155,15 @@ class SplitPanelRenderer
                     },
                     start: function(event, ui) {
                         var leftid = event.target.id;
-                        var rightid = "' . $baseid . '" + (parseInt(leftid.substring(' . strlen($baseid) . ')) + 1);
+                        var rightid = "' .
+             $baseid . '" + (parseInt(leftid.substring(' . strlen($baseid) . ')) + 1);
                         var left = $("#" + leftid);
                         var right = $("#" + rightid);
                         //add a mask over the Iframe to prevent IE from stealing mouse events
                         $(\'<div class="ui-draggable-iframeFix" style="background: #fff;"></div>\')
                             .css({
-                                width: ' . right . '.width()+"px", height: ' . right . '.height()+"px",
+                                width: ' . right .
+             '.width()+"px", height: ' . right . '.height()+"px",
                                 position: "absolute", opacity: "0.001", zIndex: 1000
                             })
                             .css(' . right . '.offset())
@@ -167,7 +182,7 @@ class SplitPanelRenderer
                 leftpanel.resizable("option", "maxHeight", leftpanel.height());
             }
         });';
-        
+
         $html[] = 'function getPanelWidth(exclude, staticw) {
             var npanels = ' . sizeof($this->panels) . ';
             var width = staticw;
@@ -178,50 +193,57 @@ class SplitPanelRenderer
             }
             return width;
         }';
+
         $html[] = '</script>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Calculates the total default width of all panels.
-     * 
-     * @return type
+     *
+     * @return integer
      */
     private function get_panel_widths()
     {
         $width = 0;
+
         foreach ($this->panels as $key => $panel)
         {
             $width += $panel->get_width();
         }
+
         return $width;
     }
 
     /**
      * Renders the actual body of the accordeon.
-     * 
-     * @return type
+     *
+     * @return string
      */
     public function render()
     {
         $html = array();
+
         $html[] = $this->header();
-        
+
         // Tab content
         $panels = $this->get_panels();
-        
+
         foreach ($panels as $key => $panel)
         {
             if ($key == sizeof($panels) - 1)
+            {
                 $html[] = $panel->body(true);
+            }
             else
             {
                 $html[] = $panel->body(false);
             }
         }
-        
+
         $html[] = $this->footer();
+
         return implode(PHP_EOL, $html);
     }
 }

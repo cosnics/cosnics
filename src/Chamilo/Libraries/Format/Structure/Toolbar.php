@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 /**
  *
- * @package common.html.toolbar
+ * @package Chamilo\Libraries\Format\Structure
  */
 class Toolbar
 {
@@ -16,13 +16,13 @@ class Toolbar
 
     /**
      *
-     * @var array
+     * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
     private $items = array();
 
     /**
      *
-     * @var array
+     * @var string[]
      */
     private $class_names = array();
 
@@ -41,7 +41,7 @@ class Toolbar
     /**
      *
      * @param string $type
-     * @param array $class_names
+     * @param string[] $class_names
      * @param string $css
      */
     public function __construct($type = self :: TYPE_HORIZONTAL, $class_names = array(), $css = null)
@@ -72,7 +72,7 @@ class Toolbar
     /**
      * Returns the toolbaritem from the given position
      *
-     * @param int $index
+     * @param integer $index
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem
      */
     public function get_item($index)
@@ -83,8 +83,8 @@ class Toolbar
     /**
      * Inserts an item in the toolbar
      *
-     * @param ToolbarItem $item
-     * @param int $index
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
+     * @param integer $index
      */
     public function insert_item(ToolbarItem $item, $index)
     {
@@ -96,8 +96,8 @@ class Toolbar
     /**
      * Replaces an item in the toolbar
      *
-     * @param ToolbarItem $item
-     * @param int $index
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
+     * @param integer $index
      */
     public function replace_item(ToolbarItem $item, $index)
     {
@@ -108,7 +108,7 @@ class Toolbar
 
     /**
      *
-     * @param ToolbarItem $item
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
      */
     public function add_item(ToolbarItem $item)
     {
@@ -117,7 +117,7 @@ class Toolbar
 
     /**
      *
-     * @param ToolbarItem $item
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
      */
     public function prepend_item(ToolbarItem $item)
     {
@@ -126,7 +126,7 @@ class Toolbar
 
     /**
      *
-     * @param array $items
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
     public function add_items($items)
     {
@@ -215,11 +215,20 @@ class Toolbar
         return implode($html);
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function has_items()
     {
         return count($this->items) > 0;
     }
 
+    /**
+     *
+     * @param boolean $keepDisplayProperty
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+     */
     public function convertToButtonToolBar($keepDisplayProperty = true)
     {
         $buttonToolbar = new ButtonToolBar();
