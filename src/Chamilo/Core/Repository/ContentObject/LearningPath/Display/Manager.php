@@ -50,6 +50,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_SHOW_STUDENT_VIEW = 'ShowStudentView';
     const ACTION_DISABLE_STUDENT_VIEW = 'DisableStudentView';
     const ACTION_EXPORT_REPORTING = 'ReportingExporter';
+    const ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'ToggleEnforceDefaultTraversingOrder';
 
     // Parameters
     const PARAM_STEP = 'step';

@@ -130,6 +130,20 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $user->setId(Session::get_user_id());
 
         $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
+
+        return true;
+    }
+
+    public function update($trueUpdate = true)
+    {
+        if(!parent::update($trueUpdate))
+        {
+            return false;
+        }
+
+        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
+
+        return true;
     }
 
     /**
@@ -149,7 +163,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 
     /**
      *
-     * @return object | TreeNodeDataService
+     * @return object | \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      */
     protected function getTreeNodeDataService()
     {
@@ -161,7 +175,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
 
     /**
      *
-     * @return object | LearningPathService
+     * @return object |  \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      */
     protected function getLearningPathService()
     {

@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
@@ -122,13 +123,32 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $html[] = $this->renderMovePanel();
         }
 
-        if ($this->canEditCurrentTreeNode() && (($this->getCurrentTreeNode()->getTreeNodeData() &&
-             $this->getCurrentTreeNode()->getTreeNodeData()->isBlocked()) ||
-             $this->learningPath->enforcesDefaultTraversingOrder()))
+        if ($this->canEditCurrentTreeNode() &&
+            (
+                (
+                    $this->getCurrentTreeNode()->getTreeNodeData() &&
+                    $this->getCurrentTreeNode()->getTreeNodeData()->isBlocked()
+                ) ||
+                $this->getCurrentTreeNode()->isInDefaultTraversingOrder()
+            )
+        )
         {
-            $message = $this->learningPath->enforcesDefaultTraversingOrder() ? 'LearningPathEnforcesDefaultTraversingOrder' : 'ThisStepIsRequired';
+            $firstParent = $this->getCurrentTreeNode()->getFirstParentThatEnforcesDefaultTraversingOrder();
+            $title = ($firstParent instanceof TreeNode) ?
+                $this->getAutomaticNumberingService()->getAutomaticNumberedTitleForTreeNode($firstParent) : '';
 
-            $html[] = '<div class="alert alert-warning">' . $translator->getTranslation($message) . '</div>';
+            $message = $this->getCurrentTreeNode()->isInDefaultTraversingOrder() ?
+                'LearningPathEnforcesDefaultTraversingOrder' : 'ThisStepIsRequired';
+
+            $html[] = '<div class="alert alert-warning">' .
+                $translator->getTranslation($message, array('DefaultTraversingOrderParent' => $title)) . '</div>';
+        }
+
+        if ($this->canEditCurrentTreeNode() &&
+            $this->getCurrentTreeNode()->getTreeNodeData()->enforcesDefaultTraversingOrder())
+        {
+            $html[] = '<div class="alert alert-warning">' .
+                $translator->getTranslation('ThisStepEnforcesDefaultTraversingOrder') . '</div>';
         }
 
         $html[] = $embedder->run();
@@ -369,26 +389,62 @@ class ViewerComponent extends BaseHtmlTreeComponent
         /** @var LearningPath $learningPath */
         $learningPath = $this->get_root_content_object();
 
-        if (! $this->canEditCurrentTreeNode() || $learningPath->enforcesDefaultTraversingOrder() ||
-             $treeNode->isRootNode())
+        if (!$this->canEditCurrentTreeNode()
+            || $treeNode->isInDefaultTraversingOrder()
+        )
         {
             return;
         }
 
-        $translationVariable = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'MarkAsOptional' : 'MarkAsRequired';
+        if (!$treeNode->isRootNode())
+        {
+            $translationVariable = ($treeNode->getTreeNodeData() &&
+                $treeNode->getTreeNodeData()->isBlocked()) ?
+                'MarkAsOptional' : 'MarkAsRequired';
 
-        $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
+            $icon = ($treeNode->getTreeNodeData() &&
+                $treeNode->getTreeNodeData()->isBlocked()) ?
+                'unlock' : 'ban';
 
-        $moveButton = new SubButton(
-            $translator->getTranslation($translationVariable, null, Manager::context()),
-            new FontAwesomeGlyph($icon),
-            $this->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
-                    self::PARAM_CHILD_ID => $treeNode->getId())),
-            Button::DISPLAY_ICON_AND_LABEL);
+            $blockNode = new SubButton(
+                $translator->getTranslation($translationVariable, null, Manager::context()),
+                new FontAwesomeGlyph($icon),
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
+                        self::PARAM_CHILD_ID => $treeNode->getId()
+                    )
+                ),
+                Button::DISPLAY_ICON_AND_LABEL
+            );
 
-        $button->addSubButton($moveButton);
+            $button->addSubButton($blockNode);
+        }
+
+        if ($treeNode->getContentObject() instanceof Section || $treeNode->isRootNode())
+        {
+            $translationVariable = ($treeNode->getTreeNodeData() &&
+                $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+                'DisableDefaultTraversingOrder' : 'EnableDefaultTraversingOrder';
+
+            $icon = ($treeNode->getTreeNodeData() &&
+                $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
+                'sitemap' : 'sitemap';
+
+            $blockNode = new SubButton(
+                $translator->getTranslation($translationVariable, null, Manager::context()),
+                new FontAwesomeGlyph($icon),
+                $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
+                        self::PARAM_CHILD_ID => $treeNode->getId()
+                    )
+                ),
+                Button::DISPLAY_ICON_AND_LABEL
+            );
+
+            $button->addSubButton($blockNode);
+        }
     }
 
     /**
