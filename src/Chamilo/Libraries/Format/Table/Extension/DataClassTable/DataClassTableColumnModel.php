@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Table\TableColumnModel;
 
 /**
  *
+ * @package Chamilo\Libraries\Format\Table\Extension\DataClassTable
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop>
  */
