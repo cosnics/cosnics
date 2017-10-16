@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,17 +6,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Form type to declare two date pickers, one with a start date, one with an end date. The date pickers are linked
+ * Form type to declare two date pickers, one with a start date, one with an end date.
+ * The date pickers are linked
  * to eachother so that the start date can never be bigger then the end date
  *
- * @package common\libraries
- *
+ * @package Chamilo\Libraries\Format\Form\FormType
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class StartEndDatePickerFormType extends AbstractType
 {
+
     /**
-     * {@inheritdoc}
+     *
+     * @see \Symfony\Component\Form\AbstractType::buildForm()
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -26,21 +27,17 @@ class StartEndDatePickerFormType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     *
+     * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => null,
-            )
-        );
+        $resolver->setDefaults(array('data_class' => null));
     }
 
     /**
-     * Returns the name of this type.
      *
-     * @return string The name of this type
+     * @see \Symfony\Component\Form\AbstractType::getName()
      */
     public function getName()
     {

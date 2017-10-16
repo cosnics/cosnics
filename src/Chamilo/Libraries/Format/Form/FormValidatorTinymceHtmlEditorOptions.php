@@ -5,7 +5,8 @@ use Chamilo\Libraries\File\Path;
 
 /**
  * The combination of options available for the FormValidatorCkeditorHtmlEditor
- * 
+ *
+ * @package Chamilo\Libraries\Format\Form
  * @author Scaramanga
  */
 class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptions
@@ -21,8 +22,8 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
 
     private $toolbars = array(
         'Basic' => array(
-            self::OPTION_TOOLBAR_LINE_1 => 'bold,italic,underline,separator,numlist,bullist,separator,link,unlink,separator,forecolor,backcolor,separator,hr,separator,image,template', 
-            self::OPTION_TOOLBAR_LINE_2 => '', 
+            self::OPTION_TOOLBAR_LINE_1 => 'bold,italic,underline,separator,numlist,bullist,separator,link,unlink,separator,forecolor,backcolor,separator,hr,separator,image,template',
+            self::OPTION_TOOLBAR_LINE_2 => '',
             self::OPTION_TOOLBAR_LINE_3 => ''));
 
     public function get_option_names()
@@ -42,20 +43,20 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
     public function get_mapping()
     {
         $mapping = parent::get_mapping();
-        
+
         $mapping[self::OPTION_THEME] = 'theme';
         // $mapping[self :: OPTION_COLLAPSE_TOOLBAR] = 'toolbarStartupExpanded';
         // $mapping[self :: OPTION_CONFIGURATION] = 'script_url';
         // $mapping[self :: OPTION_FULL_PAGE] = 'fullPage';
         $mapping[self::OPTION_TEMPLATES] = 'template_external_list_url';
-        
+
         return $mapping;
     }
 
     public function get_toolbar_format($toolbar_name)
     {
         $toolbars = $this->toolbars;
-        
+
         if (key_exists($toolbar_name, $toolbars))
         {
             return $toolbars[$toolbar_name];
@@ -69,22 +70,22 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
     public function set_defaults()
     {
         parent::set_defaults();
-        
+
         $this->set_option(
-            self::OPTION_SCRIPT_URL, 
+            self::OPTION_SCRIPT_URL,
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/tinymce.min.js');
         $this->set_option(self::OPTION_THEME, 'advanced');
         $this->set_option(self::OPTION_TOOLBAR_LOCATION, 'top');
         $this->set_option(self::OPTION_TOOLBAR_ALIGN, 'left');
         $this->set_option(self::OPTION_BROWSER, 'myFileBrowser');
         $this->set_option(self::OPTION_PLUGIN, 'template,media');
-        
+
         $formats = $this->get_toolbar_format($this->get_option(self::OPTION_TOOLBAR));
         foreach ($formats as $key => $format)
         {
             $this->set_option($key, $format);
         }
-        
+
         $this->set_option(self::OPTION_COLLAPSE_TOOLBAR, null);
         $this->set_option(self::OPTION_TOOLBAR, null);
         $this->set_option(self::OPTION_FULL_PAGE, null);

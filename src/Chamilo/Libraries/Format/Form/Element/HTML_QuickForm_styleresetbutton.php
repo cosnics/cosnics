@@ -2,7 +2,7 @@
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_stylebutton.php';
 /**
  *
- * @package HTML_QuickForm_styleresetbutton
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -25,14 +25,14 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
         {
             $glyph = 'trash';
         }
-        
+
         HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
-        
+
         $this->setType('reset');
-        
+
         $defaultAttributes = array();
         $defaultAttributes[] = $this->getAttribute('class');
-        
+
         $this->setAttribute('class', implode(' ', $defaultAttributes));
     }
 

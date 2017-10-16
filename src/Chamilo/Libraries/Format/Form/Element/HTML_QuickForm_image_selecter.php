@@ -8,13 +8,9 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- *
- * @package common.html.formvalidator.Element
- */
-
-/**
  * AJAX-based tree search and image selecter.
  *
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Hans De Bisschop
  */
 class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
@@ -22,22 +18,63 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
     const DEFAULT_HEIGHT = 300;
     const DEFAULT_WIDTH = 365;
 
+    /**
+     *
+     * @var boolean
+     */
     private static $initialized;
 
+    /**
+     *
+     * @var string
+     */
     private $search_url;
 
+    /**
+     *
+     * @var string[]
+     */
     private $locale;
 
+    /**
+     *
+     * @var boolean
+     */
     private $default_collapsed;
 
+    /**
+     *
+     * @var integer
+     */
     private $height;
 
+    /**
+     *
+     * @var integer
+     */
     private $width;
 
+    /**
+     *
+     * @var integer[]
+     */
     private $exclude;
 
+    /**
+     *
+     * @var integer[]
+     */
     private $defaults;
 
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string $search_url
+     * @param string[] $locale
+     * @param integer[] $default
+     * @param string[] $options
+     */
     public function __construct($elementName = null, $elementLabel = null, $search_url = null,
         $locale = array('Display' => 'Display'), $default = array(), $options = array('rescale_image' => true, 'allow_change' => false))
     {
@@ -55,41 +92,73 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $this->setValue($default);
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isCollapsed()
     {
         return $this->isDefaultCollapsed() && ! count($this->getValue());
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isDefaultCollapsed()
     {
         return $this->default_collapsed;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getHeight()
     {
         return $this->height;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getWidth()
     {
         return $this->width;
     }
 
-    public function excludeElements($excluded_ids)
+    /**
+     *
+     * @param integer[] $excludedIds
+     */
+    public function excludeElements($excludedIds)
     {
-        $this->exclude = array_merge($this->exclude, $excluded_ids);
+        $this->exclude = array_merge($this->exclude, $excludedIds);
     }
 
-    public function setDefaultCollapsed($default_collapsed)
+    /**
+     *
+     * @param boolean $defaultCollapsed
+     */
+    public function setDefaultCollapsed($defaultCollapsed)
     {
-        $this->default_collapsed = $default_collapsed;
+        $this->default_collapsed = $defaultCollapsed;
     }
 
+    /**
+     *
+     * @param integer $height
+     */
     public function setHeight($height)
     {
         $this->height = $height;
     }
 
+    /**
+     *
+     * @param integer $width
+     */
     public function setWidth($width)
     {
         $this->height = $width;
@@ -105,11 +174,19 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
             array('class' => 'element_query', 'id' => $this->getName() . '_search_field'));
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::getValue()
+     */
     public function getValue()
     {
         return $this->_elements[0]->getValue();
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::exportValue()
+     */
     public function exportValue($submitValues, $assoc = false)
     {
         if ($assoc)
@@ -120,11 +197,19 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         return $this->getValue();
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::setValue()
+     */
     public function setValue($value)
     {
         $this->_elements[0]->setValue($value);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function toHTML()
     {
         $calculator = new \Chamilo\Core\Repository\Quota\Calculator(
@@ -303,16 +388,31 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param integer[] $defaults
+     */
     public function setDefaults($defaults)
     {
         $this->defaults = $defaults;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::accept()
+     */
     public function accept($renderer, $required = false, $error = null)
     {
         $renderer->renderElement($this, $required, $error);
     }
 
+    /**
+     *
+     * @param string $elementName
+     * @param string[] $dropzoneOptions
+     * @param boolean $includeLabel
+     * @return string
+     */
     protected function addFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true)
     {
         $dropzoneHtml = array();
@@ -393,7 +493,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
      * Helper Function
      *
      * @param string $variable
-     * @param array $parameters
+     * @param string[] $parameters
      *
      * @return string
      */

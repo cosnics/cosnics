@@ -2,32 +2,13 @@
 namespace Chamilo\Libraries\Format\Form;
 
 /**
- * Class representing a page of a multipage form in the formvalidator extension.
- * PHP versions 4 and 5
- * LICENSE: This source file is subject to version 3.01 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_01.txt If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
- *
- * @package common.html.formvalidator
- * @author Alexey Borzov <avb@php.net>
- * @author Bertrand Mansion <bmansion@mamasam.com>
- * @copyright 2003-2007 The PHP Group
- * @license http://www.php.net/license/3_01.txt PHP License 3.01
- * @link http://pear.php.net/package/HTML_QuickForm_Controller
- */
-
-/**
  * Create, validate and process HTML forms
- */
-
-/**
  * Class representing a page of a multipage form in the formvalidator extension.
  * Generally you'll need to subclass this and define your buildForm()
  * method that will build the form. While it is also possible to instantiate
  * this class and build the form manually, this is not the recommended way.
  *
+ * @package Chamilo\Libraries\Format\Form
  * @category HTML
  * @author Alexey Borzov <avb@php.net>
  * @author Bertrand Mansion <bmansion@mamasam.com>

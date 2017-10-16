@@ -1,19 +1,14 @@
 <?php
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- *
- * @package common.html.formvalidator.Element
- */
-
-/**
  * Advanced ajax based element finder.
  * Includes multiple entities, advanced filtering, multiple selects
  *
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Sven Vanpoucke
  */
 class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
@@ -32,28 +27,28 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     /**
      * Height of this element
      *
-     * @var int
+     * @var integer
      */
     private $height;
 
     /**
      * Width of the element
      *
-     * @var int
+     * @var integer
      */
     private $width;
 
     /**
      * List of types of elements on which can be searched
      *
-     * @var AdvancedElementFinderElementTypes
+     * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes
      */
     private $element_types;
 
     /**
      * List of default selected elements
      *
-     * @var AdvancedElementFinderElements
+     * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
      */
     private $default_values;
 
@@ -61,13 +56,20 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * An array of configuration values for the elementfinder (eg.
      * max number of selectable items)
      *
-     * @var array
+     * @var string[]
      */
     private $configuration;
 
-    public function __construct(
-        $elementName = null, $elementLabel = null, $element_types = null, $default_values = null, $config = array()
-    )
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes $elementTypes
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements $defaultValues
+     * @param string[] $config
+     */
+    public function __construct($elementName = null, $elementLabel = null, $elementTypes = null, $defaultValues = null,
+        $config = array())
     {
         HTML_QuickForm_element::__construct($elementName, $elementLabel);
 
@@ -76,66 +78,97 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_persistantFreeze = true;
         $this->_appendName = false;
 
-        $this->element_types = $element_types;
+        $this->element_types = $elementTypes;
 
         $this->height = self::DEFAULT_HEIGHT;
         $this->width = self::DEFAULT_WIDTH;
 
-        if (!empty($element_types))
+        if (! empty($elementTypes))
         {
             $this->build_elements();
         }
 
-        $this->setDefaultValues($default_values);
+        $this->setDefaultValues($defaultValues);
     }
 
-    // Setters and getters
+    /**
+     *
+     * @return boolean
+     */
     public function isCollapsed()
     {
-        return $this->isDefaultCollapsed() && !count($this->getValue());
+        return $this->isDefaultCollapsed() && ! count($this->getValue());
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isDefaultCollapsed()
     {
         return $this->default_collapsed;
     }
 
+    /**
+     *
+     * @param boolean $default_collapsed
+     */
     public function setDefaultCollapsed($default_collapsed)
     {
         $this->default_collapsed = $default_collapsed;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getHeight()
     {
         return $this->height;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getWidth()
     {
         return $this->width;
     }
 
+    /**
+     *
+     * @param integer $height
+     */
     public function setHeight($height)
     {
         $this->height = $height;
     }
 
+    /**
+     *
+     * @param integer $width
+     */
     public function setWidth($width)
     {
         $this->height = $width;
     }
 
-    public function setDefaultValues($default_values)
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements $defaultValues
+     */
+    public function setDefaultValues($defaultValues)
     {
-        if (!$default_values)
+        if (! $defaultValues)
         {
             return;
         }
 
-        $this->default_values = $default_values;
+        $this->default_values = $defaultValues;
 
         $default_ids = array();
-        foreach ($default_values->get_elements() as $default_value)
+        foreach ($defaultValues->get_elements() as $default_value)
         {
             $default_ids[] = $default_value->get_id();
         }
@@ -159,12 +192,11 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_elements[] = new HTML_QuickForm_hidden(
             'active_hidden_' . $this->getName(),
             null,
-            array('id' => $active_hidden_id)
-        );
+            array('id' => $active_hidden_id));
 
         $element_types_array = array();
         $element_types_array[- 1] = '-- ' . Translation::get('SelectElementType', null, Utilities::COMMON_LIBRARIES) .
-            ' --';
+             ' --';
         foreach ($this->element_types->get_types() as $element_type)
         {
             $element_types_array[$element_type->get_id()] = $element_type->get_name();
@@ -174,31 +206,26 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             'element_types_' . $this->getName(),
             null,
             $element_types_array,
-            array('id' => $element_types_select_box_id)
-        );
+            array('id' => $element_types_select_box_id));
 
         $this->_elements[] = new HTML_QuickForm_text(
             'search_' . $this->getName(),
             null,
-            array('class' => 'element_query', 'id' => 'search_field')
-        );
+            array('class' => 'element_query', 'id' => 'search_field'));
 
         $this->_elements[] = new HTML_QuickForm_button(
             'activate_' . $this->getName(),
             '',
-            array('id' => $activate_button_id, 'class' => 'activate_elements')
-        );
+            array('id' => $activate_button_id, 'class' => 'activate_elements'));
         $this->_elements[] = new HTML_QuickForm_button(
             'deactivate_' . $this->getName(),
             '',
-            array('id' => $deactivate_button_id, 'class' => 'deactivate_elements')
-        );
+            array('id' => $deactivate_button_id, 'class' => 'deactivate_elements'));
     }
 
     /**
-     * Returns the values of the element finder as an associative array
      *
-     * @return Array
+     * @see HTML_QuickForm_group::getValue()
      */
     public function getValue()
     {
@@ -219,7 +246,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     }
 
     /**
-     * Exports the value of this element
+     *
+     * @see HTML_QuickForm_group::exportValue()
      */
     public function exportValue($submitValues, $assoc = false)
     {
@@ -227,9 +255,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     }
 
     /**
-     * Renders the element
      *
-     * @return String
+     * @return string
      */
     public function toHTML()
     {
@@ -243,16 +270,16 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         if ($this->isCollapsed())
         {
             $html[] = '<button id="' . $safe_name . '_expand_button" class="normal select">' .
-                htmlentities(Translation::get('Show', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+                 htmlentities(Translation::get('Show', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
         else
         {
             $html[] = '<button id="' . $safe_name . '_expand_button" style="display: none" class="normal select">' .
-                htmlentities(Translation::get('Show', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+                 htmlentities(Translation::get('Show', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
 
         $html[] = '<div class="element_finder" id="' . $id . '" style="margin-top: 5px;' .
-            ($this->isCollapsed() ? ' display: none;' : '') . '">';
+             ($this->isCollapsed() ? ' display: none;' : '') . '">';
 
         $html[] = $this->_elements[0]->toHTML();
 
@@ -271,12 +298,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         if ($this->isCollapsed())
         {
             $html[] = '<button id="' . $safe_name . '_collapse_button" style="display: none" class="normal hide">' .
-                htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+                 htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
         else
         {
             $html[] = '<button id="' . $safe_name . '_collapse_button" class="normal hide mini">' .
-                htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
+                 htmlentities(Translation::get('Hide', null, Utilities::COMMON_LIBRARIES)) . '</button>';
         }
 
         $html[] = '</div>';
@@ -289,7 +316,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         // Inactive
         $html[] = '<div class="element_finder_inactive">';
         $html[] = '<div id="inactive_elements" class="inactive_elements" style="height: ' . $this->getHeight() .
-            'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
+             'px; width: ' . $this->getWidth() . 'px; overflow: auto;">';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
@@ -304,7 +331,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         // Active
         $html[] = '<div class="element_finder_active">';
         $html[] = '<div id="active_elements" class="active_elements" style="height: ' . $this->getHeight() .
-            'px; width: ' . $this->getWidth() . 'px; overflow: auto;"></div>';
+             'px; width: ' . $this->getWidth() . 'px; overflow: auto;"></div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
@@ -320,8 +347,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'Plugin/Jquery/jquery.advelementfinder.js'
-        );
+                 'Plugin/Jquery/jquery.advelementfinder.js');
         $html[] = '<script type="text/javascript">';
 
         if ($this->default_values)
@@ -330,14 +356,16 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         }
 
         $configuration_json = '';
+
         foreach ($this->configuration as $name => $value)
         {
             $configuration_json .= ' ' . $name . ': ' . $value . ', ';
         }
+
         $configuration_json = substr($configuration_json, 0, strlen($configuration_json) - 2);
 
         $html[] = '$("#' . $id . '").advelementfinder({ name: "' . $safe_name . '", ' . $default_values_text .
-            'elementTypes: ' . json_encode($this->element_types->as_array()) . ',' . $configuration_json . '});';
+             'elementTypes: ' . json_encode($this->element_types->as_array()) . ',' . $configuration_json . '});';
 
         $html[] = '</script>';
 
@@ -345,7 +373,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     }
 
     /**
-     * Accepts this element for rendering
+     *
+     * @see HTML_QuickForm_group::accept()
      */
     public function accept($renderer, $required = false, $error = null)
     {

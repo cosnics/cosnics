@@ -4,15 +4,20 @@ namespace Chamilo\Libraries\Format\Form;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
 {
 
     public function create()
     {
         $form = $this->get_form();
-        
+
         $scripts = $this->get_includes();
-        
+
         foreach ($scripts as $script)
         {
             if (! empty($script))
@@ -20,9 +25,9 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
                 $form->addElement('html', $script);
             }
         }
-        
+
         $form->addElement('html', implode(PHP_EOL, $this->get_javascript()));
-        
+
         return parent::create();
     }
 
@@ -31,7 +36,7 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
         $html = array();
         $html[] = parent::render();
         $html[] = implode(PHP_EOL, $this->get_javascript());
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -44,7 +49,7 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/jquery.tinymce.js');
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce.js');
-        
+
         return $scripts;
     }
 
@@ -62,7 +67,7 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
         $javascript[] = '	});';
         $javascript[] = '});';
         $javascript[] = '</script>';
-        
+
         return $javascript;
     }
 }

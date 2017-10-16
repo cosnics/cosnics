@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 /**
  * Implementation of the property accessor for Chamilo underscore-based getters and setters
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Format\Form
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloPropertyAccessor implements PropertyAccessorInterface
