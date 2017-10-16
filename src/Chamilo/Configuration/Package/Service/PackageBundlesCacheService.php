@@ -4,6 +4,8 @@ namespace Chamilo\Configuration\Package\Service;
 use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -30,7 +32,8 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier);
+        $packageFactory = new PackageFactory(PathBuilder::getInstance(), Translation::getInstance());
+        $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier, $packageFactory);
         $packageList = $packageListBuilder->getPackageList();
         $packageList->get_all_packages();
         $packageList->get_all_packages(true);
