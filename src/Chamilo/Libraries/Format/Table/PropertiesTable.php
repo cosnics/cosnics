@@ -5,6 +5,10 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Table
+ */
 class PropertiesTable extends HTML_Table
 {
 
@@ -12,7 +16,7 @@ class PropertiesTable extends HTML_Table
 
     /**
      * Constructor creates the table
-     * 
+     *
      * @param array $properties
      */
     public function __construct(array $properties)
@@ -20,7 +24,7 @@ class PropertiesTable extends HTML_Table
         parent::__construct(
             array('class' => 'table table-striped table-bordered table-hover table-responsive table-properties'));
         $this->properties = $properties;
-        
+
         $this->build_table();
     }
 
@@ -35,12 +39,12 @@ class PropertiesTable extends HTML_Table
             {
                 $contents = array();
                 $contents[] = $property;
-                
+
                 if (! is_array($values))
                 {
                     $values = array($values);
                 }
-                
+
                 if (count($values) > 0)
                 {
                     foreach ($values as $value)
@@ -48,10 +52,10 @@ class PropertiesTable extends HTML_Table
                         $contents[] = $value;
                     }
                 }
-                
+
                 $this->addRow($contents);
             }
-            
+
             $this->setColAttributes(0, array('class' => 'header'));
         }
         else

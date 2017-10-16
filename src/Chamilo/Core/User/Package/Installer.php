@@ -20,6 +20,15 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     use DependencyInjectionContainerTrait;
 
     /**
+     * Constructor
+     */
+    public function __construct($formValues)
+    {
+        parent::__construct($formValues);
+        $this->initializeContainer();
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */

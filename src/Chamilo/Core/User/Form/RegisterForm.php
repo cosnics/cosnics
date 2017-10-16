@@ -43,6 +43,7 @@ class RegisterForm extends FormValidator
     {
         parent::__construct('user_settings', 'post', $action);
 
+        $this->initializeContainer();
         $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
         $this->user = $user;
         $this->build_creation_form();

@@ -6,6 +6,8 @@ use Chamilo\Libraries\Platform\Security;
 
 /**
  * Sortable table which can be used for data available in an array
+ *
+ * @package Chamilo\Libraries\Format\Table
  */
 class SortableTableFromArray extends SortableTable
 {

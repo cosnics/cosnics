@@ -20,6 +20,11 @@ class LdapParser
 {
     use DependencyInjectionContainerTrait;
 
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
     /**
      *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities

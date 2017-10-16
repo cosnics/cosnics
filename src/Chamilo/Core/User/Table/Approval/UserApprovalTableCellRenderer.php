@@ -21,6 +21,19 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
     use DependencyInjectionContainerTrait;
 
     /**
+     * Constructor
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @throws \Exception
+     */
+    public function __construct($table)
+    {
+        parent::__construct($table);
+
+        $this->initializeContainer();
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */

@@ -53,6 +53,7 @@ class UserImportForm extends FormValidator
     {
         parent::__construct('user_import', 'post', $action);
 
+        $this->initializeContainer();
         $this->form_user = $form_user;
         $this->form_type = $form_type;
         $this->failedcsv = array();
