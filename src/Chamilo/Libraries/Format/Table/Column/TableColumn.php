@@ -7,9 +7,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class represents a column for a table Refactoring from ObjectTable to split between a table based on a record
- * and based on an object (@TODO: Used New in the name because of the fact that there is currently a class with the name
- * TableColumn)
+ * and based on an object
  *
+ * @package Chamilo\Libraries\Format\Table\Column
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableColumn
@@ -17,12 +17,6 @@ abstract class TableColumn
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
     const CSS_CLASSES_COLUMN_HEADER = 'header';
     const CSS_CLASSES_COLUMN_CONTENT = 'content';
-
-    /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
 
     /**
      * The name of the column
@@ -39,7 +33,7 @@ abstract class TableColumn
     /**
      * Whether or not the column is sortable
      *
-     * @var bool
+     * @var boolean
      */
     private $sortable;
 
@@ -51,17 +45,10 @@ abstract class TableColumn
     protected $cssClasses;
 
     /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Constructor
      *
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
-     * @param bool $sortable - [OPTIONAL] default null
+     * @param boolean $sortable - [OPTIONAL] default null
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
@@ -97,12 +84,6 @@ abstract class TableColumn
                 self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
                 self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses));
     }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the name of this column

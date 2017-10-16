@@ -7,35 +7,30 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * This class represents a table form action
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
- * 
+ *
+ * @package Chamilo\Libraries\Format\Table\FormAction
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class TableFormAction
 {
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * The action parameter
-     * 
+     *
      * @var string
      */
     private $action;
 
     /**
      * The title
-     * 
+     *
      * @var string
      */
     private $title;
 
     /**
      * Whether or not a confirm box is necessary
-     * 
+     *
      * @var bool
      */
     private $confirm;
@@ -47,17 +42,10 @@ class TableFormAction
     private $confirmationMessage;
 
     /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * Constructor
-     * 
+     *
      * @param string $action
      * @param string $title
-     * @param bool $confirm
+     * @param boolean $confirm
      * @param string $confirmationMessage
      */
     public function __construct($action, $title, $confirm = true, $confirmationMessage = null)
@@ -69,14 +57,8 @@ class TableFormAction
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the action
-     * 
+     *
      * @return string
      */
     public function get_action()
@@ -86,7 +68,7 @@ class TableFormAction
 
     /**
      * Returns the title
-     * 
+     *
      * @return string
      */
     public function get_title()
@@ -96,8 +78,8 @@ class TableFormAction
 
     /**
      * Returns the confirm flag
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     public function get_confirm()
     {
@@ -106,7 +88,7 @@ class TableFormAction
 
     /**
      * Sets the action
-     * 
+     *
      * @param string $action
      */
     public function set_action($action)
@@ -116,7 +98,7 @@ class TableFormAction
 
     /**
      * Sets the title
-     * 
+     *
      * @param string $title
      */
     public function set_title($title)
@@ -126,8 +108,8 @@ class TableFormAction
 
     /**
      * Sets the confirm flag
-     * 
-     * @param bool $confirm
+     *
+     * @param boolean $confirm
      */
     public function set_confirm($confirm)
     {
@@ -155,15 +137,15 @@ class TableFormAction
     public function getConfirmation()
     {
         $confirmation = false;
-        
+
         if ($this->get_confirm() == true)
         {
             $confirmation = $this->getConfirmationMessage() ? $this->getConfirmationMessage() : Translation::get(
-                'ConfirmYourSelectionAndAction', 
-                null, 
+                'ConfirmYourSelectionAndAction',
+                null,
                 Utilities::COMMON_LIBRARIES);
         }
-        
+
         return $confirmation;
     }
 }
