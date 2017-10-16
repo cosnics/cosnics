@@ -36,11 +36,10 @@ class BrowserComponent extends TabComponent implements TableSupport
      */
     protected function getTableHtml()
     {
-        $parameters = $this->get_parameters(true);
-
+        $parameters = $this->get_parameters();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_BROWSE;
 
-        $course_group_table = new CourseGroupTable($this, new CourseGroupTableDataProvider($this));
+        $course_group_table = new CourseGroupTable($this);
 
         return $course_group_table->as_html();
     }

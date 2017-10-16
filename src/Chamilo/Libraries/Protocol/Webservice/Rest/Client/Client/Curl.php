@@ -36,7 +36,7 @@ class Curl extends RestClient
         parent::__construct($baseUrl);
         $this->set_mode(self::MODE_CURL);
 
-        $this->set_check_targetCertificate(false);
+        $this->set_check_target_certificate(false);
     }
 
     /**
@@ -54,7 +54,7 @@ class Curl extends RestClient
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
 
-        if ($this->get_check_targetCertificate())
+        if ($this->get_check_target_certificate())
         {
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 2);
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, true);
