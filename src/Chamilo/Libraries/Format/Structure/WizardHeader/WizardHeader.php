@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Format\Structure\WizardHeader;
 
 /**
  * Describes a header for a wizard
- * 
+ *
+ * @package Chamilo\Libraries\Format\Structure\WizardHeader
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class WizardHeader
@@ -11,18 +12,23 @@ class WizardHeader
 
     /**
      * The titles of steps in the wizard
-     * 
+     *
      * @var string[]
      */
     private $stepTitles;
 
     /**
      * The index of the selected step
-     * 
-     * @var int
+     *
+     * @var integer
      */
     private $selectedStepIndex;
 
+    /**
+     *
+     * @param string[] $stepTitles
+     * @param integer $selectedStepIndex
+     */
     public function __construct($stepTitles = array(), $selectedStepIndex = 0)
     {
         $this->stepTitles = $stepTitles;
@@ -31,7 +37,7 @@ class WizardHeader
 
     /**
      *
-     * @return \string[]
+     * @return string[]
      */
     public function getStepTitles()
     {
@@ -40,7 +46,7 @@ class WizardHeader
 
     /**
      *
-     * @param \string[] $stepTitles
+     * @param string[] $stepTitles
      */
     public function setStepTitles($stepTitles)
     {
@@ -49,7 +55,7 @@ class WizardHeader
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getSelectedStepIndex()
     {
@@ -58,7 +64,7 @@ class WizardHeader
 
     /**
      *
-     * @param int $selectedStepIndex
+     * @param integer $selectedStepIndex
      */
     public function setSelectedStepIndex($selectedStepIndex)
     {
@@ -67,10 +73,10 @@ class WizardHeader
 
     /**
      * Checks whether or not the given step index is currently selected
-     * 
-     * @param int $stepIndex
      *
-     * @return bool
+     * @param integer $stepIndex
+     *
+     * @return boolean
      */
     public function isStepSelected($stepIndex)
     {
@@ -79,7 +85,7 @@ class WizardHeader
 
     /**
      * Adds a step title
-     * 
+     *
      * @param string $stepTitle
      */
     public function addStepTitle($stepTitle)

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
  * Generates a breadcrumb based on the package and component name. Includes the
  * possibility to add additional breadcrumbs between the package breadcrumb and the component breadcrumb
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Format\Structure
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
@@ -21,34 +21,28 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     /**
      * The application component
      *
-     * @var Application
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     protected $component;
 
     /**
      * The breadcrumb trail instance
      *
-     * @var BreadcrumbTrail
+     * @var \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
     protected $breadcrumb_trail;
 
     /**
      * Constructor
      *
-     * @param Application $component
-     * @param BreadcrumbTrail $breadcrumb_trail
+     * @param \Chamilo\Libraries\Architecture\Application\Application $component
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
      */
-    public function __construct(Application $component, BreadcrumbTrail $breadcrumb_trail)
+    public function __construct(Application $component, BreadcrumbTrail $breadcrumbTrail)
     {
-        $this->breadcrumb_trail = $breadcrumb_trail;
+        $this->breadcrumb_trail = $breadcrumbTrail;
         $this->component = $component;
     }
-
-    /**
-     * **************************************************************************************************************
-     * Generate functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Automatically generates the breadcrumbs based on the given component
@@ -102,23 +96,17 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      *
-     * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
      */
-    public function set_breadcrumb_trail($breadcrumb_trail)
+    public function set_breadcrumb_trail($breadcrumbTrail)
     {
-        $this->breadcrumb_trail = $breadcrumb_trail;
+        $this->breadcrumb_trail = $breadcrumbTrail;
     }
 
     /**
      *
-     * @return \libraries\format\BreadcrumbTrail
+     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
     public function get_breadcrumb_trail()
     {
@@ -127,7 +115,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
     /**
      *
-     * @param \libraries\architecture\application\Application $component
+     * @param \Chamilo\Libraries\Architecture\Application\Application $component
      */
     public function set_component($component)
     {
@@ -136,7 +124,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
     /**
      *
-     * @return \libraries\architecture\application\Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_component()
     {

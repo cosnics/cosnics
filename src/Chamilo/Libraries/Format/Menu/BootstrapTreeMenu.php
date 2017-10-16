@@ -103,8 +103,7 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @param int $nodeIdentifier
-     *
+     * @param integer $nodeIdentifier
      * @return string
      */
     public function getNodeUrl($nodeIdentifier)
@@ -126,8 +125,9 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @return string TODO: REMOVE the revealNode and expandNode functionality due to issues with own node-ids generated
-     *         by plugin
+     * @return string
+     * @todo Remove the revealNode and expandNode functionality due to issues with own node-ids generated
+     *       by plugin
      */
     public function render()
     {

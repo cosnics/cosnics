@@ -21,25 +21,25 @@ class BreadcrumbTrail
     /**
      * Singleton
      *
-     * @var BreadcrumbTrail
+     * @var \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
     private static $instance;
 
     /**
      *
-     * @var array
+     * @var \Chamilo\Libraries\Format\Structure\Breadcrumb[]
      */
     private $breadcrumbtrail;
 
     /**
      *
-     * @var array
+     * @var string[]
      */
     private $help_item;
 
     /**
      *
-     * @var array
+     * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
     private $extra_items;
 
@@ -51,7 +51,7 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return BreadcrumbTrail
+     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
     public static function getInstance()
     {
@@ -65,15 +65,16 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param boolean $include_main_index
+     * @param boolean $includeMainIndex
+     * @param string $containerMode
      */
-    public function __construct($include_main_index = true, $containerMode = 'container-fluid')
+    public function __construct($includeMainIndex = true, $containerMode = 'container-fluid')
     {
         $this->breadcrumbtrail = array();
         $this->extra_items = array();
         $this->containerMode = $containerMode;
 
-        if ($include_main_index)
+        if ($includeMainIndex)
         {
             $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
 
@@ -89,8 +90,7 @@ class BreadcrumbTrail
                 $siteName = 'Chamilo';
             }
 
-            $this->add(
-                new Breadcrumb($pathBuilder->getBasePath(true), $siteName, null, 'home'));
+            $this->add(new Breadcrumb($pathBuilder->getBasePath(true), $siteName, null, 'home'));
         }
     }
 
@@ -114,7 +114,7 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param Breadcrumb $breadcrumb
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb $breadcrumb
      */
     public function add($breadcrumb)
     {
@@ -133,16 +133,16 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param ToolbarItem $extra_item
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $extraItem
      */
-    public function add_extra($extra_item)
+    public function add_extra($extraItem)
     {
-        $this->extra_items[] = $extra_item;
+        $this->extra_items[] = $extraItem;
     }
 
     /**
      *
-     * @return array
+     * @return string[]
      */
     public function get_help_item()
     {
@@ -151,29 +151,37 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param array $help_item
+     * @param string $helpItem
      */
-    public function set_help_item($help_item)
+    public function set_help_item($helpItem)
     {
-        $this->help_item = $help_item;
+        $this->help_item = $helpItem;
     }
 
-    public function remove($breadcrumb_index)
+    public function remove($breadcrumbIndex)
     {
-        if ($breadcrumb_index < 0)
+        if ($breadcrumbIndex < 0)
         {
-            $breadcrumb_index = count($this->breadcrumbtrail) + $breadcrumb_index;
+            $breadcrumbIndex = count($this->breadcrumbtrail) + $breadcrumbIndex;
         }
 
-        unset($this->breadcrumbtrail[$breadcrumb_index]);
+        unset($this->breadcrumbtrail[$breadcrumbIndex]);
         $this->breadcrumbtrail = array_values($this->breadcrumbtrail);
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb
+     */
     public function get_first()
     {
         return $this->breadcrumbtrail[0];
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb
+     */
     public function get_last()
     {
         $breadcrumbtrail = $this->breadcrumbtrail;
@@ -181,10 +189,14 @@ class BreadcrumbTrail
         return $breadcrumbtrail[$last_key];
     }
 
-    public function truncate($keep_main_index = false)
+    /**
+     *
+     * @param boolean $keepMainIndex
+     */
+    public function truncate($keepMainIndex = false)
     {
         $this->breadcrumbtrail = array();
-        if ($keep_main_index)
+        if ($keepMainIndex)
         {
             $this->add(
                 new Breadcrumb(
@@ -308,7 +320,7 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return number
+     * @return integer
      */
     public function size()
     {
@@ -317,7 +329,7 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return array
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
      */
     public function get_breadcrumbtrail()
     {
@@ -326,7 +338,7 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param unknown $breadcrumbtrail
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbtrail
      * @deprecated Deprecated method
      */
     public function set_breadcrumbtrail($breadcrumbtrail)
@@ -334,6 +346,10 @@ class BreadcrumbTrail
         $this->set($breadcrumbtrail);
     }
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
+     */
     public function set($breadcrumbs)
     {
         $this->breadcrumbtrail = $breadcrumbs;
@@ -343,7 +359,7 @@ class BreadcrumbTrail
      *
      * @param string $variable
      * @param string $application
-     * @return mixed
+     * @return string
      */
     public function get_setting($variable, $application)
     {
@@ -352,13 +368,17 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return array
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
      */
     public function get_breadcrumbs()
     {
         return $this->breadcrumbtrail;
     }
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $trail
+     */
     public function merge($trail)
     {
         $this->breadcrumbtrail = array_merge($this->breadcrumbtrail, $trail->get_breadcrumbtrail());

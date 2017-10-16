@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -36,13 +36,13 @@ trait ActionButtonRendererTrait
     public function renderLinkOpeningTag()
     {
         $html = array();
-        
+
         $html[] = '<a';
         $html[] = $this->renderClasses();
         $html[] = $this->renderTitle();
         $html[] = $this->renderAction();
         $html[] = '>';
-        
+
         return implode(' ', $html);
     }
 
@@ -53,12 +53,12 @@ trait ActionButtonRendererTrait
     public function determineClasses()
     {
         $classes = parent::determineClasses();
-        
+
         if (! $this->getButton()->getAction())
         {
             $classes[] = 'disabled';
         }
-        
+
         return $classes;
     }
 
@@ -70,22 +70,22 @@ trait ActionButtonRendererTrait
     {
         $button = $this->getButton();
         $html = array();
-        
+
         if ($button->getAction())
         {
             $html[] = 'href="' . htmlentities($button->getAction()) . '"';
-            
+
             if ($button->getTarget())
             {
                 $html[] = 'target="' . $button->getTarget() . '"';
             }
-            
+
             if ($button->needsConfirmation())
             {
                 $html[] = 'onclick="return confirm(\'' . addslashes(htmlentities($button->getConfirmation())) . '\');"';
             }
         }
-        
+
         return implode(' ', $html);
     }
 }

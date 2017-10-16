@@ -25,18 +25,15 @@ class ActionBarSearchForm extends FormValidator
 
     /**
      * The renderer used to display the form
+     *
+     * @var \HTML_QuickForm_Renderer_Default
      */
     private $renderer;
 
     /**
-     * Advanced or simple search form
-     */
-    private $advanced;
-
-    /**
      * Creates a new search form
      *
-     * @param string $url The location to which the search request should be posted.
+     * @param string $url
      */
     public function __construct($url)
     {
@@ -75,29 +72,43 @@ class ActionBarSearchForm extends FormValidator
     }
 
     /**
-     * Display the form
+     *
+     * @return string
+     * @deprecated Use render() now
      */
     public function as_html()
     {
+        return $this->render();
+    }
+
+    /**
+     * Display the form
+     */
+    public function render()
+    {
         $html = array();
+
         $html[] = '<div class="simple_search">';
         $html[] = $this->renderer->toHTML();
         $html[] = '</div>';
+
         return implode('', $html);
     }
 
     /**
      * Gets the conditions that this form introduces.
      *
-     * @return String the query
+     * @return string
      */
     public function get_query()
     {
         $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
+
         if (! $query)
         {
             $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
+
         return $query;
     }
 }

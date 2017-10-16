@@ -93,6 +93,10 @@ abstract class BaseFooter implements FooterInterface
         $this->containerMode = $containerMode;
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function getContainerHeader()
     {
         $html = array();
@@ -105,6 +109,10 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function getContainerFooter()
     {
         $html = array();
@@ -119,6 +127,10 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function getHeader()
     {
         $html = array();
@@ -128,6 +140,10 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function getFooter()
     {
         $html = array();
@@ -138,5 +154,19 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function toHtml();
+    /**
+     *
+     * @return string
+     * @deprecated Use render() now
+     */
+    public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Structure\FooterInterface::render()
+     */
+    abstract public function render();
 }

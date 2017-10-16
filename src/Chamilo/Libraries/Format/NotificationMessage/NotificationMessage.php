@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Format\NotificationMessage;
 
 /**
  * Value object to describe a notification message
- * 
- * @package Chamilo\Libraries\Format
+ *
+ * @package Chamilo\Libraries\Format\NotificationMessage
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -32,7 +32,7 @@ class NotificationMessage
     /**
      * A category for the message.
      * Can be used to limit the number of messages of the same category.
-     * 
+     *
      * @var string
      */
     protected $category;
@@ -41,7 +41,7 @@ class NotificationMessage
      *
      * @param string $message
      * @param string $type
-     * @param null $category
+     * @param string $category
      */
     public function __construct($message, $type = self :: TYPE_INFO, $category = null)
     {
@@ -81,8 +81,7 @@ class NotificationMessage
      *
      * @param string $message
      * @param string $category
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
      */
     public static function confirm($message, $category = null)
     {
@@ -93,8 +92,7 @@ class NotificationMessage
      *
      * @param string $message
      * @param string $category
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
      */
     public static function normal($message, $category = null)
     {
@@ -105,8 +103,7 @@ class NotificationMessage
      *
      * @param string $message
      * @param string $category
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
      */
     public static function warning($message, $category = null)
     {
@@ -117,8 +114,7 @@ class NotificationMessage
      *
      * @param string $message
      * @param string $category
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
      */
     public static function error($message, $category = null)
     {

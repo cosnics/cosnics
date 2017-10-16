@@ -14,7 +14,7 @@ class Header extends BaseHeader
 
     /**
      *
-     * @return \Chamilo\Core\Install\Format\Structure\Banner
+     * @see \Chamilo\Libraries\Format\Structure\BaseHeader::getBanner()
      */
     protected function getBanner()
     {

@@ -8,8 +8,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
  * This class describes a dynamic content menu.
  * This menu can have several items with content attached to it. All the
  * items (content) are (is) loaded at the same time. Only the content of the selected menu item is visible.
- * 
- * @package \libraries
+ *
+ * @package Chamilo\Libraries\Format\Menu\DynamicContentMenu
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DynamicContentMenu
@@ -17,107 +17,105 @@ class DynamicContentMenu
 
     /**
      * The name of the menu
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $name;
 
     /**
      * The menu items
-     * 
-     * @var DynamicContentMenuItem[]
+     *
+     * @var \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[]
      */
     private $menu_items;
 
     /**
      * Constructor
-     * 
-     * @param $name String
-     * @param $menu_items DynamicContentMenuItem[]
+     *
+     * @param string $name
+     * @param \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[] $menuItems
      */
-    public function __construct($name, $menu_items = array())
+    public function __construct($name, $menuItems = array())
     {
         $this->set_name($name);
-        $this->set_menu_items($menu_items);
+        $this->set_menu_items($menuItems);
     }
 
     /**
-     * **************************************************************************************************************
-     * Render Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * Returns the menu as html
-     * 
-     * @return String
+     *
+     * @return string
+     * @deprecated Use render() now
      */
     public function as_html()
     {
+        return $this->render();
+    }
+
+    /**
+     * Returns the menu as html
+     *
+     * @return string
+     */
+    public function render()
+    {
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->render_menu();
         $html[] = $this->render_content();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Renders the menu
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_menu()
     {
         $html = array();
-        
+
         $html[] = $this->render_menu_header();
         $html[] = '<ul class="dynamic_content_menu_list">';
-        
+
         foreach ($this->menu_items as $menu_item)
         {
             $html[] = $menu_item->render_menu_item();
         }
-        
+
         $html[] = '</ul>';
         $html[] = $this->render_small_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the content
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_content()
     {
         $html = array();
-        
+
         $html[] = $this->render_content_header();
-        
+
         foreach ($this->get_menu_items() as $menu_item)
         {
             $html[] = $menu_item->render_content();
         }
-        
+
         $html[] = $this->render_small_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the container header
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_header()
     {
@@ -126,36 +124,37 @@ class DynamicContentMenu
 
     /**
      * Renders the container footer
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_footer()
     {
         $html = array();
-        
+
         $html[] = '<div class="clear"></div></div>';
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'DynamicContentMenu.js');
-        
+
         $selected_item = $this->get_selected_item();
+
         if ($selected_item)
         {
             $selected_item_id = $selected_item->get_id();
         }
-        
+
         $html[] = '<script type="text/javascript">';
         $html[] = '	$(\'#' . $this->get_name() . '.dynamic_content_menu_container\').dynamicContentMenu({
 				    selectedItemId: \'' . $selected_item_id . '\'});';
         $html[] = '</script>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders a small footer for the menu and content headers
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_small_footer()
     {
@@ -164,8 +163,8 @@ class DynamicContentMenu
 
     /**
      * Renders the menu container header
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_menu_header()
     {
@@ -174,8 +173,8 @@ class DynamicContentMenu
 
     /**
      * Renders the content container header
-     * 
-     * @return String
+     *
+     * @return string
      */
     protected function render_content_header()
     {
@@ -184,8 +183,8 @@ class DynamicContentMenu
 
     /**
      * Returns the selected dynamic content menu item
-     * 
-     * @return DynamicContentMenuItem
+     *
+     * @return \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem
      */
     protected function get_selected_item()
     {
@@ -199,38 +198,32 @@ class DynamicContentMenu
     }
 
     /**
-     * **************************************************************************************************************
-     * List Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Adds a menu item to the menu items list
-     * 
-     * @param $menu_item DynamicContentMenuItem
+     *
+     * @param \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem $menuItem
      */
-    public function add_menu_item(DynamicContentMenuItem $menu_item)
+    public function add_menu_item(DynamicContentMenuItem $menuItem)
     {
-        $this->menu_items[] = $menu_item;
+        $this->menu_items[] = $menuItem;
     }
 
     /**
      * Adds multiple menu items to the menu items list
-     * 
-     * @param $menu_items DynamicContentMenuItem[]
+     *
+     * @param \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[] $menuItems
      */
-    public function add_menu_items($menu_items)
+    public function add_menu_items($menuItems)
     {
-        foreach ($menu_items as $menu_item)
+        foreach ($menuItems as $menuItem)
         {
-            $this->add_menu_item($menu_item);
+            $this->add_menu_item($menuItem);
         }
     }
 
     /**
      * Removes a menu item form the menu items list
-     * 
-     * @param $index int
+     *
+     * @param integer $index
      */
     public function remove_menu_item($index)
     {
@@ -246,15 +239,9 @@ class DynamicContentMenu
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters / Setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the name of this menu
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_name()
     {
@@ -263,8 +250,8 @@ class DynamicContentMenu
 
     /**
      * Returns the menu items
-     * 
-     * @return DynamicContentMenuItem[]
+     *
+     * @return \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[]
      */
     public function get_menu_items()
     {
@@ -273,8 +260,8 @@ class DynamicContentMenu
 
     /**
      * Sets the name of this menu
-     * 
-     * @param $name String
+     *
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -283,11 +270,11 @@ class DynamicContentMenu
 
     /**
      * Sets the menu items
-     * 
-     * @param $menu_items DynamicContentMenuItem[]
+     *
+     * @param \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[] $menuItems
      */
-    public function set_menu_items($menu_items)
+    public function set_menu_items($menuItems)
     {
-        $this->menu_items = $menu_items;
+        $this->menu_items = $menuItems;
     }
 }

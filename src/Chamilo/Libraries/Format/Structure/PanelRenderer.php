@@ -1,10 +1,10 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Structure;
 
 /**
  * Renders a bootstrap panel
  *
+ * @package Chamilo\Libraries\Format\Structure
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PanelRenderer
@@ -22,7 +22,6 @@ class PanelRenderer
      * @param string $title
      * @param string $content
      * @param string $mode
-     *
      * @return string
      */
     public function render($title, $content, $mode = self::MODE_DEFAULT)
@@ -44,7 +43,6 @@ class PanelRenderer
      * @param string $title
      * @param string[] $tableValues
      * @param string $mode
-     *
      * @return string
      */
     public function renderTablePanel($title, $tableValues = array(), $mode = self::MODE_DEFAULT)
@@ -73,7 +71,6 @@ class PanelRenderer
      *
      * @param string $title
      * @param string $mode
-     *
      * @return string
      */
     protected function renderPanelHeader($title = null, $mode = self::MODE_DEFAULT)
@@ -86,7 +83,7 @@ class PanelRenderer
 
         $html[] = '<div class="panel ' . $contextualClass . '">';
 
-        if (!is_null($title))
+        if (! is_null($title))
         {
             $html[] = '<div class="panel-heading">';
             $html[] = '<h5 class="panel-title">' . $title . '</h5>';
@@ -118,26 +115,28 @@ class PanelRenderer
     protected function getAllowedModes()
     {
         return array(
-            self::MODE_DEFAULT, self::MODE_PRIMARY, self::MODE_SUCCESS, self::MODE_INFO, self::MODE_WARNING,
-            self::MODE_DANGER
-        );
+            self::MODE_DEFAULT,
+            self::MODE_PRIMARY,
+            self::MODE_SUCCESS,
+            self::MODE_INFO,
+            self::MODE_WARNING,
+            self::MODE_DANGER);
     }
 
     /**
-     * Validates the mode of the progress bar
+     * Validates the mode of the panel renderer
      *
      * @param string $mode
+     * @throws \InvalidArgumentException
      */
     protected function validateMode($mode = self::MODE_DEFAULT)
     {
-        if (!in_array($mode, $this->getAllowedModes()))
+        if (! in_array($mode, $this->getAllowedModes()))
         {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The given mode must be a valid string and must be one of (%s)',
-                    implode(', ', $this->getAllowedModes())
-                )
-            );
+                    implode(', ', $this->getAllowedModes())));
         }
     }
 }

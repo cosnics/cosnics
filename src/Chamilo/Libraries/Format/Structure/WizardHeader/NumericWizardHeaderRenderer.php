@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Format\Structure\WizardHeader;
 
 /**
  * Describes a header for a wizard
- * 
+ *
+ * @package Chamilo\Libraries\Format\Structure\WizardHeader
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class NumericWizardHeaderRenderer extends WizardHeaderRenderer
@@ -11,8 +12,8 @@ class NumericWizardHeaderRenderer extends WizardHeaderRenderer
 
     /**
      * Returns the step titles
-     * 
-     * @return \string[]
+     *
+     * @return string[]
      */
     protected function getStepTitles()
     {
@@ -21,7 +22,7 @@ class NumericWizardHeaderRenderer extends WizardHeaderRenderer
         {
             $stepTitles[$index] = ($index + 1) . '. ' . $stepTitle;
         }
-        
+
         return $stepTitles;
     }
 }
