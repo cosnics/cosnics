@@ -8,16 +8,21 @@ use HTML_Table;
 /**
  *
  * @package Chamilo\Libraries\Format\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PropertiesTable extends HTML_Table
 {
 
+    /**
+     *
+     * @var string[]
+     */
     private $properties;
 
     /**
      * Constructor creates the table
      *
-     * @param array $properties
+     * @param string[] $properties
      */
     public function __construct(array $properties)
     {
@@ -25,13 +30,13 @@ class PropertiesTable extends HTML_Table
             array('class' => 'table table-striped table-bordered table-hover table-responsive table-properties'));
         $this->properties = $properties;
 
-        $this->build_table();
+        $this->buildTable();
     }
 
     /**
      * Builds the table with given properties
      */
-    public function build_table()
+    public function buildTable()
     {
         if (count($this->properties) > 0)
         {
@@ -85,3 +90,4 @@ class PropertiesTable extends HTML_Table
         $this->properties = $properties;
     }
 }
+

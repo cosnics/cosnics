@@ -74,11 +74,12 @@ class PagerRenderer
 
     /**
      *
+     * @param string[] $queryParameters
+     * @param string $pageNumberParameterName
      * @param boolean $isDisabled
      * @param string $symbol
      * @param string $translation
-     * @param unknown $target
-     *
+     * @param string $targetPage
      * @return string
      */
     protected function renderDirectionPaginationItem($queryParameters, $pageNumberParameterName, $isDisabled, $symbol,
@@ -106,10 +107,11 @@ class PagerRenderer
 
     /**
      *
+     * @param string[] $queryParameters
+     * @param string $pageNumberParameterName
      * @param integer $start
      * @param integer $end
      * @param boolean $includeRange
-     *
      * @return string
      */
     protected function renderPaginationBetweenStartAndEnd($queryParameters, $pageNumberParameterName, $start, $end,
@@ -187,7 +189,6 @@ class PagerRenderer
      * @param string[] $queryParameters
      * @param string $pageNumberParameterName
      * @param boolean $includeRange
-     *
      * @return string
      */
     public function renderPagination($queryParameters = array(), $pageNumberParameterName = 'page_nr', $includeRange = true)
@@ -203,10 +204,9 @@ class PagerRenderer
     /**
      *
      * @param string[] $queryParameters
-     * @param string $itemsPerPageParameterName
+     * @param string $pageNumberParameterName
      * @param integer $pageLimit
      * @param boolean $includeRange
-     *
      * @return string
      */
     public function renderPaginationWithPageLimit($queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7,
@@ -278,7 +278,7 @@ class PagerRenderer
      *
      * @param string[] $queryParameters
      * @param string $itemsPerPageParameterName
-     *
+     * @param string[] $translationVariables
      * @return string
      */
     public function renderItemsPerPageSelector($queryParameters, $itemsPerPageParameterName,
@@ -367,7 +367,6 @@ class PagerRenderer
      * @param string[] $queryParameters
      * @param string $variableName
      * @param string $variableValue
-     *
      * @return string
      */
     protected function getUrl($queryParameters, $variableName, $variableValue)

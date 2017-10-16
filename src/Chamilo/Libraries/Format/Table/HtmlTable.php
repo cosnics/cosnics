@@ -67,6 +67,8 @@ abstract class HtmlTable extends \HTML_Table
 
     /**
      * Number of items to display per page
+     *
+     * @var integer
      */
     private $numberOfItemsPerPage;
 
@@ -92,7 +94,7 @@ abstract class HtmlTable extends \HTML_Table
 
     /**
      *
-     * @var string[]
+     * @var string[][]
      */
     private $sourceData;
 
@@ -156,6 +158,10 @@ abstract class HtmlTable extends \HTML_Table
      */
     private $allowPageNavigation = true;
 
+    /**
+     *
+     * @var boolean
+     */
     protected $allowMultiSort = false;
 
     /**
@@ -165,10 +171,10 @@ abstract class HtmlTable extends \HTML_Table
      * @param string[] $sourceDataFunction
      * @param integer $defaultOrderColumn
      * @param integer $defaultNumberOfItemsPerPage
-     * @param int|string $defaultOrderDirection
+     * @param integer $defaultOrderDirection
      * @param boolean $allowPageSelection
      * @param boolean $allowPageNavigation
-     * @param bool $allowMultiSort
+     * @param boolean $allowMultiSort
      */
     public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
         $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $allowPageNavigation = true,
@@ -220,7 +226,6 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param string $parameter
-     *
      * @return string
      */
     public function getParameterName($parameter)
@@ -242,8 +247,6 @@ abstract class HtmlTable extends \HTML_Table
 
     /**
      *
-     * @param integer $defaultOrderColumn
-     *
      * @return integer
      */
     protected function determineOrderColumn()
@@ -260,8 +263,6 @@ abstract class HtmlTable extends \HTML_Table
     }
 
     /**
-     *
-     * @param integer $defaultOrderDirection
      *
      * @return integer
      */
@@ -280,8 +281,6 @@ abstract class HtmlTable extends \HTML_Table
 
     /**
      *
-     * @param integer $defaultNumberOfItemsPerPage
-     *
      * @return integer
      */
     protected function determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage)
@@ -295,7 +294,7 @@ abstract class HtmlTable extends \HTML_Table
     /**
      * Returns the filter parameters for this table
      *
-     * @return array
+     * @return string[]
      */
     public function getTableFilterParameters()
     {
@@ -343,11 +342,11 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @return string
-     * @deprecated Use toHtml() now
+     * @deprecated Use render() now
      */
     public function as_html()
     {
-        return $this->toHtml();
+        return $this->render();
     }
 
     /**
@@ -559,11 +558,21 @@ abstract class HtmlTable extends \HTML_Table
     abstract public function getTableActionsJavascript();
 
     /**
+     *
+     * @see HTML_Table::toHtml()
+     * @deprecated User render() now
+     */
+    public function toHtml($emptyTable = false)
+    {
+        return $this->render($emptyTable);
+    }
+
+    /**
      * Returns the complete table HTML.
      *
      * @return string
      */
-    public function toHtml($empty_table = false)
+    public function render($empty_table = false)
     {
         if ($this->countSourceData() == 0)
         {
@@ -629,7 +638,6 @@ abstract class HtmlTable extends \HTML_Table
      * @param integer $numberOfItemsPerPage
      * @param integer $orderColumn
      * @param integer $orderDirection
-     *
      * @return string[]
      */
     public function getQueryParameters($pageNumber = null, $numberOfItemsPerPage = null, $orderColumn = null, $orderDirection = null)
@@ -760,10 +768,9 @@ abstract class HtmlTable extends \HTML_Table
      *
      * @param integer $orderColumn
      * @param string $label
-     * @param boolean $sortable
+     * @param boolean $isSortable
      * @param string[] $headerAttributes
      * @param string[] $cellAttributes
-     *
      * @return string
      */
     public function setColumnHeader($orderColumn, $label, $isSortable = true, $headerAttributes = null, $cellAttributes = null)
@@ -852,7 +859,6 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param integer $selectedOrderColumn
-     *
      * @return integer[][]
      */
     protected function determineOrderColumnQueryParameters($selectedOrderColumn)
@@ -958,7 +964,7 @@ abstract class HtmlTable extends \HTML_Table
      * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
-     * @param integer
+     * @param integer $offset
      * @return string[]
      */
     public function getSourceData($offset = null)
@@ -1083,7 +1089,6 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param integer $value
-     *
      * @return string
      */
     public function getCheckboxHtml($value)
@@ -1113,7 +1118,6 @@ abstract class HtmlTable extends \HTML_Table
      * checkbox
      *
      * @param string[] $row
-     *
      * @return string[]
      */
     abstract public function filterData($row);

@@ -502,14 +502,14 @@ abstract class Table
      */
     protected function get_class($type = null)
     {
-        $class_name = get_class($this);
+        $className = get_class($this);
 
         if (! is_null($type))
         {
-            $class_name .= $type;
+            $className .= $type;
         }
 
-        return $class_name;
+        return $className;
     }
 
     /**

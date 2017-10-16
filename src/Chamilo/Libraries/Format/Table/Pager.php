@@ -163,7 +163,7 @@ class Pager
 
     /**
      *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @return integer
      */
     public function getPreviousRangeEnd()
@@ -185,7 +185,7 @@ class Pager
 
     /**
      *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @return integer
      */
     public function getCurrentRangeStart()
@@ -230,7 +230,7 @@ class Pager
 
     /**
      *
-     * @throws Exception
+     * @throws \Exception
      * @return integer
      */
     public function getCurrentRangeEnd()
