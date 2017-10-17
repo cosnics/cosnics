@@ -1,12 +1,10 @@
 <?php
-
 namespace Chamilo\Libraries\Mail\ValueObject;
 
 /**
  * Describes the content and metadata for an e-mail
  *
  * @package Chamilo\Libraries\Mail\ValueObject
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mail
@@ -101,10 +99,10 @@ class Mail
      *
      * @param string $subject
      * @param string $message
-     * @param array $to
-     * @param bool $sendIndividually
-     * @param array $cc
-     * @param array $bcc
+     * @param string[] $to
+     * @param boolean $sendIndividually
+     * @param string[] $cc
+     * @param string[] $bcc
      * @param string $fromName
      * @param string $fromEmail
      * @param string $replyName
@@ -112,10 +110,8 @@ class Mail
      * @param \Chamilo\Libraries\Mail\ValueObject\MailFile[] $embeddedImages
      * @param \Chamilo\Libraries\Mail\ValueObject\MailFile[] $attachments
      */
-    public function __construct(
-        $subject, $message, $to = array(), $sendIndividually = true, $cc = array(), $bcc = array(), $fromName = null,
-        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = array(), $attachments = array()
-    )
+    public function __construct($subject, $message, $to = array(), $sendIndividually = true, $cc = array(), $bcc = array(), $fromName = null,
+        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = array(), $attachments = array())
     {
         $this->subject = $subject;
         $this->message = $message;
@@ -133,18 +129,17 @@ class Mail
     /**
      * Validates and sets the recipients
      *
-     * @param bool $sendIndividually
-     * @param array $to
-     * @param array $cc
-     * @param array $bcc
+     * @param boolean $sendIndividually
+     * @param string[] $to
+     * @param string[] $cc
+     * @param string[] $bcc
      */
     protected function setRecipients($sendIndividually = false, $to = array(), $cc = array(), $bcc = array())
     {
-        if ($sendIndividually && (!empty($cc) || !empty($bcc)))
+        if ($sendIndividually && (! empty($cc) || ! empty($bcc)))
         {
             throw new \InvalidArgumentException(
-                'A mail that is set to send individually to the target users should not include cc or bcc recipients'
-            );
+                'A mail that is set to send individually to the target users should not include cc or bcc recipients');
         }
 
         $this->to = is_array($to) ? $to : array($to);

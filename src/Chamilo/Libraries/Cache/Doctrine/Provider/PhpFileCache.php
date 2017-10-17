@@ -38,7 +38,7 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
      * Extension of the doDelete function to invalidate the opcache
      *
      * @param string $identifier
-     * @return bool
+     * @return boolean
      */
     protected function doDelete($identifier)
     {

@@ -172,8 +172,8 @@ abstract class ViewRenderer extends Renderer
     /**
      * Get the events between $start_time and $end_time which should be displayed in the calendar
      *
-     * @param int $startTime
-     * @param int $endTime
+     * @param integer $startTime
+     * @param integer $endTime
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents($startTime, $endTime)

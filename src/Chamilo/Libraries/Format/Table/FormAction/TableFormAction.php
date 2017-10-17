@@ -31,7 +31,7 @@ class TableFormAction
     /**
      * Whether or not a confirm box is necessary
      *
-     * @var bool
+     * @var boolean
      */
     private $confirm;
 

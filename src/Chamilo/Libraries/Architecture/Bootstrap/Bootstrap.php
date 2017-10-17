@@ -52,7 +52,7 @@ class Bootstrap
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
-     * @param bool $showErrors
+     * @param boolean $showErrors
      */
     public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,

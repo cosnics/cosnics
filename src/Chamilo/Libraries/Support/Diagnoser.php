@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package common.diagnoser
+ * @package Chamilo\Libraries\Support
  * @author spou595 Class that is responsible for generating diagnostic information about the system
  */
 class Diagnoser
@@ -20,6 +20,8 @@ class Diagnoser
 
     /**
      * The manager where this diagnoser runs on
+     *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $manager;
 
@@ -31,11 +33,19 @@ class Diagnoser
     const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $manager
+     */
     public function __construct($manager = null)
     {
         $this->manager = $manager;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function to_html()
     {
         $sections = array('chamilo', 'php', 'database', 'webserver');
@@ -72,7 +82,7 @@ class Diagnoser
     /**
      * Functions to get the data for the chamilo diagnostics
      *
-     * @return array of data
+     * @return string[]
      */
     public function get_chamilo_data()
     {
@@ -135,7 +145,7 @@ class Diagnoser
     /**
      * Functions to get the data for the php diagnostics
      *
-     * @return array of data
+     * @return string[]
      */
     public function get_php_data()
     {
@@ -411,7 +421,7 @@ class Diagnoser
     /**
      * Functions to get the data for the mysql diagnostics
      *
-     * @return array of data
+     * @return string[]
      */
     public function get_database_data()
     {
@@ -477,7 +487,7 @@ class Diagnoser
     /**
      * Functions to get the data for the webserver diagnostics
      *
-     * @return array of data
+     * @return string[]
      */
     public function get_webserver_data()
     {
@@ -624,6 +634,11 @@ class Diagnoser
         return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
     public function format_yes_no($value)
     {
         return $value ? Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES) : Translation::get(
@@ -632,6 +647,11 @@ class Diagnoser
             Utilities::COMMON_LIBRARIES);
     }
 
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
     public function format_on_off($value)
     {
         return $value ? Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES) : Translation::get(

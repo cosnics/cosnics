@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Client;
 
 use Chamilo\Libraries\File\Filesystem;
@@ -8,14 +7,15 @@ use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Client
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Client
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Curl extends RestClient
 {
 
     /**
+     *
      * @var resource
      */
     private $curl;
@@ -40,8 +40,8 @@ class Curl extends RestClient
     }
 
     /**
-     * @param bool $responseMimeType
      *
+     * @param boolean $responseMimeType
      * @return RestResult
      */
     public function request($responseMimeType = false)
@@ -88,14 +88,14 @@ class Curl extends RestClient
 
         // cookies
         $temporaryPath = Path::getInstance()->getTemporaryPath();
-        if (!is_dir($temporaryPath))
+        if (! is_dir($temporaryPath))
         {
             Filesystem::create_dir($temporaryPath);
         }
 
         $this->cookieFile = $temporaryPath . 'curl_cookies.txt';
 
-        if (!file_exists($this->cookieFile))
+        if (! file_exists($this->cookieFile))
         {
             fopen($this->cookieFile, 'w') or die('cannot create goofie file');
         }
@@ -108,7 +108,7 @@ class Curl extends RestClient
         $responseHttpCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
         $responseContentType = curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE);
 
-        if (!$responseMimeType)
+        if (! $responseMimeType)
         {
             $responseMimeType = self::extract_mime_type($responseContentType);
         }
@@ -134,8 +134,7 @@ class Curl extends RestClient
         {
             $result->set_response_error(
                 'The REST request returned an HTTP error code of ' . $responseHttpCode . ' (' .
-                $this->get_http_code_translation($responseHttpCode) . ')'
-            );
+                     $this->get_http_code_translation($responseHttpCode) . ')');
         }
 
         curl_close($this->curl);
@@ -144,11 +143,10 @@ class Curl extends RestClient
     }
 
     /**
+     *
      * @return string[]
      *
-     * @deprecated
-     *
-     * @see parseCookieFile
+     * @deprecated Use parseCookieFile() now
      */
     public function parse_cookie_file()
     {
@@ -156,6 +154,7 @@ class Curl extends RestClient
     }
 
     /**
+     *
      * @return string[]
      */
     public function parseCookieFile()
@@ -181,10 +180,7 @@ class Curl extends RestClient
     /**
      *
      * @return resource
-     *
-     * @deprecated
-     *
-     * @see getCurl
+     * @deprecated Use getCurl() now
      */
     public function get_curl()
     {
@@ -195,9 +191,7 @@ class Curl extends RestClient
      *
      * @param resource $curl
      *
-     * @deprecated
-     *
-     * @see setCurl
+     * @deprecated Use setCurl() now
      */
     public function set_curl($curl)
     {

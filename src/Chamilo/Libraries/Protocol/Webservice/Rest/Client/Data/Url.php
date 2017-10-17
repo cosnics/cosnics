@@ -6,16 +6,16 @@ use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData;
 use Exception;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Url extends RestData
 {
 
     /**
-     * @return string
      *
+     * @return string
      * @throws \Exception
      */
     public function prepare()

@@ -4,19 +4,21 @@ namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Basic extends RestAuthentication
 {
 
     /**
+     *
      * @var string
      */
     private $login;
 
     /**
+     *
      * @var string
      */
     private $password;

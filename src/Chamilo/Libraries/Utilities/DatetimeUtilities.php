@@ -14,48 +14,11 @@ class DatetimeUtilities
 {
 
     /**
-     * Get a four digit year from a two digit year.
-     * The century depends on the year difference between the given year
-     * and the current year. e.g. with default $years_difference_for_century value of 20: - calling the function in 2009
-     * with a given $year value of 19 return 2019 - calling the function in 2009 with a given $year value of 75 return
-     * 1975
-     *
-     * @param $years_difference_for_century The maximum difference of years between the current year and the given year
-     *        to return the current century
-     * @return integer A year number
-     */
-    public static function get_complete_year($year, $years_difference_for_century = 20)
-    {
-        if (is_numeric($year))
-        {
-            if ($year > 100)
-            {
-                return $year;
-            }
-            else
-            {
-                if ($year <= date('y') || $year - date('y') < $years_difference_for_century)
-                {
-                    return (date('Y') - date('y') + $year);
-                }
-                else
-                {
-                    return (date('Y') - date('y') - 100 + $year);
-                }
-            }
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    /**
      * formats the date according to the locale settings
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Christophe Gesch� <gesche@ipm.ucl.ac.be> originally inspired from from PhpMyAdmin
-     * @param string $formatOfDate date pattern
+     * @param string $dateFormat date pattern
      * @param integer $timestamp, default is NOW.
      * @return the formatted date
      */
@@ -86,6 +49,10 @@ class DatetimeUtilities
         return strftime($date, $timeStamp);
     }
 
+    /**
+     *
+     * @return string
+     */
     private static function default_date_time_format()
     {
         $translator = Translation::getInstance();
@@ -98,8 +65,10 @@ class DatetimeUtilities
     /**
      * Convert the given date to the selected timezone
      *
-     * @param String $date The date
-     * @param String $timezone The selected timezone
+     * @param string $date The date
+     * @param string $format
+     * @param string $timezone The selected timezone
+     * @return string
      */
     public static function convert_date_to_timezone($date, $format = null, $timezone = null)
     {
@@ -129,7 +98,8 @@ class DatetimeUtilities
     /**
      * Convert the seconds to h:m:s or m:s or s
      *
-     * @param String $time
+     * @param string $time
+     * @return string
      */
     public static function convert_seconds_to_hours($time)
     {
@@ -156,6 +126,7 @@ class DatetimeUtilities
                      'm ' . str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
             }
         }
+
         return $converted_time;
     }
 
@@ -163,7 +134,7 @@ class DatetimeUtilities
      * Defining the shorts for the days.
      * Memoized.
      *
-     * @return array
+     * @return string[]
      */
     public static function get_days_short()
     {
@@ -189,7 +160,7 @@ class DatetimeUtilities
      * Defining the days of the week to allow translation of the days.
      * Memoized.
      *
-     * @return array
+     * @return string[]
      */
     public static function get_days_long()
     {
@@ -214,7 +185,7 @@ class DatetimeUtilities
      * Defining the shorts for the months.
      * Memoized.
      *
-     * @return array
+     * @return string[]
      */
     public static function get_month_short()
     {
@@ -245,7 +216,7 @@ class DatetimeUtilities
      * Defining the shorts for the months.
      * Memoized.
      *
-     * @return array
+     * @return string[]
      */
     public static function get_month_long()
     {
@@ -276,7 +247,7 @@ class DatetimeUtilities
      * Converts a date/time value retrieved from a FormValidator datepicker element to the corresponding UNIX itmestamp.
      *
      * @param $string string The date/time value.
-     * @return int The UNIX timestamp.
+     * @return integer The UNIX timestamp.
      */
     public static function time_from_datepicker($string)
     {
@@ -297,7 +268,7 @@ class DatetimeUtilities
      * corresponding UNIX itmestamp.
      *
      * @param $string string The date/time value.
-     * @return int The UNIX timestamp.
+     * @return integer The UNIX timestamp.
      */
     public static function time_from_datepicker_without_timepicker($string, $h = 0, $m = 0, $s = 0)
     {
@@ -305,6 +276,11 @@ class DatetimeUtilities
         return mktime($h, $m, $s, $yearMonthDday[1], $yearMonthDday[2], $yearMonthDday[0]);
     }
 
+    /**
+     *
+     * @param integer $seconds
+     * @return string
+     */
     public static function format_seconds_to_hours($seconds)
     {
         $hours = floor($seconds / 3600);
@@ -326,6 +302,11 @@ class DatetimeUtilities
         return $hours . ':' . $minutes . ':' . $seconds;
     }
 
+    /**
+     *
+     * @param integer $seconds
+     * @return string
+     */
     public static function format_seconds_to_minutes($seconds)
     {
         $minutes = floor($seconds / 60);

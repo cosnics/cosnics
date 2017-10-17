@@ -14,10 +14,10 @@ abstract class RestData
 {
 
     /**
+     *
      * @var string
      */
     private $data;
-
     const TYPE_FORM = 'form';
     const TYPE_URL = 'url';
     const TYPE_PLAIN = 'plain';
@@ -33,6 +33,7 @@ abstract class RestData
     }
 
     /**
+     *
      * @param string $content_type
      * @param string $data
      *
@@ -64,10 +65,9 @@ abstract class RestData
     }
 
     /**
-     * @return string
      *
-     * @deprecated
-     * @see getData
+     * @return string
+     * @deprecated Use getData() now
      */
     public function get_data()
     {
@@ -75,10 +75,9 @@ abstract class RestData
     }
 
     /**
-     * @param string $data
      *
-     * @deprecated
-     * @see setData
+     * @param string $data
+     * @deprecated Use setData() now
      */
     public function set_data($data)
     {

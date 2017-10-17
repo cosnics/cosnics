@@ -3,64 +3,78 @@ namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
 
+/**
+ *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client
+ */
 abstract class RestClient
 {
 
     /**
+     *
      * @var string
      */
     private $mode;
 
     /**
+     *
      * @var string
      */
     private $baseUrl;
 
     /**
+     *
      * @var string
      */
     private $method;
 
     /**
+     *
      * @var \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData
      */
     private $data;
 
     /**
+     *
      * @var string
      */
     private $dataMimeType;
 
     /**
+     *
      * @var string[]
      */
     private $headers = array();
 
     /**
+     *
      * @var string
      */
     private $endpoint;
 
     /**
+     *
      * @var string[]
      */
     private $queryParameters;
 
     /**
+     *
      * @var RestAuthentication
      */
     private $authentication;
 
     /**
+     *
      * @var string
      */
     private $checkTargetCertificate;
 
     /**
+     *
      * @var string
      */
     private $targetCAFile;
-
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
     const METHOD_DELETE = 'DELETE';
@@ -79,6 +93,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_mode()
@@ -87,6 +102,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $mode
      */
     public function set_mode($mode)
@@ -95,6 +111,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_base_url()
@@ -103,6 +120,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $baseUrl
      */
     public function set_base_url($baseUrl)
@@ -111,6 +129,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_method()
@@ -119,6 +138,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $method
      */
     public function set_method($method)
@@ -127,6 +147,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData
      */
     public function get_data()
@@ -135,6 +156,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData $data
      */
     public function set_data(RestData $data)
@@ -143,7 +165,8 @@ abstract class RestClient
     }
 
     /**
-     * @return bool
+     *
+     * @return boolean
      */
     public function has_data()
     {
@@ -151,6 +174,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_data_mimeType()
@@ -159,6 +183,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $dataMimeType
      */
     public function set_data_mimeType($dataMimeType)
@@ -167,7 +192,8 @@ abstract class RestClient
     }
 
     /**
-     * @return bool
+     *
+     * @return boolean
      */
     public function has_data_mimetype()
     {
@@ -175,6 +201,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string[]
      */
     public function get_headers()
@@ -183,6 +210,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string[] $headers
      */
     public function set_headers($headers)
@@ -191,6 +219,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $field
      * @param string $value
      */
@@ -200,6 +229,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $field
      */
     public function remove_header($field)
@@ -208,6 +238,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_endpoint()
@@ -216,6 +247,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $endpoint
      */
     public function set_endpoint($endpoint)
@@ -224,6 +256,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_query_parameters()
@@ -232,6 +265,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string[] $queryParameters
      */
     public function set_query_parameters($queryParameters)
@@ -240,7 +274,8 @@ abstract class RestClient
     }
 
     /**
-     * @return bool
+     *
+     * @return boolean
      */
     public function has_query_parameters()
     {
@@ -248,6 +283,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_resource_url()
@@ -261,6 +297,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $parameter
      * @param string $value
      */
@@ -270,6 +307,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $parameter
      */
     public function remove_query_parameter($parameter)
@@ -278,28 +316,28 @@ abstract class RestClient
     }
 
     /**
-     * @param string $base_url
-     * @param string $mode
      *
+     * @param string $baseUrl
+     * @param string $mode
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
      */
-    public static function factory($base_url = '', $mode = self::MODE_CURL)
+    public static function factory($baseUrl = '', $mode = self::MODE_CURL)
     {
         $rest_client_class = __NAMESPACE__ . '\Client\\' .
              (string) StringUtilities::getInstance()->createString($mode)->upperCamelize();
-        return new $rest_client_class($base_url);
+        return new $rest_client_class($baseUrl);
     }
 
     /**
-     * @param bool $responseMimeType
      *
+     * @param boolean $responseMimeType
      * @return mixed
      */
     abstract public function request($responseMimeType = false);
 
     /**
-     * @param string $http_code
      *
+     * @param string $http_code
      * @return string
      */
     public function get_http_code_translation($http_code)
@@ -348,7 +386,7 @@ abstract class RestClient
                 return 'Locked';
             case '424' :
                 return 'Method failure';
-            
+
             case '500' :
                 return 'Internal Server Error';
             case '501' :
@@ -365,7 +403,7 @@ abstract class RestClient
                 return 'Insufficient storage';
             case '509' :
                 return 'Bandwidth Limit Exceeded';
-            
+
             default :
                 return null;
         }
@@ -383,7 +421,7 @@ abstract class RestClient
         $this->set_method($method);
         $this->set_endpoint($endpoint);
         $this->set_query_parameters($query_parameters);
-        
+
         if ($data)
         {
             $this->set_data($data);
@@ -391,6 +429,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication
      */
     public function get_authentication()
@@ -399,6 +438,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestAuthentication $authentication
      */
     public function set_authentication(RestAuthentication $authentication)
@@ -407,7 +447,8 @@ abstract class RestClient
     }
 
     /**
-     * @return bool
+     *
+     * @return boolean
      */
     public function has_authentication()
     {
@@ -415,6 +456,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_check_target_certificate()
@@ -423,6 +465,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $checkTargetCertificate
      */
     public function set_check_target_certificate($checkTargetCertificate)
@@ -431,6 +474,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @return string
      */
     public function get_target_ca_file()
@@ -439,6 +483,7 @@ abstract class RestClient
     }
 
     /**
+     *
      * @param string $targetCAFile
      */
     public function set_target_ca_file($targetCAFile)

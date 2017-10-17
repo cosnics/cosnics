@@ -14,50 +14,58 @@ abstract class RestResult
 {
 
     /**
+     *
      * @var string
      */
     private $requestMethod;
 
     /**
+     *
      * @var string
      */
     private $requestData;
 
     /**
+     *
      * @var string
      */
     private $requestUrl;
 
     /**
+     *
      * @var string
      */
     private $requestPort;
 
     /**
+     *
      * @var string
      */
     private $responseCode;
 
     /**
+     *
      * @var string
      */
     private $responseContent;
 
     /**
+     *
      * @var string
      */
     private $responseError;
 
     /**
+     *
      * @var string
      */
     private $responseHeader;
 
     /**
+     *
      * @var string
      */
     private $responseCookies;
-    
     const TYPE_XML = 'xml';
     const TYPE_JSON = 'json';
     const TYPE_PLAIN = 'plain';
@@ -69,13 +77,14 @@ abstract class RestResult
     const FORMAT_XML_DEPRECATED = 'text/xml';
 
     /**
+     *
      * @var string[]
      */
     private static $xml_format = array(self::FORMAT_XML, self::FORMAT_XML_DEPRECATED);
 
     /**
-     * @param string $type
      *
+     * @param string $type
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
      */
     public static function factory($type = self::TYPE_PLAIN)
@@ -86,15 +95,15 @@ abstract class RestResult
     }
 
     /**
-     * @param string $content_type
      *
+     * @param string $contentType
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
      */
-    public static function content_type_factory($content_type)
+    public static function content_type_factory($contentType)
     {
-        switch ($content_type)
+        switch ($contentType)
         {
-            case in_array($content_type, self::$xml_format) :
+            case in_array($contentType, self::$xml_format) :
                 $type = self::TYPE_XML;
                 break;
             case self::FORMAT_HTML :
@@ -109,10 +118,12 @@ abstract class RestResult
             default :
                 $type = self::TYPE_PLAIN;
         }
+
         return self::factory($type);
     }
 
     /**
+     *
      * @return string
      */
     public function get_request_method()
@@ -121,6 +132,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $requestMethod
      */
     public function set_request_method($requestMethod)
@@ -129,6 +141,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_request_data()
@@ -137,6 +150,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $requestData
      */
     public function set_request_data($requestData)
@@ -145,6 +159,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_request_url()
@@ -153,6 +168,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $requestUrl
      */
     public function set_request_url($requestUrl)
@@ -161,6 +177,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_request_port()
@@ -169,6 +186,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $requestPort
      */
     public function set_request_port($requestPort)
@@ -177,6 +195,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_response_code()
@@ -185,6 +204,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $responseCode
      */
     public function set_response_code($responseCode)
@@ -193,7 +213,8 @@ abstract class RestResult
     }
 
     /**
-     * @param bool $parse
+     *
+     * @param boolean $parse
      *
      * @return string
      */
@@ -203,7 +224,8 @@ abstract class RestResult
     }
 
     /**
-     * @param string  $responseContent
+     *
+     * @param string $responseContent
      */
     public function set_response_content($responseContent)
     {
@@ -211,6 +233,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_response_error()
@@ -219,6 +242,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $responseError
      */
     public function set_response_error($responseError)
@@ -227,6 +251,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_response_header()
@@ -235,6 +260,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $responseHeader
      */
     public function set_response_header($responseHeader)
@@ -243,6 +269,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @return string
      */
     public function get_response_cookies()
@@ -251,6 +278,7 @@ abstract class RestResult
     }
 
     /**
+     *
      * @param string $responseCookies
      */
     public function set_response_cookies($responseCookies)

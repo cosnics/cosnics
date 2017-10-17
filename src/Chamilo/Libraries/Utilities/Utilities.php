@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 
 /**
  *
+ * @package Chamilo\Libraries\Utilities
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -31,9 +32,9 @@ class Utilities
      * Splits a Google-style search query.
      * For example, the query /"chamilo repository" utilities/ would be parsed into
      * array('chamilo repository', 'utilities').
-     * 
+     *
      * @param $pattern The query.
-     * @return array The query's parts.
+     * @return string[] The query's parts.
      */
     public static function split_query($pattern)
     {
@@ -54,13 +55,14 @@ class Utilities
     /**
      * Transforms a search string (given by an end user in a search form) to a Condition, which can be used to retrieve
      * learning objects from the repository.
-     * 
-     * @param $query string The query as given by the end user.
-     * @param $properties mixed The learning object properties which should be taken into account for the condition. For
+     *
+     * @param string $query The query as given by the end user.
+     * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties The learning object
+     *        properties which should be taken into account for the condition. For
      *        example, array('title','type') will yield a Condition which can be used to search for learning objects
      *        on the properties 'title' or 'type'. By default the properties are 'title' and 'description'. If the
      *        condition should apply to a single property, you can pass a string instead of an array.
-     * @return Condition The condition.
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition The condition.
      * @deprecated Use the function get_conditions() in action_bar_renderer to access the search property. This function
      *             uses this method to create the conditions.
      */
@@ -100,14 +102,18 @@ class Utilities
      * Orders the given learning objects by their title.
      * Note that the ordering happens in-place; there is no return
      * value.
-     * 
-     * @param $objects array The learning objects to order.
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $objects The content objects to order.
      */
     public static function order_content_objects_by_title($objects)
     {
         usort($objects, array(get_class(), 'by_title'));
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $objects The content objects to order.
+     */
     public static function order_content_objects_by_id_desc($objects)
     {
         usort($objects, array(get_class(), 'by_id_desc'));
@@ -115,9 +121,9 @@ class Utilities
 
     /**
      * Prepares the given learning objects for use as a value for the element_finder QuickForm element.
-     * 
-     * @param $objects array The learning objects.
-     * @return array The value.
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $objects
+     * @return string[] The value.
      */
     public static function content_objects_for_element_finder($objects)
     {
@@ -132,9 +138,9 @@ class Utilities
 
     /**
      * Prepares the given learning object for use as a value for the element_finder QuickForm element's value array.
-     * 
-     * @param $object ContentObject The learning object.
-     * @return array The value.
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $object
+     * @return string[] The value.
      */
     public static function content_object_for_element_finder($object)
     {
@@ -146,33 +152,43 @@ class Utilities
         $return['classes'] = 'type type_' . ClassnameUtilities::getInstance()->getClassNameFromNamespace($type, true);
         $return['title'] = $object->get_title();
         $return['description'] = Translation::get(
-            'TypeName', 
-            array(), 
+            'TypeName',
+            array(),
             ClassnameUtilities::getInstance()->getNamespaceFromClassname($type)) . ' (' . $date . ')';
         return $return;
     }
 
     /**
      * Compares learning objects by title.
-     * 
-     * @param $content_object_1 ContentObject
-     * @param $content_object_2 ContentObject
-     * @return int
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object_1
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object_2
+     * @return integer
      */
     public static function by_title($content_object_1, $content_object_2)
     {
         return strcasecmp($content_object_1->get_title(), $content_object_2->get_title());
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object_1
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object_2
+     * @return integer
+     */
     private static function by_id_desc($content_object_1, $content_object_2)
     {
         return ($content_object_1->get_id() < $content_object_2->get_id() ? 1 : - 1);
     }
 
+    /**
+     *
+     * @return string
+     */
     public static function add_block_hider()
     {
         $html = array();
-        
+
         $html[] = '<script type="text/javascript">';
         $html[] .= 'function showElement(item)';
         $html[] .= '{';
@@ -191,24 +207,31 @@ class Utilities
         $html[] .= '	}';
         $html[] .= '}';
         $html[] .= '</script>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param string $id
+     * @param string $message
+     * @param boolean $display_block
+     * @return string
+     */
     public static function build_block_hider($id = null, $message = null, $display_block = false)
     {
         $html = array();
-        
+
         if (isset($id))
         {
             if (! isset($message))
             {
                 $message = self::underscores_to_camelcase($id);
             }
-            
+
             $show_message = 'Show' . $message;
             $hide_message = 'Hide' . $message;
-            
+
             $html[] = '<div id="plus-' . $id . '"><a href="javascript:showElement(\'' . $id . '\')">' . Translation::get(
                 'Show' . $message) . '</a></div>';
             $html[] = '<div id="minus-' . $id . '" style="display: none;"><a href="javascript:showElement(\'' . $id .
@@ -219,17 +242,19 @@ class Utilities
         {
             $html[] = '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
-    
-    // 2 simple functions to display an array, a bit prettier as print_r
-    // for testing purposes only!
-    // @author Dieter De Neef
+
+    /**
+     *
+     * @param string[] $array
+     * @return string
+     */
     public static function DisplayArray($array)
     {
         $html = array();
-        
+
         $depth = 0;
         if (is_array($array))
         {
@@ -253,29 +278,36 @@ class Utilities
         {
             $html[] = "Variabele is geen array";
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param string[] $inlinearray
+     * @param integer $depth
+     * @param string $element
+     * @return string
+     */
     public static function DisplayInlineArray($inlinearray, $depth, $element)
     {
         $html = array();
-        
+
         $spaces = null;
-        
+
         for ($j = 0; $j < $depth - 1; $j ++)
         {
             $spaces .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         }
-        
+
         $html[] = $spaces . "[" . $element . "]" . "Array (<br />";
-        
+
         $spaces .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        
+
         for ($i = 0; $i < count($inlinearray); $i ++)
         {
             $key = key($inlinearray);
-            
+
             if (is_array($inlinearray[$i]))
             {
                 $html[] = self::DisplayInlineArray($inlinearray[$i], $depth + 1, $i);
@@ -285,18 +317,18 @@ class Utilities
                 $html[] = $spaces . "[" . $key . "] => " . $inlinearray[$key];
                 $html[] = "<br />";
             }
-            
+
             next($inlinearray);
         }
-        
+
         $html[] = $spaces . ")<br />";
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @param $value mixed
+     * @param boolean $value
      * @return string
      */
     public static function display_true_false_icon($value)
@@ -314,7 +346,8 @@ class Utilities
 
     /**
      *
-     * @param $string string
+     * @param string $string
+     * @return string
      */
     public static function htmlentities($string)
     {
@@ -323,7 +356,7 @@ class Utilities
 
     /**
      *
-     * @param $mimetype string
+     * @param string $mimetype
      * @return string The image html
      */
     public static function mimetype_to_image($mimetype)
@@ -331,16 +364,16 @@ class Utilities
         $mimetype_image = str_replace('/', '_', $mimetype);
         $mimetype_image = (string) StringUtilities::getInstance()->createString($mimetype_image)->upperCamelize();
         return Theme::getInstance()->getCommonImage(
-            'Mimetype/' . $mimetype_image, 
-            'png', 
-            $mimetype, 
-            '', 
+            'Mimetype/' . $mimetype_image,
+            'png',
+            $mimetype,
+            '',
             ToolbarItem::DISPLAY_ICON);
     }
 
     /**
      * Render a complete backtrace for the currently executing script
-     * 
+     *
      * @return string The backtrace
      */
     public static function get_backtrace()
@@ -356,15 +389,15 @@ class Utilities
 
     /**
      * Get the class name from a fully qualified namespaced class name if and only if it's in the given namespace
-     * 
-     * @param $namespace string
-     * @param $classname string
-     * @return string boolean class name or false
+     *
+     * @param string $namespace
+     * @param string $classname
+     * @return string|boolean class name or false
      */
     public static function get_namespace_classname($namespace, $classname)
     {
         $classname_parts = explode('\\', $classname);
-        
+
         if (count($classname_parts) == 1)
         {
             return false;
@@ -384,33 +417,45 @@ class Utilities
         }
     }
 
+    /**
+     *
+     * @param string[] $items
+     * @return string[]
+     */
     public static function clone_array($items)
     {
         $result = array();
+
         foreach ($items as $key => $value)
         {
             $result[$key] = is_object($value) ? clone ($value) : $value;
         }
+
         return $result;
     }
 
     /**
      * Get the current query string (e.g.
      * "?foo=bar&faa=bor")
-     * 
-     * @param $append array optional array of key/value pairs to be appended to the current QS.
+     *
+     * @param string[] $append optional array of key/value pairs to be appended to the current QS.
      * @return string
      */
     public static function get_current_query_string($append = array())
     {
-        $query_string = $_SERVER['QUERY_STRING'];
+        $queryString = $_SERVER['QUERY_STRING'];
         foreach ($append as $key => $value)
         {
-            $query_string .= ($query_string === '' ? '' : '&') . $key . '=' . $value;
+            $queryString .= ($queryString === '' ? '' : '&') . $key . '=' . $value;
         }
-        return $query_string;
+        return $queryString;
     }
 
+    /**
+     *
+     * @param string[] $parsed_url
+     * @return string
+     */
     public static function build_url($parsed_url)
     {
         $scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
@@ -421,7 +466,7 @@ class Utilities
         $pass = ($user || $pass) ? $pass . '@' : '';
         $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
         $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
-        
+
         if (isset($parsed_url['query']) && is_array($parsed_url['query']))
         {
             $query = '?' . http_build_query($parsed_url['query']);
@@ -434,10 +479,17 @@ class Utilities
         {
             $query = '';
         }
-        
+
         return $scheme . $user . $pass . $host . $port . $path . $query . $fragment;
     }
 
+    /**
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param integer[] $imageProperties
+     * @return integer
+     */
     public static function scaleDimensions($width, $height, $imageProperties)
     {
         if ($imageProperties['width'] > $width || $imageProperties['height'] > $height)
@@ -460,7 +512,7 @@ class Utilities
             $imageProperties['thumbnailWidth'] = $imageProperties['width'];
             $imageProperties['thumbnailHeight'] = $imageProperties['height'];
         }
-        
+
         return $imageProperties;
     }
 }

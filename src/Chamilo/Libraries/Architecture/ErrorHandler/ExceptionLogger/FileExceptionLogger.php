@@ -43,9 +43,9 @@ class FileExceptionLogger implements ExceptionLoggerInterface
      * Logs an exception
      *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
@@ -73,8 +73,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
     /**
      * Determines the exception level string
      *
-     * @param int $exceptionLevel
-     *
+     * @param integer $exceptionLevel
      * @return string
      */
     protected function determineExceptionLevelString($exceptionLevel = self::EXCEPTION_LEVEL_ERROR)
