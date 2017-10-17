@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -81,6 +82,11 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->setBreadcrumbs();
+
+        if(!$this->getForum() instanceof Forum)
+        {
+            throw new NotAllowedException();
+        }
 
         $html = array();
 

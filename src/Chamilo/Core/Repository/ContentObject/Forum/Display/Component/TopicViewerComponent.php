@@ -8,6 +8,9 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -76,6 +79,11 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
+        if(!$this->getForumTopic() instanceof ForumTopic)
+        {
+            throw new NotAllowedException();
+        }
+
         $this->setBreadcrumbs();
 
         $html = array();
@@ -98,14 +106,19 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function getForumTopic()
     {
         if (! isset($this->forumTopic))
         {
             $complexForumTopic = $this->get_complex_content_object_item();
+            if(!$complexForumTopic)
+            {
+                throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('ForumTopic'));
+            }
+
             $this->forumTopic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ForumTopic::class_name(),
                 $complexForumTopic->get_ref());
