@@ -285,3 +285,10 @@ DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND
 
 /** 16 OCT 2017 **/
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');
+
+CREATE TABLE `weblcms_course_group_publication_category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `course_group_id` int(10) UNSIGNED NOT NULL,
+  `content_object_publication_category_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

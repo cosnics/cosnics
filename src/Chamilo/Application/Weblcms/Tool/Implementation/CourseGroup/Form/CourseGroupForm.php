@@ -693,10 +693,12 @@ class CourseGroupForm extends FormValidator
         $integrationPackages = Configuration::getInstance()->getIntegrationRegistrations(Manager::context());
         foreach($integrationPackages as $integrationPackage)
         {
-            $formDecorator = $integrationPackage['context'] . '\\Form\\CourseGroupFormDecorator';
-            if(class_exists($formDecorator) && is_subclass_of($formDecorator, CourseGroupFormDecoratorInterface::class))
+            $formDecoratorClass = $integrationPackage['context'] . '\\Form\\CourseGroupFormDecorator';
+            if(class_exists($formDecoratorClass) && is_subclass_of($formDecoratorClass, CourseGroupFormDecoratorInterface::class))
             {
-
+                /** @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecoratorInterface $formDecorator */
+                $formDecorator = new $formDecoratorClass();
+                $formDecorator->decorateCourseGroupForm($this);
             }
         }
     }
