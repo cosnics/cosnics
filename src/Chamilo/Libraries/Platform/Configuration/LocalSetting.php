@@ -84,7 +84,7 @@ class LocalSetting
 
     /**
      *
-     * @return number
+     * @return integer
      */
     public function getUserIdentifier()
     {
@@ -93,7 +93,7 @@ class LocalSetting
 
     /**
      *
-     * @param number $userIdentifier
+     * @param integer $userIdentifier
      */
     public function setUserIdentifier($userIdentifier)
     {
