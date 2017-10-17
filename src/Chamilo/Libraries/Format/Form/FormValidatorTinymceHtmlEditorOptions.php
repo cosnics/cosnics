@@ -20,12 +20,20 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
     const OPTION_BROWSER = 'file_browser_callback';
     const OPTION_PLUGIN = 'plugins';
 
+    /**
+     *
+     * @var string[]
+     */
     private $toolbars = array(
         'Basic' => array(
             self::OPTION_TOOLBAR_LINE_1 => 'bold,italic,underline,separator,numlist,bullist,separator,link,unlink,separator,forecolor,backcolor,separator,hr,separator,image,template',
             self::OPTION_TOOLBAR_LINE_2 => '',
             self::OPTION_TOOLBAR_LINE_3 => ''));
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions::get_option_names()
+     */
     public function get_option_names()
     {
         $options = parent::get_option_names();
@@ -40,26 +48,32 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
         return $options;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions::get_mapping()
+     */
     public function get_mapping()
     {
         $mapping = parent::get_mapping();
 
         $mapping[self::OPTION_THEME] = 'theme';
-        // $mapping[self :: OPTION_COLLAPSE_TOOLBAR] = 'toolbarStartupExpanded';
-        // $mapping[self :: OPTION_CONFIGURATION] = 'script_url';
-        // $mapping[self :: OPTION_FULL_PAGE] = 'fullPage';
         $mapping[self::OPTION_TEMPLATES] = 'template_external_list_url';
 
         return $mapping;
     }
 
-    public function get_toolbar_format($toolbar_name)
+    /**
+     *
+     * @param string $toolbarName
+     * @return string
+     */
+    public function get_toolbar_format($toolbarName)
     {
         $toolbars = $this->toolbars;
 
-        if (key_exists($toolbar_name, $toolbars))
+        if (key_exists($toolbarName, $toolbars))
         {
-            return $toolbars[$toolbar_name];
+            return $toolbars[$toolbarName];
         }
         else
         {
@@ -67,6 +81,10 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions::set_defaults()
+     */
     public function set_defaults()
     {
         parent::set_defaults();

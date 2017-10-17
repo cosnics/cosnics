@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;

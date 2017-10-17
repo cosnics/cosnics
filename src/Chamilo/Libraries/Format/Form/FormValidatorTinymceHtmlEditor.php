@@ -12,6 +12,10 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor::create()
+     */
     public function create()
     {
         $form = $this->get_form();
@@ -31,18 +35,28 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
         return parent::create();
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor::render()
+     */
     public function render()
     {
         $html = array();
+
         $html[] = parent::render();
         $html[] = implode(PHP_EOL, $this->get_javascript());
 
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_includes()
     {
         $scripts = array();
+
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/tiny_mce.js');
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
@@ -53,9 +67,14 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
         return $scripts;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_javascript()
     {
         $javascript = array();
+
         $javascript[] = '<script type="text/javascript">';
         $javascript[] = '$(function ()';
         $javascript[] = '{';

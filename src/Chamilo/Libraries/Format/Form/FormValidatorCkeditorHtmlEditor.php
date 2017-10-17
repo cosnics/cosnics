@@ -14,6 +14,10 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor::create()
+     */
     public function create()
     {
         $form = $this->get_form();
@@ -35,6 +39,10 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
         return parent::create();
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor::render()
+     */
     public function render()
     {
         $html = array();
@@ -45,6 +53,10 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function add_pre_javascript_config()
     {
         $javascript = array();
@@ -57,6 +69,10 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
         return $javascript;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_includes()
     {
         $configFile = Path::getInstance()->getBasePath() .
@@ -65,6 +81,7 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
         $timestamp = filemtime($configFile);
 
         $scripts = array();
+
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js');
         $scripts[] = '<script type="text/javascript">';
@@ -79,9 +96,14 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
         return $scripts;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_javascript()
     {
         $javascript = array();
+
         $javascript[] = '<script type="text/javascript">';
         $javascript[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\'';
         $javascript[] = '$(function ()';

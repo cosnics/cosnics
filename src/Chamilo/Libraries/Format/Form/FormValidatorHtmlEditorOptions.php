@@ -13,12 +13,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class FormValidatorHtmlEditorOptions
 {
-
-    /**
-     *
-     * @var Array The array containing all the options
-     */
-    private $options;
     const OPTION_SKIN = 'skin';
 
     /**
@@ -64,7 +58,13 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      *
-     * @param Array $options
+     * @var string[]
+     */
+    private $options;
+
+    /**
+     *
+     * @param string[] $options
      */
     public function __construct($options)
     {
@@ -75,7 +75,7 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Returns the names of all available options
      *
-     * @return Array The option names
+     * @return string[] The option names
      */
     public function get_option_names()
     {
@@ -94,7 +94,7 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Gets all options
      *
-     * @return Array The options
+     * @return string[] The options
      */
     public function get_options()
     {
@@ -104,7 +104,7 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Set the options
      *
-     * @param Array $options
+     * @param string[] $options
      */
     public function set_options($options)
     {
@@ -114,6 +114,7 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Get a specific option's value or null if the option isn't set
      *
+     * @param string $variable
      * @return mixed the option's value
      */
     public function get_option($variable)
@@ -131,7 +132,7 @@ abstract class FormValidatorHtmlEditorOptions
     /**
      * Sets a specific option
      *
-     * @param String $variable
+     * @param string $variable
      * @param mixed $value
      */
     public function set_option($variable, $value)
@@ -139,6 +140,10 @@ abstract class FormValidatorHtmlEditorOptions
         $this->options[$variable] = $value;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_mapping()
     {
         return array_combine($this->get_option_names(), $this->get_option_names());
@@ -146,6 +151,8 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Process the generic options into editor specific ones
+     *
+     * @return string
      */
     public function render_options()
     {
@@ -213,6 +220,11 @@ abstract class FormValidatorHtmlEditorOptions
         }
     }
 
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
     public function format_for_javascript($value)
     {
         if (is_bool($value))
@@ -249,9 +261,9 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      *
-     * @param String $type
-     * @param Array $options
-     * @return FormValidatorHtmlEditorOptions
+     * @param string $type
+     * @param string[] $options
+     * @return \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions
      */
     public static function factory($type, $options = array())
     {

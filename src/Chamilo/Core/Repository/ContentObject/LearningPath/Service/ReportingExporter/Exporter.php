@@ -2,8 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter;
 
-use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\TreeNodeChildrenUserProgressExportFormat;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat\UsersProgressExportFormat;
