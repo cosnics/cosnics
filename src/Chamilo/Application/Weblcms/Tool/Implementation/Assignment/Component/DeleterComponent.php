@@ -43,7 +43,7 @@ class DeleterComponent extends Manager
                 ContentObjectPublication::class_name(), 
                 $pid);
             
-            if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
+            if (!empty($publication) && $this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
             {
                 $publication->delete();
                 $condition = new EqualityCondition(
