@@ -137,7 +137,7 @@ class SortableTableFromArray extends SortableTable
     {
         $this->initializeTable();
 
-        return parent::toHtml();
+        return parent::render();
     }
 
     /**

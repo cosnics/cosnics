@@ -9,15 +9,15 @@ use Exception;
 
 /**
  * Abstract class that describes a dataclass
- * 
- * @package common.libraries
+ *
+ * @package Chamilo\Libraries\Storage\DataClass
  * @author Hans De Bisschop - Erasmus Hogeschool Brussel
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class DataClass
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    
+
     // Constants
     const PROPERTY_ID = 'id';
     const NO_UID = - 1;
@@ -29,7 +29,7 @@ abstract class DataClass
      * Properties *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Properties of the data class object, stored in an associative array.
      * Combination of different types of
@@ -40,18 +40,18 @@ abstract class DataClass
 
     /**
      * The listeners for this dataclass
-     * 
+     *
      * @var DataClassListener[]
      */
     private $listeners;
 
     /**
      * A list of errors that this dataclass has
-     * 
+     *
      * @var Array
      */
     private $errors;
-    
+
     /**
      * **************************************************************************************************************
      * Property Types
@@ -66,10 +66,10 @@ abstract class DataClass
      * Main functionality
      * **************************************************************************************************************
      */
-    
+
     /**
      * Creates a new data class object.
-     * 
+     *
      * @param $default_properties array The default properties of the data class object. Associative array.
      * @param $optional_properties array The optional properties of the data class object. Associative array.
      */
@@ -98,7 +98,7 @@ abstract class DataClass
                 unset($record[$property]);
             }
         }
-        
+
         if (count($record) > 0 && $object instanceof DataClass && ! $object instanceof CompositeDataClass)
         {
             foreach ($record as $optional_property_name => $optional_property_value)
@@ -114,10 +114,10 @@ abstract class DataClass
      * Properties functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Retrieves all the properties
-     * 
+     *
      * @return Array
      */
     public function get_properties()
@@ -127,7 +127,7 @@ abstract class DataClass
 
     /**
      * Sets all the properties
-     * 
+     *
      * @param $properties Array
      */
     public function set_properties($properties)
@@ -140,10 +140,10 @@ abstract class DataClass
      * Specific properties functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Sets the properties for a specific type
-     * 
+     *
      * @param $properties_type string
      * @param $properties Array
      */
@@ -154,7 +154,7 @@ abstract class DataClass
 
     /**
      * Returns the properties for a specific type
-     * 
+     *
      * @param $properties_type string
      *
      * @return Array
@@ -166,7 +166,7 @@ abstract class DataClass
 
     /**
      * Get a property from a property type
-     * 
+     *
      * @param $properties_type string
      * @param $property_name string
      *
@@ -175,13 +175,13 @@ abstract class DataClass
     public function get_specific_property($properties_type, $property_name)
     {
         $properties = $this->get_specific_properties($properties_type);
-        
+
         return (isset($properties) && array_key_exists($property_name, $properties)) ? $properties[$property_name] : null;
     }
 
     /**
      * Sets a property for a specific property type
-     * 
+     *
      * @param $properties_type string
      * @param $property_name string
      * @param $property_value string
@@ -196,10 +196,10 @@ abstract class DataClass
      * Default properties functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Gets a default property of this data class object by name.
-     * 
+     *
      * @param $name string The name of the property.
      */
     public function get_default_property($name)
@@ -209,7 +209,7 @@ abstract class DataClass
 
     /**
      * Sets a default property of this data class by name.
-     * 
+     *
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
@@ -222,7 +222,7 @@ abstract class DataClass
 
     /**
      * Gets the default properties of this data class.
-     * 
+     *
      * @return array An associative array containing the properties.
      */
     public function get_default_properties()
@@ -232,7 +232,7 @@ abstract class DataClass
 
     /**
      * Sets the default properties of this dataclass
-     * 
+     *
      * @param $default_properties array
      */
     public function set_default_properties($default_properties)
@@ -242,7 +242,7 @@ abstract class DataClass
 
     /**
      * Get the default properties of all data classes.
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[]
@@ -255,7 +255,7 @@ abstract class DataClass
 
     /**
      * Checks if the given identifier is the name of a default data class property.
-     * 
+     *
      * @param $name string The identifier.
      * @return boolean True if the identifier is a property name, false otherwise.
      */
@@ -269,10 +269,10 @@ abstract class DataClass
      * Optional properties functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Gets the optional properties of this data class.
-     * 
+     *
      * @return array An associative array containing the properties.
      */
     public function get_optional_properties()
@@ -282,7 +282,7 @@ abstract class DataClass
 
     /**
      * Sets the optional properties of this dataclass
-     * 
+     *
      * @param $optional_properties Array
      */
     public function set_optional_properties($optional_properties)
@@ -292,7 +292,7 @@ abstract class DataClass
 
     /**
      * Gets a optional property of this data class object by name.
-     * 
+     *
      * @param $name string The name of the property.
      */
     public function get_optional_property($name)
@@ -302,7 +302,7 @@ abstract class DataClass
 
     /**
      * Sets a optional property of this data class by name.
-     * 
+     *
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
@@ -316,10 +316,10 @@ abstract class DataClass
      * Foreign properties functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Gets the foreign properties of this data class.
-     * 
+     *
      * @return array An associative array containing the properties.
      */
     public function get_foreign_properties()
@@ -329,7 +329,7 @@ abstract class DataClass
 
     /**
      * Sets the foreign properties of this dataclass
-     * 
+     *
      * @param $foreign_properties Array
      */
     public function set_foreign_properties($foreign_properties)
@@ -340,7 +340,7 @@ abstract class DataClass
     /**
      * Gets a foreign property of this data class object by name and retrieves it with lazy loading if the property does
      * not yet exists in this dataclass
-     * 
+     *
      * @param string $name
      * @param string $classname The type of the foreign object
      * @return mixed
@@ -348,22 +348,22 @@ abstract class DataClass
     public function get_foreign_property($name, $classname)
     {
         $foreign_property = $this->get_specific_property(self::PROPERTIES_FOREIGN, $name);
-        
+
         if (is_null($foreign_property))
         {
             $foreign_property = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                $classname, 
+                $classname,
                 $this->get_default_property($name . '_id'));
-            
+
             $this->set_foreign_property($name, $foreign_property);
         }
-        
+
         return $foreign_property;
     }
 
     /**
      * Sets a foreign property of this data class by name and pushes the id of this
-     * 
+     *
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      * @throws \Exception
@@ -374,10 +374,10 @@ abstract class DataClass
         {
             throw new \Exception(
                 Translation::get(
-                    'ForeignObjectPropertyCanNotBeNull', 
+                    'ForeignObjectPropertyCanNotBeNull',
                     array('OBJECT' => $this->class_name(), 'FOREIGN_OBJECT' => $name)));
         }
-        
+
         $this->set_specific_property(self::PROPERTIES_FOREIGN, $name, $value);
         $this->set_default_property($name . '_id', $value->get_id());
     }
@@ -387,10 +387,10 @@ abstract class DataClass
      * Properties Metadata Functionality
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns all (unique) properties by which a DataClass object can be cached
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[]
@@ -406,10 +406,10 @@ abstract class DataClass
      * Getters and setters
      * *************************************************************************************************************
      */
-    
+
     /**
      * Returns the id of this object
-     * 
+     *
      * @return int The id.
      * @deprecated Use getId() now
      */
@@ -420,7 +420,7 @@ abstract class DataClass
 
     /**
      * Returns the id of this object
-     * 
+     *
      * @return int The id.
      */
     public function getId()
@@ -430,7 +430,7 @@ abstract class DataClass
 
     /**
      * Sets id of the object
-     * 
+     *
      * @param $id int
      * @deprecated Use setId($id) now
      */
@@ -461,10 +461,10 @@ abstract class DataClass
      * CRUD functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Saves the object
-     * 
+     *
      * @return boolean
      */
     public function save()
@@ -481,7 +481,7 @@ abstract class DataClass
 
     /**
      * Check if the data class has an id or not (and therefore exists in the database)
-     * 
+     *
      * @return boolean
      */
     public function is_identified()
@@ -493,7 +493,7 @@ abstract class DataClass
     /**
      * Check wether the object contains all mandatory properties to be saved in datasource This method should be
      * overriden in classes inheriting from DataClass
-     * 
+     *
      * @return boolean Return true if the object can be saved, false otherwise
      */
     protected function check_before_save()
@@ -507,7 +507,7 @@ abstract class DataClass
 
     /**
      * Creates the object
-     * 
+     *
      * @return boolean
      */
     public function create()
@@ -518,44 +518,44 @@ abstract class DataClass
         {
             $success = \Chamilo\Libraries\Storage\DataManager\DataManager::create($this);
         }
-        
+
         $this->notify(DataClassListener::AFTER_CREATE, array($success));
         return $success;
     }
 
     /**
      * Updates the object
-     * 
+     *
      * @throws \Exception
      * @return boolean
      */
     public function update()
     {
         $success = false;
-        
+
         $this->notify(DataClassListener::BEFORE_UPDATE);
-        
+
         if ($this->check_before_save())
         {
             $success = \Chamilo\Libraries\Storage\DataManager\DataManager::update($this);
         }
-        
+
         $this->notify(DataClassListener::AFTER_UPDATE, array($success));
-        
+
         return $success;
     }
 
     /**
      * Deletes the object
-     * 
+     *
      * @return boolean
      */
     public function delete()
     {
         $this->notify(DataClassListener::BEFORE_DELETE);
-        
+
         $success = true;
-        
+
         if (! $this->delete_dependencies())
         {
             $success = false;
@@ -564,9 +564,9 @@ abstract class DataClass
         {
             $success = \Chamilo\Libraries\Storage\DataManager\DataManager::delete($this);
         }
-        
+
         $this->notify(DataClassListener::AFTER_DELETE, array($success));
-        
+
         return $success;
     }
 
@@ -578,9 +578,9 @@ abstract class DataClass
         foreach ($this->get_dependencies() as $dependency_class => $dependency_condition)
         {
             $dependency_objects = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                $dependency_class, 
+                $dependency_class,
                 new DataClassRetrievesParameters($dependency_condition));
-            
+
             while ($dependency_object = $dependency_objects->next_result())
             {
                 if (! $dependency_object->delete())
@@ -589,13 +589,13 @@ abstract class DataClass
                 }
             }
         }
-        
+
         return true;
     }
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @param array $dependencies
      *
      * @return string[string]
@@ -603,7 +603,7 @@ abstract class DataClass
     protected function get_dependencies($dependencies = array())
     {
         $this->notify(DataClassListener::GET_DEPENDENCIES, array(&$dependencies));
-        
+
         return $dependencies;
     }
 
@@ -612,10 +612,10 @@ abstract class DataClass
      * Listener functionality *
      * *************************************************************************************************************
      */
-    
+
     /**
      * Sets the listeners
-     * 
+     *
      * @param DataClassListener[] $listeners
      */
     public function set_listeners($listeners)
@@ -625,7 +625,7 @@ abstract class DataClass
 
     /**
      * Returns the listeners
-     * 
+     *
      * @return DataClassListener[]
      */
     public function get_listeners()
@@ -635,7 +635,7 @@ abstract class DataClass
 
     /**
      * Adss a listener to the listeners
-     * 
+     *
      * @param DataClassListener $listener
      */
     public function add_listener(DataClassListener $listener)
@@ -645,7 +645,7 @@ abstract class DataClass
 
     /**
      * Removes a listener from the index
-     * 
+     *
      * @param $index
      */
     public function remove_listener($index)
@@ -655,7 +655,7 @@ abstract class DataClass
 
     /**
      * Triggers an event in all the listeners
-     * 
+     *
      * @param string $event
      * @param mixed $parameters
      *
@@ -675,7 +675,7 @@ abstract class DataClass
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -684,10 +684,10 @@ abstract class DataClass
      * Error handling
      * *************************************************************************************************************
      */
-    
+
     /**
      * Adds an error to the error list
-     * 
+     *
      * @param $error_msg string
      */
     public function add_error($error_msg)
@@ -696,13 +696,13 @@ abstract class DataClass
         {
             $this->errors = array();
         }
-        
+
         $this->errors[] = $error_msg;
     }
 
     /**
      * Checks wether the object has errors
-     * 
+     *
      * @return booleans
      */
     public function has_errors()
@@ -712,7 +712,7 @@ abstract class DataClass
 
     /**
      * Retrieves the list of errors
-     * 
+     *
      * @return Array
      */
     public function get_errors()
@@ -733,10 +733,10 @@ abstract class DataClass
      * Helper functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Returns the name of the object
-     * 
+     *
      * @return string
      * @deprecated Only used for legacy calls to CUD method implementations, should no longer be necessary
      */
@@ -750,10 +750,10 @@ abstract class DataClass
      * Static functionality
      * *************************************************************************************************************
      */
-    
+
     /**
      * Returns whether or not this dataclass is an extended type
-     * 
+     *
      * @return boolean
      */
     public static function is_extended_type()
@@ -763,7 +763,7 @@ abstract class DataClass
 
     /**
      * Returns the table name for this dataclass
-     * 
+     *
      * @return string
      */
     public static function get_table_name()
@@ -774,7 +774,7 @@ abstract class DataClass
             self::$tableNames[static::class_name()] = $data_manager::PREFIX .
                  ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), true);
         }
-        
+
         return self::$tableNames[static::class_name()];
     }
 
