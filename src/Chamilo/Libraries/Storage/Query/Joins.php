@@ -1,15 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
+use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+
 /**
  *
- * @package Chamilo\Libraries\Storage\Query$Joins
+ * @package Chamilo\Libraries\Storage\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Joins implements \Countable
+class Joins implements \Countable, Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      *
@@ -19,7 +22,7 @@ class Joins implements \Countable
 
     /**
      * Constructor
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Join[] $joins
      */
     public function __construct($joins = array())
@@ -29,7 +32,7 @@ class Joins implements \Countable
 
     /**
      * Gets the joins
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Join[]
      */
     public function get()
@@ -47,39 +50,35 @@ class Joins implements \Countable
     }
 
     /**
-     * @param Join $join
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Join $join
      */
     public function prepend($join)
     {
         array_unshift($this->joins, $join);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
     public function getHashParts()
     {
         $hashes = array();
-        
+
         foreach ($this->joins as $join)
         {
             $hashes[] = $join->getHashParts();
         }
-        
+
         sort($hashes);
-        
+
         return $hashes;
     }
 
     /**
      *
-     * @return string
-     */
-    public function hash()
-    {
-        return md5(json_encode($this->getHashParts()));
-    }
-
-    /**
-     *
-     * @see Countable::count()
+     * @see \Countable::count()
      */
     public function count()
     {
@@ -88,8 +87,8 @@ class Joins implements \Countable
 
     /**
      * Merges the given dataclass properties into this one
-     * 
-     * @param Joins $joinsToMerge
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Joins $joinsToMerge
      */
     public function merge(Joins $joinsToMerge = null)
     {
@@ -97,7 +96,7 @@ class Joins implements \Countable
         {
             return;
         }
-        
+
         foreach ($joinsToMerge->get() as $join)
         {
             $this->add($join);

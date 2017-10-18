@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -116,7 +117,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
             CourseEntityRelation::class_name(),
-            new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation::PROPERTY_ENTITY_ID));
+            new DataClassDistinctParameters(
+                new AndCondition($conditions),
+                new DataClassProperties(
+                    array(
+                        new PropertyConditionVariable(
+                            CourseEntityRelation::class,
+                            CourseEntityRelation::PROPERTY_ENTITY_ID)))));
     }
 
     /**

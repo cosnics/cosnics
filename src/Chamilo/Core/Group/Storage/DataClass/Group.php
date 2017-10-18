@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -318,7 +319,10 @@ class Group extends NestedSet
             $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
             $users = DataManager::distinct(
                 GroupRelUser::class_name(),
-                new DataClassDistinctParameters($condition, GroupRelUser::PROPERTY_USER_ID));
+                new DataClassDistinctParameters(
+                    $condition,
+                    new DataClassProperties(
+                        array(new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)))));
 
             $this->users[(int) $include_subgroups][(int) $recursive_subgroups] = $users;
         }
@@ -375,7 +379,7 @@ class Group extends NestedSet
 
             $subgroupIdentifiers = DataManager::distinct(
                 Group::class_name(),
-                new DataClassDistinctParameters($childrenCondition, Group::PROPERTY_ID));
+                new DataClassDistinctParameters($childrenCondition, new DataClassProperties(array(new PropertyConditionVariable(Group::class,Group::PROPERTY_ID)))));
 
             $this->subgroupIdentifiers[(int) $recursive] = $subgroupIdentifiers;
         }

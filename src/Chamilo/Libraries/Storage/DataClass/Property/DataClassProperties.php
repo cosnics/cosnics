@@ -14,12 +14,17 @@ class DataClassProperties implements Hashable
 {
     use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
+     */
     private $properties;
 
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]
+     * @param
+     *            \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
     public function __construct($properties = array())
     {
@@ -29,7 +34,7 @@ class DataClassProperties implements Hashable
     /**
      * Gets the properties
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
     public function get()
     {
@@ -38,7 +43,7 @@ class DataClassProperties implements Hashable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty | ConditionVariable $property
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      */
     public function add($property)
     {
@@ -47,7 +52,7 @@ class DataClassProperties implements Hashable
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
     public function getHashParts()
     {
@@ -68,7 +73,7 @@ class DataClassProperties implements Hashable
     /**
      * Merges the given dataclass properties into this one
      *
-     * @param DataClassProperties $dataClassPropertiesToMerge
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassPropertiesToMerge
      */
     public function merge(DataClassProperties $dataClassPropertiesToMerge = null)
     {

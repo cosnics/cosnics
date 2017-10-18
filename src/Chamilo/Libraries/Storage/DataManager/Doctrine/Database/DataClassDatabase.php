@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -78,11 +77,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
      */
-    public function __construct(
-        \Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
+    public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
         ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
-        RecordProcessor $recordProcessor = null
-    )
+        RecordProcessor $recordProcessor = null)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
@@ -188,8 +185,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     protected function handleError(\Exception $exception)
     {
         $this->getExceptionLogger()->logException(
-            new \Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
-        );
+            new \Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'));
     }
 
     /**
@@ -297,8 +293,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $statement = $this->getRecordsResult(
             $this->buildRetrievesSql($dataClassName, $parameters),
             $dataClassName,
-            $parameters
-        );
+            $parameters);
 
         return $this->fetchRecords($statement);
     }
@@ -321,8 +316,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($groupBy->get_group_by() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy(
-                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable)
-                );
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable));
             }
         }
 
@@ -331,8 +325,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($parameters->get_properties()->get() as $conditionVariable)
             {
                 $queryBuilder->addSelect(
-                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable)
-                );
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable));
             }
         }
         else
@@ -356,8 +349,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $statement = $this->getRecordsResult(
             $this->buildRecordsSql($dataClassName, $parameters),
             $dataClassName,
-            $parameters
-        );
+            $parameters);
 
         return $this->fetchRecords($statement);
     }
@@ -423,13 +415,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $queryBuilder->set(
                     $this->getConditionPartTranslatorService()->translateConditionVariable(
                         $this,
-                        $dataClassProperty->get_property()
-                    ),
+                        $dataClassProperty->get_property()),
                     $this->getConditionPartTranslatorService()->translateConditionVariable(
                         $this,
-                        $dataClassProperty->get_value()
-                    )
-                );
+                        $dataClassProperty->get_value()));
             }
 
             if ($condition)
@@ -443,7 +432,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-            if (!$statement instanceof \PDOException)
+            if (! $statement instanceof \PDOException)
             {
                 return true;
             }
@@ -477,7 +466,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             return true;
         }
@@ -504,8 +493,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $property = $this->getConditionPartTranslatorService()->translateConditionVariable(
                 $this,
-                $parameters->get_property()
-            );
+                $parameters->get_property());
         }
         else
         {
@@ -515,14 +503,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder->addSelect('COUNT(' . $property . ')');
         $queryBuilder->from(
             $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName))
-        );
+            $this->getAlias($this->prepareTableName($dataClassName)));
 
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_NUM);
 
@@ -550,8 +537,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         foreach ($parameters->get_property()->get() as $property)
         {
             $queryBuilder->addSelect(
-                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property)
-            );
+                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
         $queryBuilder->addSelect('COUNT(1)');
@@ -562,20 +548,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
         foreach ($parameters->get_property()->get() as $property)
         {
             $queryBuilder->addGroupBy(
-                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property)
-            );
+                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
         if ($parameters->get_having() instanceof Condition)
         {
             $queryBuilder->having(
-                $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->get_having())
-            );
+                $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->get_having()));
         }
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $counts = array();
             while ($record = $statement->fetch(\PDO::FETCH_NUM))
@@ -606,16 +590,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         $properties = $parameters->get_property();
 
-        if (!is_array($properties))
+        if (! is_array($properties))
         {
             $properties = array($properties);
         }
 
         $select = array();
 
-        foreach ($properties as $property)
+        foreach ($parameters->getDataClassProperties()->get() as $conditionVariable)
         {
-            $select[] = $this->escapeColumnName($property, $this->getAlias($dataClassName::get_table_name()));
+            $select[] = $this->getConditionPartTranslatorService()->translateConditionVariable(
+                $this,
+                $conditionVariable);
         }
 
         $queryBuilder = $this->getConnection()->createQueryBuilder();
@@ -627,12 +613,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $distinctElements = array();
             while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
             {
-                if (count($properties) > 1)
+                if (count($parameters->getDataClassProperties()->get()) > 1)
                 {
                     $distinctElements[] = $record;
                 }
@@ -665,8 +651,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->getConnection()->createQueryBuilder();
         $queryBuilder->addSelect(
             'MAX(' . $this->escapeColumnName($property, $this->getAlias($dataClassName::get_table_name())) . ') AS ' .
-            self::ALIAS_MAX_SORT
-        );
+                 self::ALIAS_MAX_SORT);
         $queryBuilder->from($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
 
         if (isset($condition))
@@ -675,14 +660,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $this->getConditionPartTranslatorService()->translateCondition(
                     $this,
                     $condition,
-                    $this->getAlias($dataClassName::get_table_name())
-                )
-            );
+                    $this->getAlias($dataClassName::get_table_name())));
         }
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_NUM);
 
@@ -704,7 +687,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
-        if (!$compositeDataClass->is_extended())
+        if (! $compositeDataClass->is_extended())
         {
             return array();
         }
@@ -717,11 +700,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
 
         $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object::get_table_name() . ' WHERE ' .
-            $object::PROPERTY_ID . '=' . $this->quote($compositeDataClass->getId());
+             $object::PROPERTY_ID . '=' . $this->quote($compositeDataClass->getId());
 
         $statement = $this->getConnection()->query($query);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_ASSOC);
             $additionalProperties = array();
@@ -737,7 +720,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                         if (is_resource($record[$prop]))
                         {
                             $data = '';
-                            while (!feof($record[$prop]))
+                            while (! feof($record[$prop]))
                             {
                                 $data .= fread($record[$prop], 1024);
                             }
@@ -775,7 +758,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $throwOnFalse = function ($connection) use ($function)
         {
             $result = call_user_func($function, $connection);
-            if (!$result)
+            if (! $result)
             {
                 throw new Exception();
             }
@@ -842,7 +825,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function escapeColumnName($columnName, $storageUnitAlias = null)
     {
-        if (!empty($storageUnitAlias))
+        if (! empty($storageUnitAlias))
         {
             return $storageUnitAlias . '.' . $columnName;
         }
@@ -953,8 +936,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         $queryBuilder->from(
             $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName))
-        );
+            $this->getAlias($this->prepareTableName($dataClassName)));
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
         $queryBuilder = $this->processOrderBy($queryBuilder, $parameters->get_order_by());
         $queryBuilder = $this->processLimit($queryBuilder, $parameters->get_count(), $parameters->get_offset());
@@ -971,8 +953,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     protected function prepareTableName($dataClassName)
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class_name()) &&
-            get_parent_class($dataClassName) == CompositeDataClass::class_name()
-        )
+             get_parent_class($dataClassName) == CompositeDataClass::class_name())
         {
             $tableName = $dataClassName::get_table_name();
         }
@@ -980,7 +961,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $tableName = $dataClassName::get_table_name();
         }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && !$dataClassName::is_extended())
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && ! $dataClassName::is_extended())
         {
             $parent = $dataClassName::parent_class_name();
             $tableName = $parent::get_table_name();
@@ -1006,8 +987,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         $queryBuilder->from(
             $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName))
-        );
+            $this->getAlias($this->prepareTableName($dataClassName)));
 
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
         $queryBuilder = $this->processOrderBy($queryBuilder, $parameters->get_order_by());
@@ -1019,7 +999,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($sqlQuery);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_ASSOC);
         }
@@ -1035,7 +1015,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
-        if (is_null($record) || !is_array($record) || empty($record))
+        if (is_null($record) || ! is_array($record) || empty($record))
         {
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
@@ -1087,7 +1067,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function escape($text, $escapeWildcards = false)
     {
-        if (!is_null($text))
+        if (! is_null($text))
         {
             return $this->quote($text);
         }
@@ -1110,7 +1090,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $orderBy = array();
         }
-        elseif (!is_array($orderBy))
+        elseif (! is_array($orderBy))
         {
             $orderBy = array($orderBy);
         }
@@ -1119,8 +1099,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $queryBuilder->addOrderBy(
                 $this->getConditionPartTranslatorService()->translateConditionVariable($this, $order->get_property()),
-                ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC')
-            );
+                ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC'));
         }
 
         return $queryBuilder;
@@ -1164,8 +1143,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($properties->get() as $conditionVariable)
             {
                 $queryBuilder->addSelect(
-                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable)
-                );
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable));
             }
         }
         else
@@ -1190,8 +1168,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($groupBy->get() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy(
-                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable)
-                );
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable));
             }
         }
 
@@ -1214,8 +1191,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             {
                 $joinCondition = $this->getConditionPartTranslatorService()->translateCondition(
                     $this,
-                    $join->get_condition()
-                );
+                    $join->get_condition());
                 $joinDataClassName = $join->get_data_class();
 
                 switch ($join->get_type())
@@ -1225,24 +1201,21 @@ class DataClassDatabase implements DataClassDatabaseInterface
                             $this->getAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
                             $this->getAlias($joinDataClassName::get_table_name()),
-                            $joinCondition
-                        );
+                            $joinCondition);
                         break;
                     case Join::TYPE_RIGHT :
                         $queryBuilder->rightJoin(
                             $this->getAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
                             $this->getAlias($joinDataClassName::get_table_name()),
-                            $joinCondition
-                        );
+                            $joinCondition);
                         break;
                     case Join::TYPE_LEFT :
                         $queryBuilder->leftJoin(
                             $this->getAlias($dataClassName::get_table_name()),
                             $joinDataClassName::get_table_name(),
                             $this->getAlias($joinDataClassName::get_table_name()),
-                            $joinCondition
-                        );
+                            $joinCondition);
                         break;
                 }
             }
@@ -1294,11 +1267,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function getDataClass($dataClassName, $record)
     {
-        $baseClassName =
-            (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() :
-                DataClass::class_name());
-        $dataClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ?
-            $record[CompositeDataClass::PROPERTY_TYPE] : $dataClassName);
+        $baseClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() : DataClass::class_name());
+        $dataClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $dataClassName);
 
         return $baseClassName::factory($dataClassName, $record);
     }

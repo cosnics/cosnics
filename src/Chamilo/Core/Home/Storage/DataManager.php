@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -105,7 +106,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $columnIdentifiers = self::distinct(
             Element::class_name(),
-            new DataClassDistinctParameters($columnCondition, Element::PROPERTY_ID));
+            new DataClassDistinctParameters(
+                $columnCondition,
+                new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))));
 
         $condition = new InCondition(
             new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID),

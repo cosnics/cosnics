@@ -15,7 +15,7 @@ abstract class ConditionVariableTranslator extends ConditionPartTranslator
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\ConditionVariable
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function getConditionVariable()
     {
@@ -24,9 +24,9 @@ abstract class ConditionVariableTranslator extends ConditionPartTranslator
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\ConditionVariable $conditionVariable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      */
-    public function setCondition(ConditionVariable $conditionVariable)
+    public function setConditionVariable(ConditionVariable $conditionVariable)
     {
         $this->setConditionPart($conditionVariable);
     }

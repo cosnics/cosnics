@@ -53,5 +53,5 @@ trait HashableTrait
      *
      * @return string[]
      */
-    abstract function getHashParts();
+    abstract public function getHashParts();
 }

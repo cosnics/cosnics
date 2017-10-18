@@ -229,7 +229,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                 if ($only_retrieve_ids)
                 {
-                    $parameters = new DataClassDistinctParameters($condition, Group::PROPERTY_ID);
+                    $parameters = new DataClassDistinctParameters(
+                        $condition,
+                        new DataClassProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID))));
                     $group_ids = static::distinct(Group::class_name(), $parameters);
 
                     self::$allSubscribedGroupsCache[$cacheId] = $group_ids;

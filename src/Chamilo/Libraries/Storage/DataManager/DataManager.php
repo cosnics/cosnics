@@ -457,7 +457,7 @@ class DataManager
     {
         if (!$parameters instanceof DataClassRetrievesParameters)
         {
-            $parameters = DataClassRetrievesParameters::generate($parameters);
+            throw new \Exception('Illegal parameter passed to the DataManager :: retrieves() method.');
         }
 
         if (is_subclass_of($class, CompositeDataClass::class_name()))
@@ -512,7 +512,7 @@ class DataManager
     {
         if (!$parameters instanceof RecordRetrievesParameters)
         {
-            $parameters = RecordRetrievesParameters::generate($parameters);
+            throw new \Exception('Illegal parameter passed to the DataManager :: records() method.');
         }
 
         if (!RecordResultSetCache::exists($class, $parameters))
@@ -544,7 +544,7 @@ class DataManager
     {
         if (!$parameters instanceof DataClassDistinctParameters)
         {
-            $parameters = DataClassDistinctParameters::generate($parameters);
+            throw new \Exception('Illegal parameter passed to the DataManager :: distinct() method.');
         }
 
         if (!DataClassDistinctCache::exists($class, $parameters))
@@ -671,7 +671,7 @@ class DataManager
     {
         if (!$parameters instanceof DataClassCountParameters)
         {
-            $parameters = DataClassCountParameters::generate($parameters);
+            throw new \Exception('Illegal parameter passed to the DataManager :: count() method.');
         }
 
         if (is_subclass_of($class, CompositeDataClass::class_name()))

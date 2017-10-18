@@ -1,17 +1,21 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+
 /**
  * Describes the order by functionality of a query.
  * Uses ConditionVariable to define the property
- * 
+ *
  * @package Chamilo\Libraries\Storage\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OrderBy
+class OrderBy implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      *
@@ -27,7 +31,7 @@ class OrderBy
 
     /**
      * Constructor
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      * @param integer $direction
      */
@@ -39,7 +43,7 @@ class OrderBy
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_property()
     {
@@ -59,7 +63,7 @@ class OrderBy
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      */
-    public function set_property($property)
+    public function set_property(ConditionVariable $property)
     {
         $this->property = $property;
     }
@@ -71,5 +75,14 @@ class OrderBy
     public function set_direction($direction)
     {
         $this->direction = $direction;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        return array($this->get_property()->getHashParts(), $this->get_direction());
     }
 }

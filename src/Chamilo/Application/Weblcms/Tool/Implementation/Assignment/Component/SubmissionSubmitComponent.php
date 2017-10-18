@@ -34,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -237,7 +238,11 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent implemen
                 CourseEntityRelation::class_name(),
                 new DataClassDistinctParameters(
                     new AndCondition($cgrConditions),
-                    CourseEntityRelation::PROPERTY_ENTITY_ID));
+                    new DataClassProperties(
+                        array(
+                            new PropertyConditionVariable(
+                                CourseEntityRelation::class,
+                                CourseEntityRelation::PROPERTY_ENTITY_ID)))));
 
             // ***********************************************************************************************//
             // DMTODO Problem with caching. Once caching problems fixed, remove the following line of code. //

@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Exception;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -15,64 +16,36 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
 {
 
     /**
-     * The ordering of the DataClass objects to be applied to the result set
-     * 
-     * @var \Chamilo\Libraries\Storage\Query\OrderBy[]
-     */
-    private $orderBy;
-
-    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $dataClassProperties
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
-    public function __construct($condition = null, $property = array(), Joins $joins = null, $orderBy = array())
+    public function __construct(Condition $condition = null, DataClassProperties $dataClassProperties = null,
+        Joins $joins = null, $orderBy = array())
     {
-        parent::__construct($condition, $property, $joins);
-        $this->orderBy = $orderBy;
+        DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy);
     }
 
     /**
-     * Get the ordering of the DataClass objects to be applied to the result set
-     * 
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
-     */
-    public function getOrderBy()
-    {
-        return $this->orderBy;
-    }
-
-    /**
-     * Set the ordering of the DataClass objects to be applied to the result set
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
-     */
-    public function setOrderBy($orderBy)
-    {
-        $this->orderBy = $orderBy;
-    }
-
-    /**
+     * Get the property of the DataClass object to be used as a parameter
      *
-     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
+     * @deprecated Use DataClassProperties and getDataClassProperties() now
      */
-    public function getHashParts()
+    public function get_property()
     {
-        $hashParts = parent::getHashParts();
-        
-        $hashParts[] = $this->getOrderBy();
-        
-        return $hashParts;
+        return $this->getDataClassProperties();
     }
 
     /**
-     * Throw an exception if the DataClassPropertyParameters object is invalid
-     * 
-     * @throws \Exception
+     * Set the property of the DataClass object to be used as a parameter
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $properties
+     * @deprecated Use DataClassProperties and setDataClassProperties() now
      */
-    public static function invalid()
+    public function set_property($properties)
     {
-        throw new Exception('Illegal parameter(s) passed to the DataManager :: distinct() method.');
+        $this->setDataClassProperties($properties);
     }
 }

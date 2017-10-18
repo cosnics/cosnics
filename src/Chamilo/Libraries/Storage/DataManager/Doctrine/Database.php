@@ -1293,18 +1293,11 @@ class Database
      */
     public function distinct($class, DataClassDistinctParameters $parameters)
     {
-        $properties = $parameters->get_property();
-
-        if (!is_array($properties))
-        {
-            $properties = array($properties);
-        }
-
         $select = array();
 
-        foreach ($properties as $property)
+        foreach ($parameters->getDataClassProperties()->get() as $property)
         {
-            $select[] = self::escape_column_name($property, $this->get_alias($class::get_table_name()));
+            $select[] = ConditionVariableTranslator::render($property);
         }
 
         $query_builder = $this->connection->createQueryBuilder();
@@ -1321,7 +1314,7 @@ class Database
             $distinct_elements = array();
             while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
             {
-                if (count($properties) > 1)
+                if (count($parameters->getDataClassProperties()->get()) > 1)
                 {
                     $distinct_elements[] = $record;
                 }

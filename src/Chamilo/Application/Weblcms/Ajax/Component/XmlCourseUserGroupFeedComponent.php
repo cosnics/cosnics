@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
@@ -142,7 +143,11 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
             $parameters = new DataClassDistinctParameters(
                 new AndCondition($userConditions),
-                CourseEntityRelation::PROPERTY_ENTITY_ID);
+                new DataClassProperties(
+                    array(
+                        new PropertyConditionVariable(
+                            CourseEntityRelation::class,
+                            CourseEntityRelation::PROPERTY_ENTITY_ID))));
 
             $user_ids = DataManager::distinct(CourseEntityRelation::class_name(), $parameters);
 

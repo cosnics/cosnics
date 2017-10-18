@@ -274,7 +274,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($object->get_object_number()));
-        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID);
+        $parameters = new DataClassDistinctParameters(
+            $condition,
+            new DataClassProperties(
+                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
         $version_ids = self::distinct(ContentObject::class_name(), $parameters);
         sort($version_ids);
 
