@@ -48,7 +48,7 @@ abstract class DataClass
     /**
      * A list of errors that this dataclass has
      * 
-     * @var Array
+     * @var array
      */
     private $errors;
     
@@ -118,7 +118,7 @@ abstract class DataClass
     /**
      * Retrieves all the properties
      * 
-     * @return Array
+     * @return array
      */
     public function get_properties()
     {
@@ -128,7 +128,7 @@ abstract class DataClass
     /**
      * Sets all the properties
      * 
-     * @param $properties Array
+     * @param $properties array
      */
     public function set_properties($properties)
     {
@@ -145,7 +145,7 @@ abstract class DataClass
      * Sets the properties for a specific type
      * 
      * @param $properties_type string
-     * @param $properties Array
+     * @param $properties array
      */
     public function set_specific_properties($properties_type, $properties)
     {
@@ -157,7 +157,7 @@ abstract class DataClass
      * 
      * @param $properties_type string
      *
-     * @return Array
+     * @return array
      */
     public function get_specific_properties($properties_type)
     {
@@ -283,7 +283,7 @@ abstract class DataClass
     /**
      * Sets the optional properties of this dataclass
      * 
-     * @param $optional_properties Array
+     * @param $optional_properties array
      */
     public function set_optional_properties($optional_properties)
     {
@@ -330,7 +330,7 @@ abstract class DataClass
     /**
      * Sets the foreign properties of this dataclass
      * 
-     * @param $foreign_properties Array
+     * @param $foreign_properties array
      */
     public function set_foreign_properties($foreign_properties)
     {
@@ -703,7 +703,7 @@ abstract class DataClass
     /**
      * Checks wether the object has errors
      * 
-     * @return booleans
+     * @return bool
      */
     public function has_errors()
     {
@@ -713,7 +713,7 @@ abstract class DataClass
     /**
      * Retrieves the list of errors
      * 
-     * @return Array
+     * @return array
      */
     public function get_errors()
     {

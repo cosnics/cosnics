@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecoratorInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -16,17 +16,55 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
+    const PROPERTY_DOCUMENT_CATEGORY_ID = 'document_category_id';
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService
+     */
+    protected $courseGroupPublicationCategoryService;
+
+    /**
+     * CourseGroupServiceDecorator constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
+     */
+    public function __construct(
+        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
+    )
+    {
+        $this->courseGroupPublicationCategoryService = $courseGroupPublicationCategoryService;
+    }
 
     /**
      * Decorates the course group form
      *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $courseGroupForm
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      */
-    public function decorateCourseGroupForm(FormValidator $courseGroupForm)
+    public function decorateCourseGroupForm(FormValidator $courseGroupForm, CourseGroup $courseGroup)
     {
+        $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
+
         // Creation form or editing form without linked document category
         $courseGroupForm->addElement(
-            'checkbox', CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID, Translation::get('Document')
+            'checkbox', CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']',
+            Translation::getInstance()->getTranslation('Document')
         );
+
+        $courseGroupForm->addElement(
+            'html',
+            '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $id .
+            '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
+            '<div class="warning-message">' .
+            Translation::getInstance()->getTranslation('DocumentToolUncheckedWarning') . '</div>' .
+            '</div></div>'
+        );
+
+        $defaults = [
+            CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
+                $courseGroup->get_document_category_id()
+        ];
+
+        $courseGroupForm->setDefaults($defaults);
     }
 }

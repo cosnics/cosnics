@@ -2,8 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupServiceDecoratorInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -17,6 +18,23 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
 {
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService
+     */
+    protected $courseGroupPublicationCategoryService;
+
+    /**
+     * CourseGroupServiceDecorator constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
+     */
+    public function __construct(
+        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
+    )
+    {
+        $this->courseGroupPublicationCategoryService = $courseGroupPublicationCategoryService;
+    }
+
+    /**
      * Decorates the create functionality of a course group. Handing over the created course group and the form
      * values for further processing of the custom form
      *
@@ -25,7 +43,12 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function createGroup(CourseGroup $courseGroup, $formValues = [])
     {
-        // TODO: Implement createGroup() method.
+        if ($formValues[CourseGroupFormDecorator::PROPERTY_DOCUMENT_CATEGORY_ID][0] == 1)
+        {
+            $this->courseGroupPublicationCategoryService->createPublicationCategoryForCourseGroup(
+                $courseGroup, 'Document'
+            );
+        }
     }
 
     /**

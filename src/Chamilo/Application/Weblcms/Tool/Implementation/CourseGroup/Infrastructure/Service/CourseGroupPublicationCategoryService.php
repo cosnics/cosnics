@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
+use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupPublicationCategory;
@@ -35,6 +36,24 @@ class CourseGroupPublicationCategoryService
      * @var WeblcmsRights
      */
     protected $weblcmsRights;
+
+    /**
+     * CourseGroupPublicationCategoryService constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository $courseGroupPublicationCategoryRepository
+     * @param \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $publicationRepository
+     * @param \Chamilo\Application\Weblcms\Rights\WeblcmsRights $weblcmsRights
+     */
+    public function __construct(
+        CourseGroupPublicationCategoryRepository $courseGroupPublicationCategoryRepository,
+        PublicationRepository $publicationRepository,
+        WeblcmsRights $weblcmsRights
+    )
+    {
+        $this->courseGroupPublicationCategoryRepository = $courseGroupPublicationCategoryRepository;
+        $this->publicationRepository = $publicationRepository;
+        $this->weblcmsRights = $weblcmsRights;
+    }
 
     /**
      * Helper function to create a new publication category

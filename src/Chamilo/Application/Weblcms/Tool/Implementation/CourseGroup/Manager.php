@@ -46,4 +46,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return array(self::PARAM_COURSE_GROUP);
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
+     */
+    protected function getCourseGroupDecoratorsManager()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.course_group.decorator.manager');
+    }
 }

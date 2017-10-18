@@ -289,6 +289,6 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 CREATE TABLE `weblcms_course_group_publication_category` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `course_group_id` int(10) UNSIGNED NOT NULL,
-  `content_object_publication_category_id` int(10) UNSIGNED NOT NULL,
+  `publication_category_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -21,7 +22,7 @@ class EditorComponent extends TabComponent
 
     public function renderTabContent()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -29,20 +30,28 @@ class EditorComponent extends TabComponent
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
+        /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation::get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))));
+                Translation::get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))
+            )
+        );
 
         $form = new CourseGroupForm(
+            $this->getCourseGroupDecoratorsManager(),
             CourseGroupForm::TYPE_EDIT,
             $course_group,
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP,
-                    self::PARAM_COURSE_GROUP => $course_group_id)));
+                    self::PARAM_COURSE_GROUP => $course_group_id
+                )
+            ),
+            $this->getUser()
+        );
 
         if ($form->validate())
         {
@@ -53,17 +62,19 @@ class EditorComponent extends TabComponent
                 $message = Translation::get(
                     'ObjectUpdated',
                     array('OBJECT' => Translation::get('CourseGroup')),
-                    Utilities::COMMON_LIBRARIES);
+                    Utilities::COMMON_LIBRARIES
+                );
             }
             else
             {
                 $message = Translation::get(
-                    'ObjectNotUpdated',
-                    array('OBJECT' => Translation::get('CourseGroup')),
-                    Utilities::COMMON_LIBRARIES) . '<br />' . implode('<br />', $course_group->get_errors());
+                        'ObjectNotUpdated',
+                        array('OBJECT' => Translation::get('CourseGroup')),
+                        Utilities::COMMON_LIBRARIES
+                    ) . '<br />' . implode('<br />', $course_group->get_errors());
             }
 
-            $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
 
         return $form->toHtml();

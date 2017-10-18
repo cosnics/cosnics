@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
