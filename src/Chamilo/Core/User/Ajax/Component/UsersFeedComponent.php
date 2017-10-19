@@ -89,7 +89,7 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
     {
         $condition = $this->getCondition();
 
-        $this->userCount = DataManager::count(User::class_name(), $condition);
+        $this->userCount = DataManager::count(User::class_name(), new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition,
@@ -99,7 +99,7 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
 
-        return DataManager::retrieves(User::class_name(), new DataClassCountParameters($parameters));
+        return DataManager::retrieves(User::class_name(), $parameters);
     }
 
     /**
