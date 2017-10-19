@@ -22,15 +22,15 @@ class GroupBy implements Hashable
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    private $group_by;
+    private $conditionVariables;
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $groupBy
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function __construct($groupBy = array())
+    public function __construct($conditionVariables = array())
     {
-        $this->group_by = (is_array($groupBy) ? $groupBy : func_get_args());
+        $this->conditionVariables = (is_array($conditionVariables) ? $conditionVariables : func_get_args());
     }
 
     /**
@@ -39,7 +39,7 @@ class GroupBy implements Hashable
      */
     public function get()
     {
-        return $this->group_by;
+        return $this->conditionVariables;
     }
 
     /**
@@ -49,7 +49,7 @@ class GroupBy implements Hashable
      */
     public function add($groupBy)
     {
-        $this->group_by[] = $groupBy;
+        $this->conditionVariables[] = $groupBy;
     }
 
     /**
@@ -60,9 +60,9 @@ class GroupBy implements Hashable
     {
         $hashes = array();
 
-        foreach ($this->get() as $group_by)
+        foreach ($this->get() as $conditionVariable)
         {
-            $hashes[] = $group_by->getHashParts();
+            $hashes[] = $conditionVariable->getHashParts();
         }
 
         sort($hashes);

@@ -25,7 +25,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
     /**
      * The property that describes the base object in the relation class
      *
-     * @var int
+     * @var integer
      */
     private $base_key;
 

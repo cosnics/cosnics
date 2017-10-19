@@ -27,7 +27,7 @@ class DataClassIterator extends \ArrayIterator
      * DataClassIterator constructor.
      *
      * @param string $dataClassName
-     * @param array $dataClasses
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      */
     public function __construct($dataClassName, $dataClasses)
     {

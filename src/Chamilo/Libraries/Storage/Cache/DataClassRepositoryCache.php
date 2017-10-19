@@ -314,7 +314,7 @@ class DataClassRepositoryCache
      *
      * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     * @param string[] $property_values
+     * @param string[] $propertyValues
      * @throws \Exception
      * @return boolean
      */
@@ -364,6 +364,7 @@ class DataClassRepositoryCache
 
     /**
      *
+     * @param string $className
      * @param string[] $record
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      * @throws \Exception
@@ -388,6 +389,7 @@ class DataClassRepositoryCache
 
     /**
      *
+     * @param string $className
      * @param \Chamilo\Libraries\Storage\Iterator\RecordIterator $recordIterator
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      * @throws \Exception
