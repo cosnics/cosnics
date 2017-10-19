@@ -5,7 +5,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastruc
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
-use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -147,6 +146,8 @@ class CourseGroupPublicationCategoryService
         {
             $publicationCategory->set_allow_change(1);
             $this->courseGroupPublicationCategoryRepository->update($publicationCategory);
+
+            $this->removeRightsOnCategoryForCourseGroup($publicationCategory, $courseGroup);
         }
 
         $courseGroupPublicationCategories =
@@ -203,19 +204,7 @@ class CourseGroupPublicationCategoryService
         $rights = array(WeblcmsRights::VIEW_RIGHT, WeblcmsRights::ADD_RIGHT, WeblcmsRights::MANAGE_CATEGORIES_RIGHT)
     )
     {
-        /** @var RightsLocation $location */
-        $location = $this->weblcmsRights->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights::TYPE_COURSE_CATEGORY,
-            $publicationCategory->getId(),
-            $courseGroup->get_course_code()
-        );
-
-        if (!$location)
-        {
-            throw new \Exception(
-                'No location found for the publication category with id ' . $publicationCategory->getId()
-            );
-        }
+        $location = $this->getLocationFromPublicationCategory($publicationCategory);
 
         $location->disinherit();
 
@@ -242,6 +231,66 @@ class CourseGroupPublicationCategoryService
                 );
             }
         }
+    }
+
+    /**
+     * Removes the rights for a given course group from a given category
+     *
+     * @param ContentObjectPublicationCategory $publicationCategory
+     * @param CourseGroup $courseGroup
+     * @param array $rights
+     *
+     * @throws \Exception
+     */
+    protected function removeRightsOnCategoryForCourseGroup(
+        ContentObjectPublicationCategory $publicationCategory,
+        CourseGroup $courseGroup,
+        $rights = array(WeblcmsRights::VIEW_RIGHT, WeblcmsRights::ADD_RIGHT, WeblcmsRights::MANAGE_CATEGORIES_RIGHT)
+    )
+    {
+        $location = $this->getLocationFromPublicationCategory($publicationCategory);
+
+        foreach ($rights as $right)
+        {
+            if (!$this->weblcmsRights->unset_location_entity_right(
+                \Chamilo\Application\Weblcms\Manager::context(),
+                $right,
+                $courseGroup->getId(),
+                CourseGroupEntity::ENTITY_TYPE,
+                $location->getId()
+            ))
+            {
+                throw new \Exception(
+                    'Could not remove right ' . $right . ' from publication category with id ' .
+                    $publicationCategory->getId()
+                );
+            }
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory $publicationCategory
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation
+     *
+     * @throws \Exception
+     */
+    protected function getLocationFromPublicationCategory(ContentObjectPublicationCategory $publicationCategory)
+    {
+        $location = $this->weblcmsRights->get_weblcms_location_by_identifier_from_courses_subtree(
+            WeblcmsRights::TYPE_COURSE_CATEGORY,
+            $publicationCategory->getId(),
+            $publicationCategory->get_course()
+        );
+
+        if (!$location)
+        {
+            throw new \Exception(
+                'No location found for the publication category with id ' . $publicationCategory->getId()
+            );
+        }
+
+        return $location;
     }
 
     /**

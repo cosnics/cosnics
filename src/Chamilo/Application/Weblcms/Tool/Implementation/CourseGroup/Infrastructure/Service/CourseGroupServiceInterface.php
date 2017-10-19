@@ -13,25 +13,6 @@ interface CourseGroupServiceInterface
 {
 
     /**
-     * Creates a document category for a given course group
-     * 
-     * @param CourseGroup $courseGroup
-     *
-     * @throws \Exception
-     */
-    public function createDocumentCategoryForCourseGroup(CourseGroup $courseGroup);
-
-    /**
-     * Creates a forum for a given course group
-     * 
-     * @param CourseGroup $courseGroup
-     * @param User $user
-     *
-     * @throws \Exception
-     */
-    public function createForumCategoryAndPublicationForCourseGroup(CourseGroup $courseGroup, User $user);
-
-    /**
      * Counts the course groups in a given course
      * 
      * @param int $courseId

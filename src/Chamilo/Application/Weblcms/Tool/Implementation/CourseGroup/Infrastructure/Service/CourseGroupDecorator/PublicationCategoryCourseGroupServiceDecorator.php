@@ -34,11 +34,12 @@ abstract class PublicationCategoryCourseGroupServiceDecorator implements CourseG
      * values for further processing of the custom form
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      */
-    public function createGroup(CourseGroup $courseGroup, $formValues = [])
+    public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        $hasCategory = boolval($formValues[$this->getFormProperty()][$courseGroup->getId()]);
+        $hasCategory = boolval($formValues[$this->getFormProperty()][0]);
 
         if ($hasCategory)
         {
@@ -53,9 +54,10 @@ abstract class PublicationCategoryCourseGroupServiceDecorator implements CourseG
      * values for further processing of the custom form
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      */
-    public function updateGroup(CourseGroup $courseGroup, $formValues = [])
+    public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
         $hasCategory = boolval($formValues[$this->getFormProperty()][$courseGroup->getId()]);
 

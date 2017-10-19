@@ -85,13 +85,14 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
      * values for further processing of the custom form
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      */
-    public function createGroup(CourseGroup $courseGroup, $formValues = [])
+    public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
         foreach ($this->serviceDecorators as $serviceDecorator)
         {
-            $serviceDecorator->createGroup($courseGroup, $formValues);
+            $serviceDecorator->createGroup($courseGroup, $user, $formValues);
         }
     }
 
@@ -100,13 +101,14 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
      * values for further processing of the custom form
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      */
-    public function updateGroup(CourseGroup $courseGroup, $formValues = [])
+    public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
         foreach ($this->serviceDecorators as $serviceDecorator)
         {
-            $serviceDecorator->updateGroup($courseGroup, $formValues);
+            $serviceDecorator->updateGroup($courseGroup, $user, $formValues);
         }
     }
 

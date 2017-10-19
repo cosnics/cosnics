@@ -37,7 +37,7 @@ class BrowserComponent extends Manager
     {
         $course_id = $this->get_course_id();
 
-        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
+        $courseGroupService = new CourseGroupService(new CourseGroupRepository());
 
         // $trail = BreadcrumbTrail :: getInstance();
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
@@ -104,7 +104,7 @@ class BrowserComponent extends Manager
                 $categories_ids = array_keys($values['categories']);
                 $copyCourseGroups = boolval($values['course_groups']);
 
-                $courseCopier = new CourseCopier(new CourseCopierRepository(), $courseGroupService);
+                $courseCopier = new CourseCopier(new CourseCopierRepository());
 
                 $courseCopier->copyCourse(
                     $this->getUser(),

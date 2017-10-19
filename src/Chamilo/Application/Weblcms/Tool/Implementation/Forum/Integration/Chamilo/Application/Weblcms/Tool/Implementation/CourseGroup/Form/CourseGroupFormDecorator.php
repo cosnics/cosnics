@@ -51,15 +51,6 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
             Translation::getInstance()->getTranslation('Forum')
         );
 
-        $courseGroupForm->addElement(
-            'html',
-            '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $id .
-            '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
-            '<div class="warning-message">' .
-            Translation::getInstance()->getTranslation('ForumToolUncheckedWarning') . '</div>' .
-            '</div></div>'
-        );
-
         $defaults = [
             CourseGroup::PROPERTY_FORUM_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
                 $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories($courseGroup, 'Forum')

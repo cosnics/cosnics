@@ -5,11 +5,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -253,7 +250,7 @@ class CourseGroupForm extends FormValidator
             Translation::getInstance()->getTranslation('SelfUnRegAllowed')
         );
 
-        $this->add_tools($this->course_group, $counter);
+        $this->add_tools($this->course_group);
 
         $this->close_header();
     }
@@ -327,7 +324,7 @@ class CourseGroupForm extends FormValidator
             Translation::getInstance()->getTranslation('SelfUnRegAllowed')
         );
 
-        $this->add_tools($this->course_group, $counter);
+        $this->add_tools($this->course_group);
 
         $this->close_header();
     }
@@ -352,8 +349,6 @@ class CourseGroupForm extends FormValidator
      */
     public function update_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
-
         $values = $this->exportValues();
 
         $counter = 1;
@@ -469,8 +464,6 @@ class CourseGroupForm extends FormValidator
                     $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER . $counter]
                 );
 
-                // if the name changes, update the corresponding document
-                // category and or forum if necessary
                 if ($course_group->get_name() != $values[CourseGroup::PROPERTY_NAME . $counter])
                 {
                     $old_name = $course_group->get_name();
@@ -486,59 +479,9 @@ class CourseGroupForm extends FormValidator
                         );
                         continue;
                     }
-
-                    $forum_category_id = $course_group->get_optional_property(CourseGroup::PROPERTY_FORUM_CATEGORY_ID);
-                    if ($forum_category_id)
-                    {
-                        /** @var ContentObjectPublicationCategory $forum_category */
-                        $forum_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $forum_category_id
-                        );
-                        $forum_category->set_name($values[CourseGroup::PROPERTY_NAME . $counter]);
-                        $forum_category->update();
-                    }
                 }
 
-                $createForum = boolval($values[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter]);
-
-
-                if ($createForum)
-                {
-                    if ($course_group->get_forum_category_id() == 0) // it
-                        // doesn't
-                        // exist yet
-                    {
-                        $courseGroupService->createForumCategoryAndPublicationForCourseGroup(
-                            $course_group, $this->currentUser
-                        );
-                    }
-                }
-                else
-                {
-                    if ($course_group->get_forum_category_id() != 0) // unlink
-                        // the
-                        // document
-                        // category
-                    {
-                        $forum_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $course_group->get_forum_category_id()
-                        );
-                        if ($forum_category)
-                        {
-                            $forum_category->set_allow_change(1);
-                            $forum_category->delete();
-                        }
-                        $course_group->set_forum_category_id(0);
-                    }
-                }
-                if (!$course_group->update())
-                {
-                    return false;
-                }
-
-                $this->courseGroupDecoratorsManager->updateGroup($course_group, $values);
+                $this->courseGroupDecoratorsManager->updateGroup($course_group, $this->currentUser, $values);
 
                 // Change the parent
                 if ($course_group->get_parent_id() != $values[CourseGroup::PROPERTY_PARENT_ID . $counter])
@@ -610,18 +553,14 @@ class CourseGroupForm extends FormValidator
             Translation::getInstance()->getTranslation('SelfUnRegAllowed')
         );
 
-        $this->add_tools($this->course_group, null);
+        $this->add_tools($this->course_group);
         $this->close_header();
     }
 
     /**
-     * Adds the Documents and Forum checkboxes in the form, If the course group does not have the document and forum
-     * tool activated, show the chechboxes to activate them
-     *
      * @param $course_group CourseGroup
-     * @param int $counter
      */
-    public function add_tools($course_group, $counter)
+    public function add_tools($course_group)
     {
         $this->addElement('category', Translation::getInstance()->getTranslation('Integrations'));
         $this->courseGroupDecoratorsManager->decorateCourseGroupForm($this, $course_group);
@@ -694,7 +633,7 @@ class CourseGroupForm extends FormValidator
                 Translation::getInstance()->getTranslation('SelfUnRegAllowed')
             );
 
-            $this->add_tools($course_groups, $counter);
+            $this->add_tools($course_groups);
 
             $this->addElement('hidden', CourseGroup::PROPERTY_ID . $counter);
             $this->addElement('hidden', CourseGroup::PROPERTY_PARENT_ID . $counter . 'old');
@@ -944,8 +883,7 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * A course_group title should be unique per course as a document and forum category names correspond to the
-     * course_group name This method checks if a course group witht the same title already exists for this course
+     * A course_group title should be unique per course
      *
      * @param $course_group CourseGroup
      *
@@ -986,31 +924,12 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * This methos creates one or several course_groups for the given course If checked document and forum publications
-     * are created with the same name as the course_group titel.
-     *
-     * @param
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * This methos creates one or several course_groups for the given course
      *
      * @return boolean
      */
     public function create_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
-
         $this->rights = array();
         $this->rights[] = WeblcmsRights::VIEW_RIGHT;
         $this->rights[] = WeblcmsRights::ADD_RIGHT;
@@ -1111,7 +1030,7 @@ class CourseGroupForm extends FormValidator
                 {
                     if ($course_group->create())
                     {
-                        $this->courseGroupDecoratorsManager->createGroup($course_group, $values);
+                        $this->courseGroupDecoratorsManager->createGroup($course_group, $this->currentUser, $values);
                     }
                     else
                     {

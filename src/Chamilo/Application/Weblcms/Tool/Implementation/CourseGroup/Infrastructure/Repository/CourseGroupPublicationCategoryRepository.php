@@ -73,7 +73,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
             new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseGroupPublicationCategory::class,
-                    CourseGroupPublicationCategory::PROPERTY_PUBLICATION_CATEGORY_ID
+                    CourseGroupPublicationCategory::PROPERTY_COURSE_GROUP_ID
                 ),
                 new StaticConditionVariable($courseGroup->getId())
             )
