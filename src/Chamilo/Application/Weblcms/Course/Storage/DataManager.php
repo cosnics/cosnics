@@ -274,7 +274,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID),
             new StaticConditionVariable($course_type_id));
 
-        return self::count(Course::class_name(), $condition);
+        return self::count(Course::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
@@ -327,7 +327,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::count(Course::class_name(), $condition) == 0;
+        return self::count(Course::class_name(), new DataClassCountParameters($condition)) == 0;
     }
 
     public static function retrieve_course($id)
@@ -821,7 +821,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         return self::count(
             CourseEntityRelation::class_name(),
-            self::get_course_user_relation_by_course_and_user_condition($course_id, $user_id)) > 0;
+            new DataClassCountParameters(
+                self::get_course_user_relation_by_course_and_user_condition($course_id, $user_id))) > 0;
     }
 
     /**
@@ -836,7 +837,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         return self::count(
             CourseEntityRelation::class_name(),
-            self::get_course_group_relation_by_course_and_group_condition($course_id, $group_id)) > 0;
+            new DataClassCountParameters(
+                self::get_course_group_relation_by_course_and_group_condition($course_id, $group_id))) > 0;
     }
 
     /**
@@ -1100,7 +1102,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
                 self::$is_teacher_cache[$course_id][$user->get_id()] = DataManager::count(
                     CourseEntityRelation::class_name(),
-                    $condition) > 0;
+                    new DataClassCountParameters($condition)) > 0;
             }
         }
 
@@ -1447,7 +1449,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
                 $condition = new AndCondition($conditions);
 
-                $has_group_relations = self::count(CourseEntityRelation::class_name(), $condition) > 0;
+                $has_group_relations = self::count(
+                    CourseEntityRelation::class_name(),
+                    new DataClassCountParameters($condition)) > 0;
             }
             else
             {

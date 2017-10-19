@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Feed to return users
@@ -98,7 +99,7 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))));
 
-        return DataManager::retrieves(User::class_name(), $parameters);
+        return DataManager::retrieves(User::class_name(), new DataClassCountParameters($parameters));
     }
 
     /**

@@ -47,7 +47,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Dropbox\Exception;
 
 /**
  * This is the base class for all tools used in applications.

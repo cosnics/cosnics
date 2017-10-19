@@ -234,7 +234,7 @@ class DataClassRepository
     {
         if (! $parameters instanceof DataClassRetrievesParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataClassRepository :: retrieves() method.');
+            $parameters = DataClassRetrievesParameters::generate($parameters);
         }
 
         if (is_subclass_of($dataClassName, CompositeDataClass::class_name()))
@@ -298,7 +298,7 @@ class DataClassRepository
     {
         if (! $parameters instanceof RecordRetrievesParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataClassRepository :: records() method.');
+            $parameters = RecordRetrievesParameters::generate($parameters);
         }
 
         if ($this->isQueryCacheEnabled())
@@ -478,7 +478,7 @@ class DataClassRepository
     {
         if (! $parameters instanceof DataClassCountParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataClassRepository :: count() method.');
+            $parameters = DataClassCountParameters::generate($parameters);
         }
 
         if (is_subclass_of($dataClassName, CompositeDataClass::class_name()))
@@ -532,7 +532,7 @@ class DataClassRepository
     {
         if (! $parameters instanceof DataClassDistinctParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataClassRepository :: distinct() method.');
+            $parameters = DataClassDistinctParameters::generate($parameters);
         }
 
         if ($this->isQueryCacheEnabled())

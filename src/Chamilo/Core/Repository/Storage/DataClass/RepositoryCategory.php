@@ -102,7 +102,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
                 new StaticConditionVariable($this->get_parent()));
-            $count = DataManager::count(RepositoryCategory::class_name(), $condition);
+            $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
             if ($count == 0)
             {
                 $this->add_error(Translation::get('ParentDoesNotExist'));
@@ -142,7 +142,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             new StaticConditionVariable($this->get_type()));
 
         $condition = new AndCondition($conditions);
-        $count = DataManager::count(RepositoryCategory::class_name(), $condition);
+        $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
 
         if ($count > 0)
         {

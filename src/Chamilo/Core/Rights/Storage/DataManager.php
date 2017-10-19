@@ -178,9 +178,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new DataClassCountParameters(
             $condition,
             $joins,
-            new FunctionConditionVariable(
+            new DataClassProperties(array(new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_IDENTIFIER)));
+                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_IDENTIFIER)))));
 
         return $context_dm::count($context_location::class_name(), $parameters);
     }

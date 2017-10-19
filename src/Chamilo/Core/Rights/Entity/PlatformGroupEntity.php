@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class that describes the platform groups for the rights editor
- * 
+ *
  * @author Sven Vanpoucke
  */
 class PlatformGroupEntity implements NestedRightsEntity
@@ -38,7 +38,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Retrieves the items for this entity
-     * 
+     *
      * @param $condition Condition
      * @param $offset int
      * @param $count int
@@ -48,15 +48,15 @@ class PlatformGroupEntity implements NestedRightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        
+
         return \Chamilo\Core\Group\Storage\DataManager::retrieves(
-            Group::class_name(), 
+            Group::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Retrieves the entity item ids relevant for a given user (direct subscribed platformgroups and their parents)
-     * 
+     *
      * @param $user_id integer
      * @return array
      */
@@ -65,7 +65,7 @@ class PlatformGroupEntity implements NestedRightsEntity
         if (is_null($this->platform_group_cache[$user_id]))
         {
             $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
-                $user_id, 
+                $user_id,
                 true);
         }
         return $this->platform_group_cache[$user_id];
@@ -73,7 +73,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Counts the items for this entity
-     * 
+     *
      * @param $condition Condition
      * @return int
      */
@@ -81,13 +81,13 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         $condition = $this->get_condition($condition);
         return \Chamilo\Core\Group\Storage\DataManager::count(
-            Group::class_name(), 
+            Group::class_name(),
             new DataClassCountParameters($condition));
     }
 
     /**
      * Returns the name of this entity
-     * 
+     *
      * @return String
      */
     public function get_entity_name()
@@ -97,7 +97,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the translated name of this entiry for displaying purposes only!
-     * 
+     *
      * @return String Translated name of the entity
      */
     public function get_entity_translated_name()
@@ -108,7 +108,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the type of this entity
-     * 
+     *
      * @return int
      */
     public function get_entity_type()
@@ -118,7 +118,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the path to the icon of the entity
-     * 
+     *
      * @return String
      */
     public function get_entity_icon()
@@ -128,7 +128,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the ID column of this entity
-     * 
+     *
      * @return String
      */
     public function get_id_property()
@@ -138,7 +138,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the PARENT column of this entity
-     * 
+     *
      * @return String
      */
     public function get_parent_property()
@@ -148,7 +148,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the TITLE column of this entity
-     * 
+     *
      * @return String
      */
     public function get_title_property()
@@ -158,7 +158,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the root ids for this entity
-     * 
+     *
      * @return Array<int>
      */
     public function get_root_ids()
@@ -168,7 +168,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the properties on which can be searched
-     * 
+     *
      * @return Array
      */
     public function get_search_properties()
@@ -183,15 +183,15 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(), 
+                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(),
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => 'xml_group_menu_feed'));
-        
+
         return $redirect->getUrl();
     }
 
     /**
      * Function that can be filled in extensions of this class to limit the platform groups
-     * 
+     *
      * @return Condition
      */
     public function get_condition($condition)
@@ -205,10 +205,10 @@ class PlatformGroupEntity implements NestedRightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'platform_groups', 
-            Translation::get('PlatformGroups'), 
-            Manager::context() . '\Ajax', 
-            'platform_group_entity_feed', 
+            'platform_groups',
+            Translation::get('PlatformGroups'),
+            Manager::context() . '\Ajax',
+            'platform_group_entity_feed',
             array());
     }
 
@@ -222,19 +222,19 @@ class PlatformGroupEntity implements NestedRightsEntity
         {
             return null;
         }
-        
+
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-        
+
         return new AdvancedElementFinderElement(
-            static::ENTITY_TYPE . '_' . $id, 
-            'type type_group', 
-            $group->get_name(), 
+            static::ENTITY_TYPE . '_' . $id,
+            'type type_group',
+            $group->get_name(),
             $description);
     }
 
     /**
      * Returns the class name of the data class that is used for this entity
-     * 
+     *
      * @return string
      */
     public static function data_class_class_name()
@@ -244,7 +244,7 @@ class PlatformGroupEntity implements NestedRightsEntity
 
     /**
      * Get the fully qualified class name of the object
-     * 
+     *
      * @return string
      */
     public static function class_name()

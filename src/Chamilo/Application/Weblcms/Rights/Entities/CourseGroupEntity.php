@@ -16,10 +16,11 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Class that describes the course groups for the rights editor
- * 
+ *
  * @author Sven Vanpoucke
  */
 class CourseGroupEntity implements NestedRightsEntity
@@ -49,7 +50,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Retrieves the items for this entity
-     * 
+     *
      * @param $condition Condition
      * @param $offset int
      * @param $count int
@@ -59,15 +60,15 @@ class CourseGroupEntity implements NestedRightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        
+
         return CourseGroupDataManager::retrieves(
-            CourseGroup::class_name(), 
+            CourseGroup::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Retrieves the entity item ids relevant for a given user
-     * 
+     *
      * @param $user_id integer
      * @return array
      */
@@ -81,25 +82,25 @@ class CourseGroupEntity implements NestedRightsEntity
                 $this->course_group_cache[$user_id][] = $course_group->get_id();
             }
         }
-        
+
         return $this->course_group_cache[$user_id];
     }
 
     /**
      * Counts the items for this entity
-     * 
+     *
      * @param $condition Condition
      * @return int
      */
     public function count_entity_items($condition = null)
     {
         $condition = $this->get_condition($condition);
-        return DataManager::count(CourseGroup::class_name(), $condition);
+        return DataManager::count(CourseGroup::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
      * Returns the name of this entity
-     * 
+     *
      * @return String
      */
     public function get_entity_name()
@@ -114,7 +115,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the translated name of this entiry for displaying purposes only!
-     * 
+     *
      * @return String Translated name of the entity
      */
     public function get_entity_translated_name()
@@ -125,7 +126,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the type of this entity
-     * 
+     *
      * @return int
      */
     public function get_entity_type()
@@ -135,7 +136,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the path to the icon of the entity
-     * 
+     *
      * @return String
      */
     public function get_entity_icon()
@@ -145,7 +146,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the ID column of this entity
-     * 
+     *
      * @return String
      */
     public function get_id_property()
@@ -155,7 +156,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the PARENT column of this entity
-     * 
+     *
      * @return String
      */
     public function get_parent_property()
@@ -165,7 +166,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the TITLE column of this entity
-     * 
+     *
      * @return String
      */
     public function get_title_property()
@@ -175,7 +176,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the root ids for this entity
-     * 
+     *
      * @return Array<int>
      */
     public function get_root_ids()
@@ -185,7 +186,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
     /**
      * Returns the properties on which can be searched
-     * 
+     *
      * @return Array
      */
     public function get_search_properties()
@@ -200,29 +201,29 @@ class CourseGroupEntity implements NestedRightsEntity
     {
         return '';
     }
-    
+
     // Helper functionality
-    
+
     /**
      * Adds the course condition to the given condition
-     * 
+     *
      * @return Condition
      */
     private function get_condition($condition)
     {
         $course_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->course_id));
         if ($condition)
         {
             $conditions = array();
-            
+
             $conditions[] = $condition;
             $conditions[] = $course_condition;
-            
+
             return new AndCondition($conditions);
         }
-        
+
         return $course_condition;
     }
 
@@ -232,10 +233,10 @@ class CourseGroupEntity implements NestedRightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'course_groups', 
-            Translation::get('CourseGroups'), 
-            Manager::package(), 
-            'course_groups_feed', 
+            'course_groups',
+            Translation::get('CourseGroups'),
+            Manager::package(),
+            'course_groups_feed',
             array('course_id' => $this->course_id));
     }
 
@@ -249,17 +250,17 @@ class CourseGroupEntity implements NestedRightsEntity
         {
             return null;
         }
-        
+
         return new AdvancedElementFinderElement(
-            self::ENTITY_TYPE . '_' . $id, 
-            'type type_group', 
-            $group->get_name(), 
+            self::ENTITY_TYPE . '_' . $id,
+            'type type_group',
+            $group->get_name(),
             $group->get_description());
     }
 
     /**
      * Returns the class name of the data class that is used for this entity
-     * 
+     *
      * @return string
      */
     public static function data_class_class_name()

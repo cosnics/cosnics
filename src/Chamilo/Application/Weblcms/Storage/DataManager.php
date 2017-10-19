@@ -95,7 +95,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
 
-        return self::count(ContentObjectPublication::class_name(), $condition) >= 1;
+        return self::count(ContentObjectPublication::class_name(), new DataClassCountParameters($condition)) >= 1;
     }
 
     /**
@@ -113,7 +113,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
             $object_ids);
 
-        return self::count(ContentObjectPublication::class_name(), $condition) >= 1;
+        return self::count(ContentObjectPublication::class_name(), new DataClassCountParameters($condition)) >= 1;
     }
 
     /**
@@ -2573,7 +2573,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         return self::count(
             RightsLocationLockedRight::class_name(),
-            self::get_rights_location_locked_right_condition($location_id, $right_id)) > 0;
+            new DataClassCountParameters(self::get_rights_location_locked_right_condition($location_id, $right_id))) > 0;
     }
 
     /**
@@ -2645,7 +2645,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return (self::count(CourseRequest::class_name(), $condition) > 0);
+        return (self::count(CourseRequest::class_name(), new DataClassCountParameters($condition)) > 0);
     }
 
     public static function retrieve_all_courses_with_course_categories(User $user)

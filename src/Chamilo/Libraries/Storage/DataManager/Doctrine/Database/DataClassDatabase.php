@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
 
@@ -488,12 +487,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function count($dataClassName, $parameters)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $dataClassProperties = $parameters->getDataClassProperties();
 
-        if ($parameters->get_property() instanceof ConditionVariable)
+        if ($dataClassProperties instanceof DataClassProperties)
         {
+            $dataClassPropertyVariables = $dataClassProperties->get();
             $property = $this->getConditionPartTranslatorService()->translateConditionVariable(
                 $this,
-                $parameters->get_property());
+                array_shift($dataClassPropertyVariables));
         }
         else
         {
@@ -534,7 +535,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
-        foreach ($parameters->get_property()->get() as $property)
+        foreach ($parameters->getDataClassProperties()->get() as $property)
         {
             $queryBuilder->addSelect(
                 $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));

@@ -732,7 +732,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new OrCondition($conditions);
         $count_wrapper_items = self::count_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
 
         if ($count_wrapper_items > 0)
         {
@@ -758,11 +758,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $count_children = self::count_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
-                    ComplexContentObjectItem::PROPERTY_PARENT),
-                new StaticConditionVariable($object->get_id())));
+            new DataClassCountParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::PROPERTY_PARENT),
+                    new StaticConditionVariable($object->get_id()))));
 
         if ($count_children > 0)
         {
@@ -864,7 +865,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
                 new StaticConditionVariable($user_id));
 
-            self::$number_of_categories[$user_id] = self::count(RepositoryCategory::class_name(), $condition);
+            self::$number_of_categories[$user_id] = self::count(
+                RepositoryCategory::class_name(),
+                new DataClassCountParameters($condition));
         }
 
         return self::$number_of_categories{$user_id};
@@ -937,7 +940,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             self::$workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()] = (self::count(
                 RepositoryCategory::class_name(),
-                $condition) > 0);
+                new DataClassCountParameters($condition)) > 0);
         }
 
         return self::$workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()];
@@ -989,7 +992,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($content_object_id));
         $condition = new AndCondition($conditions);
 
-        $number_of_attachments = self::count(ContentObjectAttachment::class_name(), $condition);
+        $number_of_attachments = self::count(
+            ContentObjectAttachment::class_name(),
+            new DataClassCountParameters($condition));
         if ($number_of_attachments > 0)
         {
             return true;
@@ -1057,7 +1062,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return (self::count_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition) > 0);
+        return (self::count_complex_content_object_items(
+            ComplexContentObjectItem::class_name(),
+            new DataClassCountParameters($condition)) > 0);
     }
 
     /**

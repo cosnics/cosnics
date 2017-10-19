@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Repository;
 
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
@@ -38,17 +37,14 @@ class ContentObjectRepository
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllInPersonalWorkspace(
-        $contentObjectClassName, WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty
-    )
+    public function findAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer),
             $count,
             $offset,
-            $orderProperty
-        );
+            $orderProperty);
 
         return $this->findAll($contentObjectClassName, $parameters);
     }
@@ -61,14 +57,11 @@ class ContentObjectRepository
      *
      * @return int
      */
-    public function countAllInPersonalWorkspace(
-        $contentObjectClassName, WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer
-    )
+    public function countAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer)
     {
         $parameters = new DataClassCountParameters(
-            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer)
-        );
+            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer));
 
         return $this->countAll($contentObjectClassName, $parameters);
     }
@@ -80,17 +73,14 @@ class ContentObjectRepository
      *
      * @return AndCondition
      */
-    protected function getPersonalWorkspaceConditions(
-        WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer
-    )
+    protected function getPersonalWorkspaceConditions(WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer)
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($personalWorkspace->getId())
-        );
+            new StaticConditionVariable($personalWorkspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
         return new AndCondition($conditions);
@@ -107,18 +97,15 @@ class ContentObjectRepository
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllInWorkspace(
-        $contentObjectClassName, WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty
-    )
+    public function findAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
+        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
             $count,
             $offset,
             $orderProperty,
-            $this->getWorkspaceJoins()
-        );
+            $this->getWorkspaceJoins());
 
         return $this->findAll($contentObjectClassName, $parameters);
     }
@@ -131,15 +118,12 @@ class ContentObjectRepository
      *
      * @return int
      */
-    public function countAllInWorkspace(
-        $contentObjectClassName, WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer
-    )
+    public function countAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
+        ConditionFilterRenderer $filterConditionRenderer)
     {
         $parameters = new DataClassCountParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
-            $this->getWorkspaceJoins()
-        );
+            $this->getWorkspaceJoins());
 
         return $this->countAll($contentObjectClassName, $parameters);
     }
@@ -151,19 +135,15 @@ class ContentObjectRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    protected function getWorkspaceConditions(
-        WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer
-    )
+    protected function getWorkspaceConditions(WorkspaceInterface $workspace,
+        ConditionFilterRenderer $filterConditionRenderer)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation::class_name(),
-                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
-            ),
-            new StaticConditionVariable($workspace->getId())
-        );
+                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
+            new StaticConditionVariable($workspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
         return new AndCondition($conditions);
@@ -179,9 +159,7 @@ class ContentObjectRepository
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation::class_name(),
-                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
-            )
-        );
+                WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID));
 
         $join = new Join(WorkspaceContentObjectRelation::class_name(), $joinCondition);
 
@@ -223,8 +201,7 @@ class ContentObjectRepository
     {
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(),
-            $contentObjectId
-        );
+            $contentObjectId);
     }
 
     /**
@@ -263,12 +240,10 @@ class ContentObjectRepository
         return $contentObject->delete();
     }
 
-    public function copyIncludesFromContentObject(
-        ContentObject $sourceContentObject, ContentObject $targetContentObject
-    )
+    public function copyIncludesFromContentObject(ContentObject $sourceContentObject, ContentObject $targetContentObject)
     {
         $includedObjects = $sourceContentObject->get_includes();
-        foreach($includedObjects as $includedObject)
+        foreach ($includedObjects as $includedObject)
         {
             $targetContentObject->include_content_object($includedObject->getId());
         }
@@ -288,9 +263,7 @@ class ContentObjectRepository
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CURRENT),
-                new StaticConditionVariable(ContentObject::CURRENT_OLD)
-            )
-        );
+                new StaticConditionVariable(ContentObject::CURRENT_OLD)));
 
         $conditions[] = $this->getStateCondition(ContentObject::STATE_NORMAL);
         $conditions[] = $this->getActiveHelperTypeConditions();
@@ -312,9 +285,7 @@ class ContentObjectRepository
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-                    new StaticConditionVariable($type)
-                )
-            );
+                    new StaticConditionVariable($type)));
         }
 
         return new AndCondition($conditions);
@@ -330,7 +301,6 @@ class ContentObjectRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
-            new StaticConditionVariable($state)
-        );
+            new StaticConditionVariable($state));
     }
 }

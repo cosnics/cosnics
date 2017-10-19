@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Feed to return users of this course
@@ -197,7 +198,7 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         }
         $this->user_count = \Chamilo\Core\User\Storage\DataManager::count(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition,

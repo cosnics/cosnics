@@ -5,6 +5,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * QuickForm rule to check if a username is available
@@ -39,7 +40,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
         $condition = new AndCondition($conditions);
         $count = \Chamilo\Core\User\Storage\DataManager::count(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
 
         return $count == 0;
     }

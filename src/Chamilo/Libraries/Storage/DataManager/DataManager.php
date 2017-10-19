@@ -81,7 +81,7 @@ class DataManager
     {
         $type = static::get_type();
 
-        if (!isset(self::$instance[$type]))
+        if (! isset(self::$instance[$type]))
         {
             $class = '\Chamilo\Libraries\Storage\DataManager\\' . $type . '\Database';
             self::$instance[$type] = new $class();
@@ -98,8 +98,7 @@ class DataManager
     public static function set_instance($instance)
     {
         self::$instance[\Chamilo\Libraries\Architecture\ClassnameUtilities::getInstance()->getNamespaceFromObject(
-            $instance
-        )] = $instance;
+            $instance)] = $instance;
     }
 
     /**
@@ -121,7 +120,7 @@ class DataManager
      */
     public static function create(DataClass $object)
     {
-        if (!static::getInstance()->create($object))
+        if (! static::getInstance()->create($object))
         {
             return false;
         }
@@ -154,9 +153,9 @@ class DataManager
             {
                 throw new UserException(
                     Translation::getInstance()->getTranslation(
-                        'CouldNotRetrieveObject', null, Utilities::COMMON_LIBRARIES
-                    )
-                );
+                        'CouldNotRetrieveObject',
+                        null,
+                        Utilities::COMMON_LIBRARIES));
             }
         }
         else
@@ -176,12 +175,12 @@ class DataManager
     {
         $parentClassName = static::determineCompositeDataClassParentClassName($className);
 
-        if (static::isCompositeDataClass($className) && !static::isExtensionClass($className))
+        if (static::isCompositeDataClass($className) && ! static::isExtensionClass($className))
         {
             $className = static::determineCompositeDataClassType($className, $parameters);
         }
 
-        if (!$className)
+        if (! $className)
         {
             throw new \Exception('Could not determine the composite data class type');
         }
@@ -199,9 +198,7 @@ class DataManager
                 $parentClassName,
                 new EqualityCondition(
                     new PropertyConditionVariable($parentClassName, $parentClassName::PROPERTY_ID),
-                    new PropertyConditionVariable($className, $className::PROPERTY_ID)
-                )
-            );
+                    new PropertyConditionVariable($className, $className::PROPERTY_ID)));
 
             if ($parameters->get_joins() instanceof Joins)
             {
@@ -220,8 +217,7 @@ class DataManager
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($parentClassName, $parentClassName::PROPERTY_TYPE),
-                new StaticConditionVariable($className)
-            );
+                new StaticConditionVariable($className));
 
             if ($parameters->get_condition() instanceof Condition)
             {
@@ -245,14 +241,13 @@ class DataManager
 
     private static function retrieveClass($cacheClass, $objectClass, $factoryClass, $parameters)
     {
-        if (!DataClassCache::exists($cacheClass, $parameters))
+        if (! DataClassCache::exists($cacheClass, $parameters))
         {
             try
             {
                 DataClassResultCache::add(
                     static::__retrieveClass($objectClass, $factoryClass, $parameters),
-                    $parameters
-                );
+                    $parameters);
             }
             catch (DataClassNoResultException $exception)
             {
@@ -273,13 +268,10 @@ class DataManager
     private static function determineCompositeDataClassType($className, $parameters)
     {
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(new PropertyConditionVariable($className, CompositeDataClass::PROPERTY_TYPE))
-            ),
+            new DataClassProperties(array(new PropertyConditionVariable($className, CompositeDataClass::PROPERTY_TYPE))),
             $parameters->get_condition(),
             $parameters->get_order_by(),
-            $parameters->get_joins()
-        );
+            $parameters->get_joins());
 
         $type = static::record($className, $parameters);
 
@@ -300,7 +292,7 @@ class DataManager
 
     public static function record($class, RecordRetrieveParameters $parameters = null)
     {
-        if (!RecordCache::exists($class, $parameters))
+        if (! RecordCache::exists($class, $parameters))
         {
             try
             {
@@ -329,7 +321,7 @@ class DataManager
             if (is_resource($field))
             {
                 $data = '';
-                while (!feof($field))
+                while (! feof($field))
                 {
                     $data .= fread($field, 1024);
                 }
@@ -362,10 +354,7 @@ class DataManager
             new DataClassRetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable($parentClass, $parentClass::PROPERTY_ID),
-                    new StaticConditionVariable($id)
-                )
-            )
-        );
+                    new StaticConditionVariable($id))));
     }
 
     /**
@@ -388,7 +377,7 @@ class DataManager
     private static function isExtensionClass($className)
     {
         return static::isCompositeDataClass($className) &&
-        get_parent_class($className) !== CompositeDataClass::class_name();
+             get_parent_class($className) !== CompositeDataClass::class_name();
     }
 
     /**
@@ -423,15 +412,12 @@ class DataManager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($conditionClass, $conditionClass::PROPERTY_ID),
-            new StaticConditionVariable($identifier)
-        );
+            new StaticConditionVariable($identifier));
 
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
-                array(new PropertyConditionVariable($conditionClass, $conditionClass::PROPERTY_TYPE))
-            ),
-            $condition
-        );
+                array(new PropertyConditionVariable($conditionClass, $conditionClass::PROPERTY_TYPE))),
+            $condition);
 
         $type = static::record($conditionClass, $parameters);
 
@@ -455,9 +441,9 @@ class DataManager
      */
     public static function retrieves($class, $parameters = null)
     {
-        if (!$parameters instanceof DataClassRetrievesParameters)
+        if (! $parameters instanceof DataClassRetrievesParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataManager :: retrieves() method.');
+            $parameters = DataClassRetrievesParameters::generate($parameters);
         }
 
         if (is_subclass_of($class, CompositeDataClass::class_name()))
@@ -492,7 +478,7 @@ class DataManager
 
     private static function retrievesClass($cacheClass, $objectClass, $parameters = null)
     {
-        if (!DataClassResultSetCache::exists($cacheClass, $parameters))
+        if (! DataClassResultSetCache::exists($cacheClass, $parameters))
         {
             DataClassResultSetCache::add(static::__retrievesClass($objectClass, $parameters), $parameters);
         }
@@ -510,12 +496,12 @@ class DataManager
 
     public static function records($class, $parameters = null)
     {
-        if (!$parameters instanceof RecordRetrievesParameters)
+        if (! $parameters instanceof RecordRetrievesParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataManager :: records() method.');
+            $parameters = RecordRetrievesParameters::generate($parameters);
         }
 
-        if (!RecordResultSetCache::exists($class, $parameters))
+        if (! RecordResultSetCache::exists($class, $parameters))
         {
             RecordResultSetCache::add($class, static::__records($class, $parameters), $parameters);
         }
@@ -542,12 +528,12 @@ class DataManager
      */
     public static function distinct($class, $parameters)
     {
-        if (!$parameters instanceof DataClassDistinctParameters)
+        if (! $parameters instanceof DataClassDistinctParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataManager :: distinct() method.');
+            $parameters = DataClassDistinctParameters::generate($parameters);
         }
 
-        if (!DataClassDistinctCache::exists($class, $parameters))
+        if (! DataClassDistinctCache::exists($class, $parameters))
         {
             DataClassDistinctCache::add($class, $parameters, static::__distinct($class, $parameters));
         }
@@ -566,8 +552,7 @@ class DataManager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
-            new StaticConditionVariable($object->get_id())
-        );
+            new StaticConditionVariable($object->get_id()));
 
         return static::getInstance()->update($object, $condition);
     }
@@ -584,9 +569,7 @@ class DataManager
      *
      * @return boolean
      */
-    public static function updates(
-        $class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array()
-    )
+    public static function updates($class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array())
     {
         if ($properties instanceof DataClassProperties)
         {
@@ -597,7 +580,7 @@ class DataManager
             $properties_class = new DataClassProperties($properties);
         }
 
-        if (!static::getInstance()->updates($class, $properties_class, $condition, $offset, $count, $order_by))
+        if (! static::getInstance()->updates($class, $properties_class, $condition, $offset, $count, $order_by))
         {
             return false;
         }
@@ -618,10 +601,9 @@ class DataManager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($class_name, $class_name::PROPERTY_ID),
-            new StaticConditionVariable($object->get_id())
-        );
+            new StaticConditionVariable($object->get_id()));
 
-        if (!static::getInstance()->delete($class_name, $condition))
+        if (! static::getInstance()->delete($class_name, $condition))
         {
             return false;
         }
@@ -630,9 +612,8 @@ class DataManager
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
-                new StaticConditionVariable($object->get_id())
-            );
-            if (!static::getInstance()->delete($object::class_name(), $condition))
+                new StaticConditionVariable($object->get_id()));
+            if (! static::getInstance()->delete($object::class_name(), $condition))
             {
                 return false;
             }
@@ -651,7 +632,7 @@ class DataManager
      */
     public static function deletes($class, Condition $condition)
     {
-        if (!static::getInstance()->delete($class, $condition))
+        if (! static::getInstance()->delete($class, $condition))
         {
             return false;
         }
@@ -669,9 +650,9 @@ class DataManager
      */
     public static function count($class, $parameters = null)
     {
-        if (!$parameters instanceof DataClassCountParameters)
+        if (! $parameters instanceof DataClassCountParameters)
         {
-            throw new \Exception('Illegal parameter passed to the DataManager :: count() method.');
+            $parameters = DataClassCountParameters::generate($parameters);
         }
 
         if (is_subclass_of($class, CompositeDataClass::class_name()))
@@ -699,7 +680,7 @@ class DataManager
 
     private static function countClass($cacheClass, $objectClass, $parameters)
     {
-        if (!DataClassCountCache::exists($cacheClass, $parameters))
+        if (! DataClassCountCache::exists($cacheClass, $parameters))
         {
             DataClassCountCache::add($cacheClass, $parameters, static::__countClass($objectClass, $parameters));
         }
@@ -723,7 +704,7 @@ class DataManager
      */
     public static function count_grouped($class, DataClassCountGroupedParameters $parameters)
     {
-        if (!DataClassCountGroupedCache::exists($class, $parameters))
+        if (! DataClassCountGroupedCache::exists($class, $parameters))
         {
             DataClassCountGroupedCache::add($class, $parameters, static::__countGrouped($class, $parameters));
         }
@@ -814,7 +795,6 @@ class DataManager
      * @param string $table_name
      * @param string $property
      * @param multitype :mixed $attributes
-     *
      * @return boolean
      */
     public static function alter_storage_unit($type, $table_name, $property, $attributes = array())
@@ -828,7 +808,6 @@ class DataManager
      * @param string $table_name
      * @param string $name
      * @param multitype :string $columns
-     *
      * @return boolean
      */
     public static function alter_storage_unit_index($type, $table_name, $name = null, $columns = array())
@@ -846,12 +825,12 @@ class DataManager
      */
     public static function truncate_storage_unit($name, $optimize = true)
     {
-        if (!static::getInstance()->truncate_storage_unit($name))
+        if (! static::getInstance()->truncate_storage_unit($name))
         {
             return false;
         }
 
-        if ($optimize && !static::optimize_storage_unit($name))
+        if ($optimize && ! static::optimize_storage_unit($name))
         {
             return false;
         }
@@ -921,14 +900,12 @@ class DataManager
      *
      * @example $display_order_mapping[$old_display_order] = $new_display_order;
      */
-    public static function change_display_orders_by_mapping_array(
-        $class_name, $display_order_property,
-        $display_order_mapping = array(), $display_order_condition = null
-    )
+    public static function change_display_orders_by_mapping_array($class_name, $display_order_property,
+        $display_order_mapping = array(), $display_order_condition = null)
     {
         foreach ($display_order_mapping as $old_display_order => $new_display_order)
         {
-            if (!static::move_display_orders($class_name, $old_display_order, $new_display_order))
+            if (! static::move_display_orders($class_name, $old_display_order, $new_display_order))
             {
                 return false;
             }
@@ -938,8 +915,7 @@ class DataManager
             $properties = new DataClassProperties(array());
 
             $properties->add(
-                new DataClassProperty($display_order_property_variable, new StaticConditionVariable($new_display_order))
-            );
+                new DataClassProperty($display_order_property_variable, new StaticConditionVariable($new_display_order)));
 
             $conditions = array();
 
@@ -950,8 +926,7 @@ class DataManager
 
             $conditions[] = new EqualityCondition(
                 $display_order_property_variable,
-                new StaticConditionVariable($old_display_order)
-            );
+                new StaticConditionVariable($old_display_order));
 
             $condition = new AndCondition($conditions);
 
@@ -973,10 +948,8 @@ class DataManager
      *
      * @return bool
      */
-    public static function move_display_orders(
-        $class_name, $display_order_property, $start = 1, $end = null,
-        $display_order_condition = null
-    )
+    public static function move_display_orders($class_name, $display_order_property, $start = 1, $end = null,
+        $display_order_condition = null)
     {
         if ($start == $end)
         {
@@ -994,7 +967,7 @@ class DataManager
             $direction = - 1;
         }
 
-        if (!is_null($end))
+        if (! is_null($end))
         {
             if ($start < $end)
             {
@@ -1013,7 +986,7 @@ class DataManager
 
         $conditions[] = new InequalityCondition($display_order_property_variable, $start_operator, $start_variable);
 
-        if (!is_null($end))
+        if (! is_null($end))
         {
             $end_variable = new StaticConditionVariable($end);
 
@@ -1030,8 +1003,7 @@ class DataManager
         $update_variable = new OperationConditionVariable(
             $display_order_property_variable,
             OperationConditionVariable::ADDITION,
-            new StaticConditionVariable($direction)
-        );
+            new StaticConditionVariable($direction));
 
         $properties = new DataClassProperties(array());
 

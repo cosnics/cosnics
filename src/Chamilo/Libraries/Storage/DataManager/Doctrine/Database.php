@@ -21,7 +21,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
@@ -111,7 +110,7 @@ class Database
      */
     public function error_handling($error)
     {
-        if (!self::$error_log)
+        if (! self::$error_log)
         {
             $logfile = Path::getInstance()->getLogPath() . '/doctrine_errors.log';
             self::$error_log = new FileLogger($logfile, true);
@@ -126,12 +125,11 @@ class Database
      *
      * @param $name string The column name.
      * @param $table_alias String The alias of the table the coloumn is in
-     *
      * @return string The escaped column name.
      */
     public static function escape_column_name($name, $table_alias = null)
     {
-        if (!empty($table_alias))
+        if (! empty($table_alias))
         {
             return $table_alias . '.' . $name;
         }
@@ -158,7 +156,6 @@ class Database
      * @param $name String the table name
      * @param $properties Array the table properties
      * @param $indexes Array the table indexes
-     *
      * @return true if the storage unit is succesfully created
      */
     public function create_storage_unit($name, $properties, $indexes)
@@ -202,8 +199,7 @@ class Database
                     $name = StorageAliasGenerator::getInstance()->get_constraint_name(
                         $table_name,
                         $name,
-                        StorageAliasGenerator::TYPE_CONSTRAINT
-                    );
+                        StorageAliasGenerator::TYPE_CONSTRAINT);
                     $table->setPrimaryKey(array($property), $name);
                 }
             }
@@ -213,8 +209,7 @@ class Database
                 $name = StorageAliasGenerator::getInstance()->get_constraint_name(
                     $table_name,
                     $index,
-                    StorageAliasGenerator::TYPE_CONSTRAINT
-                );
+                    StorageAliasGenerator::TYPE_CONSTRAINT);
 
                 switch ($attributes['type'])
                 {
@@ -324,7 +319,7 @@ class Database
                     $options[$attribute] = ($value == 1 ? true : false);
                     break;
                 case 'default' :
-                    $options[$attribute] = (!is_numeric($value) && empty($value) ? null : $value);
+                    $options[$attribute] = (! is_numeric($value) && empty($value) ? null : $value);
                     break;
                 case 'autoincrement' :
                     $options[$attribute] = ($value == 'true' ? true : false);
@@ -332,7 +327,7 @@ class Database
             }
         }
 
-        if (!isset($options['notnull']))
+        if (! isset($options['notnull']))
         {
             $options['notnull'] = false;
         }
@@ -467,8 +462,7 @@ class Database
             {
                 $composite_condition = new EqualityCondition(
                     new PropertyConditionVariable($parent_class, $parent_class::PROPERTY_ID),
-                    new StaticConditionVariable($object->get_id())
-                );
+                    new StaticConditionVariable($object->get_id()));
                 $query_builder->where(ConditionTranslator::render($composite_condition));
             }
             else
@@ -543,8 +537,7 @@ class Database
             {
                 $query_builder->set(
                     ConditionVariableTranslator::render($data_class_property->get_property()),
-                    ConditionVariableTranslator::render($data_class_property->get_value())
-                );
+                    ConditionVariableTranslator::render($data_class_property->get_value()));
             }
 
             if ($condition)
@@ -558,7 +551,7 @@ class Database
 
             $statement = $this->get_connection()->query($query_builder->getSQL());
 
-            if (!$statement instanceof \PDOException)
+            if (! $statement instanceof \PDOException)
             {
                 return true;
             }
@@ -591,7 +584,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             return true;
         }
@@ -647,7 +640,7 @@ class Database
 
         $statement = $this->get_connection()->query($query);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             return true;
         }
@@ -676,15 +669,14 @@ class Database
             {
                 $column = new \Doctrine\DBAL\Schema\Column($property);
                 $query = 'ALTER TABLE ' . $table_name . ' DROP COLUMN ' .
-                    $column->getQuotedName($this->get_connection()->getDatabasePlatform());
+                     $column->getQuotedName($this->get_connection()->getDatabasePlatform());
             }
             else
             {
                 $column = new \Doctrine\DBAL\Schema\Column(
                     $property,
                     \Doctrine\DBAL\Types\Type::getType(self::parse_storage_unit_property_type($attributes)),
-                    self::parse_storage_unit_attributes($attributes)
-                );
+                    self::parse_storage_unit_attributes($attributes));
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
                 // altering tables (yet)
@@ -713,8 +705,7 @@ class Database
                 $columnData['notnull'] = $column->getNotNull();
                 $columnData['fixed'] = $column->getFixed();
                 $columnData['unique'] = false; // TODO: what do we do about this?
-                $columnData['version'] =
-                    ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
+                $columnData['version'] = ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
 
                 if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)
                 {
@@ -732,8 +723,7 @@ class Database
                 if ($this->get_connection()->getDatabasePlatform()->isCommentedDoctrineType($column->getType()))
                 {
                     $columnData['comment'] .= $this->get_connection()->getDatabasePlatform()->getDoctrineTypeComment(
-                        $column->getType()
-                    );
+                        $column->getType());
                 }
 
                 $columns = array($columnData['name'] => $columnData);
@@ -751,7 +741,7 @@ class Database
 
             $statement = $this->get_connection()->query($query);
 
-            if (!$statement instanceof \PDOException)
+            if (! $statement instanceof \PDOException)
             {
                 return true;
             }
@@ -802,21 +792,19 @@ class Database
                 break;
             case DataManager::ALTER_STORAGE_UNIT_ADD_INDEX :
                 $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                        $name,
-                        new \Doctrine\DBAL\Schema\Index($name, $columns, false, false)
-                    );
+                    $name,
+                    new \Doctrine\DBAL\Schema\Index($name, $columns, false, false));
                 break;
             case DataManager::ALTER_STORAGE_UNIT_ADD_UNIQUE :
                 $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                        $name,
-                        new \Doctrine\DBAL\Schema\Index($name, $columns, true, false)
-                    );
+                    $name,
+                    new \Doctrine\DBAL\Schema\Index($name, $columns, true, false));
                 break;
         }
 
         $statement = $this->get_connection()->query($query);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             return true;
         }
@@ -838,10 +826,12 @@ class Database
     public function count($class, $parameters)
     {
         $query_builder = $this->connection->createQueryBuilder();
+        $dataClassProperties = $parameters->getDataClassProperties();
 
-        if ($parameters->get_property() instanceof ConditionVariable)
+        if ($dataClassProperties instanceof DataClassProperties)
         {
-            $property = ConditionVariableTranslator::render($parameters->get_property());
+            $dataClassPropertyVariables = $dataClassProperties->get();
+            $property = ConditionVariableTranslator::render(array_shift($dataClassPropertyVariables));
         }
         else
         {
@@ -855,7 +845,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_NUM);
 
@@ -879,25 +869,30 @@ class Database
     public function count_grouped($class, $parameters)
     {
         $query_builder = $this->connection->createQueryBuilder();
-        foreach ($parameters->get_property()->get() as $property)
+
+        foreach ($parameters->getDataClassProperties()->get() as $property)
         {
 
             $query_builder->addSelect(ConditionVariableTranslator::render($property));
         }
+
         $query_builder->addSelect('COUNT(1)');
         $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
 
         $query_builder = $this->process_parameters($query_builder, $class, $parameters);
+
         foreach ($parameters->get_property()->get() as $property)
         {
             $query_builder->addGroupBy(ConditionVariableTranslator::render($property));
         }
+
         $query_builder->having(ConditionTranslator::render($parameters->get_having()));
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $counts = array();
+
             while ($record = $statement->fetch(\PDO::FETCH_NUM))
             {
                 $counts[$record[0]] = $record[1];
@@ -933,9 +928,8 @@ class Database
                     {
                         $join_class = $join->get_data_class();
 
-                        $data_manager =
-                            ClassnameUtilities::getInstance()->getNamespaceParent($join_class::context(), 1) .
-                            '\DataManager';
+                        $data_manager = ClassnameUtilities::getInstance()->getNamespaceParent($join_class::context(), 1) .
+                             '\DataManager';
 
                         $alias = $data_manager::getInstance()->get_alias($join_class::get_table_name());
 
@@ -957,8 +951,7 @@ class Database
     {
         return new DataClassResultSet(
             $this->get_records_result($this->build_retrieves_sql($class, $parameters), $class, $parameters),
-            $class
-        );
+            $class);
     }
 
     /**
@@ -971,8 +964,7 @@ class Database
     public function records($class, RecordRetrievesParameters $parameters)
     {
         return new RecordResultSet(
-            $this->get_records_result($this->build_records_sql($class, $parameters), $class, $parameters)
-        );
+            $this->get_records_result($this->build_records_sql($class, $parameters), $class, $parameters));
     }
 
     /**
@@ -1070,8 +1062,7 @@ class Database
         $query_builder = $this->connection->createQueryBuilder();
         $query_builder->addSelect(
             'MAX(' . self::escape_column_name($property, $this->get_alias($class::get_table_name())) . ') AS ' .
-            self::ALIAS_MAX_SORT
-        );
+                 self::ALIAS_MAX_SORT);
         $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
 
         if (isset($condition))
@@ -1081,7 +1072,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_NUM);
 
@@ -1109,7 +1100,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             if ($optimize)
             {
@@ -1165,8 +1156,7 @@ class Database
     private function prepare_table_name($class)
     {
         if (is_subclass_of($class, CompositeDataClass::class_name()) &&
-            get_parent_class($class) == CompositeDataClass::class_name()
-        )
+             get_parent_class($class) == CompositeDataClass::class_name())
         {
             $table_name = $class::get_table_name();
         }
@@ -1174,7 +1164,7 @@ class Database
         {
             $table_name = $class::get_table_name();
         }
-        elseif (is_subclass_of($class, CompositeDataClass::class_name()) && !$class::is_extended())
+        elseif (is_subclass_of($class, CompositeDataClass::class_name()) && ! $class::is_extended())
         {
             $parent = $class::parent_class_name();
             $table_name = $parent::get_table_name();
@@ -1247,7 +1237,7 @@ class Database
 
         $statement = $this->get_connection()->query($sqlQuery);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO::FETCH_ASSOC);
         }
@@ -1263,7 +1253,7 @@ class Database
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
-        if (is_null($record) || !is_array($record) || empty($record))
+        if (is_null($record) || ! is_array($record) || empty($record))
         {
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
@@ -1273,7 +1263,7 @@ class Database
             if (is_resource($field))
             {
                 $data = '';
-                while (!feof($field))
+                while (! feof($field))
                 {
                     $data .= fread($field, 1024);
                 }
@@ -1309,7 +1299,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $distinct_elements = array();
             while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
@@ -1386,7 +1376,7 @@ class Database
      */
     public function escape($text, $escape_wildcards = false)
     {
-        if (!is_null($text))
+        if (! is_null($text))
         {
             return $this->connection->quote($text);
         }
@@ -1417,7 +1407,7 @@ class Database
      */
     public function retrieve_composite_data_class_additional_properties(CompositeDataClass $object)
     {
-        if (!$object->is_extended())
+        if (! $object->is_extended())
         {
             return array();
         }
@@ -1429,11 +1419,11 @@ class Database
         }
 
         $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object::get_table_name() . ' WHERE ' .
-            $object::PROPERTY_ID . '=' . $this->quote($object->get_id());
+             $object::PROPERTY_ID . '=' . $this->quote($object->get_id());
 
         $statement = $this->get_connection()->query($query);
 
-        if (!$statement instanceof \PDOException)
+        if (! $statement instanceof \PDOException)
         {
             $distinct_elements = array();
             $record = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -1451,7 +1441,7 @@ class Database
                         if (is_resource($record[$prop]))
                         {
                             $data = '';
-                            while (!feof($record[$prop]))
+                            while (! feof($record[$prop]))
                             {
                                 $data .= fread($record[$prop], 1024);
                             }
@@ -1488,7 +1478,7 @@ class Database
         $throw_on_false = function ($connection) use ($function)
         {
             $result = call_user_func($function, $connection);
-            if (!$result)
+            if (! $result)
             {
                 throw new Exception();
             }
@@ -1524,7 +1514,7 @@ class Database
         {
             $order_by = array();
         }
-        elseif (!is_array($order_by))
+        elseif (! is_array($order_by))
         {
             $order_by = array($order_by);
         }
@@ -1533,8 +1523,7 @@ class Database
         {
             $query_builder->addOrderBy(
                 ConditionVariableTranslator::render($order->get_property()),
-                ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC')
-            );
+                ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC'));
         }
 
         return $query_builder;
@@ -1619,8 +1608,7 @@ class Database
     protected function process_joins($query_builder, $class, $joins)
     {
         if (is_subclass_of($class, CompositeDataClass::class_name()) && get_parent_class($class) !=
-            CompositeDataClass::class_name() && !$class::is_extended()
-        )
+             CompositeDataClass::class_name() && ! $class::is_extended())
         {
             $class = $class::parent_class_name();
         }
@@ -1641,24 +1629,21 @@ class Database
                             $classAlias,
                             $data_class_name::get_table_name(),
                             $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition
-                        );
+                            $join_condition);
                         break;
                     case Join::TYPE_RIGHT :
                         $query_builder->rightJoin(
                             $classAlias,
                             $data_class_name::get_table_name(),
                             $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition
-                        );
+                            $join_condition);
                         break;
                     case Join::TYPE_LEFT :
                         $query_builder->leftJoin(
                             $classAlias,
                             $data_class_name::get_table_name(),
                             $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition
-                        );
+                            $join_condition);
                         break;
                 }
             }
@@ -1680,8 +1665,7 @@ class Database
         if ($condition instanceof Condition)
         {
             $query_builder->where(
-                ConditionTranslator::render($condition, $this->get_alias($this->prepare_table_name($class)))
-            );
+                ConditionTranslator::render($condition, $this->get_alias($this->prepare_table_name($class))));
         }
 
         return $query_builder;

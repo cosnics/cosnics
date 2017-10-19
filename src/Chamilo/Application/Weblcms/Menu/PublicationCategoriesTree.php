@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -143,7 +144,9 @@ class PublicationCategoriesTree extends GenericTree
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectPublicationCategory::class_name(), $condition) > 0;
+        return DataManager::count(
+            ContentObjectPublicationCategory::class_name(),
+            new DataClassCountParameters($condition)) > 0;
     }
 
     /**

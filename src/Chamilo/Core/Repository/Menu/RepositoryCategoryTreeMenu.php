@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -87,8 +88,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_current_node_id()
     {
-        return FilterData::getInstance($this->workspaceImplementation)->get_filter_property(
-            FilterData::FILTER_CATEGORY);
+        return FilterData::getInstance($this->workspaceImplementation)->get_filter_property(FilterData::FILTER_CATEGORY);
     }
 
     public function get_node($node_id)
@@ -114,7 +114,9 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function node_has_children($parent_node_id)
     {
-        return (DataManager::count(RepositoryCategory::class_name(), $this->get_retrieve_condition($parent_node_id)) > 0);
+        return (DataManager::count(
+            RepositoryCategory::class_name(),
+            new DataClassCountParameters($this->get_retrieve_condition($parent_node_id))) > 0);
     }
 
     public function get_search_url()

@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -148,7 +149,7 @@ class RestorerComponent extends Manager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
             new StaticConditionVariable($id));
-        return (DataManager::count(RepositoryCategory::class_name(), $condition) > 0);
+        return (DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition)) > 0);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

@@ -652,7 +652,7 @@ class ContentObject extends CompositeDataClass
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectAttachment::class_name(), $condition) > 0;
+        return DataManager::count(ContentObjectAttachment::class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
     public function is_included_in($object_id)
@@ -668,7 +668,7 @@ class ContentObject extends CompositeDataClass
             new StaticConditionVariable($this->get_id()));
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectInclude::class_name(), $condition) > 0;
+        return DataManager::count(ContentObjectInclude::class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
     /**

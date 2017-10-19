@@ -760,7 +760,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::count(
             ContentObjectPublicationCategory::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
     }
 
     private function retrieve_category($category_id)

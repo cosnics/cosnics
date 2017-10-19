@@ -180,7 +180,7 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        if($this->getUser() && $this->getRequest()->get(self::PARAM_ACTION) != self::ACTION_DOWNLOAD_DOCUMENT)
+        if ($this->getUser() && $this->getRequest()->get(self::PARAM_ACTION) != self::ACTION_DOWNLOAD_DOCUMENT)
         {
             $this->checkAuthorization(Manager::context());
         }
@@ -524,9 +524,7 @@ abstract class Manager extends Application
      */
     private function get_category_menu($force_search = false)
     {
-        $this->set_parameter(
-            DynamicTabsRenderer::PARAM_SELECTED_TAB,
-            array(self::TABS_FILTER => self::TAB_CATEGORY));
+        $this->set_parameter(DynamicTabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
 
         if (! isset($this->category_menu))
         {
@@ -676,7 +674,7 @@ abstract class Manager extends Application
 
     public function count_categories($conditions = null)
     {
-        return DataManager::count(RepositoryCategory::class_name(), $conditions);
+        return DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($conditions));
     }
 
     public function get_copy_content_object_url($content_object_id)
@@ -741,7 +739,7 @@ abstract class Manager extends Application
 
         $html[] = parent::render_header();
 
-        if($this->get_action() == self::ACTION_HTML_EDITOR_FILE)
+        if ($this->get_action() == self::ACTION_HTML_EDITOR_FILE)
         {
             return implode(PHP_EOL, $html);
         }

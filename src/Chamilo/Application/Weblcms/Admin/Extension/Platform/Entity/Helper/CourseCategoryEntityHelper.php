@@ -122,9 +122,11 @@ class CourseCategoryEntityHelper
         $parameters = new DataClassCountParameters(
             $condition,
             self::get_joins(),
-            new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT,
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID)));
+            new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID)))));
 
         return DataManager::count(Admin::class_name(), $parameters);
     }
