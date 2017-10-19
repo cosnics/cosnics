@@ -90,6 +90,47 @@ class CourseGroupPublicationCategoryService
     }
 
     /**
+     * Helper function to update new publication category to the name of the course group
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param string $toolName
+     */
+    public function updatePublicationCategoryForCourseGroup(CourseGroup $courseGroup, $toolName)
+    {
+        $publicationCategories =
+            $this->courseGroupPublicationCategoryRepository->findPublicationCategoriesForCourseGroup(
+                $courseGroup, $toolName
+            );
+
+        foreach ($publicationCategories as $publicationCategory)
+        {
+            if($publicationCategory->get_name() != $courseGroup->get_name())
+            {
+                $publicationCategory->set_name($courseGroup->get_name());
+                $this->courseGroupPublicationCategoryRepository->update($publicationCategory);
+            }
+        }
+    }
+
+    /**
+     * Helper function to either create a new or update an existing publication category for a course group
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param string $toolName
+     */
+    public function createOrUpdatePublicationCategoryForCourseGroup(CourseGroup $courseGroup, $toolName)
+    {
+        if (!$this->courseGroupHasPublicationCategories($courseGroup, $toolName))
+        {
+            $this->createPublicationCategoryForCourseGroup($courseGroup, $toolName);
+        }
+        else
+        {
+            $this->updatePublicationCategoryForCourseGroup($courseGroup, $toolName);
+        }
+    }
+
+    /**
      * Removes the publication categories from a given course group
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup

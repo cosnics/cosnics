@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -10,13 +10,13 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * Decorates the CourseGroup form with additional items
  *
- * @package Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Package
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Package
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
-    const PROPERTY_DOCUMENT_CATEGORY_ID = 'document_category_id';
+    const PROPERTY_FORUM_CATEGORY_ID = 'forum_category_id';
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService
@@ -45,26 +45,24 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
     {
         $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
 
-        // Creation form or editing form without linked document category
+        // Creation form or editing form without linked forum category
         $courseGroupForm->addElement(
-            'checkbox', CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']',
-            Translation::getInstance()->getTranslation('Document')
+            'checkbox', CourseGroup::PROPERTY_FORUM_CATEGORY_ID . '[' . $id . ']',
+            Translation::getInstance()->getTranslation('Forum')
         );
 
         $courseGroupForm->addElement(
             'html',
-            '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $id .
+            '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $id .
             '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
             '<div class="warning-message">' .
-            Translation::getInstance()->getTranslation('DocumentToolUncheckedWarning') . '</div>' .
+            Translation::getInstance()->getTranslation('ForumToolUncheckedWarning') . '</div>' .
             '</div></div>'
         );
 
         $defaults = [
-            CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
-                $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories(
-                    $courseGroup, 'Document'
-                )
+            CourseGroup::PROPERTY_FORUM_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
+                $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories($courseGroup, 'Forum')
         ];
 
         $courseGroupForm->setDefaults($defaults);

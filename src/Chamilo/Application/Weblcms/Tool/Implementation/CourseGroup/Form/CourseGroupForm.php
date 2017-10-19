@@ -486,19 +486,7 @@ class CourseGroupForm extends FormValidator
                         );
                         continue;
                     }
-                    $document_category_id = $course_group->get_optional_property(
-                        CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID
-                    );
-                    if ($document_category_id)
-                    {
-                        /** @var ContentObjectPublicationCategory $document_category */
-                        $document_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $document_category_id
-                        );
-                        $document_category->set_name($values[CourseGroup::PROPERTY_NAME . $counter]);
-                        $document_category->update();
-                    }
+
                     $forum_category_id = $course_group->get_optional_property(CourseGroup::PROPERTY_FORUM_CATEGORY_ID);
                     if ($forum_category_id)
                     {
@@ -511,39 +499,9 @@ class CourseGroupForm extends FormValidator
                         $forum_category->update();
                     }
                 }
-                $createDocumentCategory = boolval($values[CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter]);
+
                 $createForum = boolval($values[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter]);
 
-                if ($createDocumentCategory)
-                {
-                    if ($course_group->get_document_category_id() == 0) // it
-                        // doesn't
-                        // exist
-                        // yet
-                    {
-                        $courseGroupService->createDocumentCategoryForCourseGroup($course_group);
-                    }
-                }
-                else
-                {
-                    if ($course_group->get_document_category_id() != 0) // unlink
-                        // the
-                        // document
-                        // category
-                    {
-                        $document_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $course_group->get_document_category_id()
-                        );
-                        if ($document_category)
-                        {
-                            $document_category->set_allow_change(1);
-                            // $document_category->update();
-                            $document_category->delete();
-                        }
-                        $course_group->set_document_category_id(0);
-                    }
-                }
 
                 if ($createForum)
                 {
@@ -579,6 +537,8 @@ class CourseGroupForm extends FormValidator
                 {
                     return false;
                 }
+
+                $this->courseGroupDecoratorsManager->updateGroup($course_group, $values);
 
                 // Change the parent
                 if ($course_group->get_parent_id() != $values[CourseGroup::PROPERTY_PARENT_ID . $counter])
@@ -664,37 +624,6 @@ class CourseGroupForm extends FormValidator
     public function add_tools($course_group, $counter)
     {
         $this->addElement('category', Translation::getInstance()->getTranslation('Integrations'));
-
-        if ($course_group->get_forum_category_id() > 0)
-        {
-            // Editing form with linked forum
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter,
-                Translation::getInstance()->getTranslation('Forum'),
-                null,
-                array("value" => $course_group->get_forum_category_id())
-            );
-            $this->addElement(
-                'html',
-                '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter .
-                '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
-                '<div class="warning-message">' .
-                Translation::getInstance()->getTranslation('ForumToolUncheckedWarning') . '</div>' .
-                '</div></div>'
-            );
-        }
-
-        else
-        {
-            // Creation form or editing form without linked forum
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter,
-                Translation::getInstance()->getTranslation('Forum')
-            );
-        }
-
         $this->courseGroupDecoratorsManager->decorateCourseGroupForm($this, $course_group);
     }
 
@@ -1183,16 +1112,6 @@ class CourseGroupForm extends FormValidator
                     if ($course_group->create())
                     {
                         $this->courseGroupDecoratorsManager->createGroup($course_group, $values);
-
-                        $createForum = boolval($values[CourseGroup::PROPERTY_FORUM_CATEGORY_ID]);
-                        if ($createForum)
-                        {
-                            $courseGroupService->createForumCategoryAndPublicationForCourseGroup(
-                                $course_group, $this->currentUser
-                            );
-                        }
-
-                        $course_group->update();
                     }
                     else
                     {
@@ -1563,7 +1482,6 @@ class CourseGroupForm extends FormValidator
         $defaults[CourseGroup::PROPERTY_SELF_UNREG . $counter] = $course_group->is_self_unregistration_allowed();
         $defaults[CourseGroup::PROPERTY_RANDOM_REG . $counter] = $course_group->is_random_registration_done();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter] = $course_group->get_parent_id();
-        $defaults[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter] = $course_group->get_forum_category_id();
         parent::setDefaults($defaults);
     }
 
@@ -1586,7 +1504,6 @@ class CourseGroupForm extends FormValidator
         $defaults[CourseGroup::PROPERTY_SELF_UNREG . $counter] = $course_group->is_self_unregistration_allowed();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter] = $course_group->get_parent_id();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter . 'old'] = $course_group->get_parent_id();
-        $defaults[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter] = $course_group->get_forum_category_id();
         parent::setDefaults($defaults);
     }
 

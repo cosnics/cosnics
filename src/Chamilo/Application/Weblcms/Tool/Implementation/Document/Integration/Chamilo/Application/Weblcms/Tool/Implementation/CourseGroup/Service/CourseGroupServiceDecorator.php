@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\PublicationCategoryCourseGroupServiceDecorator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,85 +15,24 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterface
+class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterface
 {
-
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService
-     */
-    protected $courseGroupPublicationCategoryService;
-
-    /**
-     * CourseGroupServiceDecorator constructor.
+     * Returns the name of the tool to be used in the category
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
+     * @return string
      */
-    public function __construct(
-        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService $courseGroupPublicationCategoryService
-    )
+    function getToolName()
     {
-        $this->courseGroupPublicationCategoryService = $courseGroupPublicationCategoryService;
+        return 'Document';
     }
 
     /**
-     * Decorates the create functionality of a course group. Handing over the created course group and the form
-     * values for further processing of the custom form
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param array $formValues
+     * Returns the name of the property for the
+     * @return mixed
      */
-    public function createGroup(CourseGroup $courseGroup, $formValues = [])
+    function getFormProperty()
     {
-        if ($formValues[CourseGroupFormDecorator::PROPERTY_DOCUMENT_CATEGORY_ID][0] == 1)
-        {
-            $this->courseGroupPublicationCategoryService->createPublicationCategoryForCourseGroup(
-                $courseGroup, 'Document'
-            );
-        }
-    }
-
-    /**
-     * Decorates the update functionality of a course group. Handing over the created course group and the form
-     * values for further processing of the custom form
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param array $formValues
-     */
-    public function updateGroup(CourseGroup $courseGroup, $formValues = [])
-    {
-        // TODO: Implement updateGroup() method.
-    }
-
-    /**
-     * Decorates the delete functionality of a course group. Handing over the created course group and the form
-     * values for further processing of the custom form
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     */
-    public function deleteGroup(CourseGroup $courseGroup)
-    {
-        // TODO: Implement deleteGroup() method.
-    }
-
-    /**
-     * Decorates the subscribe user functionality
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function subscribeUser(CourseGroup $courseGroup, User $user)
-    {
-        // TODO: Implement subscribeUser() method.
-    }
-
-    /**
-     * Decorates the unsubscribe user functionality
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function unsubscribeUser(CourseGroup $courseGroup, User $user)
-    {
-        // TODO: Implement unsubscribeUser() method.
+        return CourseGroupFormDecorator::PROPERTY_DOCUMENT_CATEGORY_ID;
     }
 }
