@@ -47,12 +47,12 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 
         // Creation form or editing form without linked forum category
         $courseGroupForm->addElement(
-            'checkbox', CourseGroup::PROPERTY_FORUM_CATEGORY_ID . '[' . $id . ']',
+            'checkbox', self::PROPERTY_FORUM_CATEGORY_ID . '[' . $id . ']',
             Translation::getInstance()->getTranslation('Forum')
         );
 
         $defaults = [
-            CourseGroup::PROPERTY_FORUM_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
+            self::PROPERTY_FORUM_CATEGORY_ID . '[' . $courseGroup->getId() . ']' =>
                 $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories($courseGroup, 'Forum')
         ];
 

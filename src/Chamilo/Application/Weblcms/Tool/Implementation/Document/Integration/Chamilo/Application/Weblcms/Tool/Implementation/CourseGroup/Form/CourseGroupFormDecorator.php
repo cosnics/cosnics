@@ -47,12 +47,12 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 
         // Creation form or editing form without linked document category
         $courseGroupForm->addElement(
-            'checkbox', CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']',
+            'checkbox', self::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']',
             Translation::getInstance()->getTranslation('Document')
         );
 
         $defaults = [
-            CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']' =>
+            self::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']' =>
                 $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories(
                     $courseGroup, 'Document'
                 )
