@@ -509,7 +509,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
 
-        foreach ($parameters->getDataClassProperties()->get() as $property)
+        foreach ($parameters->getGroupBy()->get() as $property)
         {
             $queryBuilder->addGroupBy(
                 $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));

@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Parameters;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 
 /**
  *
@@ -23,9 +24,14 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
     public function __construct(Condition $condition = null, DataClassProperties $dataClassProperties = null,
-        $havingCondition = null, Joins $joins = null)
+        $havingCondition = null, Joins $joins = null, GroupBy $groupBy = null)
     {
-        DataClassParameters::__construct($condition, $joins, $dataClassProperties, null, null, $havingCondition);
+        if (is_null($groupBy))
+        {
+            $groupBy = new GroupBy($dataClassProperties->get());
+        }
+
+        DataClassParameters::__construct($condition, $joins, $dataClassProperties, null, $groupBy, $havingCondition);
     }
 
     /**

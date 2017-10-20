@@ -881,7 +881,7 @@ class Database
 
         $query_builder = $this->process_parameters($query_builder, $class, $parameters);
 
-        foreach ($parameters->getDataClassProperties()->get() as $property)
+        foreach ($parameters->getGroupBy()->get() as $property)
         {
             $query_builder->addGroupBy(ConditionVariableTranslator::render($property));
         }
