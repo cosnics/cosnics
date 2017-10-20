@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\File\Filesystem;
@@ -9,10 +8,12 @@ use Chamilo\Libraries\Cache\FileBasedCacheService;
 /**
  * Manages the cache for the doctrine ORM proxies
  *
+ * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineProxyCacheService extends FileBasedCacheService
 {
+
     /**
      * The EntityManager
      *
@@ -31,29 +32,26 @@ class DoctrineProxyCacheService extends FileBasedCacheService
     }
 
     /**
-     * Warms up the cache.
+     *
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
      */
     public function warmUp()
     {
-        if (!is_dir($proxyCacheDir = $this->entityManager->getConfiguration()->getProxyDir()))
+        if (! is_dir($proxyCacheDir = $this->entityManager->getConfiguration()->getProxyDir()))
         {
-            if (!Filesystem::create_dir($proxyCacheDir))
+            if (! Filesystem::create_dir($proxyCacheDir))
             {
                 throw new \RuntimeException(
-                    sprintf('Unable to create the Doctrine Proxy directory "%s".', $proxyCacheDir)
-                );
+                    sprintf('Unable to create the Doctrine Proxy directory "%s".', $proxyCacheDir));
             }
-
         }
-        elseif (!is_writable($proxyCacheDir))
+        elseif (! is_writable($proxyCacheDir))
         {
             throw new \RuntimeException(
                 sprintf(
-                    'The Doctrine Proxy directory "%s" is not writeable for the current system user.', $proxyCacheDir
-                )
-            );
+                    'The Doctrine Proxy directory "%s" is not writeable for the current system user.',
+                    $proxyCacheDir));
         }
-
 
         if ($this->entityManager->getConfiguration()->getAutoGenerateProxyClasses())
         {

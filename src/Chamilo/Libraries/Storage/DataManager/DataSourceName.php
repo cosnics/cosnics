@@ -104,6 +104,7 @@ abstract class DataSourceName
     /**
      * Get the database driver to be used
      *
+     * @param boolean $implementation
      * @return string
      */
     public function get_driver($implementation = false)
@@ -257,90 +258,92 @@ abstract class DataSourceName
      * Parse a string to a valid data source name
      *
      * @param string $type
-     * @param string $connection_string
+     * @param string $connectionString
      * @return \Chamilo\Libraries\Storage\DataManager\DataSourceName
      */
-    public static function parse($type, $connection_string)
+    public static function parse($type, $connectionString)
     {
-        $data_source_name = self::factory($type);
+        $dataSourceName = self::factory($type);
 
         // Find driver
-        if (($position = strpos($connection_string, '://')) !== false)
+        if (($position = strpos($connectionString, '://')) !== false)
         {
-            $string = substr($connection_string, 0, $position);
-            $connection_string = substr($connection_string, $position + 3);
+            $string = substr($connectionString, 0, $position);
+            $connectionString = substr($connectionString, $position + 3);
         }
         else
         {
-            $string = $connection_string;
-            $connection_string = null;
+            $string = $connectionString;
+            $connectionString = null;
         }
 
         // Get the driver
         if (preg_match('|^(.+?)\((.*?)\)$|', $string, $arr))
         {
-            $data_source_name->set_driver($arr[1]);
+            $dataSourceName->set_driver($arr[1]);
         }
         else
         {
-            $data_source_name->set_driver($string);
+            $dataSourceName->set_driver($string);
         }
 
-        if (! count($connection_string))
+        if (! count($connectionString))
         {
             throw new \Exception('The connection string passed to the DataSourceName :: parse() method is not valid');
         }
 
         // Get (if found): username and password
         // $connection_string => username:password@protocol+host_specification/database
-        if (($at = strrpos($connection_string, '@')) !== false)
+        if (($at = strrpos($connectionString, '@')) !== false)
         {
-            $string = substr($connection_string, 0, $at);
-            $connection_string = substr($connection_string, $at + 1);
+            $string = substr($connectionString, 0, $at);
+            $connectionString = substr($connectionString, $at + 1);
+
             if (($position = strpos($string, ':')) !== false)
             {
-                $data_source_name->set_username(rawurldecode(substr($string, 0, $position)));
-                $data_source_name->set_password(rawurldecode(substr($string, $position + 1)));
+                $dataSourceName->set_username(rawurldecode(substr($string, 0, $position)));
+                $dataSourceName->set_password(rawurldecode(substr($string, $position + 1)));
             }
             else
             {
-                $data_source_name->set_username(rawurldecode($string));
+                $dataSourceName->set_username(rawurldecode($string));
             }
         }
 
         // Find protocol and host specification
 
         // $connection_string => protocol(protocol_options)/database
-        if (preg_match('|^([^(]+)\((.*?)\)/?(.*?)$|', $connection_string, $match))
+        if (preg_match('|^([^(]+)\((.*?)\)/?(.*?)$|', $connectionString, $match))
         {
             $protocol = $match[1];
             $protocol_options = $match[2] ? $match[2] : false;
-            $connection_string = $match[3];
+            $connectionString = $match[3];
 
             // $connection_string => protocol+hostspec/database (old format)
         }
         else
         {
-            if (strpos($connection_string, '+') !== false)
+            if (strpos($connectionString, '+') !== false)
             {
-                list($protocol, $connection_string) = explode('+', $connection_string, 2);
+                list($protocol, $connectionString) = explode('+', $connectionString, 2);
             }
-            if (strpos($connection_string, '//') === 0 && strpos($connection_string, '/', 2) !== false &&
-                 $data_source_name->get_driver() == 'oci8')
+
+            if (strpos($connectionString, '//') === 0 && strpos($connectionString, '/', 2) !== false &&
+                 $dataSourceName->get_driver() == 'oci8')
             {
                 // oracle's "Easy Connect" syntax: "username/password@[//]host[:port][/service_name]"
                 // e.g. "scott/tiger@//mymachine:1521/oracle"
-                $protocol_options = $connection_string;
-                $connection_string = substr($protocol_options, strrpos($protocol_options, '/') + 1);
+                $protocol_options = $connectionString;
+                $connectionString = substr($protocol_options, strrpos($protocol_options, '/') + 1);
             }
-            elseif (strpos($connection_string, '/') !== false)
+            elseif (strpos($connectionString, '/') !== false)
             {
-                list($protocol_options, $connection_string) = explode('/', $connection_string, 2);
+                list($protocol_options, $connectionString) = explode('/', $connectionString, 2);
             }
             else
             {
-                $protocol_options = $connection_string;
-                $connection_string = null;
+                $protocol_options = $connectionString;
+                $connectionString = null;
             }
         }
 
@@ -355,21 +358,21 @@ abstract class DataSourceName
             $port = null;
         }
 
-        $data_source_name->set_host($protocol_options);
-        $data_source_name->set_port($port);
+        $dataSourceName->set_host($protocol_options);
+        $dataSourceName->set_port($port);
 
         // Get database if there is one: $connection_string => database
-        if ($connection_string)
+        if ($connectionString)
         {
             // /database
-            if (($position = strpos($connection_string, '?')) === false)
+            if (($position = strpos($connectionString, '?')) === false)
             {
-                $data_source_name->set_database($connection_string);
+                $dataSourceName->set_database($connectionString);
             }
             // /database?param1=value1&param2=value2
             else
             {
-                $data_source_name->set_database(substr($connection_string, 0, $position));
+                $dataSourceName->set_database(substr($connectionString, 0, $position));
 
                 /*
                  * Ignore the following for now
@@ -396,7 +399,7 @@ abstract class DataSourceName
             }
         }
 
-        return $data_source_name;
+        return $dataSourceName;
     }
 
     /**

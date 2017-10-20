@@ -24,7 +24,7 @@ class EqualityConditionTranslator extends ConditionTranslator
         {
             return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' IS NULL';
         }
-        
+
         return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator::render(
             $this->get_condition()->get_value());
     }
