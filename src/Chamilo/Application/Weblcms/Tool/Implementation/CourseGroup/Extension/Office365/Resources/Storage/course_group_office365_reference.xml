@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="weblcms_course_group_publication_category">
+<object name="weblcms_course_group_office365_reference">
     <properties>
         <property
                 name="id"
@@ -13,16 +13,15 @@
                 unsigned="1"
                 notnull="1"/>
         <property
-                name="publication_category_id"
-                type="integer"
-                unsigned="1"
-                notnull="1"/>
+                name="office365_group_id"
+                type="text"
+                notnull="1"
+                length="50"/>
+        <property
+                name="office365_plan_id"
+                type="text"
+                length="50" />
     </properties>
-    <index
-            name="publication_category_id"
-            type="primary">
-        <indexproperty name="publication_category_id"/>
-    </index>
     <index name="course_group_id">
         <indexproperty name="course_group_id"/>
     </index>

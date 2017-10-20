@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.form.course_group_form_decorator"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator">
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.form" />
+        </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_service_decorator"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupServiceDecorator">
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.service" />
+        </service>
+    </services>
+</container>

@@ -278,6 +278,11 @@ class ConfigurationForm extends FormValidator
                                 $options);
                         }
                     }
+
+                    if($setting['locked'] == 1)
+                    {
+                        $this->freeze($name);
+                    }
                 }
 
                 if ($has_settings)

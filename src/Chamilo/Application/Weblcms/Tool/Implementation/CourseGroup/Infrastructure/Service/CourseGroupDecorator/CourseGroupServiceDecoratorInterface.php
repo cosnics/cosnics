@@ -18,8 +18,6 @@ interface CourseGroupServiceDecoratorInterface
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
-     *
-     * @return
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = []);
 
@@ -30,8 +28,6 @@ interface CourseGroupServiceDecoratorInterface
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
-     *
-     * @return
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = []);
 

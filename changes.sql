@@ -288,6 +288,8 @@ ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_trave
 /** 16 OCT 2017 **/
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration', 'Integration', 'Forum', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension', 'Extension', 'Office365', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration', 'Integration', 'Office365', '1', '1.0.0', '1');
 
 CREATE TABLE `weblcms_course_group_publication_category` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -295,3 +297,13 @@ CREATE TABLE `weblcms_course_group_publication_category` (
   `publication_category_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `weblcms_course_group_office365_reference` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `course_group_id` int(10) UNSIGNED NOT NULL,
+  `office365_group_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `office365_plan_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_id', NULL, '0'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_secret', NULL, '0'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'access_token', NULL, '1'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'external_user_id', NULL, '1');
