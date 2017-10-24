@@ -14,17 +14,20 @@
                     name="access_token"
                     field="text"
                     default=""
-                    user_setting="1"
-                    locked="1"/>
-            <setting name="external_user_id"
-                     field="text"
-                     default=""
-                     user_setting="1"
-                     locked="1"/>
-            <!--<setting-->
-            <!--name="tenant_id"-->
-            <!--field="text"-->
-            <!--default="" />-->
+                    user_setting="true"
+                    locked="true"
+                    hidden="true" />
+            <setting
+                    name="external_user_id"
+                    field="text"
+                    default=""
+                    user_setting="true"
+                    locked="true"
+                    hidden="true" />
+            <setting
+                    name="tenant_id"
+                    field="text"
+                    default=""/>
             <!--<setting-->
             <!--name="tenant_name"-->
             <!--field="text"-->

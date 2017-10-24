@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use JsonSchema\Exception\ResourceNotFoundException;
+use Microsoft\Graph\Http\GraphRequest;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
@@ -11,6 +13,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class Office365Repository
 {
+    const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
+    const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '405';
+
     /**
      * @var \TheNetworg\OAuth2\Client\Provider\Azure
      */
@@ -31,67 +36,148 @@ class Office365Repository
     {
         $this->azureProvider = $azureProvider;
         $this->graph = $graph;
-    }
 
-    public function isAccessTokenValid($accessToken)
-    {
-        return '';
-    }
-
-    public function refreshAccessToken($accessToken)
-    {
-        return '';
-    }
-
-    public function getAccessToken()
-    {
-        return '';
-    }
-
-    public function getOffice365UserIdentifier(User $user)
-    {
-        return '';
+        $this->graph->setAccessToken($this->getAccessToken());
     }
 
     /**
-     * @param string $accessToken
+     * Returns the access token
+     *
+     * @return \League\OAuth2\Client\Token\AccessToken
+     */
+    protected function getAccessToken()
+    {
+        return $this->azureProvider->getAccessToken(
+            'client_credentials',
+            ['resource' => 'https://graph.microsoft.com/']
+        );
+    }
+
+    /**
+     * Returns the identifier for the given Chamilo user
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     */
+    public function getOffice365UserIdentifier(User $user)
+    {
+        $member = $this->getOffice365User($user);
+        return $member->getId();
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Microsoft\Graph\Model\User
+     */
+    public function getOffice365User(User $user)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('GET', '/users/' . $user->get_email())
+                ->setReturnType(\Microsoft\Graph\Model\User::class)
+        );
+    }
+
+    /**
+     * @param string $groupId
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\User
+     */
+    public function getGroupMember($groupId, $office365UserIdentifier)
+    {
+        try
+        {
+            return $this->executeRequestWithAccessTokenExpirationRetry(
+                $this->graph->createRequest('GET', '/groups/' . $groupId . '/members/' . $office365UserIdentifier)
+                    ->setReturnType(\Microsoft\Graph\Model\User::class)
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == self::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                return null;
+            }
+
+            throw $exception;
+        }
+    }
+
+    protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
+    {
+        try
+        {
+            return $graphRequest->execute();
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
+            {
+                //TODO: store new access token
+                $accessToken = $this->getAccessToken();
+                $this->graph->setAccessToken($accessToken);
+
+                return $graphRequest->execute();
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
      * @param string $groupName
      *
      * @return \Microsoft\Graph\Model\Group
      */
-    public function createGroup($accessToken, $groupName)
+    public function createGroup($groupName)
     {
-        $this->graph->setAccessToken($accessToken);
-
         $groupData = [
             'description' => $groupName,
             'displayName' => $groupName,
             'mailEnabled' => false,
-            'groupTypes'=> [
+            'groupTypes' => [
                 'Unified',
             ],
             'securityEnabled' => false
         ];
 
-        return $this->graph->createRequest("POST", "/groups")
-            ->attachBody($groupData)
-            ->setReturnType(\Microsoft\Graph\Model\Group::class)
-            ->execute();
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups')
+                ->attachBody($groupData)
+                ->setReturnType(\Microsoft\Graph\Model\Group::class)
+        );
     }
 
     /**
-     * @param string $accessToken
-     * @param \Microsoft\Graph\Model\Group $group
+     * @param string $groupIdentifier
      * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
      */
-    public function subscribeOwnerInGroup($accessToken, Group $group, $office365UserIdentifier)
+    public function subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier)
     {
-        $this->graph->setAccessToken($accessToken);
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . 'owners/$ref')
+                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
 
-        $this->graph->createRequest("POST", "/groups/" . $group->getId() . 'owners/$ref')
-            ->attachBody(["@odata.id" => "https://graph.microsoft.com/v1.0/users/" . $office365UserIdentifier])
-            ->setReturnType(\Microsoft\Graph\Model\Event::class)
-            ->execute();
+    /**
+     * @param string $groupIdentifier
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . 'members/$ref')
+                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
     }
 
 }

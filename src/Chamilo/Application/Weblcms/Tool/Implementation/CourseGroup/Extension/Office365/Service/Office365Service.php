@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use JsonSchema\Exception\ResourceNotFoundException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
@@ -41,43 +42,73 @@ class Office365Service
      */
     public function createGroupByName(User $owner, $groupName)
     {
-        $accessToken = $this->getAccessToken();
         $office365UserIdentifier = $this->getOffice365UserIdentifier($owner);
 
-        $group = $this->office365Repository->createGroup($accessToken, $groupName);
-        $this->office365Repository->subscribeOwnerInGroup($accessToken, $group, $office365UserIdentifier);
+        $group = $this->office365Repository->createGroup($groupName);
+        $this->office365Repository->subscribeMemberInGroup($group, $office365UserIdentifier);
     }
 
     /**
-     * Gets an access token
-     *
-     * @return string
+     * @param string $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    protected function getAccessToken()
+    public function addMemberToGroup($groupId, User $user)
     {
-        $accessToken = $this->localSetting->get(
-            'access_token', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
-        );
-
-        if(!$this->office365Repository->isAccessTokenValid($accessToken))
+        if (!$this->isMemberOfGroup($groupId, $user))
         {
-            try
-            {
-                $accessToken = $this->office365Repository->refreshAccessToken($accessToken);
-            }
-            catch(\Exception $ex)
-            {
-                $accessToken = $this->office365Repository->getAccessToken();
-            }
+            $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
 
-            $this->localSetting->create(
-                'access_token', $accessToken,
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
-            );
+            $this->office365Repository->subscribeMemberInGroup($groupId, $office365UserIdentifier);
         }
-
-        return $accessToken;
     }
+
+    public function isMemberOfGroup($groupId, User $user)
+    {
+        return $this->getGroupMember($groupId, $user) instanceof \Microsoft\Graph\Model\User;
+    }
+
+    public function getGroupMember($groupId, User $user)
+    {
+        $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+        return $this->office365Repository->getGroupMember($groupId, $office365UserIdentifier);
+    }
+
+//    /**
+//     * Gets an access token
+//     *
+//     * @return string
+//     */
+//    protected function getAccessToken()
+//    {
+//        $accessToken = $this->localSetting->get(
+//            'access_token', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+//        );
+//
+//        if(empty($accessToken))
+//        {
+//            $accessToken = $this->requestNewAccessToken();
+//        }
+//
+//        return $accessToken;
+//    }
+//
+//    /**
+//     * Requests a new access token from office365 and stores them in the settings
+//     *
+//     * @return string
+//     */
+//    protected function requestNewAccessToken()
+//    {
+//        $accessToken = $this->office365Repository->getAccessToken();
+//
+//        $this->localSetting->create(
+//            'access_token', $accessToken,
+//            'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+//        );
+//
+//        return $accessToken->getToken();
+//    }
 
     /**
      * Returns the identifier in office365 for a given user
@@ -92,9 +123,14 @@ class Office365Service
             'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
         );
 
-        if(empty($office365UserIdentifier))
+        if (empty($office365UserIdentifier))
         {
             $office365UserIdentifier = $this->office365Repository->getOffice365UserIdentifier($user);
+
+            $this->localSetting->create(
+                'external_user_id', $office365UserIdentifier,
+                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+            );
         }
 
         return $office365UserIdentifier;
