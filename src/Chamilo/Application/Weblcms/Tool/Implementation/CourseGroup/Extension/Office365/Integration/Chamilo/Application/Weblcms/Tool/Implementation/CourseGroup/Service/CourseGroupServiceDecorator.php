@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\CourseGroupOffice365ReferenceService;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -16,6 +18,30 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterface
 {
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service
+     */
+    protected $office365Service;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\CourseGroupOffice365ReferenceService
+     */
+    protected $courseGroupOffice365ReferenceService;
+
+    /**
+     * CourseGroupServiceDecorator constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service $office365Service
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService
+     */
+    public function __construct(
+        Office365Service $office365Service, CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService
+    )
+    {
+        $this->office365Service = $office365Service;
+        $this->courseGroupOffice365ReferenceService = $courseGroupOffice365ReferenceService;
+    }
+
     /**
      * Decorates the create functionality of a course group. Handing over the created course group and the form
      * values for further processing of the custom form
@@ -82,8 +108,11 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
-        // check if o-group / plan is active for group
-        // subscribe user to group
+        if($this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        {
+            $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+            $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        }
     }
 
     /**

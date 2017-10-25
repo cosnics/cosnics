@@ -1,9 +1,10 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use JsonSchema\Exception\ResourceNotFoundException;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
@@ -26,12 +27,12 @@ class Office365Service
      * Office365Service constructor.
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository $office365Repository
+     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
      */
-    public function __construct(
-        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository $office365Repository
-    )
+    public function __construct(Office365Repository $office365Repository, LocalSetting $localSetting)
     {
         $this->office365Repository = $office365Repository;
+        $this->localSetting = $localSetting;
     }
 
     /**
@@ -49,6 +50,8 @@ class Office365Service
     }
 
     /**
+     * Adds a member to a group. Checking if the user is already subscribed or not.
+     *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
@@ -62,53 +65,33 @@ class Office365Service
         }
     }
 
+    /**
+     * Returns whether or not the given user is subscribed to the given group
+     *
+     * @param int $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     */
     public function isMemberOfGroup($groupId, User $user)
     {
         return $this->getGroupMember($groupId, $user) instanceof \Microsoft\Graph\Model\User;
     }
 
+    /**
+     * Returns the group member object of a user in a given group
+     *
+     * @param int $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Microsoft\Graph\Model\User
+     */
     public function getGroupMember($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
 
         return $this->office365Repository->getGroupMember($groupId, $office365UserIdentifier);
     }
-
-//    /**
-//     * Gets an access token
-//     *
-//     * @return string
-//     */
-//    protected function getAccessToken()
-//    {
-//        $accessToken = $this->localSetting->get(
-//            'access_token', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
-//        );
-//
-//        if(empty($accessToken))
-//        {
-//            $accessToken = $this->requestNewAccessToken();
-//        }
-//
-//        return $accessToken;
-//    }
-//
-//    /**
-//     * Requests a new access token from office365 and stores them in the settings
-//     *
-//     * @return string
-//     */
-//    protected function requestNewAccessToken()
-//    {
-//        $accessToken = $this->office365Repository->getAccessToken();
-//
-//        $this->localSetting->create(
-//            'access_token', $accessToken,
-//            'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
-//        );
-//
-//        return $accessToken->getToken();
-//    }
 
     /**
      * Returns the identifier in office365 for a given user
@@ -125,7 +108,8 @@ class Office365Service
 
         if (empty($office365UserIdentifier))
         {
-            $office365UserIdentifier = $this->office365Repository->getOffice365UserIdentifier($user);
+            $office365User = $this->office365Repository->getOffice365User($user);
+            $office365UserIdentifier = $office365User->getId();
 
             $this->localSetting->create(
                 'external_user_id', $office365UserIdentifier,

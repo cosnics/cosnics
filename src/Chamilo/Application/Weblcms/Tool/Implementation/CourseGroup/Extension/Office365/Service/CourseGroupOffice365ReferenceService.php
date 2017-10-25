@@ -86,8 +86,18 @@ class CourseGroupOffice365ReferenceService
      */
     public function courseGroupHasReference(CourseGroup $courseGroup)
     {
-        $courseGroupOffice365Reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        $courseGroupOffice365Reference = $this->getCourseGroupReference($courseGroup);
         return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getCourseGroupReference(CourseGroup $courseGroup)
+    {
+        return $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
     }
 
     /**

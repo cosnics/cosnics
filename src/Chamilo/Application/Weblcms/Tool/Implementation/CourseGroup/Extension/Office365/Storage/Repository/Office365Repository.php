@@ -3,7 +3,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use JsonSchema\Exception\ResourceNotFoundException;
+use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Token\AccessToken;
+use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
 
 /**
@@ -14,12 +16,12 @@ use Microsoft\Graph\Http\GraphRequest;
 class Office365Repository
 {
     const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
-    const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '405';
+    const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
 
     /**
-     * @var \TheNetworg\OAuth2\Client\Provider\Azure
+     * @var \League\OAuth2\Client\Provider\AbstractProvider
      */
-    protected $azureProvider;
+    protected $oauthProvider;
 
     /**
      * @var \Microsoft\Graph\Graph
@@ -27,17 +29,40 @@ class Office365Repository
     protected $graph;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface
+     */
+    protected $accessTokenRepository;
+
+    /**
      * Office365Repository constructor.
      *
-     * @param \TheNetworg\OAuth2\Client\Provider\Azure $azureProvider
+     * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
      * @param \Microsoft\Graph\Graph $graph
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      */
-    public function __construct(\TheNetworg\OAuth2\Client\Provider\Azure $azureProvider, \Microsoft\Graph\Graph $graph)
+    public function __construct(
+        AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository
+    )
     {
-        $this->azureProvider = $azureProvider;
+        $this->oauthProvider = $oauthProvider;
         $this->graph = $graph;
+        $this->accessTokenRepository = $accessTokenRepository;
 
-        $this->graph->setAccessToken($this->getAccessToken());
+        $this->initializeAccessToken();
+    }
+
+    /**
+     * Initializes the access token
+     */
+    protected function initializeAccessToken()
+    {
+        $accessToken = $this->accessTokenRepository->getAccessToken();
+        if (!$accessToken instanceof AccessToken || $accessToken->hasExpired())
+        {
+            $accessToken = $this->requestNewAccessToken();
+        }
+
+        $this->graph->setAccessToken($accessToken);
     }
 
     /**
@@ -45,25 +70,16 @@ class Office365Repository
      *
      * @return \League\OAuth2\Client\Token\AccessToken
      */
-    protected function getAccessToken()
+    protected function requestNewAccessToken()
     {
-        return $this->azureProvider->getAccessToken(
+        $accessToken = $this->oauthProvider->getAccessToken(
             'client_credentials',
             ['resource' => 'https://graph.microsoft.com/']
         );
-    }
 
-    /**
-     * Returns the identifier for the given Chamilo user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    public function getOffice365UserIdentifier(User $user)
-    {
-        $member = $this->getOffice365User($user);
-        return $member->getId();
+        $this->accessTokenRepository->storeAccessToken($accessToken);
+
+        return $accessToken;
     }
 
     /**
@@ -105,6 +121,14 @@ class Office365Repository
         }
     }
 
+    /**
+     * Executes a request in the graph API with an additional try if the access token has expired by refreshing
+     * the access token and executing the request again.
+     *
+     * @param \Microsoft\Graph\Http\GraphRequest $graphRequest
+     *
+     * @return mixed
+     */
     protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
     {
         try
@@ -115,8 +139,7 @@ class Office365Repository
         {
             if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
             {
-                //TODO: store new access token
-                $accessToken = $this->getAccessToken();
+                $accessToken = $this->requestNewAccessToken();
                 $this->graph->setAccessToken($accessToken);
 
                 return $graphRequest->execute();
@@ -159,7 +182,7 @@ class Office365Repository
     public function subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . 'owners/$ref')
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/owners/$ref')
                 ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
                 ->setReturnType(\Microsoft\Graph\Model\Event::class)
         );
@@ -174,10 +197,9 @@ class Office365Repository
     public function subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . 'members/$ref')
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/members/$ref')
                 ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
                 ->setReturnType(\Microsoft\Graph\Model\Event::class)
         );
     }
-
 }
