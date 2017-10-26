@@ -279,6 +279,13 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if (count($members_to_delete) > 0)
         {
             $succes = $this->course_group->unsubscribe_users($members_to_delete);
+
+            foreach($members_to_delete as $userId)
+            {
+                $user = new User();
+                $user->setId($userId);
+                $this->courseGroupDecoratorsManager->unsubscribeUser($this->course_group, $user);
+            }
         }
 
         if (count($members_to_add) > 0)

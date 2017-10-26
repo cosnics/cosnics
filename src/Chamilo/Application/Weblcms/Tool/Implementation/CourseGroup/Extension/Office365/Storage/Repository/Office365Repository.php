@@ -96,6 +96,192 @@ class Office365Repository
     }
 
     /**
+     * Executes a request in the graph API with an additional try if the access token has expired by refreshing
+     * the access token and executing the request again.
+     *
+     * @param \Microsoft\Graph\Http\GraphRequest $graphRequest
+     *
+     * @return mixed
+     */
+    protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
+    {
+        try
+        {
+            return $graphRequest->execute();
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
+            {
+                $accessToken = $this->requestNewAccessToken();
+                $this->graph->setAccessToken($accessToken);
+                $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $accessToken]);
+
+                return $graphRequest->execute();
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Creates a new group by a given name
+     *
+     * @param string $groupName
+     *
+     * @return \Microsoft\Graph\Model\Group
+     */
+    public function createGroup($groupName)
+    {
+        $groupData = [
+            'description' => $groupName,
+            'displayName' => $groupName,
+            'mailEnabled' => false,
+            'groupTypes' => [
+                'Unified',
+            ],
+            'securityEnabled' => false
+        ];
+
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups')
+                ->attachBody($groupData)
+                ->setReturnType(\Microsoft\Graph\Model\Group::class)
+        );
+    }
+
+    /**
+     * Updates a group name by a given identifier
+     *
+     * @param string $groupIdentifier
+     * @param string $groupName
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function updateGroup($groupIdentifier, $groupName)
+    {
+        $groupData = [
+            'description' => $groupName,
+            'displayName' => $groupName
+        ];
+
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('PATCH', '/groups/' . $groupIdentifier)
+                ->attachBody($groupData)
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
+     * Subscribes an owner to a group
+     *
+     * @param string $groupIdentifier
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/owners/$ref')
+                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
+     * Removes an owner from a given group
+     *
+     * @param string $groupIdentifier
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function removeOwnerFromGroup($groupIdentifier, $office365UserIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest(
+                'DELETE', '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier . '/$ref'
+            )
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
+     * @param string $groupId
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\User
+     */
+    public function getGroupOwner($groupId, $office365UserIdentifier)
+    {
+        try
+        {
+            return $this->executeRequestWithAccessTokenExpirationRetry(
+                $this->graph->createRequest('GET', '/groups/' . $groupId . '/owners/' . $office365UserIdentifier)
+                    ->setReturnType(\Microsoft\Graph\Model\User::class)
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == self::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                return null;
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Lists the owners of a given group
+     *
+     * @param string $groupIdentifier
+     *
+     * @return \Microsoft\Graph\Model\User[]
+     */
+    public function listOwners($groupIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/owners')
+                ->setReturnType(\Microsoft\Graph\Model\User::class)
+        );
+    }
+
+    /**
+     * @param string $groupIdentifier
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/members/$ref')
+                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
+     * Removes an owner from a given group
+     *
+     * @param string $groupIdentifier
+     * @param string $office365UserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function removeMemberFromGroup($groupIdentifier, $office365UserIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest(
+                'DELETE', '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier . '/$ref'
+            )
+                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
      * @param string $groupId
      * @param string $office365UserIdentifier
      *
@@ -122,84 +308,17 @@ class Office365Repository
     }
 
     /**
-     * Executes a request in the graph API with an additional try if the access token has expired by refreshing
-     * the access token and executing the request again.
+     * Lists the owners of a given group
      *
-     * @param \Microsoft\Graph\Http\GraphRequest $graphRequest
-     *
-     * @return mixed
-     */
-    protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
-    {
-        try
-        {
-            return $graphRequest->execute();
-        }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
-        {
-            if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
-            {
-                $accessToken = $this->requestNewAccessToken();
-                $this->graph->setAccessToken($accessToken);
-
-                return $graphRequest->execute();
-            }
-
-            throw $exception;
-        }
-    }
-
-    /**
-     * @param string $groupName
-     *
-     * @return \Microsoft\Graph\Model\Group
-     */
-    public function createGroup($groupName)
-    {
-        $groupData = [
-            'description' => $groupName,
-            'displayName' => $groupName,
-            'mailEnabled' => false,
-            'groupTypes' => [
-                'Unified',
-            ],
-            'securityEnabled' => false
-        ];
-
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups')
-                ->attachBody($groupData)
-                ->setReturnType(\Microsoft\Graph\Model\Group::class)
-        );
-    }
-
-    /**
      * @param string $groupIdentifier
-     * @param string $office365UserIdentifier
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\User[]
      */
-    public function subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier)
+    public function listMembers($groupIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/owners/$ref')
-                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
-    }
-
-    /**
-     * @param string $groupIdentifier
-     * @param string $office365UserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Event
-     */
-    public function subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier)
-    {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/members/$ref')
-                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
+            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/members')
+                ->setReturnType(\Microsoft\Graph\Model\User::class)
         );
     }
 }

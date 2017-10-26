@@ -45,6 +45,7 @@ class CourseGroupOffice365ReferenceService
         $courseGroupOffice365Reference = new CourseGroupOffice365Reference();
         $courseGroupOffice365Reference->setCourseGroupId($courseGroup->getId());
         $courseGroupOffice365Reference->setOffice365GroupId($office365GroupId);
+        $courseGroupOffice365Reference->setLinked(true);
 
         if (!$this->courseGroupOffice365ReferenceRepository->createReference($courseGroupOffice365Reference))
         {
@@ -67,7 +68,7 @@ class CourseGroupOffice365ReferenceService
      */
     public function removeReferenceForCourseGroup(CourseGroup $courseGroup)
     {
-        if(!$this->courseGroupOffice365ReferenceRepository->removeReferenceForCourseGroup($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceRepository->removeReferenceForCourseGroup($courseGroup))
         {
             throw new \Exception(
                 sprintf(
@@ -87,10 +88,14 @@ class CourseGroupOffice365ReferenceService
     public function courseGroupHasReference(CourseGroup $courseGroup)
     {
         $courseGroupOffice365Reference = $this->getCourseGroupReference($courseGroup);
-        return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference;
+
+        return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference &&
+            $courseGroupOffice365Reference->isLinked();
     }
 
     /**
+     * Returns the Office365 reference object for a course group
+     *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference|\Chamilo\Libraries\Storage\DataClass\DataClass
@@ -98,6 +103,52 @@ class CourseGroupOffice365ReferenceService
     public function getCourseGroupReference(CourseGroup $courseGroup)
     {
         return $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+    }
+
+    /**
+     * Unlinks the course group from the office365 group. The reference object is never removed but
+     * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     *
+     * @throws \Exception
+     */
+    public function unlinkCourseGroupReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        $courseGroupOffice365Reference->setLinked(false);
+
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \Exception(
+                sprintf(
+                    'Could not update the CourseGroupOffice365Reference for course group %s',
+                    $courseGroupOffice365Reference->getCourseGroupId()
+                )
+            );
+        }
+    }
+
+    /**
+     * Links the course group from the office365 group. The reference object is never removed but
+     * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     *
+     * @throws \Exception
+     */
+    public function linkCourseGroupReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        $courseGroupOffice365Reference->setLinked(true);
+
+        if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
+        {
+            throw new \Exception(
+                sprintf(
+                    'Could not update the CourseGroupOffice365Reference for course group %s',
+                    $courseGroupOffice365Reference->getCourseGroupId()
+                )
+            );
+        }
     }
 
     /**
@@ -111,8 +162,9 @@ class CourseGroupOffice365ReferenceService
      */
     public function storePlannerReferenceForCourseGroup(CourseGroup $courseGroup, $office365GroupId, $office365PlanId)
     {
-        $courseGroupOffice365Reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        if(!$courseGroupOffice365Reference)
+        $courseGroupOffice365Reference =
+            $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        if (!$courseGroupOffice365Reference)
         {
             $courseGroupOffice365Reference = $this->createReferenceForCourseGroup($courseGroup, $office365GroupId);
         }
@@ -141,8 +193,9 @@ class CourseGroupOffice365ReferenceService
      */
     public function removePlannerFromCourseGroup(CourseGroup $courseGroup)
     {
-        $courseGroupOffice365Reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        if(!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
+        $courseGroupOffice365Reference =
+            $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
             throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
         }
@@ -172,8 +225,9 @@ class CourseGroupOffice365ReferenceService
      */
     public function courseGroupHasPlannerReference(CourseGroup $courseGroup)
     {
-        $courseGroupOffice365Reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        if(!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
+        $courseGroupOffice365Reference =
+            $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
+        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
             return false;
         }

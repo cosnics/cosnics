@@ -21,6 +21,11 @@
                 name="office365_plan_id"
                 type="text"
                 length="50" />
+        <property
+                name="linked"
+                type="boolean"
+                notnull="1"
+                default="1" />
     </properties>
     <index name="course_group_id">
         <indexproperty name="course_group_id"/>

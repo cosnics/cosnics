@@ -40,6 +40,8 @@ class Office365Service
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $owner
      * @param string $groupName
+     *
+     * @return string
      */
     public function createGroupByName(User $owner, $groupName)
     {
@@ -47,6 +49,19 @@ class Office365Service
 
         $group = $this->office365Repository->createGroup($groupName);
         $this->office365Repository->subscribeMemberInGroup($group, $office365UserIdentifier);
+
+        return $group->getId();
+    }
+
+    /**
+     * Updates the name of a group
+     *
+     * @param string $groupId
+     * @param string $groupName
+     */
+    public function updateGroupName($groupId, $groupName)
+    {
+        $this->office365Repository->updateGroup($groupId, $groupName);
     }
 
     /**
@@ -66,6 +81,22 @@ class Office365Service
     }
 
     /**
+     * Removes a member from a group. Checking if the user is subscribed or not.
+     *
+     * @param string $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function removeMemberFromGroup($groupId, User $user)
+    {
+        if ($this->isMemberOfGroup($groupId, $user))
+        {
+            $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+            $this->office365Repository->removeMemberFromGroup($groupId, $office365UserIdentifier);
+        }
+    }
+
+    /**
      * Returns whether or not the given user is subscribed to the given group
      *
      * @param int $groupId
@@ -75,22 +106,139 @@ class Office365Service
      */
     public function isMemberOfGroup($groupId, User $user)
     {
-        return $this->getGroupMember($groupId, $user) instanceof \Microsoft\Graph\Model\User;
+        $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+        $groupMember = $this->office365Repository->getGroupMember($groupId, $office365UserIdentifier);
+
+        return $groupMember instanceof \Microsoft\Graph\Model\User;
     }
 
     /**
-     * Returns the group member object of a user in a given group
+     * Returns a list of external user identifiers that are subscribed as member in an office365 group
+     *
+     * @param string $groupId
+     *
+     * @return string[]
+     */
+    public function getGroupMembers($groupId)
+    {
+        $userIdentifiers = [];
+
+        $groupMembers = $this->office365Repository->listMembers($groupId);
+        foreach($groupMembers as $groupMember)
+        {
+            $userIdentifiers[] = $groupMember->getId();
+        }
+
+        return $userIdentifiers;
+    }
+
+    /**
+     * Removes all the members from a given group
+     *
+     * @param string $groupId
+     */
+    public function removeAllMembersFromGroup($groupId)
+    {
+        $groupMembers = $this->getGroupMembers($groupId);
+        foreach($groupMembers as $groupMember)
+        {
+            $this->office365Repository->removeMemberFromGroup($groupId, $groupMember);
+        }
+    }
+
+    /**
+     * Adds a owner to a group. Checking if the user is already subscribed or not.
+     *
+     * @param string $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function addOwnerToGroup($groupId, User $user)
+    {
+        if (!$this->isOwnerOfGroup($groupId, $user))
+        {
+            $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+            $this->office365Repository->subscribeOwnerInGroup($groupId, $office365UserIdentifier);
+        }
+    }
+
+    /**
+     * Removes a owner from a group. Checking if the user is subscribed or not.
+     *
+     * @param string $groupId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function removeOwnerFromGroup($groupId, User $user)
+    {
+        if ($this->isOwnerOfGroup($groupId, $user))
+        {
+            $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+            $this->office365Repository->removeOwnerFromGroup($groupId, $office365UserIdentifier);
+        }
+    }
+
+    /**
+     * Returns whether or not the given user is subscribed to the given group
      *
      * @param int $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Microsoft\Graph\Model\User
+     * @return bool
      */
-    public function getGroupMember($groupId, User $user)
+    public function isOwnerOfGroup($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+        $groupOwner = $this->office365Repository->getGroupOwner($groupId, $office365UserIdentifier);
 
-        return $this->office365Repository->getGroupMember($groupId, $office365UserIdentifier);
+        return $groupOwner instanceof \Microsoft\Graph\Model\User;
+    }
+
+
+    /**
+     * Returns a list of external user identifiers that are subscribed as owner in an office365 group
+     *
+     * @param string $groupId
+     *
+     * @return string[]
+     */
+    public function getGroupOwners($groupId)
+    {
+        $userIdentifiers = [];
+
+        $groupOwners = $this->office365Repository->listOwners($groupId);
+        foreach($groupOwners as $groupOwner)
+        {
+            $userIdentifiers[] = $groupOwner->getId();
+        }
+
+        return $userIdentifiers;
+    }
+
+    /**
+     * Removes all the owners from a given group
+     *
+     * @param string $groupId
+     */
+    public function removeAllOwnersFromGroup($groupId)
+    {
+        $groupOwners = $this->getGroupOwners($groupId);
+        foreach($groupOwners as $groupOwner)
+        {
+            $this->office365Repository->removeOwnerFromGroup($groupId, $groupOwner);
+        }
+    }
+
+
+    /**
+     * Removes all the users from a given group
+     *
+     * @param string $groupId
+     */
+    public function removeAllUsersFromGroup($groupId)
+    {
+        $this->removeAllOwnersFromGroup($groupId);
+        $this->removeAllMembersFromGroup($groupId);
     }
 
     /**
