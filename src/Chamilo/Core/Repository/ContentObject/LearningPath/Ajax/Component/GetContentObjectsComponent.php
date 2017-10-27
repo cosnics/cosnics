@@ -53,7 +53,7 @@ class GetContentObjectsComponent extends Manager
 
         $contentObjects = $service->getContentObjectsByTypeForWorkspace(
             ContentObject::class_name(),
-            $workspace, $filterConditionRenderer
+            $workspace, $filterConditionRenderer->render()
         );
 
         $contentObjectsArray = array();

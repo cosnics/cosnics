@@ -22,14 +22,15 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
 
         /** @var FilterData $filterData */
         $filterData = $this->get_component()->getFilterData();
-
+        
+        $conditionFilterRenderer = new ConditionFilterRenderer($filterData,
+                $this->get_component()->getWorkspace()
+            );
+        
         return $contentObjectService->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(),
             $this->get_component()->getWorkspace(),
-            new ConditionFilterRenderer(
-                $filterData,
-                $this->get_component()->getWorkspace()
-            ),
+            $conditionFilterRenderer->render(),
             $count,
             $offset,
             $order_property
@@ -45,14 +46,15 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
 
         /** @var FilterData $filterData */
         $filterData = $this->get_component()->getFilterData();
+        $conditionFilterRenderer = new ConditionFilterRenderer(
+                $filterData,
+                $this->get_component()->getWorkspace()
+            );
 
         return $contentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(),
             $this->get_component()->getWorkspace(),
-            new ConditionFilterRenderer(
-                $filterData,
-                $this->get_component()->getWorkspace()
-            )
+            $conditionFilterRenderer->render()
         );
     }
 }

@@ -20,7 +20,7 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
             $this->get_component()->get_repository_browser()->getWorkspace(), 
             ConditionFilterRenderer::factory(
                 $filterData, 
-                $this->get_component()->get_repository_browser()->getWorkspace()), 
+                $this->get_component()->get_repository_browser()->getWorkspace())->render(), 
             $count, 
             $offset, 
             $orderProperty);
@@ -36,6 +36,6 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
             $this->get_component()->get_repository_browser()->getWorkspace(), 
             ConditionFilterRenderer::factory(
                 $filterData, 
-                $this->get_component()->get_repository_browser()->getWorkspace()));
+                $this->get_component()->get_repository_browser()->getWorkspace())->render());
     }
 }

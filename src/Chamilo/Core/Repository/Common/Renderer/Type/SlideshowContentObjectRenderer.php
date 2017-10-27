@@ -37,7 +37,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(),
             $workspace,
-            ConditionFilterRenderer::factory($filterData, $workspace));
+            ConditionFilterRenderer::factory($filterData, $workspace)->render());
 
         $contentObject = $contentObjectRenditionImplementation = $contentObjectActions = null;
 
@@ -46,7 +46,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
                 $filterData->getTypeDataClass(),
                 $workspace,
-                ConditionFilterRenderer::factory($filterData, $workspace),
+                ConditionFilterRenderer::factory($filterData, $workspace)->render(),
                 1,
                 $slideshowIndex,
                 array()
