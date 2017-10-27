@@ -11,6 +11,7 @@
         repositoryBrowserApp.controller('MainController', ['$scope', 'chamiloUtilities', function ($scope, chamiloUtilities) {
             this.contentObjects = [];
             this.isLoading = false;
+            this.totalContentObjectsCount = 0;
 
             var mainController = this;
 
@@ -32,6 +33,7 @@
                     function (data, status, headers, config) {
                         mainController.isLoading = false;
                         mainController.contentObjects = data.properties.content_object_data;
+                        mainController.totalContentObjectsCount = data.properties.content_object_count;
                     }
                 );
             };
@@ -59,6 +61,7 @@
                 fields="['Chamilo_Core_Repository_Storage_DataClass_ContentObject:title', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified']"
                 page-items="20"
                 locale="en"
+                total-items="mainController.totalContentObjectsCount"
                 on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)"
         >
             <thead>
