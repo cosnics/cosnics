@@ -19,6 +19,12 @@
                 id="chamilo.core.repository.storage.repository.content_object_template_repository"
                 class="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository">
         </service>
+        
+        <service
+                id="chamilo.core.repository.workspace.service.content_object_service"
+                class="Chamilo\Core\Repository\Workspace\Service\ContentObjectService">
+        	<argument type="service" id="chamilo.core.repository.workspace.repository.content_object_repository" />
+        </service>
 
         <service
                 id="chamilo.core.repository.workspace.repository.content_object_repository"
