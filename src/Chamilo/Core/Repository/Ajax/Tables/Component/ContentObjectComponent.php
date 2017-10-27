@@ -97,7 +97,7 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $contentObjects = $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), 
             $workspaceImplementation, 
-            ConditionFilterRenderer::factory($filterData, $workspaceImplementation), 
+            ConditionFilterRenderer::factory($filterData, $workspaceImplementation)->render(), 
             $this->getOffset(), 
             $this->getItemsPerPage(), 
             $this->getOrderBy());

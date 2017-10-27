@@ -30,7 +30,7 @@ class ContentObjectRepository
      *
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $personalWorkspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param Condition $filterCondition
      * @param int $count
      * @param int $offset
      * @param OrderBy[] $orderProperty
@@ -38,10 +38,10 @@ class ContentObjectRepository
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function findAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
+        Condition $filterCondition, $count, $offset, $orderProperty)
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer),
+            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterCondition),
             $count,
             $offset,
             $orderProperty);
@@ -53,15 +53,15 @@ class ContentObjectRepository
      *
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $personalWorkspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param Condition $filterCondition
      *
      * @return int
      */
     public function countAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+        Condition $filterCondition)
     {
         $parameters = new DataClassCountParameters(
-            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer));
+            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterCondition));
 
         return $this->countAll($contentObjectClassName, $parameters);
     }
@@ -69,19 +69,19 @@ class ContentObjectRepository
     /**
      *
      * @param WorkspaceInterface $personalWorkspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param Condition $filterCondition
      *
      * @return AndCondition
      */
     protected function getPersonalWorkspaceConditions(WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+        Condition $filterCondition)
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($personalWorkspace->getId()));
-        $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
+        $conditions[] = $this->getActiveContentObjectConditions($filterCondition);
 
         return new AndCondition($conditions);
     }
@@ -90,7 +90,7 @@ class ContentObjectRepository
      *
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $workspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param Condition $filterCondition
      * @param int $count
      * @param int $offset
      * @param OrderBy[] $orderProperty
@@ -98,10 +98,10 @@ class ContentObjectRepository
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function findAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
+        Condition $filterCondition, $count, $offset, $orderProperty)
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
+            $this->getWorkspaceConditions($workspace, $filterCondition),
             $count,
             $offset,
             $orderProperty,
@@ -114,15 +114,15 @@ class ContentObjectRepository
      *
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $workspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param Condition $filterCondition
      *
      * @return int
      */
     public function countAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+        Condition $filterCondition)
     {
         $parameters = new DataClassCountParameters(
-            $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
+            $this->getWorkspaceConditions($workspace, $filterCondition),
             $this->getWorkspaceJoins());
 
         return $this->countAll($contentObjectClassName, $parameters);
@@ -131,12 +131,12 @@ class ContentObjectRepository
     /**
      *
      * @param WorkspaceInterface $workspace
-     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param ConditionFilterRenderer $filterCondition
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
     protected function getWorkspaceConditions(WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+        Condition $filterCondition)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -144,7 +144,7 @@ class ContentObjectRepository
                 WorkspaceContentObjectRelation::class_name(),
                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
-        $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
+        $conditions[] = $this->getActiveContentObjectConditions($filterCondition);
 
         return new AndCondition($conditions);
     }
@@ -249,11 +249,9 @@ class ContentObjectRepository
         }
     }
 
-    protected function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
+    protected function getActiveContentObjectConditions(Condition $filterCondition)
     {
         $conditions = array();
-
-        $filterCondition = $filterConditionRenderer->render();
 
         if ($filterCondition instanceof Condition)
         {
