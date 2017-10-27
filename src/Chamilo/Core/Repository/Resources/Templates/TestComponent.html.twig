@@ -14,25 +14,8 @@
 
             var mainController = this;
 
-            this.contentObjects = [
-                {
-                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:title': 'test',
-                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description': 'test',
-                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified': 'test'
-                }
-            ];
-
-            console.log(this.contentObjects);
-
             this.refreshContentObjects = function(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse) {
                 mainController.isLoading = true;
-
-                console.log(currentPage);
-                console.log(pageItems);
-                console.log(filterBy);
-                console.log(filterByFields);
-                console.log(orderBy);
-                console.log(orderByReverse);
 
                 chamiloUtilities.callChamiloAjax(
                     'Chamilo\\Core\\Repository\\Ajax\\Tables', 'ContentObject',
