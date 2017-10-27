@@ -1,0 +1,94 @@
+{% set appContext = 'Chamilo\\Libraries' %}
+
+<script type="text/javascript">
+    var chamiloTrNgGrid = angular.module('chamiloTrNgGrid');
+
+    chamiloTrNgGrid.value(
+            'gridTranslations', {
+                'Search': '{{ 'Search'|trans({}, appContext) }}',
+                'Search All': '{{ 'SearchAll'|trans({}, appContext) }}',
+                'First Page': '{{ 'FirstPage'|trans({}, appContext) }}',
+                'Next Page': '{{ 'NextPage'|trans({}, appContext) }}',
+                'Last Page': '{{ 'LastPage'|trans({}, appContext) }}',
+                'Previous Page': '{{ 'PreviousPage'|trans({}, appContext) }}',
+                'Sort': '{{ 'Sort'|trans({}, appContext) }}',
+                'Page': '{{ 'Page'|trans({}, appContext) }}',
+                'No items to display': '{{ 'NoSearchResults'|trans({}, appContext) }}',
+                'displayed': '{{ 'displayed'|trans({}, appContext) }}',
+                'in total': '{{ 'inTotal'|trans({}, appContext) }}'
+            }
+    );
+</script>
+
+<script type="text/ng-template" id="trNgGridColumnFilter.html">
+    <div ng-show="(gridOptions.enableFiltering&&columnOptions.enableFiltering!==false)||columnOptions.enableFiltering" class="tr-ng-column-filter">
+        <div class="{{ '{{ TrNgGrid.columnFilterInputWrapperCssClass }}' }}">
+            <input ng-model-options="{ debounce: { 'default': 750, 'blur': 0 } }" placeholder="{{ '{{\'Search\'|trNgGridTranslateFilter:gridOptions.locale}}' }}" class="form-control input-sm" type="text" ng-model="columnOptions.filter" ng-keypress="speedUpAsyncDataRetrieval($event)" />
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="trNgGridGlobalFilter.html">
+    <span ng-show="gridOptions.enableFiltering" class="pull-left form-group">
+        <input ng-model-options="{ debounce: { 'default': 750, 'blur': 0 } }" class="form-control" type="text" ng-model="gridOptions.filterBy" ng-keypress="speedUpAsyncDataRetrieval($event)" ng-attr-placeholder="{{ '{{ \'Search All\'|trNgGridTranslateFilter:gridOptions.locale }}' }}" />
+    </span>
+</script>
+
+<script type="text/ng-template" id="trNgGridPager.html">
+    <span class="pull-right form-group">
+        <ul class="pagination pagination-sm">
+            <li ng-class="{disabled:!pageCanGoBack}" ng-if="extendedControlsActive">
+                <a href="" ng-click="pageCanGoBack&&navigateToPage(0)" ng-attr-title="{{ '{{\'First Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">
+                    <span>&laquo;</span>
+                </a>
+            </li>
+            <li ng-class="{disabled:!pageCanGoBack}" ng-if="extendedControlsActive">
+                <a href="" ng-click="pageCanGoBack&&navigateToPage(gridOptions.currentPage - 1)" ng-attr-title="{{ '{{\'Previous Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">
+                    <span>&lsaquo;</span>
+                </a>
+            </li>
+            <li ng-if="pageSelectionActive" ng-repeat="pageIndex in pageIndexes track by $index" ng-class="{disabled:pageIndex===null, active:pageIndex===gridOptions.currentPage}">
+                <span ng-if="pageIndex===null">...</span>
+                <a href="" ng-click="navigateToPage(pageIndex)" ng-if="pageIndex!==null" ng-attr-title="{{ '{{\'Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">{{ '{{pageIndex+1}}' }}</a>
+            </li>
+            <li ng-class="{disabled:!pageCanGoForward}" ng-if="extendedControlsActive">
+                <a href="" ng-click="pageCanGoForward&&navigateToPage(gridOptions.currentPage + 1)" ng-attr-title="{{ '{{\'Next Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">
+                    <span>&rsaquo;</span>
+                </a>
+            </li>
+            <li ng-class="{disabled:!pageCanGoForward}" ng-if="extendedControlsActive">
+                <a href="" ng-click="pageCanGoForward&&navigateToPage(lastPageIndex)" ng-attr-title="{{ '{{\'Last Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">
+                    <span>&raquo;</span>
+                </a>
+            </li>
+            <li class="disabled" style="white-space: nowrap;">
+                <span ng-hide="totalItemsCount">{{ '{{\'No items to display\'|trNgGridTranslateFilter:gridOptions.locale}}' }}</span>
+                <span ng-show="totalItemsCount" ng-attr-title="{{ '{{\'Select Page\'|trNgGridTranslateFilter:gridOptions.locale}}' }}">
+                    {{ '{{startItemIndex+1}}' }} - {{ '{{endItemIndex+1}}' }} {{ '{{\'displayed\'|trNgGridTranslateFilter:gridOptions.locale}}' }}
+                    <span>, {{ '{{totalItemsCount}}' }} {{ '{{\'in total\'|trNgGridTranslateFilter:gridOptions.locale}}' }}</span>
+                </span >
+            </li>
+        </ul>
+    </span>
+</script>
+
+{#<script type="text/ng-template" id="trNgGridHeaderCellTemplate.html">#}
+    {#<div class="{{ '{{ TrNgGrid.headerCellCssClass }}' }}" ng-switch="isCustomized">#}
+        {#<div ng-switch-when="true">#}
+            {#<div ng-transclude=""></div>#}
+        {#</div>#}
+        {#<div ng-switch-default#}
+             {#ng-switch="(gridOptions.enableSorting&&columnOptions.enableSorting!==false)||columnOptions.enableSorting">#}
+            {#<div class="{{ '{{ TrNgGrid.columnTitleCssClass }}' }}" ng-switch-when="true"#}
+                 {#ng-click="toggleSorting(columnOptions.fieldName)" style="cursor: pointer;">#}
+                {#{{ '{{ columnTitle|trNgGridTranslateFilter:gridOptions.locale }}' }}#}
+                {#<div tr-ng-grid-column-sort=""></div>#}
+            {#</div>#}
+            {#<div class="{{ '{{ TrNgGrid.columnTitleCssClass }}' }}" ng-switch-default>#}
+                {#{{ '{{ columnTitle|trNgGridTranslateFilter:gridOptions.locale }}' }}#}
+                {#<div tr-ng-grid-column-sort=""></div>#}
+            {#</div>#}
+            {#<div tr-ng-grid-column-filter=""></div>#}
+        {#</div>#}
+    {#</div>#}
+{#</script>#}

@@ -53,9 +53,13 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.timepicker.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'JqueryContextMenu/jquery.contextMenu.min.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular.min.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular-sanitize.min.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS-UI-Bootstrap/ui-bootstrap.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/AngularJS/angular.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/AngularJS/angular-sanitize.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/AngularJS-UI-Bootstrap/ui-bootstrap.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/TrNgGrid/trNgGrid.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/Chamilo/ChamiloTrNgGrid.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/Chamilo/Toolbar.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Angular/Chamilo/Utilities.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Fancytree/dist/jquery.fancytree-all.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Dropzone/dropzone.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'phpjs.js');

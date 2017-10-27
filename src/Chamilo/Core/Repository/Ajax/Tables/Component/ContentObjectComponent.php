@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {

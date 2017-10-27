@@ -1,0 +1,86 @@
+{% set appContext = 'Chamilo\\Core\\Repository' %}
+
+<h4>This is a test!</h4>
+
+<script type="text/javascript">
+    (function(){
+        var repositoryBrowserApp = angular.module('repositoryBrowserApp', [
+            'chamiloTrNgGrid', 'ui.bootstrap', 'chamilo'
+        ]);
+
+        repositoryBrowserApp.controller('MainController', ['$scope', 'chamiloUtilities', function ($scope, chamiloUtilities) {
+            this.contentObjects = [];
+            this.isLoading = false;
+
+            var mainController = this;
+
+            this.fetchContentObjects = function() {
+                mainController.isLoading = true;
+
+                chamiloUtilities.callChamiloAjax(
+                    'Chamilo\\Core\\Repository\\Ajax\\Tables', 'ContentObject',
+                    {},
+                    function (data, status, headers, config) {
+                        mainController.isLoading = false;
+                        mainController.contentObjects = data.properties.content_object_data;
+                    }
+                );
+            };
+
+            this.refreshContentObjects = function(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse) {
+                mainController.isLoading = true;
+
+                console.log(currentPage);
+                console.log(pageItems);
+                console.log(filterBy);
+                console.log(filterByFields);
+                console.log(orderBy);
+                console.log(orderByReverse);
+
+                chamiloUtilities.callChamiloAjax(
+                    'Chamilo\\Core\\Repository\\Ajax\\Tables', 'ContentObject',
+                    {},
+                    function (data, status, headers, config) {
+                        mainController.isLoading = false;
+                        mainController.contentObjects = data.properties.content_object_data;
+                    }
+                );
+            };
+
+            this.fetchContentObjects();
+
+        }]);
+
+    })();
+</script>
+
+
+<div ng-app="repositoryBrowserApp" ng-controller="MainController as mainController">
+    {% include 'Chamilo\\Libraries:Plugin/AngularJS/trNgGrid_templates.html.twig' %}
+    <div class="container-fluid">
+
+        <div class="row" ng-show="mainController.isLoading">
+            <div class="col-md-12 text-center">
+                {{ getImage('Action/LoadingHuge', 'Chamilo\\Configuration', 'gif') }}
+            </div>
+        </div>
+
+        <table
+                ng-show="!mainController.isLoading"
+                tr-ng-grid=""
+                items="mainController.contentObjects"
+                fields="['title', 'description', 'modified']"
+                page-items="20"
+                locale="en"
+                on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)">
+
+            <thead>
+            <tr>
+                <th field-name="title" display-name="{{ 'Title'|trans({}, appContext) }}"></th>
+                <th field-name="description" display-name="{{ 'Description'|trans({}, appContext) }}"></th>
+                <th field-name="modified" display-name="{{ 'ModificationDate'|trans({}, appContext) }}"></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>

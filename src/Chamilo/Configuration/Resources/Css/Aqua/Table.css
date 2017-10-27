@@ -427,3 +427,38 @@ div.thumbnail_container {
 .table th.cell-stat-4x, .table td.cell-stat-4x {
 	width: 28em;
 }
+
+/*****************************************************
+ * EXTRA STYLES FOR TRNGGRID						 *
+ *****************************************************/
+
+.tr-ng-grid .tr-ng-column-header .tr-ng-title {
+	color: #337ab7;
+	font-weight: bold;
+}
+
+.tr-ng-grid .tr-ng-sort .tr-ng-sort-inactive {
+	color: #999999;
+}
+
+.tr-ng-grid .tr-ng-sort .tr-ng-sort-active {
+	color: #333333;
+}
+
+.tr-ng-grid .tr-ng-sort .glyphicon-chevron-down:before {
+	content: "\e094"
+}
+
+.tr-ng-grid .tr-ng-sort .glyphicon-chevron-up:before {
+	content: "\e093"
+}
+
+.tr-ng-grid>tbody>tr>td,
+.tr-ng-grid>tbody>tr>td>.tr-ng-cell {
+	-webkit-touch-callout: default; /* iOS Safari */
+	-webkit-user-select: auto;   /* Chrome/Safari/Opera */
+	-khtml-user-select: all;    /* Konqueror */
+	-moz-user-select: all;      /* Firefox */
+	-ms-user-select: all;       /* Internet Explorer/Edge */
+	user-select: all;
+}
