@@ -14,6 +14,16 @@
 
             var mainController = this;
 
+            this.contentObjects = [
+                {
+                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:title': 'test',
+                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description': 'test',
+                    'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified': 'test'
+                }
+            ];
+
+            console.log(this.contentObjects);
+
             this.refreshContentObjects = function(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse) {
                 mainController.isLoading = true;
 
@@ -63,16 +73,16 @@
                 ng-show="!mainController.isLoading"
                 tr-ng-grid=""
                 items="mainController.contentObjects"
-                fields="['title', 'description', 'modified']"
+                fields="['Chamilo_Core_Repository_Storage_DataClass_ContentObject:title', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified']"
                 page-items="20"
                 locale="en"
-                on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)">
-
+                {#on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)"#}
+        >
             <thead>
             <tr>
-                <th field-name="title" display-name="{{ 'Title'|trans({}, appContext) }}"></th>
-                <th field-name="description" display-name="{{ 'Description'|trans({}, appContext) }}"></th>
-                <th field-name="modified" display-name="{{ 'ModificationDate'|trans({}, appContext) }}"></th>
+                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:title" display-name="{{ 'Title'|trans({}, appContext) }}"></th>
+                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:description" display-name="{{ 'Description'|trans({}, appContext) }}"></th>
+                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified" display-name="{{ 'ModificationDate'|trans({}, appContext) }}"></th>
             </tr>
             </thead>
         </table>
