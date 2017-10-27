@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
 
 class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
@@ -16,8 +17,8 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     const PARAM_ITEMS_PER_PAGE = 'pageItems';
     const PARAM_ORDER_BY_PROPERTY = 'orderBy';
     const PARAM_ORDER_BY_DIRECTION = 'orderByReverse';
-    const PARAM_FILTER = 'filter';
-    const PARAM_FILTER_FIELDS = 'filterfields';
+    const PARAM_GLOBAL_FILTER = 'globalFilter';
+    const PARAM_INDIVIDUAL_FILTERS = 'individualFilters';
     const PROPERTY_CONTENT_OBJECT_DATA = 'content_object_data';
 
     /**
@@ -55,34 +56,45 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     /**
      *
-     * @return integer
+     * @return string
      */
-    protected function getOffset()
+    protected function getGlobalFilter()
     {
-        return $this->getCurrentPage() * $this->getItemsPerPage();
+        return (string) $this->getPostDataValue(self::PARAM_GLOBAL_FILTER);
     }
 
-    protected function getOrderby()
+    protected function getGlobalFilterProperties()
     {
-        $orderByReverse = (boolean) $this->getPostDataValue(self::PARAM_ORDER_BY_DIRECTION);
-        $orderByPropertyParts = explode(':', $this->getPostDataValue(self::PARAM_ORDER_BY_PROPERTY));
-        
-        if (empty($orderByPropertyParts) || count($orderByPropertyParts) != 2)
-        {
-            throw new \InvalidArgumentException();
-        }
-        
-        $orderByClassName = str_replace('_', '\\', $orderByPropertyParts[0]);
-        
-        if (! class_exists($orderByClassName) || ! is_subclass_of($orderByClassName, DataClass::class))
-        {
-            throw new \InvalidArgumentException();
-        }
-        
         return array(
-            new OrderBy(
-                new PropertyConditionVariable($orderByClassName, $orderByPropertyParts[1]), 
-                $orderByReverse ? SORT_DESC : SORT_ASC));
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    protected function getIndividualFilters()
+    {
+        return $this->getPostDataValue(self::PARAM_INDIVIDUAL_FILTERS);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getOrderByProperty()
+    {
+        return (string) $this->getPostDataValue(self::PARAM_ORDER_BY_PROPERTY);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function getIsReverseOrder()
+    {
+        return (boolean) $this->getPostDataValue(self::PARAM_ORDER_BY_DIRECTION);
     }
 
     /**
@@ -91,16 +103,26 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function run()
     {
-        $filterData = $this->getFilterData();
+        $dataClassTableParametersConverter = new DataClassTableParametersConverter();
+        
+        $dataClassRetrievesParameters = $dataClassTableParametersConverter->buildDataClassRetrievesParameters(
+            $this->getCurrentPage(), 
+            $this->getItemsPerPage(), 
+            $this->getGlobalFilter(), 
+            $this->getGlobalFilterProperties(), 
+            $this->getIndividualFilters(), 
+            $this->getOrderByProperty(), 
+            $this->getIsReverseOrder());
+        
         $workspaceImplementation = $this->getWorkspaceImplementation();
         
         $contentObjects = $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(), 
+            ContentObject::class, 
             $workspaceImplementation, 
-            ConditionFilterRenderer::factory($filterData, $workspaceImplementation)->render(), 
-            $this->getOffset(), 
-            $this->getItemsPerPage(), 
-            $this->getOrderBy());
+            $dataClassRetrievesParameters->getCondition(), 
+            $dataClassRetrievesParameters->getOffset(), 
+            $dataClassRetrievesParameters->getCount(), 
+            $dataClassRetrievesParameters->getOrderBy());
         
         $contentObjectData = array();
         
@@ -135,14 +157,5 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     protected function getWorkspaceImplementation()
     {
         return new PersonalWorkspace($this->getUser());
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Filter\FilterData
-     */
-    protected function getFilterData()
-    {
-        return FilterData::getInstance($this->getWorkspaceImplementation());
     }
 }
