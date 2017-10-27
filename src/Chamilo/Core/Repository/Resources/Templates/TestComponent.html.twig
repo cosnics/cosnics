@@ -14,19 +14,6 @@
 
             var mainController = this;
 
-            this.fetchContentObjects = function() {
-                mainController.isLoading = true;
-
-                chamiloUtilities.callChamiloAjax(
-                    'Chamilo\\Core\\Repository\\Ajax\\Tables', 'ContentObject',
-                    {},
-                    function (data, status, headers, config) {
-                        mainController.isLoading = false;
-                        mainController.contentObjects = data.properties.content_object_data;
-                    }
-                );
-            };
-
             this.refreshContentObjects = function(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse) {
                 mainController.isLoading = true;
 
@@ -39,15 +26,22 @@
 
                 chamiloUtilities.callChamiloAjax(
                     'Chamilo\\Core\\Repository\\Ajax\\Tables', 'ContentObject',
-                    {},
+                    {
+                        'currentPage': currentPage,
+                        'pageItems': pageItems,
+                        'filter': filterBy,
+                        'filterFields': filterByFields,
+                        'orderBy': orderBy,
+                        'orderByReverse': orderByReverse
+
+
+                    },
                     function (data, status, headers, config) {
                         mainController.isLoading = false;
                         mainController.contentObjects = data.properties.content_object_data;
                     }
                 );
             };
-
-            this.fetchContentObjects();
 
         }]);
 
