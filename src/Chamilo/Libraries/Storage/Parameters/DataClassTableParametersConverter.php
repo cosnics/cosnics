@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -30,6 +31,11 @@ class DataClassTableParametersConverter
      */
     public function convertOrderByProperty($orderProperty = null, $isReverseOrder = false)
     {
+        if(empty($orderProperty))
+        {
+            return [];
+        }
+
         return array(
             new OrderBy(
                 $this->convertPropertyStringToPropertyConditionVariable($orderProperty),
@@ -45,9 +51,14 @@ class DataClassTableParametersConverter
      */
     public function convertIndividualFiltersIntoConditions($individualFilters = [])
     {
+        if(empty($individualFilters))
+        {
+            return null;
+        }
+
         $conditions = [];
 
-        foreach($individualFilters as $propertyString => $filterText)
+        foreach ($individualFilters as $propertyString => $filterText)
         {
             $property = $this->convertPropertyStringToPropertyConditionVariable($propertyString);
             $conditions = array_merge($conditions, $this->createConditionsForSearchTerms($filterText, [$property]));
@@ -65,6 +76,11 @@ class DataClassTableParametersConverter
      */
     public function convertGlobalFilterIntoCondition($globalFilter = null, $globalFilterProperties = [])
     {
+        if(empty($globalFilter))
+        {
+            return null;
+        }
+
         return new AndCondition($this->createConditionsForSearchTerms($globalFilter, $globalFilterProperties));
     }
 
@@ -79,10 +95,19 @@ class DataClassTableParametersConverter
      */
     protected function convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters)
     {
-        $conditions = [
-            $this->convertIndividualFiltersIntoConditions($individualFilters),
-            $this->convertGlobalFilterIntoCondition($globalFilter, $globalFilterProperties)
-        ];
+        $conditions = [];
+
+        $globalFilterCondition = $this->convertIndividualFiltersIntoConditions($individualFilters);
+        if($globalFilterCondition instanceof Condition)
+        {
+            $conditions[] = $globalFilterCondition;
+        }
+
+        $individualFiltersCondition = $this->convertGlobalFilterIntoCondition($globalFilter, $globalFilterProperties);
+        if($individualFiltersCondition instanceof Condition)
+        {
+            $conditions[] = $individualFiltersCondition;
+        }
 
         return new AndCondition($conditions);
     }
@@ -144,12 +169,11 @@ class DataClassTableParametersConverter
     )
     {
         return new RecordRetrievesParameters(
-            null,  $this->convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters),
+            null, $this->convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters),
             $itemsPerPage, $this->calculateOffset($currentPage, $itemsPerPage),
             $this->convertOrderByProperty($orderProperty, $isReverseOrder)
         );
     }
-
 
     /**
      * Returns the relevant search terms
@@ -177,9 +201,9 @@ class DataClassTableParametersConverter
         $filterText = $this->getRelevantSearchTerms($filterText);
         $conditions = [];
 
-        foreach($propertyConditionVariables as $propertyConditionVariable)
+        foreach ($propertyConditionVariables as $propertyConditionVariable)
         {
-            foreach($filterText as $searchTerm)
+            foreach ($filterText as $searchTerm)
             {
                 $conditions[] = new PatternMatchCondition($propertyConditionVariable, '*' . $searchTerm . '*');
             }
@@ -206,14 +230,19 @@ class DataClassTableParametersConverter
 
         if (empty($propertyStringParts) || count($propertyStringParts) != 2)
         {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(
+                'The property string ' . $propertyString . ' is empty or could not be parsed'
+            );
         }
 
         $propertyClassName = str_replace('_', '\\', $propertyStringParts[0]);
 
         if (!class_exists($propertyClassName) || !is_subclass_of($propertyClassName, DataClass::class))
         {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(
+                'The class ' . $propertyClassName .
+                ' is not a valid class or does not inherit from \Chamilo\Libraries\Storage\DataClass\DataClass'
+            );
         }
 
         return new PropertyConditionVariable($propertyClassName, $propertyStringParts[1]);

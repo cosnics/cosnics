@@ -103,7 +103,7 @@ abstract class AjaxManager extends Application
      * Returns the value of the given parameter.
      *
      * @param string $name
-     * @return string
+     * @return string|string[]
      */
     public function getPostDataValue($name)
     {

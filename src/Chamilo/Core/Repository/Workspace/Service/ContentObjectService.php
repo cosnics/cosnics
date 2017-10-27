@@ -106,18 +106,18 @@ class ContentObjectService
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
-        Condition $filterCondition, $offset = null, $count = null, $orderProperty = array())
+        Condition $filterCondition, $count = null, $offset = null, $orderProperty = array())
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
-        
+
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
                 $contentObjectClassName, 
                 $workspace, 
                 $filterCondition, 
-                $offset, 
-                $count, 
+                $count,
+                $offset,
                 $orderProperty);
         }
         else
@@ -125,9 +125,9 @@ class ContentObjectService
             return $this->getContentObjectRepository()->findAllInWorkspace(
                 $contentObjectClassName, 
                 $workspace, 
-                $filterCondition, 
+                $filterCondition,
+                $count,
                 $offset, 
-                $count, 
                 $orderProperty);
         }
     }

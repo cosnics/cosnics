@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Ajax\Tables\Component;
 
 use Chamilo\Core\Repository\Filter\FilterData;
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
 class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
     const PARAM_CURRENT_PAGE = 'currentPage';
-    const PARAM_ITEMS_PER_PAGE = 'pageItems';
+    const PARAM_ITEMS_PER_PAGE = 'itemsPerPage';
     const PARAM_ORDER_BY_PROPERTY = 'orderBy';
     const PARAM_ORDER_BY_DIRECTION = 'orderByReverse';
     const PARAM_GLOBAL_FILTER = 'globalFilter';
@@ -28,12 +29,12 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function getRequiredPostParameters()
     {
         return array(
-            self::PARAM_CURRENT_PAGE, 
-            self::PARAM_ITEMS_PER_PAGE, 
-            self::PARAM_ORDER_BY_PROPERTY, 
-            self::PARAM_ORDER_BY_DIRECTION, 
-            self::PARAM_FILTER, 
-            self::PARAM_FILTER_FIELDS);
+            self::PARAM_CURRENT_PAGE,
+            self::PARAM_ITEMS_PER_PAGE,
+            self::PARAM_ORDER_BY_PROPERTY,
+            self::PARAM_ORDER_BY_DIRECTION,
+            self::PARAM_GLOBAL_FILTER
+        );
     }
 
     /**
@@ -66,17 +67,17 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     protected function getGlobalFilterProperties()
     {
         return array(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), 
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+        );
     }
 
     /**
-     *
      * @return string[]
      */
     protected function getIndividualFilters()
     {
-        return $this->getPostDataValue(self::PARAM_INDIVIDUAL_FILTERS);
+        return $this->getRequest()->getFromPost(self::PARAM_INDIVIDUAL_FILTERS);
     }
 
     /**
@@ -104,38 +105,43 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function run()
     {
         $dataClassTableParametersConverter = new DataClassTableParametersConverter();
-        
+
         $dataClassRetrievesParameters = $dataClassTableParametersConverter->buildDataClassRetrievesParameters(
-            $this->getCurrentPage(), 
-            $this->getItemsPerPage(), 
-            $this->getGlobalFilter(), 
-            $this->getGlobalFilterProperties(), 
-            $this->getIndividualFilters(), 
-            $this->getOrderByProperty(), 
-            $this->getIsReverseOrder());
-        
+            $this->getCurrentPage(),
+            $this->getItemsPerPage(),
+            $this->getGlobalFilter(),
+            $this->getGlobalFilterProperties(),
+            $this->getIndividualFilters(),
+            $this->getOrderByProperty(),
+            $this->getIsReverseOrder()
+        );
+
         $workspaceImplementation = $this->getWorkspaceImplementation();
-        
+
         $contentObjects = $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
-            ContentObject::class, 
-            $workspaceImplementation, 
-            $dataClassRetrievesParameters->getCondition(), 
-            $dataClassRetrievesParameters->getOffset(), 
-            $dataClassRetrievesParameters->getCount(), 
-            $dataClassRetrievesParameters->getOrderBy());
-        
+            ContentObject::class,
+            $workspaceImplementation,
+            $dataClassRetrievesParameters->getCondition(),
+            $dataClassRetrievesParameters->getCount(),
+            $dataClassRetrievesParameters->getOffset(),
+            $dataClassRetrievesParameters->getOrderBy()
+        );
+
         $contentObjectData = array();
-        
+
+        $propertyPrefix = str_replace('\\', '_', ContentObject::class) . ':';
+
         while ($contentObject = $contentObjects->next_result())
         {
             $contentObjectData[] = array(
-                ContentObject::PROPERTY_TITLE => $contentObject->get_title(), 
-                ContentObject::PROPERTY_DESCRIPTION => $contentObject->get_description(), 
-                ContentObject::PROPERTY_MODIFICATION_DATE => $contentObject->get_modification_date());
+                $propertyPrefix . ContentObject::PROPERTY_TITLE => $contentObject->get_title(),
+                $propertyPrefix . ContentObject::PROPERTY_DESCRIPTION => $contentObject->get_description(),
+                $propertyPrefix . ContentObject::PROPERTY_MODIFICATION_DATE => $contentObject->get_modification_date()
+            );
         }
-        
+
         $properties = array(self::PROPERTY_CONTENT_OBJECT_DATA => $contentObjectData);
-        
+
         $jsonAjaxResult = new JsonAjaxResult();
         $jsonAjaxResult->set_properties($properties);
         $jsonAjaxResult->display();
