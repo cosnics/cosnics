@@ -97,6 +97,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
                 $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
                 $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
                 $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
+                //connect plan id
             }
             else
             {
