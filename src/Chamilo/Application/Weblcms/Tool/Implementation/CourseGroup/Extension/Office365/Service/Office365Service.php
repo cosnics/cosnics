@@ -251,7 +251,7 @@ class Office365Service
     protected function getOffice365UserIdentifier(User $user)
     {
         $office365UserIdentifier = $this->localSetting->get(
-            'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+            'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
         );
 
         if (empty($office365UserIdentifier))
@@ -261,7 +261,7 @@ class Office365Service
 
             $this->localSetting->create(
                 'external_user_id', $office365UserIdentifier,
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
             );
         }
 

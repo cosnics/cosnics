@@ -303,6 +303,7 @@ CREATE TABLE `weblcms_course_group_office365_reference` (
   `course_group_id` int(10) UNSIGNED NOT NULL,
   `office365_group_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `office365_plan_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `linked` TINYINT(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

@@ -80,8 +80,9 @@ abstract class PublicationCategoryCourseGroupServiceDecorator implements CourseG
      * values for further processing of the custom form
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function deleteGroup(CourseGroup $courseGroup)
+    public function deleteGroup(CourseGroup $courseGroup, User $user)
     {
         $this->courseGroupPublicationCategoryService->disconnectPublicationCategoryFromCourseGroup(
             $courseGroup, $this->getToolName()
