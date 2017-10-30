@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Tables\Component;
 
+use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectDataTableProvider;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
-use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider;
+use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -14,88 +14,19 @@ use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
-class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
+class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager implements DataTablePagedComponentInterface
 {
-    const PARAM_CURRENT_PAGE = 'currentPage';
-    const PARAM_ITEMS_PER_PAGE = 'itemsPerPage';
-    const PARAM_ORDER_BY_PROPERTY = 'orderBy';
-    const PARAM_ORDER_BY_DIRECTION = 'orderByReverse';
-    const PARAM_GLOBAL_FILTER = 'globalFilter';
-    const PARAM_INDIVIDUAL_FILTERS = 'individualFilters';
+    use \Chamilo\Libraries\Format\DataTable\Traits\DataTablePagedComponentTrait;
 
     /**
      *
-     * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function getRequiredPostParameters()
-    {
-        return array(
-            self::PARAM_CURRENT_PAGE,
-            self::PARAM_ITEMS_PER_PAGE,
-            self::PARAM_ORDER_BY_PROPERTY,
-            self::PARAM_ORDER_BY_DIRECTION,
-            self::PARAM_GLOBAL_FILTER);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    protected function getCurrentPage()
-    {
-        return (int) $this->getPostDataValue(self::PARAM_CURRENT_PAGE);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    protected function getItemsPerPage()
-    {
-        return (int) $this->getPostDataValue(self::PARAM_ITEMS_PER_PAGE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getGlobalFilter()
-    {
-        return (string) $this->getPostDataValue(self::PARAM_GLOBAL_FILTER);
-    }
-
-    protected function getGlobalFilterProperties()
+    public function getGlobalFilterProperties()
     {
         return array(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    protected function getIndividualFilters()
-    {
-        return $this->getRequest()->getFromPost(self::PARAM_INDIVIDUAL_FILTERS);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getOrderByProperty()
-    {
-        return (string) $this->getPostDataValue(self::PARAM_ORDER_BY_PROPERTY);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    protected function getIsReverseOrder()
-    {
-        return (boolean) $this->getPostDataValue(self::PARAM_ORDER_BY_DIRECTION);
     }
 
     /**
@@ -132,29 +63,11 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     */
-    protected function getDataClassRetrievesParameters()
-    {
-        $dataClassTableParametersConverter = new DataClassTableParametersConverter();
-
-        return $dataClassTableParametersConverter->buildDataClassRetrievesParameters(
-            $this->getCurrentPage(),
-            $this->getItemsPerPage(),
-            $this->getGlobalFilter(),
-            $this->getGlobalFilterProperties(),
-            $this->getIndividualFilters(),
-            $this->getOrderByProperty(),
-            $this->getIsReverseOrder());
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider
      */
-    protected function getTableDataProvider()
+    public function getTableDataProvider()
     {
-        return new ContentObjectTableDataProvider(
+        return new ContentObjectDataTableProvider(
             $this->getDataClassRetrievesParameters(),
             $this->getContentObjectService(),
             $this->getWorkspaceImplementation());

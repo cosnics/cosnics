@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Tables\Service;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
@@ -11,14 +12,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * @package Chamilo\Core\Repository\Ajax\Tables\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentObjectTableDataProvider
+class ContentObjectDataTableProvider extends DataTableProvider
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     */
-    private $dataClassRetrievesParameters;
 
     /**
      *
@@ -41,7 +36,8 @@ class ContentObjectTableDataProvider
     public function __construct(DataClassRetrievesParameters $dataClassRetrievesParameters,
         ContentObjectService $contentObjectService, WorkspaceInterface $workspaceImplementation)
     {
-        $this->dataClassRetrievesParameters = $dataClassRetrievesParameters;
+        parent::__construct($dataClassRetrievesParameters);
+
         $this->contentObjectService = $contentObjectService;
         $this->workspaceImplementation = $workspaceImplementation;
     }
@@ -62,24 +58,6 @@ class ContentObjectTableDataProvider
     public function setContentObjectService(ContentObjectService $contentObjectService)
     {
         $this->contentObjectService = $contentObjectService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     */
-    public function getDataClassRetrievesParameters()
-    {
-        return $this->dataClassRetrievesParameters;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
-     */
-    public function setDataClassRetrievesParameters(DataClassRetrievesParameters $dataClassRetrievesParameters)
-    {
-        $this->dataClassRetrievesParameters = $dataClassRetrievesParameters;
     }
 
     /**
