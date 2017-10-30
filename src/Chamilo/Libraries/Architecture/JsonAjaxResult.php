@@ -161,9 +161,20 @@ class JsonAjaxResult
      * @param string $property
      * @return string
      */
-    public function get_property($property)
+    public function getProperty($property)
     {
         return $this->properties[$property];
+    }
+
+    /**
+     *
+     * @param string $property
+     * @return string
+     * @deprecated Use getProperty($property) now
+     */
+    public function get_property($property)
+    {
+        return $this->getProperty($property);
     }
 
     /**
@@ -172,9 +183,20 @@ class JsonAjaxResult
      * @param string $property
      * @param string $value
      */
-    public function set_property($property, $value)
+    public function setProperty($property, $value)
     {
         $this->properties[$property] = $value;
+    }
+
+    /**
+     *
+     * @param string $property
+     * @param string $value
+     * @deprecated User setProperty($property, $value) now
+     */
+    public function set_property($property, $value)
+    {
+        $this->setProperty($property, $value);
     }
 
     /**

@@ -40,6 +40,7 @@ abstract class AjaxManager extends Application
         foreach ($this->getRequiredPostParameters() as $parameter)
         {
             $value = $this->getRequestedPostDataValue($parameter);
+
             if (! is_null($value))
             {
                 $this->setPostDataValue($parameter, $value);

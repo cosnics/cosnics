@@ -3,9 +3,9 @@ namespace Chamilo\Core\Repository\Ajax\Tables\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
 
 /**
  *
@@ -147,9 +147,8 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
             self::PROPERTY_CONTENT_OBJECT_DATA => $contentObjectData,
             self::PROPERTY_CONTENT_OBJECT_COUNT => $contentObjectCount);
 
-        $jsonAjaxResult = new JsonAjaxResult();
-        $jsonAjaxResult->set_properties($properties);
-        $jsonAjaxResult->display();
+        $jsonResponse = new JsonDataClassTableResponse($contentObjectData, $contentObjectCount);
+        $jsonResponse->send();
     }
 
     /**

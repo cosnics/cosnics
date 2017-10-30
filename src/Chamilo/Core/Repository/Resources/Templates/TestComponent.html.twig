@@ -32,8 +32,8 @@
                     },
                     function (data, status, headers, config) {
                         mainController.isLoading = false;
-                        mainController.contentObjects = data.properties.content_object_data;
-                        mainController.totalContentObjectsCount = data.properties.content_object_count;
+                        mainController.contentObjects = data.data_class_table.row_data;
+                        mainController.totalContentObjectsCount = data_class_table.row_count;
                     }
                 );
             };
