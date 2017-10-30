@@ -1,8 +1,9 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository\CourseGroupOffice365ReferenceRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 
 /**
@@ -13,18 +14,16 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 class CourseGroupOffice365ReferenceService
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository
+     * @var CourseGroupOffice365ReferenceRepository
      */
     protected $courseGroupOffice365ReferenceRepository;
 
     /**
      * CourseGroupOffice365Service constructor.
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository\CourseGroupOffice365ReferenceRepository|\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository
      */
-    public function __construct(
-        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository
-    )
+    public function __construct(CourseGroupOffice365ReferenceRepository $courseGroupOffice365ReferenceRepository)
     {
         $this->courseGroupOffice365ReferenceRepository = $courseGroupOffice365ReferenceRepository;
     }
@@ -36,7 +35,7 @@ class CourseGroupOffice365ReferenceService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $office365GroupId
      *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference
      *
      * @throws \Exception
      */
@@ -98,7 +97,7 @@ class CourseGroupOffice365ReferenceService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function getCourseGroupReference(CourseGroup $courseGroup)
     {
@@ -109,7 +108,7 @@ class CourseGroupOffice365ReferenceService
      * Unlinks the course group from the office365 group. The reference object is never removed but
      * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
      *
      * @throws \Exception
      */
@@ -132,7 +131,7 @@ class CourseGroupOffice365ReferenceService
      * Links the course group from the office365 group. The reference object is never removed but
      * only flagged as unlinked so it can be retrieved in the future to reactivate the connection
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
      *
      * @throws \Exception
      */
@@ -227,7 +226,8 @@ class CourseGroupOffice365ReferenceService
     {
         $courseGroupOffice365Reference =
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
+        if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference ||
+            !$courseGroupOffice365Reference->isLinked())
         {
             return false;
         }

@@ -89,10 +89,22 @@ class Office365Repository
      */
     public function getOffice365User(User $user)
     {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('GET', '/users/' . $user->get_email())
-                ->setReturnType(\Microsoft\Graph\Model\User::class)
-        );
+        try
+        {
+            return $this->executeRequestWithAccessTokenExpirationRetry(
+                $this->graph->createRequest('GET', '/users/' . $user->get_email())
+                    ->setReturnType(\Microsoft\Graph\Model\User::class)
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == self::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                return null;
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -240,7 +252,7 @@ class Office365Repository
      *
      * @return \Microsoft\Graph\Model\User[]
      */
-    public function listOwners($groupIdentifier)
+    public function listGroupOwners($groupIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
             $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/owners')
@@ -314,11 +326,26 @@ class Office365Repository
      *
      * @return \Microsoft\Graph\Model\User[]
      */
-    public function listMembers($groupIdentifier)
+    public function listGroupMembers($groupIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
             $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/members')
                 ->setReturnType(\Microsoft\Graph\Model\User::class)
+        );
+    }
+
+    /**
+     * Lists the plans for a given group
+     *
+     * @param string $groupIdentifier
+     *
+     * @return \Microsoft\Graph\Model\PlannerPlan[]
+     */
+    public function listGroupPlans($groupIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/planner/plans')
+                ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class)
         );
     }
 }

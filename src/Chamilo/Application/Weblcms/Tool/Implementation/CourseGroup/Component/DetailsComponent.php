@@ -51,6 +51,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         $html = array();
 
         $html[] = $this->renderDetails($currentCourseGroup);
+        $html[] = $this->renderIntegrations($currentCourseGroup);
         $html[] = $this->renderUsersTable();
 
         return implode(PHP_EOL, $html);
@@ -168,6 +169,31 @@ class DetailsComponent extends TabComponent implements TableSupport
         $html[] = '</div>';
 
         $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders the integration actions for a given
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @return string
+     */
+    protected function renderIntegrations(CourseGroup $courseGroup)
+    {
+        $html = array();
+
+        $integrationLinksButtonToolbar = new ButtonToolBar();
+        $renderer = new ButtonToolBarRenderer($integrationLinksButtonToolbar);
+        $this->getCourseGroupDecoratorsManager()->addCourseGroupActions($integrationLinksButtonToolbar, $courseGroup);
+
+        if($integrationLinksButtonToolbar->hasItems())
+        {
+            $html[] = '<div class="tab-content-header">';
+            $html[] = '<h5>' . Translation::getInstance()->getTranslation('Integrations', null, Manager::context()) . '</h5>';
+            $html[] = '</div>';
+            $html[] = $renderer->render();
+        }
 
         return implode(PHP_EOL, $html);
     }

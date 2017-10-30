@@ -307,4 +307,10 @@ CREATE TABLE `weblcms_course_group_office365_reference` (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_id', NULL, '0'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_secret', NULL, '0'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'access_token', NULL, '1'), (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'external_user_id', NULL, '1'),  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'tenant_id', NULL, '0');
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_id', NULL, '0'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_secret', NULL, '0'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'access_token', NULL, '1'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'external_user_id', NULL, '1'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'tenant_id', NULL, '0'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0');

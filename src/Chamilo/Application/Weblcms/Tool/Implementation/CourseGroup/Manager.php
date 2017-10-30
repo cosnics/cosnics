@@ -33,6 +33,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
     const ACTION_GROUP_DETAILS = 'Details';
 
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass | CourseGroup
+     */
     public function get_course_group()
     {
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);

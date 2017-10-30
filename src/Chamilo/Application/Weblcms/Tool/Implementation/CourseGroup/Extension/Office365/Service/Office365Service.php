@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -42,10 +43,19 @@ class Office365Service
      * @param string $groupName
      *
      * @return string
+     *
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
      */
     public function createGroupByName(User $owner, $groupName)
     {
+        //TODO: Temporarily hardcode this to avoid new groups being created
+        return 'e5dcbd72-8938-4ed2-9b31-fbac1b04ea3b';
         $office365UserIdentifier = $this->getOffice365UserIdentifier($owner);
+
+        if(empty($office365UserIdentifier))
+        {
+            throw new Office365UserNotExistsException($owner);
+        }
 
         $group = $this->office365Repository->createGroup($groupName);
         $this->office365Repository->subscribeMemberInGroup($group, $office365UserIdentifier);
@@ -69,12 +79,19 @@ class Office365Service
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
      */
     public function addMemberToGroup($groupId, User $user)
     {
         if (!$this->isMemberOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+            if(empty($office365UserIdentifier))
+            {
+                throw new Office365UserNotExistsException($user);
+            }
 
             $this->office365Repository->subscribeMemberInGroup($groupId, $office365UserIdentifier);
         }
@@ -85,12 +102,19 @@ class Office365Service
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
      */
     public function removeMemberFromGroup($groupId, User $user)
     {
         if ($this->isMemberOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+
+            if(empty($office365UserIdentifier))
+            {
+                throw new Office365UserNotExistsException($user);
+            }
 
             $this->office365Repository->removeMemberFromGroup($groupId, $office365UserIdentifier);
         }
@@ -107,6 +131,11 @@ class Office365Service
     public function isMemberOfGroup($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+        if(empty($office365UserIdentifier))
+        {
+            return false;
+        }
+
         $groupMember = $this->office365Repository->getGroupMember($groupId, $office365UserIdentifier);
 
         return $groupMember instanceof \Microsoft\Graph\Model\User;
@@ -123,7 +152,7 @@ class Office365Service
     {
         $userIdentifiers = [];
 
-        $groupMembers = $this->office365Repository->listMembers($groupId);
+        $groupMembers = $this->office365Repository->listGroupMembers($groupId);
         foreach($groupMembers as $groupMember)
         {
             $userIdentifiers[] = $groupMember->getId();
@@ -151,12 +180,18 @@ class Office365Service
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
      */
     public function addOwnerToGroup($groupId, User $user)
     {
         if (!$this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+            if(empty($office365UserIdentifier))
+            {
+                throw new Office365UserNotExistsException($user);
+            }
 
             $this->office365Repository->subscribeOwnerInGroup($groupId, $office365UserIdentifier);
         }
@@ -167,12 +202,18 @@ class Office365Service
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
      */
     public function removeOwnerFromGroup($groupId, User $user)
     {
         if ($this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+            if(empty($office365UserIdentifier))
+            {
+                throw new Office365UserNotExistsException($user);
+            }
 
             $this->office365Repository->removeOwnerFromGroup($groupId, $office365UserIdentifier);
         }
@@ -189,6 +230,11 @@ class Office365Service
     public function isOwnerOfGroup($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
+        if(empty($office365UserIdentifier))
+        {
+            return false;
+        }
+
         $groupOwner = $this->office365Repository->getGroupOwner($groupId, $office365UserIdentifier);
 
         return $groupOwner instanceof \Microsoft\Graph\Model\User;
@@ -206,7 +252,7 @@ class Office365Service
     {
         $userIdentifiers = [];
 
-        $groupOwners = $this->office365Repository->listOwners($groupId);
+        $groupOwners = $this->office365Repository->listGroupOwners($groupId);
         foreach($groupOwners as $groupOwner)
         {
             $userIdentifiers[] = $groupOwner->getId();
@@ -231,14 +277,41 @@ class Office365Service
 
 
     /**
-     * Removes all the users from a given group
+     * Returns a list of all the plan identifiers of a given group
      *
      * @param string $groupId
+     *
+     * @return string[]
      */
-    public function removeAllUsersFromGroup($groupId)
+    public function getGroupPlanIds($groupId)
     {
-        $this->removeAllOwnersFromGroup($groupId);
-        $this->removeAllMembersFromGroup($groupId);
+        $groupPlanIds = [];
+
+        foreach($this->office365Repository->listGroupPlans($groupId) as $groupPlan)
+        {
+            $groupPlanIds[] = $groupPlan->getId();
+        }
+
+        return $groupPlanIds;
+    }
+
+    /**
+     * Returns the first plan identifier of a given group
+     *
+     * @param string $groupId
+     *
+     * @return string
+     */
+    public function getDefaultGroupPlanId($groupId)
+    {
+        $groupPlans = $this->office365Repository->listGroupPlans($groupId);
+
+        if(empty($groupPlans))
+        {
+            return null;
+        }
+
+        return $groupPlans[0]->getId();
     }
 
     /**
@@ -248,7 +321,7 @@ class Office365Service
      *
      * @return string
      */
-    protected function getOffice365UserIdentifier(User $user)
+    public function getOffice365UserIdentifier(User $user)
     {
         $office365UserIdentifier = $this->localSetting->get(
             'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
@@ -257,7 +330,11 @@ class Office365Service
         if (empty($office365UserIdentifier))
         {
             $office365User = $this->office365Repository->getOffice365User($user);
-            $office365UserIdentifier = $office365User->getId();
+
+            if($office365User instanceof \Microsoft\Graph\Model\User)
+            {
+                $office365UserIdentifier = $office365User->getId();
+            }
 
             $this->localSetting->create(
                 'external_user_id', $office365UserIdentifier,
@@ -267,4 +344,5 @@ class Office365Service
 
         return $office365UserIdentifier;
     }
+
 }

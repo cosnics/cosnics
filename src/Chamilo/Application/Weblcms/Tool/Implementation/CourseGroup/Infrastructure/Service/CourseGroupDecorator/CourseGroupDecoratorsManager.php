@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastruc
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 
 /**
  * Manages the decorators for the CourseGroups
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface, CourseGroupServiceDecoratorInterface
+class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface, CourseGroupServiceDecoratorInterface, CourseGroupActionsDecoratorInterface
 {
     /**
      * @var CourseGroupFormDecoratorInterface[]
@@ -26,12 +27,18 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
     protected $serviceDecorators;
 
     /**
+     * @var CourseGroupActionsDecoratorInterface[]
+     */
+    protected $actionsDecorators;
+
+    /**
      * CourseGroupDecoratorsManager constructor.
      */
     public function __construct()
     {
         $this->formDecorators = [];
         $this->serviceDecorators = [];
+        $this->actionsDecorators = [];
     }
 
     /**
@@ -51,6 +58,14 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
     }
 
     /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupActionsDecoratorInterface[]
+     */
+    public function getActionsDecorators()
+    {
+        return $this->actionsDecorators;
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface $courseGroupFormDecorator
      */
     public function addFormDecorator(CourseGroupFormDecoratorInterface $courseGroupFormDecorator)
@@ -64,6 +79,14 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
     public function addServiceDecorator(CourseGroupServiceDecoratorInterface $courseGroupServiceDecorator)
     {
         $this->serviceDecorators[] = $courseGroupServiceDecorator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupActionsDecoratorInterface $actionsDecorator
+     */
+    public function addActionsDecorator(CourseGroupActionsDecoratorInterface $actionsDecorator)
+    {
+        $this->actionsDecorators[] = $actionsDecorator;
     }
 
     /**
@@ -152,6 +175,20 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
         foreach ($this->serviceDecorators as $serviceDecorator)
         {
             $serviceDecorator->unsubscribeUser($courseGroup, $user);
+        }
+    }
+
+    /**
+     * Adds actions to the toolbar of integration actions
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $courseGroupActionsToolbar
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     */
+    public function addCourseGroupActions(ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup)
+    {
+        foreach($this->actionsDecorators as $actionsDecorator)
+        {
+            $actionsDecorator->addCourseGroupActions($courseGroupActionsToolbar, $courseGroup);
         }
     }
 }

@@ -25,15 +25,5 @@
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.office365_repository" />
             <argument type="service" id="chamilo.libraries.platform.configuration.local_setting" />
         </service>
-
-        <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.course_group_office365_reference_repository"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\CourseGroupOffice365ReferenceRepository">
-            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
-        </service>
-
-        <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.service.course_group_office365_reference_service"
-                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\CourseGroupOffice365ReferenceService" >
-            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.course_group_office365_reference_repository" />
-        </service>
     </services>
 </container>

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -17,6 +18,21 @@ use Chamilo\Libraries\Platform\Translation;
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
     const PROPERTY_USE_PLANNER = 'use_planner';
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
+     */
+    protected $courseGroupOffice365ReferenceService;
+
+    /**
+     * CourseGroupFormDecorator constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService
+     */
+    public function __construct(CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService)
+    {
+        $this->courseGroupOffice365ReferenceService = $courseGroupOffice365ReferenceService;
+    }
 
     /**
      * Decorates the course group form
@@ -35,7 +51,8 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
         );
 
         $defaults = [
-            self::PROPERTY_USE_PLANNER . '[' . $courseGroup->getId() . ']' => false
+            self::PROPERTY_USE_PLANNER . '[' . $courseGroup->getId() . ']' =>
+                $this->courseGroupOffice365ReferenceService->courseGroupHasPlannerReference($courseGroup)
         ];
 
         $courseGroupForm->setDefaults($defaults);

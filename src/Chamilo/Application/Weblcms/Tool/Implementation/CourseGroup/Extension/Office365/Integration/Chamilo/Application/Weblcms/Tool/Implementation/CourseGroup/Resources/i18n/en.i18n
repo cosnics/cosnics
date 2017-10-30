@@ -1,2 +1,4 @@
 Typename = "Office 365 integration for course groups"
 UsePlanner = "Planner (Office365)"
+CourseGroupSyncSuccessful = "Successfully synced the course group and teacher subscriptions to the Office365 group"
+CourseGroupSyncFailed= "Failed to sync the course group and teacher subscriptions to the Office365 group"
