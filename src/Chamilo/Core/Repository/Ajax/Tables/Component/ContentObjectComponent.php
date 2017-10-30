@@ -38,8 +38,8 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
         $tableDataProvider = $this->getTableDataProvider();
 
         $jsonResponse = new JsonDataClassTableResponse(
-            $tableDataProvider->getTableRowData(),
-            $tableDataProvider->getTableRowCount());
+            $tableDataProvider->getDataTableRowData(),
+            $tableDataProvider->getDataTableRowCount());
         $jsonResponse->send();
     }
 
@@ -63,7 +63,7 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider
+     * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectDataTableProvider
      */
     public function getTableDataProvider()
     {

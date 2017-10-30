@@ -49,12 +49,12 @@ abstract class DataTableProvider implements DataTableProviderInterface
      *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getTableRowData()
      */
-    abstract public function getTableRowData();
+    abstract public function getDataTableRowData();
 
     /**
      *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getTableRowCount()
      */
-    abstract public function getTableRowCount();
+    abstract public function getDataTableRowCount();
 }
 

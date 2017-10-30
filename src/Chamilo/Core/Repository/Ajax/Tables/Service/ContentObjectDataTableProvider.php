@@ -6,6 +6,9 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel;
+use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer;
 
 /**
  *
@@ -80,41 +83,77 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
-     * @return string[][]
+     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel
      */
-    public function getTableRowData()
+    public function getDataTableColumnModel()
+    {
+        return new ContentObjectDataTableColumnModel();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer
+     */
+    public function getDataTableCellRenderer()
+    {
+        return new ContentObjectDataTableCellRenderer();
+    }
+
+    /**
+     *
+     * @param DataClass $dataClass
+     * @return string[]
+     */
+    public function handleDataClass(DataClass $dataClass)
+    {
+        $rowData = array();
+
+        foreach ($this->getDataTableColumnModel()->getColumns() as $column)
+        {
+            $rowData[$column->getName()] = $this->getDataTableCellRenderer()->renderCell($column, $dataClass);
+        }
+
+        return $rowData;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function getDataTableDataClasses()
     {
         $dataClassRetrievesParameters = $this->getDataClassRetrievesParameters();
 
-        $contentObjects = $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
+        return $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
             ContentObject::class,
             $this->getWorkspaceImplementation(),
             $dataClassRetrievesParameters->getCondition(),
             $dataClassRetrievesParameters->getCount(),
             $dataClassRetrievesParameters->getOffset(),
-            $dataClassRetrievesParameters->getOrderBy());
+            $dataClassRetrievesParameters->getOrderBy())->as_array();
+    }
 
-        // TODO: This is where we would need a renderer based on some kind of column model
-        $contentObjectData = array();
+    /**
+     *
+     * @return string[][]
+     */
+    public function getDataTableRowData()
+    {
+        $dataTableRowData = array();
 
-        $propertyPrefix = str_replace('\\', '_', ContentObject::class) . ':';
-
-        while ($contentObject = $contentObjects->next_result())
+        foreach ($this->getDataTableDataClasses() as $dataClass)
         {
-            $contentObjectData[] = array(
-                $propertyPrefix . ContentObject::PROPERTY_TITLE => $contentObject->get_title(),
-                $propertyPrefix . ContentObject::PROPERTY_DESCRIPTION => $contentObject->get_description(),
-                $propertyPrefix . ContentObject::PROPERTY_MODIFICATION_DATE => $contentObject->get_modification_date());
+            $dataTableRowData[] = $this->handleDataClass($dataClass);
         }
 
-        return $contentObjectData;
+        return $dataTableRowData;
     }
 
     /**
      *
      * @return integer
      */
-    public function getTableRowCount()
+    public function getDataTableRowCount()
     {
         return $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
             ContentObject::class,

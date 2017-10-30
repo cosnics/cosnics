@@ -13,12 +13,12 @@ interface DataTableProviderInterface
      *
      * @return string[][]
      */
-    public function getTableRowData();
+    public function getDataTableRowData();
 
     /**
      *
      * @return integer
      */
-    public function getTableRowCount();
+    public function getDataTableRowCount();
 }
 

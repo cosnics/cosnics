@@ -46,31 +46,29 @@
 
 <div ng-app="repositoryBrowserApp" ng-controller="MainController as mainController">
     {% include 'Chamilo\\Libraries:Plugin/AngularJS/trNgGrid_templates.html.twig' %}
-    <div class="container-fluid">
 
-        <div class="row" ng-show="mainController.isLoading">
-            <div class="col-md-12 text-center">
-                {{ getImage('Action/LoadingHuge', 'Chamilo\\Configuration', 'gif') }}
-            </div>
+    <div class="panel panel-default" ng-show="mainController.isLoading">
+        <div class="panel-body text-center">
+            {{ getImage('Action/LoadingHuge', 'Chamilo\\Configuration', 'gif') }}
         </div>
-
-        <table
-                ng-show="!mainController.isLoading"
-                tr-ng-grid=""
-                items="mainController.contentObjects"
-                fields="['Chamilo_Core_Repository_Storage_DataClass_ContentObject:title', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified']"
-                page-items="20"
-                locale="en"
-                total-items="mainController.totalContentObjectsCount"
-                on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)"
-        >
-            <thead>
-            <tr>
-                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:title" display-name="{{ 'Title'|trans({}, appContext) }}"></th>
-                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:description" display-name="{{ 'Description'|trans({}, appContext) }}"></th>
-                <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified" display-name="{{ 'ModificationDate'|trans({}, appContext) }}"></th>
-            </tr>
-            </thead>
-        </table>
     </div>
+
+    <table
+            ng-show="!mainController.isLoading"
+            tr-ng-grid=""
+            items="mainController.contentObjects"
+            fields="['Chamilo_Core_Repository_Storage_DataClass_ContentObject:title', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:description', 'Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified']"
+            page-items="20"
+            locale="en"
+            total-items="mainController.totalContentObjectsCount"
+            on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)"
+    >
+        <thead>
+        <tr>
+            <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:title" display-name="{{ 'Title'|trans({}, appContext) }}"></th>
+            <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:description" display-name="{{ 'Description'|trans({}, appContext) }}"></th>
+            <th field-name="Chamilo_Core_Repository_Storage_DataClass_ContentObject:modified" display-name="{{ 'ModificationDate'|trans({}, appContext) }}"></th>
+        </tr>
+        </thead>
+    </table>
 </div>
