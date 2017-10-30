@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
+use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider;
 
 /**
  *
@@ -21,8 +22,6 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     const PARAM_ORDER_BY_DIRECTION = 'orderByReverse';
     const PARAM_GLOBAL_FILTER = 'globalFilter';
     const PARAM_INDIVIDUAL_FILTERS = 'individualFilters';
-    const PROPERTY_CONTENT_OBJECT_DATA = 'content_object_data';
-    const PROPERTY_CONTENT_OBJECT_COUNT = 'content_object_count';
 
     /**
      *
@@ -105,49 +104,11 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function run()
     {
-        $dataClassTableParametersConverter = new DataClassTableParametersConverter();
+        $tableDataProvider = $this->getTableDataProvider();
 
-        $dataClassRetrievesParameters = $dataClassTableParametersConverter->buildDataClassRetrievesParameters(
-            $this->getCurrentPage(),
-            $this->getItemsPerPage(),
-            $this->getGlobalFilter(),
-            $this->getGlobalFilterProperties(),
-            $this->getIndividualFilters(),
-            $this->getOrderByProperty(),
-            $this->getIsReverseOrder());
-
-        $workspaceImplementation = $this->getWorkspaceImplementation();
-
-        $contentObjects = $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
-            ContentObject::class,
-            $workspaceImplementation,
-            $dataClassRetrievesParameters->getCondition(),
-            $dataClassRetrievesParameters->getCount(),
-            $dataClassRetrievesParameters->getOffset(),
-            $dataClassRetrievesParameters->getOrderBy());
-
-        $contentObjectData = array();
-
-        $propertyPrefix = str_replace('\\', '_', ContentObject::class) . ':';
-
-        while ($contentObject = $contentObjects->next_result())
-        {
-            $contentObjectData[] = array(
-                $propertyPrefix . ContentObject::PROPERTY_TITLE => $contentObject->get_title(),
-                $propertyPrefix . ContentObject::PROPERTY_DESCRIPTION => $contentObject->get_description(),
-                $propertyPrefix . ContentObject::PROPERTY_MODIFICATION_DATE => $contentObject->get_modification_date());
-        }
-
-        $contentObjectCount = $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
-            ContentObject::class,
-            $workspaceImplementation,
-            $dataClassRetrievesParameters->getCondition());
-
-        $properties = array(
-            self::PROPERTY_CONTENT_OBJECT_DATA => $contentObjectData,
-            self::PROPERTY_CONTENT_OBJECT_COUNT => $contentObjectCount);
-
-        $jsonResponse = new JsonDataClassTableResponse($contentObjectData, $contentObjectCount);
+        $jsonResponse = new JsonDataClassTableResponse(
+            $tableDataProvider->getTableRowData(),
+            $tableDataProvider->getTableRowCount());
         $jsonResponse->send();
     }
 
@@ -167,5 +128,35 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager
     protected function getWorkspaceImplementation()
     {
         return new PersonalWorkspace($this->getUser());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
+     */
+    protected function getDataClassRetrievesParameters()
+    {
+        $dataClassTableParametersConverter = new DataClassTableParametersConverter();
+
+        return $dataClassTableParametersConverter->buildDataClassRetrievesParameters(
+            $this->getCurrentPage(),
+            $this->getItemsPerPage(),
+            $this->getGlobalFilter(),
+            $this->getGlobalFilterProperties(),
+            $this->getIndividualFilters(),
+            $this->getOrderByProperty(),
+            $this->getIsReverseOrder());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider
+     */
+    protected function getTableDataProvider()
+    {
+        return new ContentObjectTableDataProvider(
+            $this->getDataClassRetrievesParameters(),
+            $this->getContentObjectService(),
+            $this->getWorkspaceImplementation());
     }
 }
