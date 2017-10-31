@@ -48,5 +48,24 @@
             id="chamilo.libraries.format.notification_message.notification_message_renderer"
             class="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer">
         </service>
+
+        <service
+            id="chamilo.libraries.format.data_table.service.data_table_cell_renderer_factory"
+            class="Chamilo\Libraries\Format\DataTable\Service\DataTableCellRendererFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translation" />
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.datetime_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.format.data_table.service.data_table_column_model_factory"
+            class="Chamilo\Libraries\Format\DataTable\Service\DataTableColumnModelFactory">
+        </service>
     </services>
 </container>

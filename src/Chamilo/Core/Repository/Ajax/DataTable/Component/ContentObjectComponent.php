@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\DataTable\Component;
 
-use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectDataTableProvider;
+use Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableProvider;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
@@ -48,12 +48,36 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
+     * @return string
+     */
+    protected function getDataTableContext()
+    {
+        return 'Chamilo\Core\Repository';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getDataTableType()
+    {
+        return 'ContentObject';
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface::getDataTableProvider()
      */
     public function getDataTableProvider()
     {
         return new ContentObjectDataTableProvider(
             $this->getDataClassRetrievesParameters(),
+            $this->getDataTableCellRendererFactory()->getDataTableCellRenderer(
+                $this->getDataTableContext(),
+                $this->getDataTableType()),
+            $this->getDataTableColumnModelFactory()->getDataTableColumnModel(
+                $this->getDataTableContext(),
+                $this->getDataTableType()),
             $this->getContentObjectService(),
             $this->getWorkspaceImplementation());
     }

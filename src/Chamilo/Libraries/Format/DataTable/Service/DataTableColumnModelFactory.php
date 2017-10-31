@@ -12,13 +12,14 @@ class DataTableColumnModelFactory
 
     /**
      *
-     * @param string $context
-     * @param string $type
+     * @param string $dataTableContext
+     * @param string $dataTableType
      * @return \Chamilo\Libraries\Format\DataTable\DataTableColumnModel
      */
-    public function getDataTableColumnModel($context, $type)
+    public function getDataTableColumnModel($dataTableContext, $dataTableType)
     {
-        $className = $context . '\\' . $type . 'DataTableColumnModel';
+        $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
+             'DataTableColumnModel';
         return new $className();
     }
 }

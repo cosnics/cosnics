@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Traits;
 
-use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
+use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Format\DataTable\Service\DataClassTableParametersConverter;
 
 /**
@@ -134,6 +134,32 @@ trait DataTablePagedComponentTrait
             $tableDataProvider->getDataTableRowData(),
             $tableDataProvider->getDataTableRowCount());
         $jsonResponse->send();
+    }
+
+    /**
+     * Returns a service from the dependency injection container
+     *
+     * @param string $serviceId
+     * @return mixed
+     */
+    abstract public function getService($serviceId);
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableCellRendererFactory
+     */
+    protected function getDataTableCellRendererFactory()
+    {
+        return $this->getService('chamilo.libraries.format.data_table.service.data_table_cell_renderer_factory');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableColumnModelFactory
+     */
+    protected function getDataTableColumnModelFactory()
+    {
+        return $this->getService('chamilo.libraries.format.data_table.service.data_table_column_model_factory');
     }
 }
 

@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 
-use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer;
-use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
+use Chamilo\Libraries\Format\DataTable\DataTableColumnModel;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
@@ -33,13 +33,16 @@ class ContentObjectDataTableProvider extends DataTableProvider
     /**
      *
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel
      * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectService $contentObjectService
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      */
     public function __construct(DataClassRetrievesParameters $dataClassRetrievesParameters,
+        DataTableCellRenderer $dataTableCellRenderer, DataTableColumnModel $dataTableColumnModel,
         ContentObjectService $contentObjectService, WorkspaceInterface $workspaceImplementation)
     {
-        parent::__construct($dataClassRetrievesParameters);
+        parent::__construct($dataClassRetrievesParameters, $dataTableCellRenderer, $dataTableColumnModel);
 
         $this->contentObjectService = $contentObjectService;
         $this->workspaceImplementation = $workspaceImplementation;
@@ -79,24 +82,6 @@ class ContentObjectDataTableProvider extends DataTableProvider
     public function setWorkspaceImplementation(WorkspaceInterface $workspaceImplementation)
     {
         $this->workspaceImplementation = $workspaceImplementation;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel
-     */
-    public function getDataTableColumnModel()
-    {
-        return new ContentObjectDataTableColumnModel();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer
-     */
-    public function getDataTableCellRenderer()
-    {
-        return new ContentObjectDataTableCellRenderer();
     }
 
     /**

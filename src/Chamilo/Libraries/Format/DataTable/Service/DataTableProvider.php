@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
+use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
+use Chamilo\Libraries\Format\DataTable\DataTableColumnModel;
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -22,11 +24,28 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
+     * @var \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer
      */
-    public function __construct(DataClassRetrievesParameters $dataClassRetrievesParameters)
+    private $dataTableCellRenderer;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\DataTable\DataTableColumnModel
+     */
+    private $dataTableColumnModel;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel
+     */
+    public function __construct(DataClassRetrievesParameters $dataClassRetrievesParameters,
+        DataTableCellRenderer $dataTableCellRenderer, DataTableColumnModel $dataTableColumnModel)
     {
         $this->dataClassRetrievesParameters = $dataClassRetrievesParameters;
+        $this->dataTableCellRenderer = $dataTableCellRenderer;
+        $this->dataTableColumnModel = $dataTableColumnModel;
     }
 
     /**
@@ -49,15 +68,39 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel
+     * @return \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer
      */
-    abstract public function getDataTableColumnModel();
+    public function getDataTableCellRenderer()
+    {
+        return $this->dataTableCellRenderer;
+    }
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer
      */
-    abstract public function getDataTableCellRenderer();
+    public function setDataTableCellRenderer(DataTableCellRenderer $dataTableCellRenderer)
+    {
+        $this->dataTableCellRenderer = $dataTableCellRenderer;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\DataTable\DataTableColumnModel
+     */
+    public function getDataTableColumnModel()
+    {
+        return $this->dataTableColumnModel;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel
+     */
+    public function setDataTableColumnModel(DataTableColumnModel $dataTableColumnModel)
+    {
+        $this->dataTableColumnModel = $dataTableColumnModel;
+    }
 
     /**
      *
