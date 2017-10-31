@@ -146,20 +146,11 @@ trait DataTablePagedComponentTrait
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableCellRendererFactory
+     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory
      */
-    protected function getDataTableCellRendererFactory()
+    protected function getDataTableProviderFactory()
     {
-        return $this->getService('chamilo.libraries.format.data_table.service.data_table_cell_renderer_factory');
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableColumnModelFactory
-     */
-    protected function getDataTableColumnModelFactory()
-    {
-        return $this->getService('chamilo.libraries.format.data_table.service.data_table_column_model_factory');
+        return $this->getService('chamilo.libraries.format.data_table.service.data_table_provider_factory');
     }
 }
 

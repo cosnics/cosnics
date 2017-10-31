@@ -108,10 +108,6 @@ class DataTableCellRendererFactory
      */
     public function getDataTableCellRenderer($dataTableContext, $dataTableType)
     {
-        $stringUtilities = StringUtilities::getInstance();
-        $translationUtilities = Translation::getInstance();
-        $dateTimeUtilities = new DatetimeUtilities();
-
         $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
              'DataTableCellRenderer';
 

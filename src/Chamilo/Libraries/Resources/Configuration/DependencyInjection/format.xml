@@ -67,5 +67,16 @@
             id="chamilo.libraries.format.data_table.service.data_table_column_model_factory"
             class="Chamilo\Libraries\Format\DataTable\Service\DataTableColumnModelFactory">
         </service>
+
+        <service
+            id="chamilo.libraries.format.data_table.service.data_table_provider_factory"
+            class="Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.format.data_table.service.data_table_cell_renderer_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.format.data_table.service.data_table_column_model_factory" />
+        </service>
     </services>
 </container>
