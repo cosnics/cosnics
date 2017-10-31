@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -72,15 +73,18 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             return new OrCondition($conditions);
         }
@@ -91,7 +95,7 @@ class DetailsComponent extends TabComponent implements TableSupport
     /**
      * Handles the unsubscribe action
      *
-     * @param $course_group
+     * @param CourseGroup $course_group
      */
     protected function handleUnsubscribeAction($course_group)
     {
@@ -99,7 +103,7 @@ class DetailsComponent extends TabComponent implements TableSupport
 
         if ($users)
         {
-            if (! is_array($users))
+            if (!is_array($users))
             {
                 $users = array($users);
             }
@@ -107,16 +111,22 @@ class DetailsComponent extends TabComponent implements TableSupport
             foreach ($users as $user)
             {
                 $course_group->unsubscribe_users($user);
-            }
 
-            $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
-            $this->redirect(
-                $message,
-                false,
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
-                    self::PARAM_COURSE_GROUP => $course_group->get_id()));
+                $userObject = new User();
+                $userObject->setId($user);
+                $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $userObject);
+            }
         }
+
+        $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
+        $this->redirect(
+            $message,
+            false,
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
+                self::PARAM_COURSE_GROUP => $course_group->get_id()
+            )
+        );
     }
 
     /**
@@ -143,19 +153,25 @@ class DetailsComponent extends TabComponent implements TableSupport
 
         $html[] = '<b>' . Translation::get('NumberOfMembers') . ':</b> ' . $currentCourseGroup->count_members();
         $html[] = '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' .
-             $currentCourseGroup->get_max_number_of_members();
-        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' . ($currentCourseGroup->is_self_registration_allowed() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' . ($currentCourseGroup->is_self_unregistration_allowed() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' . ($currentCourseGroup->is_random_registration_done() ? Translation::get(
-            'ConfirmYes',
-            null,
-            Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+            $currentCourseGroup->get_max_number_of_members();
+        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
+            ($currentCourseGroup->is_self_registration_allowed() ? Translation::get(
+                'ConfirmYes',
+                null,
+                Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
+            ($currentCourseGroup->is_self_unregistration_allowed() ? Translation::get(
+                'ConfirmYes',
+                null,
+                Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
+            ($currentCourseGroup->is_random_registration_done() ? Translation::get(
+                'ConfirmYes',
+                null,
+                Utilities::COMMON_LIBRARIES
+            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -175,6 +191,7 @@ class DetailsComponent extends TabComponent implements TableSupport
 
     /**
      * Renders the integration actions for a given
+     *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
      * @return string
@@ -185,12 +202,16 @@ class DetailsComponent extends TabComponent implements TableSupport
 
         $integrationLinksButtonToolbar = new ButtonToolBar();
         $renderer = new ButtonToolBarRenderer($integrationLinksButtonToolbar);
-        $this->getCourseGroupDecoratorsManager()->addCourseGroupActions($integrationLinksButtonToolbar, $courseGroup);
 
-        if($integrationLinksButtonToolbar->hasItems())
+        $this->getCourseGroupDecoratorsManager()->addCourseGroupActions(
+            $integrationLinksButtonToolbar, $courseGroup, $this->getUser(), $this->is_allowed(WeblcmsRights::EDIT_RIGHT)
+        );
+
+        if ($integrationLinksButtonToolbar->hasItems())
         {
             $html[] = '<div class="tab-content-header">';
-            $html[] = '<h5>' . Translation::getInstance()->getTranslation('Integrations', null, Manager::context()) . '</h5>';
+            $html[] =
+                '<h5>' . Translation::getInstance()->getTranslation('Integrations', null, Manager::context()) . '</h5>';
             $html[] = '</div>';
             $html[] = $renderer->render();
         }
@@ -211,7 +232,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         $buttonToolbar = new ButtonToolBar();
         $managementButtonGroup = new ButtonGroup();
 
-        if ($courseGroup->is_self_registration_allowed() && ! $courseGroup->is_member($this->getUser()))
+        if ($courseGroup->is_self_registration_allowed() && !$courseGroup->is_member($this->getUser()))
         {
             $buttonToolbar->addItem(
                 new Button(
@@ -220,7 +241,9 @@ class DetailsComponent extends TabComponent implements TableSupport
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL,
                     false,
-                    'btn-success'));
+                    'btn-success'
+                )
+            );
         }
 
         if ($courseGroup->is_self_unregistration_allowed() && $courseGroup->is_member($this->getUser()))
@@ -232,7 +255,9 @@ class DetailsComponent extends TabComponent implements TableSupport
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL,
                     false,
-                    'btn-danger'));
+                    'btn-danger'
+                )
+            );
         }
 
         if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT))
@@ -242,7 +267,9 @@ class DetailsComponent extends TabComponent implements TableSupport
                     $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
                     $theme->getCommonImagePath('Action/Backup'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $managementButtonGroup->addButton(
                 new Button(
@@ -253,7 +280,10 @@ class DetailsComponent extends TabComponent implements TableSupport
                     $translator->getTranslation(
                         'DeleteConfirm',
                         array('NAME' => $courseGroup->get_name()),
-                        Manager::context())));
+                        Manager::context()
+                    )
+                )
+            );
         }
 
         $buttonToolbar->addButtonGroup($managementButtonGroup);
@@ -261,7 +291,8 @@ class DetailsComponent extends TabComponent implements TableSupport
         if ($courseGroup->is_member($this->getUser()) || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $navigateToOptions = new DropdownButton(
-                $translator->getTranslation('NavigateTo', array(), Manager::context()));
+                $translator->getTranslation('NavigateTo', array(), Manager::context())
+            );
 
 //            if ($courseGroup->get_document_category_id())
 //            {
@@ -284,28 +315,6 @@ class DetailsComponent extends TabComponent implements TableSupport
 //                        $url,
 //                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
 //            }
-//TODO: LINKS
-//            if ($courseGroup->get_forum_category_id())
-//            {
-//                $type_name = 'Forum';
-//
-//                $params = array();
-//                $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-//                $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseGroup->get_course_code();
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $type_name;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager::ACTION_BROWSE;
-//                $params[\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY] = $courseGroup->get_forum_category_id();
-//                $url = $this->get_url($params);
-//
-//                $namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($type_name);
-//                $navigateToOptions->addSubButton(
-//                    new SubButton(
-//                        Translation::get('ForumCategory', null, Manager::context()),
-//                        Theme::getInstance()->getImagePath($namespace, 'Logo/16'),
-//                        $url,
-//                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
-//            }
 
             if ($navigateToOptions->hasButtons())
             {
@@ -324,7 +333,7 @@ class DetailsComponent extends TabComponent implements TableSupport
     protected function renderUsersTable()
     {
         $courseGroup = $this->getCurrentCourseGroup();
-        if (! $courseGroup->is_member($this->getUser()) && ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$courseGroup->is_member($this->getUser()) && !$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             return null;
         }

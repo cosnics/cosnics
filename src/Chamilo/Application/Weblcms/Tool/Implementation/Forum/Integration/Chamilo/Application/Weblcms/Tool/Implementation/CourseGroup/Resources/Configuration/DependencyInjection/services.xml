@@ -15,5 +15,13 @@
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />
             <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.service" />
         </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.forum.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_actions_decorator"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator">
+            <argument type="service" id="chamilo.libraries.architecture.application.routing.url_generator" />
+            <argument type="service" id="symfony.component.translation.translator" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.actions" />
+        </service>
     </services>
 </container>

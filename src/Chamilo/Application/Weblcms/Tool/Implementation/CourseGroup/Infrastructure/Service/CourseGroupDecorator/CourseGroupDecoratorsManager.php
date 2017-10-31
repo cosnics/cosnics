@@ -183,12 +183,16 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $courseGroupActionsToolbar
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param bool $isCourseTeacher
      */
-    public function addCourseGroupActions(ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup)
+    public function addCourseGroupActions(
+        ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup, User $user, $isCourseTeacher = false
+    )
     {
         foreach($this->actionsDecorators as $actionsDecorator)
         {
-            $actionsDecorator->addCourseGroupActions($courseGroupActionsToolbar, $courseGroup);
+            $actionsDecorator->addCourseGroupActions($courseGroupActionsToolbar, $courseGroup, $user, $isCourseTeacher);
         }
     }
 }

@@ -20,6 +20,8 @@ class SelfUnsubscriberComponent extends Manager
              $this->get_user()->get_id() == $user->get_id())
         {
             $course_group->unsubscribe_users($this->get_user_id());
+            $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $this->getUser());
+
             $this->redirect(
                 Translation::get('UserUnsubscribed'),
                 false,

@@ -45,6 +45,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
+        /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
         if (! $course_group)
             throw new ObjectNotExistException(Translation::get('CourseGroup'), $course_group_id);
@@ -74,6 +75,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             foreach ($users as $user)
             {
                 $course_group->unsubscribe_users($user);
+
+                $userObject = new User();
+                $userObject->setId($user);
+                $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $userObject);
             }
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');

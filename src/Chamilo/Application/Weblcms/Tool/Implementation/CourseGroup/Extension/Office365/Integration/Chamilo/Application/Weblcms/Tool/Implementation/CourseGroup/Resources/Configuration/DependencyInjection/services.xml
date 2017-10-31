@@ -33,5 +33,13 @@
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService" >
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.storage.repository.course_group_office365_reference_repository" />
         </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_actions_decorator"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator">
+            <argument type="service" id="chamilo.libraries.architecture.application.routing.url_generator" />
+            <argument type="service" id="symfony.component.translation.translator" />
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_office365_reference_service" />
+            <tag name="chamilo.application.weblcms.tool.implementation.course_group.decorator.actions" />
+        </service>
     </services>
 </container>

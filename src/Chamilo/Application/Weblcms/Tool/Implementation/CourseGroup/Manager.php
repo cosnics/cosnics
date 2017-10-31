@@ -32,6 +32,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
     const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
     const ACTION_GROUP_DETAILS = 'Details';
+    const ACTION_LAUNCH_INTEGRATION = 'IntegrationLauncher';
 
     /**
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass | CourseGroup

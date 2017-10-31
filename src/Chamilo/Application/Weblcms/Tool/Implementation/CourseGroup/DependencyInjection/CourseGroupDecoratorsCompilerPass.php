@@ -35,6 +35,7 @@ class CourseGroupDecoratorsCompilerPass implements CompilerPassInterface
 
             $this->addFormDecorators($container, $definition);
             $this->addServiceDecorators($container, $definition);
+            $this->addActionsDecorators($container, $definition);
         }
     }
 
@@ -67,6 +68,22 @@ class CourseGroupDecoratorsCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $taggedServiceId => $tags)
         {
             $definition->addMethodCall('addServiceDecorator', array(new Reference($taggedServiceId)));
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     */
+    protected function addActionsDecorators(ContainerBuilder $container, Definition $definition)
+    {
+        $taggedActionss = $container->findTaggedServiceIds(
+            'chamilo.application.weblcms.tool.implementation.course_group.decorator.actions'
+        );
+
+        foreach ($taggedActionss as $taggedActionsId => $tags)
+        {
+            $definition->addMethodCall('addActionsDecorator', array(new Reference($taggedActionsId)));
         }
     }
 }

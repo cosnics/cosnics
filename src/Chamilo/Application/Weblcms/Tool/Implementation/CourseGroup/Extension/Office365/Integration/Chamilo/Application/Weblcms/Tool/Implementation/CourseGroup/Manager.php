@@ -51,7 +51,7 @@ abstract class Manager extends Application
     protected function getCourseGroupOffice365ReferenceService()
     {
         return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.course_group.extension.office365.service.course_group_office365_reference_service'
+            'chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_office365_reference_service'
         );
     }
 
