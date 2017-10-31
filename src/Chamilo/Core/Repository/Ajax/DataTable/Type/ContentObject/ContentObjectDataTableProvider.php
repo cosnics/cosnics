@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -30,6 +30,19 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
+     * @see \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider::__construct()
+     */
+    public function __construct(\Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer,
+        \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel,
+        ContentObjectService $contentObjectService)
+    {
+        parent::__construct($dataTableCellRenderer, $dataTableColumnModel);
+
+        $this->contentObjectService = $contentObjectService;
+    }
+
+    /**
+     *
      * @return \Chamilo\Core\Repository\Workspace\Service\ContentObjectService
      */
     public function getContentObjectService()
@@ -48,48 +61,14 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function getWorkspaceImplementation()
-    {
-        return $this->workspaceImplementation;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
-     */
-    public function setWorkspaceImplementation(WorkspaceInterface $workspaceImplementation)
-    {
-        $this->workspaceImplementation = $workspaceImplementation;
-    }
-
-    public function validateDataTableProviderConfiguration()
-    {
-        if (! $this->getContentObjectService() instanceof ContentObjectService)
-        {
-            throw new \InvalidArgumentException(
-                'Please configure a ContentObjectService for the ContentObjectDataTableProvider before attempting to use it');
-        }
-
-        if (! $this->getWorkspaceImplementation() instanceof WorkspaceInterface)
-        {
-            throw new \InvalidArgumentException(
-                'Please configure a Workspace-instance for the ContentObjectDataTableProvider before attempting to use it');
-        }
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider::getDataTableDataClasses()
      */
-    public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters)
+    public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance)
     {
-        $this->validateDataTableProviderConfiguration();
-
         return $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
             ContentObject::class,
-            $this->getWorkspaceImplementation(),
+            $workspaceInstance,
             $dataClassRetrievesParameters->getCondition(),
             $dataClassRetrievesParameters->getCount(),
             $dataClassRetrievesParameters->getOffset(),
@@ -98,15 +77,35 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceInstance
+     * @return string[][]
+     */
+    public function getDataTableRowData(DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance)
+    {
+        $dataTableRowData = array();
+
+        foreach ($this->getDataTableDataClasses($dataClassRetrievesParameters, $workspaceInstance) as $dataClass)
+        {
+            $dataTableRowData[] = $this->handleDataClass($dataClass);
+        }
+
+        return $dataTableRowData;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceInstance
      * @return integer
      */
-    public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters)
+    public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance)
     {
-        $this->validateDataTableProviderConfiguration();
-
         return $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
             ContentObject::class,
-            $this->getWorkspaceImplementation(),
+            $workspaceInstance,
             $dataClassRetrievesParameters->getCondition());
     }
 }

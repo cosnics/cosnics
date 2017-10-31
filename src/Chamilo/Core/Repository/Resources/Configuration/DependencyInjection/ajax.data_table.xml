@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_cell_renderer"
+            class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableCellRenderer">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translation" />
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.datetime_utilities" />
+        </service>
+
+        <service
+            id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_column_model"
+            class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableColumnModel">
+        </service>
+
+        <service
+            id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_provider"
+            class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableProvider">
+            <argument
+                type="service"
+                id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_cell_renderer" />
+            <argument
+                type="service"
+                id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_column_model" />
+            <argument
+                type="service"
+                id="chamilo.core.repository.workspace.service.content_object_service" />
+        </service>
+    </services>
+</container>

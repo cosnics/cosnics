@@ -3,9 +3,7 @@ namespace Chamilo\Libraries\Format\DataTable\Service;
 
 use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
 use Chamilo\Libraries\Format\DataTable\DataTableColumnModel;
-use Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -13,7 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
-abstract class DataTableProvider implements DataTableProviderInterface
+abstract class DataTableProvider // implements DataTableProviderInterface
 {
 
     /**
@@ -91,34 +89,5 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
         return $rowData;
     }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
-     */
-    abstract public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters);
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getDataTableRowData()
-     */
-    public function getDataTableRowData(DataClassRetrievesParameters $dataClassRetrievesParameters)
-    {
-        $dataTableRowData = array();
-
-        foreach ($this->getDataTableDataClasses($dataClassRetrievesParameters) as $dataClass)
-        {
-            $dataTableRowData[] = $this->handleDataClass($dataClass);
-        }
-
-        return $dataTableRowData;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getTableRowCount()
-     */
-    abstract public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters);
 }
 

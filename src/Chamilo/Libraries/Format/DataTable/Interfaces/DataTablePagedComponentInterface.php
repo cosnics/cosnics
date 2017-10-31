@@ -63,11 +63,5 @@ interface DataTablePagedComponentInterface
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */
     public function getDataClassRetrievesParameters();
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface
-     */
-    public function getDataTableProvider();
 }
 

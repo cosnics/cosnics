@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Traits;
 
-use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Format\DataTable\Service\DataClassTableParametersConverter;
 
@@ -118,39 +117,6 @@ trait DataTablePagedComponentTrait
             $this->getIndividualFilters(),
             $this->getOrderByProperty(),
             $this->getIsReverseOrder());
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface
-     */
-    abstract public function getDataTableProvider();
-
-    public function run()
-    {
-        $tableDataProvider = $this->getDataTableProvider();
-
-        $jsonResponse = new JsonDataClassTableResponse(
-            $tableDataProvider->getDataTableRowData($this->getDataClassRetrievesParameters()),
-            $tableDataProvider->getDataTableRowCount($this->getDataClassRetrievesParameters()));
-        $jsonResponse->send();
-    }
-
-    /**
-     * Returns a service from the dependency injection container
-     *
-     * @param string $serviceId
-     * @return mixed
-     */
-    abstract public function getService($serviceId);
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory
-     */
-    protected function getDataTableProviderFactory()
-    {
-        return $this->getService('chamilo.libraries.format.data_table.service.data_table_provider_factory');
     }
 }
 

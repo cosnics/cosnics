@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Ajax\DataTable\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -29,15 +30,6 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Workspace\Service\ContentObjectService
-     */
-    protected function getContentObjectService()
-    {
-        return $this->getService('chamilo.core.repository.workspace.service.content_object_service');
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace
      */
     protected function getWorkspaceImplementation()
@@ -45,19 +37,27 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
         return new PersonalWorkspace($this->getUser());
     }
 
+    public function run()
+    {
+        $tableDataProvider = $this->getDataTableProvider();
+
+        $jsonResponse = new JsonDataClassTableResponse(
+            $tableDataProvider->getDataTableRowData(
+                $this->getDataClassRetrievesParameters(),
+                $this->getWorkspaceImplementation()),
+            $tableDataProvider->getDataTableRowCount(
+                $this->getDataClassRetrievesParameters(),
+                $this->getWorkspaceImplementation()));
+        $jsonResponse->send();
+    }
+
     /**
      *
-     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface::getDataTableProvider()
+     * @return \Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableProvider
      */
     public function getDataTableProvider()
     {
-        $contentObjectTableDataProvider = $this->getDataTableProviderFactory()->getDataTableProvider(
-            'Chamilo\Core\Repository',
-            'ContentObject');
-
-        $contentObjectTableDataProvider->setContentObjectService($this->getContentObjectService());
-        $contentObjectTableDataProvider->setWorkspaceImplementation($this->getWorkspaceImplementation());
-
-        return $contentObjectTableDataProvider;
+        return $this->getService(
+            'chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_provider');
     }
 }
