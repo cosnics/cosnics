@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  *
  * @package Chamilo\Core\Repository\Ajax\Tables\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 class ContentObjectDataTableProvider extends DataTableProvider
 {

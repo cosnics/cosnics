@@ -2,13 +2,14 @@
 namespace Chamilo\Libraries\Format\DataTable\Traits;
 
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
 use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
+use Chamilo\Libraries\Format\DataTable\Service\DataClassTableParametersConverter;
 
 /**
  *
  * @package Chamilo\Libraries\Format\DataTable\Traits
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 trait DataTablePagedComponentTrait
 {

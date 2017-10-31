@@ -9,6 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package Chamilo\Core\Repository\Ajax\Tables
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 class ContentObjectDataTableCellRenderer extends DataTableCellRenderer
 {

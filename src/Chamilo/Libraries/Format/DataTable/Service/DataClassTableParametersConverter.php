@@ -2,17 +2,19 @@
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
 /**
  *
  * @package Chamilo\Libraries\Format\DataTable\Service
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop - Erasmus Hogeschool Brussel
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DataClassTableParametersConverter
 {
@@ -24,7 +26,7 @@ class DataClassTableParametersConverter
      * E.g Chamilo_Core_Repository_Storage_DataClass_ContentObject:title
      *
      * @param string $orderProperty
-     * @param bool $isReverseOrder
+     * @param boolean $isReverseOrder
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
      */
@@ -113,10 +115,10 @@ class DataClassTableParametersConverter
 
     /**
      *
-     * @param int $currentPage
-     * @param int $itemsPerPage
+     * @param integer $currentPage
+     * @param integer $itemsPerPage
      *
-     * @return int
+     * @return integer
      */
     public function calculateOffset($currentPage = 0, $itemsPerPage = 20)
     {
@@ -126,13 +128,13 @@ class DataClassTableParametersConverter
     /**
      * Dynamically builds the DataClassRetrievesParameters for the given parameters
      *
-     * @param int $currentPage
-     * @param int $itemsPerPage
+     * @param integer $currentPage
+     * @param integer $itemsPerPage
      * @param string $globalFilter
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $globalFilterProperties
      * @param string[] $individualFilters
      * @param string $orderProperty
-     * @param bool $isReverseOrder
+     * @param boolean $isReverseOrder
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */
@@ -149,13 +151,13 @@ class DataClassTableParametersConverter
     /**
      * Dynamically builds the DataClassRetrievesParameters for the given parameters
      *
-     * @param int $currentPage
-     * @param int $itemsPerPage
+     * @param integer $currentPage
+     * @param integer $itemsPerPage
      * @param string $globalFilter
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $globalFilterProperties
      * @param string[] $individualFilters
      * @param string $orderProperty
-     * @param bool $isReverseOrder
+     * @param boolean $isReverseOrder
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */

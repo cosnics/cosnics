@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  *
  * @package Chamilo\Libraries\Format\DataTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 abstract class DataTableColumnModel
 {

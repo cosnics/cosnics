@@ -5,6 +5,7 @@ namespace Chamilo\Libraries\Format\DataTable\Column;
  *
  * @package Chamilo\Libraries\Format\Table\Column
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 abstract class DataTableColumn
 {

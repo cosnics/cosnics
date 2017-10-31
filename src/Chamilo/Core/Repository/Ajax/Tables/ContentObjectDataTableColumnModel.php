@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @package Chamilo\Core\Repository\Ajax\Tables$ContentObjectDataTableColumnModel
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 class ContentObjectDataTableColumnModel extends DataTableColumnModel implements TableColumnModelActionsColumnSupport
 {
