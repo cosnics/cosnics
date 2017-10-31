@@ -131,8 +131,8 @@ trait DataTablePagedComponentTrait
         $tableDataProvider = $this->getDataTableProvider();
 
         $jsonResponse = new JsonDataClassTableResponse(
-            $tableDataProvider->getDataTableRowData(),
-            $tableDataProvider->getDataTableRowCount());
+            $tableDataProvider->getDataTableRowData($this->getDataClassRetrievesParameters()),
+            $tableDataProvider->getDataTableRowCount($this->getDataClassRetrievesParameters()));
         $jsonResponse->send();
     }
 

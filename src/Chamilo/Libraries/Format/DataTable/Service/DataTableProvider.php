@@ -18,12 +18,6 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     */
-    private $dataClassRetrievesParameters;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer
      */
     private $dataTableCellRenderer;
@@ -36,34 +30,13 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @param \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer
      * @param \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel
      */
-    public function __construct(DataClassRetrievesParameters $dataClassRetrievesParameters,
-        DataTableCellRenderer $dataTableCellRenderer, DataTableColumnModel $dataTableColumnModel)
+    public function __construct(DataTableCellRenderer $dataTableCellRenderer, DataTableColumnModel $dataTableColumnModel)
     {
-        $this->dataClassRetrievesParameters = $dataClassRetrievesParameters;
         $this->dataTableCellRenderer = $dataTableCellRenderer;
         $this->dataTableColumnModel = $dataTableColumnModel;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     */
-    public function getDataClassRetrievesParameters()
-    {
-        return $this->dataClassRetrievesParameters;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
-     */
-    public function setDataClassRetrievesParameters(DataClassRetrievesParameters $dataClassRetrievesParameters)
-    {
-        $this->dataClassRetrievesParameters = $dataClassRetrievesParameters;
     }
 
     /**
@@ -121,19 +94,20 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    abstract public function getDataTableDataClasses();
+    abstract public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters);
 
     /**
      *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getDataTableRowData()
      */
-    public function getDataTableRowData()
+    public function getDataTableRowData(DataClassRetrievesParameters $dataClassRetrievesParameters)
     {
         $dataTableRowData = array();
 
-        foreach ($this->getDataTableDataClasses() as $dataClass)
+        foreach ($this->getDataTableDataClasses($dataClassRetrievesParameters) as $dataClass)
         {
             $dataTableRowData[] = $this->handleDataClass($dataClass);
         }
@@ -145,6 +119,6 @@ abstract class DataTableProvider implements DataTableProviderInterface
      *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getTableRowCount()
      */
-    abstract public function getDataTableRowCount();
+    abstract public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters);
 }
 

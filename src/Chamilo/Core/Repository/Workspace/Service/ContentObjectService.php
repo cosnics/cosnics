@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
-use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -61,15 +60,15 @@ class ContentObjectService
      *
      * @see ContentObjectService::getContentObjectsByTypeForWorkspace
      */
-    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace, 
-        Condition $filterCondition, $offset, $count, $orderProperty)
+    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace, Condition $filterCondition, $offset,
+        $count, $orderProperty)
     {
         return $this->getContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(), 
-            $workspace, 
-            $filterCondition, 
-            $offset, 
-            $count, 
+            ContentObject::class_name(),
+            $workspace,
+            $filterCondition,
+            $offset,
+            $count,
             $orderProperty);
     }
 
@@ -84,18 +83,14 @@ class ContentObjectService
      *
      * @see ContentObjectService::countContentObjectsByTypeForWorkspace
      */
-    public function countContentObjectsForWorkspace(WorkspaceInterface $workspace, 
-        Condition $filterCondition)
+    public function countContentObjectsForWorkspace(WorkspaceInterface $workspace, Condition $filterCondition)
     {
-        return $this->countContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(), 
-            $workspace, 
-            $filterCondition);
+        return $this->countContentObjectsByTypeForWorkspace(ContentObject::class_name(), $workspace, $filterCondition);
     }
 
     /**
      * Returns a list of content objects in a given workspace by a specific type
-     * 
+     *
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $workspace
      * @param Condition $filterCondition
@@ -105,7 +100,7 @@ class ContentObjectService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
+    public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
         Condition $filterCondition, $count = null, $offset = null, $orderProperty = array())
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
@@ -113,9 +108,9 @@ class ContentObjectService
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
-                $contentObjectClassName, 
-                $workspace, 
-                $filterCondition, 
+                $contentObjectClassName,
+                $workspace,
+                $filterCondition,
                 $count,
                 $offset,
                 $orderProperty);
@@ -123,11 +118,11 @@ class ContentObjectService
         else
         {
             return $this->getContentObjectRepository()->findAllInWorkspace(
-                $contentObjectClassName, 
-                $workspace, 
+                $contentObjectClassName,
+                $workspace,
                 $filterCondition,
                 $count,
-                $offset, 
+                $offset,
                 $orderProperty);
         }
     }
@@ -140,23 +135,23 @@ class ContentObjectService
      *
      * @return int
      */
-    public function countContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
+    public function countContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
         Condition $filterCondition)
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
-        
+
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->countAllInPersonalWorkspace(
-                $contentObjectClassName, 
-                $workspace, 
+                $contentObjectClassName,
+                $workspace,
                 $filterCondition);
         }
         else
         {
             return $this->getContentObjectRepository()->countAllInWorkspace(
-                $contentObjectClassName, 
-                $workspace, 
+                $contentObjectClassName,
+                $workspace,
                 $filterCondition);
         }
     }

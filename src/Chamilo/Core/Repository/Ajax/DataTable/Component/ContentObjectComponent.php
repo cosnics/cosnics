@@ -53,8 +53,7 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
     {
         $contentObjectTableDataProvider = $this->getDataTableProviderFactory()->getDataTableProvider(
             'Chamilo\Core\Repository',
-            'ContentObject',
-            $this->getDataClassRetrievesParameters());
+            'ContentObject');
 
         $contentObjectTableDataProvider->setContentObjectService($this->getContentObjectService());
         $contentObjectTableDataProvider->setWorkspaceImplementation($this->getWorkspaceImplementation());

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-
 /**
  *
  * @package Chamilo\Libraries\Format\DataTable\Service
@@ -76,16 +74,13 @@ class DataTableProviderFactory
      *
      * @param string $dataTableContext
      * @param string $dataTableType
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */
-    public function getDataTableProvider($dataTableContext, $dataTableType,
-        DataClassRetrievesParameters $dataClassRetrievesParameters)
+    public function getDataTableProvider($dataTableContext, $dataTableType)
     {
         $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
              'DataTableProvider';
 
         return new $className(
-            $dataClassRetrievesParameters,
             $this->getDataTableCellRendererFactory()->getDataTableCellRenderer($dataTableContext, $dataTableType),
             $this->getDataTableColumnModelFactory()->getDataTableColumnModel($dataTableContext, $dataTableType));
     }

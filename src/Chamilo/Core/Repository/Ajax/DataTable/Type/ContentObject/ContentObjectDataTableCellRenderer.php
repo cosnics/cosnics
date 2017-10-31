@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  *
@@ -14,7 +15,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ContentObjectDataTableCellRenderer extends DataTableCellRenderer
 {
 
-    public function renderCell($column, $contentObject)
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer::renderCell()
+     */
+    public function renderCell($column, DataClass $contentObject)
     {
         switch ($column->getName())
         {

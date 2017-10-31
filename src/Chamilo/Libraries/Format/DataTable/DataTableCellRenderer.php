@@ -107,7 +107,7 @@ abstract class DataTableCellRenderer
      * Renders a single cell
      *
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $data_class
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      * @return string
      */
     public function renderCell($column, DataClass $dataClass)

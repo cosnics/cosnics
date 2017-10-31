@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Interfaces;
 
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+
 /**
  *
  * @package Chamilo\Libraries\Format\DataTable\Interfaces
@@ -12,14 +14,16 @@ interface DataTableProviderInterface
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @return string[][]
      */
-    public function getDataTableRowData();
+    public function getDataTableRowData(DataClassRetrievesParameters $dataClassRetrievesParameters);
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @return integer
      */
-    public function getDataTableRowCount();
+    public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters);
 }
 

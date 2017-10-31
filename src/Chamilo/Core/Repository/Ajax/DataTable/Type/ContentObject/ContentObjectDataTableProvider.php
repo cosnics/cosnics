@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -80,13 +81,11 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @see \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider::getDataTableDataClasses()
      */
-    public function getDataTableDataClasses()
+    public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters)
     {
         $this->validateDataTableProviderConfiguration();
-
-        $dataClassRetrievesParameters = $this->getDataClassRetrievesParameters();
 
         return $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
             ContentObject::class,
@@ -101,14 +100,14 @@ class ContentObjectDataTableProvider extends DataTableProvider
      *
      * @return integer
      */
-    public function getDataTableRowCount()
+    public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters)
     {
         $this->validateDataTableProviderConfiguration();
 
         return $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
             ContentObject::class,
             $this->getWorkspaceImplementation(),
-            $this->getDataClassRetrievesParameters()->getCondition());
+            $dataClassRetrievesParameters->getCondition());
     }
 }
 
