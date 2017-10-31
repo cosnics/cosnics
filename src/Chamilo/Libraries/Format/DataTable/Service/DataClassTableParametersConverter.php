@@ -1,6 +1,5 @@
 <?php
-
-namespace Chamilo\Libraries\Storage\Parameters;
+namespace Chamilo\Libraries\Format\DataTable\Service;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -10,8 +9,8 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- * @package Chamilo\Libraries\Storage\Parameters
  *
+ * @package Chamilo\Libraries\Format\DataTable\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop - Erasmus Hogeschool Brussel
  */
@@ -19,9 +18,9 @@ class DataClassTableParametersConverter
 {
 
     /**
-     * Parses a string based order property to an orderBy. The property string exists out of
+     * Parses a string based order property to an orderBy.
+     * The property string exists out of
      * FQCN (underscores instead of \ due to javascript issues) : propertyName.
-     *
      * E.g Chamilo_Core_Repository_Storage_DataClass_ContentObject:title
      *
      * @param string $orderProperty
@@ -31,7 +30,7 @@ class DataClassTableParametersConverter
      */
     public function convertOrderByProperty($orderProperty = null, $isReverseOrder = false)
     {
-        if(empty($orderProperty))
+        if (empty($orderProperty))
         {
             return [];
         }
@@ -39,19 +38,18 @@ class DataClassTableParametersConverter
         return array(
             new OrderBy(
                 $this->convertPropertyStringToPropertyConditionVariable($orderProperty),
-                $isReverseOrder ? SORT_DESC : SORT_ASC
-            )
-        );
+                $isReverseOrder ? SORT_DESC : SORT_ASC));
     }
 
     /**
+     *
      * @param string[] $individualFilters
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function convertIndividualFiltersIntoConditions($individualFilters = [])
     {
-        if(empty($individualFilters))
+        if (empty($individualFilters))
         {
             return null;
         }
@@ -68,6 +66,7 @@ class DataClassTableParametersConverter
     }
 
     /**
+     *
      * @param string $globalFilter
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $globalFilterProperties
      *
@@ -76,7 +75,7 @@ class DataClassTableParametersConverter
      */
     public function convertGlobalFilterIntoCondition($globalFilter = null, $globalFilterProperties = [])
     {
-        if(empty($globalFilter))
+        if (empty($globalFilter))
         {
             return null;
         }
@@ -98,13 +97,13 @@ class DataClassTableParametersConverter
         $conditions = [];
 
         $globalFilterCondition = $this->convertIndividualFiltersIntoConditions($individualFilters);
-        if($globalFilterCondition instanceof Condition)
+        if ($globalFilterCondition instanceof Condition)
         {
             $conditions[] = $globalFilterCondition;
         }
 
         $individualFiltersCondition = $this->convertGlobalFilterIntoCondition($globalFilter, $globalFilterProperties);
-        if($individualFiltersCondition instanceof Condition)
+        if ($individualFiltersCondition instanceof Condition)
         {
             $conditions[] = $individualFiltersCondition;
         }
@@ -113,6 +112,7 @@ class DataClassTableParametersConverter
     }
 
     /**
+     *
      * @param int $currentPage
      * @param int $itemsPerPage
      *
@@ -136,17 +136,14 @@ class DataClassTableParametersConverter
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */
-    public function buildDataClassRetrievesParameters(
-        $currentPage = 0, $itemsPerPage = 10, $globalFilter = null, $globalFilterProperties = [],
-        $individualFilters = [],
-        $orderProperty = null, $isReverseOrder = false
-    )
+    public function buildDataClassRetrievesParameters($currentPage = 0, $itemsPerPage = 10, $globalFilter = null,
+        $globalFilterProperties = [], $individualFilters = [], $orderProperty = null, $isReverseOrder = false)
     {
         return new DataClassRetrievesParameters(
             $this->convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters),
-            $itemsPerPage, $this->calculateOffset($currentPage, $itemsPerPage),
-            $this->convertOrderByProperty($orderProperty, $isReverseOrder)
-        );
+            $itemsPerPage,
+            $this->calculateOffset($currentPage, $itemsPerPage),
+            $this->convertOrderByProperty($orderProperty, $isReverseOrder));
     }
 
     /**
@@ -162,17 +159,15 @@ class DataClassTableParametersConverter
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      */
-    public function buildRecordRetrievesParameters(
-        $currentPage = 0, $itemsPerPage = 10, $globalFilter = null, $globalFilterProperties = [],
-        $individualFilters = [],
-        $orderProperty = null, $isReverseOrder = false
-    )
+    public function buildRecordRetrievesParameters($currentPage = 0, $itemsPerPage = 10, $globalFilter = null,
+        $globalFilterProperties = [], $individualFilters = [], $orderProperty = null, $isReverseOrder = false)
     {
         return new RecordRetrievesParameters(
-            null, $this->convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters),
-            $itemsPerPage, $this->calculateOffset($currentPage, $itemsPerPage),
-            $this->convertOrderByProperty($orderProperty, $isReverseOrder)
-        );
+            null,
+            $this->convertFiltersIntoConditions($globalFilter, $globalFilterProperties, $individualFilters),
+            $itemsPerPage,
+            $this->calculateOffset($currentPage, $itemsPerPage),
+            $this->convertOrderByProperty($orderProperty, $isReverseOrder));
     }
 
     /**
@@ -214,10 +209,8 @@ class DataClassTableParametersConverter
 
     /**
      * Converts a property string into a real PropertyConditionVariable
-     *
      * The property string exists out of
      * FQCN (underscores instead of \ due to javascript issues) : propertyName.
-     *
      * E.g Chamilo_Core_Repository_Storage_DataClass_ContentObject:title
      *
      * @param string $propertyString
@@ -231,18 +224,16 @@ class DataClassTableParametersConverter
         if (empty($propertyStringParts) || count($propertyStringParts) != 2)
         {
             throw new \InvalidArgumentException(
-                'The property string ' . $propertyString . ' is empty or could not be parsed'
-            );
+                'The property string ' . $propertyString . ' is empty or could not be parsed');
         }
 
         $propertyClassName = str_replace('_', '\\', $propertyStringParts[0]);
 
-        if (!class_exists($propertyClassName) || !is_subclass_of($propertyClassName, DataClass::class))
+        if (! class_exists($propertyClassName) || ! is_subclass_of($propertyClassName, DataClass::class))
         {
             throw new \InvalidArgumentException(
                 'The class ' . $propertyClassName .
-                ' is not a valid class or does not inherit from \Chamilo\Libraries\Storage\DataClass\DataClass'
-            );
+                     ' is not a valid class or does not inherit from \Chamilo\Libraries\Storage\DataClass\DataClass');
         }
 
         return new PropertyConditionVariable($propertyClassName, $propertyStringParts[1]);

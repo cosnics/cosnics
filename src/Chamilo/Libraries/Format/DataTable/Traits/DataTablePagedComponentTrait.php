@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\DataTable\Traits;
 
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassTableParametersConverter;
+use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
 
 /**
  *
@@ -116,6 +117,22 @@ trait DataTablePagedComponentTrait
             $this->getIndividualFilters(),
             $this->getOrderByProperty(),
             $this->getIsReverseOrder());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface
+     */
+    abstract public function getDataTableProvider();
+
+    public function run()
+    {
+        $tableDataProvider = $this->getDataTableProvider();
+
+        $jsonResponse = new JsonDataClassTableResponse(
+            $tableDataProvider->getDataTableRowData(),
+            $tableDataProvider->getDataTableRowCount());
+        $jsonResponse->send();
     }
 }
 

@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Tables\Service;
 
+use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer;
+use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel;
-use Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer;
 
 /**
  *
@@ -101,23 +100,6 @@ class ContentObjectDataTableProvider extends DataTableProvider
 
     /**
      *
-     * @param DataClass $dataClass
-     * @return string[]
-     */
-    public function handleDataClass(DataClass $dataClass)
-    {
-        $rowData = array();
-
-        foreach ($this->getDataTableColumnModel()->getColumns() as $column)
-        {
-            $rowData[$column->getName()] = $this->getDataTableCellRenderer()->renderCell($column, $dataClass);
-        }
-
-        return $rowData;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function getDataTableDataClasses()
@@ -131,22 +113,6 @@ class ContentObjectDataTableProvider extends DataTableProvider
             $dataClassRetrievesParameters->getCount(),
             $dataClassRetrievesParameters->getOffset(),
             $dataClassRetrievesParameters->getOrderBy())->as_array();
-    }
-
-    /**
-     *
-     * @return string[][]
-     */
-    public function getDataTableRowData()
-    {
-        $dataTableRowData = array();
-
-        foreach ($this->getDataTableDataClasses() as $dataClass)
-        {
-            $dataTableRowData[] = $this->handleDataClass($dataClass);
-        }
-
-        return $dataTableRowData;
     }
 
     /**

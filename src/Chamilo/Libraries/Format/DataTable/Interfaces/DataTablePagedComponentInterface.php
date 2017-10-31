@@ -65,8 +65,8 @@ interface DataTablePagedComponentInterface
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectTableDataProvider
+     * @return \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface
      */
-    public function getTableDataProvider();
+    public function getDataTableProvider();
 }
 

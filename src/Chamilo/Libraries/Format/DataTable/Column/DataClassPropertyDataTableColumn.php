@@ -29,19 +29,24 @@ class DataClassPropertyDataTableColumn extends DataTableColumn
 
         parent::__construct(
             $this->determineColumnName(
-                $propertyConditionVariable->get_class(),
-                $propertyConditionVariable->get_property()),
+                $propertyConditionVariable->get_property(),
+                $propertyConditionVariable->get_class()),
             $this->determineColumnTitle($propertyConditionVariable));
     }
 
     /**
      *
-     * @param string $className
      * @param string $property
+     * @param string $className
      * @return string
      */
-    public function determineColumnName($className, $property)
+    public function determineColumnName($property, $className = null)
     {
+        if (is_null($className))
+        {
+            return $property;
+        }
+
         $classNameSlug = StringUtilities::getInstance()->createString($className)->replace('\\', '_')->__toString();
         return $classNameSlug . ':' . $property;
     }
@@ -56,7 +61,7 @@ class DataClassPropertyDataTableColumn extends DataTableColumn
         $className = $propertyConditionVariable->get_class();
 
         return Translation::getInstance()->getTranslation(
-            (string) StringUtilities::getInstance()->createString($propertyConditionVariable->get_property())->upperCamelize(),
+            StringUtilities::getInstance()->createString($propertyConditionVariable->get_property())->upperCamelize()->__toString(),
             null,
             $className::context());
     }

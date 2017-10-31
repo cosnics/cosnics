@@ -3,9 +3,6 @@ namespace Chamilo\Core\Repository\Ajax\Tables;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -20,31 +17,20 @@ class ContentObjectDataTableCellRenderer extends DataTableCellRenderer
     {
         switch ($column->getName())
         {
-            case $this->determineColumnName(ContentObject::class, ContentObject::PROPERTY_TITLE) :
-                return StringUtilities::getInstance()->truncate($contentObject->get_title(), 50, true);
-            case $this->determineColumnName(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION) :
-                return StringUtilities::getInstance()->truncate(
-                    html_entity_decode($contentObject->get_description()),
-                    50);
-            case $this->determineColumnName(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE) :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::getInstance()->getTranslation('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+            case $this->determineColumnName(ContentObject::PROPERTY_TITLE, ContentObject::class) :
+                return $this->getStringUtilities()->truncate($contentObject->get_title(), 50, true);
+            case $this->determineColumnName(ContentObject::PROPERTY_DESCRIPTION, ContentObject::class) :
+                return $this->getStringUtilities()->truncate(html_entity_decode($contentObject->get_description()), 50);
+            case $this->determineColumnName(ContentObject::PROPERTY_MODIFICATION_DATE, ContentObject::class) :
+                return $this->getDateTimeUtilities()->format_locale_date(
+                    $this->getTranslationUtilities()->getTranslation(
+                        'DateTimeFormatLong',
+                        null,
+                        Utilities::COMMON_LIBRARIES),
                     $contentObject->get_modification_date());
         }
 
         return parent::renderCell($column, $contentObject);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param string $property
-     * @return string
-     */
-    public function determineColumnName($className, $property)
-    {
-        $classNameSlug = StringUtilities::getInstance()->createString($className)->replace('\\', '_')->__toString();
-        return $classNameSlug . ':' . $property;
     }
 }
 

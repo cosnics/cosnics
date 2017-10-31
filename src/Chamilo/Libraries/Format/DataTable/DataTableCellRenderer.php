@@ -3,7 +3,10 @@ namespace Chamilo\Libraries\Format\DataTable;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -12,6 +15,92 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class DataTableCellRenderer
 {
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    private $stringUtilities;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Platform\Translation
+     */
+    private $translationUtilities;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Utilities\DatetimeUtilities
+     */
+    private $dateTimeUtilities;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
+     * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $dateTimeUtilities
+     */
+    public function __construct(StringUtilities $stringUtilities, Translation $translationUtilities,
+        DatetimeUtilities $dateTimeUtilities)
+    {
+        $this->stringUtilities = $stringUtilities;
+        $this->translationUtilities = $translationUtilities;
+        $this->dateTimeUtilities = $dateTimeUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities()
+    {
+        return $this->stringUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities)
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Translation
+     */
+    public function getTranslationUtilities()
+    {
+        return $this->translationUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
+     */
+    public function setTranslationUtilities(Translation $translationUtilities)
+    {
+        $this->translationUtilities = $translationUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Utilities\DatetimeUtilities
+     */
+    public function getDateTimeUtilities()
+    {
+        return $this->dateTimeUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $dateTimeUtilities
+     */
+    public function setDateTimeUtilities(DatetimeUtilities $dateTimeUtilities)
+    {
+        $this->dateTimeUtilities = $dateTimeUtilities;
+    }
 
     /**
      * Renders a single cell
@@ -28,5 +117,22 @@ abstract class DataTableCellRenderer
         }
 
         return $dataClass->get_default_property($column->getName());
+    }
+
+    /**
+     *
+     * @param string $property
+     * @param string $className
+     * @return string
+     */
+    public function determineColumnName($property, $className = null)
+    {
+        if (is_null($className))
+        {
+            return $property;
+        }
+
+        $classNameSlug = $this->getStringUtilities()->createString($className)->replace('\\', '_')->__toString();
+        return $classNameSlug . ':' . $property;
     }
 }

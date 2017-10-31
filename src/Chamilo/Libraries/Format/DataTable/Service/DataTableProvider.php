@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
@@ -47,9 +48,54 @@ abstract class DataTableProvider implements DataTableProviderInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getTableRowData()
+     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableColumnModel
      */
-    abstract public function getDataTableRowData();
+    abstract public function getDataTableColumnModel();
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Ajax\Tables\ContentObjectDataTableCellRenderer
+     */
+    abstract public function getDataTableCellRenderer();
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @return string[]
+     */
+    public function handleDataClass(DataClass $dataClass)
+    {
+        $rowData = array();
+
+        foreach ($this->getDataTableColumnModel()->getColumns() as $column)
+        {
+            $rowData[$column->getName()] = $this->getDataTableCellRenderer()->renderCell($column, $dataClass);
+        }
+
+        return $rowData;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    abstract public function getDataTableDataClasses();
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTableProviderInterface::getDataTableRowData()
+     */
+    public function getDataTableRowData()
+    {
+        $dataTableRowData = array();
+
+        foreach ($this->getDataTableDataClasses() as $dataClass)
+        {
+            $dataTableRowData[] = $this->handleDataClass($dataClass);
+        }
+
+        return $dataTableRowData;
+    }
 
     /**
      *

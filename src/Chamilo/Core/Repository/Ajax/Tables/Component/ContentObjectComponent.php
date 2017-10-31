@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Ajax\Tables\Component;
 use Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectDataTableProvider;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Libraries\Architecture\JsonDataClassTableResponse;
 use Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -31,20 +30,6 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
-     */
-    public function run()
-    {
-        $tableDataProvider = $this->getTableDataProvider();
-
-        $jsonResponse = new JsonDataClassTableResponse(
-            $tableDataProvider->getDataTableRowData(),
-            $tableDataProvider->getDataTableRowCount());
-        $jsonResponse->send();
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Service\ContentObjectService
      */
     protected function getContentObjectService()
@@ -63,9 +48,9 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Ajax\Tables\Service\ContentObjectDataTableProvider
+     * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface::getDataTableProvider()
      */
-    public function getTableDataProvider()
+    public function getDataTableProvider()
     {
         return new ContentObjectDataTableProvider(
             $this->getDataClassRetrievesParameters(),
