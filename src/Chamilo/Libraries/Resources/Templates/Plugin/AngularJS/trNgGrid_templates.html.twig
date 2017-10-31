@@ -34,6 +34,15 @@
     </span>
 </script>
 
+<script type="text/ng-template" id="trNgGridBodyCellTemplate.html">
+    <div data-id="{{ '{{ gridItem.id }}' }}" ng-attr-class="tr-ng-cell text-{{ '{{ columnOptions.displayAlign }}' }}" ng-switch="isCustomized">
+        <div ng-switch-when="true">
+            <div ng-transclude=""></div>
+        </div>
+        <div ng-switch-default>{{ '{{ gridDisplayItem[columnOptions.displayFieldName] }}' }}</div>
+    </div>
+</script>
+
 <script type="text/ng-template" id="trNgGridPager.html">
     <span class="pull-right form-group">
         <ul class="pagination pagination-sm">

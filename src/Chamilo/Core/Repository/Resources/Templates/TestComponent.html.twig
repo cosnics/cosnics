@@ -33,11 +33,33 @@
                     function (data, status, headers, config) {
                         mainController.isLoading = false;
                         mainController.contentObjects = data.data_class_table.row_data;
-                        mainController.totalContentObjectsCount = data_class_table.row_count;
+                        mainController.totalContentObjectsCount = data.data_class_table.row_count;
+
+                        buildContextMenu();
                     }
                 );
             };
 
+            var buildContextMenu = function () {
+                $.contextMenu({
+                    selector: ".repository-table tbody tr td div.tr-ng-cell",
+                    zIndex: 10001,
+                    minWidth: '202px',
+                    build: function ($triggerElement, e) {
+                        var rowId = $triggerElement.data('id');
+                        return {
+                            items: {
+                                copy: {
+                                    name: "Copy",
+                                    callback: function (key, opt) {
+                                        alert('Clicked on copy for row ' + rowId);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
         }]);
 
     })();
@@ -62,6 +84,7 @@
             locale="en"
             total-items="mainController.totalContentObjectsCount"
             on-data-required="mainController.refreshContentObjects(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)"
+            class="repository-table"
     >
         <thead>
         <tr>

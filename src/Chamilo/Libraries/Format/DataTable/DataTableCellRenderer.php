@@ -121,6 +121,18 @@ abstract class DataTableCellRenderer
     }
 
     /**
+     * Renders the identifier for the given dataclass
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return int
+     */
+    public function renderDataIdentifier(DataClass $dataClass)
+    {
+        return $dataClass->getId();
+    }
+
+    /**
      *
      * @param string $property
      * @param string $className

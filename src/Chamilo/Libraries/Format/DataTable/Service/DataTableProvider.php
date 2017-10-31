@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class DataTableProvider // implements DataTableProviderInterface
 {
+    const COLUMN_IDENTIFIER = 'id';
 
     /**
      *
@@ -81,6 +82,8 @@ abstract class DataTableProvider // implements DataTableProviderInterface
     public function handleDataClass(DataClass $dataClass)
     {
         $rowData = array();
+
+        $rowData[self::COLUMN_IDENTIFIER] = $this->getDataTableCellRenderer()->renderDataIdentifier($dataClass);
 
         foreach ($this->getDataTableColumnModel()->getColumns() as $column)
         {
