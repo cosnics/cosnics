@@ -5,6 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -82,7 +83,7 @@ class DataClassTableParametersConverter
             return null;
         }
 
-        return new AndCondition($this->createConditionsForSearchTerms($globalFilter, $globalFilterProperties));
+        return new OrCondition($this->createConditionsForSearchTerms($globalFilter, $globalFilterProperties));
     }
 
     /**
@@ -200,9 +201,15 @@ class DataClassTableParametersConverter
 
         foreach ($propertyConditionVariables as $propertyConditionVariable)
         {
+            $filterConditions = [];
             foreach ($filterText as $searchTerm)
             {
-                $conditions[] = new PatternMatchCondition($propertyConditionVariable, '*' . $searchTerm . '*');
+                $filterConditions[] = new PatternMatchCondition($propertyConditionVariable, '*' . $searchTerm . '*');
+            }
+
+            if(!empty($filterConditions))
+            {
+                $conditions[] = new AndCondition($filterConditions);
             }
         }
 
