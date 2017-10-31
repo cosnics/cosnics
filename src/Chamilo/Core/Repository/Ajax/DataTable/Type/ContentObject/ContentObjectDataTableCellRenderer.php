@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Ajax\Tables;
+namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
@@ -7,7 +7,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package Chamilo\Core\Repository\Ajax\Tables
+ * @package Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Ajax\Tables;
+namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\DataTable\Column\DataClassPropertyDataTableColumn;
@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
- * @package Chamilo\Core\Repository\Ajax\Tables$ContentObjectDataTableColumnModel
+ * @package Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
