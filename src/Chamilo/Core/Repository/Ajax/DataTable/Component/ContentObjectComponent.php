@@ -47,31 +47,13 @@ class ContentObjectComponent extends \Chamilo\Core\Repository\Ajax\Manager imple
 
     /**
      *
-     * @return string
-     */
-    protected function getDataTableContext()
-    {
-        return 'Chamilo\Core\Repository';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getDataTableType()
-    {
-        return 'ContentObject';
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Format\DataTable\Interfaces\DataTablePagedComponentInterface::getDataTableProvider()
      */
     public function getDataTableProvider()
     {
         $contentObjectTableDataProvider = $this->getDataTableProviderFactory()->getDataTableProvider(
-            $this->getDataTableContext(),
-            $this->getDataTableType(),
+            'Chamilo\Core\Repository',
+            'ContentObject',
             $this->getDataClassRetrievesParameters());
 
         $contentObjectTableDataProvider->setContentObjectService($this->getContentObjectService());

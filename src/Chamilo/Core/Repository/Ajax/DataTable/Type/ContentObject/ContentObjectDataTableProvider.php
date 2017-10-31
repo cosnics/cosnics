@@ -63,12 +63,29 @@ class ContentObjectDataTableProvider extends DataTableProvider
         $this->workspaceImplementation = $workspaceImplementation;
     }
 
+    public function validateDataTableProviderConfiguration()
+    {
+        if (! $this->getContentObjectService() instanceof ContentObjectService)
+        {
+            throw new \InvalidArgumentException(
+                'Please configure a ContentObjectService for the ContentObjectDataTableProvider before attempting to use it');
+        }
+
+        if (! $this->getWorkspaceImplementation() instanceof WorkspaceInterface)
+        {
+            throw new \InvalidArgumentException(
+                'Please configure a Workspace-instance for the ContentObjectDataTableProvider before attempting to use it');
+        }
+    }
+
     /**
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function getDataTableDataClasses()
     {
+        $this->validateDataTableProviderConfiguration();
+
         $dataClassRetrievesParameters = $this->getDataClassRetrievesParameters();
 
         return $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
@@ -86,6 +103,8 @@ class ContentObjectDataTableProvider extends DataTableProvider
      */
     public function getDataTableRowCount()
     {
+        $this->validateDataTableProviderConfiguration();
+
         return $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
             ContentObject::class,
             $this->getWorkspaceImplementation(),
