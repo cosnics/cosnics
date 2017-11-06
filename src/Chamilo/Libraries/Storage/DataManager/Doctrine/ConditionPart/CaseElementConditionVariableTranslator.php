@@ -22,14 +22,14 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-        
+
         $conditionVariable = $this->getConditionVariable();
-        
+
         if ($conditionVariable->get_condition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
             $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(), 
+                $this->getDataClassDatabase(),
                 $conditionVariable->get_condition());
             $strings[] = ' THEN ';
         }
@@ -37,9 +37,9 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = ' ELSE ';
         }
-        
+
         $strings[] = $conditionVariable->get_statement();
-        
+
         return implode('', $strings);
     }
 }

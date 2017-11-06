@@ -189,10 +189,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @param boolean $autoAssignIdentifier
-     *
-     * @return boolean
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::create()
      */
     public function create(DataClass $dataClass, $autoAssignIdentifier = true)
     {
@@ -242,10 +239,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param string[] $record
-     *
-     * @return boolean
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::createRecord()
      */
     public function createRecord($dataClassName, $record)
     {
@@ -265,10 +259,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return string[]
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieve()
      */
     public function retrieve($dataClassName, $parameters = null)
     {
@@ -282,10 +273,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieves()
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -299,10 +287,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return string[]
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::record()
      */
     public function record($dataClassName, $parameters = null)
     {
@@ -338,10 +323,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::records()
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters)
     {
@@ -355,12 +337,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassStorageUnitName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param string[] $propertiesToUpdate
-     *
-     * @throws Exception
-     * @return boolean
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::update()
      */
     public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
     {
@@ -395,12 +372,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @throws Exception
-     * @return boolean
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::updates()
      */
     public function updates($dataClassName, DataClassProperties $properties, $condition)
     {
@@ -448,10 +420,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return boolean
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::delete()
      */
     public function delete($dataClassName, $condition)
     {
@@ -479,10 +448,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     *
-     * @return integer
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::count()
      */
     public function count($dataClassName, $parameters)
     {
@@ -526,10 +492,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     *
-     * @return integer
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::countGrouped()
      */
     public function countGrouped($dataClassName, $parameters)
     {
@@ -546,16 +509,16 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $queryBuilder = $this->processParameters($queryBuilder, $dataClassName, $parameters);
 
-        foreach ($parameters->get_property()->get() as $property)
+        foreach ($parameters->getGroupBy()->get() as $property)
         {
             $queryBuilder->addGroupBy(
                 $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
-        if ($parameters->get_having() instanceof Condition)
+        if ($parameters->getHavingCondition() instanceof Condition)
         {
             $queryBuilder->having(
-                $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->get_having()));
+                $this->getConditionPartTranslatorService()->translateCondition($this, $parameters->getHavingCondition()));
         }
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
@@ -582,20 +545,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     *
-     * @return string[]
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::distinct()
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
-        $properties = $parameters->get_property();
-
-        if (! is_array($properties))
-        {
-            $properties = array($properties);
-        }
-
         $select = array();
 
         foreach ($parameters->getDataClassProperties()->get() as $conditionVariable)
@@ -641,13 +594,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param string $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieveMaximumValue()
      */
-    public function retrieveMaximumValue($dataClassName, $property, $condition = null)
+    public function retrieveMaximumValue($dataClassName, $property, Condition $condition = null)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
         $queryBuilder->addSelect(
@@ -682,9 +631,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $compositeDataClass
-     *
-     * @return string[]
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieveCompositeDataClassAdditionalProperties()
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
@@ -745,10 +692,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param mixed $function
-     *
-     * @throws Exception
-     * @return mixed
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::transactional()
      */
     public function transactional($function)
     {
@@ -783,9 +727,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassStorageUnitName
-     *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::getAlias()
      */
     public function getAlias($dataClassStorageUnitName)
     {
@@ -794,9 +736,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::translateCondition()
      */
     public function translateCondition(Condition $condition = null)
     {
@@ -805,12 +745,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $value
-     * @param string $type
-     * @param boolean $quote
-     * @param boolean $escapeWildcards
-     *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::quote()
      */
     public function quote($value, $type = null, $quote = true, $escapeWildcards = false)
     {
@@ -819,10 +754,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $columnName
-     * @param string $storageUnitAlias
-     *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::escapeColumnName()
      */
     public function escapeColumnName($columnName, $storageUnitAlias = null)
     {
@@ -844,9 +776,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function processCompositeDataClassJoins($queryBuilder, $dataClassName, $parameters)
     {
-        if ($parameters->get_joins() instanceof Joins)
+        if ($parameters->getJoins() instanceof Joins)
         {
-            foreach ($parameters->get_joins()->get() as $join)
+            foreach ($parameters->getJoins()->get() as $join)
             {
                 if (is_subclass_of($join->get_data_class(), CompositeDataClass::class_name()))
                 {
@@ -866,7 +798,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string $sql
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
      * @throws DataClassNoResultException
      * @return \Doctrine\DBAL\Driver\Statement
      */
@@ -887,7 +818,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
      * @return string
      */
     protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
@@ -896,7 +826,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $select = $this->getAlias($this->prepareTableName($dataClassName)) . '.*';
 
-        if ($parameters->get_distinct())
+        if ($parameters->getDistinct())
         {
             $select = 'DISTINCT ' . $select;
         }
@@ -912,15 +842,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     *
      * @return string
      */
     protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
-        $queryBuilder = $this->processDataClassProperties($queryBuilder, $dataClassName, $parameters->get_properties());
-        $queryBuilder = $this->processGroupBy($queryBuilder, $parameters->get_group_by());
+        $queryBuilder = $this->processDataClassProperties(
+            $queryBuilder,
+            $dataClassName,
+            $parameters->getDataClassProperties());
+        $queryBuilder = $this->processGroupBy($queryBuilder, $parameters->getGroupBy());
 
         return $this->buildBasicRecordsSql($queryBuilder, $dataClassName, $parameters);
     }
@@ -930,7 +862,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
      * @return string
      */
     protected function buildBasicRecordsSql($queryBuilder, $dataClassName, $parameters)
@@ -948,7 +879,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $dataClassName
-     *
      * @return string
      */
     protected function prepareTableName($dataClassName)
@@ -980,8 +910,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @throws DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @return string[]
      */
     protected function fetchRecord($queryBuilder, $dataClassName, $parameters)
@@ -1027,7 +956,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param \Doctrine\DBAL\Driver\Statement $statement
-     *
      * @return string[]
      */
     protected function fetchRecords(\Doctrine\DBAL\Driver\Statement $statement)
@@ -1046,7 +974,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * Processes a given record by transforming to the correct type
      *
      * @param mixed[] $record
-     *
      * @return mixed[]
      */
     protected function processRecord($record)
@@ -1062,8 +989,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $text
-     * @param boolean $escape_wildcards
-     *
+     * @param boolean $escapeWildcards
      * @return string
      */
     protected function escape($text, $escapeWildcards = false)
@@ -1082,7 +1008,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processOrderBy($queryBuilder, $orderBy)
@@ -1109,9 +1034,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param int $count
-     * @param int $offset
-     *
+     * @param integer $count
+     * @param integer $offset
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processLimit($queryBuilder, $count = null, $offset = null)
@@ -1134,7 +1058,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processDataClassProperties($queryBuilder, $dataClassName, $properties)
@@ -1159,7 +1082,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processGroupBy($queryBuilder, $groupBy)
@@ -1181,7 +1103,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processJoins($queryBuilder, $dataClassName, $joins)
@@ -1230,7 +1151,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processCondition($queryBuilder, $dataClassName, $condition)
@@ -1248,13 +1168,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processParameters($queryBuilder, $dataClassName, $parameters)
     {
-        $queryBuilder = $this->processJoins($queryBuilder, $dataClassName, $parameters->get_joins());
-        $queryBuilder = $this->processCondition($queryBuilder, $dataClassName, $parameters->get_condition());
+        $queryBuilder = $this->processJoins($queryBuilder, $dataClassName, $parameters->getJoins());
+        $queryBuilder = $this->processCondition($queryBuilder, $dataClassName, $parameters->getCondition());
 
         return $queryBuilder;
     }
@@ -1263,7 +1182,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param string[] $record
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     protected function getDataClass($dataClassName, $record)

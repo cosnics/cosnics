@@ -99,6 +99,11 @@ class DataClassResultCache extends DataClassCache
         return true;
     }
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
+     * @return string
+     */
     private static function getCacheClassName(DataClass $object)
     {
         $compositeDataClassName = CompositeDataClass::class_name();

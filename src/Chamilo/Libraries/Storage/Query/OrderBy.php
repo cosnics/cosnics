@@ -21,7 +21,7 @@ class OrderBy implements Hashable
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
-    private $property;
+    private $conditionVariable;
 
     /**
      *
@@ -32,47 +32,87 @@ class OrderBy implements Hashable
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param integer $direction
      */
-    public function __construct($property, $direction = SORT_ASC)
+    public function __construct(ConditionVariable $conditionVariable, $direction = SORT_ASC)
     {
-        $this->property = $property;
+        $this->conditionVariable = $conditionVariable;
         $this->direction = $direction;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @deprecated Use getConditionVariable() now
      */
     public function get_property()
     {
-        return $this->property;
+        return $this->getConditionVariable();
     }
 
     /**
      *
-     * @return integer
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     * @deprecated Use getConditionVariable() now
      */
-    public function get_direction()
+    public function set_property(ConditionVariable $conditionVariable)
     {
-        return $this->direction;
+        $this->setConditionVariable($conditionVariable);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return $this->conditionVariable;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      */
-    public function set_property(ConditionVariable $property)
+    public function setConditionVariable(ConditionVariable $conditionVariable)
     {
-        $this->property = $property;
+        $this->conditionVariable = $conditionVariable;
+    }
+
+    /**
+     *
+     * @return integer
+     * @deprecated User getDirection() now
+     */
+    public function get_direction()
+    {
+        return $this->getDirection();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDirection()
+    {
+        return $this->direction;
+    }
+
+    /**
+     *
+     * @param integer $direction
+     * @deprecated User setDirection() now
+     */
+    public function set_direction($direction)
+    {
+        $this->setDirection($direction);
     }
 
     /**
      *
      * @param integer $direction
      */
-    public function set_direction($direction)
+    public function setDirection($direction)
     {
         $this->direction = $direction;
     }
@@ -83,6 +123,6 @@ class OrderBy implements Hashable
      */
     public function getHashParts()
     {
-        return array($this->get_property()->getHashParts(), $this->get_direction());
+        return array($this->getConditionVariable()->getHashParts(), $this->get_direction());
     }
 }

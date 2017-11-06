@@ -82,7 +82,6 @@ class QueryCache
 
     /**
      *
-     * @param string $class
      * @return boolean
      */
     public static function truncate()

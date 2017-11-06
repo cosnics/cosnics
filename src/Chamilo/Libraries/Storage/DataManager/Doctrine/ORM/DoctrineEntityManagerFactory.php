@@ -1,11 +1,8 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\File\Path;
-
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
-
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\DBAL\Connection;
@@ -14,40 +11,40 @@ use Doctrine\ORM\Tools\Setup;
 
 /**
  * Initializes the Doctrine entity manager for use with annotations, caching and the chamilo naming strategy
- *
  * More information can be found at the Doctrine ORM
+ *
  * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html
- *
- * @package application\countries
- *
+ * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineEntityManagerFactory
 {
+
     /**
      * The mapping driver for the entity manager
      *
-     * @var MappingDriver
+     * @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
     protected $mappingDriver;
 
     /**
-     * @var Connection
+     *
+     * @var \Doctrine\DBAL\Connection
      */
     protected $doctrineConnection;
 
     /**
      * The event listeners
      *
-     * @var object
+     * @var object[]
      */
     protected $eventListeners;
 
     /**
      * Constructor
      *
-     * @param MappingDriver $mappingDriver
-     * @param Connection $doctrineConnection
+     * @param \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver $mappingDriver
+     * @param \Doctrine\DBAL\Connection $doctrineConnection
      */
     public function __construct(MappingDriver $mappingDriver, Connection $doctrineConnection)
     {
@@ -60,7 +57,7 @@ class DoctrineEntityManagerFactory
      * Adds an event listener to the entity manager
      *
      * @param string|array $events
-     * @param $eventListener
+     * @param object $eventListener
      */
     public function addEventListener($events, $eventListener)
     {
@@ -70,7 +67,7 @@ class DoctrineEntityManagerFactory
     /**
      * Creates and returns the entity manager
      *
-     * @return EntityManager
+     * @return \Doctrine\ORM\EntityManager
      */
     public function createEntityManager()
     {
@@ -78,16 +75,14 @@ class DoctrineEntityManagerFactory
         $cache = $devMode ? new ArrayCache() : null;
         $cache = new ArrayCache();
 
-        $configuration = Setup::createConfiguration(
-            $devMode, Path::getInstance()->getCachePath(__NAMESPACE__), $cache
-        );
+        $configuration = Setup::createConfiguration($devMode, Path::getInstance()->getCachePath(__NAMESPACE__), $cache);
 
         $configuration->setMetadataDriverImpl($this->mappingDriver);
         $configuration->setNamingStrategy(new ChamiloNamingStrategy());
 
         $entityManager = EntityManager::create($this->doctrineConnection, $configuration);
 
-        foreach($this->eventListeners as $eventListener)
+        foreach ($this->eventListeners as $eventListener)
         {
             $entityManager->getEventManager()->addEventListener($eventListener['events'], $eventListener['listener']);
         }

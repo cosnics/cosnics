@@ -43,6 +43,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -460,7 +461,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition,
             new DataClassProperties(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH)),
-            $having);
+            $having,
+            null,
+            new GroupBy(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH)));
 
         return self::count_grouped(ContentObject::class_name(), $parameters);
     }

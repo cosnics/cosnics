@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 
 /**
  * A ConditionVariable that describes a function on another ConditionVariable
- * 
+ *
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -13,50 +13,50 @@ class FunctionConditionVariable extends ConditionVariable
 {
     /**
      * A constant defining a sum
-     * 
+     *
      * @var int
      */
-    CONST SUM = 1;
-    
+    const SUM = 1;
+
     /**
      * A constant defining a count
-     * 
+     *
      * @var int
      */
-    CONST COUNT = 2;
-    
+    const COUNT = 2;
+
     /**
      * A constant defining a minimum
-     * 
+     *
      * @var int
      */
-    CONST MIN = 3;
-    
+    const MIN = 3;
+
     /**
      * A constant defining a maximum
-     * 
+     *
      * @var int
      */
-    CONST MAX = 4;
-    
+    const MAX = 4;
+
     /**
      * A constant defining a distinct
-     * 
+     *
      * @var integer
      */
-    CONST DISTINCT = 5;
+    const DISTINCT = 5;
     const AVERAGE = 6;
 
     /**
      * The ConditionVariable
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $condition_variable;
 
     /**
      * The function to apply to the ConditionVariable
-     * 
+     *
      * @var integer
      */
     private $function;
@@ -69,20 +69,20 @@ class FunctionConditionVariable extends ConditionVariable
 
     /**
      * Constructor
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param integer $function
      */
-    public function __construct($function, $condition_variable, $alias = null)
+    public function __construct($function, $conditionVariable, $alias = null)
     {
-        $this->condition_variable = $condition_variable;
+        $this->condition_variable = $conditionVariable;
         $this->function = $function;
         $this->alias = $alias;
     }
 
     /**
      * Get the ConditionVariable on the condition_variable side of the operation
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_condition_variable()
@@ -92,17 +92,17 @@ class FunctionConditionVariable extends ConditionVariable
 
     /**
      * Set the ConditionVariable on the condition_variable side of the operation
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      */
-    public function set_condition_variable($condition_variable)
+    public function set_condition_variable($conditionVariable)
     {
-        $this->condition_variable = $condition_variable;
+        $this->condition_variable = $conditionVariable;
     }
 
     /**
      * Get the ConditionVariable on the function side of the operation
-     * 
+     *
      * @return \libraries\storage\ConditionVariable
      */
     public function get_function()
@@ -137,14 +137,18 @@ class FunctionConditionVariable extends ConditionVariable
         $this->alias = $alias;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
     public function getHashParts()
     {
         $hashParts = ConditionVariable::getHashParts();
-        
+
         $hashParts[] = $this->get_condition_variable()->getHashParts();
         $hashParts[] = $this->get_function();
         $hashParts[] = $this->get_alias();
-        
+
         return $hashParts;
     }
 }
