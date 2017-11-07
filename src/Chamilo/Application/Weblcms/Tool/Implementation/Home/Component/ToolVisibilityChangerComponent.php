@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ToolVisibilityChangerComponent extends Manager
 {

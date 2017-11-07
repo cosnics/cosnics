@@ -6,7 +6,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**

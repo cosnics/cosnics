@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Rights\Component;
 use Chamilo\Core\Repository\Quota\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class AccessorComponent extends Manager
 {

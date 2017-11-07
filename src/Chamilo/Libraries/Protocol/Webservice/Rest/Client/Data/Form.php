@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData;
 use Exception;
 

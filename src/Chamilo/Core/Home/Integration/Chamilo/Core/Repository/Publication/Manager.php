@@ -7,7 +7,7 @@ use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements PublicationInterface
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class represents a data class property for the gallery table

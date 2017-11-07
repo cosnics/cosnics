@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /*
  * To change this template, choose Tools | Templates and open the template in the editor.

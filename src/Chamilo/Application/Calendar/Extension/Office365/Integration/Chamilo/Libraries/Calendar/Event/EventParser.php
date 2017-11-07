@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\L
 
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

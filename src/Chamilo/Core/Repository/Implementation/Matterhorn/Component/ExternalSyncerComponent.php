@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Matterhorn\Component;
 use Chamilo\Core\Repository\Implementation\Matterhorn\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Matterhorn\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExternalSyncerComponent extends Manager

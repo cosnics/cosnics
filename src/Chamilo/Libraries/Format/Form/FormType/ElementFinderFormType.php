@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Form\FormType;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\DataTransformer\ElementFinderDataTransformer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;

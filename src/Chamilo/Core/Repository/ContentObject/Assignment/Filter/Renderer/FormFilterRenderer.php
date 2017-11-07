@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Filter\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Filter\FilterData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Render the parameters set via FilterData as a FormValidator

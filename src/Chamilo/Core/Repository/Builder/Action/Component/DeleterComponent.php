@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Builder\Action\Component;
 use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class RequestForm extends FormValidator

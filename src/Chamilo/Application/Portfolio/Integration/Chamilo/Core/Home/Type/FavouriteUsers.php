@@ -5,7 +5,7 @@ use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteR
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Renders the favourite users

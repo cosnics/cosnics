@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Common\
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Common\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {

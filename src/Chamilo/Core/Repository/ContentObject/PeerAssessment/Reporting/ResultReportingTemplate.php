@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ResultReportingTemplate extends ReportingTemplate
 {

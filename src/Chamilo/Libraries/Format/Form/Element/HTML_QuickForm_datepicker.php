@@ -1,7 +1,7 @@
 <?php
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Form element to select a date and hour (with popup datepicker)

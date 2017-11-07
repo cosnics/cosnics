@@ -4,7 +4,7 @@ namespace Chamilo\Core\Lynx\Remote\Component;
 use Chamilo\Core\Lynx\Remote\DataClass\Package;
 use Chamilo\Core\Lynx\Remote\DataManager;
 use Chamilo\Core\Lynx\Remote\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;

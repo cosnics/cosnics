@@ -34,7 +34,6 @@ use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
-use Chamilo\Libraries\Platform\TranslationCacheService;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
@@ -117,7 +116,6 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         $cacheManager->addCacheService(
             'chamilo_dependency_injection',
             new DependencyInjectionCacheService($configurationConsulter));
-        $cacheManager->addCacheService('chamilo_translations', new TranslationCacheService());
         $cacheManager->addCacheService(
             'symfony_translations',
             new \Chamilo\Libraries\Translation\TranslationCacheService());

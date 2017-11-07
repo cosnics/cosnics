@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Hq23\Component;
 
 use Chamilo\Core\Repository\Implementation\Hq23\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExporterComponent extends Manager

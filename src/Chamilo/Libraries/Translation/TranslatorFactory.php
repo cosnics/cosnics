@@ -1,16 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
+use Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Configuration\Configuration;
 
 /**
  * Builds the symfony translator
@@ -32,7 +34,13 @@ class TranslatorFactory
     {
         if (! $locale)
         {
-            $isoCode = Translation::getInstance()->getLanguageIsocode();
+            // TODO: Do we still need this if the default is already passed on via the DI definition?
+            $classnameUtilities = ClassnameUtilities::getInstance();
+            $pathBuilder = new PathBuilder($classnameUtilities);
+            $fileConfigurationConsulter = new ConfigurationConsulter(
+                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
+
+            $isoCode = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language'));
             $locale = $isoCode . '_' . strtoupper($isoCode);
         }
 
@@ -60,7 +68,9 @@ class TranslatorFactory
             Filesystem::create_dir($translationCachePath);
         }
 
-        $packageNamespaces = Configuration::getInstance()->get_registration_contexts();
+        // TODO: Improve caching?
+        $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
+        $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),

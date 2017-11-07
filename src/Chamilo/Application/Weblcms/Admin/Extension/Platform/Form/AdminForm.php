@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Form;
 
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class AdminForm extends FormValidator

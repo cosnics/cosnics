@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Workspace;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class PersonalWorkspace implements WorkspaceInterface
 {

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * The email notificator of a post extends abstract email notificator
