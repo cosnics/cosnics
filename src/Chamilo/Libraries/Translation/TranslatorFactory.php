@@ -40,8 +40,7 @@ class TranslatorFactory
             $fileConfigurationConsulter = new ConfigurationConsulter(
                 new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
 
-            $isoCode = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language'));
-            $locale = $isoCode . '_' . strtoupper($isoCode);
+            $locale = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language'));
         }
 
         $translator = new Translator($locale);
@@ -49,7 +48,7 @@ class TranslatorFactory
         $translator->addLoader('optimized', new OptimizedTranslationsPhpFileLoader());
         $this->addOptimizedTranslationResources($translator);
 
-        $translator->setFallbackLocales(array('en_EN', 'nl_NL'));
+        $translator->setFallbackLocales(array('en', 'nl'));
 
         return $translator;
     }
