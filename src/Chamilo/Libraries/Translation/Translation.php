@@ -92,6 +92,17 @@ class Translation
     }
 
     /**
+     * @return string
+     */
+    public function getShortLanguageIsocode()
+    {
+        $locale = $this->getTranslator()->getLocale();
+        $localeParts = explode('_', $locale);
+
+        return $localeParts[0];
+    }
+
+    /**
      *
      * @param string $languageIsoCode
      */
@@ -103,7 +114,7 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Chamilo\Libraries\Translation\Translation
      */
     static public function getInstance()
     {
