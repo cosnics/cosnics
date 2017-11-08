@@ -102,7 +102,7 @@ class Template
 
     public function translate($variable)
     {
-        $language = Translation::getInstance()->getLanguageIsocode();
+        $language = Translation::getInstance()->getShortLanguageIsocode();
         return $this->get_translation()->translate($language, $variable);
     }
 
