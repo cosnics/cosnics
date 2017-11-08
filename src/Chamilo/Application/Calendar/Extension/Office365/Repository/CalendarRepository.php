@@ -45,18 +45,6 @@ class CalendarRepository
      *
      * @var string
      */
-    private $tenantId;
-
-    /**
-     *
-     * @var string
-     */
-    private $tenantName;
-
-    /**
-     *
-     * @var string
-     */
     private $token;
 
     /**
@@ -76,16 +64,12 @@ class CalendarRepository
      * @param string $developerKey
      * @param string $clientId
      * @param string $clientSecret
-     * @param string $tenantId
-     * @param string $tenantName
      * @param string $token
      */
-    public function __construct($clientId, $clientSecret, $tenantId, $tenantName, $token = null)
+    public function __construct($clientId, $clientSecret, $token = null)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->tenantId = $tenantId;
-        $this->tenantName = $tenantName;
         $this->token = $token;
     }
 
@@ -108,11 +92,9 @@ class CalendarRepository
 
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
-            $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
-            $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
             $token = unserialize(LocalSetting::getInstance()->get('token', $configurationContext));
 
-            self::$instance = new static($clientId, $clientSecret, $tenantId, $tenantName, $token);
+            self::$instance = new static($clientId, $clientSecret, $token);
         }
 
         return static::$instance;
@@ -152,42 +134,6 @@ class CalendarRepository
     public function setClientSecret($clientSecret)
     {
         $this->clientSecret = $clientSecret;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTenantId()
-    {
-        return $this->tenantId;
-    }
-
-    /**
-     *
-     * @param string $tenantId
-     */
-    public function setTenantId($tenantId)
-    {
-        $this->tenantId = $tenantId;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTenantName()
-    {
-        return $this->tenantName;
-    }
-
-    /**
-     *
-     * @param string $tenantName
-     */
-    public function setTenantName($tenantName)
-    {
-        $this->tenantName = $tenantName;
     }
 
     /**
@@ -303,18 +249,7 @@ class CalendarRepository
             return true;
         }
 
-        $replyUri = new Redirect();
-
-        $provider = new \TheNetworg\OAuth2\Client\Provider\Azure(
-            [
-                'clientId' => $this->getClientId(),
-                'clientSecret' => $this->getClientSecret(),
-                'redirectUri' => $replyUri->getUrl()]);
-
-        $provider->pathAuthorize = "/oauth2/v2.0/authorize";
-        $provider->pathToken = "/oauth2/v2.0/token";
-        $provider->scope = [$this->getClientScope()];
-        $provider->authWithResource = false;
+        $provider = $this->getOAuthProvider();
 
         if (isset($authenticationCode))
         {
@@ -333,11 +268,40 @@ class CalendarRepository
 
     /**
      *
+     * @return \TheNetworg\OAuth2\Client\Provider\Azure
+     */
+    protected function getOAuthProvider()
+    {
+        $replyUri = new Redirect();
+
+        $provider = new \TheNetworg\OAuth2\Client\Provider\Azure(
+            [
+                'clientId' => $this->getClientId(),
+                'clientSecret' => $this->getClientSecret(),
+                'redirectUri' => $replyUri->getUrl()]);
+
+        $provider->pathAuthorize = "/oauth2/v2.0/authorize";
+        $provider->pathToken = "/oauth2/v2.0/token";
+        $provider->scope = [$this->getClientScope()];
+        $provider->authWithResource = false;
+
+        return $provider;
+    }
+
+    protected function refreshToken()
+    {
+        return $this->getOAuthProvider()->getAccessToken(
+            'refresh_token',
+            ['refresh_token' => $this->getRefreshToken()]);
+    }
+
+    /**
+     *
      * @return string
      */
     private function getClientScope()
     {
-        return 'https://outlook.office.com/Calendars.Read';
+        return 'https://outlook.office.com/Calendars.Read  offline_access';
     }
 
     /**
@@ -351,25 +315,6 @@ class CalendarRepository
             \Chamilo\Application\Calendar\Extension\Office365\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager::ACTION_LOGIN);
     }
 
-    /**
-     *
-     * @param Redirect $replyUri
-     * @return string
-     */
-    private function createAuthUrl(Redirect $replyUri)
-    {
-        $params = array(
-            'response_type' => 'code',
-            'redirect_uri' => $replyUri->getUrl(),
-            'state' => base64_encode(serialize($this->getReplyParameters())),
-            'client_id' => $this->getClientId(),
-            'response_mode' => 'query',
-            'prompt' => 'login',
-            'scope' => $this->getClientScope());
-
-        return self::AUTHENTICATION_BASE_URL . 'authorize' . "?" . http_build_query($params, '', '&');
-    }
-
     public function logout()
     {
         return $this->saveToken(null);
@@ -381,13 +326,11 @@ class CalendarRepository
      */
     public function findOwnedCalendars()
     {
-        $result = $this->executeRequest($this->buildRequest('GET', 'me/calendars'));
-
-        $calendarItems = $result->value;
+        $calendarItems = $this->executeRequest($this->buildRequest('GET', 'me/calendars'));
 
         $availableCalendars = array();
 
-        foreach ($calendarItems as $calendarItem)
+        foreach ($calendarItems->value as $calendarItem)
         {
             $availableCalendar = new AvailableCalendar();
 
@@ -420,11 +363,11 @@ class CalendarRepository
 
     public function buildRequest($type, $endpoint, $queryParameters = [])
     {
-        // TODO: Refresh token?
-        // if ($this->hasAccessToken() && $this->isAccessTokenExpired())
-        // {
-        // $this->saveToken($this->refreshToken());
-        // }
+        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
+        {
+            $this->saveToken($this->refreshToken());
+        }
+
         $uri = self::CALENDAR_BASE_URL . $this->buildEndpoint($endpoint, $queryParameters);
         $headers = ['Authorization' => 'Bearer ' . $this->getAccessToken()];
 
