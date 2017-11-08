@@ -20,8 +20,8 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class CalendarRepository
 {
-    const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/';
-    const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v1.0/';
+    const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
+    const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v2.0/';
 
     /**
      *
@@ -110,7 +110,7 @@ class CalendarRepository
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
             $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
             $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
-            $token = json_decode(LocalSetting::getInstance()->get('token', $configurationContext));
+            $token = unserialize(LocalSetting::getInstance()->get('token', $configurationContext));
 
             self::$instance = new static($clientId, $clientSecret, $tenantId, $tenantName, $token);
         }
@@ -192,7 +192,7 @@ class CalendarRepository
 
     /**
      *
-     * @return string
+     * @return \TheNetworg\OAuth2\Client\Token\AccessToken
      */
     public function getToken()
     {
@@ -214,7 +214,10 @@ class CalendarRepository
      */
     public function getAccessToken()
     {
-        return $this->getToken()->access_token;
+        if ($this->getToken() instanceof \TheNetworg\OAuth2\Client\Token\AccessToken)
+        {
+            return $this->getToken()->getToken();
+        }
     }
 
     /**
@@ -223,7 +226,10 @@ class CalendarRepository
      */
     public function getRefreshToken()
     {
-        return $this->getToken()->refresh_token;
+        if ($this->getToken() instanceof \TheNetworg\OAuth2\Client\Token\AccessToken)
+        {
+            return $this->getToken()->getRefreshToken();
+        }
     }
 
     /**
@@ -232,7 +238,10 @@ class CalendarRepository
      */
     public function getTokenExpirationTime()
     {
-        return $this->getToken()->expires_on;
+        if ($this->getToken() instanceof \TheNetworg\OAuth2\Client\Token\AccessToken)
+        {
+            return $this->getToken()->getExpires();
+        }
     }
 
     /**
@@ -242,7 +251,7 @@ class CalendarRepository
      */
     public function saveToken($token)
     {
-        $this->token = json_decode($token);
+        $this->token = $token;
         return LocalSetting::getInstance()->create(
             'token',
             $token,
@@ -275,33 +284,6 @@ class CalendarRepository
 
     /**
      *
-     * @return \stdClass
-     */
-    private function refreshToken()
-    {
-        $client = $this->getGuzzleHttpClient();
-
-        $replyUri = new Redirect();
-
-        $formParameters = array(
-            'grant_type' => 'refresh_token',
-            'client_id' => $this->getClientId(),
-            'scope' => $this->getClientScope(),
-            'redirect_uri' => $replyUri->getUrl(),
-            'resource' => 'https://outlook.office365.com/',
-            'client_secret' => $this->getClientSecret(),
-            'refresh_token' => $this->getRefreshToken());
-
-        $response = $client->request(
-            'POST',
-            self::AUTHENTICATION_BASE_URL . 'token',
-            array('form_params' => $formParameters));
-
-        return $response->getBody()->getContents();
-    }
-
-    /**
-     *
      * @return boolean
      */
     private function isAccessTokenExpired()
@@ -321,17 +303,31 @@ class CalendarRepository
             return true;
         }
 
+        $replyUri = new Redirect();
+
+        $provider = new \TheNetworg\OAuth2\Client\Provider\Azure(
+            [
+                'clientId' => $this->getClientId(),
+                'clientSecret' => $this->getClientSecret(),
+                'redirectUri' => $replyUri->getUrl()]);
+
+        $provider->pathAuthorize = "/oauth2/v2.0/authorize";
+        $provider->pathToken = "/oauth2/v2.0/token";
+        $provider->scope = [$this->getClientScope()];
+        $provider->authWithResource = false;
+
         if (isset($authenticationCode))
         {
-            $token = $this->requestAccessToken($authenticationCode);
-            return $this->saveToken($token);
+            $token = $provider->getAccessToken('authorization_code', ['code' => $authenticationCode]);
+            return $this->saveToken(serialize($token));
         }
         else
         {
-            $replyUri = new Redirect();
-
-            $redirect = new Redirect();
-            $redirect->writeHeader($this->createAuthUrl($replyUri));
+            $authUrl = $provider->getAuthorizationUrl(
+                ['state' => base64_encode(serialize($this->getReplyParameters()))]);
+            $_SESSION['oauth2state'] = $provider->getState();
+            header('Location: ' . $authUrl);
+            exit();
         }
     }
 
@@ -342,34 +338,6 @@ class CalendarRepository
     private function getClientScope()
     {
         return 'https://outlook.office.com/Calendars.Read';
-    }
-
-    /**
-     *
-     * @param string $authenticationCode
-     * @return \stdClass
-     */
-    private function requestAccessToken($authenticationCode)
-    {
-        $client = $this->getGuzzleHttpClient();
-
-        $replyUri = new Redirect();
-
-        $formParameters = array(
-            'grant_type' => 'authorization_code',
-            'client_id' => $this->getClientId(),
-            'scope' => $this->getClientScope(),
-            'code' => $authenticationCode,
-            'redirect_uri' => $replyUri->getUrl(),
-            'resource' => 'https://outlook.office365.com/',
-            'client_secret' => $this->getClientSecret());
-
-        $response = $client->request(
-            'POST',
-            self::AUTHENTICATION_BASE_URL . 'token',
-            array('form_params' => $formParameters));
-
-        return $response->getBody()->getContents();
     }
 
     /**
@@ -452,11 +420,11 @@ class CalendarRepository
 
     public function buildRequest($type, $endpoint, $queryParameters = [])
     {
-        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
-        {
-            $this->saveToken($this->refreshToken());
-        }
-
+        // TODO: Refresh token?
+        // if ($this->hasAccessToken() && $this->isAccessTokenExpired())
+        // {
+        // $this->saveToken($this->refreshToken());
+        // }
         $uri = self::CALENDAR_BASE_URL . $this->buildEndpoint($endpoint, $queryParameters);
         $headers = ['Authorization' => 'Bearer ' . $this->getAccessToken()];
 
@@ -525,11 +493,7 @@ class CalendarRepository
             $this->buildRequest(
                 'GET',
                 'me/calendars/' . $calendarIdentifier . '/calendarview',
-                [
-                    'query' => [
-                        '$top' => 200,
-                        'startDateTime' => date('c', $fromDate),
-                        'endDateTime' => date('c', $toDate)]]));
+                ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]));
 
         return new ArrayResultSet($result->value);
     }
