@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -54,8 +55,17 @@ class VisitPlannerComponent extends Manager
             ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri']
         );
 
+        $planId = $reference->getOffice365PlanId();
+        if (empty($planId))
+        {
+            $planId = $this->getOffice365Service()->getDefaultGroupPlanId($reference->getOffice365GroupId());
+            $office365ReferenceService->storePlannerReferenceForCourseGroup(
+                $courseGroup, $reference->getOffice365GroupId(), $planId
+            );
+        }
+
         $plannerUrl = $baseUrl . '/#/plantaskboard?groupId=%s&planId=%s';
-        $plannerUrl = sprintf($plannerUrl, $reference->getOffice365GroupId(), $reference->getOffice365PlanId());
+        $plannerUrl = sprintf($plannerUrl, $reference->getOffice365GroupId(), $planId);
 
         return new RedirectResponse($plannerUrl);
     }

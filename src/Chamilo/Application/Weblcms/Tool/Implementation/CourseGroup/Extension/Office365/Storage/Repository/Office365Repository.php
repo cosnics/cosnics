@@ -7,6 +7,7 @@ use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
@@ -34,35 +35,50 @@ class Office365Repository
     protected $accessTokenRepository;
 
     /**
+     * @var AccessToken
+     */
+    protected $delegatedAccessToken;
+
+    /**
+     * @var string
+     */
+    protected $currentRequestUrl;
+
+    /**
      * Office365Repository constructor.
      *
      * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
      * @param \Microsoft\Graph\Graph $graph
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
+     * @param string $currentRequestUrl
      */
     public function __construct(
-        AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository
+        AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository,
+        $currentRequestUrl
     )
     {
         $this->oauthProvider = $oauthProvider;
         $this->graph = $graph;
         $this->accessTokenRepository = $accessTokenRepository;
+        $this->currentRequestUrl = $currentRequestUrl;
 
-        $this->initializeAccessToken();
+        $this->initializeApplicationAccessToken();
     }
 
     /**
      * Initializes the access token
      */
-    protected function initializeAccessToken()
+    protected function initializeApplicationAccessToken()
     {
-        $accessToken = $this->accessTokenRepository->getAccessToken();
+        $accessToken = $this->accessTokenRepository->getApplicationAccessToken();
         if (!$accessToken instanceof AccessToken || $accessToken->hasExpired())
         {
-            $accessToken = $this->requestNewAccessToken();
+            $accessToken = $this->requestNewApplicationAccessToken();
         }
 
         $this->graph->setAccessToken($accessToken);
+
+        $this->delegatedAccessToken = $this->accessTokenRepository->getDelegatedAccessToken();
     }
 
     /**
@@ -70,16 +86,56 @@ class Office365Repository
      *
      * @return \League\OAuth2\Client\Token\AccessToken
      */
-    protected function requestNewAccessToken()
+    protected function requestNewApplicationAccessToken()
     {
         $accessToken = $this->oauthProvider->getAccessToken(
             'client_credentials',
             ['resource' => 'https://graph.microsoft.com/']
         );
 
-        $this->accessTokenRepository->storeAccessToken($accessToken);
+        $this->accessTokenRepository->storeApplicationAccessToken($accessToken);
 
         return $accessToken;
+    }
+
+    /**
+     * Requests a new access token for the user, redirecting the user to the authorization URL
+     */
+    protected function requestNewDelegatedAccessToken()
+    {
+        $authorizationUrl = $this->oauthProvider->getAuthorizationUrl(
+            ['state' => base64_encode($this->currentRequestUrl)]
+        );
+
+        $redirectResponse = new RedirectResponse($authorizationUrl);
+        $redirectResponse->send();
+    }
+
+    /**
+     * Sets the user access token as the currently to use access token
+     */
+    protected function activateDelegatedAccessToken()
+    {
+        if (empty($this->delegatedAccessToken) || !$this->delegatedAccessToken instanceof AccessToken)
+        {
+            $this->requestNewDelegatedAccessToken();
+        }
+
+        $this->graph->setAccessToken($this->delegatedAccessToken);
+    }
+
+    /**
+     * Authorizes a user by a given authorization code
+     *
+     * @param string $authorizationCode
+     */
+    public function authorizeUserByAuthorizationCode($authorizationCode)
+    {
+        $this->delegatedAccessToken = $this->oauthProvider->getAccessToken(
+            'authorization_code', ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']
+        );
+
+        $this->accessTokenRepository->storeDelegatedAccessToken($this->delegatedAccessToken);
     }
 
     /**
@@ -125,7 +181,7 @@ class Office365Repository
         {
             if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
             {
-                $accessToken = $this->requestNewAccessToken();
+                $accessToken = $this->requestNewApplicationAccessToken();
                 $this->graph->setAccessToken($accessToken);
                 $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $accessToken]);
 
@@ -343,9 +399,14 @@ class Office365Repository
      */
     public function listGroupPlans($groupIdentifier)
     {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/planner/plans')
-                ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class)
-        );
+        $this->activateDelegatedAccessToken();
+
+        $request = $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/planner/plans')
+            ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class);
+
+        $result = $request->execute();
+        $this->initializeApplicationAccessToken();
+
+        return $result;
     }
 }

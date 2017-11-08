@@ -7,12 +7,14 @@
         <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.access_token_repository"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepository">
             <argument type="service" id="chamilo.libraries.platform.configuration.local_setting" />
+            <argument type="service" id="chamilo.libraries.platform.session.session_utilities" />
         </service>
 
         <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.office365_repository_factory"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365RepositoryFactory">
             <argument type="service" id="chamilo.configuration.service.configuration_consulter" />
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.access_token_repository" />
+            <argument type="service" id="symfony.component.http_foundation.request" />
         </service>
 
         <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.office365_repository"

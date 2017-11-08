@@ -52,7 +52,7 @@ class Office365Service
         return 'e5dcbd72-8938-4ed2-9b31-fbac1b04ea3b';
         $office365UserIdentifier = $this->getOffice365UserIdentifier($owner);
 
-        if(empty($office365UserIdentifier))
+        if (empty($office365UserIdentifier))
         {
             throw new Office365UserNotExistsException($owner);
         }
@@ -88,7 +88,7 @@ class Office365Service
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
 
-            if(empty($office365UserIdentifier))
+            if (empty($office365UserIdentifier))
             {
                 throw new Office365UserNotExistsException($user);
             }
@@ -111,7 +111,7 @@ class Office365Service
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
 
-            if(empty($office365UserIdentifier))
+            if (empty($office365UserIdentifier))
             {
                 throw new Office365UserNotExistsException($user);
             }
@@ -131,7 +131,7 @@ class Office365Service
     public function isMemberOfGroup($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-        if(empty($office365UserIdentifier))
+        if (empty($office365UserIdentifier))
         {
             return false;
         }
@@ -153,7 +153,7 @@ class Office365Service
         $userIdentifiers = [];
 
         $groupMembers = $this->office365Repository->listGroupMembers($groupId);
-        foreach($groupMembers as $groupMember)
+        foreach ($groupMembers as $groupMember)
         {
             $userIdentifiers[] = $groupMember->getId();
         }
@@ -169,7 +169,7 @@ class Office365Service
     public function removeAllMembersFromGroup($groupId)
     {
         $groupMembers = $this->getGroupMembers($groupId);
-        foreach($groupMembers as $groupMember)
+        foreach ($groupMembers as $groupMember)
         {
             $this->office365Repository->removeMemberFromGroup($groupId, $groupMember);
         }
@@ -188,7 +188,7 @@ class Office365Service
         if (!$this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-            if(empty($office365UserIdentifier))
+            if (empty($office365UserIdentifier))
             {
                 throw new Office365UserNotExistsException($user);
             }
@@ -210,7 +210,7 @@ class Office365Service
         if ($this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-            if(empty($office365UserIdentifier))
+            if (empty($office365UserIdentifier))
             {
                 throw new Office365UserNotExistsException($user);
             }
@@ -230,7 +230,7 @@ class Office365Service
     public function isOwnerOfGroup($groupId, User $user)
     {
         $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-        if(empty($office365UserIdentifier))
+        if (empty($office365UserIdentifier))
         {
             return false;
         }
@@ -239,7 +239,6 @@ class Office365Service
 
         return $groupOwner instanceof \Microsoft\Graph\Model\User;
     }
-
 
     /**
      * Returns a list of external user identifiers that are subscribed as owner in an office365 group
@@ -253,7 +252,7 @@ class Office365Service
         $userIdentifiers = [];
 
         $groupOwners = $this->office365Repository->listGroupOwners($groupId);
-        foreach($groupOwners as $groupOwner)
+        foreach ($groupOwners as $groupOwner)
         {
             $userIdentifiers[] = $groupOwner->getId();
         }
@@ -269,12 +268,11 @@ class Office365Service
     public function removeAllOwnersFromGroup($groupId)
     {
         $groupOwners = $this->getGroupOwners($groupId);
-        foreach($groupOwners as $groupOwner)
+        foreach ($groupOwners as $groupOwner)
         {
             $this->office365Repository->removeOwnerFromGroup($groupId, $groupOwner);
         }
     }
-
 
     /**
      * Returns a list of all the plan identifiers of a given group
@@ -287,7 +285,7 @@ class Office365Service
     {
         $groupPlanIds = [];
 
-        foreach($this->office365Repository->listGroupPlans($groupId) as $groupPlan)
+        foreach ($this->office365Repository->listGroupPlans($groupId) as $groupPlan)
         {
             $groupPlanIds[] = $groupPlan->getId();
         }
@@ -306,7 +304,7 @@ class Office365Service
     {
         $groupPlans = $this->office365Repository->listGroupPlans($groupId);
 
-        if(empty($groupPlans))
+        if (empty($groupPlans))
         {
             return null;
         }
@@ -331,7 +329,7 @@ class Office365Service
         {
             $office365User = $this->office365Repository->getOffice365User($user);
 
-            if($office365User instanceof \Microsoft\Graph\Model\User)
+            if ($office365User instanceof \Microsoft\Graph\Model\User)
             {
                 $office365UserIdentifier = $office365User->getId();
             }
@@ -343,6 +341,16 @@ class Office365Service
         }
 
         return $office365UserIdentifier;
+    }
+
+    /**
+     * Authorizes a user by a given authorization code
+     *
+     * @param string $authorizationCode
+     */
+    public function authorizeUserByAuthorizationCode($authorizationCode)
+    {
+        $this->office365Repository->authorizeUserByAuthorizationCode($authorizationCode);
     }
 
 }

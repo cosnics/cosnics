@@ -14,16 +14,30 @@ use League\OAuth2\Client\Token\AccessToken;
 interface AccessTokenRepositoryInterface
 {
     /**
-     * Returns the access token
+     * Returns the application access token
      *
      * @return AccessToken
      */
-    public function getAccessToken();
+    public function getApplicationAccessToken();
 
     /**
-     * Stores the access token
+     * Stores the application access token
      *
      * @param \League\OAuth2\Client\Token\AccessToken $accessToken
      */
-    public function storeAccessToken(AccessToken $accessToken);
+    public function storeApplicationAccessToken(AccessToken $accessToken);
+
+    /**
+     * Returns the delegated access token
+     *
+     * @return AccessToken
+     */
+    public function getDelegatedAccessToken();
+
+    /**
+     * Stores the delegated access token
+     *
+     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
+     */
+    public function storeDelegatedAccessToken(AccessToken $accessToken);
 }
