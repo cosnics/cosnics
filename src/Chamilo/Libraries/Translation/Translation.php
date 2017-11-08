@@ -86,9 +86,14 @@ class Translation
         $this->translator = $translator;
     }
 
+    /**
+     *
+     * @return string
+     * @deprecated Use Translator->getLocale() now
+     */
     public function getLanguageIsocode()
     {
-        return $this->getTranslator()->getLocale();
+        return array_shift(explode('_', $this->getTranslator()->getLocale()));
     }
 
     /**
@@ -103,7 +108,7 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Chamilo\Libraries\Translation\Translation
      */
     static public function getInstance()
     {
