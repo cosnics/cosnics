@@ -45,7 +45,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
             foreach ($translationFilesPerPackage as $translationFile)
             {
                 $fileParts = explode('.', basename($translationFile));
-                $locale = $fileParts[0] . '_' . strtoupper($fileParts[0]);
+                $locale = $fileParts[0];
 
                 switch ($fileParts[1])
                 {

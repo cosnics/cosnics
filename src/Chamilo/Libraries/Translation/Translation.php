@@ -93,7 +93,7 @@ class Translation
      */
     public function getLanguageIsocode()
     {
-        return array_shift(explode('_', $this->getTranslator()->getLocale()));
+        return $this->getTranslator()->getLocale();
     }
 
     /**
@@ -102,8 +102,7 @@ class Translation
      */
     public function setLanguageIsocode($languageIsoCode)
     {
-        $locale = $languageIsoCode . '_' . strtoupper($languageIsoCode);
-        $this->getTranslator()->setLocale($locale);
+        $this->getTranslator()->setLocale($languageIsoCode);
     }
 
     /**
