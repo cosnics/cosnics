@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**

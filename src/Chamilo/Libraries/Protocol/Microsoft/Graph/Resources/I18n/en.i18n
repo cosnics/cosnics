@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Libraries\Protocol\Microsoft\Graph
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Microsoft Graph"
+TypeCategory = "Libraries"
+AccessToken = "Login token (is automatically filled in by the system)"
+ExternalUserId = "External user id (is automatically filled in by the system)"
+ClientId = "Client ID"
+ClientSecret = "Client Secret"

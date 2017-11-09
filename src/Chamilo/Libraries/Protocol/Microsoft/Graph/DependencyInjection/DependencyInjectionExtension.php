@@ -1,6 +1,5 @@
 <?php
-
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\DependencyInjection;
+namespace Chamilo\Libraries\Protocol\Microsoft\Graph\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
@@ -12,10 +11,9 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\DependencyInjection
  *
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\DependencyInjection
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends Extension implements ExtensionInterface
@@ -26,9 +24,8 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      *
      * @param array $config An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
-     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     * @api
+     *         @api
      */
     public function load(array $config, ContainerBuilder $container)
     {
@@ -37,10 +34,9 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $loader = new XmlFileLoader(
             $container,
             new FileLocator(
-                $pathBuilder->getConfigurationPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365') .
-                'DependencyInjection'
-            )
-        );
+                $pathBuilder->getConfigurationPath(
+                    'Chamilo\Libraries\Protocol\Microsoft\Graph') .
+                     'DependencyInjection'));
 
         $loader->load('services.xml');
     }
@@ -50,11 +46,10 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      * This alias is also the mandatory prefix to use when using YAML.
      *
      * @return string The alias
-     * @api
+     *         @api
      */
     public function getAlias()
     {
         return 'chamilo.application.weblcms.tool.implementation.course_group.extension.office365';
     }
-
 }

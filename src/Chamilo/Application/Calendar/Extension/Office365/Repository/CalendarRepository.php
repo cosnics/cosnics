@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class CalendarRepository
 {
-    const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
     const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v2.0/';
 
     /**
@@ -244,26 +243,32 @@ class CalendarRepository
      */
     public function login($authenticationCode = null)
     {
-        if ($this->hasAccessToken())
-        {
-            return true;
-        }
-
+        // if ($this->hasAccessToken())
+        // {
+        // return true;
+        // }
         $provider = $this->getOAuthProvider();
 
-        if (isset($authenticationCode))
-        {
-            $token = $provider->getAccessToken('authorization_code', ['code' => $authenticationCode]);
+        //         if (isset($authenticationCode))
+            //         {
+        $token = $provider->getAccessToken(
+            'client_credentials',
+            [
+                'scope' => $this->getClientScope(),
+                'resource' => ['https://graph.microsoft.com/']]);
+            var_dump($token);
+            echo $token->getToken();
+            exit;
             return $this->saveToken(serialize($token));
-        }
-        else
-        {
-            $authUrl = $provider->getAuthorizationUrl(
-                ['state' => base64_encode(serialize($this->getReplyParameters()))]);
-            $_SESSION['oauth2state'] = $provider->getState();
-            header('Location: ' . $authUrl);
-            exit();
-        }
+            //         }
+        //         else
+            //         {
+            //             $authUrl = $provider->getAuthorizationUrl(
+            //                 ['state' => base64_encode(serialize($this->getReplyParameters()))]);
+            //             $_SESSION['oauth2state'] = $provider->getState();
+            //             header('Location: ' . $authUrl);
+            //             exit();
+            //         }
     }
 
     /**
@@ -280,19 +285,18 @@ class CalendarRepository
                 'clientSecret' => $this->getClientSecret(),
                 'redirectUri' => $replyUri->getUrl()]);
 
-        $provider->pathAuthorize = "/oauth2/v2.0/authorize";
-        $provider->pathToken = "/oauth2/v2.0/token";
-        $provider->scope = [$this->getClientScope()];
-        $provider->authWithResource = false;
+            $provider->pathAuthorize = "/oauth2/v2.0/authorize";
+            $provider->pathToken = "/oauth2/v2.0/token";
+            $provider->scope = [$this->getClientScope()];
+            $provider->resource = ['https://graph.microsoft.com/'];
 
-        return $provider;
+            return $provider;
     }
 
     protected function refreshToken()
     {
-        return $this->getOAuthProvider()->getAccessToken(
-            'refresh_token',
-            ['refresh_token' => $this->getRefreshToken()]);
+        return $this->getOAuthProvider()->getAccessToken('refresh_token', [
+            'refresh_token' => $this->getRefreshToken()]);
     }
 
     /**
@@ -301,7 +305,7 @@ class CalendarRepository
      */
     private function getClientScope()
     {
-        return 'https://outlook.office.com/Calendars.Read  offline_access';
+        return 'https://graph.microsoft.com/.default';
     }
 
     /**

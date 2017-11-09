@@ -2,7 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component\IntegrationLauncherComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**

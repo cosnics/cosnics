@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Microsoft\Graph\Graph;
