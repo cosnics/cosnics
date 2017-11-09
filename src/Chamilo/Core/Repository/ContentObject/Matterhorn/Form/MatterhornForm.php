@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Matterhorn\Form;
 use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class MatterhornForm extends ContentObjectForm
 {

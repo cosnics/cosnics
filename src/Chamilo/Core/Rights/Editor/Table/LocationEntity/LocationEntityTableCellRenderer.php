@@ -4,7 +4,7 @@ namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class LocationEntityTableCellRenderer extends DataClassTableCellRenderer
 {

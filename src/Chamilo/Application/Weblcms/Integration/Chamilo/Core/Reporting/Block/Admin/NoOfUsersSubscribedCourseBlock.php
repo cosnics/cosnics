@@ -4,12 +4,13 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 class NoOfUsersSubscribedCourseBlock extends CourseBlock
 {
@@ -18,8 +19,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
 
-        $users = \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name());
+        $users = \Chamilo\Core\User\Storage\DataManager::count(\Chamilo\Core\User\Storage\DataClass\User::class_name());
 
         $courses = \Chamilo\Application\Weblcms\Storage\DataManager::count(
             CourseEntityRelation::class_name(),
@@ -30,11 +30,13 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
                         CourseEntityRelation::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)),
                 null,
-                new FunctionConditionVariable(
-                    FunctionConditionVariable::DISTINCT,
-                    new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(),
-                        CourseEntityRelation::PROPERTY_ENTITY_ID))));
+                new DataClassProperties(
+                    array(
+                        new FunctionConditionVariable(
+                            FunctionConditionVariable::DISTINCT,
+                            new PropertyConditionVariable(
+                                CourseEntityRelation::class_name(),
+                                CourseEntityRelation::PROPERTY_ENTITY_ID))))));
 
         $reporting_data->set_categories(
             array(Translation::get('UsersSubscribedToCourse'), Translation::get('UsersNotSubscribedToCourse')));

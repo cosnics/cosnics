@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Package;
 
 use Chamilo\Core\Repository\Quota\Rights\Rights;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

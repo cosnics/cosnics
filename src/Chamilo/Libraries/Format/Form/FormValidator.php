@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\File\Path;
@@ -8,18 +7,11 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 use HTML_QuickForm_RuleRegistry;
 
-/**
- *
- * @package common.html.formvalidator
- */
-/**
- * Filter
- */
 define('NO_HTML', 1);
 define('STUDENT_HTML', 2);
 define('TEACHER_HTML', 3);
@@ -28,6 +20,8 @@ define('TEACHER_HTML_FULLPAGE', 5);
 
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
+ *
+ * @package Chamilo\Libraries\Format\Form
  */
 class FormValidator extends HTML_QuickForm
 {
@@ -36,35 +30,47 @@ class FormValidator extends HTML_QuickForm
     const FORM_METHOD_POST = 'post';
     const FORM_METHOD_GET = 'get';
 
+    /**
+     *
+     * @var boolean
+     */
     private $no_errors;
 
+    /**
+     *
+     * @var \HTML_QuickForm_Renderer_Default
+     */
     private $renderer;
 
     /**
      * The HTML-editors in this form
+     *
+     * @var string[]
      */
     private $html_editors;
 
+    /**
+     *
+     * @var boolean
+     */
     private $with_progress_bar;
 
     /**
      * Constructor
      *
-     * @param string $form_name Name of the form
+     * @param string $formName Name of the form
      * @param string $method Method ('post' (default) or 'get')
      * @param string $action Action (default is $PHP_SELF)
      * @param string $target Form's target defaults to '_self'
-     * @param mixed $attributes (optional)Extra attributes for <form> tag
-     * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
+     * @param sring[] $attributes (optional)Extra attributes for <form> tag
+     * @param boolean $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
      *        (default = true)
      */
-    public function __construct(
-        $form_name = '', $method = 'post', $action = '', $target = '', $attributes = array(), $trackSubmit = true
-    )
+    public function __construct($formName = '', $method = 'post', $action = '', $target = '', $attributes = array(), $trackSubmit = true)
     {
         $attributes['onreset'] = 'resetElements()';
 
-        parent::__construct($form_name, $method, $action, $target, $attributes, $trackSubmit);
+        parent::__construct($formName, $method, $action, $target, $attributes, $trackSubmit);
 
         $this->registerAdditionalElements();
         $this->registerAdditionalRules();
@@ -72,9 +78,7 @@ class FormValidator extends HTML_QuickForm
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'
-            )
-        );
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'));
 
         $this->setDefaultTemplates();
 
@@ -110,9 +114,8 @@ EOT;
 
         HTML_QuickForm::setRequiredNote(
             '<span class="form_required"><img src="' . Theme::getInstance()->getCommonImagePath('Action/Required') .
-            '" alt="*" title ="*"/>&nbsp;<small>' .
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>'
-        );
+                 '" alt="*" title ="*"/>&nbsp;<small>' .
+                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
 	<div class="form-row row">
 		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>
@@ -122,6 +125,11 @@ EOT;
         $this->renderer->setRequiredNoteTemplate($required_note_template);
     }
 
+    /**
+     *
+     * @param string $extraClasses
+     * @return string
+     */
     public function getElementTemplate($extraClasses = null)
     {
         $element_template = array();
@@ -129,12 +137,11 @@ EOT;
         $element_template[] = '<div class="form-row row ' . $extraClasses . '">';
         $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-            Theme::getInstance()->getCommonImagePath('Action/Required') .
-            '" alt="*" title ="*"/></span> <!-- END required -->';
+             Theme::getInstance()->getCommonImagePath('Action/Required') .
+             '" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $element_template[] =
-            '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
+        $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '<div class="form_feedback"></div></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
@@ -159,71 +166,59 @@ EOT;
         $this->registerElementType(
             'datepicker',
             $dir . 'Element/HTML_QuickForm_datepicker.php',
-            'HTML_QuickForm_datepicker'
-        );
+            'HTML_QuickForm_datepicker');
         $this->registerElementType(
             'timepicker',
             $dir . 'Element/HTML_QuickForm_timepicker.php',
-            'HTML_QuickForm_timepicker'
-        );
+            'HTML_QuickForm_timepicker');
 
         // Element finder elements
         $this->registerElementType(
             'upload_or_create',
             $dir . 'Element/HTML_QuickForm_upload_or_create.php',
-            'HTML_QuickForm_upload_or_create'
-        );
+            'HTML_QuickForm_upload_or_create');
         $this->registerElementType(
             'element_finder',
             $dir . 'Element/HTML_QuickForm_element_finder.php',
-            'HTML_QuickForm_element_finder'
-        );
+            'HTML_QuickForm_element_finder');
         $this->registerElementType(
             'advanced_element_finder',
             $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
-            'HTML_QuickForm_advanced_element_finder'
-        );
+            'HTML_QuickForm_advanced_element_finder');
         $this->registerElementType(
             'image_selecter',
             $dir . 'Element/HTML_QuickForm_image_selecter.php',
-            'HTML_QuickForm_image_selecter'
-        );
+            'HTML_QuickForm_image_selecter');
 
         $this->registerElementType(
             'user_group_finder',
             $dir . 'Element/HTML_QuickForm_user_group_finder.php',
-            'HTML_QuickForm_user_group_finder'
-        );
+            'HTML_QuickForm_user_group_finder');
 
         // Button elements
         $this->registerElementType(
             'style_button',
             $dir . 'Element/HTML_QuickForm_stylebutton.php',
-            'HTML_QuickForm_stylebutton'
-        );
+            'HTML_QuickForm_stylebutton');
         $this->registerElementType(
             'style_submit_button',
             $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
-            'HTML_QuickForm_stylesubmitbutton'
-        );
+            'HTML_QuickForm_stylesubmitbutton');
         $this->registerElementType(
             'style_reset_button',
             $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
-            'HTML_QuickForm_styleresetbutton'
-        );
+            'HTML_QuickForm_styleresetbutton');
 
         // Checkbox and radio elements
         $this->registerElementType(
             'radio',
             $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
-            'HTML_QuickForm_bootstrap_radio'
-        );
+            'HTML_QuickForm_bootstrap_radio');
 
         $this->registerElementType(
             'checkbox',
             $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
-            'HTML_QuickForm_extended_checkbox'
-        );
+            'HTML_QuickForm_extended_checkbox');
 
         $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
 
@@ -239,56 +234,54 @@ EOT;
             'date_compare',
             null,
             'HTML_QuickForm_Rule_DateCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php');
         $this->registerRule(
             'number_compare',
             null,
             'HTML_QuickForm_Rule_NumberCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php');
         $this->registerRule(
             'username_available',
             null,
             'HTML_QuickForm_Rule_UsernameAvailable',
-            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php');
         $this->registerRule(
             'username',
             null,
             'HTML_QuickForm_Rule_Username',
-            $dir . 'Rule/HTML_QuickForm_Rule_Username.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_Username.php');
         $this->registerRule(
             'filetype',
             null,
             'HTML_QuickForm_Rule_Filetype',
-            $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php');
 
         $this->registerRule(
             'disk_quota',
             null,
             'HTML_QuickForm_Rule_DiskQuota',
-            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php'
-        );
+            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php');
     }
 
     public function set_error_reporting($enabled)
     {
-        $this->no_errors = !$enabled;
+        $this->no_errors = ! $enabled;
     }
 
     /**
      * Returns the renderer
      *
-     * @return HTML_QuickForm_Renderer_Default
+     * @return \HTML_QuickForm_Renderer_Default
      */
     public function get_renderer()
     {
         return $this->renderer;
     }
 
+    /**
+     *
+     * @param \HTML_QuickForm_Renderer_Default $renderer
+     */
     public function set_renderer($renderer)
     {
         $this->renderer = $renderer;
@@ -297,19 +290,18 @@ EOT;
     /**
      *
      * @param \HTML_QuickForm_group $group
-     * @param string $element_name
-     *
+     * @param string $elementName
      * @return \HTML_QuickForm_element
      */
-    public function get_group_element($group_name, $element_name)
+    public function get_group_element($groupName, $elementName)
     {
-        $group_elements = $this->getElement($group_name)->getElements();
+        $groupElements = $this->getElement($groupName)->getElements();
 
-        foreach ($group_elements as $group_element)
+        foreach ($groupElements as $groupElement)
         {
-            if ($group_element->getName() == $element_name)
+            if ($groupElement->getName() == $elementName)
             {
-                return $group_element;
+                return $groupElement;
             }
         }
     }
@@ -318,20 +310,15 @@ EOT;
      * Add a textfield to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $label The label for the form-element
      * @param string $name The element name
+     * @param string $label The label for the form-element
      * @param boolean $required Is the form-element required (default=true)
-     * @param array $attributes Optional list of attributes for the form-element
-     *
-     * @return HTML_QuickForm_input The element.
+     * @param string[] $attributes Optional list of attributes for the form-element
+     * @return \HTML_QuickForm_input The element.
      */
     public function add_textfield($name, $label, $required = true, $attributes = array())
     {
-        // if (! array_key_exists('size', $attributes))
-        // {
-        // $attributes['size'] = 50;
-        // }
-        if (!array_key_exists('class', $attributes))
+        if (! array_key_exists('class', $attributes))
         {
             $attributes['class'] = 'form-control';
         }
@@ -343,20 +330,26 @@ EOT;
             $this->addRule(
                 $name,
                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required'
-            );
+                'required');
         }
 
         return $element;
     }
 
+    /**
+     *
+     * @param string $name
+     * @param string $label
+     * @param string[] $attributes
+     * @return \HTML_QuickForm_text
+     */
     public function create_textfield($name, $label, $attributes = array())
     {
         // if (! array_key_exists('size', $attributes))
         // {
         // $attributes['size'] = 50;
         // }
-        if (!array_key_exists('class', $attributes))
+        if (! array_key_exists('class', $attributes))
         {
             $attributes['class'] = 'form-control';
         }
@@ -369,10 +362,11 @@ EOT;
     /**
      * Add a password field to the form.
      *
-     * @param $name
-     * @param $label
-     * @param $required
-     * @param $attributes
+     * @param string $name
+     * @param string $label
+     * @param boolean $required
+     * @param string[] $attributes
+     * @return \HTML_QuickForm_password
      */
     public function add_password($name, $label, $required = true, $attributes = array())
     {
@@ -383,8 +377,7 @@ EOT;
             $this->addRule(
                 $name,
                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required'
-            );
+                'required');
         }
 
         return $element;
@@ -393,13 +386,14 @@ EOT;
     /**
      * Create a password field.
      *
-     * @param $name
-     * @param $label
-     * @param $attributes
+     * @param string $name
+     * @param string $label
+     * @param string[] $attributes
+     * @return \HTML_QuickForm_password
      */
     public function create_password($name, $label, $attributes = array())
     {
-        if (!array_key_exists('size', $attributes))
+        if (! array_key_exists('size', $attributes))
         {
             $attributes['size'] = 50;
         }
@@ -413,11 +407,10 @@ EOT;
      *
      * @param string $name The element name.
      * @param string $label The element label.
-     * @param array $values Associative array of possible values.
+     * @param string[] $values Associative array of possible values.
      * @param boolean $required <code>true</code> if required (default), <code>false</code> otherwise.
-     * @param array $attributes Element attributes (optional).
-     *
-     * @return HTML_QuickForm_select The element.
+     * @param string[] $attributes Element attributes (optional).
+     * @return \HTML_QuickForm_select The element.
      */
     public function add_select($name, $label, $values, $required = true, $attributes = array())
     {
@@ -427,8 +420,7 @@ EOT;
             $this->addRule(
                 $name,
                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-                'required'
-            );
+                'required');
         }
 
         return $element;
@@ -439,11 +431,11 @@ EOT;
      * A trim-filter is attached to the field. A HTML-filter is
      * attached to the field (cleans HTML) A rule is attached to check for unwanted HTML
      *
-     * @param string $label The label for the form-element
-     * @param string $name The element name
-     * @param boolean $required Is the form-element required (default=true)
-     *
-     * @return HTML_QuickForm_html_editor The element.
+     * @param string $name
+     * @param string $label
+     * @param boolean $required
+     * @param string[] $options
+     * @param string[] $attributes
      */
     public function add_html_editor($name, $label, $required = true, $options = array(), $attributes = array())
     {
@@ -453,8 +445,7 @@ EOT;
             $label,
             $required,
             $options,
-            $attributes
-        );
+            $attributes);
         $html_editor->set_form($this);
         $html_editor->add();
     }
@@ -462,13 +453,14 @@ EOT;
     /**
      * Adds tabs to a form
      *
-     * @param array $tabs
-     * @param int $selected_tab The tab that is selected
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicFormTab $tabs
+     * @param integer $selected_tab The tab that is selected
      */
     public function add_tabs($tabs, $selected_tab)
     {
         $this->addElement('html', '<div id="form_tabs">');
         $this->addElement('html', '<ul>');
+
         foreach ($tabs as $index => $tab)
         {
             $this->addElement('html', '<li><a href="#form_tabs-' . $index . '">');
@@ -477,10 +469,11 @@ EOT;
             $this->addElement('html', '</span>');
             $this->addElement('html', '</a></li>');
         }
+
         $this->addElement('html', '</ul>');
+
         foreach ($tabs as $index => $tab)
         {
-            // $this->addElement('html', '<h2>' . $tab->get_title() . '</h2>');
             $this->addElement('html', '<div class="form_tab" id="form_tabs-' . $index . '">');
             call_user_func(array($this, $tab->get_method()));
             $this->addElement('html', '<div class="clear"></div>');
@@ -495,11 +488,17 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTabs.js'
-            )
-        );
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTabs.js'));
     }
 
+    /**
+     *
+     * @param string $name
+     * @param string $label
+     * @param string[] $options
+     * @param string[] $attributes
+     * @return \HTML_QuickForm_textarea
+     */
     public function create_html_editor($name, $label, $options = array(), $attributes = array())
     {
         $html_editor = FormValidatorHtmlEditor::factory(
@@ -508,18 +507,25 @@ EOT;
             $label,
             false,
             $options,
-            $attributes
-        );
+            $attributes);
         $html_editor->set_form($this);
 
         return $html_editor->create();
     }
 
+    /**
+     *
+     * @param string $name
+     */
     public function register_html_editor($name)
     {
         $this->html_editors[] = $name;
     }
 
+    /**
+     *
+     * @param string $name
+     */
     public function unregister_html_editor($name)
     {
         $key = array_search($name, $this->html_editors);
@@ -530,6 +536,10 @@ EOT;
         }
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_html_editors()
     {
         return $this->html_editors;
@@ -538,21 +548,19 @@ EOT;
     /**
      * Add a datepicker element to the form A rule is added to check if the date is a valid one
      *
-     * @param string $label The label for the form-element
      * @param string $name The element name
-     *
-     * @return HTML_QuickForm_datepicker The element.
+     * @param string $label The label for the form-element
+     * @param boolean $includeTimePicker
+     * @return \HTML_QuickForm_datepicker
      */
-    public function add_datepicker($name, $label, $include_time_picker = true)
+    public function add_datepicker($name, $label, $includeTimePicker = true)
     {
-        // $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
         $element = $this->addElement(
             'datepicker',
             $name,
             $label,
             array('form_name' => $this->getAttribute('name'), 'class' => $name),
-            $include_time_picker
-        );
+            $includeTimePicker);
         $this->addRule($name, Translation::get('InvalidDate'), 'date');
 
         return $element;
@@ -561,20 +569,19 @@ EOT;
     /**
      * Add a timepicker element to the form
      *
-     * @param string $label The label for the form-element
      * @param string $name The element name
-     *
-     * @return HTML_QuickForm_datepicker The element.
+     * @param string $label The label for the form-element
+     * @param boolean $includeMinutesPicker
+     * @return \HTML_QuickForm_timepicker The element.
      */
-    public function add_timepicker($name, $label, $include_minutes_picker = true)
+    public function add_timepicker($name, $label, $includeMinutesPicker = true)
     {
         $element = $this->addElement(
             'timepicker',
             $name,
             $label,
             array('form_name' => $this->getAttribute('name'), 'class' => $name),
-            $include_minutes_picker
-        );
+            $includeMinutesPicker);
 
         return $element;
     }
@@ -584,40 +591,48 @@ EOT;
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
      *
-     * @param string $label The label for the form-element
-     * @param string $name The element name
+     * @param string $firstName The element name
+     * @param string $secondName The element name
+     * @param string $firstLabel The label for the form-element
+     * @param string $secondLabel The label for the form-element
+     * @param boolean $include_time_picker
+     * @return \HTML_QuickForm_datepicker[]
      */
-    public function add_timewindow($name_1, $name_2, $label_1, $label_2, $include_time_picker = true)
+    public function add_timewindow($firstName, $secondName, $firstLabel, $secondLabel, $includeTimePicker = true)
     {
-        $elements[] = $this->add_datepicker($name_1, $label_1, $include_time_picker);
-        $elements[] = $this->add_datepicker($name_2, $label_2, $include_time_picker);
+        $elements = array();
+
+        $elements[] = $this->add_datepicker($firstName, $firstLabel, $includeTimePicker);
+        $elements[] = $this->add_datepicker($secondName, $secondLabel, $includeTimePicker);
+
         $this->addRule(
-            array($name_1, $name_2),
+            array($firstName, $secondName),
             Translation::get('StartDateShouldBeBeforeEndDate'),
             'date_compare',
-            'lte'
-        );
+            'lte');
 
         return $elements;
     }
 
     /**
+     *
+     * @param string $elementLabel
+     * @param string $elementNamePrefix
+     * @param boolean $useDimensions
      */
-    public function add_forever_or_timewindow(
-        $element_label = 'PublicationPeriod', $element_name_prefix = '', $use_dimensions = false
-    )
+    public function add_forever_or_timewindow($elementLabel = 'PublicationPeriod', $elementNamePrefix = '', $useDimensions = false)
     {
-        if (!$use_dimensions)
+        if (! $useDimensions)
         {
-            $elementName = $element_name_prefix . 'forever';
-            $fromName = $element_name_prefix . 'from_date';
-            $toName = $element_name_prefix . 'to_date';
+            $elementName = $elementNamePrefix . 'forever';
+            $fromName = $elementNamePrefix . 'from_date';
+            $toName = $elementNamePrefix . 'to_date';
         }
         else
         {
-            $elementName = $element_name_prefix . '[forever]';
-            $fromName = $element_name_prefix . '[from_date]';
-            $toName = $element_name_prefix . '[to_date]';
+            $elementName = $elementNamePrefix . '[forever]';
+            $fromName = $elementNamePrefix . '[from_date]';
+            $toName = $elementNamePrefix . '[to_date]';
         }
 
         $choices[] = $this->createElement(
@@ -626,17 +641,15 @@ EOT;
             '',
             Translation::get('Forever'),
             1,
-            array('id' => 'forever', 'onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')')
-        );
+            array('id' => 'forever', 'onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')'));
         $choices[] = $this->createElement(
             'radio',
             $elementName,
             '',
             Translation::get('LimitedPeriod'),
             0,
-            array('id' => 'limited', 'onclick' => 'javascript:timewindow_show(\'forever_timewindow\')')
-        );
-        $this->addGroup($choices, null, Translation::get($element_label), '', false);
+            array('id' => 'limited', 'onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
+        $this->addGroup($choices, null, Translation::get($elementLabel), '', false);
         $this->addElement('html', '<div style="margin-left:25px;display:block;" id="forever_timewindow">');
         $this->add_timewindow($fromName, $toName, '', '');
         $this->addElement('html', '</div>');
@@ -658,13 +671,15 @@ EOT;
 						el.style.display='none';
 					}
 					/* ]]> */
-					</script>\n"
-        );
+					</script>\n");
     }
 
     /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
      */
-    public function add_forever_or_expiration_date_window($element_name, $element_label = 'ExpirationDate')
+    public function add_forever_or_expiration_date_window($elementName, $elementLabel = 'ExpirationDate')
     {
         $choices[] = $this->createElement(
             'radio',
@@ -672,19 +687,17 @@ EOT;
             '',
             Translation::get('Forever'),
             1,
-            array('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')', 'id' => 'forever')
-        );
+            array('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')', 'id' => 'forever'));
         $choices[] = $this->createElement(
             'radio',
             'forever',
             '',
             Translation::get('LimitedPeriod'),
             0,
-            array('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')')
-        );
-        $this->addGroup($choices, null, Translation::get($element_label), '<br />', false);
+            array('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
+        $this->addGroup($choices, null, Translation::get($elementLabel), '<br />', false);
         $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="forever_timewindow">');
-        $this->addElement('datepicker', $element_name, '', array('form_name' => $this->getAttribute('name')), false);
+        $this->addElement('datepicker', $elementName, '', array('form_name' => $this->getAttribute('name')), false);
         $this->addElement('html', '</div>');
         $this->addElement(
             'html',
@@ -704,37 +717,40 @@ EOT;
 						el.style.display='none';
 					}
 					/* ]]> */
-					</script>\n"
-        );
+					</script>\n");
     }
 
-    public function add_receivers($elementName, $elementLabel, $attributes, $no_selection = 'Everybody', $legend = null)
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string[] $attributes
+     * @param string $noSelection
+     * @param unknown $legend
+     */
+    public function add_receivers($elementName, $elementLabel, $attributes, $noSelection = 'Everybody', $legend = null)
     {
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
             $elementName . '_option',
             '',
-            Translation::get($no_selection),
+            Translation::get($noSelection),
             '0',
             array(
                 'onclick' => 'javascript:receivers_hide(\'receivers_window_' . $elementName . '\')',
-                'id' => 'receiver_' . $elementName
-            )
-        );
+                'id' => 'receiver_' . $elementName));
         $choices[] = $this->createElement(
             'radio',
             $elementName . '_option',
             '',
             Translation::get('SelectGroupsUsers'),
             '1',
-            array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')')
-        );
+            array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')'));
         $this->addGroup($choices, null, $elementLabel, '', false);
         $this->addElement(
             'html',
-            '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">'
-        );
+            '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">');
 
         $this->add_element_finder_with_legend($elementName, null, $attributes, $legend);
 
@@ -743,7 +759,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -772,10 +789,16 @@ EOT;
 						$(document).on('click', ':reset', reset_receivers_" . $elementName . ");
 					});
 					/* ]]> */
-					</script>\n"
-        );
+					</script>\n");
     }
 
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string[] $attributes
+     * @param unknown $legend
+     */
     public function add_element_finder_with_legend($elementName, $elementLabel, $attributes, $legend = null)
     {
         $element_finder = $this->createElement(
@@ -785,8 +808,7 @@ EOT;
             $attributes['search_url'],
             $attributes['locale'],
             $attributes['defaults'],
-            $attributes['options']
-        );
+            $attributes['options']);
         $element_finder->excludeElements($attributes['exclude']);
         $this->addElement($element_finder);
 
@@ -796,13 +818,22 @@ EOT;
         }
     }
 
-    public function add_receivers_variable($elementName, $elementLabel, $attributes, $radioArray, $defaultSelected)
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string[] $attributes
+     * @param string[] $radioArray
+     */
+    public function add_receivers_variable($elementName, $elementLabel, $attributes, $radioArray)
     {
         $choices = array();
-        if (!is_array($radioArray))
+
+        if (! is_array($radioArray))
         {
             $radioArray = array($radioArray);
         }
+
         foreach ($radioArray as $radioType)
         {
             $choices[] = $this->createElement(
@@ -813,10 +844,9 @@ EOT;
                 $radioType,
                 array(
                     'onclick' => 'javascript:receivers_hide(\'' . $elementName . 'receivers_window\')',
-                    'id' => $elementName . 'receiver'
-                )
-            );
+                    'id' => $elementName . 'receiver'));
         }
+
         $choices[] = $this->createElement(
             'radio',
             $elementName . '_option',
@@ -825,16 +855,13 @@ EOT;
             '1',
             array(
                 'onclick' => 'javascript:receivers_show(\'' . $elementName . 'receivers_window\')',
-                'id' => $elementName . 'group'
-            )
-        );
+                'id' => $elementName . 'group'));
         $this->addGroup($choices, null, $elementLabel, '<br />', false);
         $idGroup = $elementName . 'group';
         $nameWindow = $elementName . 'receivers_window';
         $this->addElement(
             'html',
-            '<div style="margin-left: 25px; display: block;" id="' . $elementName . 'receivers_window">'
-        );
+            '<div style="margin-left: 25px; display: block;" id="' . $elementName . 'receivers_window">');
 
         $element_finder = $this->createElement(
             'user_group_finder',
@@ -843,8 +870,7 @@ EOT;
             $attributes['search_url'],
             $attributes['locale'],
             $attributes['defaults'],
-            $attributes['options']
-        );
+            $attributes['options']);
 
         $element_finder->excludeElements($attributes['exclude']);
 
@@ -888,72 +914,7 @@ EOT;
 						$(document).on('click', ':reset', reset_receivers_" . $elementName . ");
 					});
 					/* ]]> */
-					</script>\n"
-        );
-    }
-
-    public function add_indicators($elementName, $elementLabel, $attributes)
-    {
-        $this->addElement('html', '<div style="display: block;" id="receivers_window">');
-        $element_finder = $this->createElement(
-            'element_finder',
-            $elementName . '_elements',
-            '',
-            $attributes['search_url'],
-            $attributes['locale'],
-            $attributes['defaults']
-        );
-        $element_finder->excludeElements($attributes['exclude']);
-        $this->addElement($element_finder);
-        $this->addElement('html', '</div>');
-        $this->addElement(
-            'html',
-            "<script type=\"text/javascript\">
-					/* <![CDATA[ */
-					function receivers_show(item) {
-						el = document.getElementById(item);
-						el.style.display='';
-					}
-					function receivers_hide(item) {
-						el = document.getElementById(item);
-						el.style.display='none';
-					}
-					/* ]]> */
-					</script>\n"
-        );
-    }
-
-    // public function add_checkbox_javascript()
-    // {
-    // $html = array();
-    //
-    // $html[] = '<script type="text/javascript">';
-    // $html[] = '$(document).ready(function() {';
-    // $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
-    // $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-    // $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-    // $html[] = 'size: \'small\'';
-    // $html[] = '});';
-    // $html[] = '});';
-    // $html[] = '</script>';
-    //
-    // $this->addElement('html', implode(PHP_EOL, $html));
-    // }
-
-    /**
-     * Add a button to the form to add resources.
-     */
-    public function add_resource_button()
-    {
-        $group[] = $this->createElement(
-            'static',
-            'add_resource_img',
-            null,
-            '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Attachment') . '" alt="' .
-            Translation::get('Attachment') . '"/>'
-        );
-        $group[] = $this->createElement('submit', 'add_resource', Translation::get('Attachment'), 'class="link_alike"');
-        $this->addGroup($group);
+					</script>\n");
     }
 
     /**
@@ -961,48 +922,51 @@ EOT;
      * Once the user submits the form, a progress bar (animated gif) is displayed. The
      * progress bar will disappear once the page has been reloaded.
      *
-     * @param int $delay The number of seconds between the moment the user submits the form and the start of the
-     *        progress bar.
+     * @param integer $delay
      */
     public function add_progress_bar($delay = 2)
     {
         $this->with_progress_bar = true;
         $this->updateAttributes(
             "onsubmit=\"javascript: myUpload.start('dynamic_div','" .
-            Theme::getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
-            Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\""
-        );
+                 Theme::getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
+                 Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
         $this->addElement(
             'html',
             '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'Upload.js" type="text/javascript"></script>'
-        );
+                 'Upload.js" type="text/javascript"></script>');
         $this->addElement(
             'html',
-            '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>'
-        );
+            '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
     }
 
+    /**
+     *
+     * @param string[] $value
+     * @return boolean
+     */
     public function validate_csv($value)
     {
         $registry = &HTML_QuickForm_RuleRegistry::singleton();
         $rulenr = '-1';
+
         foreach ($this->_rules as $target => $rules)
         {
             $rulenr ++;
             $submitValue = $value[$rulenr];
+
             foreach ($rules as $elementName => $rule)
             {
                 $result = $registry->validate($rule['type'], $submitValue, $rule['format'], false);
-                if (!$this->isElementRequired($target))
+                if (! $this->isElementRequired($target))
                 {
-                    if (!isset($submitValue) || '' == $submitValue)
+                    if (! isset($submitValue) || '' == $submitValue)
                     {
                         continue 2;
                     }
                 }
 
-                if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int) $result))
+                if (! $result || (! empty($rule['howmany']) && $rule['howmany'] > (int) $result))
                 {
 
                     if (isset($rule['group']))
@@ -1021,6 +985,14 @@ EOT;
         return (0 == count($this->_errors));
     }
 
+    /**
+     *
+     * @param string $type
+     * @param string $name
+     * @param string $label
+     * @param string $message
+     * @param boolean $noMargin
+     */
     protected function addMessage($type, $name, $label, $message, $noMargin = false)
     {
         $html = array();
@@ -1057,8 +1029,10 @@ EOT;
     /**
      * Adds a warning message to the form.
      *
-     * @param string $label The label for the error message
-     * @param string $message The actual error message
+     * @param string $name
+     * @param string $label
+     * @param string $message
+     * @param boolean $noMargin
      */
     function add_warning_message($name, $label, $message, $noMargin = false)
     {
@@ -1068,8 +1042,10 @@ EOT;
     /**
      * Adds an error message to the form.
      *
-     * @param string $label The label for the error message
-     * @param string $message The actual error message
+     * @param string $name
+     * @param string $label
+     * @param string $message
+     * @param boolean $noMargin
      */
     function add_error_message($name, $label, $message, $noMargin = false)
     {
@@ -1079,14 +1055,21 @@ EOT;
     /**
      * Adds an error message to the form.
      *
-     * @param string $label The label for the error message
-     * @param string $message The actual error message
+     * @param string $name
+     * @param string $label
+     * @param string $message
+     * @param boolean $noMargin
      */
     function add_information_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('info', $name, $label, $message, $noMargin);
     }
 
+    /**
+     *
+     * @param integer $value
+     * @return integer
+     */
     public function parse_checkbox_value($value = null)
     {
         if (isset($value) && $value == 1)
@@ -1101,6 +1084,9 @@ EOT;
 
     /**
      * Adds javascript code to hide a certain element.
+     *
+     * @param string $type
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $extra
      */
     public function add_element_hider($type, $extra = null)
     {
@@ -1186,14 +1172,27 @@ EOT;
 
     /**
      * Returns the HTML representation of this form.
+     *
+     * @return string
+     * @deprecated Use render() now
      */
     public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Returns the HTML representation of this form.
+     *
+     * @return string
+     */
+    public function render()
     {
         $error = false;
 
         foreach ($this->_elements as $index => $element)
         {
-            if (!is_null(parent::getElementError($element->getName())))
+            if (! is_null(parent::getElementError($element->getName())))
             {
                 $error = true;
                 break;
@@ -1239,9 +1238,9 @@ EOT;
      * library because quickform produces arrays when an array is used in the name, but quickform does not accept arrays
      * for the default values, instead the inner arrays are converted as strings
      *
-     * @param string[] $array
-     *
-     * @return string
+     * @param string[][] $array
+     * @param integer $level
+     * @return string[]
      */
     protected function multi_dimensional_array_to_single_dimensional_array($array, $level = 0)
     {
@@ -1269,6 +1268,15 @@ EOT;
         return $single_dimension_array;
     }
 
+    /**
+     *
+     * @param \HTML_QuickForm_element $elements
+     * @param string $name
+     * @param string $groupLabel
+     * @param string $separator
+     * @param string $appendName
+     * @return \HTML_QuickForm_group
+     */
     function &createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
     {
         static $anonGroups = 1;
@@ -1278,9 +1286,8 @@ EOT;
             $name = 'qf_group_' . $anonGroups ++;
             $appendName = false;
         }
-        $group = &$this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
 
-        return $group;
+        return $this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
     }
 
     public function addSaveResetButtons()
@@ -1291,19 +1298,23 @@ EOT;
             'style_submit_button',
             'submit',
             Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'positive')
-        );
+            array('class' => 'positive'));
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
             Translation::get('Reset', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'normal empty')
-        );
+            array('class' => 'normal empty'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
+    /**
+     *
+     * @param string $name
+     * @param string $label
+     * @param boolean $required
+     */
     public function addImageUploader($name, $label, $required)
     {
         $this->addElement('html', '<div class="image-uploader" id="image-uploader-' . $name . '">');
@@ -1311,15 +1322,13 @@ EOT;
             'hidden',
             $name,
             null,
-            ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"'
-        );
+            ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"');
         $this->addElement(
             'static',
             null,
             $label,
             '<div class="thumbnail" data-element="' . $name . '"><img class="image-uploader-preview" src="' .
-            Theme::getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>'
-        );
+                 Theme::getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>');
         $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
 
         $this->addElement('html', '</div>');
@@ -1327,9 +1336,7 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'
-            )
-        );
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
     }
 
     /**
@@ -1352,6 +1359,7 @@ EOT;
      *
      * @param string $elementName
      * @param string[] $dropzoneOptions
+     * @param boolean $includeLabel
      */
     public function addSingleFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true)
     {
@@ -1367,23 +1375,19 @@ EOT;
             'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                'Plugin/Jquery/jquery.file.upload.single.js'
-            )
-        );
+                     'Plugin/Jquery/jquery.file.upload.single.js'));
     }
 
     /**
      *
      * @param string $elementName
      * @param string[] $dropzoneOptions
-     * @param bool $includeLabel
-     * @param bool $markRequired
+     * @param boolean $includeLabel
+     * @param boolean $markRequired
      *
      * @internal param string $uploadType
      */
-    public function addFileDropzone(
-        $elementName, $dropzoneOptions = array(), $includeLabel = true, $markRequired = false
-    )
+    public function addFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true, $markRequired = false)
     {
         $autoProcess = true;
         if (array_key_exists('autoProcessQueue', $dropzoneOptions))
@@ -1418,17 +1422,15 @@ EOT;
         $dropzoneHtml[] = '<strong class="error text-danger" data-dz-errormessage></strong>';
         $dropzoneHtml[] = '<p class="size" data-dz-size></p>';
         $dropzoneHtml[] = '<div>';
-        $dropzoneHtml[] =
-            '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
-        $dropzoneHtml[] =
-            '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
+        $dropzoneHtml[] = '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
+        $dropzoneHtml[] = '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
 
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
-            '</span>';
+             '</span>';
         $dropzoneHtml[] = '</button>';
 
         $dropzoneHtml[] = '</div>';
@@ -1439,8 +1441,7 @@ EOT;
         $dropzoneHtml[] = '<div class="clearfix"></div>';
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body">';
-        $dropzoneHtml[] =
-            '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
+        $dropzoneHtml[] = '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
 
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="panel-footer">';
@@ -1467,10 +1468,10 @@ EOT;
             $label = '';
         }
 
-        if($markRequired)
+        if ($markRequired)
         {
             $label .= '<span class="form_required"><img src="' .
-                Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
+                 Theme::getInstance()->getCommonImagePath('Action/Required') . '" alt="*" title ="*"/></span>';
         }
 
         $this->addElement('static', null, $label, implode(PHP_EOL, $dropzoneHtml));
@@ -1486,17 +1487,14 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                'Plugin/Jquery/jquery.file.upload.js'
-            )
-        );
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'));
 
         $javascriptHtml = array();
 
         $javascriptHtml[] = '<script type="text/javascript">';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({' .
-            implode(', ', $dropzoneOptionsString) . '});';
+             implode(', ', $dropzoneOptionsString) . '});';
         $javascriptHtml[] = '});';
         $javascriptHtml[] = '</script>';
 
@@ -1509,8 +1507,7 @@ EOT;
      * Helper Function
      *
      * @param string $variable
-     * @param array $parameters
-     *
+     * @param string[] $parameters
      * @return string
      */
     protected function getTranslation($variable, $parameters = array())

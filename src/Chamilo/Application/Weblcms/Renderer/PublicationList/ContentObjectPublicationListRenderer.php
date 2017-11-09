@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -26,6 +26,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -446,7 +447,9 @@ abstract class ContentObjectPublicationListRenderer
                     ContentObjectPublicationCategory::PROPERTY_TOOL),
                 new StaticConditionVariable($this->tool_browser->get_parent()->get_tool_id()));
 
-            $count = DataManager::count(ContentObjectPublicationCategory::class_name(), new AndCondition($conditions));
+            $count = DataManager::count(
+                ContentObjectPublicationCategory::class_name(),
+                new DataClassCountParameters(new AndCondition($conditions)));
 
             $count ++;
             if ($count > 1)

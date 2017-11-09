@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -174,7 +175,10 @@ class ExporterComponent extends Manager
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
             $content_object_ids);
-        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_TYPE);
+        $parameters = new DataClassDistinctParameters(
+            $condition,
+            new DataClassProperties(
+                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE))));
 
         $types = DataManager::distinct(ContentObject::class_name(), $parameters);
 
@@ -206,7 +210,10 @@ class ExporterComponent extends Manager
                 new StaticConditionVariable($type));
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID);
+            $parameters = new DataClassDistinctParameters(
+                $condition,
+                new DataClassProperties(
+                    array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
             $ids = DataManager::distinct(ContentObject::class_name(), $parameters);
             $table_row[] = count($ids);
 

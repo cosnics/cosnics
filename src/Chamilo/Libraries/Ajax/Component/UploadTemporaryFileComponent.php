@@ -6,7 +6,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

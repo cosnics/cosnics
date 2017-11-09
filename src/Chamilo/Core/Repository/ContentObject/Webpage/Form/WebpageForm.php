@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm_Rule_Required;
 

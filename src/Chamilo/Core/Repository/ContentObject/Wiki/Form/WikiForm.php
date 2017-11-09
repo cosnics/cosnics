@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Form;
 use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

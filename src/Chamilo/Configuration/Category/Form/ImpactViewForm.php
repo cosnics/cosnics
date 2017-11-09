@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Category\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This form renders the impact view form with a confirm checkbox and a button

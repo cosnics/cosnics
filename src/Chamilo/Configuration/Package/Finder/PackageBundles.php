@@ -2,10 +2,10 @@
 namespace Chamilo\Configuration\Package\Finder;
 
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -36,13 +36,20 @@ class PackageBundles extends BasicBundles
     private $packageLists = array();
 
     /**
-     *
-     * @param string $namespace
-     * @param integer $mode
+     * @var \Chamilo\Configuration\Package\Service\PackageFactory
      */
-    public function __construct($rootNamespace = PackageList :: ROOT, $mode = PackageList :: MODE_ALL)
+    protected $packageFactory;
+
+    /**
+     *
+     * @param string $rootNamespace
+     * @param int $mode
+     * @param \Chamilo\Configuration\Package\Service\PackageFactory|null $packageFactory
+     */
+    public function __construct($rootNamespace = PackageList::ROOT, $mode = PackageList::MODE_ALL, PackageFactory $packageFactory = null)
     {
         $this->mode = $mode;
+        $this->packageFactory = $packageFactory;
         parent::__construct($rootNamespace);
     }
 
@@ -57,7 +64,7 @@ class PackageBundles extends BasicBundles
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
-            $packageDefinition = Package::get($packageNamespace);
+            $packageDefinition = $this->packageFactory->getPackage($packageNamespace);
             $this->packageDefinitions[$packageNamespace] = $packageDefinition;
         }
     }

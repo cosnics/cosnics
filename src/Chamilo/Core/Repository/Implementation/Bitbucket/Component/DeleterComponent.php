@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Bitbucket\Component;
 
 use Chamilo\Core\Repository\Implementation\Bitbucket\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class DeleterComponent extends Manager
 {

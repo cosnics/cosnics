@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerA
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class PeerAssessmentViewerForm extends FormValidator

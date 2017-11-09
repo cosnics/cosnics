@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Matterhorn\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Matterhorn\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

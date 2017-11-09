@@ -1,10 +1,8 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration;
-
+use Chamilo\Libraries\File\Path;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
@@ -29,13 +27,12 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
  *      )
  *  )
  *
- *
- * @package common\libraries
- *
+ * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MappingDriverFactory
 {
+
     /**
      * The doctrine configuration class
      *
@@ -56,20 +53,18 @@ class MappingDriverFactory
      * @param \Doctrine\ORM\Configuration $doctrineConfiguration
      * @param string $chamiloRootPath
      */
-    public function __construct(
-        \Doctrine\ORM\Configuration $doctrineConfiguration, $chamiloRootPath = null
-    )
+    public function __construct(\Doctrine\ORM\Configuration $doctrineConfiguration, $chamiloRootPath = null)
     {
         $this->doctrineConfiguration = $doctrineConfiguration;
-        $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
+        $this->chamiloRootPath = ! is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
     }
 
     /**
-     * Creates the mapping configuration based on a given configuration array. The configuration array is
+     * Creates the mapping configuration based on a given configuration array.
+     * The configuration array is
      * processed and validated with the configuration processor
      *
-     * @param array $mappingConfiguration
-     *
+     * @param string[] $mappingConfiguration
      * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
     public function createMappingDriver(array $mappingConfiguration = array())
@@ -78,40 +73,40 @@ class MappingDriverFactory
 
         $defaultDriver = new MappingDriverChain();
 
-        if(array_key_exists('default', $mappingConfiguration) && !empty($mappingConfiguration['default']))
+        if (array_key_exists('default', $mappingConfiguration) && ! empty($mappingConfiguration['default']))
         {
             $annotationPaths = $this->createAbsoluteMappingPaths('annotation', $mappingConfiguration['default']);
 
             $defaultDriver = $this->doctrineConfiguration->newDefaultAnnotationDriver($annotationPaths, false);
         }
 
-        if(array_key_exists('custom', $mappingConfiguration) && !empty($mappingConfiguration['custom']))
+        if (array_key_exists('custom', $mappingConfiguration) && ! empty($mappingConfiguration['custom']))
         {
             $mappingDriverChain = new MappingDriverChain();
             $mappingDriverChain->setDefaultDriver($defaultDriver);
 
-            foreach($mappingConfiguration['custom'] as $customMapping)
+            foreach ($mappingConfiguration['custom'] as $customMapping)
             {
                 $paths = $this->createAbsoluteMappingPaths($customMapping['type'], $customMapping['paths']);
 
                 $driver = null;
 
-                switch($customMapping['type'])
+                switch ($customMapping['type'])
                 {
-                    case 'yaml':
+                    case 'yaml' :
                         $driver = new YamlDriver($paths);
                         break;
-                    case 'xml':
+                    case 'xml' :
                         $driver = new XmlDriver($paths);
                         break;
-                    case 'php':
+                    case 'php' :
                         $driver = new PHPDriver($paths);
                         break;
-                    case 'staticphp':
+                    case 'staticphp' :
                         $driver = new StaticPHPDriver($paths);
                         break;
-                    case 'annotation':
-                    default:
+                    case 'annotation' :
+                    default :
                         $driver = $this->doctrineConfiguration->newDefaultAnnotationDriver($paths, false);
                         break;
                 }
@@ -128,9 +123,8 @@ class MappingDriverFactory
     /**
      * Processes the given configuration
      *
-     * @param array $mappingConfiguration
-     *
-     * @return array
+     * @param string[] $mappingConfiguration
+     * @return string[]
      */
     protected function processConfiguration(array $mappingConfiguration = array())
     {
@@ -144,21 +138,19 @@ class MappingDriverFactory
      *
      * @param string $type
      * @param string[] $mappingPaths
-     *
      * @return string[]
      */
     protected function createAbsoluteMappingPaths($type, $mappingPaths)
     {
-        foreach($mappingPaths as $index => $mappingPath)
+        foreach ($mappingPaths as $index => $mappingPath)
         {
             $absoluteMappingPath = realpath($this->chamiloRootPath . $mappingPath);
             $mappingPaths[$index] = $absoluteMappingPath;
 
-            if(!is_dir($absoluteMappingPath))
+            if (! is_dir($absoluteMappingPath))
             {
                 throw new \InvalidArgumentException(
-                    'The given ' . $type . ' mapping path "' . $mappingPath . '" must be an existing directory'
-                );
+                    'The given ' . $type . ' mapping path "' . $mappingPath . '" must be an existing directory');
             }
         }
 

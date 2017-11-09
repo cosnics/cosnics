@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Authentication\Ldap;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This authentication class uses LDAP to authenticate users.

@@ -1,22 +1,22 @@
 <?php
-
 namespace Chamilo\Libraries\Platform;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @package Chamilo\Libraries\Platform
  *
+ * @package Chamilo\Libraries\Platform
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloRequest extends Request
 {
+
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
      *
      * @param string $key
      * @param mixed $default
-     * @param bool $deep
+     * @param boolean $deep
      *
      * @return mixed
      * @deprecated
@@ -76,12 +76,12 @@ class ChamiloRequest extends Request
      */
     public function getFromPostOrUrl($key, $default = null)
     {
-        if(null !== $result = $this->getFromPOST($key))
+        if (null !== $result = $this->getFromPOST($key))
         {
             return $result;
         }
 
-        if(null != $result = $this->getFromURL($key))
+        if (null != $result = $this->getFromURL($key))
         {
             return $result;
         }

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Common\RenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

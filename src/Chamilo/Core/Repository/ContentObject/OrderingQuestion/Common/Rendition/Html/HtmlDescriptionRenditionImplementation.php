@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Common\Renditio
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Common\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {

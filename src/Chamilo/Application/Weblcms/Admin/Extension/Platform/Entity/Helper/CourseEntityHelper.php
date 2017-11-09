@@ -44,13 +44,13 @@ class CourseEntityHelper
                 break;
             case self::PROPERTY_PATH :
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class_name(), 
+                    Course::class_name(),
                     $result[self::PROPERTY_COURSE_ID]);
                 return $course->get_fully_qualified_name();
             default :
                 return null;
         }
-        
+
         return null;
     }
 
@@ -58,18 +58,18 @@ class CourseEntityHelper
     {
         return $renderer->get_component()->get_url(
             array(
-                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
-                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $result[self::PROPERTY_COURSE_ID]), 
+                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $result[self::PROPERTY_COURSE_ID]),
             array(
-                Manager::PARAM_ACTION, 
-                Manager::PARAM_TARGET_TYPE, 
-                Manager::PARAM_ENTITY_TYPE, 
+                Manager::PARAM_ACTION,
+                Manager::PARAM_TARGET_TYPE,
+                Manager::PARAM_ENTITY_TYPE,
                 Manager::PARAM_ENTITY_ID));
     }
 
     /**
      * Returns the data as a resultset
-     * 
+     *
      * @param \libraries\Condition $condition
      * @param $condition
      * @param int $offset
@@ -87,21 +87,21 @@ class CourseEntityHelper
         $properties->add(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE));
         $properties->add(
             new FixedPropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
-        
+
         $parameters = new RecordRetrievesParameters(
-            $properties, 
-            $condition, 
-            $count, 
-            $offset, 
-            $order_property, 
+            $properties,
+            $condition,
+            $count,
+            $offset,
+            $order_property,
             self::get_joins());
-        
+
         return DataManager::records(Admin::class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     * 
+     *
      * @param \libraries\Condition $condition
      *
      * @return int
@@ -109,21 +109,23 @@ class CourseEntityHelper
     public static function count_table_data($condition)
     {
         $parameters = new DataClassCountParameters(
-            $condition, 
-            self::get_joins(), 
-            new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT, 
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID)));
-        
+            $condition,
+            self::get_joins(),
+            new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID)))));
+
         return DataManager::count(Admin::class_name(), $parameters);
     }
 
     private static function get_joins()
     {
         $join = new Join(
-            Course::class_name(), 
+            Course::class_name(),
             new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_ID), 
+                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_ID),
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID)));
         return new Joins(array($join));
     }
@@ -131,30 +133,30 @@ class CourseEntityHelper
     public static function expand($entity_id)
     {
         $entities = array();
-        
+
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(), 
+            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(),
             $entity_id);
-        
+
         if ($course instanceof \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course)
         {
             $entities[CourseEntity::ENTITY_TYPE][] = $course->get_id();
-            
+
             $course_category = $course->get_category();
-            
+
             if ($course_category instanceof CourseCategory)
             {
                 $entities[CourseCategoryEntity::ENTITY_TYPE][] = $course_category->get_id();
-                
+
                 $parent_course_category_ids = $course_category->get_parent_ids();
-                
+
                 foreach ($parent_course_category_ids as $parent_course_category_id)
                 {
                     $entities[CourseCategoryEntity::ENTITY_TYPE][] = $parent_course_category_id;
                 }
             }
         }
-        
+
         return $entities;
     }
 
@@ -165,7 +167,7 @@ class CourseEntityHelper
 
     /**
      * Get the fully qualified class name of the object
-     * 
+     *
      * @return string
      */
     public static function class_name()

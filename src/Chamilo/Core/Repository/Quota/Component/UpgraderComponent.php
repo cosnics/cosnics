@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class UpgraderComponent extends Manager
 {

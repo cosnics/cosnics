@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Compone
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

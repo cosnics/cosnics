@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Youtube\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExternalSyncerComponent extends Manager

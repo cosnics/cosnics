@@ -8,16 +8,18 @@ namespace Chamilo\Libraries\Storage\DataClass;
  *             security.
  * @author Sven Vanpoucke
  * @author Hans De Bisschop
+ * @package Chamilo\Libraries\Storage\DataClass
  */
 abstract class NestedTreeNode extends NestedSet
 {
-    // Nested trees functionality
-    
+
     /**
      * Count the number of children of the object
-     * 
-     * @param boolean $recursive - if put on true, every child will be counted, even those who are not directly
-     *        connected with parent_id
+     *
+     * @param boolean $recursive If put on true, every child will be counted, even those who are not directly connected
+     *        with parent_id
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return integer
      */
     public function count_children($recursive = true, $condition = null)
     {
@@ -33,9 +35,11 @@ abstract class NestedTreeNode extends NestedSet
 
     /**
      * Retrieve the children of the object
-     * 
+     *
      * @param boolean $recursive - if put on true, every child will be retrieved, even those who are not directly
      *        connected with parent_id
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function get_children($recursive = true, $condition = null)
     {
@@ -52,29 +56,34 @@ abstract class NestedTreeNode extends NestedSet
     /**
      * Count the parents of the object, recursivly, every parent will be counted, even those who are not directly
      * connected with parent_id
-     * 
-     * @param boolean $include_self - if put on true, the current object will be included in the count
+     *
+     * @param boolean $includeSelf - if put on true, the current object will be included in the count
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return integer
      */
-    public function count_parents($include_self = true, $condition = null)
+    public function count_parents($includeSelf = true, $condition = null)
     {
-        return parent::count_ancestors($include_self, $condition);
+        return parent::count_ancestors($includeSelf, $condition);
     }
 
     /**
      * Retrieve the parents of the object, recursivly, every parent will be counted, even those who are not directly
      * connected with parent_id
-     * 
-     * @param boolean $include_self - if put on true, the current object will be included in the parents list
+     *
+     * @param boolean $includeSelf - if put on true, the current object will be included in the parents list
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function get_parents($include_self = true, $condition = null)
+    public function get_parents($includeSelf = true, $condition = null)
     {
-        return parent::get_ancestors($include_self, $condition);
+        return parent::get_ancestors($includeSelf, $condition);
     }
 
     /**
      * Check if the current object is a child of the given object
-     * 
-     * @param NestedTreeNode $node - the possible parent node
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedTreeNode $node The possible parent node
+     * @return boolean
      */
     public function is_child_of($node)
     {
@@ -83,8 +92,9 @@ abstract class NestedTreeNode extends NestedSet
 
     /**
      * Check if the object is the parent of the given object
-     * 
-     * @param NestedTreeNode $node - the possible child node
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedTreeNode $node The possible child node
+     * @return boolean
      */
     public function is_parent_of($node)
     {
@@ -93,37 +103,42 @@ abstract class NestedTreeNode extends NestedSet
 
     /**
      * Move the object to another place in the tree (either with parent id or previous node id)
-     * 
-     * @param int $new_parent_id - the new parent_id
-     * @param int $new_previous_id - the previous node id where you want to add the object
+     *
+     * @param integer $newParentId - the new parent_id
+     * @param integer $newPreviousId - the previous node id where you want to add the object
+     * @return boolean
      */
-    public function move($new_parent_id = 0, $new_previous_id = 0)
+    public function move($newParentId = 0, $newPreviousId = 0)
     {
-        if ($new_previous_id != 0)
+        if ($newPreviousId != 0)
         {
-            return parent::move(self::AS_NEXT_SIBLING_OF, $new_previous_id);
+            return parent::move(self::AS_NEXT_SIBLING_OF, $newPreviousId);
         }
         else
         {
-            if ($new_parent_id == 0)
-                $new_parent_id = $this->get_parent_id();
-            
-            return parent::move(self::AS_LAST_CHILD_OF, $new_parent_id);
+            if ($newParentId == 0)
+            {
+                $newParentId = $this->get_parent_id();
+            }
+
+            return parent::move(self::AS_LAST_CHILD_OF, $newParentId);
         }
     }
 
     /**
      * Create the object in the database (either with parent id or previous node id)
-     * 
-     * @param int $previous_id - the previous node id where you want to add the object
+     *
+     * @param int $previousId - the previous node id where you want to add the object
+     * @param boolean $createInBatch
+     * @return boolean
      */
-    public function create($previous_id = 0, $create_in_batch = false)
+    public function create($previousId = 0, $createInBatch = false)
     {
         $parent_id = $this->get_parent_id();
-        
-        if ($previous_id)
+
+        if ($previousId)
         {
-            return parent::create(parent::AS_NEXT_SIBLING_OF, $previous_id);
+            return parent::create(parent::AS_NEXT_SIBLING_OF, $previousId);
         }
         else
         {

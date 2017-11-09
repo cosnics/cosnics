@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libr
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRulesIcalParser;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

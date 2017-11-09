@@ -16,10 +16,11 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * This class represents the data manager for this package
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from MDB2
  * @package application.weblcms.course_type
  */
@@ -32,10 +33,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * CourseType Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Retrieves a list of available course types joined with course type user order table
-     * 
+     *
      * @param $join_condition \libraries\storage\Condition
      * @param $condition \libraries\storage\Condition
      * @param $offset int
@@ -44,35 +45,35 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @return \libraries\storage\RecordResultSet
      */
-    public static function retrieve_course_types_with_user_order($join_condition = null, $condition = null, $offset = null, 
+    public static function retrieve_course_types_with_user_order($join_condition = null, $condition = null, $offset = null,
         $max_objects = null, $order_by = null)
     {
         $join_conditions = array();
-        
+
         if ($join_condition)
         {
             $join_conditions[] = $join_condition;
         }
-        
+
         $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID),
             new PropertyConditionVariable(
-                CourseTypeUserOrder::class_name(), 
+                CourseTypeUserOrder::class_name(),
                 CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID));
-        
+
         $join_condition = new AndCondition($join_conditions);
-        
+
         $joins = new Joins();
-        
+
         $joins->add(new Join(CourseTypeUserOrder::class_name(), $join_condition, Join::TYPE_LEFT));
-        
+
         $parameters = new RecordRetrievesParameters(null, $condition, $max_objects, $offset, $order_by, $joins);
         return self::records(CourseType::class_name(), $parameters);
     }
 
     /**
      * Retrieves the active course types ordered by the given user display order
-     * 
+     *
      * @param $user_id int
      *
      * @return \libraries\storage\RecordResultSet
@@ -80,74 +81,72 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_active_course_types_with_user_order($user_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
-        
+
         $join_conditions = array();
-        
+
         $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
+
         $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID),
             new StaticConditionVariable(null));
-        
+
         $join_condition = new OrCondition($join_conditions);
-        
+
         $course_type_user_order_alias = self::getInstance()->get_alias(CourseTypeUserOrder::get_table_name());
-        
+
         $order = array();
-        
+
         $order[] = new OrderBy(
-            new PropertyConditionVariable(
-                CourseTypeUserOrder::class_name(), 
-                CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER), 
-            SORT_ASC, 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER),
+            SORT_ASC,
             $course_type_user_order_alias);
-        
+
         $order[] = new OrderBy(
             new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_DISPLAY_ORDER));
-        
+
         return self::retrieve_course_types_with_user_order($join_condition, $condition, null, null, $order);
     }
 
     /**
      * Retrieves the active course types
-     * 
+     *
      * @return ResultSet<CourseType>
      */
     public static function retrieve_active_course_types()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
-        
+
         $order = array(
             new OrderBy(new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_DISPLAY_ORDER)));
-        
+
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order);
-        
+
         return DataManager::retrieves(CourseType::class_name(), $parameters);
     }
 
     /**
      * Counts the active course types
-     * 
+     *
      * @return int
      */
     public static function count_active_course_types()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
-        
-        return DataManager::count(CourseType::class_name(), $condition);
+
+        return DataManager::count(CourseType::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
      * Returns whether or not a course type has courses
-     * 
+     *
      * @param $course_type_id int
      *
      * @return int
@@ -160,7 +159,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * Returns the highest display order for the course types
-     * 
+     *
      * @return int
      */
     public static function get_max_display_order_for_course_types()
@@ -173,10 +172,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * CourseTypeUserOrder Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Retrieves a CourseTypeUserOrder for a given course type and user
-     * 
+     *
      * @param $course_type_id int
      * @param $user_id int
      *
@@ -185,25 +184,25 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_user_order_for_course_type($course_type_id, $user_id)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserOrder::class_name(), 
-                CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID), 
+                CourseTypeUserOrder::class_name(),
+                CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID),
             new StaticConditionVariable($course_type_id));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return self::retrieve(CourseTypeUserOrder::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Returns the highest display order for the course type user orders for a given user
-     * 
+     *
      * @param $user_id int
      *
      * @return int
@@ -211,12 +210,12 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function get_max_display_order_for_course_type_user_orders($user_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
+
         return self::retrieve_maximum_value(
-            CourseTypeUserOrder::class_name(), 
-            CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER, 
+            CourseTypeUserOrder::class_name(),
+            CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER,
             $condition);
     }
 
@@ -225,10 +224,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Creates the course type user orders for a given user with the current course types
-     * 
+     *
      * @param $user_id int
      *
      * @return boolean
@@ -236,7 +235,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function create_course_type_user_orders_for_user($user_id)
     {
         $course_types = DataManager::retrieve_active_course_types();
-        
+
         while ($course_type = $course_types->next_result())
         {
             $course_type_user_order = new CourseTypeUserOrder();
@@ -247,7 +246,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -257,7 +256,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * When new course types are found / activated, new course type user orders are added
      * with highest order (last) When coures types are deleted or inactivated, the course type user oders are deleted
      * and the display orders are fixed.
-     * 
+     *
      * @param $user_id int
      *
      * @return boolean
@@ -265,40 +264,40 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function fix_course_tab_user_orders_for_user($user_id)
     {
         $user_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(CourseTypeUserOrder::class_name(), CourseTypeUserOrder::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
-        
-        if (self::count(CourseTypeUserOrder::class_name(), $user_condition) == 0)
+
+        if (self::count(CourseTypeUserOrder::class_name(), new DataClassCountParameters($user_condition)) == 0)
         {
             return true;
         }
-        
+
         /**
          * Fix all the new / activated course types
          */
         $subcondition = $user_condition;
-        
+
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
-        
+
         $conditions[] = new NotCondition(
             new SubselectCondition(
-                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID), 
+                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    CourseTypeUserOrder::class_name(), 
-                    CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID), 
-                CourseTypeUserOrder::get_table_name(), 
+                    CourseTypeUserOrder::class_name(),
+                    CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID),
+                CourseTypeUserOrder::get_table_name(),
                 $subcondition));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         $active_course_types = DataManager::retrieves(
-            CourseType::class_name(), 
+            CourseType::class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         while ($course_type = $active_course_types->next_result())
         {
             $course_type_user_order = new CourseTypeUserOrder();
@@ -309,30 +308,30 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 return false;
             }
         }
-        
+
         /**
          * Fix all the deleted / deactivated course types
          */
         $subcondition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
-        
+
         $conditions = array();
-        
+
         $conditions[] = new NotCondition(
             new SubselectCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserOrder::class_name(), 
-                    CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID), 
-                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID), 
-                CourseType::get_table_name(), 
+                    CourseTypeUserOrder::class_name(),
+                    CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID),
+                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID),
+                CourseType::get_table_name(),
                 $subcondition));
         $conditions[] = $user_condition;
-        
+
         $condition = new AndCondition($conditions);
-        
+
         while ($course_type_user_order = DataManager::retrieve(
-            CourseTypeUserOrder::class_name(), 
+            CourseTypeUserOrder::class_name(),
             new DataClassRetrieveParameters($condition)))
         {
             if (! $course_type_user_order->delete())
@@ -340,43 +339,43 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * Checks if the given course type exists
-     * 
+     *
      * @param $course_type_name type
      * @return type
      */
     public static function is_course_type_valid($course_type_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE),
             new StaticConditionVariable($course_type_name));
-        
-        return DataManager::count(CourseType::class_name(), $condition) != 0;
+
+        return DataManager::count(CourseType::class_name(), new DataClassCountParameters($condition)) != 0;
     }
 
     /**
      * Retrieves a course type by name
-     * 
+     *
      * @param $course_type_name type
      * @return type
      */
     public static function retrieve_course_type_by_name($course_type_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE), 
+            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE),
             new StaticConditionVariable($course_type_name));
-        
+
         return self::retrieve(CourseType::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * wrapper
-     * 
+     *
      * @param type $id
      */
     public static function retrieve_course_type($id)

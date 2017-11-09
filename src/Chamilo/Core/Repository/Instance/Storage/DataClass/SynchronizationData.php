@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Instance\Storage\DataClass;
 
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -32,9 +32,9 @@ class MiniMonthRenderer extends ViewRenderer
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param int $displayTime
+     * @param integer $displayTime
      * @param string $linkTarget
-     * @param int $markPeriod
+     * @param integer $markPeriod
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
         $viewActions = array(), $linkTarget = '', $markPeriod = null)

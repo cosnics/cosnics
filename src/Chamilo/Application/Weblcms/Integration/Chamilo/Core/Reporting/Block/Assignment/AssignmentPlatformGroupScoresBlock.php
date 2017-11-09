@@ -8,10 +8,11 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  * Reporting block with score for the platform groups.
- * 
+ *
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
@@ -19,7 +20,7 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
 
     /**
      * Returns the submitter type for this reporting block.
-     * 
+     *
      * @return int The submitter type
      */
     public function get_current_submitter_type()
@@ -29,31 +30,35 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
 
     /**
      * Returns the groups for this reporting block.
-     * 
+     *
      * @return array The groups
      */
     public function get_groups()
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->course_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), 
-                CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
-        
+
         $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-            CourseEntityRelation::class_name(), 
-            new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation::PROPERTY_ENTITY_ID));
-        
+            CourseEntityRelation::class_name(),
+            new DataClassDistinctParameters(
+                new AndCondition($conditions),
+                new DataClassProperties(
+                    array(
+                        new PropertyConditionVariable(
+                            CourseEntityRelation::class,
+                            CourseEntityRelation::PROPERTY_ENTITY_ID)))));
+
         return \Chamilo\Core\Group\Storage\DataManager::retrieve_groups_and_subgroups($group_ids)->as_array();
     }
 
     /**
      * Returns true if the group with the given group id belongs to the given target entities and false otherwise.
-     * 
+     *
      * @param $target_entities array The target entities
      * @param $group_id int The group id
      * @return boolean True if the given group id belongs to the given target entities
@@ -62,7 +67,7 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
     {
         $groups_resultset = \Chamilo\Core\Group\Storage\DataManager::retrieve_groups_and_subgroups(
             $target_entities[CoursePlatformGroupEntity::ENTITY_TYPE]);
-        
+
         while ($group = $groups_resultset->next_result())
         {
             if ($group_id == $group->get_id())
@@ -70,7 +75,7 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
                 return true;
             }
         }
-        
+
         return false;
     }
 }

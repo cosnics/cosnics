@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Template;
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -102,7 +102,7 @@ class Template
 
     public function translate($variable)
     {
-        $language = Translation::getInstance()->getLanguageIsocode();
+        $language = Translation::getInstance()->getShortLanguageIsocode();
         return $this->get_translation()->translate($language, $variable);
     }
 

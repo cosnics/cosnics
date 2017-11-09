@@ -5,7 +5,7 @@ use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';

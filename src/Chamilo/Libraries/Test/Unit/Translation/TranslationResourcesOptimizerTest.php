@@ -144,7 +144,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
     public function test_get_optimized_translation_resources_with_cached_resources()
     {
         $cache_file = $this->cache_path . '/locale.php';
-        $resources = array('en_EN', 'nl_NL', 'de_DE');
+        $resources = array('en', 'nl', 'de');
 
         file_put_contents($cache_file, "<?php\n\nreturn " . var_export($resources, true) . ";\n");
 

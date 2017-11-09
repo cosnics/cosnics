@@ -174,7 +174,7 @@ class Redirect
     /**
      *
      * @param string $url
-     * @param array $parameters
+     * @param string[] $parameters
      * @return string
      */
     private function getWebLink($url, $parameters = array ())

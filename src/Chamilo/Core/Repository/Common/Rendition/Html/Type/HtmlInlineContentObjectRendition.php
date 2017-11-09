@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition

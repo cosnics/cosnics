@@ -37,9 +37,9 @@ class DataClassResultCache extends DataClassCache
                 'The DataClass cache only allows for caching of DataClass objects. Currently trying to add: ' . $type .
                      '.');
         }
-        
+
         $class_name = self::getCacheClassName($object);
-        
+
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
             $value = $object->get_default_property($cacheable_property);
@@ -47,17 +47,17 @@ class DataClassResultCache extends DataClassCache
             {
                 $cacheable_property_parameters = new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable($class_name, $cacheable_property), 
+                        new PropertyConditionVariable($class_name, $cacheable_property),
                         new StaticConditionVariable($value)));
                 DataClassCache::set_cache($class_name, $cacheable_property_parameters->hash(), $object);
             }
         }
-        
+
         if ($parameters instanceof DataClassRetrieveParameters)
         {
             DataClassCache::set_cache($class_name, $parameters->hash(), $object);
         }
-        
+
         return true;
     }
 
@@ -84,28 +84,33 @@ class DataClassResultCache extends DataClassCache
         {
             throw new Exception('Not a DataClass');
         }
-        
+
         $class_name = self::getCacheClassName($object);
-        
+
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
             $cacheable_property_parameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable($class_name, $cacheable_property), 
+                    new PropertyConditionVariable($class_name, $cacheable_property),
                     new StaticConditionVariable($object->get_default_property($cacheable_property))));
             DataClassCache::set_cache($class_name, $cacheable_property_parameters->hash(), null);
         }
-        
+
         return true;
     }
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
+     * @return string
+     */
     private static function getCacheClassName(DataClass $object)
     {
         $compositeDataClassName = CompositeDataClass::class_name();
-        
+
         $isCompositeDataClass = $object instanceof $compositeDataClassName;
         $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;
-        
+
         if ($isCompositeDataClass && $isExtensionClass)
         {
             return $object::parent_class_name();

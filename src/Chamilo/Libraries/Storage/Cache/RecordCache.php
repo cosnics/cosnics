@@ -16,21 +16,21 @@ class RecordCache
 
     /**
      * The instance of the RecordCache
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Cache\RecordCache
      */
     private static $instance;
 
     /**
      * The cache
-     * 
+     *
      * @var mixed[][]
      */
     private $cache;
 
     /**
      * Get an instance of the RecordCache
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Cache\RecordCache
      */
     public static function getInstance()
@@ -44,7 +44,7 @@ class RecordCache
 
     /**
      * Get a DataClass object from the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
@@ -52,13 +52,13 @@ class RecordCache
     public static function get($class, DataClassParameters $parameters)
     {
         $instance = self::getInstance();
-        
+
         if (self::exists($class, $parameters))
         {
             return $instance->cache[$class][$parameters->hash()];
         }
         else
-        
+
         {
             return false;
         }
@@ -66,7 +66,7 @@ class RecordCache
 
     /**
      * Returns whether a DataClass object exists in the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
@@ -75,7 +75,7 @@ class RecordCache
     {
         $instance = self::getInstance();
         $hash = $parameters->hash();
-        
+
         if (isset($instance->cache[$class][$hash]))
         {
             return true;
@@ -88,7 +88,7 @@ class RecordCache
 
     /**
      * Clear the cache for a specific DataClass type
-     * 
+     *
      * @param string $class
      * @return boolean
      */
@@ -96,7 +96,7 @@ class RecordCache
     {
         $instance = self::getInstance();
 
-        if(empty($class))
+        if (empty($class))
         {
             unset($instance->cache);
         }
@@ -105,13 +105,13 @@ class RecordCache
         {
             unset($instance->cache[$class]);
         }
-        
+
         return true;
     }
 
     /**
      * Clear the cache for a set of specific DataClass types
-     * 
+     *
      * @param string[] $classes
      * @return boolean
      */
@@ -124,13 +124,13 @@ class RecordCache
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * Set the cache value for a specific DataClass object type, hash
-     * 
+     *
      * @param string $class
      * @param string $hash
      * @param mixed $value

@@ -23,6 +23,8 @@ class HtmlMenu
 
     /**
      * Menu structure as a multidimensional hash.
+     *
+     * @var string[]
      */
     var $_menu = array();
 
@@ -37,14 +39,14 @@ class HtmlMenu
     /**
      * Path to the current menu item.
      *
-     * @var array
+     * @var string[]
      */
     var $_path = array();
 
     /**
      * Menu type: tree, rows, you-are-here.
      *
-     * @var array
+     * @var string
      */
     var $_menuType = 'tree';
 
@@ -56,6 +58,8 @@ class HtmlMenu
 
     /**
      * URL of the current page.
+     *
+     * @var string
      */
     var $_currentUrl = '';
 
@@ -76,8 +80,7 @@ class HtmlMenu
     /**
      * Initializes the menu, sets the type and menu structure.
      *
-     * @param array menu structure
-     * @param string menu type
+     * @param string[] $menu
      */
     public function __construct($menu = null)
     {
@@ -89,7 +92,7 @@ class HtmlMenu
 
     /**
      *
-     * @param string[]
+     * @param string[] $menu
      */
     public function setMenu($menu)
     {
@@ -99,7 +102,7 @@ class HtmlMenu
 
     /**
      *
-     * @param string type name
+     * @param string $menuType
      */
     public function setMenuType($menuType)
     {
@@ -117,8 +120,8 @@ class HtmlMenu
 
     /**
      *
-     * @param HtmlMenuRenderer Renderer to use
-     * @param string Type of the menu
+     * @param HtmlMenuRenderer $renderer Renderer to use
+     * @param string $menuType Type of the menu
      */
     public function render($renderer, $menuType = '')
     {
@@ -160,10 +163,10 @@ class HtmlMenu
 
     /**
      *
-     * @param mixed Node id
-     * @param string Node 'url' attribute
-     * @param int Level in the tree
-     * @return int Node type (one of HTML_MENU_ENTRY_* constants)
+     * @param mixed $nodeId
+     * @param string $nodeUrl Node 'url' attribute
+     * @param integer $level Level in the tree
+     * @return integer Node type (one of HTML_MENU_ENTRY_* constants)
      */
     private function _findNodeType($nodeId, &$nodeUrl, $level)
     {
@@ -187,8 +190,8 @@ class HtmlMenu
     /**
      * Renders the tree menu ('tree' and 'sitemap')
      *
-     * @param array (sub)menu being rendered
-     * @param int current depth in the tree structure
+     * @param string[] $menu (sub)menu being rendered
+     * @param integer $level current depth in the tree structure
      */
     private function _renderTree($menu, $level = 0)
     {
@@ -220,8 +223,8 @@ class HtmlMenu
     /**
      * Renders the 'urhere' menu
      *
-     * @param array (sub)menu being rendered
-     * @param int current depth in the tree structure
+     * @param string[] $menu (sub)menu being rendered
+     * @param integer $level current depth in the tree structure
      */
     private function _renderURHere($menu, $level = 0)
     {
@@ -250,8 +253,8 @@ class HtmlMenu
     /**
      * Renders the 'rows' menu
      *
-     * @param array (sub)menu being rendered
-     * @param int current depth in the tree structure
+     * @param string[] $menu (sub)menu being rendered
+     * @param integer $level current depth in the tree structure
      */
     private function _renderRows($menu, $level = 0)
     {
@@ -284,9 +287,9 @@ class HtmlMenu
     /**
      * Renders the 'prevnext' menu
      *
-     * @param array (sub)menu being rendered
-     * @param int current depth in the tree structure
-     * @param int flag indicating whether to finish processing
+     * @param string[] $menu (sub)menu being rendered
+     * @param integer $level current depth in the tree structure
+     * @param integer $flagStop flag indicating whether to finish processing
      *        (0 - continue, 1 - this is "next" node, 2 - stop)
      */
     private function _renderPrevNext($menu, $level = 0, $flagStop = 0)
@@ -359,7 +362,7 @@ class HtmlMenu
     /**
      * Returns the path of the current page in the menu 'tree'.
      *
-     * @return array path to the selected menu item
+     * @return string[] path to the selected menu item
      */
     public function getPath()
     {
@@ -379,8 +382,8 @@ class HtmlMenu
     /**
      * Builds the mappings from node url to the 'path' in the menu
      *
-     * @param array (sub)menu being processed
-     * @param array path to the (sub)menu
+     * @param string[] $menu (sub)menu being processed
+     * @param string[] $path path to the (sub)menu
      * @return boolean true if the path to the current page was found, otherwise false.
      * @see getPath(), $_urlMap
      */
@@ -435,7 +438,7 @@ class HtmlMenu
 
     /**
      *
-     * @param string Url to use
+     * @param string $url Url to use
      */
     public function forceCurrentUrl($url)
     {

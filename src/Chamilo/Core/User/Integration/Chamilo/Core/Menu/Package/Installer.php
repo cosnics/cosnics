@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Package;
 
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem;
 

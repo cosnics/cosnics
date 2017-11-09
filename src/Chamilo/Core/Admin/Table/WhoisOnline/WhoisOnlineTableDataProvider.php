@@ -3,6 +3,7 @@ namespace Chamilo\Core\Admin\Table\WhoisOnline;
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -43,6 +44,6 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
     {
         return \Chamilo\Core\User\Storage\DataManager::count(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
     }
 }

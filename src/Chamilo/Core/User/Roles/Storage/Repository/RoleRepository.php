@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to manage the data of roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class RoleRepository extends DataManagerRepository implements RoleRepositoryInterface
@@ -23,7 +23,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
 
     /**
      * Returns a role by a given name
-     * 
+     *
      * @param string $roleName
      *
      * @return Role
@@ -31,15 +31,15 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     public function findRoleByName($roleName)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE), 
+            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE),
             new StaticConditionVariable($roleName));
-        
+
         return DataManager::retrieve(Role::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieves the roles
-     * 
+     *
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -50,13 +50,13 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
     {
         return DataManager::retrieves(
-            Role::class_name(), 
+            Role::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $orderBy))->as_array();
     }
 
     /**
      * Counts the roles
-     * 
+     *
      * @param Condition $condition
      *
      * @return int

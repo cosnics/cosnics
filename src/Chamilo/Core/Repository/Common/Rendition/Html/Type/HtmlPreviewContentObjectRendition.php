@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
 {

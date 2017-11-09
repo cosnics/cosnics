@@ -4,17 +4,18 @@ namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class RestAuthentication
 {
+
     /**
+     *
      * @var \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
      */
     private $client;
-
     const TYPE_DIGEST = 'digest';
     const TYPE_BASIC = 'basic';
 
@@ -29,6 +30,7 @@ abstract class RestAuthentication
     }
 
     /**
+     *
      * @param \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient $client
      * @param string $type
      *
@@ -44,6 +46,7 @@ abstract class RestAuthentication
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
      */
     public function get_client()

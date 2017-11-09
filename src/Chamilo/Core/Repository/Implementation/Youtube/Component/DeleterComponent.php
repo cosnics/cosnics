@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class DeleterComponent extends Manager

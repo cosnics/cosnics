@@ -14,13 +14,14 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -121,7 +122,13 @@ class PublisherComponent extends Manager
 
         $contentObjectNumbers = DataManager::distinct(
             WorkspaceContentObjectRelation::class_name(),
-            new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID));
+            new DataClassDistinctParameters(
+                $condition,
+                new DataClassProperties(
+                    array(
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class,
+                            WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID)))));
 
         return DataManager::distinct(
             ContentObject::class_name(),
@@ -129,7 +136,8 @@ class PublisherComponent extends Manager
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
                     $contentObjectNumbers),
-                ContentObject::PROPERTY_ID));
+                new DataClassProperties(
+                    array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)))));
     }
 
     public function getCurrentWorkspace()

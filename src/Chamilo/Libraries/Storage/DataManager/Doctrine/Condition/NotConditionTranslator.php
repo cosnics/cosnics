@@ -19,11 +19,11 @@ class NotConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $string = array();
-        
+
         $string[] = 'NOT (';
         $string[] = ConditionTranslator::render($this->get_condition()->get_condition());
         $string[] = ')';
-        
+
         return implode('', $string);
     }
 }

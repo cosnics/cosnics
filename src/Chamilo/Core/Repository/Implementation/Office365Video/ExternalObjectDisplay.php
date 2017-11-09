@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Office365Video;
 
 use Chamilo\Core\Repository\External\General\Streaming\StreamingMediaExternalObjectDisplay;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay

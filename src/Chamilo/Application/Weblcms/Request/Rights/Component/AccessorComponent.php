@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Request\Rights\Component;
 use Chamilo\Application\Weblcms\Request\Rights\Form\RightsForm;
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class AccessorComponent extends Manager
 {

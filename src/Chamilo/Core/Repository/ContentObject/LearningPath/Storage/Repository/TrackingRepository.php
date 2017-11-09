@@ -222,11 +222,11 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $parameters = new DataClassCountParameters(
             $condition,
             $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds),
-            new FunctionConditionVariable(
+            new DataClassProperties(array(new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
                 new PropertyConditionVariable(
                     $this->trackingParameters->getTreeNodeAttemptClassName(),
-                    TreeNodeAttempt::PROPERTY_USER_ID)));
+                    TreeNodeAttempt::PROPERTY_USER_ID)))));
 
         return $this->dataClassRepository->count($this->trackingParameters->getTreeNodeAttemptClassName(), $parameters);
     }

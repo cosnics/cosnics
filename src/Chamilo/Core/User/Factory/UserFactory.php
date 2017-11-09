@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Factory;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Core\User\Storage\DataClass\User;

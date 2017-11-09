@@ -22,14 +22,14 @@ class DataClassCache
 
     /**
      * The cache
-     * 
+     *
      * @var mixed[][]
      */
     private $cache;
 
     /**
      * Get an instance of the DataClassCache
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Cache\DataClassCache
      */
     public static function getInstance()
@@ -43,7 +43,7 @@ class DataClassCache
 
     /**
      * Get a DataClass object from the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
@@ -51,13 +51,13 @@ class DataClassCache
     public static function get($class, DataClassParameters $parameters)
     {
         $instance = self::getInstance();
-        
+
         if (self::exists($class, $parameters))
         {
             return $instance->cache[$class][$parameters->hash()];
         }
         else
-        
+
         {
             return false;
         }
@@ -65,7 +65,7 @@ class DataClassCache
 
     /**
      * Returns whether a DataClass object exists in the cache
-     * 
+     *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters $parameters
      * @return boolean
@@ -74,7 +74,7 @@ class DataClassCache
     {
         $instance = self::getInstance();
         $hash = $parameters->hash();
-        
+
         if (isset($instance->cache[$class][$hash]))
         {
             return true;
@@ -87,25 +87,25 @@ class DataClassCache
 
     /**
      * Clear the cache for a specific DataClass type
-     * 
+     *
      * @param string $class
      * @return boolean
      */
     public static function truncate($class)
     {
         $instance = self::getInstance();
-        
+
         if (isset($instance->cache[$class]))
         {
             unset($instance->cache[$class]);
         }
-        
+
         return true;
     }
 
     /**
      * Clear the cache for a set of specific DataClass types
-     * 
+     *
      * @param string[] $classes
      * @return boolean
      */
@@ -118,13 +118,13 @@ class DataClassCache
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * Set the cache value for a specific DataClass object type, hash
-     * 
+     *
      * @param string $class
      * @param string $hash
      * @param mixed $value

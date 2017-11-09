@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseB
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class MostActiveInactiveLastVisitBlock extends CourseBlock
 {

@@ -16,7 +16,7 @@ use Chamilo\Libraries\Authentication\QueryAuthentication;
 use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

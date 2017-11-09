@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Matterhorn;
 
 use Chamilo\Libraries\Format\Utilities\Html5MediaValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class TrackAudio
 {

@@ -140,7 +140,7 @@ class ResourceProcessor
      *
      * @param string $sourcePath
      * @param string $targetPath
-     * @param bool $overwrite
+     * @param boolean $overwrite
      */
     protected function recurseCopy($sourcePath, $targetPath, $overwrite = false)
     {
