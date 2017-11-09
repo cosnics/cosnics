@@ -7,7 +7,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections;
  */
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This tool allows a user to publish course_sectionss in his or her course.

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\WizardHeader\NumericWizardHeaderRenderer;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Renders the wizard for the submission submit

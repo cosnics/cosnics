@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Da
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;

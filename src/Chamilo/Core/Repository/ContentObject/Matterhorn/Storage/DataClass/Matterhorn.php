@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -50,26 +50,26 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
     public function get_video_url()
     {
         $synchronization_data = $this->get_synchronization_data();
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE), 
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable('url'));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($synchronization_data->get_external_id()));
         $condition = new AndCondition($conditions);
         $settings = \Chamilo\Core\Repository\Storage\DataManager::retrieve(
-            Setting::class_name(), 
+            Setting::class_name(),
             new DataClassRetrieveParameters($condition));
-        
+
         return $settings->get_value() . '/engage/ui/embed.html?id=' . $synchronization_data->get_external_object_id();
     }
 
     public function create()
     {
         $this->clear_errors();
-        
+
         if ($this->check_before_create())
         {
             return parent::create();
@@ -83,7 +83,7 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
     public function update()
     {
         $this->clear_errors();
-        
+
         if ($this->check_before_create())
         {
             return parent::update();
@@ -97,12 +97,12 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
     public function check_before_create()
     {
         $synchronization_data = $this->get_synchronization_data();
-        
+
         if (! isset($synchronization_data) || ! $synchronization_data instanceof SynchronizationData)
         {
             $this->add_error(Translation::get('SearchIndexIsRequired'));
         }
-        
+
         return ! $this->has_errors();
     }
 
@@ -117,15 +117,15 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
             new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager::get_namespace('matterhorn')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         return \Chamilo\Core\Repository\Storage\DataManager::count(
-            Instance::class_name(), 
+            Instance::class_name(),
             new DataClassCountParameters($condition)) > 0;
     }
 }

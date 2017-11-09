@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Filter\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Filter\FilterData;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Render the parameters set via FilterData as HTML

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Import\Ical;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class IcalContentObjectImportForm extends ContentObjectImportForm

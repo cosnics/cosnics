@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed

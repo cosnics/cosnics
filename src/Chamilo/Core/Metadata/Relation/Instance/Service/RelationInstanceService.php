@@ -32,15 +32,15 @@ class RelationInstanceService
     public function createRelationInstancesFromSubmittedValues(User $user, $submittedValues)
     {
         $relationIds = $submittedValues[RelationInstance::PROPERTY_RELATION_ID];
-        
+
         $sourceEntities = $this->getDataClassEntitiesFromTypeFromSubmittedValues(
-            self::PROPERTY_SOURCE, 
+            self::PROPERTY_SOURCE,
             $submittedValues);
-        
+
         $targetEntities = $this->getDataClassEntitiesFromTypeFromSubmittedValues(
-            self::PROPERTY_TARGET, 
+            self::PROPERTY_TARGET,
             $submittedValues);
-        
+
         return $this->createRelationInstances($user, $sourceEntities, $relationIds, $targetEntities);
     }
 
@@ -53,12 +53,12 @@ class RelationInstanceService
     public function getDataClassEntitiesFromTypeFromSubmittedValues($type, $submittedValues)
     {
         $dataClassEntities = array();
-        
+
         foreach ($submittedValues[$type] as $encodedDataClassEntity)
         {
             $dataClassEntities[] = $this->convertEncodedDataClassEntityValuesToDataClassEntity($encodedDataClassEntity);
         }
-        
+
         return $dataClassEntities;
     }
 
@@ -71,9 +71,9 @@ class RelationInstanceService
     {
         $dataClassEntityFactory = DataClassEntityFactory::getInstance();
         $dataClassEntity = unserialize($encodedDataClassEntity);
-        
+
         return $dataClassEntityFactory->getEntityFromDataClassNameAndDataClassIdentifier(
-            $dataClassEntity[DataClassEntity::PROPERTY_TYPE], 
+            $dataClassEntity[DataClassEntity::PROPERTY_TYPE],
             $dataClassEntity[DataClassEntity::PROPERTY_IDENTIFIER]);
     }
 
@@ -88,7 +88,7 @@ class RelationInstanceService
     {
         $failures = 0;
         $attempts = 0;
-        
+
         foreach ($sourceEntities as $sourceEntity)
         {
             foreach ($relationIds as $relationId)
@@ -96,14 +96,14 @@ class RelationInstanceService
                 foreach ($targetEntities as $targetEntity)
                 {
                     if (! $this->relationInstanceExists(
-                        $sourceEntity->getDataClassName(), 
-                        $sourceEntity->getDataClassIdentifier(), 
-                        $targetEntity->getDataClassName(), 
-                        $targetEntity->getDataClassIdentifier(), 
+                        $sourceEntity->getDataClassName(),
+                        $sourceEntity->getDataClassIdentifier(),
+                        $targetEntity->getDataClassName(),
+                        $targetEntity->getDataClassIdentifier(),
                         $relationId))
                     {
                         $attempts ++;
-                        
+
                         $relationInstance = new RelationInstance();
                         $relationInstance->set_source_type($sourceEntity->getDataClassName());
                         $relationInstance->set_source_id($sourceEntity->getDataClassIdentifier());
@@ -112,7 +112,7 @@ class RelationInstanceService
                         $relationInstance->set_relation_id($relationId);
                         $relationInstance->set_user_id($user->get_id());
                         $relationInstance->set_creation_date(time());
-                        
+
                         if (! $relationInstance->create())
                         {
                             $failures ++;
@@ -121,7 +121,7 @@ class RelationInstanceService
                 }
             }
         }
-        
+
         return ! ($failures > 0);
     }
 
@@ -137,29 +137,29 @@ class RelationInstanceService
     public function relationInstanceExists($sourceType, $sourceIdentifier, $targetType, $targetIdentifier, $relationId)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE), 
+            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE),
             new StaticConditionVariable($sourceType));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID), 
+            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID),
             new StaticConditionVariable($sourceIdentifier));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE), 
+            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE),
             new StaticConditionVariable($targetType));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID), 
+            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
             new StaticConditionVariable($targetIdentifier));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID), 
+            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID),
             new StaticConditionVariable($relationId));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return DataManager::count(RelationInstance::class_name(), new DataClassCountParameters($condition)) > 0;
     }
 }

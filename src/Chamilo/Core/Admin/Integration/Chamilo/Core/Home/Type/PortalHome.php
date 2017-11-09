@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class PortalHome extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {

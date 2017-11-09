@@ -1,19 +1,16 @@
 <?php
 use Chamilo\Libraries\Utilities\StringUtilities;
 /**
- *
- * @package common.html.formvalidator.Rule
- */
-/**
  * QuickForm rule to check if a username is of the correct format
+ *
+ * @package Chamilo\Libraries\Format\Form\Rule
  */
 class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
 {
 
     /**
      * Function to check if a username is of the correct format
-     * 
-     * @see HTML_QuickForm_Rule
+     *
      * @param string $username Wanted username
      * @return boolean True if username is of the correct format
      */

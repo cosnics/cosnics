@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 

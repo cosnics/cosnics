@@ -85,7 +85,7 @@ class LocalSetting
 
     /**
      *
-     * @return number
+     * @return integer
      */
     public function getCurrentUserIdentifier()
     {

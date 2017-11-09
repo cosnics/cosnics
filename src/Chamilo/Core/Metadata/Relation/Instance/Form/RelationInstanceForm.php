@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
 use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Form for the element

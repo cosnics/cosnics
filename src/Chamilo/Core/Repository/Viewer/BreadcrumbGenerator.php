@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Repo Viewer BreadcrumbGenerator

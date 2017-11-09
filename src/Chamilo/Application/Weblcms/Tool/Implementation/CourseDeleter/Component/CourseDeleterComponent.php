@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms\CourseDe
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Manager;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * this component is used to delete a course

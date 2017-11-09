@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class represents a default Json response as provided and used by the various AJAX calls throughout Chamilo

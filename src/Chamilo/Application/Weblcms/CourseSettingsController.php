@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 

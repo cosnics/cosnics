@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class represents a table form action
@@ -31,7 +31,7 @@ class TableFormAction
     /**
      * Whether or not a confirm box is necessary
      *
-     * @var bool
+     * @var boolean
      */
     private $confirm;
 

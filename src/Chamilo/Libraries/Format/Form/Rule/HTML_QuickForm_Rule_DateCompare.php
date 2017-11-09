@@ -1,18 +1,16 @@
 <?php
 /**
- *
- * @package common.html.formvalidator.Rule
- */
-/**
  * QuickForm rule to compare 2 dates
+ *
+ * @package Chamilo\Libraries\Format\Form\Rule
  */
 class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
 {
 
     /**
      * Validate 2 dates
-     * 
-     * @param array $values Array with the 2 dates. Each element in this array
+     *
+     * @param string[][] $values Array with the 2 dates. Each element in this array
      *        should be an array width keys F (month), d (day) and Y (year)
      * @param string $operator The operator to use (default '==')
      * @return boolean True if the 2 given dates match the operator

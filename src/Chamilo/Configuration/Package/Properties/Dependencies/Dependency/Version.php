@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Package\Properties\Dependencies\Dependency;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

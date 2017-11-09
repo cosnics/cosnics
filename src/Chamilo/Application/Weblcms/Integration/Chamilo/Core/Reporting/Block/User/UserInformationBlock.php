@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class UserInformationBlock extends ToolBlock

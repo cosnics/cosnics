@@ -94,8 +94,8 @@ class CalendarService
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
         return $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier, 
-            $fromDate, 
+            $calendarIdentifier,
+            $fromDate,
             $toDate);
     }
 

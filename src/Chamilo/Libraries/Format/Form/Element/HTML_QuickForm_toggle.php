@@ -7,14 +7,23 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_extended_checkbox.p
 
 /**
  *
- * @package HTML_QuickForm_toggle
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 {
 
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, 
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string $text
+     * @param string[] $attributes
+     * @param integer $value
+     * @param string $return_value
+     */
+    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
         $return_value = null)
     {
         parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
@@ -28,11 +37,11 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
     function toHtml()
     {
         $html = array();
-        
+
         $html[] = parent::toHtml();
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'Toggle.js');
-        
+
         return implode(PHP_EOL, $html);
     }
 

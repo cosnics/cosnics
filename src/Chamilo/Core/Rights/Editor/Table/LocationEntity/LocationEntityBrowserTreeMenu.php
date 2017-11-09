@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;

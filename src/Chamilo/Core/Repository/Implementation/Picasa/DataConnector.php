@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Zend_Gdata_AuthSub;
 use Zend_Gdata_Media_Extension_MediaGroup;

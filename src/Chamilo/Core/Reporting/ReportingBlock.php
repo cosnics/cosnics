@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class ReportingBlock
 {

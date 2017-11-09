@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Exception;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 
 /**
  *
@@ -17,71 +18,59 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    private $having;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $having
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
-    public function __construct($condition = null, $property = array(), $having = null, Joins $joins = null)
+    public function __construct(Condition $condition = null, DataClassProperties $dataClassProperties = null,
+        $havingCondition = null, Joins $joins = null, GroupBy $groupBy = null)
     {
-        parent::__construct($condition, $property, $joins);
-        
-        if (! is_null($having) && ! $having instanceof Condition)
+        if (is_null($groupBy))
         {
-            throw new \Exception(
-                sprintf(
-                    'The given parameter $having should be of type ' .
-                         '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given', 
-                        gettype($having)));
+            $groupBy = new GroupBy($dataClassProperties->get());
         }
-        
-        $this->having = $having;
+
+        DataClassParameters::__construct($condition, $joins, $dataClassProperties, null, $groupBy, $havingCondition);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @deprecated Use getHavingCondition() now
      */
     public function get_having()
     {
-        return $this->having;
+        return $this->getHavingCondition();
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $having
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
+     * @deprecated Use setHavingCondition() now
      */
-    public function set_having($having)
+    public function set_having(Condition $havingCondition = null)
     {
-        $this->having = $having;
+        $this->setHavingCondition($havingCondition);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Parameters\DataClassPropertyParameters::getHashParts()
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @deprecated Use getDataClassProperties() now
      */
-    public function getHashParts()
+    public function get_properties()
     {
-        $hashParts = parent::getHashParts();
-        
-        $hashParts[] = $this->get_having();
-        
-        return $hashParts;
+        return $this->getDataClassProperties();
     }
 
     /**
-     * Throw an exception if the DataClassPropertyParameters object is invalid
-     * 
-     * @throws \Exception
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @deprecated Use setDataClassProperties() now
      */
-    public static function invalid()
+    public function set_properties(DataClassProperties $dataClassProperties = null)
     {
-        throw new Exception('Illegal parameter(s) passed to the DataManager :: count_grouped() method.');
+        $this->setDataClassProperties($dataClassProperties);
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -45,6 +46,8 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::count(CourseSection::class_name(), $condition);
+        return \Chamilo\Application\Weblcms\Storage\DataManager::count(
+            CourseSection::class_name(),
+            new DataClassCountParameters($condition));
     }
 }

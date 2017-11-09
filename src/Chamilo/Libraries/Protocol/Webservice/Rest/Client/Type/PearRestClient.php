@@ -5,6 +5,10 @@ use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
+/**
+ *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Type
+ */
 class PearRestClient extends RestClient
 {
 
@@ -12,13 +16,13 @@ class PearRestClient extends RestClient
     {
         parent::__construct($baseUrl);
         $this->set_mode(self::MODE_PEAR);
-        
+
         $this->set_check_targetCertificate(false);
     }
 
     /**
-     * @param bool $responseMimeType
      *
+     * @param boolean $responseMimeType
      * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
      */
     public function request($responseMimeType = false)
@@ -28,22 +32,22 @@ class PearRestClient extends RestClient
         $result->set_request_http_method($this->get_method());
         $result->set_request_sent_data($this->get_data());
         $result->set_request_url($this->get_url());
-        
+
         $request_properties = array();
         $request_properties['method'] = $this->get_http_method();
         $request_properties['user'] = $this->get_basic_login();
         $request_properties['pass'] = $this->get_basic_password();
-        
+
         $request = new \HTTP_Request($this->get_url(), $request_properties);
-        
+
         /*
          * addition
          */
         // possibly set a proxy
         if ($proxy = $this->get_proxy())
             $request->setProxy($proxy['server'], $proxy['port']);
-            
-            // add data
+
+        // add data
         if ($this->has_data())
         {
             $data_to_send = $this->get_data();
@@ -68,12 +72,12 @@ class PearRestClient extends RestClient
                     if (count($values) > 0)
                     {
                         $file_path = $values[0];
-                        
+
                         if ((string) StringUtilities::getInstance()->createString($file_path)->startsWith('@'))
                         {
                             $file_path = substr($file_path, 1);
                         }
-                        
+
                         if (file_exists($file_path))
                         {
                             /*
@@ -90,7 +94,7 @@ class PearRestClient extends RestClient
                      */
                     $file_content = $data_to_send['file'];
                 }
-                
+
                 $request->setBody($file_content);
             }
             /*
@@ -103,7 +107,7 @@ class PearRestClient extends RestClient
                     $request->addPostData($key, $value);
                 }
             }
-            
+
             /*
              * If the mime type is given as a parameter, we use it to set the content-type request
              */
@@ -111,12 +115,12 @@ class PearRestClient extends RestClient
             {
                 $request->addHeader('Content-type', $data_to_send['mime']);
             }
-            
+
             /*
              * addition
              */
             /* add additional headers */
-            
+
             if (is_array($this->get_header_data()))
             {
                 foreach ($this->get_header_data() as $n => $header)
@@ -125,7 +129,7 @@ class PearRestClient extends RestClient
                 }
             }
         }
-        
+
         $req_result = $request->sendRequest(true);
         if ($req_result === true)
         {
@@ -142,7 +146,7 @@ class PearRestClient extends RestClient
             $result->set_response_http_code($request->getResponseCode());
             $result->set_response_error($request->getResponseReason());
         }
-        
+
         return $result;
     }
 }

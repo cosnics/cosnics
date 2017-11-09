@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\UserExporter;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Class to export users

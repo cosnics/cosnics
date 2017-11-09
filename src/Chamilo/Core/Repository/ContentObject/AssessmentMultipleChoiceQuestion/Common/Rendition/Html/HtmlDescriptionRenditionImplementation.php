@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestion;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {

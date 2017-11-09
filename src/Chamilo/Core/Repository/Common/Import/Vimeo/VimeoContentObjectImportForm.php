@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Import\Vimeo;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class VimeoContentObjectImportForm extends ContentObjectImportForm
 {

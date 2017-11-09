@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Picture;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Factory to instantiate the user picture provider

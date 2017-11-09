@@ -18,25 +18,30 @@
 
         <service
             id="chamilo.libraries.platform.translation"
-            class="Chamilo\Libraries\Platform\Translation">
+            class="Chamilo\Libraries\Translation\Translation">
+            <deprecated>The "%service_id%" service is deprecated</deprecated>
             <factory
-                class="Chamilo\Libraries\Platform\Translation"
+                class="Chamilo\Libraries\Translation\Translation"
+                method="getInstance" />
+        </service>
+        
+        <service
+            id="chamilo.libraries.translation.translation"
+            class="Chamilo\Libraries\Translation\Translation">
+            <factory
+                class="Chamilo\Libraries\Translation\Translation"
                 method="getInstance" />
         </service>
 
         <service
             id="chamilo.libraries.platform.translator"
-            class="Chamilo\Libraries\Platform\Translation">
+            class="Chamilo\Libraries\Translation\Translation">
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
             <argument
                 type="service"
-                id="chamilo.libraries.file.path_builder" />
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.translation_cache_service" />
-            <argument>%chamilo.configuration.general.language%</argument>
+                id="symfony.component.translation.translator" />
         </service>
 
         <service

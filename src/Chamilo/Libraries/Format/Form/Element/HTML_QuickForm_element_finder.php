@@ -1,18 +1,13 @@
 <?php
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-
-/**
- *
- * @package common.html.formvalidator.Element
- */
-
 /**
  * AJAX-based tree search and multiselect element.
  * Use at your own risk.
  *
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Tim De Pauw
  */
 class HTML_QuickForm_element_finder extends HTML_QuickForm_group
@@ -20,22 +15,63 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
     const DEFAULT_HEIGHT = 300;
     const DEFAULT_WIDTH = 292;
 
+    /**
+     *
+     * @var boolean
+     */
     private static $initialized;
 
+    /**
+     *
+     * @var string
+     */
     private $search_url;
 
+    /**
+     *
+     * @var string[]
+     */
     private $locale;
 
+    /**
+     *
+     * @var boolean
+     */
     private $default_collapsed;
 
+    /**
+     *
+     * @var integer
+     */
     private $height;
 
+    /**
+     *
+     * @var integer
+     */
     private $width;
 
+    /**
+     *
+     * @var integer[]
+     */
     private $exclude;
 
+    /**
+     *
+     * @var integer[]
+     */
     private $defaults;
 
+    /**
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string $search_url
+     * @param string[] $locale
+     * @param integer[] $default_values
+     * @param string[] $options
+     */
     public function __construct($elementName = null, $elementLabel = null, $search_url = null,
         $locale = array('Display' => 'Display'), $default_values = array(), $options = array())
     {
@@ -53,41 +89,73 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $this->setValue($default_values, 0);
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isCollapsed()
     {
         return $this->isDefaultCollapsed() && ! count($this->getValue());
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isDefaultCollapsed()
     {
         return $this->default_collapsed;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getHeight()
     {
         return $this->height;
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getWidth()
     {
         return $this->width;
     }
 
+    /**
+     *
+     * @param integer[] $excluded_ids
+     */
     public function excludeElements($excluded_ids)
     {
         $this->exclude = array_merge($this->exclude, $excluded_ids);
     }
 
+    /**
+     *
+     * @param boolean $default_collapsed
+     */
     public function setDefaultCollapsed($default_collapsed)
     {
         $this->default_collapsed = $default_collapsed;
     }
 
+    /**
+     *
+     * @param integer $height
+     */
     public function setHeight($height)
     {
         $this->height = $height;
     }
 
+    /**
+     *
+     * @param integer $width
+     */
     public function setWidth($width)
     {
         $this->height = $width;
@@ -120,6 +188,10 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
             array('id' => $deactivate_button_id, 'disabled' => 'disabled', 'class' => 'deactivate_elements'));
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::getValue()
+     */
     public function getValue()
     {
         $results = array();
@@ -145,6 +217,10 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         return $results;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::exportValue()
+     */
     public function exportValue($submitValues, $assoc = false)
     {
         if ($assoc)
@@ -155,17 +231,29 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         return $this->getValue();
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::setValue()
+     */
     public function setValue($value, $element_id = 0)
     {
         $serialized = serialize($value);
         $this->_elements[$element_id]->setValue($serialized);
     }
 
+    /**
+     *
+     * @return mixed
+     */
     public function get_active_elements()
     {
         return unserialize($this->_elements[0]->getValue());
     }
 
+    /**
+     *
+     * @return string
+     */
     public function toHTML()
     {
         /*
@@ -265,11 +353,19 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param integer[] $defaults
+     */
     public function setDefaults($defaults)
     {
         $this->defaults = $defaults;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_group::accept()
+     */
     public function accept($renderer, $required = false, $error = null)
     {
         $renderer->renderElement($this, $required, $error);

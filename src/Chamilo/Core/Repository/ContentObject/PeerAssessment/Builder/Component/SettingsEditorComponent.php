@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Form\PeerAssessmentSettingsForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class SettingsEditorComponent extends Manager
 {

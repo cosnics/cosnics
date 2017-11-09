@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

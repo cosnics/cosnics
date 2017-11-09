@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Link\Form;
 
 use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

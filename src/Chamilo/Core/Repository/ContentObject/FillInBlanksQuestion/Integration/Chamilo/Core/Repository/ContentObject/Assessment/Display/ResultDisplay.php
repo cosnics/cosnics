@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\As
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestionAnswer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

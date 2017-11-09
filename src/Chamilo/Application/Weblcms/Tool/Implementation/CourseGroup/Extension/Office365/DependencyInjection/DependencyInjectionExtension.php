@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;

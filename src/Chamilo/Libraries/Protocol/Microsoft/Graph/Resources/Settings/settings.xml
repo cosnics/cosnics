@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Libraries\Protocol\Microsoft\Graph">
+    <settings>
+        <category name="general">
+            <setting
+                name="client_id"
+                field="text"
+                default="" />
+            <setting
+                name="client_secret"
+                field="text"
+                default="" />
+            <setting
+                name="access_token"
+                field="text"
+                default=""
+                user_setting="true"
+                locked="true"
+                hidden="true" />
+            <setting
+                name="external_user_id"
+                field="text"
+                default=""
+                user_setting="true"
+                locked="true"
+                hidden="true" />
+            <setting
+                name="tenant_id"
+                field="text"
+                default="" />
+            <setting
+                name="planner_base_uri"
+                field="text"
+                default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner" />
+            <!--<setting -->
+            <!--name="tenant_name" -->
+            <!--field="text" -->
+            <!--default="" /> -->
+        </category>
+    </settings>
+</package>

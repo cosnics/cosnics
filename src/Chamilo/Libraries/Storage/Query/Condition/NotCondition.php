@@ -3,25 +3,25 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 
 /**
  * This type of aggregate condition negates a single condition, thus requiring that that condition not be met.
- * 
+ *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package common.libraries
+ * @package Chamilo\Libraries\Storage\Query\Condition
  */
 class NotCondition extends AggregateCondition
 {
 
     /**
      * The condition to negate
-     * 
-     * @var \libraries\storage\Condition
+     *
+     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private $condition;
 
     /**
      * Constructor
-     * 
-     * @param $condition \libraries\storage\Condition
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public function __construct(Condition $condition)
     {
@@ -30,8 +30,8 @@ class NotCondition extends AggregateCondition
 
     /**
      * Gets the condition to negate
-     * 
-     * @return \libraries\storage\Condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition()
     {
@@ -40,14 +40,14 @@ class NotCondition extends AggregateCondition
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
     public function getHashParts()
     {
         $hashParts = parent::getHashParts();
-        
+
         $hashParts[] = $this->get_condition()->getHashParts();
-        
+
         return $hashParts;
     }
 }

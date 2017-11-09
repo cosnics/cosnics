@@ -3,7 +3,10 @@ namespace Chamilo\Configuration\Package\Storage\DataClass;
 
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Exception;
 
@@ -285,8 +288,9 @@ class Package extends DataClass
      */
     public static function exists($context)
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
+        $packageFactory = new PackageFactory(
+            new PathBuilder(ClassnameUtilities::getInstance()),
+            Translation::getInstance());
 
         return $packageFactory->packageExists($context);
     }
@@ -300,8 +304,9 @@ class Package extends DataClass
      */
     public static function get($context)
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
+        $packageFactory = new PackageFactory(
+            new PathBuilder(ClassnameUtilities::getInstance()),
+            Translation::getInstance());
 
         return $packageFactory->getPackage($context);
     }
@@ -316,8 +321,9 @@ class Package extends DataClass
      */
     public static function parse_package(\DOMXPath $domXpath, \DOMElement $packageNode)
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        $packageFactory = $container->get('chamilo.configuration.package.service.package_factory');
+        $packageFactory = new PackageFactory(
+            new PathBuilder(ClassnameUtilities::getInstance()),
+            Translation::getInstance());
 
         return $packageFactory->parsePackageFromDom($domXpath, $packageNode);
     }

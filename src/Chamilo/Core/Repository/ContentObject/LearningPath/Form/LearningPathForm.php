@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Form;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

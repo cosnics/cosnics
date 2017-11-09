@@ -6,8 +6,8 @@ use DOMDocument;
 use SimpleXMLElement;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Result
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Result
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Xml extends RestResult
@@ -18,7 +18,6 @@ class Xml extends RestResult
     /**
      *
      * @param string $parse
-     *
      * @return \DOMDocument|\SimpleXMLElement
      */
     public function get_response_content($parse = self::PARSE_DOM)

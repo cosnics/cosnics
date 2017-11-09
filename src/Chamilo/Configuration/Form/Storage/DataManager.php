@@ -25,7 +25,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function delete_all_options_from_form_element($dynamic_form_element_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Option::class_name(), Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
+            new PropertyConditionVariable(Option::class_name(), Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new StaticConditionVariable($dynamic_form_element_id));
         return self::deletes(Option::class_name(), $condition);
     }
@@ -33,18 +33,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function delete_dynamic_form_element_values_from_form($dynamic_form_id)
     {
         $subcondition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID),
             new StaticConditionVariable($dynamic_form_id));
         $subselect = new SubselectCondition(
-            new PropertyConditionVariable(Value::class_name(), Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
-            Element::get_table_name(), 
+            new PropertyConditionVariable(Value::class_name(), Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID),
+            Element::get_table_name(),
             $subcondition);
-        
+
         return self::deletes(Value::class_name(), $subselect);
     }
 
-    public static function retrieve_dynamic_form_element_values($condition = null, $offset = null, $count = null, 
+    public static function retrieve_dynamic_form_element_values($condition = null, $offset = null, $count = null,
         $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
@@ -60,12 +60,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function select_next_dynamic_form_element_option_order($dynamic_form_element_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Option::class_name(), Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
+            new PropertyConditionVariable(Option::class_name(), Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new StaticConditionVariable($dynamic_form_element_id));
         return self::retrieve_next_value(Option::class_name(), Option::PROPERTY_DISPLAY_ORDER, $condition);
     }
 
-    public static function retrieve_dynamic_form_element_options($condition = null, $offset = null, $count = null, 
+    public static function retrieve_dynamic_form_element_options($condition = null, $offset = null, $count = null,
         $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
@@ -75,7 +75,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function select_next_dynamic_form_element_order($dynamic_form_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID),
             new StaticConditionVariable($dynamic_form_id));
         return self::retrieve_next_value(Element::class_name(), Element::PROPERTY_DISPLAY_ORDER, $condition);
     }

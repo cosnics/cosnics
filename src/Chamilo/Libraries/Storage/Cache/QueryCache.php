@@ -16,21 +16,21 @@ class QueryCache
 
     /**
      * The instance of the QueryCache
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Cache\QueryCache
      */
     private static $instance;
 
     /**
      * The cache
-     * 
+     *
      * @var mixed[][]
      */
     private $cache;
 
     /**
      * Get an instance of the QueryCache
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Cache\QueryCache
      */
     public static function getInstance()
@@ -50,7 +50,7 @@ class QueryCache
     public static function get($hash)
     {
         $instance = self::getInstance();
-        
+
         if (self::exists($hash))
         {
             return $instance->cache[$hash];
@@ -69,7 +69,7 @@ class QueryCache
     public static function exists($hash)
     {
         $instance = self::getInstance();
-        
+
         if (isset($instance->cache[$hash]))
         {
             return true;
@@ -82,18 +82,17 @@ class QueryCache
 
     /**
      *
-     * @param string $class
      * @return boolean
      */
     public static function truncate()
     {
         $instance = self::getInstance();
-        
+
         if (isset($instance->cache))
         {
             unset($instance->cache);
         }
-        
+
         return true;
     }
 
@@ -118,7 +117,7 @@ class QueryCache
      *
      * @param mixed $result
      * @param string $hash
-     * @throws Exception
+     * @throws \Exception
      * @return boolean
      */
     public static function add($result, $hash)
@@ -127,12 +126,12 @@ class QueryCache
         {
             throw new Exception('Illegal hash passed to the QueryCache');
         }
-        
+
         if (! self::get($hash))
         {
             self::set_cache($hash, $result);
         }
-        
+
         return true;
     }
 
@@ -144,17 +143,17 @@ class QueryCache
     {
         $backtrace = debug_backtrace(null, 2);
         $called_class = $backtrace[1];
-        
+
         $parts = array();
         $parts[] = $called_class['class'];
         $parts[] = $called_class['type'];
         $parts[] = $called_class['function'];
-        
+
         foreach ($called_class['args'] as $argument)
         {
             $parts[] = $argument;
         }
-        
+
         return md5(serialize($parts));
     }
 }

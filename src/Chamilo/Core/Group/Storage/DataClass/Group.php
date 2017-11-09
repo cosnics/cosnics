@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -318,7 +319,10 @@ class Group extends NestedSet
             $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
             $users = DataManager::distinct(
                 GroupRelUser::class_name(),
-                new DataClassDistinctParameters($condition, GroupRelUser::PROPERTY_USER_ID));
+                new DataClassDistinctParameters(
+                    $condition,
+                    new DataClassProperties(
+                        array(new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)))));
 
             $this->users[(int) $include_subgroups][(int) $recursive_subgroups] = $users;
         }
@@ -375,7 +379,9 @@ class Group extends NestedSet
 
             $subgroupIdentifiers = DataManager::distinct(
                 Group::class_name(),
-                new DataClassDistinctParameters($childrenCondition, Group::PROPERTY_ID));
+                new DataClassDistinctParameters(
+                    $childrenCondition,
+                    new DataClassProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))));
 
             $this->subgroupIdentifiers[(int) $recursive] = $subgroupIdentifiers;
         }
@@ -395,9 +401,11 @@ class Group extends NestedSet
                 $parameters = new DataClassCountParameters(
                     $condition,
                     null,
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)));
+                    new DataClassProperties(
+                        array(
+                            new FunctionConditionVariable(
+                                FunctionConditionVariable::DISTINCT,
+                                new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)))));
             }
             elseif ($include_subgroups && $recursive_subgroups)
             {
@@ -422,9 +430,11 @@ class Group extends NestedSet
                 $parameters = new DataClassCountParameters(
                     $condition,
                     $joins,
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)));
+                    new DataClassProperties(
+                        array(
+                            new FunctionConditionVariable(
+                                FunctionConditionVariable::DISTINCT,
+                                new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)))));
             }
             else
             {
@@ -447,9 +457,11 @@ class Group extends NestedSet
                 $parameters = new DataClassCountParameters(
                     $condition,
                     $joins,
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)));
+                    new DataClassProperties(
+                        array(
+                            new FunctionConditionVariable(
+                                FunctionConditionVariable::DISTINCT,
+                                new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID)))));
             }
 
             $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager::count(
@@ -512,7 +524,9 @@ class Group extends NestedSet
                 $children_condition = new EqualityCondition(
                     new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id()));
-                $this->subgroup_count[(int) $recursive] = DataManager::count(Group::class_name(), $children_condition);
+                $this->subgroup_count[(int) $recursive] = DataManager::count(
+                    Group::class_name(),
+                    new DataClassCountParameters($children_condition));
             }
         }
 

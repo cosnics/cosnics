@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl;
 
 /**
- * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl
  *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Authentication\Curl
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Digest extends Basic

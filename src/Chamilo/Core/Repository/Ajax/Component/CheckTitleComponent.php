@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class CheckTitleComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {

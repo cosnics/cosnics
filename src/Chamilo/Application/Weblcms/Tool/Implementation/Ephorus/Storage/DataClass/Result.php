@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class defines a result for a request for the ephorus tool

@@ -14,7 +14,7 @@ class ConditionPartCache
 
     /**
      * The cache
-     * 
+     *
      * @var string[][]
      */
     private $cache;
@@ -28,7 +28,7 @@ class ConditionPartCache
 
     /**
      * Get a translated condition from the cache
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @return string
      */
@@ -46,7 +46,7 @@ class ConditionPartCache
 
     /**
      * Returns whether a Condition object exists in the cache
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @return boolean
      */
@@ -64,7 +64,7 @@ class ConditionPartCache
 
     /**
      * Set the cache value for a specific Condition
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @param string $value
      */

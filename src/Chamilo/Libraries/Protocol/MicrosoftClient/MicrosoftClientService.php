@@ -13,9 +13,7 @@ use Chamilo\Libraries\File\Redirect;
  * - OAUTH2 v2.0: https://apps.dev.microsoft.com/
  * use the base URL of the Chamilo site, i.e my.chamilo.com/index.php.
  *
- *
  * @package Chamilo\Libraries\Protocol\MicrosoftClient
- *
  * @author Andras Zolnay - edufiles
  */
 class MicrosoftClientService
@@ -43,14 +41,13 @@ class MicrosoftClientService
     /**
      * The settings provider for the microsoft client
      *
-     * @var MicrosoftClientSettingsProviderInterface
+     * @var \Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderInterface
      */
     private $microsoftClientSettingsProvider;
 
     /**
-     * Constructo
      *
-     * @param MicrosoftClientSettingsProviderInterface $microsoftClientSettingsProvider
+     * @param \Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderInterface $microsoftClientSettingsProvider
      */
     public function __construct(MicrosoftClientSettingsProviderInterface $microsoftClientSettingsProvider)
     {
@@ -82,13 +79,14 @@ class MicrosoftClientService
      * -# When called second time, the $authenticationCode should be the value of parameter 'code' sent by the Microsoft
      * login page.
      *
-     * @param array $replyParameters Parameters of the component calling this function. We store this array in parameter
-     *            'state' which is
+     * @param string[] $replyParameters Parameters of the component calling this function. We store this array in
+     *            parameter
+     *        'state' which is
      *        used by Kernel::handleOAuth2() to find the calling component and call this function the second time.
      * @param string $authenticationCode: Should be null if function called the first time. When called second times,
-     *            the value of 'code' sent by
+     *        the value of 'code' sent by
      *        Microsoft login page.
-     * @return bool
+     * @return boolean
      */
     public function login($replyParameters = null, $authenticationCode = null)
     {
@@ -107,7 +105,7 @@ class MicrosoftClientService
     /**
      * Returns whether user has an access token.
      *
-     * @return bool
+     * @return boolean
      */
     public function isUserLoggedIn()
     {
@@ -119,7 +117,7 @@ class MicrosoftClientService
     /**
      * Removes the access token stored by the setting provider.
      *
-     * @return bool
+     * @return boolean
      */
     public function logout()
     {
@@ -131,9 +129,9 @@ class MicrosoftClientService
      *
      * @param string $method, 'POST', 'GET', etc.
      * @param string $endpoint Endpoint of Microsoft REST API, e.g. drive/root/children for listing content of root
-     *            directory via Microsoft
+     *        directory via Microsoft
      *        graph. $endpoint is concatenated with base URL provided by the setting provider.
-     * @return \Guzzle\Http\Message\Request.
+     * @return \Guzzle\Http\Message\Request
      */
     public function createRequest($method, $endpoint)
     {
@@ -144,9 +142,9 @@ class MicrosoftClientService
      * Refreshes access token and sends given request.
      *
      * @param \Guzzle\Http\Message\Request $request
-     * @param bool $shouldDecodeContent
+     * @param boolean $shouldDecodeContent
      *
-     * @return bool|\Guzzle\Http\EntityBodyInterface|mixed|string
+     * @return boolean|\Guzzle\Http\EntityBodyInterface|string
      */
     public function sendRequest(\Guzzle\Http\Message\Request $request, $shouldDecodeContent = true)
     {
@@ -223,6 +221,7 @@ class MicrosoftClientService
     /**
      * Returns URL of microsoft login page.
      *
+     * @param string[] $replyParameters
      * @return string
      */
     private function createAuthorizationUrl($replyParameters)
@@ -232,12 +231,11 @@ class MicrosoftClientService
             'response_type' => 'code',
             'redirect_uri' => $this->getRedirectUri(),
             'state' => base64_encode(serialize($replyParameters)),
-            'prompt' => 'login',
-        /*
-            'login_hint' => 'user name or email',
-            'domain_hint' => 'consumers or organizations'
-        */
-             );
+            'prompt' => 'login' /*
+                                 * 'login_hint' => 'user name or email',
+                                 * 'domain_hint' => 'consumers or organizations'
+                                 */
+);
 
         if (empty($this->microsoftClientSettingsProvider->getOauth2Version()))
         { // OUATH2
@@ -380,7 +378,7 @@ class MicrosoftClientService
      * expires_on: derived from attibute expires_in and current time and used by function hasAccessTokenExpired().
      *
      * @param \stdClass $accessToken
-     * @return bool
+     * @return boolean
      */
     private function saveAccessToken($accessToken)
     {

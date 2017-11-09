@@ -8,7 +8,7 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Connector;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type\Displayer;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class DisplayerForm extends ConfigurationForm
 {

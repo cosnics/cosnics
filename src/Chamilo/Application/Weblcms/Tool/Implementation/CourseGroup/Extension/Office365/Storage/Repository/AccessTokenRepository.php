@@ -2,7 +2,6 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use League\OAuth2\Client\Token\AccessToken;
 

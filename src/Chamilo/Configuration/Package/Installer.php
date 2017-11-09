@@ -4,7 +4,7 @@ namespace Chamilo\Configuration\Package;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

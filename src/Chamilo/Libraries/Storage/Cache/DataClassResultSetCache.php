@@ -18,31 +18,31 @@ class DataClassResultSetCache extends DataClassCache
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet $result_set
+     * @param \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet $resultSet
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      * @throws \Exception
      * @return boolean
      */
-    public static function add(DataClassResultSet $result_set, DataClassRetrievesParameters $parameters)
+    public static function add(DataClassResultSet $resultSet, DataClassRetrievesParameters $parameters)
     {
         if (! $parameters instanceof DataClassRetrievesParameters)
         {
             throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
-        
-        if (! $result_set instanceof DataClassResultSet)
+
+        if (! $resultSet instanceof DataClassResultSet)
         {
-            $type = is_object($result_set) ? get_class($result_set) : gettype($result_set);
+            $type = is_object($resultSet) ? get_class($resultSet) : gettype($resultSet);
             throw new Exception(
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
-        
-        if (! DataClassCache::get($result_set->getCacheClassName(), $parameters))
+
+        if (! DataClassCache::get($resultSet->getCacheClassName(), $parameters))
         {
-            DataClassCache::set_cache($result_set->getCacheClassName(), $parameters->hash(), $result_set);
+            DataClassCache::set_cache($resultSet->getCacheClassName(), $parameters->hash(), $resultSet);
         }
-        
+
         return true;
     }
 }

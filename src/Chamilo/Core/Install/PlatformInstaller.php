@@ -9,7 +9,7 @@ use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExten
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Chamilo\Core\Install\Service\ConfigurationWriter;

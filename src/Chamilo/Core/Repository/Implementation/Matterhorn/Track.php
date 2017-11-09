@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Matterhorn;
 
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Utilities\Html5MediaValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class Track

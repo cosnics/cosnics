@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Mail\Mailer;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Factory to instantiate the mailer

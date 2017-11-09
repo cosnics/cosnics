@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Component;
 
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;

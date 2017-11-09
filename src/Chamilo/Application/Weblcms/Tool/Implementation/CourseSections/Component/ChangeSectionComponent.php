@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use HTML_Table;
 

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -171,7 +172,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::count(
             ContentObjectPublicationCategory::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
     }
 
     public function retrieve_categories($condition, $offset, $count, $order_property)

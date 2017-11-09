@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * A case element condition variable that describes a single element of a case in a select query
- * 
+ *
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -18,21 +18,21 @@ class CaseElementConditionVariable extends ConditionVariable
     /**
      * The condition used after the WHEN statement.
      * If empty the case element is an ELSE statement.
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private $condition;
 
     /**
      * The Statement
-     * 
+     *
      * @var string
      */
     private $statement;
 
     /**
      * Constructor
-     * 
+     *
      * @param string $statement
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
@@ -44,7 +44,7 @@ class CaseElementConditionVariable extends ConditionVariable
 
     /**
      * Get the condition
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public function get_condition()
@@ -54,7 +54,7 @@ class CaseElementConditionVariable extends ConditionVariable
 
     /**
      * Set the condition
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition $condition
      */
     public function set_condition($condition)
@@ -64,7 +64,7 @@ class CaseElementConditionVariable extends ConditionVariable
 
     /**
      * Get the statement
-     * 
+     *
      * @return string
      */
     public function get_statement()
@@ -74,7 +74,7 @@ class CaseElementConditionVariable extends ConditionVariable
 
     /**
      * Set the statement
-     * 
+     *
      * @param string $statement
      */
     public function set_statement($statement)
@@ -82,17 +82,21 @@ class CaseElementConditionVariable extends ConditionVariable
         $this->statement = $statement;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
     public function getHashParts()
     {
         $hashParts = ConditionVariable::getHashParts();
-        
+
         if ($this->get_condition() instanceof Condition)
         {
             $hashParts[] = $this->get_condition()->hash();
         }
-        
+
         $hashParts[] = $this->get_statement();
-        
+
         return $hashParts;
     }
 }

@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\File\Redirect;
 

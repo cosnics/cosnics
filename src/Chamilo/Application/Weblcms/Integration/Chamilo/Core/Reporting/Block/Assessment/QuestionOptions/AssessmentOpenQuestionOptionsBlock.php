@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\QuestionOptions;
 
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Shows the options of the assessment open question

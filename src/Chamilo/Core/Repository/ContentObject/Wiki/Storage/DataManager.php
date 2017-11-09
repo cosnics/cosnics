@@ -15,46 +15,46 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_complex_wiki_pages($type, $parameters = null)
     {
         $join = new Join(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class_name(),
                     ComplexContentObjectItem::PROPERTY_REF)));
-        
+
         $joins = $parameters->get_joins();
-        
+
         if (! $joins instanceof Joins)
         {
             $joins = new Joins();
             $parameters->set_joins($joins);
         }
-        
+
         $joins->add($join);
-        
+
         return self::retrieves($type, $parameters);
     }
 
     public static function count_complex_wiki_pages($type, $parameters = null)
     {
         $join = new Join(
-            ContentObject::class_name(), 
+            ContentObject::class_name(),
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class_name(),
                     ComplexContentObjectItem::PROPERTY_REF)));
-        
+
         $joins = $parameters->get_joins();
-        
+
         if (! $joins instanceof Joins)
         {
             $joins = new Joins();
             $parameters->set_joins($joins);
         }
-        
+
         $joins->add($join);
-        
+
         return self::count($type, $parameters);
     }
 }

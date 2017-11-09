@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
 /**
  * Defines an element for an advanced element finder
  * When the element has children it becomes a category
- * 
+ *
+ * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
  * @author Sven Vanpoucke
  */
 class AdvancedElementFinderElement
@@ -21,11 +22,19 @@ class AdvancedElementFinderElement
 
     /**
      * Associative array for the properties
-     * 
-     * @var Array
+     *
+     * @var string[]
      */
     private $properties;
 
+    /**
+     *
+     * @param string $id
+     * @param string $class
+     * @param string $title
+     * @param string $description
+     * @param integer $type
+     */
     public function __construct($id, $class, $title, $description, $type = self :: TYPE_SELECTABLE)
     {
         $this->set_id($id);
@@ -37,29 +46,30 @@ class AdvancedElementFinderElement
 
     /**
      * Sets a property in the associative array of properties
-     * 
-     * @param String $property_name
-     * @param Object $value
+     *
+     * @param string $propertyName
+     * @param mixed $value
      */
-    public function set_property($property_name, $value)
+    public function set_property($propertyName, $value)
     {
-        $this->properties[$property_name] = $value;
+        $this->properties[$propertyName] = $value;
     }
 
     /**
      * Retrieves a property from the associative array of properties
-     * 
-     * @param String $property_name
+     *
+     * @param string $propertyName
+     * @return mixed
      */
-    public function get_property($property_name)
+    public function get_property($propertyName)
     {
-        return $this->properties[$property_name];
+        return $this->properties[$propertyName];
     }
 
     /**
      * Sets the id of this element
-     * 
-     * @param int $id
+     *
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -68,8 +78,8 @@ class AdvancedElementFinderElement
 
     /**
      * Returns the id of this element
-     * 
-     * @return int
+     *
+     * @return string
      */
     public function get_id()
     {
@@ -78,8 +88,8 @@ class AdvancedElementFinderElement
 
     /**
      * Sets the title of this element
-     * 
-     * @param String title
+     *
+     * @param string $title
      */
     public function set_title($title)
     {
@@ -88,8 +98,8 @@ class AdvancedElementFinderElement
 
     /**
      * Sets the description of this element
-     * 
-     * @param String description
+     *
+     * @param string $description
      */
     public function set_description($description)
     {
@@ -98,8 +108,8 @@ class AdvancedElementFinderElement
 
     /**
      * Sets the class of this element
-     * 
-     * @param String class
+     *
+     * @param string $class
      */
     public function set_class($class)
     {
@@ -108,8 +118,8 @@ class AdvancedElementFinderElement
 
     /**
      * Sets the type of this element
-     * 
-     * @param String type
+     *
+     * @param string $type
      */
     public function set_type($type)
     {
@@ -118,7 +128,7 @@ class AdvancedElementFinderElement
 
     /**
      * Sets the children of this element
-     * 
+     *
      * @param Array $children
      */
     public function set_children($children)
@@ -128,8 +138,8 @@ class AdvancedElementFinderElement
 
     /**
      * Retrieves the children of this element
-     * 
-     * @return Array
+     *
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     public function get_children()
     {
@@ -138,35 +148,35 @@ class AdvancedElementFinderElement
 
     /**
      * Adds a child to this element
-     * 
-     * @param AdvancedElementFinderElement $child
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement $child
      */
     public function add_child(AdvancedElementFinderElement $child)
     {
         $children = $this->get_children();
-        
+
         $children[] = $child;
-        
+
         $this->set_children($children);
     }
 
     /**
      * Returns this element as an array
-     * 
-     * @return Array
+     *
+     * @return string[][]
      */
     public function as_array()
     {
         $array = $this->properties;
         $array[self::PROPERTY_CHILDREN] = array();
-        
+
         $children = $this->get_children();
-        
+
         foreach ($children as $child)
         {
             $array[self::PROPERTY_CHILDREN][] = $child->as_array();
         }
-        
+
         return $array;
     }
 }

@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Common\Export\HtmlExportImp
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
 use HTML_Table;

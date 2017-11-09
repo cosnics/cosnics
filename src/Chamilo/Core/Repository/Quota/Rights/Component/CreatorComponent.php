@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Rights\Component;
 use Chamilo\Core\Repository\Quota\Rights\Form\RightsGroupForm;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class CreatorComponent extends Manager
 {

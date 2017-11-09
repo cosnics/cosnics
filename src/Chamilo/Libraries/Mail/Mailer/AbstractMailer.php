@@ -21,7 +21,7 @@ abstract class AbstractMailer implements MailerInterface
 
     /**
      * Mailer constructor.
-     * 
+     *
      * @param \Chamilo\Configuration\Configuration $configuration
      */
     public function __construct(Configuration $configuration = null)
@@ -30,13 +30,13 @@ abstract class AbstractMailer implements MailerInterface
         {
             $configuration = Configuration::getInstance();
         }
-        
+
         $this->configuration = $configuration;
     }
 
     /**
      * Sends multiple mails
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
     public function sendMails($mails = array())
@@ -49,7 +49,7 @@ abstract class AbstractMailer implements MailerInterface
 
     /**
      * Determines the sender name for the given mail
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
@@ -66,7 +66,7 @@ abstract class AbstractMailer implements MailerInterface
 
     /**
      * Determines the sender e-mail for the given mail
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
@@ -77,13 +77,13 @@ abstract class AbstractMailer implements MailerInterface
         {
             return $mail->getFromEmail();
         }
-        
+
         return $this->determineDefaultEmail();
     }
 
     /**
      * Determines the reply name for the given mail
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
@@ -100,7 +100,7 @@ abstract class AbstractMailer implements MailerInterface
 
     /**
      * Determines the reply e-mail for the given mail
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
@@ -111,13 +111,13 @@ abstract class AbstractMailer implements MailerInterface
         {
             return $mail->getReplyEmail();
         }
-        
+
         return $this->determineDefaultEmail();
     }
 
     /**
      * Determines the default e-mail address when no valid e-mail is given
-     * 
+     *
      * @return string
      */
     protected function determineDefaultEmail()
@@ -127,15 +127,15 @@ abstract class AbstractMailer implements MailerInterface
         {
             return $noReplyEmail;
         }
-        
+
         return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_email'));
     }
 
     /**
      * Logs a send (or not send) mail to the database
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     * @param int $state
+     * @param integer $state
      * @param string $message
      *
      * @throws \RuntimeException

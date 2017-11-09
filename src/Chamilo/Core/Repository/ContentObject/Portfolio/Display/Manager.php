@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios

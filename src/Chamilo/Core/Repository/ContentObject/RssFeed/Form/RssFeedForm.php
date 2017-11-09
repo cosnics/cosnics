@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Form;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
 
 /**
@@ -9,10 +8,11 @@ namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
  */
 interface PHPUnitGeneratorInterface
 {
+
     /**
      * Generates the global phpunit configuration file for Chamilo
      *
-     * @param bool $includeSource
+     * @param boolean $includeSource
      */
     public function generate($includeSource = true);
 }

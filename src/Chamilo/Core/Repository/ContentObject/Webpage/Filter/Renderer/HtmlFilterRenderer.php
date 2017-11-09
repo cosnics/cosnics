@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Webpage\Filter\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Webpage\Filter\FilterData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 
 /**

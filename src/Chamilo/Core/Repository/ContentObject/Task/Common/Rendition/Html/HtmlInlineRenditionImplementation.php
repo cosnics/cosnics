@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Task\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\Task\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

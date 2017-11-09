@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestion;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

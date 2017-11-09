@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**

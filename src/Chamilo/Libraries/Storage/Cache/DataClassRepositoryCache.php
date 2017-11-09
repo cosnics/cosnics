@@ -48,7 +48,7 @@ class DataClassRepositoryCache
      *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @return boolean
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function get($class, DataClassParameters $parameters)
     {
@@ -67,7 +67,7 @@ class DataClassRepositoryCache
      * Returns whether a DataClass object exists in the cache
      *
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
      */
     public function exists($class, DataClassParameters $parameters)
@@ -134,7 +134,7 @@ class DataClassRepositoryCache
     /**
      *
      * @param string $class
-     * @param DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @param mixed $value
      * @return boolean
      */
@@ -234,7 +234,7 @@ class DataClassRepositoryCache
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     * @throws Exception
+     * @throws \Exception
      * @return boolean
      */
     public function deleteForDataClass(DataClass $object)
@@ -289,7 +289,7 @@ class DataClassRepositoryCache
      * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      * @param integer $count
-     * @throws Exception
+     * @throws \Exception
      * @return boolean
      */
     public function addForDataClassCount($className, $parameters, $count)
@@ -314,8 +314,8 @@ class DataClassRepositoryCache
      *
      * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     * @param string[] $property_values
-     * @throws Exception
+     * @param string[] $propertyValues
+     * @throws \Exception
      * @return boolean
      */
     public function addForDataClassDistinct($className, $parameters, $propertyValues)
@@ -341,7 +341,7 @@ class DataClassRepositoryCache
      * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      * @param integer[] $counts
-     * @throws Exception
+     * @throws \Exception
      * @return boolean
      */
     public function addForDataClassCountGrouped($className, $parameters, $counts)
@@ -364,6 +364,7 @@ class DataClassRepositoryCache
 
     /**
      *
+     * @param string $className
      * @param string[] $record
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      * @throws \Exception
@@ -388,6 +389,7 @@ class DataClassRepositoryCache
 
     /**
      *
+     * @param string $className
      * @param \Chamilo\Libraries\Storage\Iterator\RecordIterator $recordIterator
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      * @throws \Exception

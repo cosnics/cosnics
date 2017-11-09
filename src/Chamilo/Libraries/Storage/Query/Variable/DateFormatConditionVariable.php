@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 
 /**
  * A ConditionVariable that describes a function on another ConditionVariable
- * 
+ *
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -14,14 +14,14 @@ class DateFormatConditionVariable extends ConditionVariable
 
     /**
      * The ConditionVariable
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $condition_variable;
 
     /**
      * The DateFormat string
-     * 
+     *
      * @var string
      */
     private $format;
@@ -35,19 +35,19 @@ class DateFormatConditionVariable extends ConditionVariable
     /**
      *
      * @param string $format
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param string $alias
      */
-    public function __construct($format, $condition_variable, $alias = null)
+    public function __construct($format, $conditionVariable, $alias = null)
     {
-        $this->condition_variable = $condition_variable;
+        $this->condition_variable = $conditionVariable;
         $this->format = $format;
         $this->alias = $alias;
     }
 
     /**
      * Get the ConditionVariable on the condition_variable side of the operation
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_condition_variable()
@@ -57,12 +57,12 @@ class DateFormatConditionVariable extends ConditionVariable
 
     /**
      * Set the ConditionVariable on the condition_variable side of the operation
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      */
-    public function set_condition_variable($condition_variable)
+    public function set_condition_variable($conditionVariable)
     {
-        $this->condition_variable = $condition_variable;
+        $this->condition_variable = $conditionVariable;
     }
 
     /**
@@ -101,14 +101,18 @@ class DateFormatConditionVariable extends ConditionVariable
         $this->alias = $alias;
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
     public function getHashParts()
     {
         $hashParts = ConditionVariable::getHashParts();
-        
+
         $hashParts[] = $this->get_condition_variable()->getHashParts();
         $hashParts[] = $this->get_format();
         $hashParts[] = $this->get_alias();
-        
+
         return $hashParts;
     }
 }

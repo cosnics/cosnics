@@ -19,7 +19,7 @@ class Security
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
      *
      * @param string $variable
-     * @param bool $isAdmin
+     * @param boolean $isAdmin
      *
      * @return string string
      * @deprecated
@@ -37,7 +37,7 @@ class Security
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
      *
      * @param string $variable
-     * @param bool $isAdmin
+     * @param boolean $isAdmin
      *
      * @return string string
      */
@@ -112,7 +112,7 @@ class Security
     /**
      *
      * @param string[] $array
-     * @param bool $isAdmin
+     * @param boolean $isAdmin
      *
      * @return string[]
      *
@@ -128,7 +128,7 @@ class Security
     /**
      *
      * @param string[] $array
-     * @param bool $isAdmin
+     * @param boolean $isAdmin
      *
      * @return string[]
      */
@@ -171,7 +171,7 @@ class Security
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
      *
-     * @return bool
+     * @return boolean
      *
      * @deprecated
      *
@@ -185,7 +185,7 @@ class Security
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
      *
-     * @return bool
+     * @return boolean
      */
     public function checkUa()
     {
@@ -249,7 +249,7 @@ class Security
      *
      * @param string $array
      *
-     * @return bool if it's the right token, false otherwise
+     * @return boolean if it's the right token, false otherwise
      * @deprecated
      *
      * @see checkToken
@@ -265,7 +265,7 @@ class Security
      *
      * @param string $array
      *
-     * @return bool if it's the right token, false otherwise
+     * @return boolean if it's the right token, false otherwise
      */
     public function checkToken($array = 'post')
     {
@@ -299,7 +299,7 @@ class Security
     /**
      * Checks whether or not the logged in user is a platform admin or a teacher
      *
-     * @return bool
+     * @return boolean
      */
     protected function isPlatformAdminOrTeacher()
     {

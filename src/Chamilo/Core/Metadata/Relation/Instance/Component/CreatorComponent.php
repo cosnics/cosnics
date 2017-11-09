@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
