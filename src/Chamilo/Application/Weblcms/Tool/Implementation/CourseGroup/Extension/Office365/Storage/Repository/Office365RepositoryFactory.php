@@ -69,17 +69,32 @@ class Office365RepositoryFactory
         );
 
         $redirect = new Redirect(
-            ['application' => 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365']
+//            ['application' => 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365']
         );
 
-        $oauthClient = $provider = new \League\OAuth2\Client\Provider\GenericProvider(
+        $currentParameters = $this->chamiloRequest->query->all();
+        $landingPageParameters = [
+            'application' => 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365'
+        ];
+
+        $state = base64_encode(
+            json_encode(
+                [
+                    'landingPageParameters' => $landingPageParameters,
+                    'currentUrlParameters' => $currentParameters
+                ]
+            )
+        );
+
+        $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider(
             [
                 'clientId' => $clientId,
                 'clientSecret' => $clientSecret,
                 'urlAuthorize' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/authorize',
                 'urlAccessToken' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/token',
                 'redirectUri' => $redirect->getUrl(),
-                'urlResourceOwnerDetails' => new \stdClass()
+                'urlResourceOwnerDetails' => new \stdClass(),
+                'state' => $state
             ]
         );
 

@@ -56,7 +56,7 @@ class VisitPlannerComponent extends Manager
         );
 
         $planId = $reference->getOffice365PlanId();
-        if (empty($planId))
+        if (!empty($planId))
         {
             $planId = $this->getOffice365Service()->getDefaultGroupPlanId($reference->getOffice365GroupId());
             $office365ReferenceService->storePlannerReferenceForCourseGroup(

@@ -463,20 +463,21 @@ class Kernel
             return $this;
         }
 
-        $stateParameters = unserialize($decodedState);
+        $stateParameters = json_decode($decodedState, true);
 
-        if(!is_array($stateParameters))
+        if(!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters))
         {
             return $this;
         }
 
-        $stateParameters[self::PARAM_CODE] = $code;
+        $landingPageParameters = $stateParameters['landingPageParameters'];
+        $landingPageParameters[self::PARAM_CODE] = $code;
         if ($session_state)
         {
-            $stateParameters[self::PARAM_SESSION_STATE] = $session_state;
+            $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;
         }
 
-        $redirect = new Redirect($stateParameters);
+        $redirect = new Redirect($landingPageParameters);
         $redirect->toUrl();
 
         return $this;

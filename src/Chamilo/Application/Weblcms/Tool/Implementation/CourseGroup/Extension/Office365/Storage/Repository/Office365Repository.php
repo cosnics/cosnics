@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Redirect;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
@@ -103,9 +104,7 @@ class Office365Repository
      */
     protected function requestNewDelegatedAccessToken()
     {
-        $authorizationUrl = $this->oauthProvider->getAuthorizationUrl(
-            ['state' => base64_encode($this->currentRequestUrl)]
-        );
+        $authorizationUrl = $this->oauthProvider->getAuthorizationUrl(['state' => $this->oauthProvider->getState()]);
 
         $redirectResponse = new RedirectResponse($authorizationUrl);
         $redirectResponse->send();
