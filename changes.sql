@@ -282,6 +282,7 @@ INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user
 
 DELETE FROM `configuration_setting` WHERE `variable` LIKE 'maintenance_mode' AND context LIKE 'Chamilo\\\\Core\\\\Admin';
 
+ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_traversing_order` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `added_date`;
 
 ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_traversing_order` INT(10) UNSIGNED NOT NULL AFTER `blocked`;
 
