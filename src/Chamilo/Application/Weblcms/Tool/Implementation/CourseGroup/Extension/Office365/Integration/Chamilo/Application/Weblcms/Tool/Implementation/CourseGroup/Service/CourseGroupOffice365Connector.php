@@ -77,11 +77,7 @@ class CourseGroupOffice365Connector
         }
 
         $groupId = $this->office365Service->createGroupByName($user, $courseGroup->get_name());
-        $planId = $this->office365Service->getDefaultGroupPlanId($groupId);
-
-        $this->courseGroupOffice365ReferenceService->storePlannerReferenceForCourseGroup(
-            $courseGroup, $groupId, $planId
-        );
+        $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $groupId);
 
         $this->subscribeTeachers($courseGroup, $groupId);
         $this->subscribeCourseGroupUsers($courseGroup, $groupId);

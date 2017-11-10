@@ -481,6 +481,8 @@ class CourseGroupForm extends FormValidator
                     }
                 }
 
+                $course_group->update();
+
                 $this->courseGroupDecoratorsManager->updateGroup($course_group, $this->currentUser, $values);
 
                 // Change the parent

@@ -67,9 +67,7 @@ class Office365RepositoryFactory
             ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'tenant_id']
         );
 
-        $redirect = new Redirect(
-//            ['application' => 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365']
-        );
+        $redirect = new Redirect();
 
         $currentParameters = $this->chamiloRequest->query->all();
         $landingPageParameters = [

@@ -23,7 +23,8 @@ class VisitPlannerComponent extends Manager
         $parentComponent = $this->getIntegrationLauncherComponent();
         $courseGroup = $parentComponent->get_course_group();
 
-        if (!$parentComponent->get_course()->is_course_admin($this->getUser()) ||
+        if (!$this->getUser()->is_platform_admin() &&
+            !$parentComponent->get_course()->is_course_admin($this->getUser()) &&
             !$courseGroup->is_member($this->getUser()))
         {
             throw new NotAllowedException();
@@ -55,7 +56,7 @@ class VisitPlannerComponent extends Manager
         );
 
         $planId = $reference->getOffice365PlanId();
-        if (!empty($planId))
+        if (empty($planId))
         {
             $planId = $this->getOffice365Service()->getDefaultGroupPlanId($reference->getOffice365GroupId());
             $office365ReferenceService->storePlannerReferenceForCourseGroup(

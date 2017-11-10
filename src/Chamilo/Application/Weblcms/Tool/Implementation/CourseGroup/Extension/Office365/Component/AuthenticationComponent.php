@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -17,6 +19,8 @@ class AuthenticationComponent extends Manager
 
     /**
      * @return string
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {
@@ -25,7 +29,14 @@ class AuthenticationComponent extends Manager
 
         $this->getOffice365Service()->authorizeUserByAuthorizationCode($authorizationCode);
 
-        $currentRequestUrl = base64_decode($state);
-        return new RedirectResponse($currentRequestUrl);
+
+        $decodedState = json_decode(base64_decode($state), true);
+        if(!is_array($decodedState) || !array_key_exists('currentUrlParameters', $decodedState))
+        {
+            throw new NotAllowedException();
+        }
+
+        $redirect = new Redirect($decodedState['currentUrlParameters']);
+        return new RedirectResponse($redirect->getUrl());
     }
 }

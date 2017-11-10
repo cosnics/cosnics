@@ -472,6 +472,11 @@ class Kernel
 
         $landingPageParameters = $stateParameters['landingPageParameters'];
         $landingPageParameters[self::PARAM_CODE] = $code;
+
+        unset($stateParameters['landingPageParameters']);
+
+        $landingPageParameters[self::PARAM_STATE] = base64_encode(json_encode($stateParameters));
+
         if ($session_state)
         {
             $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;

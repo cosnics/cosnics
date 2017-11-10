@@ -119,6 +119,14 @@ class Office365Repository
         {
             $this->requestNewDelegatedAccessToken();
         }
+        elseif($this->delegatedAccessToken->hasExpired())
+        {
+            $this->delegatedAccessToken = $this->oauthProvider->getAccessToken(
+                'refresh_token', ['refresh_token' => $this->delegatedAccessToken->getRefreshToken()]
+            );
+
+            $this->accessTokenRepository->storeDelegatedAccessToken($this->delegatedAccessToken);
+        }
 
         $this->graph->setAccessToken($this->delegatedAccessToken);
     }
