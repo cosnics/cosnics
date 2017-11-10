@@ -44,41 +44,45 @@ class CalendarRepository
 
     /**
      *
+     * @param string $azureUserIdentifier
      * @return \Microsoft\Graph\Model\Calendar[]
      */
-    public function listOwnedCalendars()
+    public function listOwnedCalendars($azureUserIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'me/calendars',
+            'users/' . $azureUserIdentifier . '/calendars',
             \Microsoft\Graph\Model\Calendar::class);
     }
 
     /**
      *
      * @param string $calendarIdentifier
+     * @param string $azureUserIdentifier
      * @return \Microsoft\Graph\Model\Calendar
      */
-    public function getCalendarByIdentifier($calendarIdentifier)
+    public function getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'me/calendars/' . $calendarIdentifier,
+            'users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
             \Microsoft\Graph\Model\Calendar::class);
     }
 
     /**
      *
      * @param string $calendarIdentifier
+     * @param string $azureUserIdentifier
      * @param integer $fromDate
      * @param integer $toDate
-     * @return \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
+     * @return \Microsoft\Graph\Model\Event[]
      */
-    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
+    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $azureUserIdentifier, $fromDate,
+        $toDate)
     {
         $queryParameters = http_build_query(
             ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]);
 
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'me/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
-            \Microsoft\Graph\Model\Calendar::class);
+            'users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
+            \Microsoft\Graph\Model\Event::class);
     }
 }
