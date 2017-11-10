@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace;
 
 use Chamilo\Core\Repository\Workspace\Manager;
@@ -27,22 +28,34 @@ class WorkspaceTable extends DataClassTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        
+
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE, 
-                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE)), 
-                Translation::get('FavouriteSelected', null, Manager::context()), 
-                false));
-        
+                        Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE,
+                        Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                    )
+                ),
+                Translation::get('FavouriteSelected', null, Manager::context()),
+                false
+            )
+        );
+
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
-                Translation::get('DeleteSelected', null, Utilities::COMMON_LIBRARIES), 
-                true));
-        
+                $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                        Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                    )
+                ),
+                Translation::get('DeleteSelected', null, Utilities::COMMON_LIBRARIES),
+                true
+            )
+        );
+
         return $actions;
     }
 }

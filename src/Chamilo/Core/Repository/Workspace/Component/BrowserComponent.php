@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
@@ -16,6 +17,11 @@ class BrowserComponent extends TabComponent implements TableSupport
 
     public function build()
     {
+        if(!$this->getUser()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
         $table = new WorkspaceTable($this);
         
         $html = array();

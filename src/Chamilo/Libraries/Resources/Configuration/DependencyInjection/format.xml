@@ -20,6 +20,14 @@
         </service>
 
         <service
+            id="chamilo.libraries.format.breadcrumb_trail_renderer"
+            class="Chamilo\Libraries\Format\BreadcrumbTrailRenderer">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+        </service>
+
+        <service
             id="chamilo.libraries.format.utilities.resource_processor"
             class="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
             <argument

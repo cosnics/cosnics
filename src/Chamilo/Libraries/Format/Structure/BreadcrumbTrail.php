@@ -383,4 +383,58 @@ class BreadcrumbTrail
     {
         $this->breadcrumbtrail = array_merge($this->breadcrumbtrail, $trail->get_breadcrumbtrail());
     }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
+     */
+    public function getBreadcrumbs()
+    {
+        return $this->breadcrumbtrail;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
+     */
+    public function setBreadcrumbs($breadcrumbs)
+    {
+        $this->breadcrumbtrail = $breadcrumbs;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getHelpItem()
+    {
+        return $this->help_item;
+    }
+
+    /**
+     *
+     * @param string[] $helpItem
+     */
+    public function setHelpItem($helpItem)
+    {
+        $this->help_item = $helpItem;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
+     */
+    public function getExtraItems()
+    {
+        return $this->extra_items;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $extraItems
+     */
+    public function setExtraItems($extraItems)
+    {
+        $this->extra_items = $extraItems;
+    }
 }
