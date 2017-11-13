@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Manager;
@@ -8,8 +7,8 @@ use Chamilo\Libraries\File\Redirect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Component
  *
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AuthenticationComponent extends Manager
@@ -18,6 +17,7 @@ class AuthenticationComponent extends Manager
     const PARAM_AUTHORIZATION_STATE = 'state';
 
     /**
+     *
      * @return string
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -29,9 +29,8 @@ class AuthenticationComponent extends Manager
 
         $this->getOffice365Service()->authorizeUserByAuthorizationCode($authorizationCode);
 
-
         $decodedState = json_decode(base64_decode($state), true);
-        if(!is_array($decodedState) || !array_key_exists('currentUrlParameters', $decodedState))
+        if (! is_array($decodedState) || ! array_key_exists('currentUrlParameters', $decodedState))
         {
             throw new NotAllowedException();
         }

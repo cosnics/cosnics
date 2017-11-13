@@ -11,6 +11,7 @@ use Microsoft\Graph\Graph;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GraphRepositoryFactory
 {
@@ -66,6 +67,20 @@ class GraphRepositoryFactory
 
         $redirect = new Redirect(['application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph']);
 
+        $currentParameters = $this->chamiloRequest->query->all();
+        $landingPageParameters = [
+            'application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph'
+        ];
+
+        $state = base64_encode(
+            json_encode(
+                [
+                    'landingPageParameters' => $landingPageParameters,
+                    'currentUrlParameters' => $currentParameters
+                ]
+                )
+            );
+
         $oauthClient = $provider = new \League\OAuth2\Client\Provider\GenericProvider(
             [
                 'clientId' => $clientId,
@@ -73,7 +88,10 @@ class GraphRepositoryFactory
                 'urlAuthorize' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/authorize',
                 'urlAccessToken' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/token',
                 'redirectUri' => $redirect->getUrl(),
-                'urlResourceOwnerDetails' => new \stdClass()]);
+                'urlResourceOwnerDetails' => new \stdClass(),
+                'state' => $state
+            ]
+            );
 
         $graph = new Graph();
 

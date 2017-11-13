@@ -7,20 +7,20 @@ use Chamilo\Libraries\Architecture\Application\Application;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = 'Office365Action';
+    const PARAM_ACTION = 'GraphAction';
     const ACTION_AUTHENTICATE = 'Authentication';
     const DEFAULT_ACTION = self::ACTION_AUTHENTICATE;
 
     /**
      *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\Office365Service
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService
      */
-    protected function getOffice365Service()
+    protected function getGraphService()
     {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.course_group.extension.office365.service.office365_service');
+        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.graph_service');
     }
 }

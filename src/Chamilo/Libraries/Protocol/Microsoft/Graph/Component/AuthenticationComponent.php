@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Component;
 
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Manager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -24,9 +26,15 @@ class AuthenticationComponent extends Manager
         $authorizationCode = $this->getRequest()->getFromUrl(self::PARAM_AUTHORIZATION_CODE);
         $state = $this->getRequest()->getFromUrl(self::PARAM_AUTHORIZATION_STATE);
 
-        $this->getOffice365Service()->authorizeUserByAuthorizationCode($authorizationCode);
+        $this->getGraphService()->authorizeUserByAuthorizationCode($authorizationCode);
 
-        $currentRequestUrl = base64_decode($state);
-        return new RedirectResponse($currentRequestUrl);
+        $decodedState = json_decode(base64_decode($state), true);
+        if (! is_array($decodedState) || ! array_key_exists('currentUrlParameters', $decodedState))
+        {
+            throw new NotAllowedException();
+        }
+
+        $redirect = new Redirect($decodedState['currentUrlParameters']);
+        return new RedirectResponse($redirect->getUrl());
     }
 }
