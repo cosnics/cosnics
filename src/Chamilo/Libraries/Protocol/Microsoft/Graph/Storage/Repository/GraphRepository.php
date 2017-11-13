@@ -134,7 +134,7 @@ class GraphRepository
      *
      * @param \League\OAuth2\Client\Token\AccessToken $delegatedAccessToken
      */
-    public function setDelegatedAccessToken(AccessToken $delegatedAccessToken)
+    public function setDelegatedAccessToken(AccessToken $delegatedAccessToken = null)
     {
         $this->delegatedAccessToken = $delegatedAccessToken;
     }

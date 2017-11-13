@@ -22,12 +22,21 @@ class LoginComponent extends Manager implements DelegateComponent
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $result = $calendarService->login($this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE));
-        
+
         if ($result)
         {
             $nextAction = new Redirect(
                 array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
             $nextAction->toUrl();
         }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService
+     */
+    public function getCalendarService()
+    {
+        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.calendar_service');
     }
 }
