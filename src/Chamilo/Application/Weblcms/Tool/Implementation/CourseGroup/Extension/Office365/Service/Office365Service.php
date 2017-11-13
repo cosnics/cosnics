@@ -50,8 +50,6 @@ class Office365Service
      */
     public function createGroupByName(User $owner, $groupName)
     {
-        // TODO: Temporarily hardcode this to avoid new groups being created
-        return 'e5dcbd72-8938-4ed2-9b31-fbac1b04ea3b';
         $office365UserIdentifier = $this->getOffice365UserIdentifier($owner);
 
         if (empty($office365UserIdentifier))
@@ -60,7 +58,7 @@ class Office365Service
         }
 
         $group = $this->office365Repository->createGroup($groupName);
-        $this->office365Repository->subscribeMemberInGroup($group, $office365UserIdentifier);
+        $this->office365Repository->subscribeMemberInGroup($group->getId(), $office365UserIdentifier);
 
         return $group->getId();
     }
@@ -114,12 +112,6 @@ class Office365Service
         if ($this->isMemberOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-
-            if (empty($office365UserIdentifier))
-            {
-                throw new Office365UserNotExistsException($user);
-            }
-
             $this->office365Repository->removeMemberFromGroup($groupId, $office365UserIdentifier);
         }
     }
@@ -216,11 +208,6 @@ class Office365Service
         if ($this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
-            if (empty($office365UserIdentifier))
-            {
-                throw new Office365UserNotExistsException($user);
-            }
-
             $this->office365Repository->removeOwnerFromGroup($groupId, $office365UserIdentifier);
         }
     }

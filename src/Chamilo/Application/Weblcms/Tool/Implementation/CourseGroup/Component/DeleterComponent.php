@@ -71,7 +71,7 @@ class DeleterComponent extends Manager
                     continue;
                 }
 
-                $this->getCourseGroupDecoratorsManager()->deleteGroup($cg);
+                $this->getCourseGroupDecoratorsManager()->deleteGroup($cg, $this->getUser());
 
                 $cg->delete();
             }
