@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Source;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Source;
 
 use Chamilo\Libraries\Architecture\Test\TestApplication;
 
