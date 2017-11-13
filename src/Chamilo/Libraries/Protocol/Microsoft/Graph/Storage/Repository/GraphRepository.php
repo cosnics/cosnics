@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GraphRepository
 {
@@ -194,7 +195,7 @@ class GraphRepository
     protected function requestNewDelegatedAccessToken()
     {
         $authorizationUrl = $this->getOauthProvider()->getAuthorizationUrl(
-            ['state' => base64_encode($this->getCurrentRequestUrl())]);
+            ['state' => $this->oauthProvider->getState()]);
 
         $redirectResponse = new RedirectResponse($authorizationUrl);
         $redirectResponse->send();
@@ -211,8 +212,17 @@ class GraphRepository
         {
             $this->requestNewDelegatedAccessToken();
         }
+        elseif ($delegatedAccessToken->hasExpired())
+        {
+            $this->setDelegatedAccessToken(
+                $this->getOauthProvider()->getAccessToken(
+                    'refresh_token',
+                    ['refresh_token' => $delegatedAccessToken->getRefreshToken()]));
 
-        $this->getGraph()->setAccessToken($delegatedAccessToken);
+            $this->accessTokenRepository->storeDelegatedAccessToken($this->getDelegatedAccessToken());
+        }
+
+        $this->getGraph()->setAccessToken($this->getDelegatedAccessToken());
     }
 
     /**
@@ -319,7 +329,7 @@ class GraphRepository
     protected function createAndExecuteRequestWithDelegatedAccessToken($requestType, $endpoint, $requestBody = [],
         $returnClass = null)
     {
-        return $this->executeRequestWithDelegatedAccessToken(
+        return $this->executeRequestWithDelegatedAccess(
             $this->createRequest($requestType, $endpoint, $requestBody, $returnClass));
     }
 

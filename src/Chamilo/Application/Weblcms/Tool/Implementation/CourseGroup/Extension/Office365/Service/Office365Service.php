@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
@@ -8,18 +7,21 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
  *
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Office365Service
 {
+
     /**
+     *
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository
      */
     protected $office365Repository;
 
     /**
+     *
      * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
      */
     protected $localSetting;
@@ -73,7 +75,8 @@ class Office365Service
     }
 
     /**
-     * Adds a member to a group. Checking if the user is already subscribed or not.
+     * Adds a member to a group.
+     * Checking if the user is already subscribed or not.
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -82,7 +85,7 @@ class Office365Service
      */
     public function addMemberToGroup($groupId, User $user)
     {
-        if (!$this->isMemberOfGroup($groupId, $user))
+        if (! $this->isMemberOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
 
@@ -96,7 +99,8 @@ class Office365Service
     }
 
     /**
-     * Removes a member from a group. Checking if the user is subscribed or not.
+     * Removes a member from a group.
+     * Checking if the user is subscribed or not.
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -168,7 +172,8 @@ class Office365Service
     }
 
     /**
-     * Adds a owner to a group. Checking if the user is already subscribed or not.
+     * Adds a owner to a group.
+     * Checking if the user is already subscribed or not.
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -177,7 +182,7 @@ class Office365Service
      */
     public function addOwnerToGroup($groupId, User $user)
     {
-        if (!$this->isOwnerOfGroup($groupId, $user))
+        if (! $this->isOwnerOfGroup($groupId, $user))
         {
             $office365UserIdentifier = $this->getOffice365UserIdentifier($user);
             if (empty($office365UserIdentifier))
@@ -190,7 +195,8 @@ class Office365Service
     }
 
     /**
-     * Removes a owner from a group. Checking if the user is subscribed or not.
+     * Removes a owner from a group.
+     * Checking if the user is subscribed or not.
      *
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -309,8 +315,9 @@ class Office365Service
     public function getOffice365UserIdentifier(User $user)
     {
         $office365UserIdentifier = $this->localSetting->get(
-            'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
-        );
+            'external_user_id',
+            'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
+            $user);
 
         if (empty($office365UserIdentifier))
         {
@@ -322,9 +329,10 @@ class Office365Service
             }
 
             $this->localSetting->create(
-                'external_user_id', $office365UserIdentifier,
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
-            );
+                'external_user_id',
+                $office365UserIdentifier,
+                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
+                $user);
         }
 
         return $office365UserIdentifier;
@@ -339,5 +347,4 @@ class Office365Service
     {
         $this->office365Repository->authorizeUserByAuthorizationCode($authorizationCode);
     }
-
 }

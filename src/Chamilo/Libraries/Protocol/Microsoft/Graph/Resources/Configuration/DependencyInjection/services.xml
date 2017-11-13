@@ -36,17 +36,6 @@
             factory-method="buildGraphRepository" />
 
         <service
-            id="chamilo.libraries.protocol.microsoft.graph.service.graph_service"
-            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService">
-            <argument
-                type="service"
-                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.configuration.local_setting" />
-        </service>
-
-        <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository"
             class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository">
             <argument
@@ -68,6 +57,57 @@
             <argument
                 type="service"
                 id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+        </service>
+
+
+        <service
+            id="chamilo.libraries.protocol.microsoft.graph.service.graph_service"
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService">
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.service.group_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.service.calendar_service" />
+        </service>
+
+
+        <service
+            id="chamilo.libraries.protocol.microsoft.graph.service.user_service"
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService">
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.configuration.local_setting" />
+        </service>
+
+
+        <service
+            id="chamilo.libraries.protocol.microsoft.graph.service.group_service"
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService">
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.group_repository" />
+        </service>
+
+
+        <service
+            id="chamilo.libraries.protocol.microsoft.graph.service.calendar_service"
+            class="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService">
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.service.user_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.protocol.microsoft.graph.storage.repository.calendar_repository" />
         </service>
 
     </services>

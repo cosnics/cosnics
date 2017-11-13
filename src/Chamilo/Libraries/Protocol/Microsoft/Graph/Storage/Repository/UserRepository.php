@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserRepository
 {
@@ -66,5 +67,15 @@ class UserRepository
 
             throw $exception;
         }
+    }
+
+    /**
+     * Authorizes a user by a given authorization code
+     *
+     * @param string $authorizationCode
+     */
+    public function authorizeUserByAuthorizationCode($authorizationCode)
+    {
+        $this->getGraphRepository()->authorizeUserByAuthorizationCode($authorizationCode);
     }
 }

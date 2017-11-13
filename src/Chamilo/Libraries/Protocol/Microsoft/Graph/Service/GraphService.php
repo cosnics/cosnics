@@ -2,365 +2,273 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository;
 
 /**
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GraphService
 {
 
     /**
      *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    protected $graphRepository;
+    private $userService;
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
      */
-    protected $localSetting;
+    private $groupService;
 
     /**
-     * GraphService constructor.
      *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService
      */
-    public function __construct(GraphRepository $graphRepository, LocalSetting $localSetting)
+    private $calendarService;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService $groupService
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService $calendarService
+     */
+    public function __construct(UserService $userService, GroupService $groupService, CalendarService $calendarService)
     {
-        $this->graphRepository = $graphRepository;
-        $this->localSetting = $localSetting;
+        $this->userService = $userService;
+        $this->groupService = $groupService;
+        $this->calendarService = $calendarService;
     }
 
     /**
-     * Creates a group by a given name
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $owner
-     * @param string $groupName
-     *
-     * @return string
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    public function createGroupByName(User $owner, $groupName)
+    public function getUserService()
     {
-        // TODO: Temporarily hardcode this to avoid new groups being created
-        return 'e5dcbd72-8938-4ed2-9b31-fbac1b04ea3b';
-        $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($owner);
-
-        if (empty($azureActiveDirectoryUserIdentifier))
-        {
-            throw new AzureActiveDirectoryUserNotExistsException($owner);
-        }
-
-        $group = $this->graphRepository->createGroup($groupName);
-        $this->graphRepository->subscribeMemberInGroup($group, $azureActiveDirectoryUserIdentifier);
-
-        return $group->getId();
+        return $this->userService;
     }
 
     /**
-     * Updates the name of a group
      *
-     * @param string $groupId
-     * @param string $groupName
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      */
-    public function updateGroupName($groupId, $groupName)
+    public function setUserService(UserService $userService)
     {
-        $this->graphRepository->updateGroup($groupId, $groupName);
+        $this->userService = $userService;
     }
 
     /**
-     * Adds a member to a group.
-     * Checking if the user is already subscribed or not.
      *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
      */
-    public function addMemberToGroup($groupId, User $user)
+    public function getGroupService()
     {
-        if (! $this->isMemberOfGroup($groupId, $user))
-        {
-            $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-
-            if (empty($azureActiveDirectoryUserIdentifier))
-            {
-                throw new AzureActiveDirectoryUserNotExistsException($user);
-            }
-
-            $this->graphRepository->subscribeMemberInGroup($groupId, $azureActiveDirectoryUserIdentifier);
-        }
+        return $this->groupService;
     }
 
     /**
-     * Removes a member from a group.
-     * Checking if the user is subscribed or not.
      *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService $groupService
      */
-    public function removeMemberFromGroup($groupId, User $user)
+    public function setGroupService(GroupService $groupService)
     {
-        if ($this->isMemberOfGroup($groupId, $user))
-        {
-            $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-
-            if (empty($azureActiveDirectoryUserIdentifier))
-            {
-                throw new AzureActiveDirectoryUserNotExistsException($user);
-            }
-
-            $this->graphRepository->removeMemberFromGroup($groupId, $azureActiveDirectoryUserIdentifier);
-        }
+        $this->groupService = $groupService;
     }
 
     /**
-     * Returns whether or not the given user is subscribed to the given group
      *
-     * @param int $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService
      */
-    public function isMemberOfGroup($groupId, User $user)
+    public function getCalendarService()
     {
-        $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-        if (empty($azureActiveDirectoryUserIdentifier))
-        {
-            return false;
-        }
-
-        $groupMember = $this->graphRepository->getGroupMember($groupId, $azureActiveDirectoryUserIdentifier);
-
-        return $groupMember instanceof \Microsoft\Graph\Model\User;
+        return $this->calendarService;
     }
 
     /**
-     * Returns a list of external user identifiers that are subscribed as member in an Azure AD group
      *
-     * @param string $groupId
-     *
-     * @return string[]
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService $calendarService
      */
-    public function getGroupMembers($groupId)
+    public function setCalendarService(CalendarService $calendarService)
     {
-        $userIdentifiers = [];
-
-        $groupMembers = $this->graphRepository->listGroupMembers($groupId);
-        foreach ($groupMembers as $groupMember)
-        {
-            $userIdentifiers[] = $groupMember->getId();
-        }
-
-        return $userIdentifiers;
+        $this->calendarService = $calendarService;
     }
 
     /**
-     * Removes all the members from a given group
      *
-     * @param string $groupId
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService::getAzureUserIdentifier()
      */
-    public function removeAllMembersFromGroup($groupId)
+    public function getAzureUserIdentifier(User $user)
     {
-        $groupMembers = $this->getGroupMembers($groupId);
-        foreach ($groupMembers as $groupMember)
-        {
-            $this->graphRepository->removeMemberFromGroup($groupId, $groupMember);
-        }
+        return $this->getUserService()->getAzureUserIdentifier($user);
     }
 
     /**
-     * Adds a owner to a group.
-     * Checking if the user is already subscribed or not.
      *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException
-     */
-    public function addOwnerToGroup($groupId, User $user)
-    {
-        if (! $this->isOwnerOfGroup($groupId, $user))
-        {
-            $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-
-            if (empty($azureActiveDirectoryUserIdentifier))
-            {
-                throw new AzureActiveDirectoryUserNotExistsException($user);
-            }
-
-            $this->graphRepository->subscribeOwnerInGroup($groupId, $azureActiveDirectoryUserIdentifier);
-        }
-    }
-
-    /**
-     * Removes a owner from a group.
-     * Checking if the user is subscribed or not.
-     *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureActiveDirectoryUserNotExistsException
-     */
-    public function removeOwnerFromGroup($groupId, User $user)
-    {
-        if ($this->isOwnerOfGroup($groupId, $user))
-        {
-            $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-
-            if (empty($azureActiveDirectoryUserIdentifier))
-            {
-                throw new AzureActiveDirectoryUserNotExistsException($user);
-            }
-
-            $this->graphRepository->removeOwnerFromGroup($groupId, $azureActiveDirectoryUserIdentifier);
-        }
-    }
-
-    /**
-     * Returns whether or not the given user is subscribed to the given group
-     *
-     * @param int $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function isOwnerOfGroup($groupId, User $user)
-    {
-        $azureActiveDirectoryUserIdentifier = $this->getAzureActiveDirectoryUserIdentifier($user);
-
-        if (empty($azureActiveDirectoryUserIdentifier))
-        {
-            return false;
-        }
-
-        $groupOwner = $this->graphRepository->getGroupOwner($groupId, $azureActiveDirectoryUserIdentifier);
-
-        return $groupOwner instanceof \Microsoft\Graph\Model\User;
-    }
-
-    /**
-     * Returns a list of external user identifiers that are subscribed as owner in an Azure AD group
-     *
-     * @param string $groupId
-     *
-     * @return string[]
-     */
-    public function getGroupOwners($groupId)
-    {
-        $userIdentifiers = [];
-
-        $groupOwners = $this->graphRepository->listGroupOwners($groupId);
-        foreach ($groupOwners as $groupOwner)
-        {
-            $userIdentifiers[] = $groupOwner->getId();
-        }
-
-        return $userIdentifiers;
-    }
-
-    /**
-     * Removes all the owners from a given group
-     *
-     * @param string $groupId
-     */
-    public function removeAllOwnersFromGroup($groupId)
-    {
-        $groupOwners = $this->getGroupOwners($groupId);
-        foreach ($groupOwners as $groupOwner)
-        {
-            $this->graphRepository->removeOwnerFromGroup($groupId, $groupOwner);
-        }
-    }
-
-    /**
-     * Returns a list of all the plan identifiers of a given group
-     *
-     * @param string $groupId
-     *
-     * @return string[]
-     */
-    public function getGroupPlanIds($groupId)
-    {
-        $groupPlanIds = [];
-
-        foreach ($this->graphRepository->listGroupPlans($groupId) as $groupPlan)
-        {
-            $groupPlanIds[] = $groupPlan->getId();
-        }
-
-        return $groupPlanIds;
-    }
-
-    /**
-     * Returns the first plan identifier of a given group
-     *
-     * @param string $groupId
-     *
-     * @return string
-     */
-    public function getDefaultGroupPlanId($groupId)
-    {
-        $groupPlans = $this->graphRepository->listGroupPlans($groupId);
-
-        if (empty($groupPlans))
-        {
-            return null;
-        }
-
-        return $groupPlans[0]->getId();
-    }
-
-    /**
-     * Returns the identifier in azure active directory for a given user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    public function getAzureActiveDirectoryUserIdentifier(User $user)
-    {
-        $azureActiveDirectoryUserIdentifier = $this->localSetting->get(
-            'external_user_id',
-            'Chamilo\Libraries\Protocol\Microsoft\Graph',
-            $user);
-
-        if (empty($azureActiveDirectoryUserIdentifier))
-        {
-            $azureActiveDirectoryUser = $this->graphRepository->getAzureActiveDirectoryUser($user);
-
-            if ($azureActiveDirectoryUser instanceof \Microsoft\Graph\Model\User)
-            {
-                $azureActiveDirectoryUserIdentifier = $azureActiveDirectoryUser->getId();
-            }
-
-            $this->localSetting->create(
-                'external_user_id',
-                $azureActiveDirectoryUserIdentifier,
-                'Chamilo\Libraries\Protocol\Microsoft\Graph',
-                $user);
-        }
-
-        return $azureActiveDirectoryUserIdentifier;
-    }
-
-    /**
-     * Authorizes a user by a given authorization code
-     *
-     * @param string $authorizationCode
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService::authorizeUserByAuthorizationCode()
      */
     public function authorizeUserByAuthorizationCode($authorizationCode)
     {
-        $this->graphRepository->authorizeUserByAuthorizationCode($authorizationCode);
+        return $this->getUserService()->authorizeUserByAuthorizationCode($authorizationCode);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::createGroupByName()
+     */
+    public function createGroupByName(User $owner, $groupName)
+    {
+        return $this->getGroupService()->createGroupByName($owner, $groupName);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::updateGroupName()
+     */
+    public function updateGroupName($groupId, $groupName)
+    {
+        $this->getGroupService()->updateGroupName($groupId, $groupName);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::addMemberToGroup()
+     */
+    public function addMemberToGroup($groupId, User $user)
+    {
+        $this->getGroupService()->addMemberToGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::removeMemberFromGroup()
+     */
+    public function removeMemberFromGroup($groupId, User $user)
+    {
+        $this->getGroupService()->removeMemberFromGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::isMemberOfGroup()
+     */
+    public function isMemberOfGroup($groupId, User $user)
+    {
+        return $this->getGroupService()->isMemberOfGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::getGroupMembers()
+     */
+    public function getGroupMembers($groupId)
+    {
+        return $this->getGroupService()->getGroupMembers($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::removeAllMembersFromGroup()
+     */
+    public function removeAllMembersFromGroup($groupId)
+    {
+        $this->getGroupService()->removeAllMembersFromGroup($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::addOwnerToGroup()
+     */
+    public function addOwnerToGroup($groupId, User $user)
+    {
+        $this->getGroupService()->addOwnerToGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::removeOwnerFromGroup()
+     */
+    public function removeOwnerFromGroup($groupId, User $user)
+    {
+        $this->getGroupService()->removeOwnerFromGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::isOwnerOfGroup()
+     */
+    public function isOwnerOfGroup($groupId, User $user)
+    {
+        return $this->getGroupService()->isOwnerOfGroup($groupId, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::getGroupOwners()
+     */
+    public function getGroupOwners($groupId)
+    {
+        return $this->getGroupService()->getGroupOwners($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::removeAllOwnersFromGroup()
+     */
+    public function removeAllOwnersFromGroup($groupId)
+    {
+        $this->getGroupService()->removeAllOwnersFromGroup($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::getGroupPlanIds()
+     */
+    public function getGroupPlanIds($groupId)
+    {
+        return $this->getGroupService()->getGroupPlanIds($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService::getDefaultGroupPlanId()
+     */
+    public function getDefaultGroupPlanId($groupId)
+    {
+        return $this->getGroupService()->getDefaultGroupPlanId($groupId);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService::listOwnedCalendars()
+     */
+    public function listOwnedCalendars(User $user)
+    {
+        return $this->getCalendarService()->listOwnedCalendars($user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService::getCalendarByIdentifier()
+     */
+    public function getCalendarByIdentifier($calendarIdentifier, User $user)
+    {
+        return $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService::findEventsForCalendarIdentifierAndBetweenDates()
+     */
+    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, User $user, $fromDate, $toDate)
+    {
+        return $this->getCalendarService()->findEventsForCalendarIdentifierAndBetweenDates(
+            $calendarIdentifier,
+            $user,
+            $fromDate,
+            $toDate);
     }
 }

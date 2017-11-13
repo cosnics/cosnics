@@ -9,6 +9,7 @@ use League\OAuth2\Client\Token\AccessToken;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {

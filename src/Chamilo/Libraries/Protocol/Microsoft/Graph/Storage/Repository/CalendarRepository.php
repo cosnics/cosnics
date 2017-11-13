@@ -5,6 +5,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarRepository
 {

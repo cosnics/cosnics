@@ -9,11 +9,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AzureActiveDirectoryUserNotExistsException extends \Exception
+class AzureUserNotExistsException extends \Exception
 {
 
     /**
-     * AzureActiveDirectoryUserNotExistsException constructor.
+     * AzureUserNotExistsException constructor.
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
