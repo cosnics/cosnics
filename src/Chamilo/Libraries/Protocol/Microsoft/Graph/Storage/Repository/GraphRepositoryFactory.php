@@ -65,21 +65,19 @@ class GraphRepositoryFactory
         $tenantId = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'tenant_id']);
 
+        if (empty($tenantId))
+        {
+            $tenantId = 'common';
+        }
+
         $redirect = new Redirect(['application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph']);
 
         $currentParameters = $this->chamiloRequest->query->all();
-        $landingPageParameters = [
-            'application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph'
-        ];
+        $landingPageParameters = ['application' => 'Chamilo\Libraries\Protocol\Microsoft\Graph'];
 
         $state = base64_encode(
             json_encode(
-                [
-                    'landingPageParameters' => $landingPageParameters,
-                    'currentUrlParameters' => $currentParameters
-                ]
-                )
-            );
+                ['landingPageParameters' => $landingPageParameters, 'currentUrlParameters' => $currentParameters]));
 
         $oauthClient = $provider = new \League\OAuth2\Client\Provider\GenericProvider(
             [
@@ -89,12 +87,12 @@ class GraphRepositoryFactory
                 'urlAccessToken' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/token',
                 'redirectUri' => $redirect->getUrl(),
                 'urlResourceOwnerDetails' => new \stdClass(),
-                'state' => $state
-            ]
-            );
+                'state' => $state]);
 
-        $graph = new Graph();
-
-        return new GraphRepository($oauthClient, $graph, $this->accessTokenRepository, $this->chamiloRequest->getUri());
+        return new GraphRepository(
+            $oauthClient,
+            new Graph(),
+            $this->accessTokenRepository,
+            $this->chamiloRequest->getUri());
     }
 }
