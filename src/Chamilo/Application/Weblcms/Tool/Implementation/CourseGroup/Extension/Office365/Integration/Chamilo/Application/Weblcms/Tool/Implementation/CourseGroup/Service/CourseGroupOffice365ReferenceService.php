@@ -78,7 +78,22 @@ class CourseGroupOffice365ReferenceService
     }
 
     /**
-     * Returns whether or not the course group is connected to an office365 group
+     * Returns whether or not the course group is connected to an office365 group and linked (active)
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @return bool
+     */
+    public function courseGroupHasLinkedReference(CourseGroup $courseGroup)
+    {
+        $courseGroupOffice365Reference = $this->getCourseGroupReference($courseGroup);
+
+        return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference &&
+            $courseGroupOffice365Reference->isLinked();
+    }
+
+    /**
+     * Returns whether or not the course group is connected to an office365 group (either linked or unlinked)
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
@@ -88,8 +103,7 @@ class CourseGroupOffice365ReferenceService
     {
         $courseGroupOffice365Reference = $this->getCourseGroupReference($courseGroup);
 
-        return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference &&
-            $courseGroupOffice365Reference->isLinked();
+        return $courseGroupOffice365Reference instanceof CourseGroupOffice365Reference;
     }
 
     /**

@@ -31,7 +31,7 @@ class VisitPlannerComponent extends Manager
         }
 
         $office365ReferenceService = $this->getCourseGroupOffice365ReferenceService();
-        if (!$office365ReferenceService->courseGroupHasReference($courseGroup))
+        if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
             throw new NotAllowedException();
         }

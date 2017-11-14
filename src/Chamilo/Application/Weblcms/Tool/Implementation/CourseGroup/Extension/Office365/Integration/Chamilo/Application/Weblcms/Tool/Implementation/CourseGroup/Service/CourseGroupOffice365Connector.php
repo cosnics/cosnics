@@ -93,26 +93,27 @@ class CourseGroupOffice365Connector
     public function createOrUpdateGroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        $hasReference = $this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup);
 
-        if ($hasReference)
+        if(!$reference instanceof CourseGroupOffice365Reference)
+        {
+            $this->createGroupFromCourseGroup($courseGroup, $user);
+            return;
+        }
+
+        if ($reference->isLinked())
         {
             $this->office365Service->updateGroupName($reference->getOffice365GroupId(), $courseGroup->get_name());
 
             return;
         }
 
-        if ($reference instanceof CourseGroupOffice365Reference && !$reference->isLinked())
-        {
-            $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
-            $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
-            $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
-            $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
+        $this->office365Service->updateGroupName($reference->getOffice365GroupId(), $courseGroup->get_name());
+        $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
+        $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
+        $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
 
-            return;
-        }
-
-        $this->createGroupFromCourseGroup($courseGroup, $user);
+        return;
     }
 
     /**
@@ -123,7 +124,7 @@ class CourseGroupOffice365Connector
      */
     public function unlinkOffice365GroupFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
             return;
         }
@@ -151,7 +152,7 @@ class CourseGroupOffice365Connector
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
             return;
         }
@@ -175,7 +176,7 @@ class CourseGroupOffice365Connector
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
             return;
         }
@@ -199,7 +200,7 @@ class CourseGroupOffice365Connector
      */
     public function syncCourseGroupSubscriptions(CourseGroup $courseGroup)
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
             return;
         }
