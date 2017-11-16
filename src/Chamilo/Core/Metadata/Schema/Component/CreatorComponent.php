@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

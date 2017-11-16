@@ -32,7 +32,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
     /**
      * Locates the translation resources and returns them per locale, per resource type and per domain
      *
-     * @example $resource['nl_NL']['ini']['domain'] = '/path/to/resource'
+     * @example $resource['nl']['ini']['domain'] = '/path/to/resource'
      * @return string[]
      */
     public function findTranslationResources()
@@ -45,7 +45,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
             foreach ($translationFilesPerPackage as $translationFile)
             {
                 $fileParts = explode('.', basename($translationFile));
-                $locale = $fileParts[0] . '_' . strtoupper($fileParts[0]);
+                $locale = $fileParts[0];
 
                 switch ($fileParts[1])
                 {

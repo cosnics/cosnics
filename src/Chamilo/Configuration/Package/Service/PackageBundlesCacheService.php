@@ -5,7 +5,7 @@ use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

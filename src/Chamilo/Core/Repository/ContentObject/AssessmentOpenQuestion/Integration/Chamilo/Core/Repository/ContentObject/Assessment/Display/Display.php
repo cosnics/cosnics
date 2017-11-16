@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataCla
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\File\Redirect;
 
 /**

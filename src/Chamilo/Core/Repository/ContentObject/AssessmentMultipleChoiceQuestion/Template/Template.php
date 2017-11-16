@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Common\Template\TemplateParser;
 use Chamilo\Core\Repository\Common\Template\TemplateTranslation;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestionOption;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use DOMXPath;
 
 class Template extends \Chamilo\Core\Repository\Common\Template\Template implements TemplateParser

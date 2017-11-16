@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity\EntityTable;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

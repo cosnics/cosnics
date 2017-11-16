@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Slideshare\Component;
 use Chamilo\Core\Repository\Implementation\Slideshare\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Slideshare\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExternalSyncerComponent extends Manager

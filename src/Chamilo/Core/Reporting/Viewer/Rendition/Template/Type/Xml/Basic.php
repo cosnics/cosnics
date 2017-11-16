@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Csv as CsvBlockRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Xml;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Export\Export;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

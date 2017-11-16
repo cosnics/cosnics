@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Table\Export;
 
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use HTML_Table;
 
 class ExportTable extends SortableTableFromArray

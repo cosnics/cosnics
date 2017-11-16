@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Bitbucket\Component;
 
 use Chamilo\Core\Repository\Implementation\Bitbucket\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class RevokerComponent extends Manager
 {

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component\Browser;
 
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

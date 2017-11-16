@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

@@ -9,7 +9,7 @@ use Chamilo\Core\Metadata\Vocabulary\Form\VocabularyForm;
 use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

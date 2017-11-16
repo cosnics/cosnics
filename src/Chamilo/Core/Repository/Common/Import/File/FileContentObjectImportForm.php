@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Redirect;

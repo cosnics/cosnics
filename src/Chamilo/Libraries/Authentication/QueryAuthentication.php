@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**

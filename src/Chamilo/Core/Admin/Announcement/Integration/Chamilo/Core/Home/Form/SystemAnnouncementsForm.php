@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\Form;
 
 use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\Type\SystemAnnouncements;
 use Chamilo\Core\Home\Form\ConfigurationForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class SystemAnnouncementsForm extends ConfigurationForm
 {

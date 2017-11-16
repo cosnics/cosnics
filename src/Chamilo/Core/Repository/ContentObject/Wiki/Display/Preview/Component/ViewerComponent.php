@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Preview\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implements WikiDisplaySupport
 {

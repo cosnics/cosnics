@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class AttemptDeleterComponent extends Manager
 {

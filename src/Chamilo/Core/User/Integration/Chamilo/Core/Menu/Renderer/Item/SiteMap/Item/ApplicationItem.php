@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\SiteMap\
 
 use Chamilo\Core\Menu\Renderer\Item\SiteMap\SiteMap;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

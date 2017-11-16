@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Table\Publication\Gallery\ObjectPublicationGalle
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Renderer to display a sortable table with learning object publications.

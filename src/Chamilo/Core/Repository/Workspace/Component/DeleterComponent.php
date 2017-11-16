@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $workspaceIdentifiers = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
+        $workspaceIdentifiers = $this->getRequest()->getFromPostOrUrl(self::PARAM_WORKSPACE_ID);
 
         try
         {

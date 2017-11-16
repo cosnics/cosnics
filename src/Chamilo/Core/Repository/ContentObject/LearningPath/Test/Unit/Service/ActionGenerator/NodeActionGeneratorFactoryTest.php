@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\N
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Configuration\Configuration;
 
 /**

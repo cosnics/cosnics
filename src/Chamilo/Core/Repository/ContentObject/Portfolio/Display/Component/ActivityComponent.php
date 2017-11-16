@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity\Act
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component to list activity on a portfolio item

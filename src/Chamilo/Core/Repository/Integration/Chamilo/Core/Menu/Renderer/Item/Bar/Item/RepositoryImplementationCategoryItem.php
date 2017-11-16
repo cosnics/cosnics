@@ -7,7 +7,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**

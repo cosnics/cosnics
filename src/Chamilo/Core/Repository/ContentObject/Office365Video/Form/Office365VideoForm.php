@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Office365Video\Form;
 use Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class Office365VideoForm extends ContentObjectForm
 {

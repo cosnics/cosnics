@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
 use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

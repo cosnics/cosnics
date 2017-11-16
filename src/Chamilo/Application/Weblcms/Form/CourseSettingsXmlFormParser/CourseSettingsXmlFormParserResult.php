@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Interfaces\FormLockedSettingsSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\XmlFormParser;
 use Chamilo\Libraries\Format\Form\XmlFormParserResult;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class extends the common settings xml form parser result to parse course settings with locked and frozen

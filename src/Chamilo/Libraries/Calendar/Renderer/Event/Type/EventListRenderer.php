@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

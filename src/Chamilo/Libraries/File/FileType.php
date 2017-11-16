@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyAttemp
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

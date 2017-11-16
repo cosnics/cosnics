@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\Version;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class VersionTable extends \Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable
 {

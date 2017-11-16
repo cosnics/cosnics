@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UserResultReportingBlock extends ReportingBlock

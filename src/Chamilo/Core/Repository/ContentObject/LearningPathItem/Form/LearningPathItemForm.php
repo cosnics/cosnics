@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Form;
 
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

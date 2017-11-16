@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class TermsConditionsForm extends FormValidator
 {

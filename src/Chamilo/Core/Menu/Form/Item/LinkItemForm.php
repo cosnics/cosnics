@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Form\Item;
 
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /*
  * Component for emptying the course publication,publication categories and sections @author Maarten Volckaert -

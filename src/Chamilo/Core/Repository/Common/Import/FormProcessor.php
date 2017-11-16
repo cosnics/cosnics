@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\AssessmentViewerComponent;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class AssessmentResultProcessor
 {

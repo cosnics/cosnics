@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function

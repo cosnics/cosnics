@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class GroupDeleterComponent extends Manager

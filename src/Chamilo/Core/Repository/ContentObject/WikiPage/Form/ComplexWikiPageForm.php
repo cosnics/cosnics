@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\WikiPage\Form;
 
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

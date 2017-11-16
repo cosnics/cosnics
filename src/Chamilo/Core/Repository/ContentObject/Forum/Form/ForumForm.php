@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Form;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

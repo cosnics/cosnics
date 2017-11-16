@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotat
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

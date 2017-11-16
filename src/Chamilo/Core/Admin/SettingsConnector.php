@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Simple connector class to facilitate rendering settings forms by preprocessing data from the datamanagers to a simple

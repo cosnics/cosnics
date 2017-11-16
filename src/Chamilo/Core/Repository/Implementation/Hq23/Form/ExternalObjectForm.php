@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Hq23\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Hq23\ExternalObjectDisplay;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

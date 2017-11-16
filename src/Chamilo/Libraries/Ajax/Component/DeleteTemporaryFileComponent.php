@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

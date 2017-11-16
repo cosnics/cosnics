@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**

@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Implementation\Dropbox\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Dropbox\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

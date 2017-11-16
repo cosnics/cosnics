@@ -2,7 +2,7 @@
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Form element to upload or create a document This element contains 2 radio- buttons.

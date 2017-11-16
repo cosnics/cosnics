@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

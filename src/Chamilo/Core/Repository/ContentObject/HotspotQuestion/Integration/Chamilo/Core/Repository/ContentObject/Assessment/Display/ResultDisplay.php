@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Utilities\Utilities;

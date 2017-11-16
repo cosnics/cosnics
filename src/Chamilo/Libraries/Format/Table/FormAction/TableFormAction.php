@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class represents a table form action

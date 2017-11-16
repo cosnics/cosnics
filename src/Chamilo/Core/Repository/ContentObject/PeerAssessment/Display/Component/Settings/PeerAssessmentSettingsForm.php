@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component\ViewerComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class PeerAssessmentSettingsForm extends FormValidator

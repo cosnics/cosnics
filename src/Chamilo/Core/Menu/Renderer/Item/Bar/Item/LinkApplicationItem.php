@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

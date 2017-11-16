@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponent

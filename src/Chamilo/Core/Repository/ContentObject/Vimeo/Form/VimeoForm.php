@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Vimeo\Form;
 use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

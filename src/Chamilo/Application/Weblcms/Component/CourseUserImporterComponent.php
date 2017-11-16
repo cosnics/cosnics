@@ -13,7 +13,7 @@ use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 ini_set("max_execution_time", - 1);

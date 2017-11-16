@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\UserView\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Form\FormType;
 
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;

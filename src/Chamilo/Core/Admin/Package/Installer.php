@@ -4,7 +4,7 @@ namespace Chamilo\Core\Admin\Package;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Utilities\Utilities;
 

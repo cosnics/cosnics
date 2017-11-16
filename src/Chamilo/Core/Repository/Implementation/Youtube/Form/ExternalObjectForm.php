@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Form;
 
 use Chamilo\Core\Repository\Implementation\Youtube\ExternalObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Office365\Component;
 use Chamilo\Core\Repository\Implementation\Office365\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {

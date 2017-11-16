@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathServi
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

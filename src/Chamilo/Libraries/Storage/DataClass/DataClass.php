@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Exception;

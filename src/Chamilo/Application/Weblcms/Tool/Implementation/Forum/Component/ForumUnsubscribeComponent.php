@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager as ForumData
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This represents the component for unsubscribing a forum at forum application level.

@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Package\Properties\Dependencies\Dependency;
 
 use Chamilo\Libraries\Format\MessageLogger;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Chamilo\Configuration\Storage\DataClass\Registration;

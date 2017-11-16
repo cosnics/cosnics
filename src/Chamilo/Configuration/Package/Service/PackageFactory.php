@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;

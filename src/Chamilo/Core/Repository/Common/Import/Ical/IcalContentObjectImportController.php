@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Sabre\VObject;
 use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\Component\VTodo;

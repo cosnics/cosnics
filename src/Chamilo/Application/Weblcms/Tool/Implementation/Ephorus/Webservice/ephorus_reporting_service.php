@@ -3,7 +3,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
-require_once realpath(__DIR__ . '/../../../../../../../') . '/vendor/autoload.php';
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/vendor/autoload.php';
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();

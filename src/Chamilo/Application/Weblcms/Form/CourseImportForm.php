@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;

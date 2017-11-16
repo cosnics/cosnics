@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\CourseType\Form;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Form\CommonCourseForm;
 use Chamilo\Application\Weblcms\Interfaces\FormLockedSettingsSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**

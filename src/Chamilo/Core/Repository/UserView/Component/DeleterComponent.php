@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

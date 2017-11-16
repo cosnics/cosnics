@@ -4,7 +4,7 @@ namespace Chamilo\Application\Portfolio\Favourite;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
