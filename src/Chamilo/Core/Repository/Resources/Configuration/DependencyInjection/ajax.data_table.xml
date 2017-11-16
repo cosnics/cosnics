@@ -5,36 +5,48 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-            id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_cell_renderer"
-            class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableCellRenderer">
+                id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_actions_provider"
+                class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableActionsProvider">
             <argument
-                type="service"
-                id="chamilo.libraries.utilities.string_utilities" />
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.translation" />
-            <argument
-                type="service"
-                id="chamilo.libraries.utilities.datetime_utilities" />
-        </service>
-
-        <service
-            id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_column_model"
-            class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableColumnModel">
+                    type="service"
+                    id="symfony.component.translation.translator" />
         </service>
 
         <service
             id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_provider"
             class="Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject\ContentObjectDataTableProvider">
+
             <argument
                 type="service"
-                id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_cell_renderer" />
-            <argument
-                type="service"
-                id="chamilo.core.repository.ajax.data_table.type.content_object.content_object_data_table_column_model" />
+                id="data_table_provider_factory" />
             <argument
                 type="service"
                 id="chamilo.core.repository.workspace.service.content_object_service" />
+        </service>
+
+        <service id="data_table_provider_factory" class="Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory">
+            <argument
+                    type="service"
+                    id="data_table_cell_renderer_factory" />
+            <argument
+                    type="service"
+                    id="data_table_column_model_factory" />
+        </service>
+
+        <service id="data_table_cell_renderer_factory" class="Chamilo\Libraries\Format\DataTable\Service\DataTableCellRendererFactory">
+            <argument
+                    type="service"
+                    id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.platform.translation" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.utilities.datetime_utilities" />
+        </service>
+
+        <service id="data_table_column_model_factory" class="Chamilo\Libraries\Format\DataTable\Service\DataTableColumnModelFactory">
+
         </service>
     </services>
 </container>

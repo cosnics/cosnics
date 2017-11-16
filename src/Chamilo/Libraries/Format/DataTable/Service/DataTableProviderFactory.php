@@ -69,20 +69,5 @@ class DataTableProviderFactory
     {
         $this->dataTableColumnModelFactory = $dataTableColumnModelFactory;
     }
-
-    /**
-     *
-     * @param string $dataTableContext
-     * @param string $dataTableType
-     */
-    public function getDataTableProvider($dataTableContext, $dataTableType)
-    {
-        $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
-             'DataTableProvider';
-
-        return new $className(
-            $this->getDataTableCellRendererFactory()->getDataTableCellRenderer($dataTableContext, $dataTableType),
-            $this->getDataTableColumnModelFactory()->getDataTableColumnModel($dataTableContext, $dataTableType));
-    }
 }
 

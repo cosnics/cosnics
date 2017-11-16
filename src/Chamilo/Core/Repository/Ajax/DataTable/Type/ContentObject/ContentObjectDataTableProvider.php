@@ -1,9 +1,14 @@
 <?php
+
 namespace Chamilo\Core\Repository\Ajax\DataTable\Type\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Libraries\Format\DataTable\Column\DataTableColumn;
+use Chamilo\Libraries\Format\DataTable\DataTableActionsProvider;
 use Chamilo\Libraries\Format\DataTable\Service\DataTableProvider;
+use Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
@@ -31,12 +36,15 @@ class ContentObjectDataTableProvider extends DataTableProvider
     /**
      *
      * @see \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider::__construct()
+     *
+     * @param \Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory $dataTableProviderFactory
+     * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectService $contentObjectService
      */
-    public function __construct(\Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer,
-        \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel,
-        ContentObjectService $contentObjectService)
+    public function __construct(
+        DataTableProviderFactory $dataTableProviderFactory, ContentObjectService $contentObjectService
+    )
     {
-        parent::__construct($dataTableCellRenderer, $dataTableColumnModel);
+        parent::__construct($dataTableProviderFactory);
 
         $this->contentObjectService = $contentObjectService;
     }
@@ -63,8 +71,10 @@ class ContentObjectDataTableProvider extends DataTableProvider
      *
      * @see \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider::getDataTableDataClasses()
      */
-    public function getDataTableDataClasses(DataClassRetrievesParameters $dataClassRetrievesParameters,
-        WorkspaceInterface $workspaceInstance)
+    public function getDataTableDataClasses(
+        DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance
+    )
     {
         return $this->getContentObjectService()->getContentObjectsByTypeForWorkspace(
             ContentObject::class,
@@ -72,17 +82,21 @@ class ContentObjectDataTableProvider extends DataTableProvider
             $dataClassRetrievesParameters->getCondition(),
             $dataClassRetrievesParameters->getCount(),
             $dataClassRetrievesParameters->getOffset(),
-            $dataClassRetrievesParameters->getOrderBy())->as_array();
+            $dataClassRetrievesParameters->getOrderBy()
+        )->as_array();
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceInstance
+     *
      * @return string[][]
      */
-    public function getDataTableRowData(DataClassRetrievesParameters $dataClassRetrievesParameters,
-        WorkspaceInterface $workspaceInstance)
+    public function getDataTableRowData(
+        DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance
+    )
     {
         $dataTableRowData = array();
 
@@ -98,15 +112,19 @@ class ContentObjectDataTableProvider extends DataTableProvider
      *
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $dataClassRetrievesParameters
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceInstance
+     *
      * @return integer
      */
-    public function getDataTableRowCount(DataClassRetrievesParameters $dataClassRetrievesParameters,
-        WorkspaceInterface $workspaceInstance)
+    public function getDataTableRowCount(
+        DataClassRetrievesParameters $dataClassRetrievesParameters,
+        WorkspaceInterface $workspaceInstance
+    )
     {
         return $this->getContentObjectService()->countContentObjectsByTypeForWorkspace(
             ContentObject::class,
             $workspaceInstance,
-            $dataClassRetrievesParameters->getCondition());
+            $dataClassRetrievesParameters->getCondition()
+        );
     }
 }
 

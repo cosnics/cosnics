@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
+
 /**
  *
  * @package Chamilo\Libraries\Format\DataTable\Service
@@ -12,14 +15,21 @@ class DataTableColumnModelFactory
 
     /**
      *
-     * @param string $dataTableContext
-     * @param string $dataTableType
+     * @param \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider $dataTableProvider
+     *
      * @return \Chamilo\Libraries\Format\DataTable\DataTableColumnModel
      */
-    public function getDataTableColumnModel($dataTableContext, $dataTableType)
+    public function getDataTableColumnModel(DataTableProvider $dataTableProvider)
     {
-        $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
-             'DataTableColumnModel';
+        $dataTableProviderContext = ClassnameUtilities::getInstance()->getNamespaceFromObject($dataTableProvider);
+        $dataTableProviderClassName = ClassnameUtilities::getInstance()->getClassnameFromObject($dataTableProvider);
+
+        $dataTableProviderType = StringUtilities::getInstance()->createString($dataTableProviderClassName)
+            ->replace('DataTableProvider', '')
+            ->__toString();
+
+        $className = $dataTableProviderContext . '\\' . $dataTableProviderType . 'DataTableColumnModel';
+
         return new $className();
     }
 }

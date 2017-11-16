@@ -101,7 +101,7 @@ class ClassnameUtilities
     /**
      * Get the unqualified classname from an object instance, excluding the namespace
      *
-     * @param \stdClass $object
+     * @param object|\stdClass $object
      * @param boolean $convertToUnderscores
      * @return string
      */
@@ -113,7 +113,7 @@ class ClassnameUtilities
     /**
      * Get the namespace from an object instance, excluding the unqualified classname
      *
-     * @param \stdClass $object
+     * @param object|\stdClass $object
      * @return string
      */
     public function getNamespaceFromObject($object)

@@ -1,6 +1,8 @@
 <?php
+
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -38,8 +40,10 @@ class DataTableCellRendererFactory
      * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
      * @param \Chamilo\Libraries\Utilities\DatetimeUtilities $dateTimeUtilities
      */
-    public function __construct(StringUtilities $stringUtilities, Translation $translationUtilities,
-        DatetimeUtilities $dateTimeUtilities)
+    public function __construct(
+        StringUtilities $stringUtilities, Translation $translationUtilities,
+        DatetimeUtilities $dateTimeUtilities
+    )
     {
         $this->stringUtilities = $stringUtilities;
         $this->translationUtilities = $translationUtilities;
@@ -102,19 +106,26 @@ class DataTableCellRendererFactory
 
     /**
      *
-     * @param string $dataTableContext
-     * @param string $dataTableType
+     * @param \Chamilo\Libraries\Format\DataTable\Service\DataTableProvider $dataTableProvider
+     *
      * @return \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer
      */
-    public function getDataTableCellRenderer($dataTableContext, $dataTableType)
+    public function getDataTableCellRenderer(DataTableProvider $dataTableProvider)
     {
-        $className = $dataTableContext . '\Ajax\DataTable\Type\\' . $dataTableType . '\\' . $dataTableType .
-             'DataTableCellRenderer';
+        $dataTableProviderContext = ClassnameUtilities::getInstance()->getNamespaceFromObject($dataTableProvider);
+        $dataTableProviderClassName = ClassnameUtilities::getInstance()->getClassnameFromObject($dataTableProvider);
+
+        $dataTableProviderType = $this->stringUtilities->createString($dataTableProviderClassName)
+            ->replace('DataTableProvider', '')
+            ->__toString();
+
+        $className = $dataTableProviderContext . '\\' . $dataTableProviderType . 'DataTableCellRenderer';
 
         return new $className(
             $this->getStringUtilities(),
             $this->getTranslationUtilities(),
-            $this->getDateTimeUtilities());
+            $this->getDateTimeUtilities()
+        );
     }
 }
 

@@ -1,6 +1,10 @@
 <?php
+
 namespace Chamilo\Libraries\Format\DataTable\Service;
 
+use Chamilo\Libraries\Format\DataAction\DataActions;
+use Chamilo\Libraries\Format\DataTable\Column\DataTableColumn;
+use Chamilo\Libraries\Format\DataTable\DataTableActionsProvider;
 use Chamilo\Libraries\Format\DataTable\DataTableCellRenderer;
 use Chamilo\Libraries\Format\DataTable\DataTableColumnModel;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -13,7 +17,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class DataTableProvider // implements DataTableProviderInterface
 {
-    const COLUMN_IDENTIFIER = 'id';
+    const ROW_IDENTIFIER = 'id';
+    const ROW_ACTIONS = 'actions';
 
     /**
      *
@@ -28,14 +33,23 @@ abstract class DataTableProvider // implements DataTableProviderInterface
     private $dataTableColumnModel;
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\DataTable\DataTableCellRenderer $dataTableCellRenderer
-     * @param \Chamilo\Libraries\Format\DataTable\DataTableColumnModel $dataTableColumnModel
+     * @var \Chamilo\Libraries\Format\DataTable\DataTableActionsProvider
      */
-    public function __construct(DataTableCellRenderer $dataTableCellRenderer, DataTableColumnModel $dataTableColumnModel)
+    protected $dataTableActionsProvider;
+
+    /**
+     * @var \Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory
+     */
+    protected $dataTableProviderFactory;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\DataTable\Service\DataTableProviderFactory $dataTableProviderFactory
+     */
+    public function __construct(DataTableProviderFactory $dataTableProviderFactory
+    )
     {
-        $this->dataTableCellRenderer = $dataTableCellRenderer;
-        $this->dataTableColumnModel = $dataTableColumnModel;
+        $this->dataTableProviderFactory = $dataTableProviderFactory;
     }
 
     /**
@@ -44,6 +58,12 @@ abstract class DataTableProvider // implements DataTableProviderInterface
      */
     public function getDataTableCellRenderer()
     {
+        if (!$this->dataTableCellRenderer instanceof DataTableCellRenderer)
+        {
+            $this->dataTableCellRenderer =
+                $this->dataTableProviderFactory->getDataTableCellRendererFactory()->getDataTableCellRenderer($this);
+        }
+
         return $this->dataTableCellRenderer;
     }
 
@@ -62,6 +82,12 @@ abstract class DataTableProvider // implements DataTableProviderInterface
      */
     public function getDataTableColumnModel()
     {
+        if (!$this->dataTableColumnModel instanceof DataTableColumnModel)
+        {
+            $this->dataTableColumnModel =
+                $this->dataTableProviderFactory->getDataTableColumnModelFactory()->getDataTableColumnModel($this);
+        }
+
         return $this->dataTableColumnModel;
     }
 
@@ -75,22 +101,69 @@ abstract class DataTableProvider // implements DataTableProviderInterface
     }
 
     /**
+     * @return \Chamilo\Libraries\Format\DataTable\DataTableActionsProvider
+     */
+    public function getDataTableActionsProvider()
+    {
+        return $this->dataTableActionsProvider;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\DataTable\DataTableActionsProvider $dataTableActionsProvider
+     *
+     * @return DataTableProvider
+     */
+    public function setDataTableActionsProvider(DataTableActionsProvider $dataTableActionsProvider)
+    {
+        $this->dataTableActionsProvider = $dataTableActionsProvider;
+
+        return $this;
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return string[]
      */
     public function handleDataClass(DataClass $dataClass)
     {
         $rowData = array();
 
-        $rowData[self::COLUMN_IDENTIFIER] = $this->getDataTableCellRenderer()->renderDataIdentifier($dataClass);
+        $rowData[self::ROW_IDENTIFIER] = $this->getDataTableCellRenderer()->renderDataIdentifier($dataClass);
 
-        foreach ($this->getDataTableColumnModel()->getColumns() as $column)
+        foreach ($this->getColumns() as $column)
         {
-            $rowData[$column->getName()] = $this->getDataTableCellRenderer()->renderCell($column, $dataClass);
+            $rowData[$column->getName()] = $this->renderCell($column, $dataClass);
         }
 
+//        $rowData[self::ROW_ACTIONS] = $this->getActions($dataClass)->toArray();
+
         return $rowData;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\DataTable\Column\DataTableColumn[]
+     */
+    protected function getColumns()
+    {
+        return $this->getDataTableColumnModel()->getColumns();
+    }
+
+    protected function renderCell(DataTableColumn $column, DataClass $dataClass)
+    {
+        return $this->getDataTableCellRenderer()->renderCell($column, $dataClass);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return DataActions
+     */
+    protected function getActions(DataClass $dataClass)
+    {
+        return $this->getDataTableActionsProvider()->getDataClassActions($dataClass);
     }
 }
 
