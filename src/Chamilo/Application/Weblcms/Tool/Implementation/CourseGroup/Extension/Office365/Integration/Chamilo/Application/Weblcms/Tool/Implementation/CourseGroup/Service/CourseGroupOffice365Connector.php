@@ -76,7 +76,15 @@ class CourseGroupOffice365Connector
             );
         }
 
-        $groupId = $this->office365Service->createGroupByName($user, $courseGroup->get_name());
+        $courseGroupName = $courseGroup->get_name();
+        $course = $this->courseService->getCourseById($courseGroup->getId());
+        if ($course instanceof Course)
+        {
+            $courseGroupName =
+                $course->get_title() . ' - ' . $courseGroupName . ' (' . $course->get_visual_code() . ')';
+        }
+
+        $groupId = $this->office365Service->createGroupByName($user, $courseGroupName);
         $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $groupId);
 
         $this->subscribeTeachers($courseGroup, $groupId);
@@ -94,9 +102,10 @@ class CourseGroupOffice365Connector
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
-        if(!$reference instanceof CourseGroupOffice365Reference)
+        if (!$reference instanceof CourseGroupOffice365Reference)
         {
             $this->createGroupFromCourseGroup($courseGroup, $user);
+
             return;
         }
 
@@ -235,13 +244,13 @@ class CourseGroupOffice365Connector
         $office365GroupMemberIdentifiers = $this->office365Service->getGroupMembers($reference->getOffice365GroupId());
 
         $usersToAdd = array_diff($currentCourseGroupMemberIdentifiers, $office365GroupMemberIdentifiers);
-        foreach($usersToAdd as $userToAdd)
+        foreach ($usersToAdd as $userToAdd)
         {
             $this->office365Repository->subscribeMemberInGroup($reference->getOffice365GroupId(), $userToAdd);
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentCourseGroupMemberIdentifiers);
-        foreach($usersToRemove as $userToRemove)
+        foreach ($usersToRemove as $userToRemove)
         {
             $this->office365Repository->removeMemberFromGroup($reference->getOffice365GroupId(), $userToRemove);
         }

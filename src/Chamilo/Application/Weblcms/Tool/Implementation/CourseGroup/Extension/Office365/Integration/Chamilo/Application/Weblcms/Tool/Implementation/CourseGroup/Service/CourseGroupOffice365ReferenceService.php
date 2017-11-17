@@ -37,7 +37,7 @@ class CourseGroupOffice365ReferenceService
      *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function createReferenceForCourseGroup(CourseGroup $courseGroup, $office365GroupId)
     {
@@ -48,7 +48,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->createReference($courseGroupOffice365Reference))
         {
-            throw new \Exception(
+            throw new \RuntimeException(
                 sprintf(
                     'Could not create a new CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
@@ -63,15 +63,15 @@ class CourseGroupOffice365ReferenceService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function removeReferenceForCourseGroup(CourseGroup $courseGroup)
     {
         if (!$this->courseGroupOffice365ReferenceRepository->removeReferenceForCourseGroup($courseGroup))
         {
-            throw new \Exception(
+            throw new \RuntimeException(
                 sprintf(
-                    'Could not create the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
+                    'Could not remove the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
             );
         }
@@ -124,7 +124,7 @@ class CourseGroupOffice365ReferenceService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function unlinkCourseGroupReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
     {
@@ -132,7 +132,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \Exception(
+            throw new \RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -147,7 +147,7 @@ class CourseGroupOffice365ReferenceService
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function linkCourseGroupReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
     {
@@ -155,7 +155,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \Exception(
+            throw new \RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -171,7 +171,7 @@ class CourseGroupOffice365ReferenceService
      * @param string $office365GroupId
      * @param string $office365PlanId
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function storePlannerReferenceForCourseGroup(CourseGroup $courseGroup, $office365GroupId, $office365PlanId)
     {
@@ -188,7 +188,7 @@ class CourseGroupOffice365ReferenceService
 
             if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
             {
-                throw new \Exception(
+                throw new \RuntimeException(
                     sprintf(
                         'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                     )
@@ -217,9 +217,9 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \Exception(
+            throw new \RuntimeException(
                 sprintf(
-                    'Could not create a new CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
+                    'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
             );
         }

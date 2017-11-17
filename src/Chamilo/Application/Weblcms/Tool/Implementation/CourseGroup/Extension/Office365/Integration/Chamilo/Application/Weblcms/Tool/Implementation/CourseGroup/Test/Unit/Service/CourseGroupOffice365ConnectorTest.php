@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Unit\Service;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365Connector;
@@ -87,7 +88,19 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $courseGroup = $this->getMockBuilder(CourseGroup::class)
             ->disableOriginalConstructor()->getMock();
 
+        $courseName = 'How to create a course group in 10 steps';
+        $courseCode = 'CURMOBFBO123452017';
         $groupName = 'Test Group 101';
+
+        $office365GroupName = $courseName . ' - ' . $groupName . ' (' . $courseCode . ')';
+
+        $course = new Course();
+        $course->set_visual_code($courseCode);
+        $course->set_title($courseName);
+
+        $this->courseServiceMock->expects($this->once())
+            ->method('getCourseById')
+            ->will($this->returnValue($course));
 
         $courseGroup->expects($this->once())
             ->method('get_name')
@@ -102,7 +115,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->office365ServiceMock->expects($this->once())
             ->method('createGroupByName')
-            ->with($user, $groupName)
+            ->with($user, $office365GroupName)
             ->will($this->returnValue(5));
 
         $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
