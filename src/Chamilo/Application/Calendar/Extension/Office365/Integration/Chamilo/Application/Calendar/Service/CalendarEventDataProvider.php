@@ -7,7 +7,6 @@ use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 
 /**
@@ -19,6 +18,8 @@ use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
  */
 class CalendarEventDataProvider extends ExternalCalendar
 {
+    const CALENDAR_EVENT_DATA_PROVIDER_TYPE = 'Chamilo\Application\Calendar\Extension\Office365';
+
     use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
     /**
@@ -40,25 +41,26 @@ class CalendarEventDataProvider extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
-        $identifier = [
-            __METHOD__,
-            $calendarRendererProvider->getDataUser()->getId(),
-            $requestedSourceType,
-            $fromDate,
-            $toDate];
-
-        $identifierString = md5(serialize($identifier));
-
-        $filesystemCache = $this->getFilesystemCache();
-
-        if (! $filesystemCache->contains($identifierString))
+        try
         {
-            try
+            $events = array();
+
+            $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
+
+            $identifier = [
+                __METHOD__,
+                $calendarRendererProvider->getDataUser()->getId(),
+                $calendarIdentifiers,
+                $requestedSourceType,
+                $fromDate,
+                $toDate];
+
+            $identifierString = md5(serialize($identifier));
+
+            $filesystemCache = $this->getFilesystemCache();
+
+            if (! $filesystemCache->contains($identifierString))
             {
-                $events = array();
-
-                $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
-
                 foreach ($calendarIdentifiers as $calendarIdentifier)
                 {
                     $events = array_merge(
@@ -69,16 +71,16 @@ class CalendarEventDataProvider extends ExternalCalendar
                             $fromDate,
                             $toDate));
                 }
-            }
-            catch (\Exception $exception)
-            {
-                $events = [];
+
+                $filesystemCache->save($identifierString, $events, $this->getRefreshExternalInSeconds());
             }
 
-            $filesystemCache->save($identifierString, $events, $this->getRefreshExternalInSeconds());
+            return $filesystemCache->fetch($identifierString);
         }
-
-        return $filesystemCache->fetch($identifierString);
+        catch (\Exception $exception)
+        {
+            return [];
+        }
     }
 
     /**
@@ -90,11 +92,10 @@ class CalendarEventDataProvider extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4);
 
         $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
             $calendarRendererProvider->getDataUser(),
-            $package);
+            self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
 
         $calendarIdentifiers = array();
 
@@ -156,7 +157,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         try
         {
             $calendar = $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
-            $availableCalendar->setType('Chamilo\Application\Calendar\Extension\Office365');
+            $availableCalendar->setType(self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
         }
@@ -191,7 +192,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                 {
                     $availableCalendar = new AvailableCalendar();
 
-                    $availableCalendar->setType('Chamilo\Application\Calendar\Extension\Office365');
+                    $availableCalendar->setType(self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
                     $availableCalendar->setIdentifier($calendarItem->getId());
                     $availableCalendar->setName($calendarItem->getName());
 

@@ -115,7 +115,13 @@ class AvailabilityService
     public function createAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
         $availability = new Availability();
-        $this->setAvailabilityProperties($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
+        $this->setAvailabilityProperties(
+            $availability,
+            $user,
+            $calendarType,
+            $calendarIdentifier,
+            $isAvailable,
+            $colour);
 
         if (! $availability->create())
         {
@@ -233,7 +239,8 @@ class AvailabilityService
         return new ActionResult(
             count($calendarAvailabilityTypes),
             $failedActions,
-            __METHOD__,
+            __NAMESPACE__,
+            __FUNCTION__,
             Availability::class_name(false));
     }
 
