@@ -70,7 +70,7 @@ abstract class FullRenderer extends ViewRenderer
     {
         $html = array();
 
-        $html[] = '<div class="col-xs-12 col-lg-10 table-calendar-main">';
+        $html[] = '<div class="col-xs-12 col-lg-9 table-calendar-main">';
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-4">';
@@ -95,7 +95,7 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = $this->renderFullCalendar();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-lg-2 table-calendar-sidebar">';
+        $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = $this->getJumpForm()->render();
