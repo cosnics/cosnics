@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
@@ -21,6 +19,21 @@ use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
  */
 abstract class CalendarEventDataProvider extends InternalCalendar
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
 
     /**
      *
@@ -40,7 +53,7 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 
         $events = array();
 
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+        $availabilityService = $this->getAvailabilityService();
         $packageContext = $this->getCalendarContext();
         $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
 

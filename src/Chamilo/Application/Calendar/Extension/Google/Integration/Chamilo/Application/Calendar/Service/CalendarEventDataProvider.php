@@ -17,6 +17,12 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class CalendarEventDataProvider extends ExternalCalendar
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
 
     /**
      *
