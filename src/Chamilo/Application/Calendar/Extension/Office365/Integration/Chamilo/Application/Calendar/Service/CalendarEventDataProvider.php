@@ -3,8 +3,6 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\A
 
 use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
@@ -85,21 +83,28 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     /**
      *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @return string[]
      */
     protected function getCalendarIdentifiers(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
-
-        $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
+        $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
             $calendarRendererProvider->getDataUser(),
             self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
 
         $calendarIdentifiers = array();
 
-        if ($availabilities->size() == 0)
+        if ($availabilities->count() == 0)
         {
             $availableCalendars = $this->getCalendars($calendarRendererProvider->getDataUser());
 
@@ -110,7 +115,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         }
         else
         {
-            while ($availability = $availabilities->next_result())
+            foreach ($availabilities as $availability)
             {
                 if ($availability->isActive())
                 {

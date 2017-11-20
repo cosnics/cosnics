@@ -5,16 +5,14 @@ use Chamilo\Application\Calendar\Architecture\MixedCalendar;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces\PersonalCalendarEventDataProviderRepositoryInterface;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -25,6 +23,21 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class CalendarEventDataProvider extends MixedCalendar
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
 
     /**
      *
@@ -34,8 +47,8 @@ class CalendarEventDataProvider extends MixedCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
+        $availabilityService = $this->getAvailabilityService();
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
             $calendarRendererProvider->getDataUser(),

@@ -5,8 +5,6 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
@@ -48,22 +46,30 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     /**
      *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @return string[]
      */
     private function getCalendarIdentifiers(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
 
-        $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
+        $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
             $calendarRendererProvider->getDataUser(),
             $package);
 
         $calendarIdentifiers = array();
 
-        if ($availabilities->size() == 0)
+        if ($availabilities->count() == 0)
         {
             $availableCalendars = $this->getCalendars();
 
@@ -74,7 +80,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         }
         else
         {
-            while ($availability = $availabilities->next_result())
+            foreach ($availabilities as $availability)
             {
                 if ($availability->isActive())
                 {

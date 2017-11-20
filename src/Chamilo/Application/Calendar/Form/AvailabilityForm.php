@@ -182,7 +182,7 @@ class AvailabilityForm extends FormValidator
         $defaultValues = array();
         $calendarAvailabilities = $this->getAvailabilityService()->getAvailabilitiesForUser($this->getUser());
 
-        while ($calendarAvailability = $calendarAvailabilities->next_result())
+        foreach ($calendarAvailabilities as $calendarAvailability)
         {
             $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarAvailability->getCalendarType()][$calendarAvailability->getCalendarId()][AvailabilityService::PROPERTY_AVAILABLE] = $calendarAvailability->getAvailability();
             $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarAvailability->getCalendarType()][$calendarAvailability->getCalendarId()][AvailabilityService::PROPERTY_COLOUR] = $calendarAvailability->getColour();
