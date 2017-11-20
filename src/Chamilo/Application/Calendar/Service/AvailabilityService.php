@@ -255,9 +255,10 @@ class AvailabilityService
 
     /**
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getAvailableCalendars()
+    public function getAvailableCalendars(User $user)
     {
         $availableCalendars = array();
 
@@ -279,7 +280,7 @@ class AvailabilityService
 
                 $package = ClassnameUtilities::getInstance()->getNamespaceParent($context, 4);
                 $implementor = new $class_name();
-                $availableCalendars[$package] = $implementor->getCalendars();
+                $availableCalendars[$package] = $implementor->getCalendars($user);
             }
         }
 

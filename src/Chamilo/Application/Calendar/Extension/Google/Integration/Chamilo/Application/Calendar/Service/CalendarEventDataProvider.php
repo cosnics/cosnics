@@ -7,6 +7,7 @@ use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
@@ -24,24 +25,24 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, 
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $events = array();
-        
+
         if ($calendarService->isAuthenticated())
         {
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
-            
+
             foreach ($calendarIdentifiers as $calendarIdentifier)
             {
                 $events = array_merge(
-                    $events, 
+                    $events,
                     $this->getCalendarEvents($calendarService, $calendarIdentifier, $fromDate, $toDate));
             }
         }
-        
+
         return $events;
     }
 
@@ -55,17 +56,17 @@ class CalendarEventDataProvider extends ExternalCalendar
     {
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4);
-        
+
         $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(), 
+            $calendarRendererProvider->getDataUser(),
             $package);
-        
+
         $calendarIdentifiers = array();
-        
+
         if ($availabilities->size() == 0)
         {
             $availableCalendars = $this->getCalendars();
-            
+
             foreach ($availableCalendars as $availableCalendar)
             {
                 $calendarIdentifiers[] = $availableCalendar->getIdentifier();
@@ -81,7 +82,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                 }
             }
         }
-        
+
         return $calendarIdentifiers;
     }
 
@@ -97,39 +98,39 @@ class CalendarEventDataProvider extends ExternalCalendar
     private function getCalendarEvents(CalendarService $calendarService, $calendarId, $fromDate, $toDate)
     {
         $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
-            $calendarId, 
-            $fromDate, 
+            $calendarId,
+            $fromDate,
             $toDate);
-        
+
         $events = array();
-        
+
         while ($googleCalenderEvent = $eventResultSet->next_result())
         {
             $eventParser = new EventParser(
-                $eventResultSet->getCalendarProperties(), 
-                $googleCalenderEvent, 
-                $fromDate, 
+                $eventResultSet->getCalendarProperties(),
+                $googleCalenderEvent,
+                $fromDate,
                 $toDate);
             $events = array_merge($events, $eventParser->getEvents());
         }
-        
+
         return $events;
     }
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
      */
-    public function getCalendars()
+    public function getCalendars(User $user)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $calendars = array();
-        
+
         if ($calendarService->isAuthenticated())
         {
             $calendars = $calendarService->getOwnedCalendars();
         }
-        
+
         return $calendars;
     }
 }
