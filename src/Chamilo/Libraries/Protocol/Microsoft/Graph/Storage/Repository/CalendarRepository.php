@@ -51,7 +51,7 @@ class CalendarRepository
     public function listOwnedCalendars($azureUserIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'users/' . $azureUserIdentifier . '/calendars',
+            '/users/' . $azureUserIdentifier . '/calendars',
             \Microsoft\Graph\Model\Calendar::class);
     }
 
@@ -64,7 +64,7 @@ class CalendarRepository
     public function getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
+            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
             \Microsoft\Graph\Model\Calendar::class);
     }
 
@@ -83,7 +83,7 @@ class CalendarRepository
             ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]);
 
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            'users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
+            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
             \Microsoft\Graph\Model\Event::class);
     }
 }
