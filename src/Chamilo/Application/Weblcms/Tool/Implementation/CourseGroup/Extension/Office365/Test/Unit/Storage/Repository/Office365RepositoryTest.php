@@ -223,7 +223,9 @@ class Office365RepositoryTest extends ChamiloTestCase
             'groupTypes' => [
                 'Unified',
             ],
-            'securityEnabled' => false
+            'securityEnabled' => false,
+            'mailNickname' => 'TestGroup_101',
+            'visibility' => 'private'
         ];
 
         $this->mockRequest(
