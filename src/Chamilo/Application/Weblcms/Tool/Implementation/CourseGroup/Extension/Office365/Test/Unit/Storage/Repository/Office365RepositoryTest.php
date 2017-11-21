@@ -349,9 +349,8 @@ class Office365RepositoryTest extends ChamiloTestCase
         $users = [new \Microsoft\Graph\Model\User()];
 
         $this->mockRequest(
-            'GET', '/groups/' . $groupIdentifier . '/owners',
-            \Microsoft\Graph\Model\User::class,
-            $this->returnValue($users)
+            'GET', '/groups/' . $groupIdentifier . '/owners', null,
+            $this->returnValue($users), null, 'createCollectionRequest'
         );
 
         $this->assertEquals($users, $this->office365Repository->listGroupOwners($groupIdentifier));
@@ -452,9 +451,8 @@ class Office365RepositoryTest extends ChamiloTestCase
         $users = [new \Microsoft\Graph\Model\User()];
 
         $this->mockRequest(
-            'GET', '/groups/' . $groupIdentifier . '/members',
-            \Microsoft\Graph\Model\User::class,
-            $this->returnValue($users)
+            'GET', '/groups/' . $groupIdentifier . '/members', null,
+            $this->returnValue($users), null, 'createCollectionRequest'
         );
 
         $this->assertEquals($users, $this->office365Repository->listGroupMembers($groupIdentifier));
@@ -478,8 +476,8 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $this->mockRequest(
             'GET', '/groups/' . $groupIdentifier . '/planner/plans',
-            \Microsoft\Graph\Model\PlannerPlan::class,
-            $this->returnValue($plans)
+            null,
+            $this->returnValue($plans), null, 'createCollectionRequest'
         );
 
         $this->assertEquals($plans, $this->office365Repository->listGroupPlans($groupIdentifier));
@@ -574,17 +572,18 @@ class Office365RepositoryTest extends ChamiloTestCase
      * @param string $returnType
      * @param \PHPUnit_Framework_MockObject_Stub|null $executeStub
      * @param mixed $body
+     * @param string $requestMethodName
      */
     protected function mockRequest(
         $requestMethod = null, $requestUrl = null, $returnType = null,
-        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $body = null
+        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $body = null, $requestMethodName = 'createRequest'
     )
     {
         $graphRequest = $this->getMockBuilder(GraphRequest::class)
             ->disableOriginalConstructor()->getMock();
 
         $createRequestMock = $this->graphMock->expects($this->once())
-            ->method('createRequest')
+            ->method($requestMethodName)
             ->will($this->returnValue($graphRequest));
 
         if ($requestMethod && $requestUrl)

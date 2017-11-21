@@ -8,6 +8,7 @@ use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
+use Microsoft\Graph\Http\GraphResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -319,10 +320,11 @@ class Office365Repository
      */
     public function listGroupOwners($groupIdentifier)
     {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/owners')
-                ->setReturnType(\Microsoft\Graph\Model\User::class)
+        $response = $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/owners')
         );
+
+        return $this->parseCollectionResponse($response, \Microsoft\Graph\Model\User::class);
     }
 
     /**
@@ -393,10 +395,11 @@ class Office365Repository
      */
     public function listGroupMembers($groupIdentifier)
     {
-        return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/members')
-                ->setReturnType(\Microsoft\Graph\Model\User::class)
+        $response = $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/members')
         );
+
+        return $this->parseCollectionResponse($response, \Microsoft\Graph\Model\User::class);
     }
 
     /**
@@ -410,12 +413,33 @@ class Office365Repository
     {
         $this->activateDelegatedAccessToken();
 
-        $request = $this->graph->createRequest('GET', '/groups/' . $groupIdentifier . '/planner/plans')
-            ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class);
+        $request = $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/planner/plans');
+        $result = $this->parseCollectionResponse($request->execute(), \Microsoft\Graph\Model\PlannerPlan::class);
 
-        $result = $request->execute();
         $this->initializeApplicationAccessToken();
 
         return $result;
+    }
+
+    /**
+     * Parses a collection response. Bugfix for the microsoft graph library parsing everything to a single
+     * object when an empty collection is returned from the graph API
+     *
+     * @param \Microsoft\Graph\Http\GraphResponse $graphResponse
+     * @param string $returnType
+     *
+     * @return array
+     */
+    protected function parseCollectionResponse(GraphResponse $graphResponse, $returnType)
+    {
+        $body = $graphResponse->getBody();
+
+        $count = 0;
+        if(array_key_exists('@odata.count', $body))
+        {
+            $count = $body['@odata.count'];
+        }
+
+        return ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
     }
 }
