@@ -208,7 +208,7 @@ class CourseGroupPublicationCategoryService
 
         $location->disinherit();
 
-        if (!$location->update())
+        if (!$this->courseGroupPublicationCategoryRepository->update($location))
         {
             throw new \Exception(
                 'Could not update the location for the publication category with id ' . $publicationCategory->getId()
