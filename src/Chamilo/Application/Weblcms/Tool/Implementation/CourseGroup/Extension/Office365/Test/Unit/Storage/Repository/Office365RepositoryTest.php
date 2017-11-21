@@ -9,6 +9,7 @@ use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
+use Microsoft\Graph\Http\GraphResponse;
 
 /**
  * Tests the Office365Repository
@@ -348,9 +349,9 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $users = [new \Microsoft\Graph\Model\User()];
 
-        $this->mockRequest(
-            'GET', '/groups/' . $groupIdentifier . '/owners', null,
-            $this->returnValue($users), null, 'createCollectionRequest'
+        $this->mockCollectionRequest(
+            'GET', '/groups/' . $groupIdentifier . '/owners', \Microsoft\Graph\Model\User::class,
+            $this->returnValue($users)
         );
 
         $this->assertEquals($users, $this->office365Repository->listGroupOwners($groupIdentifier));
@@ -450,9 +451,9 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $users = [new \Microsoft\Graph\Model\User()];
 
-        $this->mockRequest(
-            'GET', '/groups/' . $groupIdentifier . '/members', null,
-            $this->returnValue($users), null, 'createCollectionRequest'
+        $this->mockCollectionRequest(
+            'GET', '/groups/' . $groupIdentifier . '/members', \Microsoft\Graph\Model\User::class,
+            $this->returnValue($users)
         );
 
         $this->assertEquals($users, $this->office365Repository->listGroupMembers($groupIdentifier));
@@ -474,10 +475,9 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $plans = [new \Microsoft\Graph\Model\PlannerPlan()];
 
-        $this->mockRequest(
+        $this->mockCollectionRequest(
             'GET', '/groups/' . $groupIdentifier . '/planner/plans',
-            null,
-            $this->returnValue($plans), null, 'createCollectionRequest'
+            \Microsoft\Graph\Model\PlannerPlan::class, $this->returnValue($plans)
         );
 
         $this->assertEquals($plans, $this->office365Repository->listGroupPlans($groupIdentifier));
@@ -495,7 +495,7 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $plans = [new \Microsoft\Graph\Model\PlannerPlan()];
 
-        $this->mockRequest(
+        $this->mockCollectionRequest(
             'GET', '/groups/' . $groupIdentifier . '/planner/plans',
             \Microsoft\Graph\Model\PlannerPlan::class,
             $this->returnValue($plans)
@@ -540,7 +540,7 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $plans = [new \Microsoft\Graph\Model\PlannerPlan()];
 
-        $this->mockRequest(
+        $this->mockCollectionRequest(
             'GET', '/groups/' . $groupIdentifier . '/planner/plans',
             \Microsoft\Graph\Model\PlannerPlan::class,
             $this->returnValue($plans)
@@ -572,18 +572,17 @@ class Office365RepositoryTest extends ChamiloTestCase
      * @param string $returnType
      * @param \PHPUnit_Framework_MockObject_Stub|null $executeStub
      * @param mixed $body
-     * @param string $requestMethodName
      */
     protected function mockRequest(
         $requestMethod = null, $requestUrl = null, $returnType = null,
-        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $body = null, $requestMethodName = 'createRequest'
+        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $body = null
     )
     {
         $graphRequest = $this->getMockBuilder(GraphRequest::class)
             ->disableOriginalConstructor()->getMock();
 
         $createRequestMock = $this->graphMock->expects($this->once())
-            ->method($requestMethodName)
+            ->method('createRequest')
             ->will($this->returnValue($graphRequest));
 
         if ($requestMethod && $requestUrl)
@@ -616,6 +615,54 @@ class Office365RepositoryTest extends ChamiloTestCase
             $executeMock->will($executeStub);
         }
     }
-}
 
-;
+    /**
+     * @param string $requestMethod
+     * @param string $requestUrl
+     * @param string $returnType
+     * @param \PHPUnit_Framework_MockObject_Stub|null $executeStub
+     * @param int $returnCount
+     */
+    protected function mockCollectionRequest(
+        $requestMethod = null, $requestUrl = null, $returnType = null,
+        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $returnCount = 1
+    )
+    {
+        $graphRequest = $this->getMockBuilder(GraphRequest::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $graphResponse = $this->getMockBuilder(GraphResponse::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $graphResponse->expects($this->once())
+            ->method('getBody')
+            ->will($this->returnValue(['@odata.count' => $returnCount]));
+
+        $createRequestMock = $this->graphMock->expects($this->once())
+            ->method('createCollectionRequest')
+            ->will($this->returnValue($graphRequest));
+
+        if ($requestMethod && $requestUrl)
+        {
+            $createRequestMock->with($requestMethod, $requestUrl);
+        }
+
+        $graphRequest->expects($this->any())
+            ->method('execute')
+            ->will($this->returnValue($graphResponse));
+
+        if($returnType && $returnCount >= 1)
+        {
+            $getResponseMock = $graphResponse->expects($this->once())
+                ->method('getResponseAsObject')
+                ->with($returnType);
+
+            if ($executeStub)
+            {
+                $getResponseMock->will($executeStub);
+            }
+        }
+
+
+    }
+}
