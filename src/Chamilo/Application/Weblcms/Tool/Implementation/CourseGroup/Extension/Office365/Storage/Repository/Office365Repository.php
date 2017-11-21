@@ -212,10 +212,12 @@ class Office365Repository
             'description' => $groupName,
             'displayName' => $groupName,
             'mailEnabled' => false,
+            'mailNickname' => str_replace(' ', '_', $groupName),
             'groupTypes' => [
                 'Unified',
             ],
-            'securityEnabled' => false
+            'securityEnabled' => false,
+            'visibility' => 'private'
         ];
 
         return $this->executeRequestWithAccessTokenExpirationRetry(
