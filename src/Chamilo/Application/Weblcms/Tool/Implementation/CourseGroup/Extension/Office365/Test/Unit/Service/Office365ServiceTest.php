@@ -463,6 +463,77 @@ class Office365ServiceTest extends ChamiloTestCase
         $this->assertEmpty($this->office365Service->getDefaultGroupPlanId($groupId));
     }
 
+    public function testCreatePlanForGroup()
+    {
+        $groupId = 5;
+        $planName = 'Planning for Groups 101';
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('createPlanForGroup')
+            ->with($groupId, $planName)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+
+        $this->assertEquals(3, $this->office365Service->createPlanForGroup($groupId, $planName));
+    }
+
+    public function testCreatePlanForGroupNoPlanName()
+    {
+        $groupId = 5;
+        $planName = 'Planning for Groups 101';
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('createPlanForGroup')
+            ->with($groupId, $planName)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+
+        $this->assertEquals(3, $this->office365Service->createPlanForGroup($groupId));
+    }
+
+    public function testGetOrCreatePlanIdForGroup()
+    {
+        $groupId = 5;
+
+        $groupPlans = [
+            new \Microsoft\Graph\Model\PlannerPlan(['id' => 3]),
+            new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
+        ];
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('listGroupPlans')
+            ->with($groupId)
+            ->will($this->returnValue($groupPlans));
+
+        $this->assertEquals(3, $this->office365Service->getOrCreatePlanIdForGroup($groupId));
+    }
+
+    public function testGetOrCreatePlanIdForGroupNoPlanFound()
+    {
+        $groupId = 5;
+        $planName = 'Planning for Groups 101';
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('listGroupPlans')
+            ->with($groupId)
+            ->will($this->returnValue([]));
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
+
+        $this->office365RepositoryMock->expects($this->once())
+            ->method('createPlanForGroup')
+            ->with($groupId, $planName)
+            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+
+        $this->assertEquals(3, $this->office365Service->getOrCreatePlanIdForGroup($groupId));
+    }
+
     public function testGetOffice365UserIdentifier()
     {
         $user = new User();

@@ -67,6 +67,10 @@ class Office365RepositoryFactory
             ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'tenant_id']
         );
 
+        $cosnicsPrefix = $this->configurationConsulter->getSetting(
+            ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'cosnics_prefix']
+        );
+
         $redirect = new Redirect();
 
         $currentParameters = $this->chamiloRequest->query->all();
@@ -98,8 +102,7 @@ class Office365RepositoryFactory
         $graph = new Graph();
 
         return new Office365Repository(
-            $oauthClient, $graph, $this->accessTokenRepository,
-            $this->chamiloRequest->getUri()
+            $oauthClient, $graph, $this->accessTokenRepository, $cosnicsPrefix
         );
     }
 

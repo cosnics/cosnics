@@ -22,6 +22,7 @@
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.storage.repository.office365_repository" />
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.service.course_group_office365_reference_service" />
             <argument type="service" id="chamilo.application.weblcms.service.course" />
+            <argument type="service" id="chamilo.configuration.service.configuration_consulter" />
         </service>
 
         <service id="chamilo.application.weblcms.tool.implementation.course_group.extension.office365.integration.chamilo.application.weblcms.tool.implementation.course_group.storage.repository.course_group_office365_reference_repository"

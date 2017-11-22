@@ -8,7 +8,7 @@
                     default=""/>
             <setting
                     name="client_secret"
-                    field="text"
+                    field="password"
                     default=""/>
             <setting
                     name="access_token"
@@ -31,10 +31,10 @@
             <setting name="planner_base_uri"
                      field="text"
                      default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner" />
-            <!--<setting-->
-            <!--name="tenant_name"-->
-            <!--field="text"-->
-            <!--default="" />-->
+            <setting
+                    name="cosnics_prefix"
+                    field="text"
+                    default="cosnics_"/>
         </category>
     </settings>
 </package>

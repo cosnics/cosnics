@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -30,42 +31,16 @@ class VisitPlannerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $office365ReferenceService = $this->getCourseGroupOffice365ReferenceService();
-        if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
+        try
         {
+            $plannerUrl =
+                $this->getCourseGroupOffice365Connector()->getPlannerUrlForVisit($courseGroup, $this->getUser());
+        }
+        catch(\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             throw new NotAllowedException();
         }
-
-        $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
-
-        $office365Service = $this->getOffice365Service();
-        if (!$office365Service->isMemberOfGroup($reference->getOffice365GroupId(), $this->getUser()))
-        {
-            try
-            {
-                $office365Service->addMemberToGroup($reference->getOffice365GroupId(), $this->getUser());
-            }
-            catch (\Exception $ex)
-            {
-                throw new NotAllowedException();
-            }
-        }
-
-        $baseUrl = $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri']
-        );
-
-        $planId = $reference->getOffice365PlanId();
-        if (empty($planId))
-        {
-            $planId = $this->getOffice365Service()->getDefaultGroupPlanId($reference->getOffice365GroupId());
-            $office365ReferenceService->storePlannerReferenceForCourseGroup(
-                $courseGroup, $reference->getOffice365GroupId(), $planId
-            );
-        }
-
-        $plannerUrl = $baseUrl . '/#/plantaskboard?groupId=%s&planId=%s';
-        $plannerUrl = sprintf($plannerUrl, $reference->getOffice365GroupId(), $planId);
 
         return new RedirectResponse($plannerUrl);
     }

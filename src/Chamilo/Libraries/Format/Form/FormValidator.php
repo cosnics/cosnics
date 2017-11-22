@@ -397,6 +397,12 @@ EOT;
         {
             $attributes['size'] = 50;
         }
+
+        if (! array_key_exists('class', $attributes))
+        {
+            $attributes['class'] = 'form-control';
+        }
+
         $element = $this->createElement('password', $name, $label, $attributes);
 
         return $element;

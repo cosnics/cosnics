@@ -217,24 +217,38 @@ class Office365RepositoryTest extends ChamiloTestCase
 
         $groupName = 'TestGroup 101';
 
-        $groupData = [
-            'description' => $groupName,
-            'displayName' => $groupName,
-            'mailEnabled' => false,
-            'groupTypes' => [
-                'Unified',
-            ],
-            'securityEnabled' => false,
-            'mailNickname' => 'TestGroup_101',
-            'visibility' => 'private'
-        ];
+//        $groupData = [
+//            'description' => $groupName,
+//            'displayName' => $groupName,
+//            'mailEnabled' => false,
+//            'groupTypes' => [
+//                'Unified',
+//            ],
+//            'securityEnabled' => false,
+//            'mailNickname' => 'TestGroup_101',
+//            'visibility' => 'private'
+//        ];
 
         $this->mockRequest(
             'POST', '/groups', \Microsoft\Graph\Model\Group::class,
-            $this->returnValue(null), $groupData
+            $this->returnValue(null)
         );
 
         $this->office365Repository->createGroup($groupName);
+    }
+
+    public function testGetGroup()
+    {
+        $this->constructWithStoredAccessToken();
+        $groupIdentifier = 5;
+        $group = new \Microsoft\Graph\Model\Group();
+
+        $this->mockRequest(
+            'GET', '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class,
+            $this->returnValue($group)
+        );
+
+        $this->assertEquals($group, $this->office365Repository->getGroup($groupIdentifier));
     }
 
     public function testUpdateGroup()
@@ -549,6 +563,33 @@ class Office365RepositoryTest extends ChamiloTestCase
         $this->assertEquals($plans, $this->office365Repository->listGroupPlans($groupIdentifier));
     }
 
+    public function testCreatePlanForGroup()
+    {
+        $groupIdentifier = 5;
+        $planName = 'Planning in the Group 101';
+
+        $accessToken = new AccessToken(
+            ['access_token' => 'eyJ0eXAiOiJKV1QiLCJub25jZSI6SnzA', 'expires' => time() + 1000]
+        );
+
+        $this->accessTokenRepositoryMock->expects($this->atLeastOnce())
+            ->method('getDelegatedAccessToken')
+            ->will($this->returnValue($accessToken));
+
+        $this->constructWithStoredAccessToken();
+
+        $plan = new \Microsoft\Graph\Model\PlannerPlan();
+
+        $body = ['owner' => $groupIdentifier, 'title' => $planName];
+
+        $this->mockRequest(
+            'POST', '/planner/plans',
+            \Microsoft\Graph\Model\PlannerPlan::class, $this->returnValue($plan), $body
+        );
+
+        $this->assertEquals($plan, $this->office365Repository->createPlanForGroup($groupIdentifier, $planName));
+    }
+
     /**
      * Constructs the Office365Repository with a valid and stored access token
      */
@@ -590,12 +631,13 @@ class Office365RepositoryTest extends ChamiloTestCase
             $createRequestMock->with($requestMethod, $requestUrl);
         }
 
+        $bodyMock = $graphRequest->expects($this->any())
+            ->method('attachBody')
+            ->will($this->returnValue($graphRequest));
+
         if ($body)
         {
-            $graphRequest->expects($this->once())
-                ->method('attachBody')
-                ->with($body)
-                ->will($this->returnValue($graphRequest));
+            $bodyMock->with($body);
         }
 
         $setReturnTypeMock = $graphRequest->expects($this->once())
