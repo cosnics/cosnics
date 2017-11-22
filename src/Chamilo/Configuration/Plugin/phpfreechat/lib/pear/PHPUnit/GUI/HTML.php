@@ -29,20 +29,19 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Wolfram Kriesing <wolfram@kriesing.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: HTML.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
 
 /**
  * HTML GUI.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Wolfram Kriesing <wolfram@kriesing.de>
@@ -63,7 +62,7 @@ class PHPUnit_GUI_HTML
      * grabs all the tests and adds them to the suite, so you
      * have no chance to find out which test goes with which suite
      * therefore you can simply pass an array of suites to this constructor here
-     * 
+     *
      * @param array The suites to be tested. If not given, then you might
      *        be using the SetupDecorator, which detects them automatically
      *        when calling getSuitesFromDir()
@@ -82,7 +81,7 @@ class PHPUnit_GUI_HTML
 
     /**
      * Add suites to the GUI
-     * 
+     *
      * @param object this should be an instance of PHPUnit_TestSuite
      */
     function addSuites($suites)
@@ -98,33 +97,33 @@ class PHPUnit_GUI_HTML
         $request = $_REQUEST;
         $showPassed = FALSE;
         $submitted = @$request['submitted'];
-        
+
         if ($submitted)
         {
             $showPassed = @$request['showOK'] ? TRUE : FALSE;
         }
-        
+
         $suiteResults = array();
-        
+
         foreach ($this->_suites as $aSuite)
         {
             $aSuiteResult = array();
-            
+
             // remove the first directory's name from the test-suite name, since it
             // mostly is something like 'tests' or alike
             $removablePrefix = explode('_', $aSuite->getName());
             $aSuiteResult['name'] = str_replace($removablePrefix[0] . '_', '', $aSuite->getName());
-            
+
             if ($submitted && isset($request[$aSuiteResult['name']]))
             {
                 $result = PHPUnit :: run($aSuite);
-                
+
                 $aSuiteResult['counts']['run'] = $result->runCount();
                 $aSuiteResult['counts']['error'] = $result->errorCount();
                 $aSuiteResult['counts']['failure'] = $result->failureCount();
-                
+
                 $aSuiteResult['results'] = $this->_prepareResult($result, $showPassed);
-                
+
                 $per = 100 / $result->runCount();
                 $failed = ($per * $result->errorCount()) + ($per * $result->failureCount());
                 $aSuiteResult['percent'] = round(100 - $failed, 2);
@@ -133,15 +132,15 @@ class PHPUnit_GUI_HTML
             {
                 $aSuiteResult['addInfo'] = 'NOT EXECUTED';
             }
-            
+
             $suiteResults[] = $aSuiteResult;
         }
-        
+
         $final['name'] = 'OVERALL RESULT';
         $final['counts'] = array();
         $final['percent'] = 0;
         $numExecutedTests = 0;
-        
+
         foreach ($suiteResults as $aSuiteResult)
         {
             if (sizeof(@$aSuiteResult['counts']))
@@ -152,12 +151,12 @@ class PHPUnit_GUI_HTML
                     {
                         $final['counts'][$key] = 0;
                     }
-                    
+
                     $final['counts'][$key] += $aCount;
                 }
             }
         }
-        
+
         if (isset($final['counts']['run']))
         {
             $per = 100 / $final['counts']['run'];
@@ -168,9 +167,9 @@ class PHPUnit_GUI_HTML
         {
             $final['percent'] = 0;
         }
-        
+
         array_unshift($suiteResults, $final);
-        
+
         include 'PHPUnit/GUI/HTML.tpl';
     }
 
@@ -178,29 +177,29 @@ class PHPUnit_GUI_HTML
     {
         $ret = array();
         $failures = $result->failures();
-        
+
         foreach ($failures as $aFailure)
         {
             $ret['failures'][] = $this->_prepareFailure($aFailure);
         }
-        
+
         $errors = $result->errors();
-        
+
         foreach ($errors as $aError)
         {
             $ret['errors'][] = $this->_prepareErrors($aError);
         }
-        
+
         if ($showPassed)
         {
             $passed = $result->passedTests();
-            
+
             foreach ($passed as $aPassed)
             {
                 $ret['passed'][] = $this->_preparePassedTests($aPassed);
             }
         }
-        
+
         return $ret;
     }
 
@@ -209,13 +208,13 @@ class PHPUnit_GUI_HTML
         $test = $failure->failedTest();
         $ret['testName'] = $test->getName();
         $exception = $failure->thrownException();
-        
+
         // a serialized string starts with a 'character:decimal:{'
         // if so we try to unserialize it
         // this piece of the regular expression is for detecting a serialized
         // type like 'a:3:' for an array with three element or an object i.e. 'O:12:"class":3'
         $serialized = '(\w:\d+:(?:"[^"]+":\d+:)?\{.*\})';
-        
+
         // Spaces might make a diff, so we shall show them properly (since a
         // user agent ignores them).
         if (preg_match('/^(.*)expected ' . $serialized . ', actual ' . $serialized . '$/sU', $exception, $matches))
@@ -226,15 +225,15 @@ class PHPUnit_GUI_HTML
                  "</pre>";
             // Improved compatibility, ob_clean() would be PHP >= 4.2.0 only.
             ob_end_clean();
-            
+
             ob_start();
             print_r(unserialize($matches[3]));
             $ret['actual'] = htmlspecialchars($matches[1]) . "<pre>" . htmlspecialchars(rtrim(ob_get_contents())) .
                  "</pre>";
             ob_end_clean();
         }
-        
-        else 
+
+        else
             if (preg_match('/^(.*)expected (.*), actual (.*)$/sU', $exception, $matches))
             {
                 $ret['expected'] = nl2br(str_replace(" ", "&nbsp;", htmlspecialchars($matches[1] . $matches[2])));
@@ -244,7 +243,7 @@ class PHPUnit_GUI_HTML
             {
                 $ret['message'] = nl2br(str_replace(" ", "&nbsp;", htmlspecialchars($exception)));
             }
-        
+
         return $ret;
     }
 

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Rights\Editor\Component;
 use Chamilo\Core\Rights\Editor\Manager;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

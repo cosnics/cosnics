@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\ResultProcessors;
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\PeerAssessmentResultprocessor;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class DochyResultProcessor extends PeerAssessmentResultprocessor
 {

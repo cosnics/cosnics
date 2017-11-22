@@ -25,6 +25,7 @@ class HashingFactory
      */
     public function __construct(StringUtilities $stringUtilities, $configuredHashingAlgorithm)
     {
+        $this->stringUtilities = $stringUtilities;
         $this->configuredHashingAlgorithm = $configuredHashingAlgorithm;
     }
 

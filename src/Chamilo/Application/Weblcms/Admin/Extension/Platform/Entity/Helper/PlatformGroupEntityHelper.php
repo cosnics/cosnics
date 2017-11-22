@@ -25,11 +25,11 @@ class PlatformGroupEntityHelper
     {
         $columns = array();
         $columns[] = new DataClassPropertyTableColumn(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
             \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_NAME);
         $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
         $columns[] = new DataClassPropertyTableColumn(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
             \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_CODE);
         return $columns;
     }
@@ -48,15 +48,15 @@ class PlatformGroupEntityHelper
             case \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_NAME :
                 $url = $renderer->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_TARGET, 
-                        Manager::PARAM_ENTITY_TYPE => $renderer->get_component()->get_selected_entity_type(), 
+                        Manager::PARAM_ACTION => Manager::ACTION_TARGET,
+                        Manager::PARAM_ENTITY_TYPE => $renderer->get_component()->get_selected_entity_type(),
                         Manager::PARAM_ENTITY_ID => $result[DataClass::PROPERTY_ID]));
                 return '<a href="' . $url . '">' . $result[\Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_NAME] .
                      '</a>';
                 break;
             case self::PROPERTY_PATH :
                 $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
                     $result[\Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID]);
                 return $group->get_fully_qualified_name();
                 break;
@@ -67,7 +67,7 @@ class PlatformGroupEntityHelper
 
     /**
      * Returns the data as a resultset
-     * 
+     *
      * @param \libraries\Condition $condition
      * @param $condition
      * @param int $offset
@@ -79,30 +79,30 @@ class PlatformGroupEntityHelper
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
         $join = new Join(
-            Admin::class_name(), 
+            Admin::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
-                    \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID), 
+                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
+                    \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID),
                 new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
-        
+
         $properties = new DataClassProperties();
         $properties->add(
             new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT, 
+                FunctionConditionVariable::DISTINCT,
                 new PropertiesConditionVariable(\Chamilo\Core\Group\Storage\DataClass\Group::class_name())));
-        
+
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
-        
+
         return \Chamilo\Core\Group\Storage\DataManager::records(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
             $parameters);
     }
 
     /**
      * Counts the data
-     * 
+     *
      * @param \libraries\Condition $condition
      *
      * @return int
@@ -110,52 +110,54 @@ class PlatformGroupEntityHelper
     public function count_table_data($condition)
     {
         $join = new Join(
-            Admin::class_name(), 
+            Admin::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
-                    \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID), 
+                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
+                    \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID),
                 new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
-        
+
         $parameters = new DataClassCountParameters(
-            $condition, 
-            $joins, 
-            new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT, 
-                new PropertyConditionVariable(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
-                    \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID)));
-        
+            $condition,
+            $joins,
+            new DataClassProperties(
+                array(
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(
+                            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
+                            \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID)))));
+
         return \Chamilo\Core\Group\Storage\DataManager::count(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
             $parameters);
     }
 
     public static function expand($entity_id)
     {
         $entities = array();
-        
+
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
             $entity_id);
-        
+
         if ($group instanceof \Chamilo\Core\Group\Storage\DataClass\Group)
         {
             $parents = $group->get_parents();
-            
+
             while ($parent = $parents->next_result())
             {
                 $entities[PlatformGroupEntity::ENTITY_TYPE][] = $parent;
             }
         }
-        
+
         return $entities;
     }
 
     /**
      * Get the fully qualified class name of the object
-     * 
+     *
      * @return string
      */
     public static function class_name()

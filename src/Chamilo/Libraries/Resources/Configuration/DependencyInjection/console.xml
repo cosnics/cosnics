@@ -24,6 +24,18 @@
                 method="getHelperSet" />
         </service>
 
+        <service id="hogent.libraries.console.helper.connection"
+                 class="Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper" >
+            <argument type="service" id="doctrine.dbal.connection" />
+            <tag name="chamilo.libraries.console.helper" alias="db" />
+        </service>
+
+        <service id="hogent.libraries.console.helper.doctrine.orm.entity_manager"
+                 class="Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper" >
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <tag name="chamilo.libraries.console.helper" alias="em" />
+        </service>
+
         <service
             id="chamilo.libraries.console.command.clear_cache"
             class="Chamilo\Libraries\Console\Command\ClearCacheCommand">
@@ -32,7 +44,7 @@
                 id="symfony.component.translation.translator" />
             <argument
                 type="service"
-                id="chamilo.libraries.cache.cache_director" />
+                id="chamilo.libraries.cache.cache_management.cache_manager" />
             <tag name="chamilo.libraries.console.command" />
         </service>
 
@@ -45,7 +57,38 @@
             <argument
                     type="service"
                     id="chamilo.libraries.format.utilities.resource_processor" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.cache.cache_management.cache_manager" />
             <tag name="chamilo.libraries.console.command" />
         </service>
+        
+        <service
+                id="chamilo.libraries.console.command.package_describer_command"
+                class="Chamilo\Libraries\Console\Command\PackageDescriberCommand">
+            <argument
+                    type="service"
+                    id="symfony.component.translation.translator" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.format.utilities.package_describer" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.cache.cache_management.cache_manager" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+
+        <service id="chamilo.libraries.console.command.generate_php_unit_config"
+                 class="Chamilo\Libraries\Console\Command\PHPUnitGeneratorCommand">
+            <tag name="chamilo.libraries.console.command" />
+            <argument type="service" id="chamilo.libraries.architecture.test.php_unit_generator" />
+        </service>
+
+        <service id="chamilo.libraries.console.command.generate_packages_php_unit_config"
+                 class="Chamilo\Libraries\Console\Command\PackagesPHPUnitGeneratorCommand">
+            <tag name="chamilo.libraries.console.command" />
+            <argument type="service" id="twig.environment" />
+        </service>
+
     </services>
 </container>

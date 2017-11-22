@@ -3,6 +3,11 @@ namespace Chamilo\Libraries\File\Properties;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
 
+/**
+ *
+ * @package Chamilo\Libraries\File\Properties
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class WebpageProperties
 {
     const PROPERTY_TITLE = 'title';
@@ -13,25 +18,43 @@ class WebpageProperties
 
     /**
      *
-     * @var multitype:string
+     * @var string[]
      */
     private $properties;
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_properties()
     {
         return $this->properties;
     }
 
+    /**
+     *
+     * @param string[] $properties
+     */
     public function set_properties($properties)
     {
         $this->properties = $properties;
     }
 
+    /**
+     *
+     * @param string $property
+     * @param string $value
+     */
     public function set_property($property, $value)
     {
         $this->properties[$property] = $value;
     }
 
+    /**
+     *
+     * @param string $property
+     * @return string
+     */
     public function get_property($property)
     {
         return $this->properties[$property];
@@ -84,11 +107,11 @@ class WebpageProperties
 
     /**
      *
-     * @param string $content_type
+     * @param string $contentType
      */
-    public function set_content_type($content_type)
+    public function set_content_type($contentType)
     {
-        $this->set_property(self::PROPERTY_CONTENT_TYPE, $content_type);
+        $this->set_property(self::PROPERTY_CONTENT_TYPE, $contentType);
     }
 
     /**
@@ -120,27 +143,27 @@ class WebpageProperties
 
     /**
      *
-     * @param \libraries\file\FileProperties $file_properties
+     * @param \Chamilo\Libraries\File\Properties\FileProperties $fileProperties
      */
-    public function set_file_properties($file_properties)
+    public function set_file_properties($fileProperties)
     {
-        $this->set_property(self::PROPERTY_FILE_PROPERTIES, $file_properties);
+        $this->set_property(self::PROPERTY_FILE_PROPERTIES, $fileProperties);
     }
 
     /**
      *
-     * @param multitype:string $file
-     * @return \libraries\WebpageProperties
+     * @param string[] $fileDescription
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
      */
-    public static function from_upload($file)
+    public static function from_upload($fileDescription)
     {
-        return self::determine_properties(FileProperties::from_upload($file));
+        return self::determine_properties(FileProperties::from_upload($fileDescription));
     }
 
     /**
      *
      * @param string $path
-     * @return \libraries\WebpageProperties
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
      */
     public static function from_path($path)
     {
@@ -149,25 +172,27 @@ class WebpageProperties
 
     /**
      *
-     * @param \libraries\file\FileProperties $file_properties
-     * @return \libraries\WebpageProperties
+     * @param \Chamilo\Libraries\File\Properties\FileProperties $fileProperties
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
      */
-    public static function determine_properties($file_properties)
+    public static function determine_properties($fileProperties)
     {
-        $dom_document = new \DOMDocument();
-        $dom_document->loadHTMLFile($file_properties->get_path());
-        $dom_xpath = new \DOMXPath($dom_document);
-        
+        $domDocument = new \DOMDocument();
+        $domDocument->loadHTMLFile($fileProperties->get_path());
+        $domXpath = new \DOMXPath($domDocument);
+
         $properties = new self();
-        $properties->set_file_properties($file_properties);
-        
-        $title = $dom_xpath->query('/html/head/title')->item(0)->nodeValue;
+        $properties->set_file_properties($fileProperties);
+
+        $title = $domXpath->query('/html/head/title')->item(0)->nodeValue;
+
         if (StringUtilities::getInstance()->hasValue(trim($title), true))
         {
             $properties->set_title(trim($title));
         }
-        
-        $description = $dom_xpath->query('/html/head/meta[@name="description"]')->item(0);
+
+        $description = $domXpath->query('/html/head/meta[@name="description"]')->item(0);
+
         if ($description instanceof \DOMNode)
         {
             if (StringUtilities::getInstance()->hasValue(trim($description->getAttribute('content')), true))
@@ -175,29 +200,32 @@ class WebpageProperties
                 $properties->set_description(trim($description->getAttribute('content')));
             }
         }
-        
-        $content_type = $dom_xpath->query('/html/head/meta[@http-equiv="content-type"]')->item(0);
-        if ($content_type instanceof \DOMNode)
+
+        $contentType = $domXpath->query('/html/head/meta[@http-equiv="content-type"]')->item(0);
+
+        if ($contentType instanceof \DOMNode)
         {
-            $content_type_parts = explode(';', $content_type->getAttribute('content'));
-            $properties->set_content_type(trim($content_type_parts[0]));
-            
-            if (StringUtilities::getInstance()->hasValue(trim($content_type_parts[1]), true))
+            $contentTypeParts = explode(';', $contentType->getAttribute('content'));
+            $properties->set_content_type(trim($contentTypeParts[0]));
+
+            if (StringUtilities::getInstance()->hasValue(trim($contentTypeParts[1]), true))
             {
-                $encoding_parts = explode('=', trim($content_type_parts[1]));
-                if (StringUtilities::getInstance()->hasValue(trim($encoding_parts[1]), true))
+                $encodingParts = explode('=', trim($contentTypeParts[1]));
+
+                if (StringUtilities::getInstance()->hasValue(trim($encodingParts[1]), true))
                 {
-                    $properties->set_encoding(trim($encoding_parts[1]));
+                    $properties->set_encoding(trim($encodingParts[1]));
                 }
             }
         }
-        
-        $charset = $dom_xpath->query('/html/head/meta[@charset]')->item(0);
+
+        $charset = $domXpath->query('/html/head/meta[@charset]')->item(0);
+
         if ($charset instanceof \DOMNode)
         {
             $properties->set_encoding($charset->getAttribute('charset'));
         }
-        
+
         return $properties;
     }
 }

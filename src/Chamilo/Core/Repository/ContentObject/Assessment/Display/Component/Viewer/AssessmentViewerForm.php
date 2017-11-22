@@ -9,7 +9,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class AssessmentViewerForm extends FormValidator
@@ -60,14 +60,15 @@ class AssessmentViewerForm extends FormValidator
         
         $this->addElement('hidden', $current_page, $this->get_page_number());
         
-        if ($this->get_page_number() == 1 && $assessment->has_description())
+        if ($assessment->has_description())
         {
             $display = ContentObjectRenditionImplementation::factory(
                 $assessment, 
-                ContentObjectRendition::FORMAT_HTML, 
-                ContentObjectRendition::VIEW_DESCRIPTION, 
+                ContentObjectRendition::FORMAT_HTML,
+                ContentObjectRendition::VIEW_FULL,
                 $this->assessment_viewer);
-            $this->add_information_message(null, null, $display->render(), true);
+
+            $this->addElement('html', $display->render());
         }
         
         $this->addElement('hidden', 'start_time', '', array('id' => 'start_time'));

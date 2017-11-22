@@ -5,10 +5,11 @@ use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Table data provider for the schema
- * 
+ *
  * @package configuration\form
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -18,7 +19,7 @@ class ElementTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     * 
+     *
      * @param \common\libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -30,19 +31,19 @@ class ElementTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
+
         return DataManager::retrieves(Element::class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     * 
+     *
      * @param \common\libraries\storage\Condition $condition
      *
      * @return int
      */
     public function count_data($condition)
     {
-        return DataManager::count(Element::class_name(), $condition);
+        return DataManager::count(Element::class_name(), new DataClassCountParameters($condition));
     }
 }

@@ -880,7 +880,8 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Group.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_completed {
+.treeview .list-group .list-group-item .icon.node-icon.type_completed,
+.fancytree-custom-icon.type_completed {
 	background-image: url(../../Images/Aqua/Status/OkMini.png);
 	opacity: 1;
 }
@@ -891,4 +892,27 @@ ul.nav-wizard.publication-wizard {
 
 .text-muted-invisible {
 	color: #777777 !important;
+}
+
+/** Context Menu **/
+.context-menu-item {
+	padding: 7px 12px 7px 28px;
+}
+
+.context-menu-item.context-menu-separator {
+	padding: 0;
+}
+
+.context-menu-icon.context-menu-icon--fa::before {
+	color: #406e8e;
+	font-size: 14px;
+}
+
+.img-responsive {
+	display: inline-block;
+}
+
+div.panel del {
+	background-color: white !important;
+	text-decoration: line-through !important;
 }

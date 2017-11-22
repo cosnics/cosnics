@@ -2,11 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component\Browser;
 
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- * $Id: assessment_browser_table_column_model.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder.assessment.component.browser
  */
 

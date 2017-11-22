@@ -123,3 +123,4 @@ Users = "Gebruikers"
 RemoveSelectedCourseGroups = "Verwijder geselecteerde cursusgroepen"
 
 SubscriptionTimeFormat = "%d/%m/%Y om %H:%M:%S"
+Integrations = "Integraties met andere modules"

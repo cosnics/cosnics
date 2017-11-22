@@ -25,14 +25,13 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -48,7 +47,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component
  */
@@ -78,16 +76,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         $content[] = $this->renderToolHeader();
         $content[] = '<div class="publication_container row">';
 
-        try
-        {
-            $this->checkAuthorization();
-            $publicationsContent = $this->renderPublications();
-        }
-        catch (\Exception $ex)
-        {
-            $publicationsContent = '<div class="alert alert-danger">' .
-                 Translation::getInstance()->getTranslation('NoViewRights', null, Manager::context()) . '</div>';
-        }
+        $this->checkAuthorization();
+
+        $publicationsContent = $this->renderPublications();
 
         if ($this->get_parent() instanceof Categorizable)
         {
@@ -318,9 +309,13 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * Retrieves the publications
      *
+     * @param int $offset
+     * @param int $max_objects
+     * @param array $object_table_order
+     *
      * @return array An array of ContentObjectPublication objects
      */
-    public function get_publications($offset, $max_objects, $object_table_order = array())
+    public function get_publications($offset = 0, $max_objects = 0, $object_table_order = array())
     {
         if (empty($this->publications))
         {
@@ -434,7 +429,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('plus'),
+                        new FontAwesomeGlyph('plus'),
                         $this->get_allowed_content_object_types(),
                         $parameters,
                         array(),
@@ -452,7 +447,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $publishActions->addButton(
                         $this->getPublicationButton(
                             Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('book'),  // new BootstrapGlyph('info-sign'),
+                            new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
                             array(Introduction::class_name()),
                             $parameters));
                 }
@@ -469,7 +464,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $manageActions->addButton(
                     new Button(
                         Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('lock'),
+                        new FontAwesomeGlyph('lock'),
                         $link,
                         Button::DISPLAY_ICON_AND_LABEL));
             }
@@ -479,7 +474,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $manageActions->addButton(
                     new Button(
                         Translation::get('ManageCategories', null, Utilities::COMMON_LIBRARIES),
-                        new BootstrapGlyph('folder-close'),
+                        new FontAwesomeGlyph('folder'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MANAGE_CATEGORIES)),
@@ -496,7 +491,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolActions->setButtons($this->get_parent()->addToolActions($toolActions));
             }
 
-            $filterAction = new DropdownButton(Translation::get('FilterView'), new BootstrapGlyph('th'));
+            $filterAction = new DropdownButton(Translation::get('FilterView'), new FontAwesomeGlyph('th'));
 
             $browser_types = $this->get_parent()->get_available_browser_types();
 
@@ -765,7 +760,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::count(
             ContentObjectPublicationCategory::class_name(),
-            $condition);
+            new DataClassCountParameters($condition));
     }
 
     private function retrieve_category($category_id)

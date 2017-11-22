@@ -7,7 +7,8 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
  * Default platform mailer
- * 
+ *
+ * @package Chamilo\Libraries\Mail\Mailer\Platform
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
@@ -15,33 +16,33 @@ class Mailer extends AbstractMailer
 
     /**
      * Sends a single mail
-     * 
-     * @param Mail $mail
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @throws \RuntimeException
      */
     public function sendMail(Mail $mail)
     {
         $headers = array();
-        
+
         $cc = $mail->getCc();
         if (! empty($cc))
         {
             $headers[] = 'Cc: ' . implode(', ', $cc);
         }
-        
+
         $bcc = $mail->getBcc();
         if (! empty($bcc))
         {
             $headers[] = 'Bcc: ' . implode(', ', $bcc);
         }
-        
+
         $headers[] = 'From: ' . $this->determineFromEmail($mail);
         $headers[] = 'Reply-To: ' . $this->determineReplyEmail($mail);
         $headers[] = 'Content-type: text/html; charset="utf8"';
-        
+
         $headers = implode(PHP_EOL, $headers);
-        
+
         if ($mail->getSendIndividually())
         {
             foreach ($mail->getTo() as $recipient)
@@ -57,10 +58,10 @@ class Mailer extends AbstractMailer
 
     /**
      * Sends the actual mail to the given recipients
-     * 
-     * @param Mail $mail
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      * @param string $recipients
-     * @param array $headers
+     * @param string[] $headers
      */
     protected function send(Mail $mail, $recipients, $headers = array())
     {
@@ -69,7 +70,7 @@ class Mailer extends AbstractMailer
             $this->logMail($mail, MailLog::STATE_FAILED);
             throw new \RuntimeException('Could not send e-mail');
         }
-        
+
         $this->logMail($mail);
     }
 }

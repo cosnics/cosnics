@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
@@ -21,9 +20,8 @@ class PublicationComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Publication\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Publication\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

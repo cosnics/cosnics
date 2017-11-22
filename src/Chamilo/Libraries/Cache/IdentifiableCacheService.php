@@ -41,7 +41,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
         {
             return false;
         }
-        
+
         return $this->warmUp();
     }
 
@@ -66,7 +66,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -91,7 +91,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -109,7 +109,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -124,7 +124,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
         {
             return false;
         }
-        
+
         return $this->warmUpForIdentifier($identifier);
     }
 

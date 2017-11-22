@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Connector;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type\Feeder;
 

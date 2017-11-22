@@ -46,7 +46,7 @@ class AssessmentSelectQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing option %s feedback', $index));
 
                     $feedback = $option->get_feedback();
-                    $newFeedback = $this->fixResourcesInTextContent($feedback);
+                    $newFeedback = $this->fixResourcesInTextContent($assessmentSelectQuestion, $feedback);
 
                     if ($feedback != $newFeedback)
                     {

@@ -33,6 +33,7 @@
             name="version"
             type="text"
             length="50" />
+        <property name="priority" type="integer" length="3" unsigned="1" notnull="1" default="1" />
     </properties>
     <index name="type">
         <indexproperty name="type" />

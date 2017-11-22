@@ -5,7 +5,7 @@ use Chamilo\Configuration\Category\Form\ImpactViewForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**

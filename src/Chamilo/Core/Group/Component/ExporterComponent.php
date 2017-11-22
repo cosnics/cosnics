@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: exporter.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib.group_manager.component
  */
 class ExporterComponent extends Manager
@@ -28,9 +27,9 @@ class ExporterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $form = new GroupExportForm(GroupExportForm::TYPE_EXPORT, $this->get_url());
-        
+
         if ($form->validate())
         {
             $export = $form->exportValues();
@@ -41,11 +40,11 @@ class ExporterComponent extends Manager
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -53,7 +52,7 @@ class ExporterComponent extends Manager
     public function build_group_tree($parent_group)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_group));
         $result = $this->retrieve_groups($condition);
         while ($group = $result->next_result())
@@ -63,7 +62,7 @@ class ExporterComponent extends Manager
             $group_array['children'] = $this->build_group_tree($group->get_id());
             $data[] = $group_array;
         }
-        
+
         return $data;
     }
 

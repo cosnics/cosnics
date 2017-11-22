@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
- * @package libraries
+ * @package Chamilo\Libraries\Format\Utilities
  * @author Laurent Opprecht
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

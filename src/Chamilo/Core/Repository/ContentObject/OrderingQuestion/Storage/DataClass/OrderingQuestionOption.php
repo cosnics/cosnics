@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass;
 
 /**
- * $Id: ordering_question_option.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.ordering_question
  */
 /**
@@ -32,7 +31,7 @@ class OrderingQuestionOption
 
     /**
      * Creates a new option for a ordering question
-     * 
+     *
      * @param string $value The value of the option
      * @param int $rank The rank of this answer in the question
      */
@@ -46,7 +45,7 @@ class OrderingQuestionOption
 
     /**
      * Gets the order of this option
-     * 
+     *
      * @return int
      */
     public function get_order()
@@ -61,7 +60,7 @@ class OrderingQuestionOption
 
     /**
      * Gets the value of this option
-     * 
+     *
      * @return string
      */
     public function get_value()

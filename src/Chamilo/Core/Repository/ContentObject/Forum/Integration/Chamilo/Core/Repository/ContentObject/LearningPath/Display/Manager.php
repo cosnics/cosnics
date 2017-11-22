@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
 {
@@ -21,19 +20,21 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
 
-    public function get_node_tabs(
-        ButtonGroup $primaryActions, ButtonGroup $secondaryActions,
-        ComplexContentObjectPathNode $node
-    )
+    /**
+     *
+     * @param ButtonGroup $primaryActions
+     * @param ButtonGroup $secondaryActions
+     * @param TreeNode $node
+     */
+    public function get_node_tabs(ButtonGroup $primaryActions, ButtonGroup $secondaryActions, TreeNode $node)
     {
         $translator = Translation::getInstance();
 
-        /** @var ContentObject $contentObject */
-        $contentObject = $this->get_application()->get_current_content_object();
+        $contentObject = $node->getContentObject();
 
         $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
-            $contentObject->getId(), $this->getUser()->getId()
-        );
+            $contentObject->getId(),
+            $this->getUser()->getId());
 
         if (! $subscribed)
         {
@@ -43,15 +44,9 @@ abstract class Manager extends Application
                     new FontAwesomeGlyph('envelope'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                                $contentObject->getId(),
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE
-                        )
-                    )
-                )
-            );
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE))));
         }
         else
         {
@@ -61,15 +56,9 @@ abstract class Manager extends Application
                     new FontAwesomeGlyph('envelope-o'),
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                                $contentObject->getId(),
-                            self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE
-                        )
-                    )
-                )
-            );
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                            self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE))));
         }
     }
 }

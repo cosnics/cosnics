@@ -6,7 +6,7 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\DataTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class BrowserComponent extends Manager
 {

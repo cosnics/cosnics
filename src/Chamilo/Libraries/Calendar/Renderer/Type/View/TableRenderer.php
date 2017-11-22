@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Table\Calendar;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 trait TableRenderer
 {
@@ -27,11 +27,15 @@ trait TableRenderer
         {
             $this->calendar = $this->initializeCalendar();
         }
-        
+
         return $this->calendar;
     }
 
-    public function setCalendar(\Chamilo\Libraries\Calendar\Table\Calendar $calendar)
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Table\Calendar $calendar
+     */
+    public function setCalendar(Calendar $calendar)
     {
         $this->calendar = $calendar;
     }

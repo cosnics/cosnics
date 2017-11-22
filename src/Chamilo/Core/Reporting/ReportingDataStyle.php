@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Reporting;
 
 /**
- * $Id: ReportingDataStyle.php
  * Class stores properties of a reporting data row.
  * Note that reporting data rows are actually columns in PDF, excel, ods, etc files.
- * 
+ *
  * @package reporting.lib
  * @author Andras Zolnay
  * @see ReportingTemplateStyle
@@ -16,7 +15,7 @@ class ReportingDataStyle
     /**
      * Stores properies (e.g.
      * font, text color, etc.) of the heading cell.
-     * 
+     *
      * @var ReportingDataCellStyle
      */
     private $headingCellStyle;
@@ -24,7 +23,7 @@ class ReportingDataStyle
     /**
      * Stores properies (e.g.
      * font, text color, etc.) of the data cells.
-     * 
+     *
      * @var ReportingDataCellStyle
      */
     private $dataCellStyle;
@@ -48,10 +47,10 @@ class ReportingDataStyle
             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
         $this->headingCellStyle->setFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_family'), 
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_style'), 
+                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_family'),
+                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_style'),
                 \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_font_size')]);
-        
+
         $this->dataCellStyle = new ReportingDataCellStyle();
         $this->dataCellStyle->setAlignment(
             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
@@ -63,10 +62,10 @@ class ReportingDataStyle
             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_border_color'));
         $this->dataCellStyle->setFont(
             [
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_family'), 
-                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_style'), 
+                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_family'),
+                \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_style'),
                 \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'data_cell_font_size')]);
-        
+
         $this->relativeWidth = 0.0;
     }
 
@@ -98,7 +97,7 @@ class ReportingDataStyle
     {
         return $this->dataCellStyle;
     }
-    
+
     // setter and getter functions
     public function getRelativeWidth()
     {

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Renderer\Item\SiteMap\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

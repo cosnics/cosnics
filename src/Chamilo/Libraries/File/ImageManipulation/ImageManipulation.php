@@ -4,14 +4,10 @@ namespace Chamilo\Libraries\File\ImageManipulation;
 use Chamilo\Libraries\File\ImageManipulation\Gd\GdImageManipulation;
 
 /**
- * $Id: image_manipulation.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
- * @package common.image_manipulation
- */
-/**
  * An abstract class for handling image manipulations.
- * Impement new image
- * manipulation methods by creating a class which extends this abstract class.
+ * Implement new image manipulation methods by creating a class which extends this abstract class.
+ *
+ * @package Chamilo\Libraries\File\ImageManipulation
  */
 abstract class ImageManipulation
 {
@@ -37,19 +33,32 @@ abstract class ImageManipulation
 
     /**
      * The file on which the manipulations will be done
+     *
+     * @var string
      */
-    protected $source_file;
+    protected $sourceFile;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $width;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $height;
 
     /**
      * Constructor
-     * 
-     * @param string $source_file Full path of the image file on which the
-     *        manipulations should be done
+     *
+     * @param string $sourceFile Full path of the image file on which the manipulations should be done
      */
-    public function __construct($source_file)
+    public function __construct($sourceFile)
     {
-        $this->source_file = $source_file;
-        $dimension = getimagesize($source_file);
+        $this->sourceFile = $sourceFile;
+        $dimension = getimagesize($sourceFile);
         $this->width = $dimension[self::DIMENSION_WIDTH];
         $this->height = $dimension[self::DIMENSION_HEIGHT];
     }
@@ -58,11 +67,11 @@ abstract class ImageManipulation
      * Resize an image maintaining the original aspect-ratio.
      * Images which are
      * allready smaller than the given width and height won't be scaled.
-     * 
-     * @param int $width
-     * @param int $height
-     * @param int $type
-     * @return boolean True if successfull, false if not
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param integer $type
+     * @return boolean
      */
     public function scale($width, $height, $type = self :: SCALE_INSIDE)
     {
@@ -72,40 +81,44 @@ abstract class ImageManipulation
 
     /**
      * Static function to calculate resized image dimensions
-     * 
-     * @param int $original_width
-     * @param int $original_height
-     * @param int $width
-     * @param int $height
-     * @param int $type
-     * @return Array An array containing the new width and height of the image
+     *
+     * @param integer $originalWidth
+     * @param integer $originalHeight
+     * @param integer $width
+     * @param integer $height
+     * @param integer $type
+     * @return string[]
      */
-    public static function rescale($original_width, $original_height, $width, $height, $type = self :: SCALE_INSIDE)
+    public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self :: SCALE_INSIDE)
     {
-        $aspect = $original_height / $original_width;
+        $aspect = $originalHeight / $originalWidth;
+
         if ($type == self::SCALE_OUTSIDE)
         {
             $new_aspect = $height / $width;
             $width = ($aspect < $new_aspect ? 9999999 : $width);
             $height = ($aspect > $new_aspect ? 9999999 : $height);
         }
+
         // don't scale up
-        if ($width >= $original_width && $height >= $original_height)
+        if ($width >= $originalWidth && $height >= $originalHeight)
         {
             return false;
         }
+
         $new_aspect = $height / $width;
+
         if ($aspect < $new_aspect)
         {
-            $width = (int) min($width, $original_width);
+            $width = (int) min($width, $originalWidth);
             $height = (int) round($width * $aspect);
         }
         else
         {
-            $height = (int) min($height, $original_height);
+            $height = (int) min($height, $originalHeight);
             $width = (int) round($height / $aspect);
         }
-        
+
         return array(self::DIMENSION_WIDTH => $width, self::DIMENSION_HEIGHT => $height);
     }
 
@@ -115,11 +128,11 @@ abstract class ImageManipulation
      * After this, the resulting
      * image will be cropped. The result is an image which the exact given with
      * and height.
-     * 
-     * @param int $width With of the resulting image
-     * @param int $height Height of the resulting image (if null, the height
-     *        will be the same as the width, resulting in a square image)
-     * @return boolean True if successfull, false if not
+     *
+     * @param integer $width With of the resulting image
+     * @param integer $height Height of the resulting image (if null, the height will be the same as the width,
+     *        resulting in a square image)
+     * @return boolean
      */
     public function create_thumbnail($width, $height = null)
     {
@@ -137,54 +150,52 @@ abstract class ImageManipulation
     /**
      * Crop an image to the rectangle specified by the given offsets and
      * dimensions.
-     * 
-     * @param int $width The width of the image after cropping
-     * @param int $height The height of the image after cropping
-     * @param int $offset_x
-     * @param int $offset_y
-     * @return boolean True if successfull, false if not
+     *
+     * @param integer $width The width of the image after cropping
+     * @param integer $height The height of the image after cropping
+     * @param integer $offsetX
+     * @param integer $offsetY
+     * @return boolean
      */
-    abstract public function crop($width, $height, $offset_x = self :: CROP_CENTER, $offset_y = self :: CROP_CENTER);
+    abstract public function crop($width, $height, $offsetX = self :: CROP_CENTER, $offsetY = self :: CROP_CENTER);
 
     /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.
-     * 
-     * @param int $width The width of the image after resizing
-     * @param int $height The height of the image after resizing
+     *
+     * @param integer $width The width of the image after resizing
+     * @param integer $height The height of the image after resizing
      * @return boolean True if successfull, false if not
      */
     abstract public function resize($width, $height);
 
     /**
      * Write the resulting image (after some manipulations to a file)
-     * 
-     * @param string $source_file Full path of the file to which the image should be
-     *        written. If null, the original image will be overwritten.
-     * @return boolean True if successfull, false if not
+     *
+     * @param string $sourceFile Full path of the file to which the image should be written. If null, the original image
+     *        will be overwritten.
+     * @return boolean
      */
-    abstract public function write_to_file($source_file = null);
+    abstract public function write_to_file($sourceFile = null);
 
     /**
      * Create an imagemanipulation instance
-     * 
-     * @todo At the moment this returns the class using GD. The class to return
-     *       should be configurable
-     * @param string $source_file Full path of the image file on which the
-     *        manipulations should be done
+     *
+     * @param string $sourceFile Full path of the image file on which the manipulations should be done
+     * @return \Chamilo\Libraries\File\ImageManipulation\Gd\GdImageManipulation
      */
-    public static function factory($source_file)
+    public static function factory($sourceFile)
     {
-        return new GdImageManipulation($source_file);
+        return new GdImageManipulation($sourceFile);
     }
 
     /**
      * Gets the image extension from the source file.
-     * 
+     *
      * @return string
      */
     protected function get_image_extension()
     {
-        $info = getimagesize($this->source_file);
+        $info = getimagesize($this->sourceFile);
         $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
         $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : '';
         return $extension;

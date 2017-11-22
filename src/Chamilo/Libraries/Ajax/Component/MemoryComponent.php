@@ -13,12 +13,16 @@ use Chamilo\Libraries\Platform\Session\Request;
 class MemoryComponent extends \Chamilo\Libraries\Ajax\Manager
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $variable = Request::post('variable');
         $value = Request::post('value');
         $action = Request::post('action');
-        
+
         switch ($action)
         {
             case 'set' :

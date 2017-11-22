@@ -11,7 +11,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class OpenCourseServiceTest extends Test
+class OpenCourseServiceTest extends ChamiloTestCase
 {
     /**
      * @var OpenCourseRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -68,7 +68,7 @@ class OpenCourseServiceTest extends Test
         $user = new User();
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
 
         $this->authorizationCheckerMock->expects($this->once())
             ->method('isAuthorized')
@@ -88,7 +88,7 @@ class OpenCourseServiceTest extends Test
     public function testGetOpenCoursesNoManager()
     {
         $user = new User();
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
         $roles = array(new Role());
 
         $this->authorizationCheckerMock->expects($this->once())
@@ -113,7 +113,7 @@ class OpenCourseServiceTest extends Test
 
     public function testGetClosedCourses()
     {
-        $iterator = new RecordIterator(array(new Course()));
+        $iterator = new RecordIterator(Course::class, [new Course()]);
 
         $this->openCourseRepositoryMock->expects($this->once())
             ->method('findClosedCourses')

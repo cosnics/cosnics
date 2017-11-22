@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Qu
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -79,7 +79,7 @@ class Display extends QuestionDisplay
         return implode(PHP_EOL, $instruction);
     }
 
-    public function add_footer($formvalidator)
+    public function add_footer()
     {
         $formvalidator = $this->get_formvalidator();
         
@@ -90,13 +90,13 @@ class Display extends QuestionDisplay
             $html[] = '<div class="panel-body">';
             $html[] = '<a id="' . $hint_name .
                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
-                Translation::get('GetAHint') . '</a>';
+                Translation::get('GetAHint', [], 'Chamilo\Core\Repository\ContentObject\Assessment') . '</a>';
             $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
         
-        parent::add_footer($formvalidator);
+        parent::add_footer();
     }
 }

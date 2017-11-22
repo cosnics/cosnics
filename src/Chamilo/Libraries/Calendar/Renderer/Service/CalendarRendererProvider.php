@@ -9,12 +9,10 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 
 /**
  *
- * @package Chamilo\Application\Calendar\Service
+ * @package Chamilo\Libraries\Calendar\Renderer\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class CalendarRendererProvider implements 
+abstract class CalendarRendererProvider implements
     \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
 {
     const SOURCE_TYPE_INTERNAL = 1;
@@ -60,7 +58,7 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getDataUser()
      */
     public function getDataUser()
     {
@@ -78,7 +76,7 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getViewingUser()
      */
     public function getViewingUser()
     {
@@ -96,7 +94,7 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
-     * @return string[]
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getDisplayParameters()
      */
     public function getDisplayParameters()
     {
@@ -113,12 +111,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the internal events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
-     * @param boolean $calculateRecurrence
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEventsInPeriod()
      */
     public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -126,12 +120,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the external events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
-     * @param boolean $calculateRecurrence
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalEventsInPeriod()
      */
     public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -139,12 +129,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
-     * @param boolean $calculateRecurrence
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEventsInPeriod()
      */
     public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -152,9 +138,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the internal events
-     * 
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEvents()
      */
     public function getInternalEvents()
     {
@@ -162,9 +147,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the external events
-     * 
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalEvents()
      */
     public function getExternalEvents()
     {
@@ -172,9 +156,8 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
-     * Get the events
-     * 
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEvents()
      */
     public function getAllEvents()
     {
@@ -192,26 +175,26 @@ abstract class CalendarRendererProvider implements
     private function getEvents($sourceType, $startTime = null, $endTime = null, $calculateRecurrence = false)
     {
         $cacheIdentifier = md5(serialize(array($sourceType, $startTime, $endTime, $calculateRecurrence)));
-        
+
         if (! isset($this->events[$cacheIdentifier]))
         {
             $events = $this->aggregateEvents($sourceType, $startTime, $endTime);
-            
+
             if ($startTime && $endTime && $calculateRecurrence)
             {
                 $recurringEvents = array();
-                
+
                 foreach ($events as $event)
                 {
                     $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
                     $parsedEvents = $recurrenceCalculator->getEvents();
-                    
+
                     foreach ($parsedEvents as $parsedEvent)
                     {
                         $recurringEvents[] = $parsedEvent;
                     }
                 }
-                
+
                 $this->events[$cacheIdentifier] = $recurringEvents;
             }
             else
@@ -219,7 +202,7 @@ abstract class CalendarRendererProvider implements
                 $this->events[$cacheIdentifier] = $events;
             }
         }
-        
+
         return $this->events[$cacheIdentifier];
     }
 
@@ -242,7 +225,7 @@ abstract class CalendarRendererProvider implements
         {
             $ajaxVisibilityClassName = ClassnameUtilities::getInstance()->getNamespaceParent(
                 $this->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
-            
+
             if (! class_exists($ajaxVisibilityClassName))
             {
                 throw new \Exception(
@@ -250,7 +233,7 @@ abstract class CalendarRendererProvider implements
                          $this->getVisibilityContext() .
                          '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');
             }
-            
+
             return true;
         }
         else

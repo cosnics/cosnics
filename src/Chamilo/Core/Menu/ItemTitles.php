@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**

@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Reporting;
 
 /**
- * $Id: ReportingDataCellStyle.php
  * Stores properies (e.g.
  * font, text color, etc.) of a reporting data cell.
- * 
+ *
  * @package reporting.lib
  * @author Andras Zolnay
  * @see ReportingTemplateStyle
@@ -21,35 +20,35 @@ class ReportingDataCellStyle
 
     /**
      * Data text color
-     * 
+     *
      * @var array(r [0..255], g [0..255], b [0..255])
      */
     private $textColor = array(0, 0, 0);
 
     /**
      * Data background color
-     * 
+     *
      * @var array(r [0..255], g [0..255], b [0..255])
      */
     private $backgroundColor = array(255, 255, 255);
 
     /**
      * Border color
-     * 
+     *
      * @var array(r [0..255], g [0..255], b [0..255])
      */
     private $borderColor = array(0, 0, 0);
 
     /**
      * Font specification
-     * 
+     *
      * @var array(family, style, size)
      *      - family: name of installed font, e.g. 'Arial'.
      *      - style: either empty or combination of 'B', 'I', 'U' or empty string.
      *      - size: font size, e.g. 10.
      */
     private $font = array('Arial', '', 10);
-    
+
     // getters and setters
     public function getAlignment()
     {

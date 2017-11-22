@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Wolfram Kriesing <wolfram@kriesing.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: SetupDecorator.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -62,7 +61,7 @@
  * So that:
  * - 'testMe.php' in the dir 'tests' bill be assumed to contain a class tests_testMe
  * - '/moretests/aTest.php' should contain a class 'tests_moretests_aTest'
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Wolfram Kriesing <wolfram@kriesing.de>
@@ -98,7 +97,7 @@ class PHPUnit_GUI_SetupDecorator
      * in order to do this simply call it like this:
      * <code>getSuitesFromDir($dir,'.*_UnitTest_.*')</code>.
      * There you can already see that the pattern is built for the use within a regular expression.
-     * 
+     *
      * @param string the directory where to search for test-suite files
      * @param string the pattern (a regexp) by which to find the files
      * @param array an array of file names that shall be excluded
@@ -109,14 +108,14 @@ class PHPUnit_GUI_SetupDecorator
         {
             $dir = substr($dir, 0, - 1);
         }
-        
+
         $files = $this->_getFiles(realpath($dir), $filenamePattern, $exclude, realpath($dir . '/..'));
         asort($files);
-        
+
         foreach ($files as $className => $aFile)
         {
             include_once ($aFile);
-            
+
             if (class_exists($className))
             {
                 $suites[] = new PHPUnit_TestSuite($className);
@@ -126,14 +125,14 @@ class PHPUnit_GUI_SetupDecorator
                 trigger_error("$className could not be found in $dir$aFile!");
             }
         }
-        
+
         $this->_gui->addSuites($suites);
     }
 
     /**
      * This method searches recursively through the directories
      * to find all the files that shall be added to the be visible.
-     * 
+     *
      * @param string the path where find the files
      * @param srting the string pattern by which to find the files
      * @param string the file names to be excluded
@@ -143,19 +142,19 @@ class PHPUnit_GUI_SetupDecorator
     function _getFiles($dir, $filenamePattern, $exclude, $rootDir)
     {
         $files = array();
-        
+
         if ($dp = opendir($dir))
         {
             while (FALSE !== ($file = readdir($dp)))
             {
                 $filename = $dir . DIRECTORY_SEPARATOR . $file;
                 $match = TRUE;
-                
+
                 if ($filenamePattern && ! preg_match("~$filenamePattern~", $file))
                 {
                     $match = FALSE;
                 }
-                
+
                 if (sizeof($exclude))
                 {
                     foreach ($exclude as $aExclude)
@@ -167,36 +166,36 @@ class PHPUnit_GUI_SetupDecorator
                         }
                     }
                 }
-                
+
                 if (is_file($filename) && $match)
                 {
                     $tmp = str_replace($rootDir, '', $filename);
-                    
+
                     if (strpos($tmp, DIRECTORY_SEPARATOR) === 0)
                     {
                         $tmp = substr($tmp, 1);
                     }
-                    
+
                     if (strpos($tmp, '/') === 0)
                     {
                         $tmp = substr($tmp, 1);
                     }
-                    
+
                     $className = str_replace(DIRECTORY_SEPARATOR, '_', $tmp);
                     $className = basename($className, '.php');
-                    
+
                     $files[$className] = $filename;
                 }
-                
+
                 if ($file != '.' && $file != '..' && is_dir($filename))
                 {
                     $files = array_merge($files, $this->_getFiles($filename, $filenamePattern, $exclude, $rootDir));
                 }
             }
-            
+
             closedir($dp);
         }
-        
+
         return $files;
     }
 }

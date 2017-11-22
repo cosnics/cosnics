@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Factory;
 
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -19,7 +20,7 @@ class ApplicationFactory
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -37,12 +38,11 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Platform\Translation $translation
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, StringUtilities $stringUtilities,
-        Translation $translation)
+    public function __construct(ChamiloRequest $request, StringUtilities $stringUtilities, Translation $translation)
     {
         $this->request = $request;
         $this->stringUtilities = $stringUtilities;
@@ -51,7 +51,7 @@ class ApplicationFactory
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -60,9 +60,9 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function setRequest(ChamiloRequest $request)
     {
         $this->request = $request;
     }
@@ -107,6 +107,7 @@ class ApplicationFactory
      *
      * @param string $context
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication($context, ApplicationConfiguration $applicationConfiguration)
     {
@@ -117,6 +118,8 @@ class ApplicationFactory
 
     /**
      *
+     * @param string $context
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
      * @param string $action
      * @return string
      */
@@ -140,6 +143,12 @@ class ApplicationFactory
         return $applicationConfiguration->getApplication();
     }
 
+    /**
+     *
+     * @param string $context
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
     protected function createApplication($context, ApplicationConfiguration $applicationConfiguration)
     {
         $action = $this->getAction($context, $applicationConfiguration);
@@ -167,6 +176,7 @@ class ApplicationFactory
     /**
      *
      * @param string $context
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
      * @return string
      */
     protected function getAction($context, ApplicationConfiguration $applicationConfiguration)
@@ -220,8 +230,7 @@ class ApplicationFactory
         if (! class_exists($managerClass))
         {
             throw new UserException(
-                Translation::get('InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries')
-            );
+                Translation::get('InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries'));
         }
 
         return $managerClass;
@@ -229,7 +238,7 @@ class ApplicationFactory
 
     /**
      *
-     * @param Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @return integer
      */
     protected function determineLevel(Application $application = null)
@@ -280,6 +289,13 @@ class ApplicationFactory
         }
     }
 
+    /**
+     *
+     * @param string $context
+     * @param string $action
+     * @throws ClassNotExistException
+     * @return string
+     */
     private function buildClassName($context, $action)
     {
         $className = $context . '\Component\\' . $action . 'Component';

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -25,12 +24,6 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
-     */
-    private $complexContentObjectPath;
-
-    /**
-     *
      * @var string
      */
     private $menuName;
@@ -44,15 +37,12 @@ abstract class BootstrapTreeMenu
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $complexContentObjectPath
      * @param string $treeMenuUrl
      * @param string $menuName
      */
-    public function __construct(Application $application, ComplexContentObjectPath $complexContentObjectPath, 
-        $treeMenuUrl, $menuName = 'bootstrap-tree-menu')
+    public function __construct(Application $application, $treeMenuUrl, $menuName = 'bootstrap-tree-menu')
     {
         $this->application = $application;
-        $this->complexContentObjectPath = $complexContentObjectPath;
         $this->treeMenuUrl = $treeMenuUrl;
         $this->menuName = $menuName;
     }
@@ -73,24 +63,6 @@ abstract class BootstrapTreeMenu
     public function setApplication(Application $application)
     {
         $this->application = $application;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
-     */
-    public function getComplexContentObjectPath()
-    {
-        return $this->complexContentObjectPath;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $complexContentObjectPath
-     */
-    public function setComplexContentObjectPath(ComplexContentObjectPath $complexContentObjectPath)
-    {
-        $this->complexContentObjectPath = $complexContentObjectPath;
     }
 
     /**
@@ -131,7 +103,7 @@ abstract class BootstrapTreeMenu
 
     /**
      *
-     * @param int $nodeIdentifier
+     * @param integer $nodeIdentifier
      * @return string
      */
     public function getNodeUrl($nodeIdentifier)
@@ -154,16 +126,18 @@ abstract class BootstrapTreeMenu
     /**
      *
      * @return string
+     * @todo Remove the revealNode and expandNode functionality due to issues with own node-ids generated
+     *       by plugin
      */
     public function render()
     {
         $currentNodeId = $this->getCurrentNodeId();
-        
+
         $html = array();
-        
+
         $html[] = '<div id="' . $this->getMenuName() . '">';
         $html[] = '</div>';
-        
+
         $html[] = "<script>
             $(function()
             {
@@ -179,31 +153,31 @@ abstract class BootstrapTreeMenu
                         data: " . json_encode($this->getNodes()) . "
                     });
 
-                    $('#" . $this->getMenuName() . "').treeview(
-                            'revealNode',
-                            [ " . $currentNodeId . ",
-                                { silent: true }
-                            ]
-                    );
-                    
-                    $('#" . $this->getMenuName() . "').treeview(
-                            'expandNode',
-                            [ " . $currentNodeId . ",
-                                { silent: false }
-                            ]
-                    );
+//                    $('#" . $this->getMenuName() . "').treeview(
+//                            'revealNode',
+//                            [ " . $currentNodeId . ",
+//                                { silent: true }
+//                            ]
+//                    );
+//
+//                    $('#" . $this->getMenuName() . "').treeview(
+//                            'expandNode',
+//                            [ " . $currentNodeId . ",
+//                                { silent: false }
+//                            ]
+//                    );
                 });
             });
         </script>";
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js');
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css');
-        
+
         return implode(PHP_EOL, $html);
     }
 }

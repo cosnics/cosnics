@@ -101,16 +101,6 @@
                 </options>
             </setting>
             <setting
-                name="maintenance_mode"
-                field="toggle"
-                default="0">
-                <options type="static">
-                    <option
-                        name="maintenance_mode"
-                        value="1" />
-                </options>
-            </setting>
-            <setting
                 name="installation_blocked"
                 field="toggle"
                 default="0">
@@ -143,6 +133,32 @@
                 name="google_analytics_tracking_id"
                 field="text"
                 default="" />
+        </category>
+        <category name="maintenance">
+            <setting
+                    name="maintenance_warning_show"
+                    field="toggle"
+                    default="0">
+                <options type="static">
+                    <option
+                            name="maintenance_warning_show"
+                            value="1" />
+                </options>
+            </setting>
+            <setting
+                    name="maintenance_warning_message"
+                    field="text"
+                    default="" />
+            <setting
+                    name="maintenance_block_access"
+                    field="toggle"
+                    default="0">
+                <options type="static">
+                    <option
+                            name="maintenance_block_access"
+                            value="1" />
+                </options>
+            </setting>
         </category>
         <category name="internationalization">
             <setting

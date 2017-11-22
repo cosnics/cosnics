@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- * $Id: document_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.document.component
  */
 class ViewerComponent extends Manager implements DelegateComponent

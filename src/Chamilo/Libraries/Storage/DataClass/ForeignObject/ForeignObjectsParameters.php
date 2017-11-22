@@ -8,90 +8,74 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents the parameters to retrieve (a) foreign object(s) with lazy loading.
- * 
- * @package common\libraries
+ *
+ * @package Chamilo\Libraries\Storage\DataClass\ForeignObject
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ForeignObjectsParameters
 {
 
     /**
-     * **************************************************************************************************************
-     * Properties
-     * **************************************************************************************************************
-     */
-    
-    /**
      * The base dataclass object for which we want to retrieve the foreign objects
-     * 
-     * @var DataClass
+     *
+     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     private $base_object;
 
     /**
      * The classname for the foreign object
-     * 
+     *
      * @var string
      */
     private $foreign_class;
 
     /**
      * The foreign key property
-     * 
+     *
      * @var string
      */
     private $foreign_key;
 
     /**
-     * **************************************************************************************************************
-     * Main Functionality
-     * **************************************************************************************************************
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $baseObject
+     * @param string $foreignClass
+     * @param string $foreignKey
      */
-    public function __construct($base_object, $foreign_class, $foreign_key = null)
+    public function __construct($baseObject, $foreignClass, $foreignKey = null)
     {
-        $this->set_base_object($base_object);
-        $this->set_foreign_class($foreign_class);
-        $this->set_foreign_key($foreign_key);
+        $this->set_base_object($baseObject);
+        $this->set_foreign_class($foreignClass);
+        $this->set_foreign_key($foreignKey);
     }
 
     /**
      * Returns the condition for the foreign objects retrieval
-     * 
-     * @return Condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable($this->get_foreign_class(), DataClass::PROPERTY_ID), 
+            new PropertyConditionVariable($this->get_foreign_class(), DataClass::PROPERTY_ID),
             new StaticConditionVariable($this->get_base_object()->get_default_property($this->get_foreign_key())));
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper Functionality
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Generates a key property with the given class name
-     * 
-     * @param string $class_name
+     *
+     * @param string $className
+     * @return string
      */
-    protected function generate_key($class_name)
+    protected function generate_key($className)
     {
-        return $class_name::get_table_name() . '_' . DataClass::PROPERTY_ID;
+        return $className::get_table_name() . '_' . DataClass::PROPERTY_ID;
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters and Setters
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the base object
-     * 
-     * @return DataClass
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public function get_base_object()
     {
@@ -100,7 +84,7 @@ class ForeignObjectsParameters
 
     /**
      * Returns the classname for the foreign object
-     * 
+     *
      * @return string
      */
     public function get_foreign_class()
@@ -110,7 +94,7 @@ class ForeignObjectsParameters
 
     /**
      * Returns the foreign key property
-     * 
+     *
      * @return string
      */
     public function get_foreign_key()
@@ -120,36 +104,36 @@ class ForeignObjectsParameters
 
     /**
      * Sets the base object
-     * 
-     * @param DataClass $base_object
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $baseObject
      */
-    public function set_base_object(DataClass $base_object)
+    public function set_base_object(DataClass $baseObject)
     {
-        $this->base_object = $base_object;
+        $this->base_object = $baseObject;
     }
 
     /**
      * Sets the classname for the foreign object
-     * 
-     * @param string $foreign_class
+     *
+     * @param string $foreignClass
      */
-    public function set_foreign_class($foreign_class)
+    public function set_foreign_class($foreignClass)
     {
-        $this->foreign_class = $foreign_class;
+        $this->foreign_class = $foreignClass;
     }
 
     /**
      * Sets the foreign key property
-     * 
-     * @param string $foreign_key
+     *
+     * @param string $foreignKey
      */
-    public function set_foreign_key($foreign_key)
+    public function set_foreign_key($foreignKey)
     {
-        if (is_null($foreign_key))
+        if (is_null($foreignKey))
         {
-            $foreign_key = $this->generate_key($this->get_foreign_class());
+            $foreignKey = $this->generate_key($this->get_foreign_class());
         }
-        
-        $this->foreign_key = $foreign_key;
+
+        $this->foreign_key = $foreignKey;
     }
 }

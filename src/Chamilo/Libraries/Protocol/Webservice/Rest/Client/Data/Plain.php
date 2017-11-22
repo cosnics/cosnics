@@ -1,18 +1,28 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData;
 use Exception;
 
+/**
+ *
+ * @package Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class Plain extends RestData
 {
 
+    /**
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function prepare()
     {
-        if (is_string($this->get_data()))
+        if (is_string($this->getData()))
         {
-            return $this->get_data();
+            return $this->getData();
         }
         else
         {

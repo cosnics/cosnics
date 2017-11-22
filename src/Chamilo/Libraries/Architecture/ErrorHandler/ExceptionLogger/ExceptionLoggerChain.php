@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 /**
  * Exception Logger that chains other exception loggers
- * 
+ *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ExceptionLoggerChain implements ExceptionLoggerInterface
@@ -11,16 +12,15 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
 
     /**
      * The exception loggers
-     * 
-     * @var ExceptionLoggerInterface[]
+     *
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface[]
      */
     protected $exceptionLoggers;
 
     /**
      * ExceptionLoggerChain constructor.
-     * 
-     * @param ExceptionLoggerInterface[] $exceptionLoggers
      *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface[] $exceptionLoggers
      * @throws \Exception
      */
     public function __construct(array $exceptionLoggers)
@@ -30,28 +30,28 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
             throw new \Exception(
                 'You must provide at least one exception logger that implements ExceptionLoggerInterface');
         }
-        
+
         foreach ($exceptionLoggers as $exceptionLogger)
         {
             if (! $exceptionLogger instanceof ExceptionLoggerInterface)
             {
                 throw new \Exception(
                     sprintf(
-                        'The given exception logger does not implement ExceptionLoggerInterface (%s)', 
+                        'The given exception logger does not implement ExceptionLoggerInterface (%s)',
                         get_class($exceptionLogger)));
             }
         }
-        
+
         $this->exceptionLoggers = $exceptionLoggers;
     }
 
     /**
      * Logs an exception
-     * 
+     *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {

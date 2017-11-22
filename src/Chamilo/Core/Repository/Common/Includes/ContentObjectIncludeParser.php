@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: content_object_include_parser.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 abstract class ContentObjectIncludeParser
@@ -49,9 +48,9 @@ abstract class ContentObjectIncludeParser
     public function parse_includes($form)
     {
         $content_object = $form->get_content_object();
-        
+
         $form_type = $form->get_form_type();
-        
+
         if ($form_type == ContentObjectForm::TYPE_EDIT)
         {
             /*
@@ -63,7 +62,7 @@ abstract class ContentObjectIncludeParser
                 $content_object->exclude_content_object($included_object->get_id());
             }
         }
-        
+
         $include_types = self::get_include_types();
         foreach ($include_types as $include_type)
         {

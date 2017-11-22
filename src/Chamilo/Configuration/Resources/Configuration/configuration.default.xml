@@ -16,6 +16,18 @@
             <parameter key="charset"></parameter>
         </parameter>
 
+        <!-- Database connection to the test database, used for integration tests -->
+        <parameter
+                key="chamilo.configuration.database.test"
+                type="collection">
+            <parameter key="driver">mysql</parameter>
+            <parameter key="username"></parameter>
+            <parameter key="password"></parameter>
+            <parameter key="host"></parameter>
+            <parameter key="name"></parameter>
+            <parameter key="charset"></parameter>
+        </parameter>
+
         <!-- Storage -->
         <parameter
             key="chamilo.configuration.storage"

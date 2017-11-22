@@ -14,6 +14,10 @@ abstract class ConditionPart implements Hashable
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
     use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
     public function getHashParts()
     {
         return array(static::class_name());

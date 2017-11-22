@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\External\Action\Component;
 use Chamilo\Core\Repository\External\Action\Form\SettingsForm;
 use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ConfigurerComponent extends Manager
 {

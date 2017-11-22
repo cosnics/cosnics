@@ -5,10 +5,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+ * @package Chamilo\Libraries\Calendar\Renderer\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Configuration extends ParameterBag
 {

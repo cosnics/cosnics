@@ -8,6 +8,9 @@ $(function() {
 	var colours = [ '#ff0000', '#f2ef00', '#00ff00', '#00ffff', '#0000ff',
 			'#ff00ff', '#0080ff', '#ff0080', '#00ff80', '#ff8000', '#8000ff' ], offset, currentPolygon = null, positions = [], skippedOptions = 0;
 
+    var ajaxContext = 'Chamilo\\Core\\Repository\\ContentObject\\HotspotQuestion\\Ajax';
+    var ajaxUri = getPath('WEB_PATH') + 'index.php';
+
 	/***************************************************************************
 	 * Functionality to draw hotspots
 	 **************************************************************************/
@@ -124,14 +127,14 @@ $(function() {
 
 	function getDeleteIcon() {
 		return $('.table-data > tbody > tr:first > td:last .remove_option')
-				.attr('src').replace('_na.png', '.png');
+				.attr('src').replace('Na.png', '.png');
 	}
 
 	function processOptions() {
 		var deleteImage, deleteField, rows;
 
 		deleteImage = '<img class="remove_option" src="'
-				+ getDeleteIcon().replace('.png', '_na.png') + '"/>';
+				+ getDeleteIcon().replace('.png', 'Na.png') + '"/>';
 		deleteField = '<input id="remove_$option_number" class="remove_option" type="image" src="'
 				+ getDeleteIcon() + '" name="remove[$option_number]" />';
 		rows = $('.table-data > tbody > tr');
@@ -167,23 +170,36 @@ $(function() {
 
 		rows = $('tr', tableBody);
 
-		doAjaxPost("./libraries/ajax/mc_question.php", {
-			action : 'skip_option',
-			value : id
-		});
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'SkipOption',
+            'option-number' : id
+        };
 
-		rows.each(function() {
-			var row_class = row % 2 === 0 ? 'row_even' : 'row_odd';
-			$(this).attr('class', row_class);
-			row += 1;
-		});
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                rows.each(function() {
+                    var row_class = row % 2 === 0 ? 'row_even' : 'row_odd';
+                    $(this).attr('class', row_class);
+                    row += 1;
+                });
 
-		skippedOptions += 1;
-		processOptions();
+                skippedOptions += 1;
+                processOptions();
 
-		// Delete the hotspots visually on the image
-		$('.polygon_fill_' + id, $('#selected_image')).remove();
-		$('.polygon_line_' + id, $('#selected_image')).remove();
+                // Delete the hotspots visually on the image
+                $('.polygon_fill_' + id, $('#selected_image')).remove();
+                $('.polygon_line_' + id, $('#selected_image')).remove();
+            }
+        });
+
+
 	}
 
 	function addOption(ev, ui) {
@@ -200,7 +216,6 @@ $(function() {
 		parameters = {
 			"width" : "100%",
 			"height" : "65",
-			"toolbar" : "RepositoryQuestion",
 			"collapse_toolbar" : true
 		};
 		editorNameAnswer = 'answer[' + numberOfOptions + ']';

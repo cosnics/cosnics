@@ -1,54 +1,55 @@
 div.blog_item {
-	border: 1px solid #cccccc;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-bottomright: 10px;
+    border: 1px solid #cccccc;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-bottomright: 10px;
 }
 
 div.blog_item div.information_box {
-	float: left;
-	width: 150px;
-	text-align: center;
-	padding: 10px;
+    float: left;
+    width: 150px;
+    text-align: center;
+    padding: 10px;
 }
 
 div.information_box img.user_image {
-	max-width: 100px;
+    max-width: 100px;
 }
 
 div.blog_item div.message_box {
-	min-height: 200px;
-	border-left: 1px solid #cccccc;
-	margin-left: 170px;
+    min-height: 200px;
+    border-left: 1px solid #cccccc;
+    margin-left: 170px;
 }
 
 div.message_box div.title {
-	border-bottom: 1px solid #cccccc;
-	padding: 5px 10px 5px 10px;
+    border-bottom: 1px solid #cccccc;
+    padding: 5px 10px 5px 10px;
 }
 
 div.message_box div.description {
-	padding: 10px 10px 0px 10px;
+    padding: 10px 10px 0px 10px;
 }
 
 div.blog_item div.actions_box {
-	border-top: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
 }
 
 div.actions_box div.actions {
-	float: right;
-	padding: 7px 10px 5px 10px;
+    float: right;
+    padding: 7px 10px 5px 10px;
 }
 
 div.blog_item div.attachments {
-	margin: 0px;
-	border-bottom: 0px;
-	border-top: 1px solid #cccccc;
-	padding-bottom: 20px;
+    margin: 0px;
+    border-bottom: 0px;
+    border-top: 1px solid #cccccc;
+    padding-bottom: 20px;
 }
 
 ul.tree-menu li div a.blog, ul.tree-menu li div a.type_blog, ul.tree-menu li div a.type_blog_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_blog,
-	.treeview .list-group .list-group-item .icon.node-icon.type_blog_default
-	{
-	background-image: url(../../Images/Aqua/Logo/16.png);
+.treeview .list-group .list-group-item .icon.node-icon.type_blog,
+.fancytree-custom-icon.type_blog,
+.fancytree-custom-icon.type_blog_default,
+.treeview .list-group .list-group-item .icon.node-icon.type_blog_default {
+    background-image: url(../../Images/Aqua/Logo/16.png);
 }

@@ -5,7 +5,8 @@ use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * Logs errors to New Relic
- * 
+ *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class NewRelicExceptionLogger implements ExceptionLoggerInterface
@@ -13,7 +14,7 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
 
     /**
      * NewRelicExceptionLogger constructor.
-     * 
+     *
      * @throws \Exception
      */
     public function __construct()
@@ -22,17 +23,17 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
         {
             throw new \Exception('Can not use the NewRelicExceptionLogger when the newrelic extension is not loaded');
         }
-        
+
         $this->configureChamiloParameters();
     }
 
     /**
      * Logs an exception
-     * 
+     *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
@@ -40,7 +41,7 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
         {
             return;
         }
-        
+
         newrelic_notice_error('chamilo_exception', $exception);
     }
 
@@ -50,10 +51,10 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
     protected function configureChamiloParameters()
     {
         $prefix = 'chamilo_';
-        
+
         newrelic_add_custom_parameter($prefix . 'url', $_SERVER['REQUEST_URI']);
         newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
-        
+
         $user_id = Session::get_user_id();
         if (! empty($user_id))
         {

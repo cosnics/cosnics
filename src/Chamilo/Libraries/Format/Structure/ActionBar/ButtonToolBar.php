@@ -166,8 +166,8 @@ class ButtonToolBar
 
     /**
      * Returns whether or not the current button toolbar has items
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasItems()
     {

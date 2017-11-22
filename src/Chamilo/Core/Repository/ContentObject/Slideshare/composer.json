@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-slideshare",
-        "version": "6.0.0", "description": "Chamilo Slideshare Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-slideshare",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Slideshare",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Slideshare"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -12,14 +18,31 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Sven Francornel",
+            "email": "sven.francornel@student.ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/slideshare"
+        "cosnics": {
+            "name": "Slideshare",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Slideshare",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Media",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

@@ -47,7 +47,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $platform_slots = array(
             'platform_language',
-            'platform_name',
+            'site_name',
             'organization_name',
             'organization_url',
             'self_reg',
@@ -78,7 +78,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected['admin_phone'] = '0123456789';
         $expected['admin_username'] = 'admin_login';
         $expected['admin_password'] = 'admin_password';
-        $expected['platform_name'] = 'Testing Platform';
+        $expected['site_name'] = 'Testing Platform';
         $expected['organization_name'] = 'Automatic Test Technology';
         $expected['organization_url'] = 'www.chamilo.org';
         $expected['self_reg'] = '0';

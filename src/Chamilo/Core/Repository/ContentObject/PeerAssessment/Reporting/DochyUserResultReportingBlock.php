@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class DochyUserResultReportingBlock extends UserResultReportingBlock
 {

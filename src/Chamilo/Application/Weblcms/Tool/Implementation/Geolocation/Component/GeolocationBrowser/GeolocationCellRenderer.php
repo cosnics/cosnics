@@ -5,8 +5,7 @@ use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCe
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableColumnModel;
 
 /**
- * $Id: geolocation_cell_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.geolocation.component.geolocation.browser
  */
 /**
@@ -29,7 +28,7 @@ class GeolocationCellRenderer extends ObjectPublicationTableCellRenderer
         {
             return $this->get_actions($publication, null, true, false)->as_html();
         }
-        
+
         return parent::render_cell($column, $publication);
     }
 }

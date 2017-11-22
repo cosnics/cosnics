@@ -4,28 +4,47 @@ namespace Chamilo\Libraries\Format\Structure;
 /**
  * Class that represents a condition property
  * Used in action bar renderer to translate these condition property's to actual PatternMatchConditions
- * 
+ *
+ * @package Chamilo\Libraries\Format\Structure
  * @author Sven Vanpoucke
  */
 class ConditionProperty
 {
 
+    /**
+     *
+     * @var string
+     */
     private $property;
 
+    /**
+     *
+     * @var string
+     */
     private $storage_unit;
 
+    /**
+     *
+     * @var boolean
+     */
     private $is_alias_storage_unit;
 
-    public function __construct($property, $storage_unit = null, $is_alias_storage_unit = false)
+    /**
+     *
+     * @param string $property
+     * @param string $storageUnit
+     * @param boolean $isAliasStorageUnit
+     */
+    public function __construct($property, $storageUnit = null, $isAliasStorageUnit = false)
     {
         $this->set_property($property);
-        $this->set_storage_unit($storage_unit);
-        $this->set_is_alias_storage_unit($is_alias_storage_unit);
+        $this->set_storage_unit($storageUnit);
+        $this->set_is_alias_storage_unit($isAliasStorageUnit);
     }
 
     /**
      *
-     * @return the $property
+     * @return string
      */
     public function get_property()
     {
@@ -34,7 +53,7 @@ class ConditionProperty
 
     /**
      *
-     * @return the $storage_unit
+     * @return string
      */
     public function get_storage_unit()
     {
@@ -43,7 +62,7 @@ class ConditionProperty
 
     /**
      *
-     * @param $property the $property to set
+     * @param string $property
      */
     public function set_property($property)
     {
@@ -52,16 +71,16 @@ class ConditionProperty
 
     /**
      *
-     * @param $storage_unit the $storage_unit to set
+     * @param string $storageUnit
      */
-    public function set_storage_unit($storage_unit)
+    public function set_storage_unit($storageUnit)
     {
-        $this->storage_unit = $storage_unit;
+        $this->storage_unit = $storageUnit;
     }
 
     /**
      *
-     * @return the $is_alias_storage_unit
+     * @return boolean
      */
     public function get_is_alias_storage_unit()
     {
@@ -70,10 +89,10 @@ class ConditionProperty
 
     /**
      *
-     * @param $is_alias_storage_unit the $is_alias_storage_unit to set
+     * @param boolean $isAliasStorageUnit
      */
-    public function set_is_alias_storage_unit($is_alias_storage_unit)
+    public function set_is_alias_storage_unit($isAliasStorageUnit)
     {
-        $this->is_alias_storage_unit = $is_alias_storage_unit;
+        $this->is_alias_storage_unit = $isAliasStorageUnit;
     }
 }

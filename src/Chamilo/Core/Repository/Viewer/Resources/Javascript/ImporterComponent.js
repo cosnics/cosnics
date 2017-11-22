@@ -24,7 +24,11 @@ $(document).ready(function()
         
         window.location.replace(currentQuery.toString());
     }
-    
-    $('#publish-button').toggleClass('hidden');
-    $("#publish-button").on('click', publishContentObjects);
+
+    var fileUploadContainers = $('.file-upload');
+
+    if(fileUploadContainers.length > 0) {
+        $('#publish-button').toggleClass('hidden');
+        $("#publish-button").on('click', publishContentObjects);
+    }
 });

@@ -1,0 +1,27 @@
+Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt:
+  tree_node_attempt_base (template):
+    publication_id: 1
+    learningPathId: 1
+    score: 0
+    completed: 1
+    start_time: 1503640800
+    total_time: 0
+    user_id: 2
+  tree_node_1_attempt{1..5} (extends tree_node_attempt_base):
+    id: <identity((int) $current)>
+    tree_node_data_id: 1
+    score: <numberBetween(0, 100)>
+    total_time: <numberBetween(0, 200)>
+  tree_node_2_attempt{6..10} (extends tree_node_attempt_base):
+      id: <identity((int) $current)>
+      tree_node_data_id: 2
+      total_time: <numberBetween(0, 200)>
+  tree_node_3_attempt{11..15} (extends tree_node_attempt_base):
+      id: <identity((int) $current)>
+      tree_node_data_id: 3
+      total_time: <numberBetween(0, 200)>
+      user_id: 3
+  tree_node_1_attempt_active (extends tree_node_attempt_base):
+    id: 16
+    tree_node_data_id: 1
+    completed: 0

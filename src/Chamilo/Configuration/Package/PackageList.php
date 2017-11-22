@@ -309,6 +309,11 @@ class PackageList
         return $this->all_packages[$recursive];
     }
 
+    /**
+     * @param bool $recursive
+     *
+     * @return Package[]
+     */
     public function get_list($recursive = true)
     {
         if (! isset($this->list[$recursive]))

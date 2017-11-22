@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -18,6 +19,8 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     // Parameters
     const PARAM_TYPES = 'types';
     const PARAM_USER_IDENTIFIER = 'user_identifier';
+    const PARAM_MODE = 'mode';
+    const PARAM_DEFAULT_SORTING = 'default_sorting';
 
     /**
      *
@@ -59,6 +62,7 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     public function warmUpForIdentifier($identifier)
     {
         $typeSelector = $this->getTypeSelectorFactory()->buildTypeSelector();
+
         return $this->getCacheProvider()->save((string) $identifier, $typeSelector);
     }
 
@@ -80,11 +84,18 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
         return array();
     }
 
-    public function getForContentObjectTypesAndUserIdentifier($contentObjectTypes, $userIdentifier = null)
+    public function getForContentObjectTypesUserIdentifierAndMode(
+        $contentObjectTypes, $userIdentifier = null, $mode = TypeSelectorFactory::MODE_CATEGORIES,
+        $defaultSorting = true
+    )
     {
         $parameterBag = new ParameterBag(
-            array(self::PARAM_TYPES => $contentObjectTypes, self::PARAM_USER_IDENTIFIER => $userIdentifier));
-        
+            array(
+                self::PARAM_TYPES => $contentObjectTypes, self::PARAM_USER_IDENTIFIER => $userIdentifier,
+                self::PARAM_MODE => $mode, self::PARAM_DEFAULT_SORTING => $defaultSorting
+            )
+        );
+
         return $this->getForIdentifier($parameterBag);
     }
 }

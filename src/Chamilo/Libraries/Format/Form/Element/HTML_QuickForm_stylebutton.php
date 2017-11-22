@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * @package HTML_QuickForm_stylebutton
+ * @package Chamilo\Libraries\Format\Form\Element
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -32,17 +32,17 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = null)
     {
         HTML_QuickForm_element::__construct($elementName, null, $attributes);
-        
+
         $defaultAttributes = array();
         $defaultAttributes[] = 'btn';
         $defaultAttributes[] = 'btn-default';
         $defaultAttributes[] = $this->getAttribute('class');
-        
+
         $this->setAttribute('class', implode(' ', $defaultAttributes));
-        
+
         $this->styleButtonLabel = $elementLabel;
         $this->glyph = $glyph;
-        
+
         if (isset($value))
         {
             $this->setValue($value);
@@ -139,22 +139,22 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         else
         {
             $html = array();
-            
+
             $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
-            
+
             if ($this->getGlyph())
             {
                 $html[] = $this->_getTabs() . '<span class="glyphicon glyphicon-' . $this->getGlyph() .
                      '" aria-hidden="true"></span>' . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
             }
-            
+
             if ($this->getStyleButtonLabel())
             {
                 $html[] = $this->_getTabs() . $this->getStyleButtonLabel();
             }
-            
+
             $html[] = $this->_getTabs() . '</button>';
-            
+
             return implode(PHP_EOL, $html);
         }
     }

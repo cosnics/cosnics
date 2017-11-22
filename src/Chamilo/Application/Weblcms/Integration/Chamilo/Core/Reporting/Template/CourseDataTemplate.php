@@ -12,8 +12,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\La
 use Chamilo\Core\Reporting\ReportingTemplate;
 
 /**
- * $Id: course_data_reporting_template.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.reporting.templates
  */
 class CourseDataTemplate extends ReportingTemplate

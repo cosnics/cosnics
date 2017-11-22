@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\External\Action\Component;
 use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class InternalSyncerComponent extends Manager

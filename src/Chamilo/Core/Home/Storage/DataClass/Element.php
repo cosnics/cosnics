@@ -37,11 +37,11 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_TYPE, 
-                self::PROPERTY_PARENT_ID, 
-                self::PROPERTY_TITLE, 
-                self::PROPERTY_SORT, 
-                self::PROPERTY_USER_ID, 
+                self::PROPERTY_TYPE,
+                self::PROPERTY_PARENT_ID,
+                self::PROPERTY_TITLE,
+                self::PROPERTY_SORT,
+                self::PROPERTY_USER_ID,
                 self::PROPERTY_CONFIGURATION));
     }
 
@@ -171,10 +171,10 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), static::PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Element::class_name(), static::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
         $childElements = DataManager::retrieves(Block::class_name(), new DataClassRetrievesParameters($condition));
-        
+
         while ($childElement = $childElements->next_result())
         {
             if (! $childElement->delete())
@@ -182,18 +182,18 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
                 return false;
             }
         }
-        
+
         return parent::delete();
     }
 
     public function hasChildren()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $childCount = DataManager::count(Block::class_name(), new DataClassCountParameters($condition));
-        
+
         return ($childCount == 0);
     }
 
@@ -227,7 +227,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         $configuration = $this->getConfiguration();
         $configuration[$variable] = $value;
-        
+
         $this->setConfiguration($configuration);
     }
 
@@ -239,7 +239,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         $configuration = $this->getConfiguration();
         unset($configuration[$variable]);
-        
+
         $this->setConfiguration($configuration);
     }
 }

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Over
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer

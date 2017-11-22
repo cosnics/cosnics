@@ -21,12 +21,12 @@ class SettingsConnector
     {
         $timezones = array();
         $timezoneIdentifiers = \DateTimeZone::listIdentifiers();
-        
+
         foreach ($timezoneIdentifiers as $timezoneIdentifier)
         {
             $timezones[$timezoneIdentifier] = $timezoneIdentifier;
         }
-        
+
         return $timezones;
     }
 

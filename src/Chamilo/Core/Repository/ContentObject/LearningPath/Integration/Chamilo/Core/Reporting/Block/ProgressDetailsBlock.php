@@ -1,11 +1,16 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -24,76 +29,120 @@ class ProgressDetailsBlock extends ReportingBlock
      */
     public function count_data()
     {
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
+
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_parent()->get_parent()->getTrackingService();
+
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
+
+        /** @var User $user */
+        $user = $this->get_parent()->get_parent()->getUser();
+
         $reporting_data = new ReportingData();
-        
-        $reporting_data->set_rows(
-            array(
-                Translation::get('LastStartTime'), 
-                Translation::get('Status'), 
-                Translation::get('Score'), 
-                Translation::get('Time'), 
-                Translation::get('Action')));
-        
-        $current_node = $this->get_parent()->get_parent()->get_current_node();
-        
+
+        $showScore = $treeNode->supportsScore();
+
+        $rows = array(
+            Translation::get('LastStartTime'),
+            Translation::get('Status'),
+            Translation::get('Time'),
+            Translation::get('Action')
+        );
+
+        if($showScore)
+        {
+            array_splice($rows, 2, 0, Translation::get('Score'));
+        }
+
+        $reporting_data->set_rows($rows);
+
+        $attempts = $trackingService->getTreeNodeAttempts(
+            $learningPath, $user, $treeNode
+        );
+
         $counter = 1;
-        
-        foreach ($current_node->get_data() as $item_attempt)
+
+        foreach ($attempts as $treeNodeAttempt)
         {
             $category = $counter;
             $reporting_data->add_category($category);
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('LastStartTime'), 
-                DatetimeUtilities::format_locale_date(null, $item_attempt->get_start_time()));
+                $category,
+                Translation::get('LastStartTime'),
+                DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time())
+            );
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Status'), 
-                Translation::get($item_attempt->get_status() == 'completed' ? 'Completed' : 'Incomplete'));
+                $category,
+                Translation::get('Status'),
+                Translation::get($treeNodeAttempt->isCompleted() ? 'Completed' : 'Incomplete')
+            );
+
+            if($showScore)
+            {
+                $reporting_data->add_data_category_row(
+                    $category,
+                    Translation::get('Score'),
+                    $treeNodeAttempt->get_score() . '%'
+                );
+            }
+
             $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Score'), 
-                $item_attempt->get_score() . '%');
-            $reporting_data->add_data_category_row(
-                $category, 
-                Translation::get('Time'), 
-                DatetimeUtilities::format_seconds_to_hours($item_attempt->get_total_time()));
-            
+                $category,
+                Translation::get('Time'),
+                DatetimeUtilities::format_seconds_to_hours($treeNodeAttempt->get_total_time())
+            );
+
             if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
             {
                 $delete_url = $this->get_parent()->get_parent()->get_url(
                     array(
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT, 
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP => $current_node->get_id(), 
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID => $item_attempt->get_id()));
-                
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID =>
+                            $treeNode->getId(),
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID =>
+                            $treeNodeAttempt->getId()
+                    )
+                );
+
                 $action = Theme::getInstance()->getCommonImage(
-                    'Action/Delete', 
-                    'png', 
-                    Translation::get('DeleteAttempt'), 
-                    $delete_url, 
-                    ToolbarItem::DISPLAY_ICON);
-                
+                    'Action/Delete',
+                    'png',
+                    Translation::get('DeleteAttempt'),
+                    $delete_url,
+                    ToolbarItem::DISPLAY_ICON
+                );
+
                 $reporting_data->add_data_category_row($category, Translation::get('Action'), $action);
             }
-            
+
             $counter ++;
         }
-        
+
         $category = '-';
         $reporting_data->add_category($category);
         $reporting_data->add_data_category_row($category, Translation::get('LastStartTime'), '');
         $reporting_data->add_data_category_row(
-            $category, 
-            Translation::get('Status'), 
-            '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>');
+            $category,
+            Translation::get('Status'),
+            '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>'
+        );
         $reporting_data->add_data_category_row($category, Translation::get('Score'), '');
+
         $reporting_data->add_data_category_row(
-            $category, 
-            Translation::get('Time'), 
+            $category,
+            Translation::get('Time'),
             '<span style="font-weight: bold;">' .
-                 DatetimeUtilities::format_seconds_to_hours($current_node->get_total_time()) . '</span>');
-        
+            DatetimeUtilities::format_seconds_to_hours(
+                $trackingService->getTotalTimeSpentInTreeNode(
+                    $learningPath, $user, $treeNode
+                )
+            ) . '</span>'
+        );
+
         return $reporting_data;
     }
 

@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestSuite.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -61,7 +60,7 @@ require_once 'PHPUnit/TestCase.php';
  * </code>
  * This constructor creates a suite with all the methods starting with
  * "test" that take no arguments.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -76,7 +75,7 @@ class PHPUnit_TestSuite
 
     /**
      * The name of the test suite.
-     * 
+     *
      * @var string
      * @access private
      */
@@ -84,7 +83,7 @@ class PHPUnit_TestSuite
 
     /**
      * The tests in the test suite.
-     * 
+     *
      * @var array
      * @access private
      */
@@ -92,7 +91,7 @@ class PHPUnit_TestSuite
 
     /**
      * Constructs a TestSuite.
-     * 
+     *
      * @param mixed
      * @access public
      */
@@ -107,7 +106,7 @@ class PHPUnit_TestSuite
 
     /**
      * Adds a test to the suite.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -118,7 +117,7 @@ class PHPUnit_TestSuite
 
     /**
      * Adds the tests from the given class to the suite.
-     * 
+     *
      * @param string
      * @access public
      */
@@ -129,12 +128,12 @@ class PHPUnit_TestSuite
             $methods = get_class_methods($testClass);
             $parentClasses = array(strtolower($testClass));
             $parentClass = $testClass;
-            
+
             while (is_string($parentClass = get_parent_class($parentClass)))
             {
                 $parentClasses[] = $parentClass;
             }
-            
+
             foreach ($methods as $method)
             {
                 if (substr($method, 0, 4) == 'test' && ! in_array($method, $parentClasses))
@@ -147,25 +146,25 @@ class PHPUnit_TestSuite
 
     /**
      * Counts the number of test cases that will be run by this test.
-     * 
+     *
      * @return integer
      * @access public
      */
     function countTestCases()
     {
         $count = 0;
-        
+
         foreach ($this->_tests as $test)
         {
             $count += $test->countTestCases();
         }
-        
+
         return $count;
     }
 
     /**
      * Returns the name of the suite.
-     * 
+     *
      * @return string
      * @access public
      */
@@ -176,7 +175,7 @@ class PHPUnit_TestSuite
 
     /**
      * Runs the tests and collects their result in a TestResult.
-     * 
+     *
      * @param object
      * @access public
      */
@@ -190,7 +189,7 @@ class PHPUnit_TestSuite
 
     /**
      * Runs a test.
-     * 
+     *
      * @param object
      * @param object
      * @access public
@@ -202,7 +201,7 @@ class PHPUnit_TestSuite
 
     /**
      * Sets the name of the suite.
-     * 
+     *
      * @param string
      * @access public
      */
@@ -213,7 +212,7 @@ class PHPUnit_TestSuite
 
     /**
      * Returns the test at the given index.
-     * 
+     *
      * @param integer
      * @return object
      * @access public
@@ -232,7 +231,7 @@ class PHPUnit_TestSuite
 
     /**
      * Returns the number of tests in this suite.
-     * 
+     *
      * @return integer
      * @access public
      */
@@ -243,7 +242,7 @@ class PHPUnit_TestSuite
 
     /**
      * Returns the tests as an enumeration.
-     * 
+     *
      * @return array
      * @access public
      */
@@ -254,7 +253,7 @@ class PHPUnit_TestSuite
 
     /**
      * Returns a string representation of the test suite.
-     * 
+     *
      * @return string
      * @access public
      */

@@ -19,28 +19,28 @@ class AggregateConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $string = '';
-        
+
         $conditionTranslations = array();
         $count = 0;
-        
+
         foreach ($this->getCondition()->get_conditions() as $key => $condition)
         {
             $count ++;
             $translation = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(), 
+                $this->getDataClassDatabase(),
                 $condition);
-            
+
             if (! empty($translation))
             {
                 $conditionTranslations[] = $translation;
             }
         }
-        
+
         if (count($conditionTranslations) > 0)
         {
             $string = '(' . implode($this->getCondition()->get_operator(), $conditionTranslations) . ')';
         }
-        
+
         return $string;
     }
 }

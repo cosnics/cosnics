@@ -4,8 +4,7 @@ namespace Chamilo\Core\Reporting;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: reporting_exporter.class.php 215 2009-11-13 14:07:59Z vanpouckesven $
- * 
+ *
  * @package reporting.lib
  * @author Michael Kyndt
  */
@@ -22,7 +21,7 @@ abstract class ReportingExporter
     public static function factory($type, $template)
     {
         $class = __NAMESPACE__ . '\Exporter\\' . StringUtilities::getInstance()->createString($type)->upperCamelize();
-        
+
         return new $class($template);
     }
 

@@ -5,8 +5,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: user_setting.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @author Sven Vanpoucke
  * @package user.lib
  */
@@ -18,7 +17,7 @@ class UserSetting extends DataClass
 
     /**
      * Get the default properties of all users quota objects.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())

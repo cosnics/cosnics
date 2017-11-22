@@ -5,7 +5,7 @@ use Chamilo\Configuration\Category\Form\ImpactViewForm;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -46,10 +46,10 @@ class ImpactViewComponent extends Manager
             
             foreach ($category_ids as $category_id)
             {
-                if (! $this->get_parent()->allowed_to_delete_category($category_id))
-                {
-                    $failures ++;
-                }
+//                if (! $this->get_parent()->allowed_to_delete_category($category_id))
+//                {
+//                    $failures ++;
+//                }
                 
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID), 

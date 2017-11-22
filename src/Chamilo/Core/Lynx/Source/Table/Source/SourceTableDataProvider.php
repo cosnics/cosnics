@@ -12,7 +12,7 @@ class SourceTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Retrieves the objects for this table
-     * 
+     *
      * @param $offset int
      * @param $count int
      * @param $order_property String
@@ -27,7 +27,7 @@ class SourceTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Counts the number of objects for this table
-     * 
+     *
      * @return int
      */
     public function count_data($condition)

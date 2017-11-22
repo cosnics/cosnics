@@ -2,12 +2,13 @@
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Describes a property for the gallery table
  *
+ * @package Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from old gallery table property
  */
 class GalleryTableProperty
@@ -32,7 +33,6 @@ class GalleryTableProperty
      *
      * @param string $property
      * @param string $title
-     * @param string $storage_unit_alias
      */
     public function __construct($property, $title = null)
     {

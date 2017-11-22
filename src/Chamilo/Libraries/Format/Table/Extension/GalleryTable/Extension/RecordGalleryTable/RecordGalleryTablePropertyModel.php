@@ -6,7 +6,8 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyMo
 /**
  * This class represents a property model for a record gallery table
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
- * 
+ *
+ * @package Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\RecordGalleryTable
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class RecordGalleryTablePropertyModel extends GalleryTablePropertyModel

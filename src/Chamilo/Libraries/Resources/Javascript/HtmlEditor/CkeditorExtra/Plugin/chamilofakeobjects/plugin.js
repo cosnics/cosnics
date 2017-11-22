@@ -176,7 +176,7 @@
             var height = cssLengthRegex.exec(realElement.attributes.height);
         }
 
-        var fakeElementImageUrl = getFakeElementImageUrl(realElement.attributes.source, realElement.attributes['security_code']);
+        var fakeElementImageUrl = getFakeElementImageUrl(realElement.attributes.source, realElement.attributes.security_code);
 
         if (!fakeElementImageUrl)
         {

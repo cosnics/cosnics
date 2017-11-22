@@ -8,18 +8,24 @@ use HTML2PDF;
 
 /**
  * Exports data to Pdf
+ *
+ * @package Chamilo\Libraries\File\Export\Pdf
  */
 class PdfExport extends Export
 {
     const EXPORT_TYPE = 'pdf';
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     */
     public function render_data()
     {
         $data = $this->get_data();
         if (is_array($data))
         {
             require_once Path::getInstance()->getPluginPath() . 'ezpdf/class.ezpdf.php';
-            $pdf = & new Cezpdf();
+            $pdf = new Cezpdf();
             $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
             foreach ($data as $datapair)
             {
@@ -37,6 +43,10 @@ class PdfExport extends Export
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     */
     public function get_type()
     {
         return self::EXPORT_TYPE;

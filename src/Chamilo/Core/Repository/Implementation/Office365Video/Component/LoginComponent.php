@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Office365Video\Component;
 
 use Chamilo\Core\Repository\Implementation\Office365Video\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class LoginComponent extends Manager

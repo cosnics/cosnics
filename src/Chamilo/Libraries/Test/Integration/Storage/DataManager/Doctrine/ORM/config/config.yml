@@ -1,0 +1,12 @@
+chamilo.libraries:
+  doctrine:
+    orm:
+      mappings:
+        default:
+          - 'Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/config'
+        custom:
+          hogent_administration:
+            type: 'yaml'
+            namespace: 'common\libraries\test'
+            paths:
+              - 'Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM/config'

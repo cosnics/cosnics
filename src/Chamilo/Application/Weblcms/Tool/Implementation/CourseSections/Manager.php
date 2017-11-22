@@ -2,13 +2,12 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections;
 
 /**
- * $Id: course_sections_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_sections
  */
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This tool allows a user to publish course_sectionss in his or her course.
@@ -30,14 +29,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     /**
      * Adds a breadcrumb to the browser component
-     * 
+     *
      * @param BreadcrumbTrail $breadcrumbTrail
      */
     protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)),
                 Translation::getInstance()->getTranslation('ViewerComponent', array(), $this->context())));
     }
 }

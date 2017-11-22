@@ -1,14 +1,18 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -21,6 +25,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
 {
 
     /**
+     * @var TrackingService
+     */
+    protected $trackingService;
+
+    /**
+     * @var TrackingRepository
+     */
+    protected $trackingRepository;
+
+    /**
      *
      * @see \core\repository\display\Preview::get_root_content_object()
      */
@@ -31,8 +45,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
             $embedded_content_object_id = $this->get_embedded_content_object_id();
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
             $this->set_parameter(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP)
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
+                Request::get(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID)
             );
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -153,43 +167,76 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     }
 
     /**
+     * Returns the currently selected learning path child id from the request
      *
-     * @return \core\repository\content_object\learning_path\ComplexContentObjectPathNode
+     * @return int
      */
-    public function get_current_node()
+    public function getCurrentTreeNodeDataId()
     {
-        try
-        {
-            $root_content_object = parent::get_root_content_object();
-            $learning_path_item_attempt_data = $this->retrieve_learning_path_tracker_items(
-                $this->retrieve_learning_path_tracker()
-            );
-
-            $path = $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
-
-            return $path->get_node(
-                Request::get(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-                    $path->get_root()->get_id()
-                )
-            );
-        }
-        catch (\Exception $ex)
-        {
-            throw new UserException(
-                Translation::getInstance()->getTranslation(
-                    'CouldNotRetrieveSelectedNode', null, 'Chamilo\Core\Repository'
-                )
-            );
-        }
+        return (int) $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
+        );
     }
 
     /**
+     * Returns the LearningPathService service
      *
-     * @see \core\repository\display\PreviewResetSupport::reset()
+     * @return LearningPathService | object
+     */
+    protected function getLearningPathService()
+    {
+        return $this->getService(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service'
+        );
+    }
+
+    /**
+     * Returns the Tree for the current learning path root
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree
+     */
+    protected function getTree()
+    {
+        return $this->getLearningPathService()->getTree(parent::get_root_content_object());
+    }
+
+    /**
+     * Returns the TreeNode for the current step
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
+     */
+    public function getCurrentTreeNode()
+    {
+        $tree = $this->getTree();
+
+        return $tree->getTreeNodeById($this->getCurrentTreeNodeDataId());
+    }
+
+    /**
+     * Resets the storage for the preview
      */
     public function reset()
     {
-        return PreviewStorage::getInstance()->reset();
+        $this->buildTrackingService();
+        $this->trackingRepository->resetStorage();
+
+        return true;
+    }
+
+    /**
+     * Builds the TrackingService
+     *
+     * @return TrackingService
+     */
+    public function buildTrackingService()
+    {
+        if (!isset($this->trackingService))
+        {
+            $trackingServiceBuilder = new TrackingServiceBuilder();
+            $this->trackingRepository = $trackingServiceBuilder->getTrackingRepository();
+            $this->trackingService = $trackingServiceBuilder->buildTrackingService(new TrackingParameters());
+        }
+
+        return $this->trackingService;
     }
 }

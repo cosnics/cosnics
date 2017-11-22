@@ -4,5 +4,11 @@ namespace Chamilo\Libraries\File\Rss\Parser;
 interface RssFeedParserInterface
 {
 
-    public function parse($url, $number_entries);
-} 
+    /**
+     * Parses a given url with a given amount of entries
+     *
+     * @param string $url
+     * @param integer $numberOfEntries @throw \InvalidArgumentException
+     */
+    public function parse($url, $numberOfEntries);
+}

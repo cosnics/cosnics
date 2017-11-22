@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -27,18 +27,18 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer imp
      * Renders a single cell
      * 
      * @param TableColumn $column
-     * @param string[] $row
+     * @param string[] $learningPathChildAttempt
      *
      * @return String
      */
-    public function render_cell($column, $row)
+    public function render_cell($column, $learningPathChildAttempt)
     {
         if ($column->get_name() == 'target_entities')
         {
-            return $this->renderTargetEntities($row['target_entities']);
+            return $this->renderTargetEntities($learningPathChildAttempt['target_entities']);
         }
         
-        return parent::render_cell($column, $row);
+        return parent::render_cell($column, $learningPathChildAttempt);
     }
 
     /**

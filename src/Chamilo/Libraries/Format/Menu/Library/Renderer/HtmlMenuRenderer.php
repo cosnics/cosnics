@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Menu\Library\Renderer;
 
 /**
  * Originaly a PEAR library
- * 
+ *
  * @package Chamilo\Libraries\Format\Menu\Library\Renderer
  * @author Alex Vorobiev <sasha@mathforum.com>
  * @author Ulf Wendel <ulf.wendel@phpdoc.de>
@@ -22,7 +22,7 @@ abstract class HtmlMenuRenderer
 
     /**
      *
-     * @param string menu type
+     * @param string $menuType
      */
     public function setMenuType($menuType)
     {
@@ -31,8 +31,8 @@ abstract class HtmlMenuRenderer
 
     /**
      * Finish the menu
-     * 
-     * @param int current depth in the tree structure
+     *
+     * @param integer $level
      */
     public function finishMenu($level)
     {
@@ -40,8 +40,8 @@ abstract class HtmlMenuRenderer
 
     /**
      * Finish the tree level (for types 'tree' and 'sitemap')
-     * 
-     * @param int current depth in the tree structure
+     *
+     * @param integer $level
      */
     public function finishLevel($level)
     {
@@ -49,8 +49,8 @@ abstract class HtmlMenuRenderer
 
     /**
      * Finish the row in the menu
-     * 
-     * @param int current depth in the tree structure
+     *
+     * @param integer $level
      */
     public function finishRow($level)
     {
@@ -58,10 +58,10 @@ abstract class HtmlMenuRenderer
 
     /**
      * Renders the element of the menu
-     * 
-     * @param array Element being rendered
-     * @param int Current depth in the tree structure
-     * @param int Type of the element (one of HTML_MENU_ENTRY_* constants)
+     *
+     * @param string[] $node
+     * @param integer $level
+     * @param integer $type
      */
     public function renderEntry($node, $level, $type)
     {

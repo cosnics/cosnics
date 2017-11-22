@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: email_manager.class.php 191 2009-11-13 11:50:28Z chellee $
- * 
+ *
  * @package application.common.email_manager
  */
 abstract class Manager extends Application
@@ -21,9 +20,9 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
+
         $this->target_users = array();
-        
+
         $email_action = Request::get(self::PARAM_ACTION);
         if ($email_action)
         {

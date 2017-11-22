@@ -4,12 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * Feedback management of the portfolio item or folder
- * 
+ *
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -26,18 +25,17 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
         {
             throw new NotAllowedException();
         }
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        $result = $factory->run();
-        
+
+        $result = $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Feedback\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $result;
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -135,7 +133,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
 
     /**
      * Retrieves all the notifications
-     * 
+     *
      * @return ResultSet<Notification>
      */
     public function retrieve_notifications()

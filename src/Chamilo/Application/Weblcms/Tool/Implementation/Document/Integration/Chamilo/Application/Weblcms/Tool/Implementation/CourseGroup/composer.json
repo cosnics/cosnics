@@ -1,0 +1,55 @@
+{
+    "name": "cosnics/application-weblcms-tool-implementation-document-integration-chamilo-application-weblcms-tool-implementation-course-group",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Implementation Document Integration Chamilo Application Weblcms Tool Implementation Course Group",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "Document",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Weblcms",
+        "Tool",
+        "Implementation",
+        "CourseGroup"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Document",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+            "type": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

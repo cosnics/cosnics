@@ -1,14 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+/**
+ *
+ * @package Chamilo\Libraries\Architecture\Traits
+ */
 trait ClassFile
 {
 
     /**
      * Returns the classname from the given php file
-     * 
-     * @param string $file
      *
+     * @param string $file
      * @return string
      */
     protected function getClassNameFromPHPFile($file)
@@ -19,42 +22,42 @@ trait ClassFile
 
         $inNamespace = false;
 
-        while (!feof($fp))
+        while (! feof($fp))
         {
             $buffer .= fread($fp, 512);
             $tokens = @token_get_all($buffer);
-            
+
             if (strpos($buffer, '{') === false)
             {
                 continue;
             }
-            
+
             for (; $i < count($tokens); $i ++)
             {
-                if($tokens[$i][0] === T_NAMESPACE)
+                if ($tokens[$i][0] === T_NAMESPACE)
                 {
                     $inNamespace = true;
                 }
 
-                if($tokens[$i][0] === T_STRING)
+                if ($tokens[$i][0] === T_STRING)
                 {
-                    if($inNamespace)
+                    if ($inNamespace)
                     {
                         $class .= $tokens[$i][1];
                     }
                 }
 
-                if($tokens[$i][0] === T_NS_SEPARATOR)
+                if ($tokens[$i][0] === T_NS_SEPARATOR)
                 {
-                    if($inNamespace)
+                    if ($inNamespace)
                     {
                         $class .= $tokens[$i][1];
                     }
                 }
 
-                if($tokens[$i] === ';')
+                if ($tokens[$i] === ';')
                 {
-                    if($inNamespace)
+                    if ($inNamespace)
                     {
                         $class .= '\\';
                         $inNamespace = false;
@@ -75,7 +78,7 @@ trait ClassFile
                 }
             }
         }
-        
+
         fclose($fp);
     }
 }

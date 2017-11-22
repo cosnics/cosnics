@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Box\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Box\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExternalSyncerComponent extends Manager

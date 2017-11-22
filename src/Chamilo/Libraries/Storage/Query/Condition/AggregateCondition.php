@@ -6,10 +6,10 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  * class.
  * By using instances of extents of this class itself in other aggregate conditions, you can create complex
  * boolean structures.
- * 
+ *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package common.libraries
+ * @package Chamilo\Libraries\Storage\Query\Condition
  */
 abstract class AggregateCondition extends Condition
 {

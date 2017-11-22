@@ -3,6 +3,8 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
 
 /**
  * class that describes a type for the advanced element finder
+ *
+ * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
  */
 class AdvancedElementFinderElementType
 {
@@ -14,11 +16,19 @@ class AdvancedElementFinderElementType
 
     /**
      * Associative array for the properties
-     * 
-     * @var Array
+     *
+     * @var string[]
      */
     private $properties;
 
+    /**
+     *
+     * @param string $id
+     * @param string $name
+     * @param string $context
+     * @param string $method
+     * @param string[] $parameters
+     */
     public function __construct($id, $name, $context, $method, $parameters = array())
     {
         $this->set_id($id);
@@ -30,29 +40,30 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets a property in the associative array of properties
-     * 
-     * @param String $property_name
-     * @param Object $value
+     *
+     * @param string $propertyName
+     * @param mixed $value
      */
-    public function set_property($property_name, $value)
+    public function set_property($propertyName, $value)
     {
-        $this->properties[$property_name] = $value;
+        $this->properties[$propertyName] = $value;
     }
 
     /**
      * Retrieves a property from the associative array of properties
-     * 
-     * @param String $property_name
+     *
+     * @param string $propertyName
+     * @return mixed
      */
-    public function get_property($property_name)
+    public function get_property($propertyName)
     {
-        return $this->properties[$property_name];
+        return $this->properties[$propertyName];
     }
 
     /**
      * Returns the id of this element type
-     * 
-     * @return int
+     *
+     * @return string
      */
     public function get_id()
     {
@@ -61,8 +72,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets the id of this element type
-     * 
-     * @param int $id
+     *
+     * @param string $id
      */
     public function set_id($id)
     {
@@ -71,8 +82,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Returns the name of this element type
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_name()
     {
@@ -81,8 +92,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets the name of this element
-     * 
-     * @param String name
+     *
+     * @param string $name
      */
     public function set_name($name)
     {
@@ -91,8 +102,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets the context of this element
-     * 
-     * @param String context
+     *
+     * @param string $context
      */
     public function set_context($context)
     {
@@ -101,8 +112,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets the method of this element
-     * 
-     * @param String method
+     *
+     * @param string $method
      */
     public function set_method($method)
     {
@@ -111,8 +122,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Sets the parameters of this element
-     * 
-     * @param Array $parameters
+     *
+     * @param string[] $parameters
      */
     public function set_parameters($parameters)
     {
@@ -121,8 +132,8 @@ class AdvancedElementFinderElementType
 
     /**
      * Returns this element as an array
-     * 
-     * @return Array
+     *
+     * @return string[]
      */
     public function as_array()
     {

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Relation\Instance;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

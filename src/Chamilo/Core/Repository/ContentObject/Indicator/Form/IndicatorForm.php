@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Indicator\Storage\DataClass\Indicator;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 
 /**
- * $Id: indicator_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.indicator
  * @author Sven Vanpoucke
  */
@@ -15,7 +14,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
  */
 class IndicatorForm extends ContentObjectForm
 {
-    
+
     // Inherited
     public function create_content_object()
     {

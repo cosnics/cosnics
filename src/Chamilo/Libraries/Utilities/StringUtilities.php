@@ -52,7 +52,7 @@ class StringUtilities
 
     /**
      * Create a \Stringy\Stringy instance with the given string and return it
-     * 
+     *
      * @param string $string
      * @return \Stringy\Stringy
      */
@@ -63,7 +63,7 @@ class StringUtilities
 
     /**
      * Get an instance of StringUtilities
-     * 
+     *
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public static function getInstance()
@@ -72,7 +72,7 @@ class StringUtilities
         {
             self::$instance = new static();
         }
-        
+
         return static::$instance;
     }
 
@@ -99,66 +99,66 @@ class StringUtilities
         {
             return true;
         }
-        
+
         if (! is_string($string))
         {
             return false;
         }
-        
+
         if ($forHumans)
         {
             $string = trim(str_replace('&nbsp;', '', strip_tags($string)));
         }
-        
+
         if (strlen($string) === 0)
         {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      *
      * @param string $email
-     * @param string $clickable_text
-     * @param string $style_class
+     * @param string $clickableText
+     * @param string $styleClass
      * @return string
      */
-    public function encryptMailLink($email, $clickable_text = null, $style_class = '')
+    public function encryptMailLink($email, $clickableText = null, $styleClass = '')
     {
-        if (is_null($clickable_text))
+        if (is_null($clickableText))
         {
-            $clickable_text = $email;
+            $clickableText = $email;
         }
         // mailto already present?
         if (substr($email, 0, 7) != 'mailto:')
             $email = 'mailto:' . $email;
-            // class (stylesheet) defined?
-        if ($style_class != '')
+        // class (stylesheet) defined?
+        if ($styleClass != '')
         {
-            $style_class = ' class="full_url_print ' . $style_class . '"';
+            $styleClass = ' class="full_url_print ' . $styleClass . '"';
         }
         else
         {
-            $style_class = ' class="full_url_print"';
+            $styleClass = ' class="full_url_print"';
         }
         // encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i ++)
             $hmail .= '&#' . ord($email{$i}) . ';';
-            // encrypt clickable text if @ is present
-        if (strpos($clickable_text, '@'))
+        // encrypt clickable text if @ is present
+        if (strpos($clickableText, '@'))
         {
-            for ($i = 0; $i < strlen($clickable_text); $i ++)
-                $hclickable_text .= '&#' . ord($clickable_text{$i}) . ';';
+            for ($i = 0; $i < strlen($clickableText); $i ++)
+                $hclickable_text .= '&#' . ord($clickableText{$i}) . ';';
         }
         else
         {
-            $hclickable_text = htmlspecialchars($clickable_text);
+            $hclickable_text = htmlspecialchars($clickableText);
         }
         // return encrypted mailto hyperlink
-        return '<a href="' . $hmail . '"' . $style_class . '>' . $hclickable_text . '</a>';
+        return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickable_text . '</a>';
     }
 
     /**
@@ -175,7 +175,7 @@ class StringUtilities
         {
             $string = strip_tags($string);
         }
-        
+
         return (string) $this->createString($string)->truncate($length, $character);
     }
 }

@@ -133,7 +133,6 @@ $(function() {
 		parameters = {
 			"width" : "100%",
 			"height" : "65",
-			"toolbar" : "RepositoryQuestion",
 			"collapse_toolbar" : true
 		};
 		editorNameAnswer = 'value[' + numberOfOptions + ']';
@@ -213,7 +212,6 @@ $(function() {
 		parameters = {
 			"width" : "100%",
 			"height" : "65",
-			"toolbar" : "RepositoryQuestion",
 			"collapse_toolbar" : true
 		};
 		editorName = 'match[' + numberOfMatches + ']';

@@ -8,14 +8,14 @@ use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Chamilo\Core\User\Roles\Service\UserRoleService class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserRoleServiceTest extends Test
+class UserRoleServiceTest extends ChamiloTestCase
 {
     /**
      * @var RoleServiceInterface | \PHPUnit_Framework_MockObject_MockObject

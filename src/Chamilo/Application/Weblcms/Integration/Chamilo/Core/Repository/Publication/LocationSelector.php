@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Core\Repository\Publication\LocationSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *

@@ -29,7 +29,7 @@ $(function()
                 $('button[name="submit_button"]').attr('class', '');
                 $('button[name="submit_button"]').addClass(buttonClass);
                 $('button[name="submit_button"]').html(buttonName);
-                $('button[name="submit_button"]').unbind('click');
+                $('button[name="submit_button"]').unbind('click', disableButton);
             }
             
             else
@@ -55,7 +55,7 @@ $(function()
                         $("#title").addClass('input_warning');
                         $('button[name="submit_button"]').attr('class', '');
                         $('button[name="submit_button"]').addClass('btn btn-warning');
-                        $('button[name="submit_button"]').unbind('click');
+                        $('button[name="submit_button"]').unbind('click', disableButton);
                     }
                     else
                     {
@@ -64,7 +64,7 @@ $(function()
                         $('button[name="submit_button"]').attr('class', '');
                         $('button[name="submit_button"]').addClass(buttonClass);
                         $('button[name="submit_button"]').html(buttonName);
-                        $('button[name="submit_button"]').unbind('click');
+                        $('button[name="submit_button"]').unbind('click', disableButton);
                     }
                 });
             }
@@ -86,7 +86,7 @@ $(function()
             $('input[name="new_category"]').removeClass('input_conflict');
             $('button[name="submit_button"]').attr('class', '');
             $('button[name="submit_button"]').html(buttonName);
-            $('button[name="submit_button"]').unbind('click');
+            $('button[name="submit_button"]').unbind('click', disableButton);
             $('button[name="submit_button"]').addClass(buttonClass);
         }
         else
@@ -125,7 +125,7 @@ $(function()
                             $('button[name="submit_button"]').attr('class', '');
                             $('button[name="submit_button"]').addClass(buttonClass);
                             $('button[name="submit_button"]').html(buttonName);
-                            $('button[name="submit_button"]').unbind('click');
+                            $('button[name="submit_button"]').unbind('click', disableButton);
                         }
                     });
         }

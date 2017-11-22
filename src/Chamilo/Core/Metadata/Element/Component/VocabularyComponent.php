@@ -3,7 +3,6 @@ namespace Chamilo\Core\Metadata\Element\Component;
 
 use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class VocabularyComponent extends Manager
 {
@@ -14,9 +13,8 @@ class VocabularyComponent extends Manager
      */
     public function run()
     {
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Metadata\Vocabulary\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Metadata\Vocabulary\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

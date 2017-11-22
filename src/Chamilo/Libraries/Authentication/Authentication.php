@@ -41,12 +41,20 @@ abstract class Authentication
         return array('SecurityToken', 'Anonymous');
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public static function anonymous_user_exists()
     {
         $anonymous_user = \Chamilo\Core\User\Storage\DataManager::retrieve_anonymous_user();
         return $anonymous_user instanceof \Chamilo\Core\User\Storage\DataClass\User;
     }
 
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
     public static function as_anonymous_user()
     {
         if (self::anonymous_user_exists())
@@ -73,12 +81,20 @@ abstract class Authentication
         return new $authenticationClass();
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
     public function logout($user)
     {
         $this->trackLogout($user);
         Session::destroy();
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
     public function trackLogout($user)
     {
         Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));

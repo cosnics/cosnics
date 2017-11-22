@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/ext-repo-flickr",
-        "version": "6.0.0", "description": "Chamilo Flickr External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-implementation-flickr",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation Flickr",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "Flickr"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +20,24 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/flickr"
+        "cosnics": {
+            "name": "Flickr",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\Flickr",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

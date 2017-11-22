@@ -1,7 +1,0 @@
-TypeName = "Date/time question"
-TypeCategory = "Content Objects"
-Question = "Question"
-Instruction = "Instruction"
-Title = "Title"
-Description = "Description"
-QuestionPreview = "Preview" 

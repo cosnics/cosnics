@@ -10,11 +10,12 @@ use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  * Utilities function for javascript manipulation
  *
- * @package libraries
+ * @package Chamilo\Libraries\Format\Utilities
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ResourceUtilities
@@ -56,22 +57,22 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
     /**
      *
      * @param string $context
-     * @param Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param ClassnameUtilities $classnameUtilities
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct($context = __NAMESPACE__, Theme $themeUtilities, PathBuilder $pathBuilder,
         ConfigurablePathBuilder $configurablePathBuilder, ClassnameUtilities $classnameUtilities,
-        \Symfony\Component\HttpFoundation\Request $request)
+        ChamiloRequest $request)
     {
         $this->context = $context;
         $this->themeUtilities = $themeUtilities;
@@ -164,7 +165,7 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -173,7 +174,7 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest($request)
     {
@@ -189,7 +190,11 @@ abstract class ResourceUtilities
         $this->classnameUtilties = $classnameUtilties;
     }
 
-    static public function launch(\Symfony\Component\HttpFoundation\Request $request)
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     */
+    static public function launch(ChamiloRequest $request)
     {
         $type = Request::get(self::PARAM_TYPE, null);
 

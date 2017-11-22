@@ -19,7 +19,7 @@ class ParameterBag extends \Symfony\Component\HttpFoundation\ParameterBag
     public function __toString()
     {
         $simpleIdentifier = $this->get(self::PARAM_IDENTIFIER);
-        
+
         if ($simpleIdentifier)
         {
             return $simpleIdentifier;

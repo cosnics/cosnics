@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: assessment_select_question_option.class.php $
- * 
+ *
  * @package repository.lib.content_object.select_question
  */
 
@@ -29,7 +28,7 @@ class AssessmentSelectQuestionOption
 
     /**
      * Creates a new option for a multiple choice question
-     * 
+     *
      * @param int $score The score of this answer in the question
      * @param string $feedback The feedback of this answer in the question
      */
@@ -43,7 +42,7 @@ class AssessmentSelectQuestionOption
 
     /**
      * Gets the value of this option
-     * 
+     *
      * @return string
      */
     public function get_value()
@@ -71,7 +70,7 @@ class AssessmentSelectQuestionOption
 
     /**
      * Determines if this option is a correct answer
-     * 
+     *
      * @return boolean
      */
     public function is_correct()

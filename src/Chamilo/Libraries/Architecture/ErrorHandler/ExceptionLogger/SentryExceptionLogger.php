@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\Platform\Session\Session;
-
 /**
  * Logs Exceptions to Sentry (sentry.io)
  *
+ * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
@@ -21,7 +20,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * SentryExceptionLogger constructor.
      *
      * @param string $sentryConnectionString
-     *
      * @throws \Exception
      */
     public function __construct($sentryConnectionString = '')
@@ -37,19 +35,17 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryClient = new \Raven_Client(
-            $sentryConnectionString, array('install_default_breadcrumb_handlers' => false)
-        );
-
-        $this->configureChamiloParameters();
+            $sentryConnectionString,
+            array('install_default_breadcrumb_handlers' => false));
     }
 
     /**
      * Logs an exception
      *
      * @param \Exception $exception
-     * @param int $exceptionLevel
+     * @param integer $exceptionLevel
      * @param string $file
-     * @param int $line
+     * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
@@ -59,17 +55,5 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryClient->captureException($exception);
-    }
-
-    /**
-     * Configures additional chamilo parameters in New Relic
-     */
-    protected function configureChamiloParameters()
-    {
-        $user_id = Session::get_user_id();
-        if (! empty($user_id))
-        {
-            $this->sentryClient->user_context(array('user_id' => $user_id));
-        }
     }
 }

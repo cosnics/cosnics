@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Install;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Theme;
 
@@ -140,7 +140,7 @@ class SettingsOverview
     {
         $html = array();
 
-        $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('platform_name'));
+        $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('site_name'));
 
         $html[] = $this->renderSetting(
             Translation::get('InstituteShortName'),

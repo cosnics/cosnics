@@ -4,8 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Service\PublicationService;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
@@ -126,23 +124,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
         foreach ($publications as $publication)
         {
-            $publicationContentObjectType = $publication->get_optional_property(ContentObject::PROPERTY_TYPE);
-
-            $publicationContentObject = new $publicationContentObjectType();
-            $publicationContentObject->set_title($publication->get_optional_property(ContentObject::PROPERTY_TITLE));
-            $publicationContentObject->set_description(
-                $publication->get_optional_property(ContentObject::PROPERTY_DESCRIPTION));
-            $publicationContentObject->set_type($publication->get_optional_property(ContentObject::PROPERTY_TYPE));
-            $publicationContentObject->set_current($publication->get_optional_property(ContentObject::PROPERTY_CURRENT));
-            $publicationContentObject->set_owner_id(
-                $publication->get_optional_property(ContentObject::PROPERTY_OWNER_ID));
-            $publicationContentObject->set_creation_date(
-                $publication->get_optional_property(ContentObject::PROPERTY_CREATION_DATE));
-            $publicationContentObject->set_modification_date(
-                $publication->get_optional_property(ContentObjectPublication::CONTENT_OBJECT_MODIFICATION_DATE_ALIAS));
-
-            $publication->set_content_object($publicationContentObject);
-
             $eventParser = new EventParser($publication, $startTime, $endTime);
             $events = array_merge($events, $eventParser->getEvents());
         }

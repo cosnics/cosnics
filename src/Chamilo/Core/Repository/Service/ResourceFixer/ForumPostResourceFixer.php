@@ -36,7 +36,7 @@ class ForumPostResourceFixer extends ResourceFixer
                 );
 
                 $content = $forumPost->get_content();
-                $newContent = $this->fixResourcesInTextContent($content);
+                $newContent = $this->fixResourcesInTextContent(null, $content);
 
                 if($content != $newContent)
                 {

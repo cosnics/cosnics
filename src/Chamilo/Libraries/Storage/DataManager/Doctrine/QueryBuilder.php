@@ -29,11 +29,11 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getSQLForDelete()
     {
-        $sql_parts = $this->getQueryParts();
-        $table = $sql_parts['from']['table'] . ($sql_parts['from']['alias'] ? ' ' . $sql_parts['from']['alias'] : '');
-        $query = 'DELETE' . ($sql_parts['from']['alias'] ? ' ' . $sql_parts['from']['alias'] : '') . ' FROM ' . $table .
-             ($sql_parts['where'] !== null ? ' WHERE ' . ((string) $sql_parts['where']) : '');
-        
+        $sqlParts = $this->getQueryParts();
+        $table = $sqlParts['from']['table'] . ($sqlParts['from']['alias'] ? ' ' . $sqlParts['from']['alias'] : '');
+        $query = 'DELETE' . ($sqlParts['from']['alias'] ? ' ' . $sqlParts['from']['alias'] : '') . ' FROM ' . $table .
+             ($sqlParts['where'] !== null ? ' WHERE ' . ((string) $sqlParts['where']) : '');
+
         return $query;
     }
 
@@ -47,17 +47,17 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
         {
             throw new \Exception();
         }
-        
+
         if ($this->sql !== null && $this->state === self::STATE_CLEAN)
         {
             return $this->sql;
         }
-        
+
         $sql = $this->getSQLForDelete();
-        
+
         $this->state = self::STATE_CLEAN;
         $this->sql = $sql;
-        
+
         return $sql;
     }
 }

@@ -54,5 +54,28 @@ class UserService
     {
         return $this->getUserRepository()->findUserById($identifier);
     }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param integer $count
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findUsers($condition, $offset = 0, $count = -1, $orderProperty = null)
+    {
+        return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderProperty);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @return integer
+     */
+    public function countUsers($condition)
+    {
+        return $this->getUserRepository()->countUsers($condition);
+    }
 }
 

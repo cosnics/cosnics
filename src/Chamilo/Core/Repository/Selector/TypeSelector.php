@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Selector;
 
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * A collection of TypeSelectorCategory instances in a TypeSelector
@@ -15,14 +15,19 @@ class TypeSelector
     const PARAM_SELECTION = 'type_selection';
 
     /**
+     * @var TypeSelectorItemInterface[]
+     */
+    protected $typeSelectorItems;
+
+    /**
      *
-     * @var \core\repository\TypeSelectorCategory[]
+     * @var TypeSelectorCategory[]
      */
     private $categories;
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory[] $categories
+     * @param TypeSelectorCategory[] $categories
      */
     public function __construct($categories = array())
     {
@@ -40,7 +45,7 @@ class TypeSelector
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory $categories[]
+     * @param TypeSelectorCategory $categories[]
      */
     public function set_categories($categories)
     {
@@ -49,11 +54,65 @@ class TypeSelector
 
     /**
      *
-     * @param \core\repository\TypeSelectorCategory $category
+     * @param TypeSelectorCategory $category
      */
-    public function add_category($category)
+    public function add_category(TypeSelectorCategory $category)
     {
         $this->categories[$category->get_type()] = $category;
+        $this->typeSelectorItems[] = $category;
+    }
+
+    /**
+     * @param TypeSelectorOption $option
+     */
+    public function add_option(TypeSelectorOption $option)
+    {
+        $this->typeSelectorItems[] = $option;
+    }
+
+    /**
+     * @return TypeSelectorItemInterface[]
+     */
+    public function getTypeSelectorItems()
+    {
+        return $this->typeSelectorItems;
+    }
+
+    /**
+     * Removes an item from the type selector by a given index
+     *
+     * @param int $index
+     */
+    public function removeTypeSelectorItemByIndex($index)
+    {
+        unset($this->typeSelectorItems[$index]);
+    }
+
+    /**
+     * Returns all the type selector options as a flat list (even those nested within categories)
+     *
+     * @return TypeSelectorOption[]
+     */
+    public function getAllTypeSelectorOptions()
+    {
+        $typeSelectorOptions = array();
+
+        foreach($this->typeSelectorItems as $typeSelectorItem)
+        {
+            if($typeSelectorItem instanceof TypeSelectorOption)
+            {
+                $typeSelectorOptions[] = $typeSelectorItem;
+            }
+            elseif($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                foreach($typeSelectorItem->get_options() as $typeSelectorOption)
+                {
+                    $typeSelectorOptions[] = $typeSelectorOption;
+                }
+            }
+        }
+
+        return $typeSelectorOptions;
     }
 
     public function category_type_exists($category_type)
@@ -65,7 +124,7 @@ class TypeSelector
      *
      * @param string $type
      * @throws ObjectNotExistException
-     * @return \core\repository\TypeSelectorCategory
+     * @return TypeSelectorCategory
      */
     public function get_category_by_type($type)
     {
@@ -86,10 +145,10 @@ class TypeSelector
     public function sort()
     {
         usort(
-            $this->categories, 
-            function ($category_a, $category_b)
+            $this->typeSelectorItems,
+            function ($itemA, $itemB)
             {
-                return strcmp($category_a->get_name(), $category_b->get_name());
+                return strcmp($itemA->get_name(), $itemB->get_name());
             });
         
         foreach ($this->categories as $category)
@@ -132,16 +191,23 @@ class TypeSelector
      */
     public function count()
     {
-        return count($this->get_categories());
+        return count($this->typeSelectorItems);
     }
 
     public function count_options()
     {
         $total = 0;
         
-        foreach ($this->get_categories() as $category)
+        foreach ($this->typeSelectorItems as $typeSelectorItem)
         {
-            $total += $category->count();
+            if($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                $total += $typeSelectorItem->count();
+            }
+            else
+            {
+                $total++;
+            }
         }
         
         return $total;
@@ -154,13 +220,23 @@ class TypeSelector
     public function get_unique_content_object_template_ids()
     {
         $types = array();
-        
-        foreach ($this->get_categories() as $category)
+
+        foreach ($this->typeSelectorItems as $typeSelectorItem)
         {
-            $types = array_merge($types, $category->get_unique_content_object_template_ids());
+            if($typeSelectorItem instanceof TypeSelectorCategory)
+            {
+                $types = array_merge($types, $typeSelectorItem->get_unique_content_object_template_ids());
+            }
+            elseif($typeSelectorItem instanceof TypeSelectorOption)
+            {
+                if (!in_array($typeSelectorItem->get_template_registration_id(), $types))
+                {
+                    $types[] = $typeSelectorItem->get_template_registration_id();
+                }
+            }
         }
-        
-        return array_unique($types);
+
+        return $types;
     }
 
     /**

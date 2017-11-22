@@ -27,17 +27,17 @@ trait DropdownButtonRendererTrait
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\AbstractButtonRenderer::render()
+     * @return string
      */
     public function render()
     {
         $html = array();
-        
+
         $html[] = '<div class="btn-group">';
         $html[] = parent::render();
         $html[] = $this->renderDropdown();
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -48,9 +48,9 @@ trait DropdownButtonRendererTrait
     public function renderSubButtons()
     {
         $html = array();
-        
+
         $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
-        
+
         foreach ($this->getButton()->getSubButtons() as $subButton)
         {
             $rendererClassName = __NAMESPACE__ . '\\' .
@@ -58,25 +58,29 @@ trait DropdownButtonRendererTrait
             $renderer = new $rendererClassName($subButton);
             $html[] = $renderer->render($subButton);
         }
-        
+
         $html[] = '</ul>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function determineDropdownClasses()
     {
         $classes = array();
-        
+
         $classes[] = 'dropdown-menu';
-        
+
         $dropdownClasses = $this->getButton()->getDropdownClasses();
-        
+
         if (! empty($dropdownClasses))
         {
             $classes[] = $dropdownClasses;
         }
-        
+
         return $classes;
     }
 

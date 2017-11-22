@@ -3,11 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\PortfolioItem\Form;
 
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- * $Id: portfolio_item_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.portfolio_item
  */
 class PortfolioItemForm extends ContentObjectForm

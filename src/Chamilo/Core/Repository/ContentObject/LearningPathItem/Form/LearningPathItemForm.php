@@ -3,11 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Form;
 
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- * $Id: learning_path_item_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.learning_path_item
  */
 class LearningPathItemForm extends ContentObjectForm

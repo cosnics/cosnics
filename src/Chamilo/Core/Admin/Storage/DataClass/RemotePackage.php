@@ -5,14 +5,13 @@ use Chamilo\Core\Admin\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * This class describes a Package data object $Id: remote_package.class.php 126 2009-11-09 13:11:05Z vanpouckesven $
- * 
+ *
  * @package admin.lib
  * @author Hans De Bisschop
  */
 class RemotePackage extends DataClass
 {
-    
+
     /**
      * Package properties
      */
@@ -35,48 +34,48 @@ class RemotePackage extends DataClass
     const PROPERTY_HOMEPAGE = 'homepage';
     const PROPERTY_DEPENDENCIES = 'dependencies';
     const PROPERTY_EXTRA = 'extra';
-    
+
     // Sub-properties
     const PROPERTY_CYCLE_PHASE = 'phase';
     const PROPERTY_CYCLE_REALM = 'realm';
-    
+
     // Release phases
     const PHASE_ALPHA = 'alpha';
     const PHASE_BETA = 'beta';
     const PHASE_RELEASE_CANDIDATE = 'release_candidate';
     const PHASE_GENERAL_AVAILABILITY = 'general_availability';
-    
+
     // Release realm
     const REALM_MAIN = 'main';
     const REALM_UNIVERSE = 'universe';
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_CODE, 
-                self::PROPERTY_CONTEXT, 
-                self::PROPERTY_NAME, 
-                self::PROPERTY_SECTION, 
-                self::PROPERTY_CATEGORY, 
-                self::PROPERTY_AUTHORS, 
-                self::PROPERTY_VERSION, 
-                self::PROPERTY_CYCLE, 
-                self::PROPERTY_FILENAME, 
-                self::PROPERTY_SIZE, 
-                self::PROPERTY_MD5, 
-                self::PROPERTY_SHA1, 
-                self::PROPERTY_SHA256, 
-                self::PROPERTY_SHA512, 
-                self::PROPERTY_TAGLINE, 
-                self::PROPERTY_DESCRIPTION, 
-                self::PROPERTY_HOMEPAGE, 
-                self::PROPERTY_DEPENDENCIES, 
+                self::PROPERTY_CODE,
+                self::PROPERTY_CONTEXT,
+                self::PROPERTY_NAME,
+                self::PROPERTY_SECTION,
+                self::PROPERTY_CATEGORY,
+                self::PROPERTY_AUTHORS,
+                self::PROPERTY_VERSION,
+                self::PROPERTY_CYCLE,
+                self::PROPERTY_FILENAME,
+                self::PROPERTY_SIZE,
+                self::PROPERTY_MD5,
+                self::PROPERTY_SHA1,
+                self::PROPERTY_SHA256,
+                self::PROPERTY_SHA512,
+                self::PROPERTY_TAGLINE,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_HOMEPAGE,
+                self::PROPERTY_DEPENDENCIES,
                 self::PROPERTY_EXTRA));
     }
 
@@ -90,7 +89,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the code of this Package.
-     * 
+     *
      * @return the code.
      */
     public function get_code()
@@ -100,7 +99,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the code of this Package.
-     * 
+     *
      * @param code
      */
     public function set_code($code)
@@ -110,7 +109,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the context of this Package.
-     * 
+     *
      * @return the context.
      */
     public function get_context()
@@ -120,7 +119,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the context of this Package.
-     * 
+     *
      * @param context
      */
     public function set_context($context)
@@ -130,7 +129,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the name of this Package.
-     * 
+     *
      * @return the name.
      */
     public function get_name()
@@ -140,7 +139,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the name of this Package.
-     * 
+     *
      * @param name
      */
     public function set_name($name)
@@ -150,7 +149,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the section of this Package.
-     * 
+     *
      * @return the section.
      */
     public function get_section()
@@ -160,7 +159,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the section of this Package.
-     * 
+     *
      * @param section
      */
     public function set_section($section)
@@ -170,7 +169,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the category of this Package.
-     * 
+     *
      * @return the category.
      */
     public function get_category()
@@ -180,7 +179,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the category of this Package.
-     * 
+     *
      * @param category
      */
     public function set_category($category)
@@ -190,7 +189,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the authors of this Package.
-     * 
+     *
      * @return the authors.
      */
     public function get_authors()
@@ -200,7 +199,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the authors of this Package.
-     * 
+     *
      * @param authors
      */
     public function set_authors($authors)
@@ -210,7 +209,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the version of this Package.
-     * 
+     *
      * @return the version.
      */
     public function get_version()
@@ -220,7 +219,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the version of this Package.
-     * 
+     *
      * @param version
      */
     public function set_version($version)
@@ -230,7 +229,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the cycle of this Package.
-     * 
+     *
      * @return the cycle.
      */
     public function get_cycle()
@@ -240,7 +239,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the cycle of this Package.
-     * 
+     *
      * @param cycle
      */
     public function set_cycle($cycle)
@@ -250,7 +249,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the cycle phase of this Package.
-     * 
+     *
      * @return the cycle phase.
      */
     public function get_cycle_phase()
@@ -261,7 +260,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the cycle realm of this Package.
-     * 
+     *
      * @return the cycle realm.
      */
     public function get_cycle_realm()
@@ -272,7 +271,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the filename of this Package.
-     * 
+     *
      * @return the filename.
      */
     public function get_filename()
@@ -282,7 +281,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the filename of this Package.
-     * 
+     *
      * @param filename
      */
     public function set_filename($filename)
@@ -292,7 +291,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the size of this Package.
-     * 
+     *
      * @return the size.
      */
     public function get_size()
@@ -302,7 +301,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the size of this Package.
-     * 
+     *
      * @param size
      */
     public function set_size($size)
@@ -312,7 +311,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the md5 of this Package.
-     * 
+     *
      * @return the md5.
      */
     public function get_md5()
@@ -322,7 +321,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the md5 of this Package.
-     * 
+     *
      * @param md5
      */
     public function set_md5($md5)
@@ -332,7 +331,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the sha1 of this Package.
-     * 
+     *
      * @return the sha1.
      */
     public function get_sha1()
@@ -342,7 +341,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the sha1 of this Package.
-     * 
+     *
      * @param sha1
      */
     public function set_sha1($sha1)
@@ -352,7 +351,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the sha256 of this Package.
-     * 
+     *
      * @return the sha256.
      */
     public function get_sha256()
@@ -362,7 +361,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the sha256 of this Package.
-     * 
+     *
      * @param sha256
      */
     public function set_sha256($sha256)
@@ -372,7 +371,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the sha512 of this Package.
-     * 
+     *
      * @return the sha512.
      */
     public function get_sha512()
@@ -382,7 +381,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the sha512 of this Package.
-     * 
+     *
      * @param sha512
      */
     public function set_sha512($sha512)
@@ -392,7 +391,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the tagline of this Package.
-     * 
+     *
      * @return the tagline.
      */
     public function get_tagline()
@@ -402,7 +401,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the tagline of this Package.
-     * 
+     *
      * @param tagline
      */
     public function set_tagline($tagline)
@@ -412,7 +411,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the description of this Package.
-     * 
+     *
      * @return the description.
      */
     public function get_description()
@@ -422,7 +421,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the description of this Package.
-     * 
+     *
      * @param description
      */
     public function set_description($description)
@@ -432,7 +431,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the extras of this Package.
-     * 
+     *
      * @return the extras.
      */
     public function get_extra()
@@ -442,7 +441,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the extras of this Package.
-     * 
+     *
      * @param extras
      */
     public function set_extra($extra)
@@ -452,7 +451,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the homepage of this Package.
-     * 
+     *
      * @return the homepage.
      */
     public function get_homepage()
@@ -462,7 +461,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the homepage of this Package.
-     * 
+     *
      * @param homepage
      */
     public function set_homepage($homepage)
@@ -472,7 +471,7 @@ class RemotePackage extends DataClass
 
     /**
      * Returns the dependencies of this Package.
-     * 
+     *
      * @return the dependencies.
      */
     public function get_dependencies()
@@ -482,7 +481,7 @@ class RemotePackage extends DataClass
 
     /**
      * Sets the dependencies of this Package.
-     * 
+     *
      * @param dependencies
      */
     public function set_dependencies($dependencies)

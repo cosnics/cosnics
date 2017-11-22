@@ -13,4 +13,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 abstract class Manager extends AjaxManager
 {
     const ACTION_USER_PICTURE = 'UserPicture';
+    const DEFAULT_ACTION = self::ACTION_USER_PICTURE;
 }

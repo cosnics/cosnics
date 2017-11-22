@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class TypeSpecificComponent extends TabComponent implements ApplicationSupport
+class TypeSpecificComponent extends BaseHtmlTreeComponent implements ApplicationSupport
 {
 
     /**
@@ -20,20 +19,19 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
-        
-        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $this->validateSelectedTreeNodeData();
+
+        $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
         $integration_namespace = $object_namespace .
              '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
-        
-        $factory = new ApplicationFactory(
-            $integration_namespace, 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            $integration_namespace,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

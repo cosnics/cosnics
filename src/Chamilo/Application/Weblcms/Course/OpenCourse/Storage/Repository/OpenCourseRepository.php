@@ -323,7 +323,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         $condition = new AndCondition($conditions);
 
-        $distinctParameters = new DataClassDistinctParameters($condition, CourseEntityRelation::PROPERTY_COURSE_ID);
+        $distinctParameters = new DataClassDistinctParameters(
+            $condition,
+            new DataClassProperties(
+                array(
+                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID))));
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
             CourseEntityRelation::class_name(),

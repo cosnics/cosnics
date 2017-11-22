@@ -7,8 +7,8 @@ use Chamilo\Libraries\File\Path;
  * This class loads twig templates by using a custom made format.
  * The templates are loaded just-in-time by prefixing
  * the template with a package namespace.
- * 
- * @package Chamilo\Libraries\Format\Twig$TwigLoaderChamiloFilesystem
+ *
+ * @package Chamilo\Libraries\Format\Twig
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -16,11 +16,8 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
 {
 
     /**
-     * Gets the source code of a template, given its name.
-     * 
-     * @param string $name The name of the template to load
-     * @return string The template source code
-     * @throws \Twig_Error_Loader When $name is not found
+     *
+     * @see Twig_LoaderInterface::getSource()
      */
     public function getSource($name)
     {
@@ -28,11 +25,8 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
     }
 
     /**
-     * Gets the cache key to use for the cache for a given template name.
-     * 
-     * @param string $name The name of the template to load
-     * @return string The cache key
-     * @throws \Twig_Error_Loader When $name is not found
+     *
+     * @see Twig_LoaderInterface::getCacheKey()
      */
     public function getCacheKey($name)
     {
@@ -40,12 +34,8 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
     }
 
     /**
-     * Returns true if the template is still fresh.
-     * 
-     * @param string $name The template name
-     * @param int $time The last modification time of the cached template
-     * @return Boolean true if the template is fresh, false otherwise
-     * @throws \Twig_Error_Loader When $name is not found
+     *
+     * @see Twig_LoaderInterface::isFresh()
      */
     public function isFresh($name, $time)
     {
@@ -55,65 +45,59 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
     /**
      * Finds a template based on a given template name.
      * The template name is prefixed by a namespace:
-     * 
-     * @example common\libraries:header.html.twig
-     * @param string $template_name
      *
+     * @param string $templateName
      * @throws \Twig_Error_Loader
-     *
      * @return string
      */
-    protected function findTemplate($template_name)
+    protected function findTemplate($templateName)
     {
-        if (strpos($template_name, ':') === false)
+        if (strpos($templateName, ':') === false)
         {
             throw new \Twig_Error_Loader(
                 sprintf(
                     'The given template name "%s" does not include a valid namespace. ' .
-                         'The valid format is "namespace:template"', 
-                        $template_name));
+                         'The valid format is "namespace:template"',
+                        $templateName));
         }
-        
-        $template_name_parts = explode(':', $template_name);
-        
-        $namespace = $template_name_parts[0];
-        
+
+        $templateNameParts = explode(':', $templateName);
+
+        $namespace = $templateNameParts[0];
+
         if (empty($namespace))
         {
             throw new \Twig_Error_Loader(
-                sprintf('The namespace in the template name "%s" can not be empty', $template_name));
+                sprintf('The namespace in the template name "%s" can not be empty', $templateName));
         }
-        
-        $namespace_path = Path::getInstance()->namespaceToFullPath($namespace);
-        
-        if (! file_exists($namespace_path) || ! is_dir($namespace_path))
+
+        $namespacePath = Path::getInstance()->namespaceToFullPath($namespace);
+
+        if (! file_exists($namespacePath) || ! is_dir($namespacePath))
         {
             throw new \Twig_Error_Loader(
                 sprintf(
-                    'The given namespace "%s" does not exist or can not be found at the expected location "%s"', 
-                    $namespace, 
-                    $namespace_path));
+                    'The given namespace "%s" does not exist or can not be found at the expected location "%s"',
+                    $namespace,
+                    $namespacePath));
         }
-        
-        $template_path = $template_name_parts[1];
-        
-        if (empty($template_path))
+
+        $templatePath = $templateNameParts[1];
+
+        if (empty($templatePath))
         {
             throw new \Twig_Error_Loader(
-                sprintf('The template path in the template name "%s" can not be empty', $template_name));
+                sprintf('The template path in the template name "%s" can not be empty', $templateName));
         }
-        
-        $full_path = $namespace_path . 'Resources/Templates/' . $template_path;
-        
-        if (! file_exists($full_path))
+
+        $fullPath = $namespacePath . 'Resources/Templates/' . $templatePath;
+
+        if (! file_exists($fullPath))
         {
             throw new \Twig_Error_Loader(
-                sprintf(
-                    'The given template "%s" can not be found at the expected path "%s"', 
-                    $template_name, 
-                    $full_path));
+                sprintf('The given template "%s" can not be found at the expected path "%s"', $templateName, $fullPath));
         }
-        
-        return $full_path;
+
+        return $fullPath;
     }
 }

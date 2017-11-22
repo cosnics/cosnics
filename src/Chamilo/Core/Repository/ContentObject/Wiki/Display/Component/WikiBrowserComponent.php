@@ -17,8 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: wiki_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.wiki.component
  */
 /*
@@ -34,16 +33,16 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
     public function run()
     {
         $this->owner = $this->get_root_content_object()->get_id();
-        
+
         if ($this->get_root_content_object() != null)
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $table = new WikiPageTable($this);
             $html[] = $table->as_html();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -52,12 +51,12 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
     {
         // search condition
         $condition = $this->get_search_condition();
-        
+
         // append with extra conditions
         $owner_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
-                ComplexContentObjectItem::PROPERTY_PARENT), 
+                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($this->owner));
         if ($condition)
         {
@@ -70,7 +69,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         {
             $condition = $owner_condition;
         }
-        
+
         return $condition;
     }
 
@@ -80,10 +79,10 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
                 '*' . $query . '*');
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             return new OrCondition($conditions);
         }

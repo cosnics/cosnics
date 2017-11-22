@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class ContentObjectDeactivator extends \Chamilo\Configuration\Package\Action\Deactivator
 {

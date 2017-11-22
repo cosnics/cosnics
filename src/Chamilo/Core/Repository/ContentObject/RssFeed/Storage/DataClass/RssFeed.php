@@ -7,8 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- * $Id: rss_feed.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.rss_feed
  */
 class RssFeed extends ContentObject implements Versionable, Includeable

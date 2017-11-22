@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-indicator",
-        "version": "6.0.0", "description": "Chamilo Indicator Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-indicator",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Indicator",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Indicator"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -12,14 +18,31 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Renaat De Muynck",
+            "email": "renaat.demuynck@arteveldehs.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/indicator"
+        "cosnics": {
+            "name": "Indicator",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Indicator",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "PeerAssessment",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

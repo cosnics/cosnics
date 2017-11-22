@@ -8,9 +8,7 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
-use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -30,10 +28,10 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $application = $this->get_repository_browser();
         $workspace = $application->getWorkspace();
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-        
+
         $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer::PARAM_INDEX, 0);
         $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer::PARAM_AUTOPLAY, 0);
-        
+
         $filterData = FilterData::getInstance($workspace);
 
         $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
@@ -63,16 +61,16 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
 
             $contentObjectActions = $this->get_content_object_actions($contentObject);
         }
-        
+
         $slideshowRender = new SlideshowRenderer(
-            $contentObject, 
-            $contentObjectCount, 
-            $contentObjectRenditionImplementation, 
+            $contentObject,
+            $contentObjectCount,
+            $contentObjectRenditionImplementation,
             $contentObjectActions,
-            $this->get_parameters(), 
-            $slideshowIndex, 
+            $this->get_parameters(),
+            $slideshowIndex,
             $slideshowAutoPlay);
-        
+
         return $slideshowRender->render();
     }
 }

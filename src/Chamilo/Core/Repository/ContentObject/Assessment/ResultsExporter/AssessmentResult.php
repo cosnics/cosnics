@@ -174,6 +174,16 @@ class AssessmentResult
     }
 
     /**
+     * Adds a QuestionResult object to the list of question results
+     *
+     * @param QuestionResult $questionResult
+     */
+    public function addQuestionResult(QuestionResult $questionResult)
+    {
+        $this->question_results[] = $questionResult;
+    }
+
+    /**
      *
      * @param int $start_time
      */

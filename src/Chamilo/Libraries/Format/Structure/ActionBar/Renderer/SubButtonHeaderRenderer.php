@@ -18,11 +18,11 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
     public function render()
     {
         $html = array();
-        
+
         $html[] = '<li ' . $this->renderClasses() . '>';
         $html[] = $this->getButton()->getLabel();
         $html[] = '</li>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -42,10 +42,10 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
     public function determineClasses()
     {
         $classes = array();
-        
+
         $classes[] = 'dropdown-header';
         $classes[] = $this->getButton()->getClasses();
-        
+
         return $classes;
     }
 }

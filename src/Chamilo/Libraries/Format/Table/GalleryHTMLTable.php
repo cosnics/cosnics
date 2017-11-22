@@ -10,11 +10,11 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyModel;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -320,7 +320,7 @@ class GalleryHTMLTable extends HtmlTable
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
-                new BootstrapGlyph('check'),
+                new FontAwesomeGlyph('check-square-o'),
                 '#',
                 Button::DISPLAY_ICON_AND_LABEL,
                 false,
@@ -329,7 +329,7 @@ class GalleryHTMLTable extends HtmlTable
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new BootstrapGlyph('unchecked'),
+                new FontAwesomeGlyph('square-o'),
                 '#',
                 Button::DISPLAY_ICON_AND_LABEL,
                 false,

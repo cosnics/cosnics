@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Scott Mattocks <scott@crisscott.com>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: Skeleton.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.1.0
  */
@@ -62,7 +61,7 @@
  * Now open the skeleton class and fill in the details.
  * If you run the test as is, all tests will fail and
  * you will see plenty of undefined constant errors.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Scott Mattocks <scott@crisscott.com>
@@ -77,42 +76,42 @@ class PHPUnit_Skeleton
 
     /**
      * Path to the class file to create a skeleton for.
-     * 
+     *
      * @var string
      */
     var $classPath;
 
     /**
      * The name of the class
-     * 
+     *
      * @var string
      */
     var $className;
 
     /**
      * Path to the configuration file needed by class to test.
-     * 
+     *
      * @var string
      */
     var $configFile;
 
     /**
      * Whether or not to include the methods of the parent class when testing.
-     * 
+     *
      * @var boolean
      */
     var $includeParents;
 
     /**
      * Whether or not to test private methods.
-     * 
+     *
      * @var boolean
      */
     var $includePrivate;
 
     /**
      * The test class that will be created.
-     * 
+     *
      * @var string
      */
     var $testClass;
@@ -121,7 +120,7 @@ class PHPUnit_Skeleton
      * Constructor.
      * Sets the class members and check that the class
      * to test is accessible.
-     * 
+     *
      * @access public
      * @param string $className
      * @param string $classPath
@@ -140,10 +139,10 @@ class PHPUnit_Skeleton
         {
             $this->_handleErrors($classPath . ' is not readable. Cannot create test class.');
         }
-        
+
         // Do we want to include parent methods?
         $this->includeParents = $includeParents;
-        
+
         // Do we want to allow private methods?
         $this->includePrivate = $includePrivate;
     }
@@ -152,7 +151,7 @@ class PHPUnit_Skeleton
      * The class to test may require a special config file before it can be
      * instantiated.
      * This method lets you set that file.
-     * 
+     *
      * @access public
      * @param string $configPath
      * @return void
@@ -175,7 +174,7 @@ class PHPUnit_Skeleton
      * The test case must have a clss definition, one var, a constructor
      * setUp, tearDown, and methods. Optionally and by default the code
      * to run the test is added when the class is written to file.
-     * 
+     *
      * @access public
      * @param none
      * @return void
@@ -187,28 +186,28 @@ class PHPUnit_Skeleton
         {
             require_once $this->configFile;
         }
-        
+
         require_once $this->classPath;
-        
+
         // Get the methods.
         $classMethods = get_class_methods($this->className);
-        
+
         // Remove the parent methods if needed.
         if (! $this->includeParents)
         {
             $parentMethods = get_class_methods(get_parent_class($this->className));
-            
+
             if (count($parentMethods))
             {
                 $classMethods = array_diff($classMethods, $parentMethods);
             }
         }
-        
+
         // Create the class definition, constructor, setUp and tearDown.
         $this->_createDefinition();
         $this->_createConstructor();
         $this->_createSetUpTearDown();
-        
+
         if (count($classMethods))
         {
             // Foreach method create a test case.
@@ -229,7 +228,7 @@ class PHPUnit_Skeleton
                 }
             }
         }
-        
+
         // Finis off the class.
         $this->_finishClass();
     }
@@ -241,7 +240,7 @@ class PHPUnit_Skeleton
      * and the definition of the class member variable.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -254,10 +253,10 @@ class PHPUnit_Skeleton
              " * real data so that the tests will run correctly. Replace \n" .
              " * all EXPECTED_VAL and PARAM strings with real data. \n" . " * \n" .
              " * Created with PHPUnit_Skeleton on " . date('Y-m-d') . "\n" . " */\n";
-        
+
         // Add the require statements.
         $this->testClass .= "require_once 'PHPUnit.php';\n";
-        
+
         // Add the class definition and variable definition.
         $this->testClass .= "class " . $this->className . "Test extends PHPUnit_TestCase {\n\n" . "    var \$" .
              $this->className . ";\n\n";
@@ -270,7 +269,7 @@ class PHPUnit_Skeleton
      * This code is taken from the PHPUnit documentation.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -289,7 +288,7 @@ class PHPUnit_Skeleton
      * This code is taken from the PHPUnit documentation.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -298,15 +297,15 @@ class PHPUnit_Skeleton
     {
         // Create the setUp method.
         $this->testClass .= "    function setUp()\n" . "    {\n";
-        
+
         if (isset($this->configFile))
         {
             $this->testClass .= "        require_once '" . $this->configFile . "';\n";
         }
-        
+
         $this->testClass .= "        require_once '" . $this->classPath . "';\n" . "        \$this->" . $this->className .
              " =new " . $this->className . "(PARAM);\n" . "    }\n\n";
-        
+
         // Create the tearDown method.
         $this->testClass .= "    function tearDown()\n" . "    {\n" . "        unset(\$this->" . $this->className .
              ");\n" . "    }\n\n";
@@ -317,7 +316,7 @@ class PHPUnit_Skeleton
      * This code is taken from the PHPUnit documentation.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -334,7 +333,7 @@ class PHPUnit_Skeleton
      * Add the closing brace needed for a proper class definition.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -353,7 +352,7 @@ class PHPUnit_Skeleton
      * This code is taken from the PHPUnit documentation.
      * All of the code needed for the new class is stored in the
      * testClass member.
-     * 
+     *
      * @access private
      * @param none
      * @return void
@@ -363,7 +362,7 @@ class PHPUnit_Skeleton
         // Create a call to the test.
         $test = "// Running the test.\n" . "\$suite  = new PHPUnit_TestSuite('" . $this->className . "Test');\n" .
              "\$result = PHPUnit::run(\$suite);\n" . "echo \$result->toString();\n";
-        
+
         return $test;
     }
 
@@ -373,7 +372,7 @@ class PHPUnit_Skeleton
      * method to a file called <className>Test.php. By default the file
      * is written to the current directory and will have code to run
      * the test appended to the bottom of the file.
-     * 
+     *
      * @access public
      * @param string $destination The directory to write the file to.
      * @param boolean $addTest Wheter to add the test running code.
@@ -387,20 +386,20 @@ class PHPUnit_Skeleton
             $this->_handleErrors('Noting to write.', PHPUS_WARNING);
             return;
         }
-        
+
         // Open the destination file.
         $fp = fopen($destination . $this->className . 'Test.php', 'w');
         fwrite($fp, "<?php\n");
-        
+
         // Write the test class.
         fwrite($fp, $this->testClass);
-        
+
         // Add the call to test the class in the file if we were asked to.
         if ($addTest)
         {
             fwrite($fp, $this->_createTest());
         }
-        
+
         // Close the file.
         fwrite($fp, "?>\n");
         fclose($fp);
@@ -410,7 +409,7 @@ class PHPUnit_Skeleton
      * Error handler.
      * This method should be rewritten to use the prefered error
      * handling method. (PEAR_ErrorStack)
-     * 
+     *
      * @access private
      * @param string $message The error message.
      * @param integer $type An indication of the severity of the error.
@@ -420,7 +419,7 @@ class PHPUnit_Skeleton
     {
         // For now just echo the message.
         echo $message;
-        
+
         // Check to see if we should quit.
         if ($type == E_USER_ERROR)
         {

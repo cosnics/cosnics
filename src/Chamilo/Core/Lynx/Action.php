@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\MessageLogger;
 /**
  * Abstract class that describes an action for a package.
  * Makes use of the message logger to log messages.
- * 
+ *
  * @author Sven Vanpoucke
  */
 abstract class Action extends MessageLogger
@@ -22,7 +22,7 @@ abstract class Action extends MessageLogger
 
     /**
      * Constructor Initializes the source action
-     * 
+     *
      * @param $source_type String
      */
     public function __construct($context)
@@ -33,7 +33,7 @@ abstract class Action extends MessageLogger
 
     /**
      * Returns the context
-     * 
+     *
      * @return string
      */
     public function get_context()
@@ -48,7 +48,7 @@ abstract class Action extends MessageLogger
 
     /**
      * Sets the action as failed for a given block with a given message
-     * 
+     *
      * @param $type String
      * @param $error_message String
      *
@@ -62,7 +62,7 @@ abstract class Action extends MessageLogger
 
     /**
      * Sets the action for a given block as success with a given message
-     * 
+     *
      * @param $type String
      * @param $message String
      *
@@ -110,7 +110,7 @@ abstract class Action extends MessageLogger
 
     /**
      * Processes a result for a given block
-     * 
+     *
      * @param $type String
      */
     public function process_result($title, $image, $final_message = null, $final_message_type = self :: TYPE_CONFIRM)
@@ -119,19 +119,19 @@ abstract class Action extends MessageLogger
         {
             $this->add_message($final_message, $final_message_type);
         }
-        
+
         $html[] = '<div class="panel panel-default">';
-        
+
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title"><img src="' . $image . '" />' . $title . '</h3>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="panel-body">';
         $html[] = $this->render();
         $html[] = '</div>';
-        
+
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

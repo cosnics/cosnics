@@ -4,6 +4,11 @@ namespace Chamilo\Libraries\Calendar\TimeZone;
 use Sabre\VObject\Component;
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ *
+ * @package Chamilo\Libraries\Calendar\TimeZone
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
 {
 
@@ -15,7 +20,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
 
     /**
      *
-     * @param Sabre\VObject\Component\VCalendar $vCalendar
+     * @param \Sabre\VObject\Component\VCalendar $vCalendar
      * @param \Sabre\VObject\Component $component
      */
     public function __construct(VCalendar $vCalendar, Component $component)
@@ -68,13 +73,13 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
 
     /**
      *
-     * @param multitype:integer $dateArray
+     * @param integer[] $dateArray
      * @return string
      */
     private function implodeDate($dateArray)
     {
         $date = array();
-        
+
         $date[] = str_pad($dateArray['year'], 4, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['month'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['day'], 2, '0', STR_PAD_LEFT);
@@ -82,14 +87,14 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
         $date[] = str_pad($dateArray['hour'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['minute'], 2, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['second'], 2, '0', STR_PAD_LEFT);
-        
+
         return implode('', $date);
     }
 
     /**
      *
      * @param string $componentName
-     * @return \Sabre\VObject\Component
+     * @return \Chamilo\Libraries\Calendar\TimeZone\TimeZoneComponentWrapper
      */
     public function newComponent($componentName)
     {

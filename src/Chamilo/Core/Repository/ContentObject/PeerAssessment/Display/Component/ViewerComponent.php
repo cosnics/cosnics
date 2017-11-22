@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\PeerAssessment\Form\PeerAssessmentView
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ViewerComponent extends Manager
 {

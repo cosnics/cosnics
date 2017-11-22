@@ -17,11 +17,11 @@ class UserEntityFeedComponent extends UsersFeedComponent
     /**
      * Returns the advanced element finder element for the given user
      * 
-     * @param User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return AdvancedElementFinderElement
      */
-    protected function get_element_for_user($user)
+    protected function getElementForUser($user)
     {
         return new AdvancedElementFinderElement(
             UserEntity::ENTITY_TYPE . '_' . $user->get_id(), 

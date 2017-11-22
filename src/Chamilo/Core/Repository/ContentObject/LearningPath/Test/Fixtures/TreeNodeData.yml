@@ -1,0 +1,41 @@
+Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData:
+  tree_node_data_base (template):
+    learningPathId: 1
+    maxAttempts: 0
+    masteryScore: 0
+    allowHints: true
+    showScore: true
+    showCorrection: true
+    showSolution: true
+    showAnswerFeedback: 1
+    feedbackLocation: 2
+    blocked: true
+    displayOrder: 1
+    userId: 2
+    addedDate: <unixTime('now')>
+  learningPath1 (extends tree_node_data_base):
+    id: 1
+    parentTreeNodeDataId: 0
+    contentObjectId: 1
+  section{2..6} (extends tree_node_data_base):
+    id: <identity((int) $current)>
+    parentTreeNodeDataId: 1
+    contentObjectId: <identity((int) $current)>
+    userId: 3
+  page7 (extends tree_node_data_base):
+    id: 7
+    parentTreeNodeDataId: 2
+    contentObjectId: 7
+  section8 (extends tree_node_data_base):
+    id: 8
+    parentTreeNodeDataId: 5
+    contentObjectId: 8
+  page9 (extends tree_node_data_base):
+    id: 9
+    parentTreeNodeDataId: 8
+    contentObjectId: 9
+  different_tree (extends tree_node_data_base):
+    id: 10
+    parentTreeNodeDataId: 0
+    contentObjectId: 10
+    learningPathId: 2

@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\CourseType\Form\CourseTypeForm;
 use Chamilo\Application\Weblcms\CourseType\Manager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

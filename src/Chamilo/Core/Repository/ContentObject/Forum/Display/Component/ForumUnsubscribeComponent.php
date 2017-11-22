@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\ForumSubscribe;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component class responsible for the unsubscrbing of a forum.

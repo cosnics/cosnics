@@ -4,22 +4,17 @@ namespace Chamilo\Libraries\Format\Table\FormAction;
 /**
  * This class represents a container for the table form actions
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
- * 
+ *
+ * @package Chamilo\Libraries\Format\Table\FormAction
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class TableFormActions
 {
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * The form actions
-     * 
-     * @var TableFormAction[]
+     *
+     * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[]
      */
     private $formActions;
 
@@ -31,23 +26,17 @@ class TableFormActions
 
     /**
      * The namespace of the table
-     * 
+     *
      * @var string
      */
     private $tableNamespace;
 
     /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Constructor
-     * 
+     *
      * @param string $tableNamespace
-     * @param TableFormAction[] $formActions
-     * @param string $namespace
+     * @param string $identifierName
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[] $formActions
      */
     public function __construct($tableNamespace, $identifierName, $formActions = array())
     {
@@ -57,14 +46,8 @@ class TableFormActions
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the namespace of the table
-     * 
+     *
      * @return string
      */
     public function get_namespace()
@@ -74,7 +57,7 @@ class TableFormActions
 
     /**
      * Sets the namespace of the table
-     * 
+     *
      * @param string $namespace
      */
     public function set_namespace($namespace)
@@ -84,8 +67,8 @@ class TableFormActions
 
     /**
      * Returns the form actions
-     * 
-     * @return TableFormAction[] $form_actions
+     *
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[] $form_actions
      */
     public function get_form_actions()
     {
@@ -94,12 +77,12 @@ class TableFormActions
 
     /**
      * Sets the form actions
-     * 
-     * @param TableFormAction[] $form_actions
+     *
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[] $formActions
      */
-    public function set_form_actions($form_actions)
+    public function set_form_actions($formActions)
     {
-        $this->formActions = $form_actions;
+        $this->formActions = $formActions;
     }
 
     /**
@@ -107,21 +90,21 @@ class TableFormActions
      * Helper functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Adds a form action
-     * 
-     * @param TableFormAction $form_action
+     *
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction $formAction
      */
-    public function add_form_action($form_action)
+    public function add_form_action($formAction)
     {
-        $this->formActions[] = $form_action;
+        $this->formActions[] = $formAction;
     }
 
     /**
      * Returns whether or not this container has form actions
-     * 
-     * @return bool
+     *
+     * @return boolean
      */
     public function has_form_actions()
     {

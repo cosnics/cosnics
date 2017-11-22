@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Storage;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -31,7 +31,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieveUserByUsername($userName)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
             new StaticConditionVariable($userName));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
@@ -44,14 +44,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieveUserByUsernameOrEmail($userIdentifier)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
             new StaticConditionVariable($userIdentifier));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
             new StaticConditionVariable($userIdentifier));
-        
+
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters(new OrCondition($conditions)));
     }
 
@@ -66,14 +66,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function official_code_exists($official_code)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
             new StaticConditionVariable($official_code));
-        return (self::count(User::class_name(), $condition) > 0);
+        return (self::count(User::class_name(), new DataClassCountParameters($condition)) > 0);
     }
 
     /**
      * Retrieve the users who are currently active
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @param $count int
      * @param $offset int
@@ -87,20 +87,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
-        
+
         return self::retrieves(User::class_name(), $parameters);
     }
 
     /**
      * Retrieve the users who are currently approved
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @param $count int
      * @param $offset int
@@ -114,20 +114,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
-        
+
         return self::retrieves(User::class_name(), $parameters);
     }
 
     /**
      * Retrieve the users who are currently not approved
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @param $count int
      * @param $offset int
@@ -141,33 +141,33 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED),
             new StaticConditionVariable(0));
         $condition = new AndCondition($conditions);
-        
+
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
-        
+
         return self::retrieves(User::class_name(), $parameters);
     }
 
     /**
      * Retrieve the (first) user whose status is "anonymous"
-     * 
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User boolean
      */
     public static function retrieve_anonymous_user()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
             new StaticConditionVariable(User::STATUS_ANONYMOUS));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Return the full name for a specific user, or a translation if provided or if the user does not exist
-     * 
+     *
      * @param $id int
      * @param $unknown_user_translation string
      * @return string
@@ -179,18 +179,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             return $user->get_fullname();
         }
-        
+
         if ($unknown_user_translation)
         {
             return $unknown_user_translation;
         }
-        
+
         return Translation::get('UnknownUser');
     }
 
     /**
      * Returns the User currently registered in the session
-     * 
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function get_current_user()
@@ -200,63 +200,63 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Retrieve a User based on the official code property
-     * 
+     *
      * @param $official_code string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_official_code($official_code)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
             new StaticConditionVariable($official_code));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieve a User based on the username property
-     * 
+     *
      * @param $username string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_username($username)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
             new StaticConditionVariable($username));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieve a User based on the external user id property
-     * 
+     *
      * @param $external_uid string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_external_uid($external_uid)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EXTERNAL_UID), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EXTERNAL_UID),
             new StaticConditionVariable($external_uid));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieve a User based on the security token
-     * 
+     *
      * @param $security_token string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_security_token($security_token)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_SECURITY_TOKEN), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_SECURITY_TOKEN),
             new StaticConditionVariable($security_token));
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieve a user-id based on the official code property
-     * 
+     *
      * @param $official_code string
      * @return int
      */
@@ -268,21 +268,21 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Retrieve a DataClassResultSet of Users based on a set of official codes
-     * 
+     *
      * @param $official_codes multitype:string
      * @return \libraries\storage\DataClassResultSet
      */
     public static function retrieve_users_by_official_codes($official_codes)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
             $official_codes);
         return self::retrieves(User::class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /**
      * Retrieve a DataClassResultSet of Users based on a set of email addresses
-     * 
+     *
      * @param $email multitype:string
      * @return \libraries\storage\DataClassResultSet
      * @deprecated Should no longer return an array, calls should be changed to use a while-loop now instead of a for
@@ -291,14 +291,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_users_by_email($email)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
             new StaticConditionVariable($email));
         return self::retrieves(User::class_name(), new DataClassRetrievesParameters($condition))->as_array();
     }
 
     /**
      * Is the username still available in the storage layer or not?
-     * 
+     *
      * @param $username string
      * @param $user_id int
      * @return boolean
@@ -312,41 +312,41 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
             new StaticConditionVariable($userName));
-        
+
         if (! is_null($userIdentifier))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
                 new StaticConditionVariable($userIdentifier));
         }
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return self::count(User::class_name(), new DataClassCountParameters($condition)) == 1;
     }
 
     public static function usernameOrEmailExists($userIdentifier)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
             new StaticConditionVariable($userIdentifier));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
             new StaticConditionVariable($userIdentifier));
-        
+
         $condition = new OrCondition($conditions);
-        
+
         return self::count(User::class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
     /**
      * Retrieve a User based on the username property
-     * 
+     *
      * @param $username string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @deprecated Use DataManager :: retrieve_user_by_username() now
@@ -358,7 +358,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Attempt to retrieve a user based on his full name (first name + last name)
-     * 
+     *
      * @param $fullname string
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
@@ -367,34 +367,34 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $name = explode(' ', $fullname);
         $firstname = $name[0];
         $lastname = $name[1];
-        
+
         $conditions = array();
         $conditions1 = array();
         $conditions2 = array();
-        
+
         $conditions1[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
             new StaticConditionVariable($firstname));
         $conditions1[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
             new StaticConditionVariable($lastname));
         $conditions[] = new AndCondition($conditions1);
-        
+
         $conditions2[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
             new StaticConditionVariable($lastname));
         $conditions2[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
             new StaticConditionVariable($firstname));
         $conditions[] = new AndCondition($conditions2);
-        
+
         $condition = new OrCondition($conditions);
         return self::retrieve(User::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Count the users who are currently active
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @return \libraries\storage\DataClassResultSet
      */
@@ -405,18 +405,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         return self::count(User::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
      * Count the users who are currently approved
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @return \libraries\storage\DataClassResultSet
      */
@@ -427,18 +427,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
-        return self::count(User::class_name(), $condition);
+
+        return self::count(User::class_name(), new DataClassCountParameters($condition));
     }
 
     /**
      * Count the users who are currently not approved
-     * 
+     *
      * @param $condition \libraries\storage\Condition
      * @return \libraries\storage\DataClassResultSet
      */
@@ -449,13 +449,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $conditions[] = $condition;
         }
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_APPROVED),
             new StaticConditionVariable(0));
         $condition = new AndCondition($conditions);
-        
-        return self::count(User::class_name(), $condition);
+
+        return self::count(User::class_name(), new DataClassCountParameters($condition));
     }
 
     public static function delete_all_users()

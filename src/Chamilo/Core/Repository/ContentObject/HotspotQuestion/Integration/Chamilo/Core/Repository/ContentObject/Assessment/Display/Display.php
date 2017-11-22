@@ -6,11 +6,10 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Qu
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: hotspot_question.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
  */

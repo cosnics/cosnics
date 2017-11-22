@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  *
@@ -16,8 +17,8 @@ abstract class AjaxManager extends Application
 
     /**
      * An array of parameters as passed by the POST-request
-     * 
-     * @var array
+     *
+     * @var string[]
      */
     private $postDataValues = array();
 
@@ -58,11 +59,11 @@ abstract class AjaxManager extends Application
     public function getRequestedPostDataValue($parameter)
     {
         $getValue = $this->getRequest()->query->get($parameter);
-        
+
         if (! isset($getValue))
         {
             $postValue = $this->getRequest()->request->get($parameter);
-            
+
             if (! isset($postValue))
             {
                 return null;
@@ -80,8 +81,8 @@ abstract class AjaxManager extends Application
 
     /**
      * Get the postDataValues
-     * 
-     * @return array
+     *
+     * @return string[]
      */
     public function getPostDataValues()
     {
@@ -90,8 +91,8 @@ abstract class AjaxManager extends Application
 
     /**
      * Set the postDataValues
-     * 
-     * @param array $postDataValues
+     *
+     * @param string[] $postDataValues
      */
     public function setPostDataValues($postDataValues)
     {
@@ -100,9 +101,9 @@ abstract class AjaxManager extends Application
 
     /**
      * Returns the value of the given parameter.
-     * 
-     * @param string $name The parameter name.
-     * @return string The parameter value.
+     *
+     * @param string $name
+     * @return string
      */
     public function getPostDataValue($name)
     {
@@ -114,9 +115,9 @@ abstract class AjaxManager extends Application
 
     /**
      * Sets the value of a parameter.
-     * 
-     * @param string $name The parameter name.
-     * @param string $value The parameter value.
+     *
+     * @param string $name
+     * @param string $value
      */
     public function setPostDataValue($name, $value)
     {
@@ -124,9 +125,20 @@ abstract class AjaxManager extends Application
     }
 
     /**
+     *
+     * @param $exception
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    protected function handleException($exception)
+    {
+        $this->getExceptionLogger()->logException($exception);
+        return new JsonResponse(null, 500);
+    }
+
+    /**
      * Get an array of parameters which should be set for this call to work
-     * 
-     * @return array
+     *
+     * @return string[]
      */
     public function getRequiredPostParameters()
     {

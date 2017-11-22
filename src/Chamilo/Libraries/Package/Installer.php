@@ -1,13 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Package;
 
+/**
+ *
+ * @package Chamilo\Libraries\Package
+ */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     /**
      * Returns the list with extra installable packages that are connected to this package
-     * 
-     * @return multitype:string
+     *
+     * @return string[]
      */
     public static function get_additional_packages()
     {

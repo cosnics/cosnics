@@ -15,9 +15,10 @@ class Footer extends BaseFooter
 {
 
     /**
-     * Returns the HTML code for the footer
+     *
+     * @see \Chamilo\Libraries\Format\Structure\BaseFooter::render()
      */
-    public function toHtml()
+    public function render()
     {
         $html = array();
 

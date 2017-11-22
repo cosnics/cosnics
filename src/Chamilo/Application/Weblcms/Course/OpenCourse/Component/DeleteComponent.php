@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component to remove open access to an existing course

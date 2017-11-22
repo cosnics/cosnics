@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Mail\Mailer;
 
 /**
  * Interface for mailer services
- * 
+ *
+ * @package Chamilo\Libraries\Mail\Mailer
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface MailerInterface

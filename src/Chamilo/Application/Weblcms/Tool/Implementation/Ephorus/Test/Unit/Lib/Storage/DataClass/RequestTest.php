@@ -68,7 +68,7 @@ class RequestTest extends DataClassTest
     {
         $request = new Request();
         
-        $data_manager_mock = $this->getMock('\application\weblcms\tool\ephorus\DataManager');
+        $data_manager_mock = $this->createMock('\application\weblcms\tool\ephorus\DataManager');
         $data_manager_mock::staticExpects($this->once())->method('deletes')->will($this->returnValue(true));
         
         $request->set_data_manager_class($data_manager_mock);
@@ -311,7 +311,7 @@ class RequestTest extends DataClassTest
         $mock_object->set_string_utilities_class(
             $this->get_string_utilities_mock_with_return_value($is_null_or_empty_return));
         
-        $document_mock = $this->getMock('\core\repository\content_object\document\Document');
+        $document_mock = $this->createMock('\core\repository\content_object\document\Document');
         
         if ($get_type_result)
         {
@@ -364,7 +364,7 @@ class RequestTest extends DataClassTest
      */
     protected function get_string_utilities_mock_with_return_value($is_null_or_empty_return)
     {
-        $string_utilities_mock = $this->getMock('\libraries\utilities\StringUtilities');
+        $string_utilities_mock = $this->createMock('\libraries\utilities\StringUtilities');
         $string_utilities_mock::staticExpects($this->any())->method('is_null_or_empty')->will(
             $this->returnValue($is_null_or_empty_return));
         
@@ -378,7 +378,7 @@ class RequestTest extends DataClassTest
      */
     protected function get_request_mock($mocked_functions = array())
     {
-        return $mock_object = $this->getMock('\application\weblcms\tool\ephorus\Request', $mocked_functions);
+        return $mock_object = $this->createMock('\application\weblcms\tool\ephorus\Request', $mocked_functions);
     }
 
     /**

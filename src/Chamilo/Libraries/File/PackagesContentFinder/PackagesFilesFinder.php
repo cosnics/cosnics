@@ -9,8 +9,8 @@ use Symfony\Component\Finder\Finder;
  * searches from the root of the package.
  * Uses a PHP-based caching system.
  * Class PackagesFilesFinder
- * 
- * @package common\libraries
+ *
+ * @package Chamilo\Libraries\File\PackagesContentFinder
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesFilesFinder extends PackagesContentFinder
@@ -18,14 +18,14 @@ class PackagesFilesFinder extends PackagesContentFinder
 
     /**
      * The path relative to the root of the package that needs to be searched
-     * 
+     *
      * @var string
      */
     private $relativeFilePath;
 
     /**
      * The pattern of the filename
-     * 
+     *
      * @var string
      */
     private $filenamePattern;
@@ -35,50 +35,48 @@ class PackagesFilesFinder extends PackagesContentFinder
      * recursive search.
      * - If no path is given, the search is started from the root of the package.
      * - If no filepattern is given, all the files are searched in the given directory
-     * 
+     *
      * @param string $relativeFilePath - The path relative to the package root
      * @param string $filenamePattern - The filename or the pattern of filenames
-     * @param bool $searchRecursive - Whether or not to search recursive
      * @return string[]
      */
     public function findFiles($relativeFilePath = null, $filenamePattern = '')
     {
         $this->relativeFilePath = $relativeFilePath;
         $this->filenamePattern = $filenamePattern;
-        
+
         return $this->findContent();
     }
 
     /**
      * Handles a single package
-     * 
-     * @param string $package
      *
-     * @return array
+     * @param string $package
+     * @return string[]
      */
     function handlePackage($package)
     {
         $files = array();
-        
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
+
         if (! file_exists($path))
         {
             return $files;
         }
-        
+
         $finder = new Finder();
         $finder->files()->depth(' == 0')->in($path);
-        
+
         if ($this->filenamePattern)
         {
             $finder->name($this->filenamePattern);
         }
-        
+
         foreach ($finder as $file)
         {
             $files[$package][] = $file->getRealPath();
         }
-        
+
         return $files;
     }
 }

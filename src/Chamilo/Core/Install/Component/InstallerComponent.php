@@ -10,7 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -68,6 +68,10 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         if (! isset($this->installer))
         {
             $values = unserialize(Session::retrieve(self::PARAM_SETTINGS));
+            if(!is_array($values))
+            {
+                $values = [];
+            }
 
             $factory = new Factory();
             $this->installer = $factory->getInstallerFromArray($installerObserver, $values);

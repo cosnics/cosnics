@@ -1,1 +1,73 @@
 @import url('../../Javascript/Plugin/Uploadify/uploadify.css');
+
+figcaption {
+    padding-top: 8px !important;
+}
+.image-captioned {
+    padding: 0px 0px 10px !important;
+    text-align: center;
+    border: solid 1px #ccc;
+    border-radius: 0px;
+    background: rgba(0,0,0,0.05);
+    display: inline-block;
+    color: #555555;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.align-left {
+    float: left;
+    margin-right: 1.5em;
+}
+
+.align-right {
+    float: right;
+    margin-left: 1.5em;
+}
+
+.align-center {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.align-center div {
+    margin: 0 auto;
+}
+
+.align-center > figure {
+    display: inline-block;
+}
+
+.embed-240p
+{
+    max-width: 426px;
+    margin:0 auto;
+}
+
+.embed-360p
+{
+    max-width: 640px;
+    margin:0 auto;
+}
+
+.embed-480p
+{
+    max-width: 854px;
+    margin:0 auto;
+}
+
+.embed-720p
+{
+    max-width: 1280px;
+    margin:0 auto;
+}
+
+.embed-1080p
+{
+    max-width: 1920px;
+    margin:0 auto;
+}
+
+.text-maintenance {
+    font-weight: bold;
+}

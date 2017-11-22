@@ -3,119 +3,229 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- * $Id: learning_path.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.learning_path
  */
-class LearningPath extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
+class LearningPath extends ContentObject implements ComplexContentObjectSupport
 {
-    const PROPERTY_CONTROL_MODE = 'control_mode';
-    const PROPERTY_VERSION = 'version';
-    const PROPERTY_PATH = 'path';
+    const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
+    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
+    const AUTOMATIC_NUMBERING_NONE = 'none';
+    const AUTOMATIC_NUMBERING_DIGITS = 'digits';
+
+    // Currently not implemented options
+    // const AUTOMATIC_NUMBERING_ALPHABETICAL = 'alphabetical';
+    // const AUTOMATIC_NUMBERING_MIX = 'mix';
 
     /**
      *
-     * @var ComplexContentObjectPath
+     * @return string[]
      */
-    private $complex_content_object_path;
-
-    public static function get_type_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
-    }
-
     public static function get_additional_property_names()
     {
-        return array(self::PROPERTY_CONTROL_MODE, self::PROPERTY_VERSION, self::PROPERTY_PATH);
+        return array(self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
 
+    /**
+     * Returns the automatic numbering
+     *
+     * @return string
+     */
+    public function getAutomaticNumbering()
+    {
+        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING);
+    }
+
+    /**
+     * Returns whether or not the automatic numbering is activated for this learning path
+     *
+     * @return bool
+     */
+    public function usesAutomaticNumbering()
+    {
+        if (! in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
+        {
+            return false;
+        }
+
+        return $this->getAutomaticNumbering() != self::AUTOMATIC_NUMBERING_NONE;
+    }
+
+    /**
+     * Sets the automatic numbering
+     *
+     * @param $automaticNumberingOption
+     */
+    public function setAutomaticNumbering($automaticNumberingOption)
+    {
+        if (! in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
+        {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The given automaticNumberingOption must be one of %s',
+                    explode(',', self::getAutomaticNumberingOptions())));
+        }
+
+        $this->set_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
+    }
+
+    /**
+     * Returns a list of automatic numbering options
+     *
+     * @return string[]
+     */
+    public static function getAutomaticNumberingOptions()
+    {
+        return array(self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS);
+    }
+
+    /**
+     * Sets whether or not the default traversing order should be enforced
+     *
+     * @param bool $enforceDefaultTraversingOrder
+     */
+    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
+    {
+        if (! is_bool($enforceDefaultTraversingOrder))
+        {
+            throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+        }
+
+        $this->set_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+    }
+
+    /**
+     * Returns whether or not the default traversing order is enforced
+     *
+     * @return bool
+     */
+    public function enforcesDefaultTraversingOrder()
+    {
+        return (bool) $this->get_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+    }
+
+    /**
+     * Creates the LearningPath and create a TreeNodeDataRecord
+     *
+     * @param bool $create_in_batch
+     *
+     * @return bool
+     */
+    public function create($create_in_batch = false)
+    {
+        if (! parent::create($create_in_batch))
+        {
+            return false;
+        }
+
+        $user = new User();
+        $user->setId(Session::get_user_id());
+
+        $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
+
+        return true;
+    }
+
+    public function update($trueUpdate = true)
+    {
+        if(!parent::update($trueUpdate))
+        {
+            return false;
+        }
+
+        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
+
+        return true;
+    }
+
+    /**
+     * Delete a LearningPath and all of it's node data
+     *
+     * @return boolean Returns whether the delete was succesfull.
+     */
+    public function delete($only_version)
+    {
+        if ($only_version)
+        {
+            $this->getLearningPathService()->emptyLearningPath($this);
+        }
+
+        return parent::delete($only_version);
+    }
+
+    /**
+     *
+     * @return object | \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected function getTreeNodeDataService()
+    {
+        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $serviceContainer->get(
+            'chamilo.core.repository.content_object.learning_path.service.tree_node_data_service');
+    }
+
+    /**
+     *
+     * @return object |  \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected function getLearningPathService()
+    {
+        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $serviceContainer->get(
+            'chamilo.core.repository.content_object.learning_path.service.learning_path_service');
+    }
+
+    /**
+     *
+     * @return array
+     */
     public function get_allowed_types()
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
         $configuration = Configuration::getInstance();
-        
+
         $registrations = $configuration->getIntegrationRegistrations(self::package());
         $types = array();
-        
+
+        usort(
+            $registrations,
+            function ($registrationA, $registrationB)
+            {
+                return $registrationA[Registration::PROPERTY_PRIORITY] < $registrationB[Registration::PROPERTY_PRIORITY];
+            });
+
         foreach ($registrations as $registration)
         {
             $type = $registration[Registration::PROPERTY_TYPE];
             $parentContext = $classNameUtilities->getNamespaceParent($type);
             $parentRegistration = $configuration->get_registration($parentContext);
-            
+
+            if ($parentContext == 'Chamilo\Core\Repository\ContentObject\Section')
+            {
+                continue;
+            }
+
             if ($parentRegistration[Registration::PROPERTY_TYPE] ==
                  \Chamilo\Core\Repository\Manager::context() . '\ContentObject')
             {
                 $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                    $registration[Registration::PROPERTY_CONTEXT], 
+                    $registration[Registration::PROPERTY_CONTEXT],
                     6);
                 $types[] = $namespace . '\Storage\DataClass\\' .
                      ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             }
         }
-        
+
         return $types;
-    }
-
-    public function get_control_mode()
-    {
-        return unserialize($this->get_additional_property(self::PROPERTY_CONTROL_MODE));
-    }
-
-    public function set_control_mode($control_mode)
-    {
-        if (! is_array($control_mode))
-            $control_mode = array($control_mode);
-        
-        $this->set_additional_property(self::PROPERTY_CONTROL_MODE, serialize($control_mode));
-    }
-
-    public function get_version()
-    {
-        return $this->get_additional_property(self::PROPERTY_VERSION);
-    }
-
-    public function set_version($version)
-    {
-        $this->set_additional_property(self::PROPERTY_VERSION, $version);
-    }
-
-    public function get_path()
-    {
-        return $this->get_additional_property(self::PROPERTY_PATH);
-    }
-
-    public function set_path($path)
-    {
-        $this->set_additional_property(self::PROPERTY_PATH, $path);
-    }
-
-    public function get_full_path()
-    {
-        return Path::getInstance()->getStoragePath('scorm') . $this->get_owner_id() . '/' . $this->get_path() . '/';
-    }
-    
-    // TODO: This should take variable $attempt_data into account
-    /**
-     *
-     * @param DummyLpiAttemptTracker[] $nodes_attempt_data
-     * @return ComplexContentObjectPath
-     */
-    public function get_complex_content_object_path($nodes_attempt_data)
-    {
-        if (! isset($this->complex_content_object_path))
-        {
-            $this->complex_content_object_path = new ComplexContentObjectPath($this, $nodes_attempt_data);
-        }
-        
-        return $this->complex_content_object_path;
     }
 }

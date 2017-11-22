@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-forum-topic",
-        "version": "6.0.0", "description": "Chamilo Forum Topic Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-forum-topic",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject ForumTopic",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "ForumTopic"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +20,25 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/forum_topic"
+        "cosnics": {
+            "name": "Forum Topic",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\ForumTopic",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

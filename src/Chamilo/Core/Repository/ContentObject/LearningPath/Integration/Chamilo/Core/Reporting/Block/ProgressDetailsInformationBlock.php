@@ -1,10 +1,15 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html\PropertiesTable;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -18,29 +23,48 @@ class ProgressDetailsInformationBlock extends ReportingBlock
 
     public function count_data()
     {
-        $current_node = $this->get_parent()->get_parent()->get_current_node();
-        $content_object = $current_node->get_content_object();
+        /** @var TreeNode $treeNode */
+        $treeNode = $this->get_parent()->get_parent()->getCurrentTreeNode();
+
+        /** @var TrackingService $trackingService */
+        $trackingService = $this->get_parent()->get_parent()->getTrackingService();
+
+        /** @var LearningPath $learningPath */
+        $learningPath = $this->get_parent()->get_parent()->get_root_content_object();
+
+        /** @var User $user */
+        $user = $this->get_parent()->get_parent()->getUser();
+
+        $content_object = $treeNode->getContentObject();
         $reporting_data = new ReportingData();
-        
+
         $reporting_data->set_rows(
             array(
-                Translation::get('Title'), 
-                Translation::get('Description'), 
-                Translation::get('AverageScore'), 
-                Translation::get('NumberOfAttempts')));
-        
+                Translation::get('Title'),
+                Translation::get('Description'),
+                Translation::get('AverageScore'),
+                Translation::get('NumberOfAttempts')
+            )
+        );
+
         $reporting_data->add_category(0);
         $reporting_data->add_data_category_row(0, Translation::get('Title'), $content_object->get_title());
         $reporting_data->add_data_category_row(0, Translation::get('Description'), $content_object->get_description());
+
         $reporting_data->add_data_category_row(
-            0, 
-            Translation::get('AverageScore'), 
-            $current_node->get_average_score() . '%');
+            0,
+            Translation::get('AverageScore'),
+            $trackingService->getAverageScoreInTreeNode(
+                $learningPath, $user, $treeNode
+            ) . '%'
+        );
+
         $reporting_data->add_data_category_row(
-            0, 
-            Translation::get('NumberOfAttempts'), 
-            count($current_node->get_data()));
-        
+            0,
+            Translation::get('NumberOfAttempts'),
+            $trackingService->countTreeNodeAttempts($learningPath, $user, $treeNode)
+        );
+
         return $reporting_data;
     }
 

@@ -24,7 +24,7 @@ $values['admin_phone'] = '';
 $values['admin_username'] = 'admin';
 $values['admin_password'] = 'admin';
 
-$values['platform_name'] = 'Chamilo LCMS Connect';
+$values['site_name'] = 'Chamilo LCMS Connect';
 $values['organization_name'] = '';
 $values['organization_url'] = 'www.chamilo.org';
 

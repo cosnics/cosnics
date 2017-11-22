@@ -13,16 +13,32 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class RestData
 {
 
+    /**
+     *
+     * @var string
+     */
     private $data;
     const TYPE_FORM = 'form';
     const TYPE_URL = 'url';
     const TYPE_PLAIN = 'plain';
 
+    /**
+     * RestData constructor.
+     *
+     * @param string $data
+     */
     public function __construct($data)
     {
         $this->data = $data;
     }
 
+    /**
+     *
+     * @param string $content_type
+     * @param string $data
+     *
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestData
+     */
     public static function factory($content_type, $data)
     {
         $rest_data__class = __NAMESPACE__ . '\Data\\' .
@@ -32,7 +48,26 @@ abstract class RestData
 
     /**
      *
-     * @return the $data
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     *
+     * @param string $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     *
+     * @return string
+     * @deprecated Use getData() now
      */
     public function get_data()
     {
@@ -41,11 +76,12 @@ abstract class RestData
 
     /**
      *
-     * @param $data the $data to set
+     * @param string $data
+     * @deprecated Use setData() now
      */
     public function set_data($data)
     {
-        $this->data = $data;
+        $this->setData($data);
     }
 
     abstract public function prepare();

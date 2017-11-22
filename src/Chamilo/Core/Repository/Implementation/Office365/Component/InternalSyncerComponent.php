@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Office365\Component;
 use Chamilo\Core\Repository\Implementation\Office365\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Office365\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class InternalSyncerComponent extends Manager

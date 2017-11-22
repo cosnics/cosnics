@@ -9,7 +9,6 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -25,7 +24,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
 
     /**
      * The publication form
-     * 
+     *
      * @var PublicationForm
      */
     protected $publicationForm;
@@ -37,12 +36,10 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     {
         $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
         $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(), 
-            $applicationConfiguration);
-        
-        return $factory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(),
+            $applicationConfiguration)->run();
     }
 
     /**
@@ -52,25 +49,25 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function get_allowed_content_object_types()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package(), 
+            Manager::package(),
             \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $registration[Registration::PROPERTY_CONTEXT], 
+                $registration[Registration::PROPERTY_CONTEXT],
                 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
-        
+
         return $types;
     }
 
     /**
      * Returns the publication form
-     * 
+     *
      * @param ContentObject[] $selectedContentObjects
      *
      * @return FormValidator
@@ -82,20 +79,20 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         {
             $ids[] = $selectedContentObject->getId();
         }
-        
+
         $this->publicationForm = new PublicationForm(
-            PublicationForm::TYPE_MULTI, 
-            $ids, 
-            $this->getUser(), 
-            $this->get_url(), 
+            PublicationForm::TYPE_MULTI,
+            $ids,
+            $this->getUser(),
+            $this->get_url(),
             $selectedContentObjects);
-        
+
         return $this->publicationForm;
     }
 
     /**
      * Returns the publication handler
-     * 
+     *
      * @return PublicationHandlerInterface
      */
     public function getPublicationHandler()
@@ -115,7 +112,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function get_additional_parameters()
     {
         return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, 
+            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
             \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
     }
 }

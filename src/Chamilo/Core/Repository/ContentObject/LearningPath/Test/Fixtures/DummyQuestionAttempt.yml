@@ -1,0 +1,10 @@
+Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt:
+  tree_node_question_attempt_base (template):
+    tree_node_attempt_id: 1
+    feedback: ''
+    hint: 0
+    score: <numberBetween(0, 4)>
+    answer: <numberBetween(0, 4)>
+  tree_node_1_question_attempt{1..10} (extends tree_node_question_attempt_base):
+    id: <identity((int) $current)>
+    question_complex_id: <identity((int) $current)>

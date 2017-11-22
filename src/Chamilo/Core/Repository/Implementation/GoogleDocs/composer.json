@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/ext-repo-google-docs",
-        "version": "6.0.0", "description": "Chamilo Google Docs External Repository",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-implementation-google-docs",
+    "version": "1.0.0",
+    "description": "Core Repository Implementation GoogleDocs",
+    "keywords": [
+        "Core",
+        "Repository",
+        "Implementation",
+        "GoogleDocs"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,14 +20,26 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
-        "zend/gdata" : "1.*",
-        "google/apiclient" : "1.1.*"
+        "php": ">=7.0.0",
+        "zend/gdata": "1.*",
+        "google/apiclient": "1.1.*"
     },
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/google_docs"
+        "cosnics": {
+            "name": "Google Drive (Docs)",
+            "context": "Chamilo\\Core\\Repository\\Implementation\\GoogleDocs",
+            "type": "Chamilo\\Core\\Repository\\Implementation",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
     }
-
 }

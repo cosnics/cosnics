@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Task\Filter\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Task\Filter\FilterData;
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Render the parameters set via FilterData as HTML

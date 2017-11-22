@@ -5,8 +5,7 @@ use Chamilo\Core\Help\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: help_item.class.php 226 2009-11-13 14:44:03Z chellee $
- * 
+ *
  * @package help.lib
  */
 class HelpItem extends DataClass
@@ -18,7 +17,7 @@ class HelpItem extends DataClass
 
     /**
      * Get the default properties of all groups.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -37,7 +36,7 @@ class HelpItem extends DataClass
 
     /**
      * Returns the name of this group.
-     * 
+     *
      * @return String The name
      */
     public function get_context()
@@ -52,7 +51,7 @@ class HelpItem extends DataClass
 
     /**
      * Returns the url of this group.
-     * 
+     *
      * @return String The url
      */
     public function get_url()
@@ -67,7 +66,7 @@ class HelpItem extends DataClass
 
     /**
      * Sets the name of this group.
-     * 
+     *
      * @param String $name the name.
      */
     public function set_context($context)
@@ -82,7 +81,7 @@ class HelpItem extends DataClass
 
     /**
      * Sets the url of this group.
-     * 
+     *
      * @param String $url the url.
      */
     public function set_url($url)

@@ -11,18 +11,22 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
 class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection
 {
 
+    /**
+     *
+     * @see \Doctrine\DBAL\Driver\PDOConnection::query()
+     */
     public function query()
     {
         $args = func_get_args();
         $sql = $args[0];
         $stmt = $this->prepare($sql);
         $stmt->execute();
-        
+
         if (! extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
         {
             $stmt->setAttribute(\PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_UTF8);
         }
-        
+
         return $stmt;
     }
 }

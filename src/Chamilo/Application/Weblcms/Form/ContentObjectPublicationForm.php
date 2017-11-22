@@ -15,6 +15,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -24,14 +25,16 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -935,14 +938,26 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $content_object = $publication->get_content_object();
         $tool = $publication->get_tool();
         $link = $this->get_course_viewer_link($publication);
-        
-        $body = Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
+
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'resource';
+        $parameters[ResourceUtilities::PARAM_THEME] = Theme::getInstance()->getTheme();
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
+        $parameters['modified'] = time();
+        $redirect = new Redirect($parameters);
+
+        $body = '<!DOCTYPE html><html lang="en"><head>';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
+
+        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
              $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
              ' - ' . Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
-        
+
         // get targets
         $target_email = array();
         
@@ -950,10 +965,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $target_email[] = $user->get_email();
         
         $target_users = DataManager::get_publication_target_users($publication);
-        
+
         foreach ($target_users as $target_user)
         {
-            $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            if(!array_key_exists(User::PROPERTY_ACTIVE, $target_user) || $target_user[User::PROPERTY_ACTIVE] == 1)
+            {
+                $target_email[] = $target_user[User::PROPERTY_EMAIL];
+            }
         }
 
         // safety check: filter any dubbles
@@ -1008,7 +1026,9 @@ class ContentObjectPublicationForm extends BasePublicationForm
         {
             $body .= '<br ><br >' . Translation::get('AttachmentWarning', array('LINK' => $link));
         }
-        
+
+        $body .= '</div></body></html>';
+
         $log = '';
         
         $log .= "mail for publication " . $publication->get_id() . " in course ";

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Form\OpenCourseForm;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component to update the roles that can access a course

@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: assessment_select_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.select_question
  */
 class AssessmentSelectQuestion extends ContentObject
@@ -55,7 +54,7 @@ class AssessmentSelectQuestion extends ContentObject
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -105,7 +104,7 @@ class AssessmentSelectQuestion extends ContentObject
     public function get_maximum_score()
     {
         $max = 0;
-        
+
         switch ($this->get_answer_type())
         {
             case self::ANSWER_TYPE_CHECKBOX :
@@ -127,10 +126,10 @@ class AssessmentSelectQuestion extends ContentObject
                 }
                 break;
         }
-        
+
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -139,7 +138,7 @@ class AssessmentSelectQuestion extends ContentObject
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

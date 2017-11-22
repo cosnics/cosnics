@@ -5,8 +5,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment
  */
 
@@ -18,7 +17,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     // Actions
     const ACTION_VIEW_ASSESSMENT = 'AssessmentViewer';
     const ACTION_VIEW_ASSESSMENT_RESULT = 'ResultsViewer';
-    
+
     // Default action
     const DEFAULT_ACTION = self::ACTION_VIEW_ASSESSMENT;
 

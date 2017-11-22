@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
- * 
+ *
  * @package Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -80,6 +80,7 @@ class Event
      * @param integer $id
      * @param integer $startDate
      * @param integer $endDate
+     * @param RecurrenceRules $recurrenceRules
      * @param string $url
      * @param string $title
      * @param string $content
@@ -87,8 +88,8 @@ class Event
      * @param string $source
      * @param string $context
      */
-    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content, 
-        $location, $source, $context)
+    public function __construct($id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
+        $title = null, $content = null, $location = null, $source = null, $context = null)
     {
         $this->id = $id;
         $this->startDate = $startDate;
@@ -104,7 +105,7 @@ class Event
 
     /**
      *
-     * @param int $id
+     * @param integer $id
      */
     public function setId($id)
     {
@@ -113,7 +114,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -122,7 +123,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getStartDate()
     {
@@ -131,7 +132,7 @@ class Event
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getEndDate()
     {
@@ -203,7 +204,7 @@ class Event
 
     /**
      *
-     * @param int $startDate
+     * @param integer $startDate
      */
     public function setStartDate($startDate)
     {
@@ -212,7 +213,7 @@ class Event
 
     /**
      *
-     * @param int $endDate
+     * @param integer $endDate
      */
     public function setEndDate($endDate)
     {
@@ -248,7 +249,7 @@ class Event
 
     /**
      *
-     * @return the $location
+     * @return string
      */
     public function getLocation()
     {

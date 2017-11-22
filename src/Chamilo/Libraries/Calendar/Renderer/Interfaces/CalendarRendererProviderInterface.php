@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Interfaces;
 
 /**
  * An interface which forces the implementing Application to provide a given set of methods
- * 
+ *
  * @package Chamilo\Libraries\Calendar\Renderer\Interfaces
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -13,30 +13,30 @@ interface CalendarRendererProviderInterface
 {
 
     /**
-     * Get the internal events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
+     * Get the internal events between $startTime and $endTime
+     *
+     * @param integer $startTime
+     * @param integer $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
-     * Get the external events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
+     * Get the external events between $startTime and $endTime
+     *
+     * @param integer $startTime
+     * @param integer $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
-     * Get the events between $start_time and $end_time
-     * 
-     * @param int $startTime
-     * @param int $endTime
+     * Get the events between $startTime and $endTime
+     *
+     * @param integer $startTime
+     * @param integer $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
@@ -44,21 +44,21 @@ interface CalendarRendererProviderInterface
 
     /**
      * Get the internal events
-     * 
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEvents();
 
     /**
      * Get the external events
-     * 
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEvents();
 
     /**
      * Get the events
-     * 
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEvents();

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 

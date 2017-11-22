@@ -4,12 +4,9 @@ namespace Chamilo\Libraries\Calendar\Table;
 use HTML_Table;
 
 /**
- * A tabular representation of a calendar
- * 
- * @package libraries\calendar\table
+ *
+ * @package Chamilo\Libraries\Calendar\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Calendar extends HTML_Table
 {
@@ -28,6 +25,9 @@ abstract class Calendar extends HTML_Table
     private $eventsToShow;
 
     /**
+     *
+     * @param integer $displayTime
+     * @param string[] $classes
      */
     public function __construct($displayTime, $classes = array())
     {
@@ -40,9 +40,9 @@ abstract class Calendar extends HTML_Table
             $this->displayTime = $displayTime;
         }
         $this->eventsToShow = array();
-        
+
         array_unshift($classes, 'table-calendar');
-        
+
         parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
     }
 
@@ -66,7 +66,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Add an event to the calendar
-     * 
+     *
      * @param integer $time A time in the day on which the event should be displayed
      * @param string $content The html content to insert in the month calendar
      */
@@ -77,8 +77,8 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the list of events to show sorted by their starting time
-     * 
-     * @return array
+     *
+     * @return string[]
      */
     public function getEventsToShow()
     {
@@ -86,6 +86,11 @@ abstract class Calendar extends HTML_Table
         return $this->eventsToShow;
     }
 
+    /**
+     *
+     * @param integer $time
+     * @return boolean
+     */
     public function containsEventsForTime($time)
     {
         return count($this->eventsToShow[$time]) > 0;
@@ -93,14 +98,14 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the first date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     abstract public function getStartTime();
 
     /**
      * Gets the end date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     abstract public function getEndTime();

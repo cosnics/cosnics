@@ -3,22 +3,23 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 
 /**
  * This type of condition requires that one or more of its aggregated conditions be met.
- * 
+ *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package common.libraries
+ * @package Chamilo\Libraries\Storage\Query\Condition
  */
 class OrCondition extends MultipleAggregateCondition
 {
     /**
      * The operator
-     * 
+     *
      * @var string
      */
     const OPERATOR = ' OR ';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.MultipleAggregateCondition::get_operator()
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition::get_operator()
      */
     public function get_operator()
     {

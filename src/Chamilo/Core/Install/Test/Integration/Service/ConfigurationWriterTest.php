@@ -5,7 +5,7 @@ use Chamilo\Core\Install\Configuration;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ConfigurationWriterTest extends Test
+class ConfigurationWriterTest extends ChamiloTestCase
 {
 
     /**

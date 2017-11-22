@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Connector;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList;
 use Chamilo\Core\Home\Form\ConfigurationForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class FilteredCourseListForm extends ConfigurationForm
 {

@@ -6,11 +6,10 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- * $Id: group_browser_table_column_model.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package groups.lib.group_manager.component.group_browser
  */
 /**

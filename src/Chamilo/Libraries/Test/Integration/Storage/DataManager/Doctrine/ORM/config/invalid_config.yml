@@ -1,0 +1,3 @@
+chamilo.libraries:
+  doctrine:
+    orm:

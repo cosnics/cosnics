@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Core\Rights;
 
+use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -113,7 +114,7 @@ class RightsUtil
         if (! $location)
         {
             // todo: refactor to translation
-            throw new Exception(
+            throw new RightsLocationNotFoundException(
                 Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
                      ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type);
         }
@@ -519,7 +520,7 @@ class RightsUtil
         $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
         
         if (! $location)
-            Throw new Exception(
+            Throw new RightsLocationNotFoundException(
                 Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
                      ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type);
         

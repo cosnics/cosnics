@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/core-user-integration-chamilo-core-reporting",
+    "version": "1.0.0",
+    "description": "Core User Integration Chamilo Core Reporting",
+    "keywords": [
+        "Core",
+        "User",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Reporting"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Reporting",
+            "context": "Chamilo\\Core\\User\\Integration\\Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core\\User\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\User",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Reporting",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
- * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
  *
  * @package group.lib
  */
@@ -238,7 +237,7 @@ class GroupMenu extends HtmlMenu
         return htmlentities(sprintf($this->urlFmt, $group));
     }
 
-    private function get_home_url($category)
+    private function get_home_url($category = null)
     {
         // TODO: Put another class in charge of the htmlentities() invocation
         return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));

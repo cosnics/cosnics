@@ -7,8 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- * $Id: bookmark.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.bookmark
  */
 class Bookmark extends ContentObject implements Versionable, Includeable
@@ -25,7 +24,7 @@ class Bookmark extends ContentObject implements Versionable, Includeable
      * If the content object "accept" the properties passed as argument it returns a new instance of itself based on
      * properties passed as argument.
      * Otherwise returns false.
-     * 
+     *
      * @param array $properties
      * @return ContentObject | array | false
      */

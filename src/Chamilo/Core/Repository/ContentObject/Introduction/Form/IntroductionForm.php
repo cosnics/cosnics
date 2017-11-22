@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introdu
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 
 /**
- * $Id: introduction_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.introduction
  */
 /**
@@ -14,7 +13,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
  */
 class IntroductionForm extends ContentObjectForm
 {
-    
+
     // Inherited
     public function create_content_object()
     {

@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Repository\Table\Export;
 
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use HTML_Table;
 
 class ExportTable extends SortableTableFromArray
 {
 
-    public function toHtml($totalValue, $totalColumn)
+    public function toHtml($totalValue = null, $totalColumn = null)
     {
         $this->initializeTable();
         

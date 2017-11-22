@@ -11,10 +11,11 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Returns the courses formatted for the element finder
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GetCoursesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
@@ -34,16 +35,16 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function run()
     {
         $this->ajaxResultGenerator = new AjaxResultGenerator(
-            $this, 
-            $this->getRequest()->get(self::PARAM_SEARCH_QUERY), 
+            $this,
+            $this->getRequest()->get(self::PARAM_SEARCH_QUERY),
             $this->getRequest()->get(self::PARAM_OFFSET));
-        
+
         $this->ajaxResultGenerator->generateAjaxResult()->display();
     }
 
     /**
      * Generates the elements for the advanced element finder
-     * 
+     *
      * @param AdvancedElementFinderElements $advancedElementFinderElements
      */
     public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements)
@@ -56,9 +57,9 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
             {
                 $advancedElementFinderElements->add_element(
                     new AdvancedElementFinderElement(
-                        'course_' . $course->getId(), 
-                        'type type_course', 
-                        $course->get_title(), 
+                        'course_' . $course->getId(),
+                        'type type_course',
+                        $course->get_title(),
                         $course->get_visual_code()));
             }
         }
@@ -66,29 +67,29 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
 
     /**
      * Returns the number of total elements (without the offset)
-     * 
+     *
      * @return int
      */
     public function getTotalNumberOfElements()
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class_name(), 
-            $this->getCondition());
+            Course::class_name(),
+            new DataClassCountParameters($this->getCondition()));
     }
 
     /**
      * Retrieves the courses for the current request
-     * 
+     *
      * @return ResultSet
      */
     protected function getCourses()
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getCondition(), 
-            100, 
-            $this->ajaxResultGenerator->getOffset(), 
+            $this->getCondition(),
+            100,
+            $this->ajaxResultGenerator->getOffset(),
             array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE))));
-        
+
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(Course::class_name(), $parameters);
     }
 
@@ -100,7 +101,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     {
         return $this->ajaxResultGenerator->getSearchCondition(
             array(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE), 
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE)));
     }
 }

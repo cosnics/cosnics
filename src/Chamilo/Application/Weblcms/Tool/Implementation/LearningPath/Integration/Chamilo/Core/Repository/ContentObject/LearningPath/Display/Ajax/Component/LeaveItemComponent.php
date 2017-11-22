@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -17,40 +19,51 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
     const PARAM_TRACKER_ID = 'tracker_id';
 
     /**
-     *
-     * @see \libraries\architecture\AjaxManager::required_parameters()
+     * @return array
      */
     public function getRequiredPostParameters()
     {
         return array(self::PARAM_TRACKER_ID);
     }
 
-    /**
-     *
-     * @see \libraries\architecture\AjaxManager::run()
-     */
     public function run()
     {
-        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            LearningPathItemAttempt::class_name(),
-            $this->getPostDataValue(self::PARAM_TRACKER_ID));
-
-        if ($attempt instanceof LearningPathItemAttempt)
+        try
         {
-            $attempt->set_total_time($attempt->get_total_time() + (time() - $attempt->get_start_time()));
+            $treeNodeAttemptId = $this->getPostDataValue(self::PARAM_TRACKER_ID);
+            $trackingService = $this->buildTrackingService();
 
-            if ($attempt->update())
-            {
-                JsonAjaxResult::success();
-            }
-            else
-            {
-                JsonAjaxResult::bad_request();
-            }
+            $trackingService->setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId);
         }
-        else
+        catch(\Exception $ex)
         {
             JsonAjaxResult::bad_request();
         }
+
+        JsonAjaxResult::success();
+    }
+
+    /**
+     * Builds the TrackingService
+     *
+     * @return TrackingService
+     */
+    public function buildTrackingService()
+    {
+        $trackingServiceBuilder = $this->getTrackingServiceBuilder();
+
+        return $trackingServiceBuilder->buildTrackingService(
+            new TrackingParameters(1)
+        );
+    }
+
+    /**
+     * @return TrackingServiceBuilder | object
+     */
+    protected function getTrackingServiceBuilder()
+    {
+        return new TrackingServiceBuilder(
+            $this->getService('chamilo.libraries.storage.data_manager.doctrine.data_class_repository')
+        );
     }
 }

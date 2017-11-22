@@ -13,23 +13,59 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class RestResult
 {
 
-    private $request_method;
+    /**
+     *
+     * @var string
+     */
+    private $requestMethod;
 
-    private $request_data;
+    /**
+     *
+     * @var string
+     */
+    private $requestData;
 
-    private $request_url;
+    /**
+     *
+     * @var string
+     */
+    private $requestUrl;
 
-    private $request_port;
+    /**
+     *
+     * @var string
+     */
+    private $requestPort;
 
-    private $response_code;
+    /**
+     *
+     * @var string
+     */
+    private $responseCode;
 
-    private $response_content;
+    /**
+     *
+     * @var string
+     */
+    private $responseContent;
 
-    private $response_error;
+    /**
+     *
+     * @var string
+     */
+    private $responseError;
 
-    private $response_header;
+    /**
+     *
+     * @var string
+     */
+    private $responseHeader;
 
-    private $response_cookies;
+    /**
+     *
+     * @var string
+     */
+    private $responseCookies;
     const TYPE_XML = 'xml';
     const TYPE_JSON = 'json';
     const TYPE_PLAIN = 'plain';
@@ -40,20 +76,34 @@ abstract class RestResult
     const FORMAT_XML = 'application/xml';
     const FORMAT_XML_DEPRECATED = 'text/xml';
 
+    /**
+     *
+     * @var string[]
+     */
     private static $xml_format = array(self::FORMAT_XML, self::FORMAT_XML_DEPRECATED);
 
-    public static function factory($type = self :: TYPE_PLAIN)
+    /**
+     *
+     * @param string $type
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
+     */
+    public static function factory($type = self::TYPE_PLAIN)
     {
         $rest_result_class = __NAMESPACE__ . '\Result\\' .
              StringUtilities::getInstance()->createString($type)->upperCamelize();
         return new $rest_result_class();
     }
 
-    public static function content_type_factory($content_type)
+    /**
+     *
+     * @param string $contentType
+     * @return \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
+     */
+    public static function content_type_factory($contentType)
     {
-        switch ($content_type)
+        switch ($contentType)
         {
-            case in_array($content_type, self::$xml_format) :
+            case in_array($contentType, self::$xml_format) :
                 $type = self::TYPE_XML;
                 break;
             case self::FORMAT_HTML :
@@ -68,168 +118,171 @@ abstract class RestResult
             default :
                 $type = self::TYPE_PLAIN;
         }
+
         return self::factory($type);
-    }
-
-    /**
-     *
-     * @return the $request_method
-     */
-    public function get_request_method()
-    {
-        return $this->request_method;
-    }
-
-    /**
-     *
-     * @param $request_method the $request_method to set
-     */
-    public function set_request_method($request_method)
-    {
-        $this->request_method = $request_method;
-    }
-
-    /**
-     *
-     * @return the $request_data
-     */
-    public function get_request_data()
-    {
-        return $this->request_data;
-    }
-
-    /**
-     *
-     * @param $request_data the $request_data to set
-     */
-    public function set_request_data($request_data)
-    {
-        $this->request_data = $request_data;
-    }
-
-    /**
-     *
-     * @return the $request_url
-     */
-    public function get_request_url()
-    {
-        return $this->request_url;
-    }
-
-    /**
-     *
-     * @param $request_url the $request_url to set
-     */
-    public function set_request_url($request_url)
-    {
-        $this->request_url = $request_url;
-    }
-
-    /**
-     *
-     * @return the $request_port
-     */
-    public function get_request_port()
-    {
-        return $this->request_port;
-    }
-
-    /**
-     *
-     * @param $request_port the $request_port to set
-     */
-    public function set_request_port($request_port)
-    {
-        $this->request_port = $request_port;
-    }
-
-    /**
-     *
-     * @return the $response_code
-     */
-    public function get_response_code()
-    {
-        return $this->response_code;
-    }
-
-    /**
-     *
-     * @param $response_code the $response_code to set
-     */
-    public function set_response_code($response_code)
-    {
-        $this->response_code = $response_code;
     }
 
     /**
      *
      * @return string
      */
+    public function get_request_method()
+    {
+        return $this->requestMethod;
+    }
+
+    /**
+     *
+     * @param string $requestMethod
+     */
+    public function set_request_method($requestMethod)
+    {
+        $this->requestMethod = $requestMethod;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_request_data()
+    {
+        return $this->requestData;
+    }
+
+    /**
+     *
+     * @param string $requestData
+     */
+    public function set_request_data($requestData)
+    {
+        $this->requestData = $requestData;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_request_url()
+    {
+        return $this->requestUrl;
+    }
+
+    /**
+     *
+     * @param string $requestUrl
+     */
+    public function set_request_url($requestUrl)
+    {
+        $this->requestUrl = $requestUrl;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_request_port()
+    {
+        return $this->requestPort;
+    }
+
+    /**
+     *
+     * @param string $requestPort
+     */
+    public function set_request_port($requestPort)
+    {
+        $this->requestPort = $requestPort;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_response_code()
+    {
+        return $this->responseCode;
+    }
+
+    /**
+     *
+     * @param string $responseCode
+     */
+    public function set_response_code($responseCode)
+    {
+        $this->responseCode = $responseCode;
+    }
+
+    /**
+     *
+     * @param boolean $parse
+     *
+     * @return string
+     */
     public function get_response_content($parse = true)
     {
-        return $this->response_content;
+        return $this->responseContent;
     }
 
     /**
      *
-     * @param $response_content the $response_content to set
+     * @param string $responseContent
      */
-    public function set_response_content($response_content)
+    public function set_response_content($responseContent)
     {
-        $this->response_content = $response_content;
+        $this->responseContent = $responseContent;
     }
 
     /**
      *
-     * @return the $response_error
+     * @return string
      */
     public function get_response_error()
     {
-        return $this->response_error;
+        return $this->responseError;
     }
 
     /**
      *
-     * @param $response_error the $response_error to set
+     * @param string $responseError
      */
-    public function set_response_error($response_error)
+    public function set_response_error($responseError)
     {
-        $this->response_error = $response_error;
+        $this->responseError = $responseError;
     }
 
     /**
      *
-     * @return the $response_header
+     * @return string
      */
     public function get_response_header()
     {
-        return $this->response_header;
+        return $this->responseHeader;
     }
 
     /**
      *
-     * @param $response_header the $response_header to set
+     * @param string $responseHeader
      */
-    public function set_response_header($response_header)
+    public function set_response_header($responseHeader)
     {
-        $this->response_header = $response_header;
+        $this->responseHeader = $responseHeader;
     }
 
     /**
      *
-     * @return the $response_cookies
+     * @return string
      */
     public function get_response_cookies()
     {
-        return $this->response_cookies;
+        return $this->responseCookies;
     }
 
     /**
      *
-     * @param $response_cookies the $response_cookies to set
+     * @param string $responseCookies
      */
-    public function set_response_cookies($response_cookies)
+    public function set_response_cookies($responseCookies)
     {
-        $this->response_cookies = $response_cookies;
+        $this->responseCookies = $responseCookies;
     }
 }

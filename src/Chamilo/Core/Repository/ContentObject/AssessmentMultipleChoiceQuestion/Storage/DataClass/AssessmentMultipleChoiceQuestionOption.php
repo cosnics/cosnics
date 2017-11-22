@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: assessment_multiple_choice_question_option.class.php $
- * 
+ *
  * @package repository.lib.content_object.multiple_choice_question
  */
 /**

@@ -3,10 +3,8 @@ namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Event
+ * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules$RecurrenceRules
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RecurrenceRules
 {
@@ -77,7 +75,7 @@ class RecurrenceRules
      * @param integer[] $byMonth
      * @param integer[] $byWeekNumber
      */
-    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(), 
+    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(),
         $byMonth = array(), $byWeekNumber = array())
     {
         $this->frequency = $frequency;
@@ -238,7 +236,7 @@ class RecurrenceRules
      *
      * @return boolean
      */
-    public function isIndefinate()
+    public function isIndefinite()
     {
         $repeatTo = $this->getUntil();
         return ($repeatTo == 0 || is_null($repeatTo));

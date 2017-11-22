@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\Storage\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: repository_data_class.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 abstract class RepositoryDataClass extends DataClass
@@ -30,12 +29,12 @@ abstract class RepositoryDataClass extends DataClass
     public function get_default_property($name, $default_value = null)
     {
         $value = parent::get_default_property($name);
-        
+
         if (! isset($value) && isset($default_value))
         {
             $value = $default_value;
         }
-        
+
         return $value;
     }
 
@@ -78,7 +77,7 @@ abstract class RepositoryDataClass extends DataClass
     {
         $extended_property_names[] = self::PROPERTY_CREATED;
         $extended_property_names[] = self::PROPERTY_MODIFIED;
-        
+
         return parent::get_default_property_names($extended_property_names);
     }
 

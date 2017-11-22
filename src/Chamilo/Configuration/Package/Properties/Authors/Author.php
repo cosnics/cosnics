@@ -33,7 +33,7 @@ class Author
      * @param string $email
      * @param string $company
      */
-    public function __construct($name, $email, $company)
+    public function __construct($name, $email, $company = null)
     {
         $this->set_name($name);
         $this->set_email($email);

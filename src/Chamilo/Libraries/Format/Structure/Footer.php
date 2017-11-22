@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -24,6 +24,7 @@ class Footer extends BaseFooter
     /**
      *
      * @param integer $viewMode
+     * @param string $containerMode
      */
     public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
@@ -32,9 +33,10 @@ class Footer extends BaseFooter
     }
 
     /**
-     * Returns the HTML code for the footer
+     *
+     * @see \Chamilo\Libraries\Format\Structure\BaseFooter::render()
      */
-    public function toHtml()
+    public function render()
     {
         $html = array();
 
@@ -53,6 +55,10 @@ class Footer extends BaseFooter
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     protected function getLinks()
     {
         $showAdministratorData = Configuration::get('Chamilo\Core\Admin', 'show_administrator_data');

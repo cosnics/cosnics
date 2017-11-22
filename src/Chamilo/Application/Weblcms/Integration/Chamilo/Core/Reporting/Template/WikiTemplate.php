@@ -7,8 +7,7 @@ use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: wiki_reporting_template.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.reporting.templates
  */
 class WikiTemplate extends ReportingTemplate

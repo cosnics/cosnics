@@ -19,41 +19,41 @@ class SubselectConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $string = array();
-        
+
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(), 
+            $this->getDataClassDatabase(),
             $this->getCondition()->get_name());
-        
+
         $string[] = 'IN (';
         $string[] = 'SELECT';
-        
+
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(), 
+            $this->getDataClassDatabase(),
             $this->getCondition()->get_value());
-        
+
         $string[] = 'FROM';
-        
+
         $class = $this->getCondition()->get_value()->get_class();
         $table = $class::get_table_name();
-        
+
         $alias = $this->getDataClassDatabase()->getAlias($table);
-        
+
         $string[] = $table;
-        
+
         $string[] = 'AS';
         $string[] = $alias;
-        
+
         if ($this->getCondition()->get_condition())
         {
             $string[] = 'WHERE ';
             $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(), 
-                $this->getCondition()->get_condition(), 
+                $this->getDataClassDatabase(),
+                $this->getCondition()->get_condition(),
                 $alias);
         }
-        
+
         $string[] = ')';
-        
+
         return implode(' ', $string);
     }
 }

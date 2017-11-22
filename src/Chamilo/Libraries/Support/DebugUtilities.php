@@ -3,30 +3,41 @@ namespace Chamilo\Libraries\Support;
 
 use DOMDocument;
 
+/**
+ *
+ * @package Chamilo\Libraries\Support
+ */
 class DebugUtilities
 {
 
+    /**
+     *
+     * @param object $object
+     * @param string $title
+     * @param integer $backtrace_index
+     * @return string
+     */
     public static function show($object, $title = null, $backtrace_index = 0)
     {
         $html = array();
-        
+
         $html[] = '<div class="panel panel-info">';
-        
+
         if (isset($title))
         {
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">' . $title . '</h3>';
             $html[] = '</div>';
         }
-        
+
         $html[] = '<div class="panel-body">';
-        
+
         $calledFrom = debug_backtrace();
         $html[] = '<strong>' . $calledFrom[$backtrace_index]['file'] . '</strong>';
         $html[] = ' (line <strong>' . $calledFrom[$backtrace_index]['line'] . '</strong>)';
-        
+
         $html[] = ('<pre>');
-        
+
         if (is_array($object))
         {
             print_r($object);
@@ -34,7 +45,7 @@ class DebugUtilities
         elseif (is_a($object, 'DOMDocument'))
         {
             $html[] = 'DOMDocument:<br/><br/>';
-            
+
             $object->formatOutput = true;
             $xml_string = $object->saveXML();
             $html[] = htmlentities($xml_string);
@@ -44,11 +55,11 @@ class DebugUtilities
             $dom = new DOMDocument();
             $debugElement = $dom->createElement('debug');
             $dom->appendChild($debugElement);
-            
+
             if (is_a($object, 'DOMNodeList'))
             {
                 $html[] = 'DOMNodeList:<br/><br/>';
-                
+
                 foreach ($object as $node)
                 {
                     $node = $dom->importNode($node, true);
@@ -58,11 +69,11 @@ class DebugUtilities
             elseif (is_a($object, 'DOMElement'))
             {
                 $html[] = 'DOMElement:<br/><br/>';
-                
+
                 $node = $dom->importNode($object, true);
                 $debugElement->appendChild($node);
             }
-            
+
             $dom->formatOutput = true;
             $xml_string = $dom->saveXML();
             $html[] = htmlentities($xml_string);
@@ -75,11 +86,11 @@ class DebugUtilities
         {
             $html[] = $object;
         }
-        
+
         $html[] = ('</pre>');
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

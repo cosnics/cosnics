@@ -4,6 +4,66 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <!-- Connection -->
+        <service
+                id="chamilo.libraries.storage.data_manager.doctrine.data_source_name"
+                class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
+            <argument>%chamilo.configuration.database%</argument>
+        </service>
+
+        <service
+                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
+                class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory">
+            <argument
+                    type="service"
+                    id="chamilo.libraries.storage.data_manager.doctrine.data_source_name" />
+        </service>
+
+        <service
+                id="doctrine.dbal.connection"
+                class="Doctrine\DBAL\Connection">
+            <factory
+                    service="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
+                    method="getConnection" />
+        </service>
+
+        <!-- Database Layer -->
+        <service
+                id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database"
+                class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase">
+            <argument
+                    type="service"
+                    id="doctrine.dbal.connection" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
+        </service>
+
+        <service
+                id="chamilo.libraries.storage.data_manager.doctrine.database.storage_unit_database"
+                class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase">
+            <argument
+                    type="service"
+                    id="doctrine.dbal.connection" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                    type="service"
+                    id="chamilo.libraries.architecture.error_handler.exception_logger" />
+        </service>
+
+        <!-- Repositories -->
+
         <service
             id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"
             class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
@@ -27,45 +87,7 @@
                 id="chamilo.libraries.storage.data_manager.doctrine.database.storage_unit_database" />
         </service>
 
-        <service
-            id="chamilo.libraries.storage.data_manager.doctrine.data_source_name"
-            class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
-            <argument>%chamilo.configuration.database%</argument>
-        </service>
-
-        <service
-            id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database"
-            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase">
-            <argument
-                type="service"
-                id="doctrine.dbal.connection" />
-            <argument
-                type="service"
-                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
-            <argument
-                type="service"
-                id="chamilo.libraries.architecture.error_handler.exception_logger" />
-            <argument
-                type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
-            <argument
-                type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
-        </service>
-
-        <service
-            id="chamilo.libraries.storage.data_manager.doctrine.database.storage_unit_database"
-            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase">
-            <argument
-                type="service"
-                id="doctrine.dbal.connection" />
-            <argument
-                type="service"
-                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
-            <argument
-                type="service"
-                id="chamilo.libraries.architecture.error_handler.exception_logger" />
-        </service>
+        <!-- Utilities -->
 
         <service
             id="chamilo.libraries.storage.data_manager.doctrine.factory.condition_part_translator_factory"
@@ -73,14 +95,6 @@
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
-        </service>
-
-        <service
-            id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
-            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory">
-            <argument
-                type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.data_source_name" />
         </service>
 
         <service

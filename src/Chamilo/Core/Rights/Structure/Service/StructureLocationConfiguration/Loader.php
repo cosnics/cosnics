@@ -62,7 +62,7 @@ class Loader implements LoaderInterface
         
         foreach ($configurationFiles as $configurationFile)
         {
-            $configuration = array_merge_recursive($configuration, Yaml::parse($configurationFile));
+            $configuration = array_merge_recursive($configuration, Yaml::parse(file_get_contents($configurationFile)));
         }
         
         return $configuration;

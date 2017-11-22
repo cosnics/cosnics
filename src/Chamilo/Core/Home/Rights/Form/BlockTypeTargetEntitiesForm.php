@@ -3,7 +3,7 @@ namespace Chamilo\Core\Home\Rights\Form;
 
 use Chamilo\Core\Home\Rights\Manager;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Target Entities Form

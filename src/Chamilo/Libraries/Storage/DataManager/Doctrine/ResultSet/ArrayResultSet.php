@@ -15,18 +15,18 @@ class ArrayResultSet extends \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
 
     /**
      * Create a new DoctrineResultSet for handling a set of records
-     * 
+     *
      * @param \Doctrine\DBAL\Driver\PDOStatement $handle
      */
     public function __construct($handle)
     {
         $data = array();
-        
+
         while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $data[] = $this->process_record($record);
         }
-        
+
         parent::__construct($data);
     }
 }

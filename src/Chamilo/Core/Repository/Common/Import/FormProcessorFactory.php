@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import;
 
-use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
@@ -56,11 +56,11 @@ class FormProcessorFactory
      * @param integer $userIdentifier
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param string[] $formValues
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @return \Chamilo\Core\Repository\Common\Import\FormProcessor
      */
-    public function getFormProcessor($type, $userIdentifier, WorkspaceInterface $workspace, $formValues, 
-        Request $request)
+    public function getFormProcessor($type, $userIdentifier, WorkspaceInterface $workspace, $formValues,
+        ChamiloRequest $request)
     {
         $type = (string) StringUtilities::getInstance()->createString($type)->upperCamelize();
         $className = __NAMESPACE__ . '\\' . $type . '\FormProcessor';

@@ -1,7 +1,7 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
@@ -12,16 +12,15 @@ use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -62,7 +61,9 @@ class ExporterComponent extends Manager
     /**
      * Returns a list of users to export
      *
-     * @return UserExportParameters
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getUserExportParameters()
     {
@@ -79,7 +80,9 @@ class ExporterComponent extends Manager
                 return $this->exportPlatformGroupUsers();
         }
 
-        return array();
+        throw new UserException(
+            $this->getTranslator()->trans('ExportTypeNotFound', null, 'Chamilo\Application\Weblcms')
+        );
     }
 
     /**
@@ -192,30 +195,32 @@ class ExporterComponent extends Manager
 
         if (empty($groupUsersIds))
         {
-            return array();
+            $groupUsers = [];
         }
-
-        $condition =
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $groupUsersIds);
-
-        $orderBy = array(
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
-        );
-
-        $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(
-            User::class_name(), new DataClassRetrievesParameters(
-                $condition, null, null, $orderBy
-            )
-        )->as_array();
-
-        foreach ($groupUsers as $groupUser)
+        else
         {
-            $groupUser->set_optional_property(
-                CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS, $groupStatus
+            $condition =
+                new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $groupUsersIds);
+
+            $orderBy = array(
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
             );
 
-            $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
+            $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(
+                User::class_name(), new DataClassRetrievesParameters(
+                    $condition, null, null, $orderBy
+                )
+            )->as_array();
+
+            foreach ($groupUsers as $groupUser)
+            {
+                $groupUser->set_optional_property(
+                    CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS, $groupStatus
+                );
+
+                $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
+            }
         }
 
         $filename = Translation::getInstance()->getTranslation(

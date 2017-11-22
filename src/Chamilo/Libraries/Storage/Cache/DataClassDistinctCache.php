@@ -19,30 +19,30 @@ class DataClassDistinctCache extends DataClassCache
      *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     * @param string[] $property_values
-     * @throws Exception
+     * @param string[] $propertyValues
+     * @throws \Exception
      * @return boolean
      */
-    public static function add($class, $parameters, $property_values)
+    public static function add($class, $parameters, $propertyValues)
     {
         if (! $parameters instanceof DataClassDistinctParameters)
         {
             throw new Exception('Illegal parameters passed to the DataClassDistinctCache');
         }
-        
-        if (! is_array($property_values))
+
+        if (! is_array($propertyValues))
         {
-            $type = is_object($property_values) ? get_class($property_values) : gettype($property_values);
+            $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
             throw new Exception(
                 'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
                      $type . '.');
         }
-        
+
         if (! DataClassCache::exists($class, $parameters))
         {
-            DataClassCache::set_cache($class, $parameters->hash(), $property_values);
+            DataClassCache::set_cache($class, $parameters->hash(), $propertyValues);
         }
-        
+
         return true;
     }
 }

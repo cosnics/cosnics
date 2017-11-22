@@ -7,15 +7,14 @@ use Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
- * $Id: blog_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.blog
  */
 
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
 

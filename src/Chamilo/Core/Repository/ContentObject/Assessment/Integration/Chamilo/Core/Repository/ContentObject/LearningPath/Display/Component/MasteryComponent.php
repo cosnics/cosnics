@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -18,67 +18,95 @@ class MasteryComponent extends Manager
 
     public function run()
     {
-        $selected_complex_content_object_item = $this->get_application()->get_current_node()->get_complex_content_object_item();
-        $lp_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
-            $selected_complex_content_object_item->get_ref());
-        
-        $form = $this->get_form($this->get_url(), $lp_item);
-        
+        $treeNodeData = $this->getCurrentTreeNode()->getTreeNodeData();
+
+        $form = $this->get_form($this->get_url(), $treeNodeData);
+
         if ($form->validate())
         {
-            $succes = $this->set_mastery_score($lp_item, $form->exportValues());
+            $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
             $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
+
+        return null;
     }
 
     /**
+     * Renders a template from a given context
      *
-     * @param string $url
-     * @param \core\repository\content_object\learning_path_item\LearningPathItem $lp_item
-     * @return \libraries\format\FormValidator
+     * @param string $context
+     * @param string $template
+     *
+     * @return string
      */
-    public function get_form($url, $lp_item)
+    protected function renderTemplate($context, $template, $parameters = array())
+    {
+        $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
+
+        if (! file_exists($templatePath))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given template %s in context %s could not be found', $template, $context));
+        }
+
+        $contents = file_get_contents($templatePath);
+
+        if ($contents === false)
+        {
+            throw new \RuntimeException(
+                sprintf('The given template %s in context %s could not be loaded', $template, $context));
+        }
+
+        foreach ($parameters as $variable => $value)
+        {
+            $contents = str_replace('{ ' . $variable . ' }', $value, $contents);
+            $contents = str_replace('{' . $variable . '}', $value, $contents);
+        }
+
+        return $contents;
+    }
+
+    public function get_form($url, TreeNodeData $treeNodeData)
     {
         $form = new FormValidator('mastery_score', 'post', $url);
-        
+
         $values = array();
         for ($i = 0; $i <= 100; $i ++)
-            $values[$i] = $i;
-        
-        $form->addElement('select', 'mastery_score', Translation::get('MasteryScore'), $values);
-        
-        if ($lp_item->get_mastery_score())
         {
-            $form->setDefaults(array('mastery_score' => $lp_item->get_mastery_score()));
+            $value = $i == 0 ? Translation::getInstance()->getTranslation('NoMasteryScore') : $i . '%';
+            $values[$i] = $value;
         }
-        
+
+        $form->addElement('select', 'mastery_score', Translation::get('MasteryScore'), $values);
+
+        if ($treeNodeData->getMasteryScore())
+        {
+            $form->setDefaults(array('mastery_score' => $treeNodeData->getMasteryScore()));
+        }
+
+        $form->addElement('html', $this->renderTemplate(Manager::context(), 'MasteryScoreSlider.html'));
+
         $buttons[] = $form->createElement('style_submit_button', 'submit', Translation::get('SetMasteryScore'));
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         return $form;
     }
 
-    /**
-     *
-     * @param \core\repository\content_object\learning_path_item\LearningPathItem $lp_item
-     * @param string[] $values
-     * @return boolean
-     */
-    public function set_mastery_score($lp_item, $values)
+    public function set_mastery_score(TreeNodeData $treeNodeData, $values)
     {
-        $lp_item->set_mastery_score($values['mastery_score']);
-        return $lp_item->update();
+        $treeNodeData->setMasteryScore((int) $values['mastery_score']);
+
+        return $treeNodeData->update();
     }
 }

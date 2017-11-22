@@ -49,7 +49,8 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     }
 
     /**
-     * Warms up the cache.
+     *
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
      */
     public function warmUp()
     {
@@ -61,15 +62,13 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     }
 
     /**
-     * Returns the path to the cache directory or file
      *
-     * @return string
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
      */
     function getCachePath()
     {
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
-        );
+            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage')));
 
         return $configurablePathBuilder->getCachePath(__NAMESPACE__);
     }

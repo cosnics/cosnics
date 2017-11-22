@@ -1,24 +1,21 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 
 /**
- * Abstract repository that can be used as a base for repositories that still use the old DataManagers. Groups common
- * functionality
+ * Abstract repository that can be used as a base for repositories that still use the old DataManagers.
  *
+ * @package Chamilo\Libraries\Storage\DataManager\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class DataManagerRepository implements DataManagerRepositoryInterface
 {
+
     /**
-     * Wrapper for the creation of an object
      *
-     * @param DataClass $object
-     *
-     * @return bool
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::create()
      */
     public function create(DataClass $object)
     {
@@ -26,11 +23,8 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
     }
 
     /**
-     * Wrapper for the update of an object
      *
-     * @param DataClass $object
-     *
-     * @return bool
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::update()
      */
     public function update(DataClass $object)
     {
@@ -38,11 +32,8 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
     }
 
     /**
-     * Wrapper for the deletion of an object
      *
-     * @param DataClass $object
-     *
-     * @return bool
+     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::delete()
      */
     public function delete(DataClass $object)
     {

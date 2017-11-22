@@ -29,13 +29,12 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: TestListener.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
@@ -83,7 +82,7 @@
  * print $result->toString();
  * ?>
  * </code>
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -98,7 +97,7 @@ class PHPUnit_TestListener
 
     /**
      * An error occurred.
-     * 
+     *
      * @param object
      * @param object
      * @access public
@@ -110,7 +109,7 @@ class PHPUnit_TestListener
 
     /**
      * A failure occurred.
-     * 
+     *
      * @param object
      * @param object
      * @access public
@@ -122,7 +121,7 @@ class PHPUnit_TestListener
 
     /**
      * A test ended.
-     * 
+     *
      * @param object
      * @access public
      * @abstract
@@ -133,7 +132,7 @@ class PHPUnit_TestListener
 
     /**
      * A test started.
-     * 
+     *
      * @param object
      * @access public
      * @abstract

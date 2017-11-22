@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Exception;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class NoTemplateException extends \Exception
 {

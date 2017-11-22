@@ -7,8 +7,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: platform_category.class.php 191 2009-11-13 11:50:28Z chellee $
- * 
+ *
  * @package application.common.category_manager
  */
 abstract class PlatformCategory extends DataClass
@@ -19,7 +18,7 @@ abstract class PlatformCategory extends DataClass
 
     /**
      * Get the default properties of all contributions.
-     * 
+     *
      * @return array The property titles.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -73,7 +72,7 @@ abstract class PlatformCategory extends DataClass
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return string[string]
      *
      */
@@ -81,7 +80,7 @@ abstract class PlatformCategory extends DataClass
     {
         return array(
             $this->class_name() => new EqualityCondition(
-                new PropertyConditionVariable($this->class_name(), self::PROPERTY_PARENT), 
+                new PropertyConditionVariable($this->class_name(), self::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id())));
     }
 }

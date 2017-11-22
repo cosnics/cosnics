@@ -3,19 +3,23 @@ namespace Chamilo\Libraries\File;
 
 /**
  * A class which can be used to log messages to a file
- * 
+ *
+ * @package Chamilo\Libraries\File
  * @author Vanpoucke Sven
  */
 class FileLogger
 {
 
+    /**
+     *
+     * @var resource
+     */
     private $handle;
 
     /**
-     * Constructor
-     * 
-     * @param $file String - The full path to the file
-     * @param $append Bool - create a new file, or append to existing one
+     *
+     * @param string $file
+     * @param boolean $append
      */
     public function __construct($file, $append = false)
     {
@@ -25,9 +29,9 @@ class FileLogger
 
     /**
      * Opens the given file
-     * 
-     * @param $file - The full path to the file
-     * @param $mode - The mode to open the file
+     *
+     * @param string $file
+     * @param string $mode
      */
     public function open_file($file, $mode)
     {
@@ -44,24 +48,26 @@ class FileLogger
 
     /**
      * Logs a message to the file
-     * 
-     * @param $message String
-     * @param $include_timestamp Bool
+     *
+     * @param string $message
+     * @param boolean $includeTimestamp
      */
-    public function log_message($message, $include_timestamp = true)
+    public function log_message($message, $includeTimestamp = true)
     {
         $message = strip_tags($message);
-        
-        if ($include_timestamp)
+
+        if ($includeTimestamp)
         {
             $message = $this->get_timestamp() . $message;
         }
-        
+
         fwrite($this->handle, $message . "\n");
     }
 
     /**
-     * Get's the current timestamp
+     * Gets the current timestamp
+     *
+     * @return integer
      */
     public function get_timestamp()
     {
@@ -69,20 +75,24 @@ class FileLogger
         return $timestamp;
     }
 
+    /**
+     *
+     * @param string[] $trace
+     */
     public function call_trace($trace)
     {
         $logfile = Path::getInstance()->getLogPath() . '/call_errors.log';
         $logger = new self($logfile, true);
-        
+
         $i = 0;
-        
+
         while (! isset($trace[$i]['line']))
         {
             $i ++;
         }
-        
+
         $message = '[' . $trace[0]['class'] . '] [' . $trace[$i]['line'] . '] ==> ' . $trace[$i]['file'];
-        
+
         $logger->log_message($message);
     }
 }

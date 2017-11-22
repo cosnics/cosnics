@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\DataManager
+ * @package Chamilo\Libraries\Storage\DataManager\Interfaces
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
@@ -36,8 +36,8 @@ interface DataClassDatabaseInterface
 
     /**
      *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @return string[]
      */
     public function retrieve($dataClassName, $parameters = null);
@@ -46,7 +46,7 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @return string[]
+     * @return string[][]
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters);
 
@@ -62,7 +62,7 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return string[]
+     * @return string[][]
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters);
 
@@ -125,7 +125,7 @@ interface DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return integer
      */
-    public function retrieveMaximumValue($dataClassName, $property, $condition = null);
+    public function retrieveMaximumValue($dataClassName, $property, Condition $condition = null);
 
     /**
      *
@@ -151,7 +151,7 @@ interface DataClassDatabaseInterface
 
     /**
      *
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return string
      */
     public function translateCondition(Condition $condition = null);

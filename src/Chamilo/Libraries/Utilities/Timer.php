@@ -3,14 +3,23 @@ namespace Chamilo\Libraries\Utilities;
 
 /**
  * Class to time a script
- * 
+ *
+ * @package Chamilo\Libraries\Utilities
  * @author svenvanpoucke
  */
 class Timer
 {
 
+    /**
+     *
+     * @var integer
+     */
     private $start_time;
 
+    /**
+     *
+     * @var integer
+     */
     private $stop_time;
 
     public function __construct()
@@ -45,6 +54,8 @@ class Timer
 
     /**
      * Returns the difference between the stop and start time in seconds
+     *
+     * @return integer
      */
     public function get_time()
     {
@@ -53,6 +64,8 @@ class Timer
 
     /**
      * Returns the difference between the stop and start time in hours:minutes:seconds
+     *
+     * @return string
      */
     public function get_time_in_hours()
     {
@@ -61,6 +74,8 @@ class Timer
 
     /**
      * function to get the microtime
+     *
+     * @return float
      */
     private function get_microtime()
     {

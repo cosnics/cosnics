@@ -13,7 +13,7 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\AbstractButtonRenderer::render()
+     * @see \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\AbstractButtonToolbarItemRenderer::render()
      */
     public function render()
     {
@@ -36,10 +36,10 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
     public function determineClasses()
     {
         $classes = array();
-        
+
         $classes[] = 'divider';
         $classes[] = $this->getButton()->getClasses();
-        
+
         return $classes;
     }
 }

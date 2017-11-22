@@ -1,15 +1,20 @@
 <?php
 namespace Chamilo\Core\Repository\Processor\Ckeditor;
 
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Theme;
 
 class Processor extends HtmlEditorProcessor
 {
 
+    /**
+     *
+     * @return string
+     */
     public function run()
     {
         $selected_object = $this->get_selected_content_objects();
@@ -19,26 +24,45 @@ class Processor extends HtmlEditorProcessor
             $selected_object = $selected_object[0];
         }
 
-        /** @var ContentObject $object */
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $selected_object
-        );
+        try
+        {
+            /**
+             *
+             * @var ContentObject $object
+             */
+            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                $selected_object);
 
-        $editor = Request::get('CKEditor');
+            $display = ContentObjectRenditionImplementation::factory($object, 'json', 'image', $this);
+
+            if ($object instanceof File)
+            {
+                if ($object->is_image())
+                {
+                    $type = 'image';
+                }
+                else
+                    $type = 'file';
+            }
+            else
+            {
+                $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($object->get_type(), true);
+            }
+
+            $rendition = $display->render();
+        }
+        catch (\Exception $ex)
+        {
+            $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
+        }
 
         $html = array();
         $html[] = '<script type="text/javascript">';
-        $html[] = 'window.opener.CKEDITOR.tools.callFunction(
-                        ' . $this->get_parameter('CKEditorFuncNum') . ',
-                        \'' . Path::getInstance()->getJavascriptPath(
-                ClassnameUtilities::getInstance()->getNamespaceParent(
-                    ClassnameUtilities::getInstance()->getNamespaceFromObject($object),
-                    2
-                ),
-                true
-            ) . 'HtmlEditor/Ckeditor/dialog.js' . '\', \'' . $object->get_id() . '\', \'' .
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace($object->get_type(), true) . '\', \'' . $object->calculate_security_code() . '\');';
+        $html[] = 'window.opener.CKEDITOR.tools.callFunction(' . $this->get_parameter('CKEditorFuncNum') . ', "' .
+             $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' . ', "' .
+             $type . '"' . ');';
+        // . '\');';
         $html[] = 'window.close();';
 
         $html[] = '</script>';

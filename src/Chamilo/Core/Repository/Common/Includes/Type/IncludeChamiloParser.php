@@ -46,6 +46,16 @@ class IncludeChamiloParser extends ContentObjectIncludeParser
                         $source = $resource->getAttribute('source');
                         $content_object->include_content_object($source);
                     }
+
+                    $placeholders = $dom_xpath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
+                    foreach($placeholders as $placeholder)
+                    {
+                        /**
+                         * @var \DOMNode $placeholder
+                         */
+                        $contentObjectId = $placeholder->getAttribute('data-co-id');
+                        $content_object->include_content_object($contentObjectId);
+                    }
                 }
             }
         }

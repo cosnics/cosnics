@@ -6,7 +6,7 @@ namespace Chamilo\Core\Repository\Selector;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TypeSelectorCategory
+class TypeSelectorCategory implements TypeSelectorItemInterface
 {
 
     /**

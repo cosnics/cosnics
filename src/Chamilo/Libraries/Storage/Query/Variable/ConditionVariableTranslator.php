@@ -22,11 +22,11 @@ abstract class ConditionVariableTranslator
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      */
-    public function __construct(ConditionVariable $condition_variable)
+    public function __construct(ConditionVariable $conditionVariable)
     {
-        $this->condition_variable = $condition_variable;
+        $this->condition_variable = $conditionVariable;
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class ConditionVariableTranslator
     {
         $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Variable\\' .
              ClassnameUtilities::getInstance()->getClassnameFromObject($condition_variable) . 'Translator';
-        
+
         return new $class($condition_variable);
     }
 
@@ -66,12 +66,12 @@ abstract class ConditionVariableTranslator
     public static function render(ConditionVariable $conditionVariable)
     {
         $conditionVariableCache = ConditionVariableCache::getInstance();
-        
+
         if (! $conditionVariableCache->exists($conditionVariable))
         {
             $conditionVariableCache->set($conditionVariable, static::runTranslator($conditionVariable));
         }
-        
+
         return $conditionVariableCache->get($conditionVariable);
     }
 }

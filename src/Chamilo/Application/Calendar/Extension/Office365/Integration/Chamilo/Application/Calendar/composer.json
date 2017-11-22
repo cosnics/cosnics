@@ -1,0 +1,51 @@
+{
+    "name": "cosnics/application-calendar-extension-office365-integration-chamilo-application-calendar",
+    "version": "1.0.0",
+    "description": "Application Calendar Extension Office365 Integration Chamilo Application Calendar",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Extension",
+        "Office365",
+        "Integration",
+        "Chamilo",
+        "Application",
+        "Calendar"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Calendar",
+            "context": "Chamilo\\Application\\Calendar\\Extension\\Office365\\Integration\\Chamilo\\Application\\Calendar",
+            "type": "Chamilo\\Application\\Calendar\\Extension\\Office365\\Integration",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Calendar",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Calendar\\Extension\\Office365",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

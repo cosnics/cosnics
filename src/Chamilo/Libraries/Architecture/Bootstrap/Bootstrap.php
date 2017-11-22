@@ -18,7 +18,7 @@ class Bootstrap
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -48,13 +48,13 @@ class Bootstrap
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     * @param ErrorHandler $errorHandler
-     * @param bool $showErrors
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
+     * @param boolean $showErrors
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
         FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
         ErrorHandler $errorHandler, $showErrors = false)
     {
@@ -67,7 +67,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -76,7 +76,7 @@ class Bootstrap
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function setRequest(Request $request)
     {
@@ -130,7 +130,7 @@ class Bootstrap
 
     /**
      *
-     * @param ErrorHandler $errorHandler
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
      */
     public function setExceptionLogger(ErrorHandler $errorHandler)
     {
@@ -158,7 +158,7 @@ class Bootstrap
     /**
      * Check if the system has been installed, if not display message accordingly
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     protected function checkInstallation()
     {
@@ -174,6 +174,10 @@ class Bootstrap
         return $this;
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
+     */
     protected function startSession()
     {
         $this->getSessionUtilities()->start();
@@ -184,7 +188,7 @@ class Bootstrap
     /**
      * Registers the error handler by using the error handler manager
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     protected function registerErrorHandlers()
     {
@@ -198,7 +202,7 @@ class Bootstrap
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrapper
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
     public function setup()
     {

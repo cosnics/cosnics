@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item\ItemTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNode\TreeNodeTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Apply batch-actions on specific folders or items (move, delete, rights configuration)
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ManagerComponent extends TabComponent implements TableSupport
+class ManagerComponent extends BaseHtmlTreeComponent implements TableSupport
 {
 
     /**
@@ -22,14 +22,15 @@ class ManagerComponent extends TabComponent implements TableSupport
      */
     public function build()
     {
-        if (! $this->get_parent()->is_allowed_to_view_content_object($this->get_current_node()))
+        $currentNode = $this->getCurrentTreeNode();
+        if (!$this->canEditTreeNode($currentNode))
         {
             throw new NotAllowedException();
         }
         
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get('ManagerComponent')));
         
-        $table = new ItemTable($this);
+        $table = new TreeNodeTable($this);
         
         $html = array();
         

@@ -1,61 +1,56 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * The combination of options available for the FormValidatorHtmlEditor Should be implemented for each specific editor
  * to translate the generic option values
- * 
+ *
+ * @package Chamilo\Libraries\Format\Form
  * @author Scaramanga
  */
 abstract class FormValidatorHtmlEditorOptions
 {
-
-    /**
-     *
-     * @var Array The array containing all the options
-     */
-    private $options;
     const OPTION_SKIN = 'skin';
-    
+
     /**
      * The name of the toolbar set e.g.
      * Basic, Wiki, Assessment
      */
     const OPTION_TOOLBAR = 'toolbar';
-    
+
     /**
      * Name of the language to be used for the editor
      */
     const OPTION_LANGUAGE = 'language';
-    
+
     /**
      * The width of the editor in pixels or percent
      */
     const OPTION_WIDTH = 'width';
-    
+
     /**
      * The height of the editor in pixels
      */
     const OPTION_HEIGHT = 'height';
-    
+
     /**
      * Whether or not the toolbar should be collapse by default
      */
     const OPTION_COLLAPSE_TOOLBAR = 'collapse_toolbar';
-    
+
     /**
      * Path to the editors configuration file
      */
     const OPTION_CONFIGURATION = 'configuration';
-    
+
     /**
      * Whether or not the content of the editor should be treated as a standalone page
      */
     const OPTION_FULL_PAGE = 'full_page';
-    
+
     /**
      * Path to available templates for the editor
      */
@@ -63,7 +58,13 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      *
-     * @param Array $options
+     * @var string[]
+     */
+    private $options;
+
+    /**
+     *
+     * @param string[] $options
      */
     public function __construct($options)
     {
@@ -73,27 +74,27 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Returns the names of all available options
-     * 
-     * @return Array The option names
+     *
+     * @return string[] The option names
      */
     public function get_option_names()
     {
         return array(
-            self::OPTION_COLLAPSE_TOOLBAR, 
-            self::OPTION_CONFIGURATION, 
-            self::OPTION_FULL_PAGE, 
-            self::OPTION_LANGUAGE, 
-            self::OPTION_TEMPLATES, 
-            self::OPTION_TOOLBAR, 
-            self::OPTION_SKIN, 
-            self::OPTION_HEIGHT, 
+            self::OPTION_COLLAPSE_TOOLBAR,
+            self::OPTION_CONFIGURATION,
+            self::OPTION_FULL_PAGE,
+            self::OPTION_LANGUAGE,
+            self::OPTION_TEMPLATES,
+            self::OPTION_TOOLBAR,
+            self::OPTION_SKIN,
+            self::OPTION_HEIGHT,
             self::OPTION_WIDTH);
     }
 
     /**
      * Gets all options
-     * 
-     * @return Array The options
+     *
+     * @return string[] The options
      */
     public function get_options()
     {
@@ -102,8 +103,8 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Set the options
-     * 
-     * @param Array $options
+     *
+     * @param string[] $options
      */
     public function set_options($options)
     {
@@ -112,7 +113,8 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Get a specific option's value or null if the option isn't set
-     * 
+     *
+     * @param string $variable
      * @return mixed the option's value
      */
     public function get_option($variable)
@@ -129,8 +131,8 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Sets a specific option
-     * 
-     * @param String $variable
+     *
+     * @param string $variable
      * @param mixed $value
      */
     public function set_option($variable, $value)
@@ -138,6 +140,10 @@ abstract class FormValidatorHtmlEditorOptions
         $this->options[$variable] = $value;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_mapping()
     {
         return array_combine($this->get_option_names(), $this->get_option_names());
@@ -145,19 +151,21 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      * Process the generic options into editor specific ones
+     *
+     * @return string
      */
     public function render_options()
     {
         $javascript = array();
         $available_options = $this->get_option_names();
         $mapping = $this->get_mapping();
-        
+
         foreach ($available_options as $available_option)
         {
             if (key_exists($available_option, $mapping))
             {
                 $value = $this->get_option($available_option);
-                
+
                 if (isset($value))
                 {
                     $processing_function = 'process_' . $available_option;
@@ -165,19 +173,19 @@ abstract class FormValidatorHtmlEditorOptions
                     {
                         $value = call_user_func(array($this, $processing_function), $value);
                     }
-                    
+
                     $javascript[] = '			' . $mapping[$available_option] . ' : ' . $this->format_for_javascript($value);
                 }
             }
         }
-        
+
         return implode(",\n", $javascript);
     }
 
     public function set_defaults()
     {
         $available_options = $this->get_option_names();
-        
+
         foreach ($available_options as $available_option)
         {
             $value = $this->get_option($available_option);
@@ -189,21 +197,21 @@ abstract class FormValidatorHtmlEditorOptions
                         $editor_lang = Translation::getInstance()->getLanguageIsocode();
                         $this->set_option($available_option, $editor_lang);
                         break;
-                    
+
                     case self::OPTION_TOOLBAR :
                         $this->set_option($available_option, 'Basic');
                         break;
                     case self::OPTION_COLLAPSE_TOOLBAR :
                         $this->set_option($available_option, false);
                         break;
-                    
+
                     case self::OPTION_WIDTH :
                         $this->set_option($available_option, '100%');
                         break;
                     case self::OPTION_HEIGHT :
                         $this->set_option($available_option, 200);
                         break;
-                    
+
                     case self::OPTION_FULL_PAGE :
                         $this->set_option($available_option, false);
                         break;
@@ -212,6 +220,11 @@ abstract class FormValidatorHtmlEditorOptions
         }
     }
 
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
     public function format_for_javascript($value)
     {
         if (is_bool($value))
@@ -232,12 +245,12 @@ abstract class FormValidatorHtmlEditorOptions
         elseif (is_array($value))
         {
             $elements = array();
-            
+
             foreach ($value as $element)
             {
                 $elements[] = self::format_for_javascript($element);
             }
-            
+
             return '[' . implode(',', $elements) . ']';
         }
         else
@@ -248,15 +261,15 @@ abstract class FormValidatorHtmlEditorOptions
 
     /**
      *
-     * @param String $type
-     * @param Array $options
-     * @return FormValidatorHtmlEditorOptions
+     * @param string $type
+     * @param string[] $options
+     * @return \Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions
      */
     public static function factory($type, $options = array())
     {
         $class = __NAMESPACE__ . '\\' . 'FormValidator' .
              StringUtilities::getInstance()->createString($type)->upperCamelize() . 'HtmlEditorOptions';
-        
+
         if (class_exists($class))
         {
             return new $class($options);

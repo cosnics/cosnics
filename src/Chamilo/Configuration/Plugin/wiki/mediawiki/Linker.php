@@ -1,6 +1,6 @@
 <?php
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Split off some of the internal bits from Skin.php.

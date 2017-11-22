@@ -17,7 +17,7 @@ $values['admin_phone'] = '0123456789';
 $values['admin_username'] = 'admin_login';
 $values['admin_password'] = 'admin_password';
 
-$values['platform_name'] = 'Testing Platform';
+$values['site_name'] = 'Testing Platform';
 $values['organization_name'] = 'Automatic Test Technology';
 $values['organization_url'] = 'www.chamilo.org';
 

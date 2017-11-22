@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Flickr;
 
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {

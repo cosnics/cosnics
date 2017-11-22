@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\External\General\Streaming;
 
 use Chamilo\Core\Repository\External\ExternalObject;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 abstract class StreamingMediaExternalObject extends ExternalObject
 {

@@ -3,6 +3,11 @@ namespace Chamilo\Libraries\Calendar\TimeZone;
 
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ *
+ * @package Chamilo\Libraries\Calendar\TimeZone
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class TimeZoneCalendarWrapper
 {
 
@@ -46,7 +51,7 @@ class TimeZoneCalendarWrapper
     /**
      *
      * @param string $componentName
-     * @return \Sabre\VObject\Component
+     * @return \Chamilo\Libraries\Calendar\TimeZone\TimeZoneComponentWrapper
      */
     public function newComponent($componentName)
     {

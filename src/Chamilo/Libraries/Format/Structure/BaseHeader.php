@@ -71,6 +71,7 @@ class BaseHeader implements HeaderInterface
     /**
      *
      * @param integer $viewMode
+     * @param string $containerMode
      * @param string $languageCode
      * @param string $textDirection
      */
@@ -268,6 +269,8 @@ class BaseHeader implements HeaderInterface
         $parameters['modified'] = $javascriptModified;
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
+        $this->addJavascriptCDNFiles();
+
         $this->addHtmlHeader('<title>' . $this->getTitle() . '</title>');
     }
 
@@ -298,6 +301,15 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
+     * Adds javascript files from a CDN
+     */
+    public function addJavascriptCDNFiles()
+    {
+        $this->addJavascriptFile(
+            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML');
+    }
+
+    /**
      * Adds a link
      */
     public function addLink($url, $rel = null, $title = null, $type = null)
@@ -311,11 +323,22 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Creates the HTML output for the header.
-     * This function will send all http headers to the browser and return the
-     * head-tag of the html document
+     *
+     * @return string
+     * @deprecated Use render() now
      */
     public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Creates the HTML output for the header.
+     * This function will send all http headers to the browser and return the head-tag of the html document
+     *
+     * @return string
+     */
+    public function render()
     {
         $this->addDefaultHeaders();
 

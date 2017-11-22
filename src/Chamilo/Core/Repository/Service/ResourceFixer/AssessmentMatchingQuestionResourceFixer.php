@@ -47,7 +47,7 @@ class AssessmentMatchingQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing option %s value', $index));
 
                     $value = $option->get_value();
-                    $newValue = $this->fixResourcesInTextContent($value);
+                    $newValue = $this->fixResourcesInTextContent($assessmentMatchingQuestion, $value);
 
                     if ($value != $newValue)
                     {
@@ -58,7 +58,7 @@ class AssessmentMatchingQuestionResourceFixer extends ResourceFixer
                     $this->logger->debug(sprintf('Parsing option %s feedback', $index));
 
                     $feedback = $option->get_feedback();
-                    $newFeedback = $this->fixResourcesInTextContent($feedback);
+                    $newFeedback = $this->fixResourcesInTextContent($assessmentMatchingQuestion, $feedback);
 
                     if ($feedback != $newFeedback)
                     {
@@ -79,7 +79,7 @@ class AssessmentMatchingQuestionResourceFixer extends ResourceFixer
                 {
                     $this->logger->debug(sprintf('Parsing match %s value', $index));
 
-                    $newMatch = $this->fixResourcesInTextContent($match);
+                    $newMatch = $this->fixResourcesInTextContent($assessmentMatchingQuestion, $match);
                     $newMatches[] = $newMatch;
 
                     if ($match != $newMatch)

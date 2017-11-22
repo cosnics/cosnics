@@ -6,14 +6,14 @@ use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the \Chamilo\Core\Rights\Structure\Service\AuthorizationChecker class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AuthorizationCheckerTest extends Test
+class AuthorizationCheckerTest extends ChamiloTestCase
 {
     /**
      * @var AuthorizationChecker

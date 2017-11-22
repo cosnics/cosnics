@@ -5,21 +5,20 @@ use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * $Id: event.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
- * 
+ *
  * @package tracking.lib
  */
 
 /**
  * This class presents a event
- * 
+ *
  * @author Sven Vanpoucke
  */
 class Event extends DataClass
 {
 
     private $trackers;
-    
+
     /**
      * Event properties
      */
@@ -29,7 +28,7 @@ class Event extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -48,7 +47,7 @@ class Event extends DataClass
 
     /**
      * Returns the name of this Event.
-     * 
+     *
      * @return the name.
      */
     public function get_name()
@@ -58,7 +57,7 @@ class Event extends DataClass
 
     /**
      * Sets the name of this Event.
-     * 
+     *
      * @param name
      */
     public function set_name($name)
@@ -68,7 +67,7 @@ class Event extends DataClass
 
     /**
      * Returns the active of this Event.
-     * 
+     *
      * @return the active.
      */
     public function get_active()
@@ -78,7 +77,7 @@ class Event extends DataClass
 
     /**
      * Sets the active of this Event.
-     * 
+     *
      * @param active
      */
     public function set_active($active)
@@ -97,7 +96,7 @@ class Event extends DataClass
 
     /**
      * Returns the context of this Event.
-     * 
+     *
      * @return the context.
      */
     public function get_context()
@@ -107,7 +106,7 @@ class Event extends DataClass
 
     /**
      * Sets the context of this Event.
-     * 
+     *
      * @param context
      */
     public function set_context($context)
@@ -124,7 +123,7 @@ class Event extends DataClass
     public static function eventFactory($name, $context)
     {
         $eventClass = $context . '\Event\\' . $name;
-        
+
         return new $eventClass();
     }
 
@@ -142,15 +141,15 @@ class Event extends DataClass
         if (! $this->trackers)
         {
             $trackers = array();
-            
+
             foreach ($this->getTrackerClasses() as $trackerClass)
             {
                 $trackers[] = new $trackerClass();
             }
-            
+
             $this->trackers = $trackers;
         }
-        
+
         return $this->trackers;
     }
 
@@ -169,7 +168,7 @@ class Event extends DataClass
     {
         $parameters['event'] = $this->get_name();
         $data = array();
-        
+
         $trackers = $this->get_trackers();
         foreach ($trackers as $tracker)
         {
@@ -178,12 +177,12 @@ class Event extends DataClass
             {
                 $tracker->set_event($this);
             }
-            
+
             $tracker->run($parameters);
-            
+
             $data[] = $tracker;
         }
-        
+
         return $data;
     }
 }

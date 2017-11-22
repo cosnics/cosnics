@@ -8,14 +8,14 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInt
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
-use Chamilo\Libraries\Architecture\Test\Test;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
  * Tests the Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer class
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class SynchronizerTest extends Test
+class SynchronizerTest extends ChamiloTestCase
 {
     /**
      * @var LoaderInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -47,7 +47,7 @@ class SynchronizerTest extends Test
     public function setUp()
     {
         $this->configurationLoader = $this->getMockForAbstractClass(LoaderInterface::class);
-        $this->registrationConsulterMock = $this->getMock(RegistrationConsulter::class, array(), array(), '', false);
+        $this->registrationConsulterMock = $this->createMock(RegistrationConsulter::class, array(), array(), '', false);
         $this->structureLocationServiceMock = $this->getMockForAbstractClass(StructureLocationServiceInterface::class);
 
         $this->structureLocationRoleServiceMock =

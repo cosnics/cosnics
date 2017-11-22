@@ -2,8 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 /**
- * $Id: course_request.class.php 216 2010-02-25 11:06:00Z Yannick & Tristan$
- * 
+ *
  * @package application.lib.weblcms.course
  */
 class CourseRequest extends CommonRequest

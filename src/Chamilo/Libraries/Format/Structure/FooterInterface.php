@@ -31,5 +31,5 @@ interface FooterInterface
      *
      * @return string
      */
-    public function toHtml();
+    public function render();
 }

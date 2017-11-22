@@ -16,10 +16,22 @@ class ContentObjectResourceRenderer
 
     /**
      * Handle description as full html or not
-     * 
+     *
      * @var bool
      */
     private $full_html;
+
+    /**
+     *
+     * @var DOMXPath $dom_xpath
+     */
+    private $dom_xpath;
+
+    /**
+     *
+     * @var DOMDocument $dom_document
+     */
+    private $dom_document;
 
     public function __construct($context, $description, $full_html = false)
     {
@@ -31,12 +43,12 @@ class ContentObjectResourceRenderer
     public function run()
     {
         $description = $this->description;
-        
+
         $this->dom_document = new DOMDocument();
         $this->dom_document->loadHTML('<?xml encoding="UTF-8">' . $description);
         $this->dom_document->removeChild($this->dom_document->firstChild);
         $this->dom_xpath = new DOMXPath($this->dom_document);
-        
+
         if (! $this->full_html)
         {
             $body_nodes = $this->dom_xpath->query('body/*');
@@ -51,89 +63,17 @@ class ContentObjectResourceRenderer
         {
             $this->dom_document->removeChild($this->dom_document->firstChild);
         }
-        
-        $resources = $this->dom_xpath->query('//resource');
-        foreach ($resources as $resource)
-        {
-            $source = $resource->getAttribute('source');
-            // $type = $resource->getAttribute('type');
-            // if (! $type)
-            // {
-            $type = ContentObjectRendition::VIEW_INLINE;
-            // }
-            
-            $parameters_list = $this->dom_xpath->query('@*', $resource);
-            $parameters = array();
-            foreach ($parameters_list as $parameter)
-            {
-                $parameters[$parameter->name] = $parameter->value;
-            }
-            
-            try
-            {
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
-                    $source);
-                
-                if (! $object instanceof ContentObject)
-                {
-                    continue;
-                }
 
-                $securityCode = $resource->getAttribute('security_code');
-                if(!isset($securityCode) || empty($securityCode))
-                {
-                    continue;
-                }
+        $this->processResources();
 
-                if($object->calculate_security_code() != $securityCode)
-                {
-                    continue;
-                }
+        $this->processContentObjectPlaceholders();
 
-//                $securityCode = $resource->getAttribute('security_code');
-//                if(isset($securityCode) && !empty($securityCode))
-//                {
-//                    if($object->calculate_security_code() != $securityCode)
-//                    {
-//                        continue;
-//                    }
-//                }
-            }
-            catch (\Exception $exception)
-            {
-                continue;
-            }
-            
-            $descriptionRendition = ContentObjectRenditionImplementation::factory(
-                $object, 
-                ContentObjectRendition::FORMAT_HTML, 
-                $type, 
-                $this)->render($parameters);
-            
-            $rendition = new DOMDocument();
-            $rendition->loadHTML($descriptionRendition);
-            
-            $rendition_xpath = new DOMXPath($rendition);
-            
-            $fragment = $rendition->createDocumentFragment();
-            
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
-            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
-            
-            $fragment = $this->dom_document->importNode($fragment, true);
-            
-            $resource->parentNode->insertBefore($fragment, $resource);
-            $resource->parentNode->removeChild($resource);
-        }
-        
         return $this->dom_document->saveHTML();
     }
 
     /**
      * Add given nodes to the given document fragment
-     * 
+     *
      * @param \DOMDocumentFragment $documentFragment
      * @param \DOMNodeList $nodes
      */
@@ -143,5 +83,146 @@ class ContentObjectResourceRenderer
         {
             $documentFragment->appendChild($node);
         }
+    }
+
+    protected function processContentObjectPlaceholders()
+    {
+        $placeholders = $this->dom_xpath->query('//*[@data-co-id]'); // select all elements with the data-co-id
+                                                                     // attribute
+        foreach ($placeholders as $placeholder)
+        {
+            /**
+             *
+             * @var \DOMNode $placeholder
+             */
+            $contentObjectId = $placeholder->getAttribute('data-co-id');
+
+            $type = ContentObjectRendition::VIEW_INLINE;
+
+            $parameters_list = $this->dom_xpath->query('@*', $placeholder);
+            $parameters = array();
+
+            foreach ($parameters_list as $parameter)
+            {
+                $parameters[$parameter->name] = $parameter->value;
+            }
+
+            try
+            {
+                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(),
+                    $contentObjectId);
+
+                if (! $object instanceof ContentObject)
+                {
+                    continue;
+                }
+
+                $securityCode = $placeholder->getAttribute('data-security-code');
+                if (empty($securityCode) || $securityCode != $object->calculate_security_code())
+                {
+                    continue;
+                }
+            }
+            catch (\Exception $exception)
+            {
+                continue;
+            }
+
+            list($rendition_xpath, $fragment) = $this->getFragment($object, $type, $parameters);
+
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
+
+            $fragment = $this->dom_document->importNode($fragment, true);
+
+            if ($placeholder->tagName == 'div')
+            {
+                $placeholder->appendChild($fragment);
+            }
+            else
+            {
+                $placeholder->parentNode->insertBefore($fragment, $placeholder);
+                $placeholder->parentNode->removeChild($placeholder);
+            }
+        }
+    }
+
+    /**
+     *
+     * @deprecated
+     *
+     */
+    protected function processResources()
+    {
+        $resources = $this->dom_xpath->query('//resource');
+        foreach ($resources as $resource)
+        {
+            $source = $resource->getAttribute('source');
+            // $type = $resource->getAttribute('type');
+            // if (! $type)
+            // {
+            $type = ContentObjectRendition::VIEW_INLINE;
+            // }
+
+            $parameters_list = $this->dom_xpath->query('@*', $resource);
+            $parameters = array();
+            foreach ($parameters_list as $parameter)
+            {
+                $parameters[$parameter->name] = $parameter->value;
+            }
+
+            try
+            {
+                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(),
+                    $source);
+
+                if (! $object instanceof ContentObject)
+                {
+                    continue;
+                }
+            }
+            catch (\Exception $exception)
+            {
+                continue;
+            }
+
+            list($rendition_xpath, $fragment) = $this->getFragment($object, $type, $parameters);
+
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
+
+            $fragment = $this->dom_document->importNode($fragment, true);
+
+            $resource->parentNode->insertBefore($fragment, $resource);
+            $resource->parentNode->removeChild($resource);
+        }
+    }
+
+    /**
+     *
+     * @param $object
+     * @param $type
+     * @param $parameters
+     * @return array
+     */
+    protected function getFragment($object, $type, $parameters): array
+    {
+        $descriptionRendition = ContentObjectRenditionImplementation::factory(
+            $object,
+            ContentObjectRendition::FORMAT_HTML,
+            $type,
+            $this)->render($parameters);
+
+        $rendition = new DOMDocument();
+        $rendition->loadHTML($descriptionRendition);
+
+        $rendition_xpath = new DOMXPath($rendition);
+
+        $fragment = $rendition->createDocumentFragment();
+        return array($rendition_xpath, $fragment);
     }
 }

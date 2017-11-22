@@ -11,8 +11,7 @@ use HTML_Menu;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 
 /**
- * $Id: content_object_category_menu.class.php 204 2009-11-13 12:51:30Z tristan $
- * 
+ *
  * @package repository.lib
  */
 class RightsTreeRenderer extends HtmlMenu
@@ -34,7 +33,7 @@ class RightsTreeRenderer extends HtmlMenu
 
     /**
      * Returns the menu items.
-     * 
+     *
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -43,10 +42,10 @@ class RightsTreeRenderer extends HtmlMenu
     {
         $menu = array();
         $condition = new InCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
             $this->groups);
         $sub_groups = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-            Group::class_name(), 
+            Group::class_name(),
             new DataClassRetrievesParameters($condition));
         while ($group = $sub_groups->next_result())
         {
@@ -69,7 +68,7 @@ class RightsTreeRenderer extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

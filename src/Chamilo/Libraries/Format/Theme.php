@@ -80,8 +80,8 @@ class Theme
      * Constructor
      *
      * @param string $theme
-     * @param StringUtilities $stringUtilities
-     * @param ClassnameUtilities $classnameUtilities
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
     public function __construct($theme, StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities,
@@ -274,9 +274,10 @@ class Theme
      * @param string $extension
      * @param string $label
      * @param string $href
-     * @param int $display
+     * @param integer $display
      * @param boolean $confirmation
      * @param string $context
+     * @return string
      */
     public function getImage($image, $extension = 'png', $label = null, $href = null,
         $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $context = null)
@@ -303,8 +304,9 @@ class Theme
      * @param string $extension
      * @param string $label
      * @param string $href
-     * @param int $display
+     * @param integer $display
      * @param boolean $confirmation
+     * @return string
      */
     public function getCommonImage($image, $extension = 'png', $label = null, $href = null,
         $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false)
@@ -325,6 +327,13 @@ class Theme
         return $this->getImagesPath($context, $web) . $image . '.' . $extension;
     }
 
+    /**
+     *
+     * @param string $image
+     * @param string $extension
+     * @param boolean $web
+     * @return string
+     */
     public function getCommonImagePath($image, $extension = 'png', $web = true)
     {
         return $this->getImagePath('Chamilo\Configuration', $image, $extension, $web);

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+
+        <service id="chamilo.libraries.console.command.doctrine.run_sql"
+                 class="Doctrine\DBAL\Tools\Console\Command\RunSqlCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.import"
+                 class="Doctrine\DBAL\Tools\Console\Command\ImportCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.clearcache.metadata"
+                 class="Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.clearcache.result"
+                 class="Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.clearcache.query"
+                 class="Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.schema.create"
+                 class="Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.schema.update"
+                 class="Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.schema.drop"
+                 class="Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.ensure_production_settings"
+                 class="Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.convert_doctrine_1_schema"
+                 class="Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.generate_repositories"
+                 class="Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.generate_entities"
+                 class="Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.generate_proxies"
+                 class="Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.convert_mapping"
+                 class="Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.run_dql"
+                 class="Doctrine\ORM\Tools\Console\Command\RunDqlCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.validate_schema"
+                 class="Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.info"
+                 class="Doctrine\ORM\Tools\Console\Command\InfoCommand">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <!--<service id="chamilo.libraries.console.command.doctrine.mapping_describe"-->
+        <!--class="Doctrine\ORM\Tools\Console\Command\MappingDescribeCommand">-->
+        <!--<tag name="chamilo.libraries.console.command" />-->
+        <!--</service>-->
+
+        <service id="chamilo.libraries.console.command.configurator.doctrine_migrations"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.diff"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DiffCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.execute"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\ExecuteCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.generate"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\GenerateCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.latest"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\LatestCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.migrate"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\MigrateCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.status"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\StatusCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+        <service id="chamilo.libraries.console.command.doctrine.migrations.version"
+                 class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\VersionCommand">
+            <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
+    </services>
+</container>

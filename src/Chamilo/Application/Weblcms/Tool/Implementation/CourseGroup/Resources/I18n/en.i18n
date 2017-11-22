@@ -123,3 +123,4 @@ Users = "Users"
 RemoveSelectedCourseGroups = "Remove selected course groups"
 
 SubscriptionTimeFormat = "%B %d, %Y at %I:%M:%S %p"
+Integrations = "Integrations with other tools"

@@ -2,15 +2,16 @@
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Interfaces\GalleryTableOrderDirectionProhibition;
-use Chamilo\Libraries\Format\Table\GalleryHTMLTable;
-use Chamilo\Libraries\Format\Table\Table;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\GalleryHTMLTable;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Table;
 
 /**
  * This class represents an table to display resources like thumbnails, images, videos...
  * Refactoring from GalleryObjectTable to support the new Table structure
  *
+ * @package Chamilo\Libraries\Format\Table\Extension\GalleryTable
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class GalleryTable extends Table
@@ -24,21 +25,15 @@ abstract class GalleryTable extends Table
     /**
      * The current row that is being processed
      *
-     * @var array
+     * @var string[]
      */
     private $current_row;
 
     /**
      *
-     * @var TableFormActions
+     * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     protected $form_actions;
-
-    /**
-     * **************************************************************************************************************
-     * Inherited Rendering Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Constructs the sortable table
@@ -65,34 +60,26 @@ abstract class GalleryTable extends Table
     }
 
     /**
-     * Initializes the table
      *
-     * @return HTML_Table
+     * @see \Chamilo\Libraries\Format\Table\Table::initialize_table()
      */
     protected function initialize_table()
     {
     }
 
     /**
-     * **************************************************************************************************************
-     * Inherited Data Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Retrieves the data from the data provider, parses the data through the cell renderer and returns the data
      * as an array
      *
-     * @param int $offset
-     * @param int $count
-     * @param int $order_column
-     * @param string $order_direction
-     *
+     * @param integer $offset
+     * @param integer $count
+     * @param integer $orderColumn
+     * @param string $orderDirection
      * @return string[][]
      */
-    public function getData($offset, $count, $order_column, $order_direction)
+    public function getData($offset, $count, $orderColumn, $orderDirection)
     {
-        $table_data = parent::getData($offset, $count, $order_column, $order_direction);
+        $table_data = parent::getData($offset, $count, $orderColumn, $orderDirection);
 
         if (count($this->current_row) > 0)
         {
@@ -105,27 +92,26 @@ abstract class GalleryTable extends Table
     /**
      * Returns the order property as ObjectTableOrder
      *
-     * @param int $order_index
-     * @param int $order_direction
-     *
-     * @return ObjectTableOrder
+     * @param integer $orderIndex
+     * @param integer $orderDirection
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      */
-    protected function get_order_property($order_index, $order_direction)
+    protected function get_order_property($orderIndex, $orderDirection)
     {
-        return $this->get_property_model()->get_order_property($order_index, $order_direction);
+        return $this->get_property_model()->get_order_property($orderIndex, $orderDirection);
     }
 
     /**
      * Handles a single result of the data and adds it to the table data
      *
-     * @param $table_data
-     * @param $result
+     * @param string[][] $tableData
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
      */
-    protected function handle_result(&$table_data, $result)
+    protected function handle_result(&$tableData, $result)
     {
         if (count($this->current_row) >= $this->get_default_column_count())
         {
-            $table_data[] = $this->current_row;
+            $tableData[] = $this->current_row;
             $this->current_row = array();
         }
 
@@ -135,17 +121,10 @@ abstract class GalleryTable extends Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Gets the table's cell renderer or builds one if it is not set
      *
      * @throws \Exception
-     *
-     * @return GalleryTableCellRenderer The cell renderer
+     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRenderer
      */
     public function get_cell_renderer()
     {
@@ -159,15 +138,9 @@ abstract class GalleryTable extends Table
     }
 
     /**
-     * **************************************************************************************************************
-     * Additional Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Gets the default column count of the table.
      *
-     * @return int The number of columns.
+     * @return integer
      */
     public function get_default_column_count()
     {
@@ -188,7 +161,7 @@ abstract class GalleryTable extends Table
     /**
      * Gets the actions for the mass-update form at the bottom of the table.
      *
-     * @return TableFormActions The actions as an associative array.
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions[]
      */
     public function get_form_actions()
     {
@@ -203,7 +176,7 @@ abstract class GalleryTable extends Table
     /**
      * Gets the table's property model.
      *
-     * @return GalleryTablePropertyModel The properties.
+     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyModel The properties.
      */
     public function get_property_model()
     {

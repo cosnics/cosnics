@@ -3,12 +3,12 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax;
 
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Helper class to build an ajax result for an advanced element finder ajax feed
- * 
+ *
+ * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AjaxResultGenerator
@@ -18,7 +18,7 @@ class AjaxResultGenerator
 
     /**
      *
-     * @var AjaxResultDataProviderInterface
+     * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface
      */
     protected $ajaxResultDataProvider;
 
@@ -30,16 +30,16 @@ class AjaxResultGenerator
 
     /**
      *
-     * @var int
+     * @var integer
      */
     protected $offset;
 
     /**
      * AdvancedElementFinderAjaxResultGenerator constructor.
-     * 
-     * @param AjaxResultDataProviderInterface $ajaxResultDataProvider
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface $ajaxResultDataProvider
      * @param string $searchQuery
-     * @param int $offset
+     * @param integer $offset
      */
     public function __construct(AjaxResultDataProviderInterface $ajaxResultDataProvider, $searchQuery = null, $offset = 0)
     {
@@ -47,45 +47,44 @@ class AjaxResultGenerator
     }
 
     /**
-     * Generates the ajax result
+     *
+     * @return \Chamilo\Libraries\Architecture\JsonAjaxResult
      */
     public function generateAjaxResult()
     {
         $result = new JsonAjaxResult();
-        
+
         $elements = new AdvancedElementFinderElements();
         $this->ajaxResultDataProvider->generateElements($elements);
         $elements = $elements->as_array();
-        
+
         $result->set_property(self::PROPERTY_ELEMENTS, $elements);
         $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->ajaxResultDataProvider->getTotalNumberOfElements());
-        
+
         return $result;
     }
 
     /**
      *
-     * @param PropertyConditionVariable[] $searchProperties
-     *
-     * @return Condition
+     * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $searchProperties
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function getSearchCondition($searchProperties = array())
     {
         $condition = null;
-        
+
         if (! empty($this->searchQuery))
         {
             $condition = Utilities::query_to_condition($this->searchQuery, $searchProperties);
         }
-        
+
         return $condition;
     }
 
     /**
      *
-     * @param int $offset
-     *
-     * @return $this
+     * @param integer $offset
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator
      */
     public function setOffset($offset = 0)
     {
@@ -93,15 +92,15 @@ class AjaxResultGenerator
         {
             $offset = 0;
         }
-        
+
         $this->offset = $offset;
-        
+
         return $this;
     }
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getOffset()
     {
@@ -111,13 +110,12 @@ class AjaxResultGenerator
     /**
      *
      * @param string $searchQuery
-     *
-     * @return $this
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator
      */
     public function setSearchQuery($searchQuery)
     {
         $this->searchQuery = $searchQuery;
-        
+
         return $this;
     }
 
@@ -132,7 +130,7 @@ class AjaxResultGenerator
 
     /**
      *
-     * @return AjaxResultDataProviderInterface
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface
      */
     public function getAjaxResultDataProvider()
     {
@@ -141,7 +139,7 @@ class AjaxResultGenerator
 
     /**
      *
-     * @param AjaxResultDataProviderInterface $ajaxResultDataProvider
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface $ajaxResultDataProvider
      */
     public function setAjaxResultDataProvider($ajaxResultDataProvider)
     {

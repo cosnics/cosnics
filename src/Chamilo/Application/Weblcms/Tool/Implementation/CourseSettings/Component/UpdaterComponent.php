@@ -4,14 +4,12 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Compone
 use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * $Id: course_settings_updater.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_settings.component
  */
 class UpdaterComponent extends Manager implements CourseSubManagerSupport
@@ -23,23 +21,22 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
         {
             throw new NotAllowedException();
         }
-        
+
         Request::set_get(
-            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION, 
+            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION,
             \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE);
         Request::set_get(\Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID, $this->get_course_id());
-        
+
         $this->getRequest()->query->set(
-            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION, 
+            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION,
             \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE);
         $this->getRequest()->query->set(
-            \Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID, 
+            \Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID,
             $this->get_course_id());
-        
-        $factory = new ApplicationFactory(
-            \Chamilo\Application\Weblcms\Course\Manager::context(), 
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Application\Weblcms\Course\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
     public function redirect_after_quick_create($succes, $message)
@@ -49,7 +46,7 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
 
     /**
      * Redirects the submanager to another component after a quick update
-     * 
+     *
      * @param boolean $succes
      * @param String $message
      */

@@ -1,9 +1,15 @@
 {
-    "name": "chamilo/co-portfolio-item",
-        "version": "6.0.0", "description": "Chamilo Portfolio Item Content Object",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-repository-content-object-portfolio-item",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject PortfolioItem",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "PortfolioItem"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,12 +20,25 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "extra": {
-        "install-path": "repository/content_object/portfolio_item"
+        "cosnics": {
+            "name": "Portfolio Item",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\PortfolioItem",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Helper",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

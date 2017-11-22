@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -55,7 +55,7 @@ class CourseUserEntity extends UserEntity
         return self::$instance;
     }
 
-    public function __construct($course_id, $limited_users = array(), $excluded_users = array())
+    public function __construct($course_id = 0, $limited_users = array(), $excluded_users = array())
     {
         $this->limited_users = $limited_users;
         $this->excluded_users = $excluded_users;

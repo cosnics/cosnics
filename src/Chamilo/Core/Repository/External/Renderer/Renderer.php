@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\External\Renderer;
 
 use Chamilo\Core\Repository\External\ExternalObject;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 

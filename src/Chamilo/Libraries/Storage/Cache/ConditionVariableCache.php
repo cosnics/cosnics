@@ -16,14 +16,14 @@ class ConditionVariableCache
 
     /**
      * The instance of the ConditionVariableCache
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
      */
     private static $instance;
 
     /**
      * The cache
-     * 
+     *
      * @var string[][]
      */
     private $cache;
@@ -35,7 +35,7 @@ class ConditionVariableCache
 
     /**
      * Get an instance of the ConditionVariableCache
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
      */
     public static function getInstance()
@@ -44,13 +44,13 @@ class ConditionVariableCache
         {
             self::$instance = new self();
         }
-        
+
         return self::$instance;
     }
 
     /**
      * Get a translated condition_variable from the cache
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return string
      */
@@ -61,7 +61,7 @@ class ConditionVariableCache
             return $this->cache[$conditionVariable->hash()];
         }
         else
-        
+
         {
             return false;
         }
@@ -69,7 +69,7 @@ class ConditionVariableCache
 
     /**
      * Returns whether a ConditionVariable object exists in the cache
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return boolean
      */
@@ -87,7 +87,7 @@ class ConditionVariableCache
 
     /**
      * Set the cache value for a specific ConditionVariable
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param string $value
      */

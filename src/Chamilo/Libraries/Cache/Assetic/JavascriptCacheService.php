@@ -5,17 +5,15 @@ use Chamilo\Libraries\Format\Utilities\FileAsset;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Service
+ * @package Chamilo\Libraries\Cache\Assetic
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class JavascriptCacheService extends AsseticCacheService
 {
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getCachePath()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getCachePath()
      */
     protected function getCachePath()
     {
@@ -24,7 +22,7 @@ class JavascriptCacheService extends AsseticCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getAssets()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssets()
      */
     protected function getAssets()
     {
@@ -54,8 +52,11 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.query.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Jquery/jquery.timepicker.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'JqueryContextMenu/jquery.contextMenu.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS/angular-sanitize.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'AngularJS-UI-Bootstrap/ui-bootstrap.min.js');
+        $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Fancytree/dist/jquery.fancytree-all.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Dropzone/dropzone.min.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'phpjs.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Utilities.js');
@@ -68,7 +69,7 @@ class JavascriptCacheService extends AsseticCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Service\AsseticCacheService::getAssetFilters()
+     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssetFilters()
      */
     protected function getAssetFilters()
     {

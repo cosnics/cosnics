@@ -6,8 +6,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
 
 /**
- * $Id: repository_rights.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 class Rights extends RightsUtil
@@ -34,7 +33,7 @@ class Rights extends RightsUtil
     {
         return array('Use' => self::USE_RIGHT);
     }
-    
+
     // External Instances subtree
     public function create_location_in_external_instances_subtree($identifier, $parent)
     {
@@ -66,13 +65,13 @@ class Rights extends RightsUtil
         $entities = array();
         $entities[] = new UserEntity();
         $entities[] = new PlatformGroupEntity();
-        
+
         return parent::is_allowed(
-            $right, 
-            __NAMESPACE__, 
-            null, 
-            $entities, 
-            $external_instance_id, 
+            $right,
+            __NAMESPACE__,
+            null,
+            $entities,
+            $external_instance_id,
             self::TYPE_EXTERNAL_INSTANCE);
     }
 

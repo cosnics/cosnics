@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\Display\DisplaySupport;
 
 /**
@@ -43,7 +44,7 @@ interface LearningPathDisplaySupport extends DisplaySupport
      *
      * @return string
      */
-    public function get_learning_path_tree_menu_url();
+    public function get_tree_menu_url();
 
     /**
      * Creates a learning path item tracker
@@ -53,4 +54,11 @@ interface LearningPathDisplaySupport extends DisplaySupport
      * @return AbstractItemAttemptTracker[]
      */
     public function create_learning_path_item_tracker($learning_path_attempt, $current_complex_content_object_item);
+
+    /**
+     * Builds the TrackingService
+     *
+     * @return TrackingService
+     */
+    public function buildTrackingService();
 }

@@ -41,9 +41,9 @@ class IdentRenderer
     /**
      *
      * @param string $identifier
-     * @param string $size
      * @param boolean $isNew
      * @param boolean $isDisabled
+     * @param string $size
      */
     public function __construct($identifier, $isNew = false, $isDisabled = false, $size = self :: SIZE_MD)
     {
@@ -132,22 +132,22 @@ class IdentRenderer
     public function render()
     {
         $classes = array();
-        
+
         $classes[] = 'ident';
         $classes[] = 'ident-' . $this->getSize();
-        
+
         if ($this->getIsNew())
         {
             $classes[] = 'ident-new';
         }
-        
+
         if ($this->getIsDisabled())
         {
             $classes[] = 'ident-disabled';
         }
-        
+
         $classes[] = 'ident-' . md5($this->getIdentifier());
-        
+
         return '<span class="' . implode(' ', $classes) . '"></span>';
     }
 }

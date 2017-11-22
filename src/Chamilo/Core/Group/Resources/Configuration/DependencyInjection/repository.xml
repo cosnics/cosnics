@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service
+            id="chamilo.core.group.storage.repository.group_repository"
+            class="Chamilo\Core\Group\Storage\Repository\GroupRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+    </services>
+</container>

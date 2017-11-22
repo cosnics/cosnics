@@ -101,7 +101,8 @@ class EventRendererFactory
     }
 
     /**
-     * Constructs the renderer and runs it
+     *
+     * @return string
      */
     public function render()
     {
@@ -117,7 +118,7 @@ class EventRendererFactory
     {
         $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
              '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
-        
+
         return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
     }
 }

@@ -6,8 +6,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Support\Diagnoser;
 
 /**
- * $Id: diagnoser.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
- * 
+ *
  * @package admin.lib.admin_manager.component
  */
 
@@ -23,14 +22,14 @@ class DiagnoserComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
-        
+
         $html = array();
         $diagnoser = new Diagnoser($this);
-        
+
         $html[] = $this->render_header();
         $html[] = $diagnoser->to_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -41,7 +40,7 @@ class DiagnoserComponent extends Manager
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

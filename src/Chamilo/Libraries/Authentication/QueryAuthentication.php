@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -16,7 +17,7 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
     private $request;
 
@@ -24,14 +25,14 @@ abstract class QueryAuthentication extends Authentication
      *
      * @param string $userName
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request)
+    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }
 
     /**
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest()
     {
@@ -40,9 +41,9 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function setRequest(\Chamilo\Libraries\Platform\ChamiloRequest $request)
     {
         $this->request = $request;
     }
@@ -50,17 +51,17 @@ abstract class QueryAuthentication extends Authentication
     /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     abstract public function login();
 
     /**
      *
      * @param string $authenticationMethod
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Chamilo\Libraries\Authentication\CredentialsAuthentication
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @return \Chamilo\Libraries\Authentication\QueryAuthentication
      */
-    public static function factory($authenticationMethod, \Symfony\Component\HttpFoundation\Request $request)
+    public static function factory($authenticationMethod, ChamiloRequest $request)
     {
         $authenticationClass = __NAMESPACE__ . '\\' . $authenticationMethod . '\\' . $authenticationMethod .
              'Authentication';
@@ -69,21 +70,20 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      * Retrieves a user by a given security token
-     * 
-     * @param $securityToken
-     * @return User
      *
-     * @throws AuthenticationException
+     * @param $securityToken
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     protected function retrieveUserBySecurityToken($securityToken)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_security_token($securityToken);
-        
+
         if (! $user instanceof User)
         {
             throw new AuthenticationException(Translation::get('InvalidSecurityToken'));
         }
-        
+
         return $user;
     }
 }

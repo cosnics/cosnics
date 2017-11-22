@@ -5,15 +5,14 @@ use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * $Id: settings_user_connector.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.settings
  */
 
 /**
  * Simple connector class to facilitate rendering settings forms by preprocessing data from the datamanagers to a simple
  * array format.
- * 
+ *
  * @author Hans De Bisschop
  */
 class SettingsConnector
@@ -32,7 +31,7 @@ class SettingsConnector
 
     /**
      * Returns the available user picture providers
-     * 
+     *
      * @return array
      */
     public function getUserPictureProviders()

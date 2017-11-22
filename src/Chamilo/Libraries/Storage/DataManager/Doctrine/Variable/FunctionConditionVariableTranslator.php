@@ -42,7 +42,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
                 $strings[] = 'AVG';
                 break;
         }
-        
+
         if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = '(';
@@ -51,14 +51,14 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = ' ';
         }
-        
+
         $strings[] = static::render($this->get_condition_variable()->get_condition_variable());
-        
+
         if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = ')';
         }
-        
+
         if ($this->get_condition_variable()->get_alias())
         {
             $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
@@ -67,7 +67,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         {
             $value = implode('', $strings);
         }
-        
+
         return $value;
     }
 }

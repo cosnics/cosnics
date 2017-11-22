@@ -1,18 +1,20 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
+use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Form to display the possible places for direct movement
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DirectMoverForm extends FormValidator
@@ -22,31 +24,40 @@ class DirectMoverForm extends FormValidator
 
     /**
      *
-     * @var ComplexContentObjectPath
+     * @var Tree
      */
-    protected $complexContentObjectPath;
+    protected $tree;
 
     /**
      *
-     * @var ComplexContentObjectPathNode
+     * @var TreeNode
      */
-    protected $currentNode;
+    protected $treeNode;
+
+    /**
+     * @var AutomaticNumberingService
+     */
+    protected $automaticNumberingService;
 
     /**
      * DirectMoverForm constructor.
-     * 
+     *
      * @param string $action
-     * @param ComplexContentObjectPath $complexContentObjectPath
-     * @param ComplexContentObjectPathNode $currentNode
+     * @param Tree $tree
+     * @param TreeNode $treeNode
+     * @param AutomaticNumberingService $automaticNumberingService
      */
-    public function __construct($action, ComplexContentObjectPath $complexContentObjectPath, 
-        ComplexContentObjectPathNode $currentNode)
+    public function __construct(
+        $action, Tree $tree,
+        TreeNode $treeNode, AutomaticNumberingService $automaticNumberingService
+    )
     {
         parent::__construct('direct_mover_form', 'post', $action);
-        
-        $this->complexContentObjectPath = $complexContentObjectPath;
-        $this->currentNode = $currentNode;
-        
+
+        $this->tree = $tree;
+        $this->treeNode = $treeNode;
+        $this->automaticNumberingService = $automaticNumberingService;
+
         $this->buildForm();
     }
 
@@ -55,86 +66,96 @@ class DirectMoverForm extends FormValidator
      */
     protected function buildForm()
     {
-        $nodes = $this->complexContentObjectPath->get_nodes();
-        $descendants = $this->currentNode->get_descendants();
-        
+        $nodes = $this->tree->getTreeNodes();
+        $descendants = $this->treeNode->getDescendantNodes();
+
         $parents = array();
         $positionsPerParent = array();
-        
+
         foreach ($nodes as $node)
         {
-            if ($node == $this->currentNode || in_array($node, $descendants))
+            if ($node === $this->treeNode || in_array($node, $descendants))
             {
                 continue;
             }
-            
-            /** @var ComplexContentObjectPathNode $node */
-            $contentObject = $node->get_content_object();
-            if ($contentObject instanceof LearningPath)
+
+            $contentObject = $node->getContentObject();
+            if ($contentObject instanceof Section || $node->isRootNode())
             {
-                $title = str_repeat('--', count($node->get_parents())) . ' ' . $contentObject->get_title();
-                $parents[$node->get_id()] = $title;
-                
+                $title = $this->automaticNumberingService->getAutomaticNumberedTitleForTreeNode($node);
+
+                $title = str_repeat('--', count($node->getParentNodes())) . ' ' . $title;
+                $parents[$node->getId()] = $title;
+
                 $displayOrder = 1;
-                
-                $positionsPerParent[$node->get_id()][] = array(
-                    self::PARAM_TITLE => $this->getTranslation('FirstItem'), 
-                    self::PARAM_DISPLAY_ORDER => $displayOrder);
-                
+
+                $positionsPerParent[$node->getId()][] = array(
+                    self::PARAM_TITLE => $this->getTranslation('FirstItem'),
+                    self::PARAM_DISPLAY_ORDER => $displayOrder
+                );
+
                 $displayOrder ++;
-                
-                $children = $node->get_children();
+
+                $children = $node->getChildNodes();
                 foreach ($children as $child)
                 {
-                    if ($child == $this->currentNode || in_array($child, $descendants))
+                    if ($child == $this->treeNode || in_array($child, $descendants))
                     {
                         continue;
                     }
-                    
-                    $positionsPerParent[$node->get_id()][] = array(
+
+                    $positionsPerParent[$node->getId()][] = array(
                         self::PARAM_TITLE => $this->getTranslation(
-                            'AfterContentObject', 
-                            array('CONTENT_OBJECT' => $child->get_content_object()->get_title())), 
-                        self::PARAM_DISPLAY_ORDER => $displayOrder);
-                    
+                            'AfterContentObject',
+                            array('CONTENT_OBJECT' => $child->getContentObject()->get_title())
+                        ),
+                        self::PARAM_DISPLAY_ORDER => $displayOrder
+                    );
+
                     $displayOrder ++;
                 }
             }
         }
-        
+
         $this->addElement(
-            'select', 
-            Manager::PARAM_PARENT_ID, 
-            $this->getTranslation('NewParent'), 
-            $parents, 
-            array('id' => 'mover-parent-id', 'class' => 'form-control'));
+            'select',
+            Manager::PARAM_PARENT_ID,
+            $this->getTranslation('NewParent'),
+            $parents,
+            array('id' => 'mover-parent-id', 'class' => 'form-control')
+        );
         $this->addElement(
-            'select', 
-            Manager::PARAM_DISPLAY_ORDER, 
-            $this->getTranslation('NewPosition'), 
-            array(), 
-            array('id' => 'mover-display-order', 'class' => 'form-control'));
+            'select',
+            Manager::PARAM_DISPLAY_ORDER,
+            $this->getTranslation('NewPosition'),
+            array(),
+            array('id' => 'mover-display-order', 'class' => 'form-control')
+        );
         $this->addElement(
-            'style_submit_button', 
-            self::PARAM_SUBMIT, 
-            $this->getTranslation('Move'), 
-            array('style' => 'margin-top: 20px;'));
-        
+            'style_submit_button',
+            self::PARAM_SUBMIT,
+            $this->getTranslation('Move'),
+            array('style' => 'margin-top: 20px;')
+        );
+
         $this->addElement(
-            'html', 
+            'html',
             '<div id="positions-per-parent" data-positions="' . htmlspecialchars(json_encode($positionsPerParent)) .
-                 '"></div>');
-        
+            '"></div>'
+        );
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->namespaceToFullPath(Manager::context(), true) .
-                     'Resources/Javascript/DirectMover.js'));
+                'Resources/Javascript/DirectMover.js'
+            )
+        );
     }
 
     /**
      * Helper functionality for translations
-     * 
+     *
      * @param string $variable
      * @param array $parameters
      *

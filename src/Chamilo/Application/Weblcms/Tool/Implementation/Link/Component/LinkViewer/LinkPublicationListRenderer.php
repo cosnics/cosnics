@@ -4,9 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component\LinkVie
 use Chamilo\Application\Weblcms\Renderer\PublicationList\Type\ListContentObjectPublicationListRenderer;
 
 /**
- * $Id: link_publication_list_renderer.class.php 216 2009-11-13 14:08:06Z
- * kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.link.component.link_viewer
  */
 class LinkPublicationListRenderer extends ListContentObjectPublicationListRenderer

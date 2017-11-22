@@ -18,7 +18,7 @@ class HomeRepository
 
     /**
      * Returns a home element by an identifier
-     * 
+     *
      * @param int $elementIdentifier
      *
      * @return Element
@@ -37,19 +37,19 @@ class HomeRepository
     public function findElementsByUserIdentifier($userIdentifier)
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getElementsByUserIdentifierCondition($userIdentifier), 
-            null, 
-            null, 
+            $this->getElementsByUserIdentifierCondition($userIdentifier),
+            null,
+            null,
             array(
-                new OrderBy(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_TYPE)), 
+                new OrderBy(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_TYPE)),
                 new OrderBy(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_SORT))));
-        
+
         return DataManager::retrieves(Element::class_name(), $parameters);
     }
 
     /**
      * Finds the blocks for a given user
-     * 
+     *
      * @param int $userIdentifier
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
@@ -58,9 +58,9 @@ class HomeRepository
     {
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Element::class_name(), Block::PROPERTY_USER_ID), 
+                new PropertyConditionVariable(Element::class_name(), Block::PROPERTY_USER_ID),
                 new StaticConditionVariable($userIdentifier)));
-        
+
         return DataManager::retrieves(Block::class_name(), $parameters);
     }
 
@@ -73,7 +73,7 @@ class HomeRepository
     public function getElementsByUserIdentifierCondition($userIdentifier)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier));
     }
 
@@ -86,7 +86,7 @@ class HomeRepository
     public function countElementsByUserIdentifier($userIdentifier)
     {
         $parameters = new DataClassCountParameters($this->getElementsByUserIdentifierCondition($userIdentifier));
-        
+
         return DataManager::count(Element::class_name(), $parameters);
     }
 
@@ -94,18 +94,18 @@ class HomeRepository
     {
         $homeIntegrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Home');
         $blockTypes = array();
-        
+
         foreach ($homeIntegrations as $homeIntegration)
         {
             $className = $homeIntegration[Registration::PROPERTY_CONTEXT] . '\Manager';
-            
+
             if (class_exists($className))
             {
                 $homeIntegrationManager = new $className();
                 $blockTypes = array_merge($blockTypes, $homeIntegrationManager->getBlockTypes());
             }
         }
-        
+
         return $blockTypes;
     }
 }

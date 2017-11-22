@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Photobucket\Component;
 
 use Chamilo\Core\Repository\Implementation\Photobucket\Manager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class DeleterComponent extends Manager

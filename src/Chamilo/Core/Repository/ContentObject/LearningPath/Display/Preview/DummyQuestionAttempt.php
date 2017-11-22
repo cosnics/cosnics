@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractQuestionAttempt;
-use Chamilo\Libraries\Utilities\UUID;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt;
 
 /**
  *
@@ -11,7 +10,7 @@ use Chamilo\Libraries\Utilities\UUID;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DummyQuestionAttempt extends AbstractQuestionAttempt
+class DummyQuestionAttempt extends TreeNodeQuestionAttempt
 {
 
     /**
@@ -20,7 +19,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function update()
     {
-        return PreviewStorage::getInstance()->update_learning_path_question_attempt($this);
+        return true;
     }
 
     /**
@@ -29,8 +28,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function create()
     {
-        $this->set_id(UUID::v4());
-        return PreviewStorage::getInstance()->create_learning_path_question_attempt($this);
+        return true;
     }
 
     /**
@@ -39,6 +37,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function delete()
     {
-        return PreviewStorage::getInstance()->delete_learning_path_question_attempt($this);
+        return true;
     }
 }

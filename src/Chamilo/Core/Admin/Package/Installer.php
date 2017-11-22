@@ -4,12 +4,11 @@ namespace Chamilo\Core\Admin\Package;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Rights;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: admin_installer.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  *
  * @package admin.install
  */
@@ -64,7 +63,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $values = $this->get_form_values();
 
         $settings = array();
-        $settings[] = array('Chamilo\Core\Admin', 'site_name', $values['platform_name']);
+        $settings[] = array('Chamilo\Core\Admin', 'site_name', $values['site_name']);
         $settings[] = array('Chamilo\Core\Admin', 'platform_language', $values['platform_language']);
         $settings[] = array('Chamilo\Core\Admin', 'version', '1.0');
         $settings[] = array('Chamilo\Core\Admin', 'theme', 'Aqua');

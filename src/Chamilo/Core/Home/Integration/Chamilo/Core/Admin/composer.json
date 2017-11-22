@@ -1,0 +1,49 @@
+{
+    "name": "cosnics/core-home-integration-chamilo-core-admin",
+    "version": "1.0.0",
+    "description": "Core Home Integration Chamilo Core Admin",
+    "keywords": [
+        "Core",
+        "Home",
+        "Integration",
+        "Chamilo",
+        "Core",
+        "Admin"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Admin",
+            "context": "Chamilo\\Core\\Home\\Integration\\Chamilo\\Core\\Admin",
+            "type": "Chamilo\\Core\\Home\\Integration\\Chamilo\\Core",
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Home",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Core\\Admin",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "install": {
+                "default": 0,
+                "core": 0
+            }
+        }
+    }
+}

@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 
 /**
- * $Id: announcement_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.announcement
  */
 /**
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
  */
 class AnnouncementForm extends ContentObjectForm
 {
-    
+
     // Inherited
     public function create_content_object()
     {

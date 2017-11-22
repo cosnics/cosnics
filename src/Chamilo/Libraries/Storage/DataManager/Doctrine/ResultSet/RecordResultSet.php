@@ -19,12 +19,12 @@ class RecordResultSet extends \Chamilo\Libraries\Storage\ResultSet\RecordResultS
     public function __construct($handle)
     {
         $records = array();
-        
+
         while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $records[] = $this->process_record($record);
         }
-        
+
         parent::__construct($records);
     }
 }

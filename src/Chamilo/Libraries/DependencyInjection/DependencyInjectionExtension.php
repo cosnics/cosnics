@@ -2,7 +2,10 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
+use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -15,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 /**
  * Extension on the dependency injection container.
  * Loads local services and parameters for this package.
- * 
+ *
  * @see http://symfony.com/doc/current/components/dependency_injection/compilation.html
  *
  * @package Chamilo\Libraries\DependencyInjection
@@ -27,19 +30,19 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
     /**
      * Loads a specific configuration.
-     * 
-     * @param string[] $config
+     *
+     * @param string[] $configuration
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configuration, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-        
+
         $xmlFileLoader = new XmlFileLoader(
-            $container, 
+            $container,
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
-        
+
         $xmlFileLoader->load('architecture.xml');
         $xmlFileLoader->load('cache.xml');
         $xmlFileLoader->load('file.xml');
@@ -48,28 +51,74 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('platform.xml');
         $xmlFileLoader->load('storage.xml');
         $xmlFileLoader->load('storage.doctrine.xml');
+        $xmlFileLoader->load('storage.doctrine_test.xml');
+        $xmlFileLoader->load('storage.doctrine_orm.xml');
         $xmlFileLoader->load('translation.xml');
         $xmlFileLoader->load('utilities.xml');
         $xmlFileLoader->load('vendor.xml');
-        
+
         // Console configuration
         $xmlFileLoader->load('console.xml');
+        $xmlFileLoader->load('console.doctrine.xml');
+
+        $this->processLibrariesConfiguration($configuration, $container);
     }
 
     /**
      * Registers the compiler passes in the container
-     * 
-     * @param ContainerBuilder $container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
+        $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
+        $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
+    }
+
+    /**
+     * Processes the configuration for chamilo.libraries
+     *
+     * @param string[] $configuration
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    protected function processLibrariesConfiguration(array $configuration, ContainerBuilder $container)
+    {
+        $config = $this->processConfiguration(new LibrariesConfiguration(), $configuration);
+
+        if (array_key_exists('doctrine', $config) && array_key_exists('orm', $config['doctrine']))
+        {
+            $ormConfig = $config['doctrine']['orm'];
+
+            if (array_key_exists('mappings', $ormConfig))
+            {
+                $mappingDriverDef = $container->getDefinition('doctrine.orm.mapping_driver');
+                $mappingDriverDef->setArguments(array($ormConfig['mappings']));
+            }
+
+            if (array_key_exists('resolve_target_entities', $ormConfig))
+            {
+                $resolveTargetEntityListenerDef = $container->getDefinition(
+                    'doctrine.orm.listeners.resolve_target_entity');
+
+                foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
+                {
+                    $resolveTargetEntityListenerDef->addMethodCall(
+                        'addResolveTargetEntity',
+                        array($name, $implementation, array()));
+                }
+
+                $resolveTargetEntityListenerDef->addTag(
+                    'doctrine.orm.event_listener',
+                    array('event' => 'loadClassMetadata'));
+            }
+        }
     }
 
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
-     * 
+     *
      * @return string
      */
     public function getAlias()

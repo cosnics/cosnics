@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\learning_path\display
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+MasteryComponent = "Stel minimum slaagcijfer in"
+SetMasteryScore = "Stel minimum slaagcijfer in"
+MasteryScore = "Slaagcijfer"
+MasteryScoreSet = "Minimum slaagcijfer ingesteld"
+NoMasteryScore = "Geen"

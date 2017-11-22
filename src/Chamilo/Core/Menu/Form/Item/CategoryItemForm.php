@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Form\Item;
 
 use Chamilo\Core\Menu\Form\ItemForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

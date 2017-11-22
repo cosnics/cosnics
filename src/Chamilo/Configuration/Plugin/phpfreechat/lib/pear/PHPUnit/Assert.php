@@ -29,20 +29,19 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright 2002-2005 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version CVS: $Id: Assert.php 137 2009-11-09 13:24:37Z vanpouckesven $
  * @link http://pear.php.net/package/PHPUnit
  * @since File available since Release 1.0.0
  */
 
 /**
  * A set of assert methods.
- * 
+ *
  * @category Testing
  * @package PHPUnit
  * @author Sebastian Bergmann <sb@sebastian-bergmann.de>
@@ -64,7 +63,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a haystack contains a needle.
-     * 
+     *
      * @param mixed
      * @param mixed
      * @param string
@@ -77,13 +76,13 @@ class PHPUnit_Assert
         {
             $this->assertTrue(strpos($haystack, $needle) !== FALSE, $message);
         }
-        
-        else 
+
+        else
             if (is_array($haystack) && ! is_object($needle))
             {
                 $this->assertTrue(in_array($needle, $haystack), $message);
             }
-            
+
             else
             {
                 $this->fail('Unsupported parameter passed to assertContains().');
@@ -92,7 +91,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a haystack does not contain a needle.
-     * 
+     *
      * @param mixed
      * @param mixed
      * @param string
@@ -105,13 +104,13 @@ class PHPUnit_Assert
         {
             $this->assertFalse(strpos($haystack, $needle) !== FALSE, $message);
         }
-        
-        else 
+
+        else
             if (is_array($haystack) && ! is_object($needle))
             {
                 $this->assertFalse(in_array($needle, $haystack), $message);
             }
-            
+
             else
             {
                 $this->fail('Unsupported parameter passed to assertNotContains().');
@@ -120,7 +119,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that two variables are equal.
-     * 
+     *
      * @param mixed
      * @param mixed
      * @param string
@@ -136,44 +135,44 @@ class PHPUnit_Assert
                 ksort($actual);
                 ksort($expected);
             }
-            
+
             if ($this->_looselyTyped)
             {
                 $actual = $this->_convertToString($actual);
                 $expected = $this->_convertToString($expected);
             }
-            
+
             $actual = serialize($actual);
             $expected = serialize($expected);
-            
-            $message = sprintf('%sexpected %s, actual %s', 
+
+            $message = sprintf('%sexpected %s, actual %s',
 
             ! empty($message) ? $message . ' ' : '', $expected, $actual);
-            
+
             if ($actual !== $expected)
             {
                 return $this->fail($message);
             }
         }
-        
+
         elseif (is_numeric($actual) && is_numeric($expected))
         {
-            $message = sprintf('%sexpected %s%s, actual %s', 
+            $message = sprintf('%sexpected %s%s, actual %s',
 
             ! empty($message) ? $message . ' ' : '', $expected, ($delta != 0) ? ('+/- ' . $delta) : '', $actual);
-            
+
             if (! ($actual >= ($expected - $delta) && $actual <= ($expected + $delta)))
             {
                 return $this->fail($message);
             }
         }
-        
+
         else
         {
-            $message = sprintf('%sexpected %s, actual %s', 
+            $message = sprintf('%sexpected %s, actual %s',
 
             ! empty($message) ? $message . ' ' : '', $expected, $actual);
-            
+
             if ($actual !== $expected)
             {
                 return $this->fail($message);
@@ -184,7 +183,7 @@ class PHPUnit_Assert
     /**
      * Asserts that two variables reference the same object.
      * This requires the Zend Engine 2 to work.
-     * 
+     *
      * @param object
      * @param object
      * @param string
@@ -198,14 +197,14 @@ class PHPUnit_Assert
         {
             $this->fail('assertSame() only works with PHP >= 5.0.0.');
         }
-        
+
         if ((is_object($expected) || is_null($expected)) && (is_object($actual) || is_null($actual)))
         {
             $message = sprintf(
-                '%sexpected two variables to reference the same object', 
-                
+                '%sexpected two variables to reference the same object',
+
                 ! empty($message) ? $message . ' ' : '');
-            
+
             if ($expected !== $actual)
             {
                 return $this->fail($message);
@@ -220,7 +219,7 @@ class PHPUnit_Assert
     /**
      * Asserts that two variables do not reference the same object.
      * This requires the Zend Engine 2 to work.
-     * 
+     *
      * @param object
      * @param object
      * @param string
@@ -234,14 +233,14 @@ class PHPUnit_Assert
         {
             $this->fail('assertNotSame() only works with PHP >= 5.0.0.');
         }
-        
+
         if ((is_object($expected) || is_null($expected)) && (is_object($actual) || is_null($actual)))
         {
             $message = sprintf(
-                '%sexpected two variables to reference different objects', 
-                
+                '%sexpected two variables to reference different objects',
+
                 ! empty($message) ? $message . ' ' : '');
-            
+
             if ($expected === $actual)
             {
                 return $this->fail($message);
@@ -255,17 +254,17 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a variable is not NULL.
-     * 
+     *
      * @param mixed
      * @param string
      * @access public
      */
     function assertNotNull($actual, $message = '')
     {
-        $message = sprintf('%sexpected NOT NULL, actual NULL', 
+        $message = sprintf('%sexpected NOT NULL, actual NULL',
 
         ! empty($message) ? $message . ' ' : '');
-        
+
         if (is_null($actual))
         {
             return $this->fail($message);
@@ -274,17 +273,17 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a variable is NULL.
-     * 
+     *
      * @param mixed
      * @param string
      * @access public
      */
     function assertNull($actual, $message = '')
     {
-        $message = sprintf('%sexpected NULL, actual NOT NULL', 
+        $message = sprintf('%sexpected NULL, actual NOT NULL',
 
         ! empty($message) ? $message . ' ' : '');
-        
+
         if (! is_null($actual))
         {
             return $this->fail($message);
@@ -293,17 +292,17 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a condition is true.
-     * 
+     *
      * @param boolean
      * @param string
      * @access public
      */
     function assertTrue($condition, $message = '')
     {
-        $message = sprintf('%sexpected TRUE, actual FALSE', 
+        $message = sprintf('%sexpected TRUE, actual FALSE',
 
         ! empty($message) ? $message . ' ' : '');
-        
+
         if (! $condition)
         {
             return $this->fail($message);
@@ -312,17 +311,17 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a condition is false.
-     * 
+     *
      * @param boolean
      * @param string
      * @access public
      */
     function assertFalse($condition, $message = '')
     {
-        $message = sprintf('%sexpected FALSE, actual TRUE', 
+        $message = sprintf('%sexpected FALSE, actual TRUE',
 
         ! empty($message) ? $message . ' ' : '');
-        
+
         if ($condition)
         {
             return $this->fail($message);
@@ -331,7 +330,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a string matches a given regular expression.
-     * 
+     *
      * @param string
      * @param string
      * @param string
@@ -339,10 +338,10 @@ class PHPUnit_Assert
      */
     function assertRegExp($pattern, $string, $message = '')
     {
-        $message = sprintf('%s"%s" does not match pattern "%s"', 
+        $message = sprintf('%s"%s" does not match pattern "%s"',
 
         ! empty($message) ? $message . ' ' : '', $string, $pattern);
-        
+
         if (! preg_match($pattern, $string))
         {
             return $this->fail($message);
@@ -351,7 +350,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a string does not match a given regular expression.
-     * 
+     *
      * @param string
      * @param string
      * @param string
@@ -360,10 +359,10 @@ class PHPUnit_Assert
      */
     function assertNotRegExp($pattern, $string, $message = '')
     {
-        $message = sprintf('%s"%s" matches pattern "%s"', 
+        $message = sprintf('%s"%s" matches pattern "%s"',
 
         ! empty($message) ? $message . ' ' : '', $string, $pattern);
-        
+
         if (preg_match($pattern, $string))
         {
             return $this->fail($message);
@@ -372,7 +371,7 @@ class PHPUnit_Assert
 
     /**
      * Asserts that a variable is of a given type.
-     * 
+     *
      * @param string $expected
      * @param mixed $actual
      * @param optional string $message
@@ -385,7 +384,7 @@ class PHPUnit_Assert
 
     /**
      * Converts a value to a string.
-     * 
+     *
      * @param mixed $value
      * @access private
      */
@@ -402,7 +401,7 @@ class PHPUnit_Assert
                 settype($value[$k], 'string');
             }
         }
-        
+
         return $value;
     }
 
@@ -421,7 +420,7 @@ class PHPUnit_Assert
 
     /**
      * Fails a test with the given message.
-     * 
+     *
      * @param string
      * @access protected
      * @abstract

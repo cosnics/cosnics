@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Filter\Render
 
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Filter\FilterData;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Render the parameters set via FilterData as a FormValidator

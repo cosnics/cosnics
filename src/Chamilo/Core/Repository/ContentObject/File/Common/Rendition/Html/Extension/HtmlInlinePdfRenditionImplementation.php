@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -32,7 +32,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         $url = $viewerPath . '?file=' . urlencode($url);
         
         $html = array();
-        
+
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $url . '" target="_blank">';
         $html[] = '<input type="button" class="btn btn-default" value="' . Translation::getInstance()->getTranslation(

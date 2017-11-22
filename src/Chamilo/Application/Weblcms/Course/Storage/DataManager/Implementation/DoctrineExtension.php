@@ -98,7 +98,8 @@ class DoctrineExtension
         $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME));
         $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
         $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS));
-        
+        $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE));
+
         $query_builder = $this->process_group_by($query_builder, $group_by);
         $query_builder = $this->process_order_by($query_builder, User::class_name(), $order_property);
         $query_builder = $this->process_limit($query_builder, $count, $offset);
@@ -245,7 +246,8 @@ class DoctrineExtension
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
         $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS));
-        
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE));
+
         return $properties;
     }
 

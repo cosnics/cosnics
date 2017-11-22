@@ -16,6 +16,18 @@
             <parameter key="charset">utf8</parameter>
         </parameter>
 
+        <!-- Database connection to the test database, used for integration tests -->
+        <parameter
+            key="chamilo.configuration.database.test"
+            type="collection">
+            <parameter key="driver">{chamilo.configuration.database.driver}</parameter>
+            <parameter key="username">{chamilo.configuration.database.username}</parameter>
+            <parameter key="password">{chamilo.configuration.database.password}</parameter>
+            <parameter key="host">{chamilo.configuration.database.host}</parameter>
+            <parameter key="name">{chamilo.configuration.database.name}_test</parameter>
+            <parameter key="charset">utf8</parameter>
+        </parameter>
+
         <!-- Storage -->
         <parameter
             key="chamilo.configuration.storage"

@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\ExternalAuthentication;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use phpCAS;
 
 /**
@@ -81,8 +81,7 @@ class CasAuthentication extends ExternalAuthentication
                         'CasAuthenticationError',
                         array(
                             'PLATFORM' => Configuration::getInstance()->get_setting(
-                                'Chamilo\Core\Admin',
-                                'platform_name'))));
+                                array('Chamilo\Core\Admin', 'site_name')))));
             }
         }
         else
@@ -105,15 +104,14 @@ class CasAuthentication extends ExternalAuthentication
                         'CasAuthenticationError',
                         array(
                             'PLATFORM' => Configuration::getInstance()->get_setting(
-                                'Chamilo\Core\Admin',
-                                'platform_name'))));
+                                array('Chamilo\Core\Admin', 'site_name')))));
             }
         }
     }
 
     /**
      *
-     * @throws AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function registerUser()
@@ -227,7 +225,6 @@ class CasAuthentication extends ExternalAuthentication
     /**
      *
      * @throws \Exception
-     * @throws AuthenticationException
      */
     public function initializeClient()
     {

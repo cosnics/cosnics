@@ -3,46 +3,39 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn;
-use Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video;
-use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
-use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
- * $Id: announcement_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.announcement.component
  */
 
 /**
  * This tool allows a user to publish announcements in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, 
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
 
     public static function get_allowed_types()
     {
-        $allowedTypes = array(
-            Youtube::class_name(), 
-            Vimeo::class_name(), 
-            Matterhorn::class_name(), 
-            Office365Video::class_name());
-        
-        $hogentTypes = array(
+        $allowedTypesString = array(
+            'Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video',
+            'Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo',
+            'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube',
             'Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa',
-            'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video'
-        );
-        
-        foreach ($hogentTypes as $hogentType)
+            'Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video');
+
+        $allowedTypes = [];
+
+        foreach ($allowedTypesString as $allowedTypeString)
         {
-            if (class_exists($hogentType))
+            if (class_exists($allowedTypeString))
             {
-                $allowedTypes[] = $hogentType;
+                $allowedTypes[] = $allowedTypeString;
             }
         }
-        
+
         return $allowedTypes;
     }
 

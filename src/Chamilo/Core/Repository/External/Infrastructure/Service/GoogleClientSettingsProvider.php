@@ -18,7 +18,7 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
     /**
      * Scopes that enable access to particular resources
      * 
-     * @var strings
+     * @var string
      */
     protected $scopes;
 

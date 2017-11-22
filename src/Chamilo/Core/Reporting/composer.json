@@ -1,9 +1,13 @@
 {
-    "name": "chamilo/core-reporting",
-        "version": "6.0.0", "description": "Chamilo Reporting Core Application",
-    "keywords": [],
-    "homepage": "http://www.chamilo.org",
-    "license": "GPLv3",
+    "name": "cosnics/core-reporting",
+    "version": "1.0.0",
+    "description": "Core Reporting",
+    "keywords": [
+        "Core",
+        "Reporting"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Vanpoucke",
@@ -14,14 +18,26 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    
     "require": {
-        "php": ">=5.4.0",
-        "phpoffice/phpexcel" : "1.8.*",
+        "php": ">=7.0.0",
+        "phpoffice/phpexcel": "1.8.*",
         "szymach/c-pchart": "1.*"
     },
     "extra": {
-        "install-path": "reporting"
+        "cosnics": {
+            "name": "Reporting",
+            "context": "Chamilo\\Core\\Reporting",
+            "type": "Chamilo\\Core",
+            "install": {
+                "core": 1,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
     }
-
 }

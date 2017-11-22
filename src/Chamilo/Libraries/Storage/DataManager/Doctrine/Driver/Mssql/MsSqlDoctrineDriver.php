@@ -13,47 +13,50 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
 
     /**
      * Attempts to establish a connection with the underlying driver.
-     * 
-     * @param string[] $params
+     *
+     * @param string[] $parameters
      * @param string $username
      * @param string $password
      * @param string[] $driverOptions
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrinePdoConnection
      */
-    public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
+    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = array())
     {
-        return new MsSqlDoctrinePdoConnection($this->_constructPdoDsn($params), $username, $password, $driverOptions);
+        return new MsSqlDoctrinePdoConnection($this->_constructPdoDsn($parameters), $username, $password, $driverOptions);
     }
 
     /**
      * Constructs the MsSql PDO DSN.
-     * 
+     *
+     * @param string[] $parameters
      * @return string The DSN.
      */
-    private function _constructPdoDsn(array $params)
+    private function _constructPdoDsn(array $parameters)
     {
         if (extension_loaded('pdo_dblib'))
         {
             $dsn = 'dblib:';
-            if (isset($params['host']) && $params['host'] != '')
+
+            if (isset($parameters['host']) && $parameters['host'] != '')
             {
-                $dsn .= 'host=' . $params['host'] . '; ';
+                $dsn .= 'host=' . $parameters['host'] . '; ';
             }
-            
-            if (isset($params['dbname']))
+
+            if (isset($parameters['dbname']))
             {
-                $dsn .= 'dbname=' . $params['dbname'] . ';';
+                $dsn .= 'dbname=' . $parameters['dbname'] . ';';
             }
-            
-            if (isset($params['charset']))
+
+            if (isset($parameters['charset']))
             {
-                $dsn .= 'charset=' . $params['charset'] . ';';
+                $dsn .= 'charset=' . $parameters['charset'] . ';';
             }
         }
         elseif (extension_loaded('pdo_sqlsrv'))
         {
-            $dsn = 'sqlsrv:Server=' . $params['host'] . ';Database=' . $params['dbname'];
+            $dsn = 'sqlsrv:Server=' . $parameters['host'] . ';Database=' . $parameters['dbname'];
         }
+
         return $dsn;
     }
 

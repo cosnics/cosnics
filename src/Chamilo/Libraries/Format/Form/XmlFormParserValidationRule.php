@@ -5,83 +5,71 @@ namespace Chamilo\Libraries\Format\Form;
  * This class holds a validation rule untill it can be used into a form.
  * We need this because quickform does not
  * support storing validation rules and reusing them in another form
- * 
- * @package \libraries
+ *
+ * @package Chamilo\Libraries\Format\Form
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class XmlFormParserValidationRule
 {
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * The form element name
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $element_name;
 
     /**
      * The message to display
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $message;
 
     /**
      * The validation rule type
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $type;
 
     /**
      * The format - Required for extra rule data
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $format;
 
     /**
      * The place to execute the validation
      * Server - Client
-     * 
-     * @var String
+     *
+     * @var string
      */
     private $validation;
 
     /**
      * Whether or not to reset the elements on client validation error
-     * 
+     *
      * @var boolean
      */
     private $reset;
 
     /**
      * Forces the rule to be applied, even if the element does not exist yet
-     * 
+     *
      * @var boolean
      */
     private $force;
 
     /**
-     * **************************************************************************************************************
-     * Main functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Constructor
-     * 
-     * @param String $element - The form element name
-     * @param String $message - The message to display
-     * @param String $type - The validation rule type
-     * @param String $format - [OPTIONAL] The format - Required for extra rule data
-     * @param String $validation - [OPTIONAL] The place to execute the validation Server - Client
+     *
+     * @param string $element - The form element name
+     * @param string $message - The message to display
+     * @param string $type - The validation rule type
+     * @param string $format - [OPTIONAL] The format - Required for extra rule data
+     * @param string $validation - [OPTIONAL] The place to execute the validation Server - Client
      * @param boolean $reset - [OPTIONAL] Whether or not to reset the elements on client validation error
      * @param boolean $force - [OPTIONAL] Forces the rule to be applied, even if the element does not exist yet
      */
@@ -98,31 +86,25 @@ class XmlFormParserValidationRule
 
     /**
      * Adds this validation rule to a given form
-     * 
-     * @param FormValidator $form
+     *
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      */
     public function add_to_form(FormValidator $form)
     {
         $form->addRule(
-            $this->get_element_name(), 
-            $this->get_message(), 
-            $this->get_type(), 
-            $this->get_format(), 
-            $this->get_validation(), 
-            $this->get_reset(), 
+            $this->get_element_name(),
+            $this->get_message(),
+            $this->get_type(),
+            $this->get_format(),
+            $this->get_validation(),
+            $this->get_reset(),
             $this->get_force());
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters and setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
      * Returns the element_name property of this object
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_element_name()
     {
@@ -131,18 +113,18 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the element_name property of this object
-     * 
-     * @param String $element_name
+     *
+     * @param string $elementName
      */
-    public function set_element_name($element_name)
+    public function set_element_name($elementName)
     {
-        $this->element_name = $element_name;
+        $this->element_name = $elementName;
     }
 
     /**
      * Returns the message property of this object
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_message()
     {
@@ -151,8 +133,8 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the message property of this object
-     * 
-     * @param String $message
+     *
+     * @param string $message
      */
     public function set_message($message)
     {
@@ -161,8 +143,8 @@ class XmlFormParserValidationRule
 
     /**
      * Returns the type property of this object
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_type()
     {
@@ -171,8 +153,8 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the type property of this object
-     * 
-     * @param String $type
+     *
+     * @param string $type
      */
     public function set_type($type)
     {
@@ -181,8 +163,8 @@ class XmlFormParserValidationRule
 
     /**
      * Returns the format property of this object
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_format()
     {
@@ -191,8 +173,8 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the format property of this object
-     * 
-     * @param String $format
+     *
+     * @param string $format
      */
     public function set_format($format)
     {
@@ -201,8 +183,8 @@ class XmlFormParserValidationRule
 
     /**
      * Returns the validation property of this object
-     * 
-     * @return String
+     *
+     * @return string
      */
     public function get_validation()
     {
@@ -211,8 +193,8 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the validation property of this object
-     * 
-     * @param String $validation
+     *
+     * @param string $validation
      */
     public function set_validation($validation)
     {
@@ -221,7 +203,7 @@ class XmlFormParserValidationRule
 
     /**
      * Returns the reset property of this object
-     * 
+     *
      * @return boolean
      */
     public function get_reset()
@@ -231,7 +213,7 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the reset property of this object
-     * 
+     *
      * @param boolean $reset
      */
     public function set_reset($reset)
@@ -241,7 +223,7 @@ class XmlFormParserValidationRule
 
     /**
      * Returns the force property of this object
-     * 
+     *
      * @return boolean
      */
     public function get_force()
@@ -251,7 +233,7 @@ class XmlFormParserValidationRule
 
     /**
      * Sets the force property of this object
-     * 
+     *
      * @param boolean $force
      */
     public function set_force($force)

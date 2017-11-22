@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Slideshare\Component;
 
 use Chamilo\Core\Repository\Implementation\Slideshare\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class ExporterComponent extends Manager implements DelegateComponent

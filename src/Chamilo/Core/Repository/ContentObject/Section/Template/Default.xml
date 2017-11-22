@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Section">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Section</translation>
+            <translation language="nl">Sectie</translation>
+            <translation language="fr">Section</translation>
+            <translation language="de">Sectie</translation>
+        </variable>
+    </translations>
+</template>

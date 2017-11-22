@@ -19,6 +19,9 @@ dropzoneCallbacks.chamilo = {
                 {
                     var selectedCategory = $('#parent_id').val();
                     formData.append('parentId', selectedCategory);
+
+                    var selectedWorkspace = $('#workspace_id').val();
+                    formData.append('workspaceId', selectedWorkspace);
                 },
                 deleteUploadedFile : function(environment, file, serverResponse)
                 {

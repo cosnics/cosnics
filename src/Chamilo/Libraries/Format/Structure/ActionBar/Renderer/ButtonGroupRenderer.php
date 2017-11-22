@@ -56,7 +56,7 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
         $classes = $this->getButtonGroup()->getClasses();
         $classes[] = 'action-bar';
         $classes[] = 'btn-group';
-        
+
         return implode(' ', $classes);
     }
 
@@ -67,20 +67,20 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
     public function render()
     {
         $html = array();
-        
+
         $html[] = '<div class="' . $this->getClasses() . '">';
-        
+
         foreach ($this->getButtonGroup()->getButtons() as $button)
         {
             $rendererClassName = __NAMESPACE__ . '\\' .
                  ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
             $renderer = new $rendererClassName($button);
-            
+
             $html[] = $renderer->render($button);
         }
-        
+
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

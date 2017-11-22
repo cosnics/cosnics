@@ -1,17 +1,28 @@
 <?php
-/**
- * $Id: option_orderer.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
- * @package common.html.formvalidator.Element
- */
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+/**
+ *
+ * @package Chamilo\Libraries\Format\Form\Element
+ */
 class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 {
 
+    /**
+     *
+     * @var string[]
+     */
     private $options;
 
-    public function __construct($name, $label, $options, $separator = '|', $attributes = array())
+    /**
+     *
+     * @param string $name
+     * @param string $label
+     * @param string[] $options
+     * @param string $separator
+     * @param string[] $attributes
+     */
+    public function __construct($name = null, $label = null, $options = null, $separator = '|', $attributes = array())
     {
         $this->separator = $separator;
         $value = (isset($_REQUEST[$name]) ? $_REQUEST[$name] : implode($this->separator, array_keys($options)));
@@ -19,6 +30,10 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         $this->options = $options;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_input::toHtml()
+     */
     public function toHtml()
     {
         $html = ResourceManager::getInstance()->get_resource_html(
@@ -27,6 +42,10 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         return $html;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_element::getFrozenHtml()
+     */
     public function getFrozenHtml()
     {
         $html = '<ol class="option-orderer oord-name_' . $this->getName() . '">';
@@ -40,11 +59,19 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         return $html;
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_input::getValue()
+     */
     public function getValue()
     {
         return explode($this->separator, parent::getValue());
     }
 
+    /**
+     *
+     * @see HTML_QuickForm_input::exportValue()
+     */
     public function exportValue()
     {
         return $this->getValue();

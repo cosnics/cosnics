@@ -14,11 +14,10 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: account_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.forms
  */
@@ -237,7 +236,7 @@ class AccountForm extends FormValidator
                 'password',
                 self::NEW_PASSWORD,
                 Translation::get('NewPassword'),
-                array('size' => 40, 'autocomplete' => 'off', 'id' => 'new_password', 'pattern' => '.{8,}')
+                array('size' => 40, 'autocomplete' => 'off', 'id' => 'new_password', 'pattern' => '.{6,}')
             );
             $this->addElement(
                 'password',
@@ -265,7 +264,7 @@ class AccountForm extends FormValidator
                 Translation::getInstance()->getTranslation('EnterCurrentPassword', null, 'Chamilo\Core\User'),
                 'checkAllowedToChangePassword'
             );
-            
+
             $this->addElement(
                 'html',
                 ResourceManager::getInstance()->get_resource_html(
@@ -304,7 +303,7 @@ class AccountForm extends FormValidator
             return true;
         }
 
-        if(strlen($newPassword) < 8)
+        if(strlen($newPassword) < 6)
         {
             return false;
         }

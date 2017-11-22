@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity\ActivityTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activity\ActivityTable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component to list activity on a portfolio item
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends TabComponent implements TableSupport, DelegateComponent
+class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, DelegateComponent
 {
 
     /**
@@ -22,14 +22,14 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
      */
     public function build()
     {
-        $this->validateAndFixCurrentStep();
-        
+        $this->validateSelectedTreeNodeData();
+
         $activity_table = new ActivityTable($this);
         
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
+                $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())),
                 Translation::get('ActivityComponent')));
         
         $html = array();
@@ -48,8 +48,18 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
     {
     }
 
+    /**
+     * Backwards Compatibility for the generic ActivityTable
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
+    public function get_current_content_object()
+    {
+        return $this->getCurrentContentObject();
+    }
+
     public function get_additional_parameters()
     {
-        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 }

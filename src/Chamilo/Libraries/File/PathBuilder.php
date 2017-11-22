@@ -70,7 +70,7 @@ class PathBuilder
      *
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    public function __construct(\Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities)
+    public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
     }
@@ -134,6 +134,12 @@ class PathBuilder
              ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
 
+    /**
+     *
+     * @param string $namespace
+     * @param boolean $web
+     * @return string
+     */
     public function getPublicStoragePath($namespace = null, $web = false)
     {
         if ($web)
@@ -145,6 +151,7 @@ class PathBuilder
             $basePath = realpath(
                 $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'Files');
         }
+
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
              ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
                 $namespace,
@@ -257,8 +264,11 @@ class PathBuilder
             $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
-    /*
-     * Checks if string is HTTP or FTP uri @param string $uri @return boolean
+    /**
+     * Checks if string is HTTP or FTP uri
+     *
+     * @param string $uri
+     * @return boolean
      */
     public function isWebUri($uri)
     {

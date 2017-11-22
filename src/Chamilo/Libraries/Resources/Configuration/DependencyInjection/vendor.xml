@@ -7,9 +7,9 @@
         <!-- SYMFONY -->
         <service
             id="symfony.component.http_foundation.request"
-            class="Symfony\Component\HttpFoundation\Request">
+            class="Chamilo\Libraries\Platform\ChamiloRequest">
             <factory
-                class="Symfony\Component\HttpFoundation\Request"
+                class="Chamilo\Libraries\Platform\ChamiloRequest"
                 method="createFromGlobals" />
         </service>
 
@@ -19,16 +19,91 @@
             <factory
                 service="chamilo.libraries.translation.translator_factory"
                 method="createTranslator" />
+            <argument>%chamilo.configuration.general.language%</argument>
         </service>
 
-        <!-- DOCTRINE -->
         <service
-            id="doctrine.dbal.connection"
-            class="Doctrine\DBAL\Connection">
-            <factory
-                service="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
-                method="getConnection" />
+            id="chamilo.libraries.format.twig.twig_factory"
+            class="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory" />
+
+        <service
+            id="twig.environment"
+            class="Twig_Environment"
+            factory-method="createEnvironment"
+            factory-service="chamilo.libraries.format.twig.twig_factory">
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.application.routing.url_generator" />
         </service>
+
+        <service
+            id="symfony.component.forms.form"
+            class="Symfony\Component\Form\FormFactory"
+            factory-method="buildFormFactory"
+            factory-service="chamilo.libraries.format.form.form_factory_builder">
+            <argument
+                type="service"
+                id="twig.environment" />
+            <argument
+                type="service"
+                id="symfony.component.validator.validator" />
+        </service>
+
+        <service
+            id="chamilo.libraries.format.form.form_factory_builder"
+            class="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder" />
+
+        <service
+            id="symfony.component.validator.validator"
+            class="Symfony\Component\Validator\Validator"
+            factory-method="createValidator"
+            factory-service="chamilo.libraries.format.validator.validator_factory" />
+
+        <service
+            id="chamilo.libraries.format.validator.validator_factory"
+            class="Chamilo\Libraries\Format\Validator\SymfonyDataClassValidatorFactory" />
+
+        <service
+            id="jms.serializer"
+            class="JMS\Serializer\Serializer"
+            factory-method="createSerializer"
+            factory-service="jms.serializer.serializer_factory" />
+
+        <service
+            id="jms.serializer.serializer_builder"
+            class="JMS\Serializer\SerializerBuilder" />
+
+        <service
+            id="jms.serializer.serializer_factory"
+            class="Chamilo\Libraries\Format\Serializer\SerializerFactory">
+            <argument
+                type="service"
+                id="jms.serializer.serializer_builder" />
+        </service>
+
+        <service
+            id="monolog.logger"
+            class="Monolog\Logger">
+            <argument>Chamilo</argument>
+        </service>
+
+        <service
+            id="symfony.component.event_dispatcher"
+            class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
+            <argument
+                type="service"
+                id="service_container" />
+        </service>
+
+        <service
+            id="symfony.config.processor"
+            class="Symfony\Component\Config\Definition\Processor" />
+        <service
+            id="symfony.yaml.parser"
+            class="Symfony\Component\Yaml\Parser" />
 
     </services>
 </container>

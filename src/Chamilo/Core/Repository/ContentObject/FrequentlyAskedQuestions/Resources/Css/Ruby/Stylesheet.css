@@ -1,6 +1,0 @@
-@import url('../Aqua/Stylesheet.css');
-
-ul.tree-menu li div a.faq, ul.tree-menu li div a.type_faq, ul.tree-menu li div a.type_faq_default
-	{
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}

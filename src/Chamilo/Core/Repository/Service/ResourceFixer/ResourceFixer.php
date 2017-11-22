@@ -38,12 +38,15 @@ abstract class ResourceFixer
     /**
      * Fixes the resource tags in a given text
      *
+     * @param ContentObject|null $contentObject
      * @param string $textContent
      *
      * @return string
      */
-    protected function fixResourcesInTextContent($textContent)
+    protected function fixResourcesInTextContent(ContentObject $contentObject = null, $textContent = '')
     {
+        $originalTextContent = $textContent;
+
         $domDocument = new \DOMDocument();
         $domDocument->loadHTML($textContent);
 
@@ -56,12 +59,6 @@ abstract class ResourceFixer
         /** @var \DOMElement $resourceTag */
         foreach ($resourceTags as $resourceTag)
         {
-            if ($resourceTag->hasAttribute('security_code'))
-            {
-                $this->logger->debug('Security code already found, skipping resource tag');
-                continue;
-            }
-
             $objectId = $resourceTag->getAttribute('source');
             if (!$objectId)
             {
@@ -96,6 +93,17 @@ abstract class ResourceFixer
                 continue;
             }
 
+            if($contentObject instanceof ContentObject)
+            {
+                $contentObject->include_content_object($objectId);
+            }
+
+            if ($resourceTag->hasAttribute('security_code'))
+            {
+                $this->logger->debug('Security code already found, skipping resource tag');
+                continue;
+            }
+
             $originalResourceTagHTML = $resourceTag->ownerDocument->saveHTML($resourceTag);
             $resourceTag->setAttribute('security_code', $object->calculate_security_code());
             $fixedResourceTagHTML = $resourceTag->ownerDocument->saveHTML($resourceTag);
@@ -110,6 +118,59 @@ abstract class ResourceFixer
             $textContent = str_replace(
                 $originalResourceTagHTML, $fixedResourceTagHTML, $textContent
             );
+
+            // Content could not be replaced with DOMParser, fallback to REGEX
+            if ($originalTextContent == $textContent)
+            {
+                $textContent = preg_replace(
+                    '/<resource.*?source=[\'"]' . $objectId . '[\'"].*?>.*?<\/resource>/',
+                    $fixedResourceTagHTML, $textContent
+                );
+
+                if(empty($textContent))
+                {
+                    $this->logger->alert(sprintf(
+                        'Failed to replace resource for object ID %s and security code %s, regex returned empty result',
+                        $objectId, $object->calculate_security_code()
+                    ));
+
+                    $textContent = $originalTextContent;
+                }
+
+                $this->logger->info(
+                    sprintf(
+                        'Fallback to regex for object ID %s and security code %s', $objectId,
+                        $object->calculate_security_code()
+                    )
+                );
+            }
+        }
+
+        $placeholders = $domXPath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
+        foreach($placeholders as $placeholder)
+        {
+            /**
+             * @var \DOMNode $placeholder
+             */
+            $contentObjectId = $placeholder->getAttribute('data-co-id');
+
+            try
+            {
+                $this->contentObjectResourceFixerRepository->findContentObjectById($contentObjectId);
+            }
+            catch (\Exception $ex)
+            {
+                $this->logger->debug(
+                    sprintf('The content object with ID %s is not found, skipping data-co-id tag', $contentObjectId)
+                );
+
+                continue;
+            }
+
+            if($contentObject instanceof ContentObject)
+            {
+                $contentObject->include_content_object($contentObjectId);
+            }
         }
 
         return $textContent;

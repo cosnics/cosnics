@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
     public function run()
     {
         $theme = Request::get('theme');

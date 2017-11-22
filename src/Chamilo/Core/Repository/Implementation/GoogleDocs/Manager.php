@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Implementation\GoogleDocs\Infrastructure\Service\Mim
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -135,7 +135,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-            $actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
+            //$actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
         }
         
         if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))

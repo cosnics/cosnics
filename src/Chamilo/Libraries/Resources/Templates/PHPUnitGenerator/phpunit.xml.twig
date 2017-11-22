@@ -1,0 +1,21 @@
+<phpunit bootstrap="../../src/Chamilo/Libraries/Architecture/Test/bootstrap.php">
+    <testsuites>
+        <testsuite name="Chamilo Tests">
+            {% for testDirectory in testDirectories -%}
+            <directory>{{ testDirectory }}</directory>
+            {% endfor -%}
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            {% for sourceDirectory in sourceDirectories -%}
+            <directory suffix=".php">{{ sourceDirectory }}</directory>
+            {% endfor -%}
+            <exclude>
+                {% for excludedDirectory in excludedDirectories -%}
+                <directory suffix=".php">{{ excludedDirectory }}</directory>
+                {% endfor -%}
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

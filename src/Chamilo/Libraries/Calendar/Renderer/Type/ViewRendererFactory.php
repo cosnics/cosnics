@@ -6,10 +6,8 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ViewRendererFactory
 {
@@ -56,9 +54,10 @@ class ViewRendererFactory
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param integer $displayTime
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $actions
      * @param string $linkTarget
      */
-    public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend, 
+    public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend,
         $displayTime, $actions = array(), $linkTarget = '')
     {
         $this->rendererType = $rendererType;
@@ -179,6 +178,8 @@ class ViewRendererFactory
 
     /**
      * Constructs the renderer and runs it
+     *
+     * @return string
      */
     public function render()
     {
@@ -193,12 +194,12 @@ class ViewRendererFactory
     public function getRenderer()
     {
         $className = __NAMESPACE__ . '\View\\' . $this->getRendererType() . 'Renderer';
-        
+
         return new $className(
-            $this->getDataProvider(), 
-            $this->getLegend(), 
-            $this->getDisplayTime(), 
-            $this->getActions(), 
+            $this->getDataProvider(),
+            $this->getLegend(),
+            $this->getDisplayTime(),
+            $this->getActions(),
             $this->getLinkTarget());
     }
 }
