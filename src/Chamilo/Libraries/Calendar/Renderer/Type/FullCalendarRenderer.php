@@ -55,20 +55,42 @@ class FullCalendarRenderer
 
         $html[] = $this->getDependencies();
 
+        $html[] = '<script>';
+        $html[] = '	$(document).ready(function() {';
+        $html[] = '    		$(\'#calendar\').fullCalendar({';
+        $html[] = $this->getConfiguration();
+        $html[] = '    		});';
+
+        $html[] = '	});';
+        $html[] = '</script>';
+
+        $html[] = '<div class="col-xs-12 col-lg-8 table-calendar-main">';
+        $html[] = '<div id="loading">Loading...</div>';
+        $html[] = '<div id="calendar"></div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
+        $html[] = 'Sidebar goes here ...';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    protected function getConfiguration()
+    {
         $ajaxUrl = new Redirect(
             array(
                 Application::PARAM_CONTEXT => 'Ehb\Application\Calendar\Extension\SyllabusPlus\Ajax',
                 Application::PARAM_ACTION => 'FullCalendarEvents'));
 
-        $html[] = '<script>';
-        $html[] = '	$(document).ready(function() {';
-        $html[] = '    		$(\'#calendar\').fullCalendar({';
-        $html[] = '    		    		header: {';
-        $html[] = '    		    		    		left: "today prev,next title",';
-        $html[] = '    		    		    		right: "month,agendaWeek,agendaDay,listWeek"';
-        $html[] = '    		    		},';
-        $html[] = '    		    		defaultDate: "' . date('Y-m-d', $this->getDisplayTime()) . '",';
-        $html[] = '    		    		navLinks: true,
+        $html = array();
+
+        $html[] = '    		    		header: {
+                               left: "today prev,next title",
+                               right: "month,agendaWeek,agendaDay,listWeek"
+                           },
+		                           defaultDate: "' . date('Y-m-d', $this->getDisplayTime()) . '",
+                           navLinks: true,
                            height: "auto",
                            firstDay: 1,
                            timeFormat: "hh:mm",
@@ -78,23 +100,15 @@ class FullCalendarRenderer
                                end: "18:00"
                            },
                            			events: {
-                               				url: '. json_encode($ajaxUrl->getUrl()) .',
+                               				url: ' . json_encode($ajaxUrl->getUrl()) . ',
                                				error: function() {
                                					    $("#script-warning").show();
                                				}
                            			},
-                           			loading: function(bool) {
+                           themeSystem: "bootstrap3",
+                           			loading: function(bool, view) {
                                				$("#loading").toggle(bool);
                            			}';
-        $html[] = '    		});';
-
-        $html[] = '	});';
-        $html[] = '</script>';
-
-        $html[] = '<div class="col-xs-12 col-lg-10 table-calendar-main">';
-        $html[] = '<div id="loading">Loading...</div>';
-        $html[] = '<div id="calendar"></div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
