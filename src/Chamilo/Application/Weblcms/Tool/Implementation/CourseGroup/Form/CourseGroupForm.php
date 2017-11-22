@@ -5,14 +5,10 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -21,7 +17,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -50,6 +45,7 @@ class CourseGroupForm extends FormValidator
     const OPTION_PARENT_GROUP_NONE = 0;
     const OPTION_PARENT_GROUP_EXISTING = 1;
     const OPTION_PARENT_GROUP_NEW = 2;
+    const COURSE_GROUP_QUANTITY = 'course_group_quantity';
 
     // private $parent;
     private $course_group;
@@ -58,28 +54,52 @@ class CourseGroupForm extends FormValidator
 
     private $rights;
 
-    public function __construct($form_type, $course_group, $action)
+    /**
+     * @var User
+     */
+    protected $currentUser;
+
+    /**
+     * @var CourseGroupDecoratorsManager
+     */
+    protected $courseGroupDecoratorsManager;
+
+    /**
+     * CourseGroupForm constructor.
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager $courseGroupDecoratorsManager
+     * @param string $form_type
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $course_group
+     * @param string $action
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     */
+    public function __construct(
+        CourseGroupDecoratorsManager $courseGroupDecoratorsManager, $form_type, CourseGroup $course_group, $action,
+        User $currentUser
+    )
     {
-        parent::__construct('course_settings', 'post', $action);
+        parent::__construct('course_groups', 'post', $action);
         $this->form_type = $form_type;
         $this->course_group = $course_group;
+        $this->currentUser = $currentUser;
+        $this->courseGroupDecoratorsManager = $courseGroupDecoratorsManager;
 
         if ($this->form_type == self::TYPE_EDIT)
         {
             $counter = 0;
-            $this->build_editing_form($counter);
-            $this->setDefaults(array(), $counter);
+            $this->build_editing_form();
+            $this->setDefaultValues(array(), $counter);
         }
         elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->add_top_fields();
             $this->build_creation_form();
-            $this->setDefaults();
+            $this->setDefaultValues();
         }
         elseif (($this->form_type == self::TYPE_ADD_COURSE_GROUP_TITLES))
         {
             $this->add_top_fields();
-            $this->setDefaults();
+            $this->setDefaultValues();
         }
     }
 
@@ -118,7 +138,7 @@ class CourseGroupForm extends FormValidator
             'radio',
             self::PARENT_GROUP_SELECTION,
             '',
-            Translation::get('NoParentGroup'),
+            Translation::getInstance()->getTranslation('NoParentGroup'),
             self::OPTION_PARENT_GROUP_NONE,
             array('id' => self::PARENT_GROUP_NONE)
         );
@@ -126,7 +146,7 @@ class CourseGroupForm extends FormValidator
             'radio',
             self::PARENT_GROUP_SELECTION,
             '',
-            Translation::get('ExistingParentGroup'),
+            Translation::getInstance()->getTranslation('ExistingParentGroup'),
             self::OPTION_PARENT_GROUP_EXISTING,
             array('id' => self::PARENT_GROUP_EXISTING)
         );
@@ -135,33 +155,32 @@ class CourseGroupForm extends FormValidator
             'radio',
             self::PARENT_GROUP_SELECTION,
             '',
-            Translation::get('NewParentGroup'),
+            Translation::getInstance()->getTranslation('NewParentGroup'),
             self::OPTION_PARENT_GROUP_NEW,
             array('id' => self::PARENT_GROUP_NEW)
         );
-        $this->addGroup($choices, null, Translation::get('ParentGroupType'), '', false);
+        $this->addGroup($choices, null, Translation::getInstance()->getTranslation('ParentGroupType'), '', false);
 
         $this->addElement('html', '<div id="parent_group_list">');
         $this->addElement(
             'select',
             CourseGroup::PROPERTY_PARENT_ID . $counter,
-            Translation::get('GroupParent'),
+            Translation::getInstance()->getTranslation('GroupParent'),
             // 'select', CourseGroup :: PROPERTY_PARENT_ID . $counter, null,
             $this->get_groups()
         );
         $this->addElement('html', '</div>');
 
         $this->addElement('html', '<div id="parent_group_name">');
-        // TODO :: hardcoded 'parent_' (throughout this entire method)
         $this->addElement(
             'text',
             'parent_' . CourseGroup::PROPERTY_NAME,
-            Translation::get('ParentGroupTitle'),
+            Translation::getInstance()->getTranslation('ParentGroupTitle'),
             array('id' => 'parent_' . CourseGroup::PROPERTY_NAME, "size" => "50")
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_NAME,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required'
         );
         $this->addElement('html', '</div>');
@@ -170,18 +189,18 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text',
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            Translation::get('MaximumGroupSubscriptionsPerMember'),
+            Translation::getInstance()->getTranslation('MaximumGroupSubscriptionsPerMember'),
             array('id' => 'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, 'size' => "4")
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
             'regex',
             '/^[0-9]*$/'
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required'
         );
         $this->addElement('html', '</div>');
@@ -193,20 +212,20 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_RANDOM_REG,
-            Translation::get('RandomRegistration'),
-            Translation::get('RegisterCourseUsersRandomly')
+            Translation::getInstance()->getTranslation('RandomRegistration'),
+            Translation::getInstance()->getTranslation('RegisterCourseUsersRandomly')
         );
         $this->addElement('html', '</div>');
 
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::get('MaxNumberOfMembers'),
+            Translation::getInstance()->getTranslation('MaxNumberOfMembers'),
             'size="4"'
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
             'regex',
             '/^[0-9]*$/'
         );
@@ -214,24 +233,24 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'textarea',
             CourseGroup::PROPERTY_DESCRIPTION . $counter,
-            Translation::get('Description'),
+            Translation::getInstance()->getTranslation('Description'),
             'cols="50"'
         );
 
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_SELF_REG . $counter,
-            Translation::get('Registration'),
-            Translation::get('SelfRegAllowed')
+            Translation::getInstance()->getTranslation('Registration'),
+            Translation::getInstance()->getTranslation('SelfRegAllowed')
         );
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_SELF_UNREG . $counter,
             null,
-            Translation::get('SelfUnRegAllowed')
+            Translation::getInstance()->getTranslation('SelfUnRegAllowed')
         );
 
-        $this->add_tools($this->course_group, $counter);
+        $this->add_tools($this->course_group);
 
         $this->close_header();
     }
@@ -239,33 +258,35 @@ class CourseGroupForm extends FormValidator
     /**
      * Builds a static part of the form which does not expand while creating several course groups refers to the
      * section: Properties
+     *
+     * @param string $counter
      */
     public function build_basic_form($counter = '')
     {
         $this->addElement(
             'select',
             CourseGroup::PROPERTY_PARENT_ID . $counter,
-            Translation::get('GroupParent'),
+            Translation::getInstance()->getTranslation('GroupParent'),
             $this->get_groups()
         );
         $this->addRule(
             CourseGroup::PROPERTY_PARENT_ID . $counter,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required'
         );
 
-        $this->build_header(Translation::get('SingleCourseGroupOptions'));
+        $this->build_header(Translation::getInstance()->getTranslation('SingleCourseGroupOptions'));
 
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER . $counter,
-            Translation::get('MaximumGroupSubscriptionsPerMember'),
+            Translation::getInstance()->getTranslation('MaximumGroupSubscriptionsPerMember'),
             'size="4"'
         );
 
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER . $counter,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
             'regex',
             '/^[0-9]*$/'
         );
@@ -273,12 +294,12 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::get('MaxNumberOfMembers'),
+            Translation::getInstance()->getTranslation('MaxNumberOfMembers'),
             'size="4"'
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
             'regex',
             '/^[0-9]*$/'
         );
@@ -286,24 +307,24 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'textarea',
             CourseGroup::PROPERTY_DESCRIPTION . $counter,
-            Translation::get('Description'),
+            Translation::getInstance()->getTranslation('Description'),
             'cols="50"'
         );
 
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_SELF_REG . $counter,
-            Translation::get('Registration'),
-            Translation::get('SelfRegAllowed')
+            Translation::getInstance()->getTranslation('Registration'),
+            Translation::getInstance()->getTranslation('SelfRegAllowed')
         );
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_SELF_UNREG . $counter,
             null,
-            Translation::get('SelfUnRegAllowed')
+            Translation::getInstance()->getTranslation('SelfUnRegAllowed')
         );
 
-        $this->add_tools($this->course_group, $counter);
+        $this->add_tools($this->course_group);
 
         $this->close_header();
     }
@@ -328,11 +349,7 @@ class CourseGroupForm extends FormValidator
      */
     public function update_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
-
         $values = $this->exportValues();
-        $course_group = $this->course_group;
-        $course_id = $this->course_group->get_course_code();
 
         $counter = 1;
 
@@ -361,7 +378,7 @@ class CourseGroupForm extends FormValidator
                 $total_size = $total_size_diff;
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($parent_course_group->get_id())
+                    new StaticConditionVariable($parent_course_group->getId())
                 );
 
                 $c_course_groups = DataManager::retrieves(
@@ -380,7 +397,7 @@ class CourseGroupForm extends FormValidator
                     $total_size > $parent_group_form_max_number_of_members)
                 {
                     $this->course_group->add_error(
-                        Translation::get('MaxMembersFromChildrenTooBigForParentCourseGroup')
+                        Translation::getInstance()->getTranslation('MaxMembersFromChildrenTooBigForParentCourseGroup')
                     );
 
                     return false;
@@ -388,6 +405,7 @@ class CourseGroupForm extends FormValidator
             }
             else
             {
+                /** @var CourseGroup $parent_course_group */
                 $parent_course_group = DataManager::retrieve_by_id(
                     CourseGroup::class_name(),
                     $this->course_group->get_parent_id()
@@ -399,7 +417,7 @@ class CourseGroupForm extends FormValidator
 
                     while ($child_group = $parent_course_group_children->next_result())
                     {
-                        if ($child_group->get_id() == $this->course_group->get_id())
+                        if ($child_group->getId() == $this->course_group->getId())
                         {
                             $total_size += $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . 0];
                         }
@@ -411,7 +429,9 @@ class CourseGroupForm extends FormValidator
 
                     if ($parent_course_group->get_max_number_of_members() < $total_size)
                     {
-                        $this->course_group->add_error(Translation::get('MaxMembersTooBigForParentCourseGroup'));
+                        $this->course_group->add_error(
+                            Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
+                        );
 
                         return false;
                     }
@@ -430,7 +450,9 @@ class CourseGroupForm extends FormValidator
                 // but not yet in the $course_groups array. If we then update those course groups, their left and right
                 // values will be overridden
                 // with their previous values.
-                $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group->get_id());
+
+                /** @var CourseGroup $course_group */
+                $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group->getId());
 
                 $course_group->set_description($values[CourseGroup::PROPERTY_DESCRIPTION . $counter]);
                 $course_group->set_max_number_of_members(
@@ -442,8 +464,6 @@ class CourseGroupForm extends FormValidator
                     $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER . $counter]
                 );
 
-                // if the name changes, update the corresponding document
-                // category and or forum if necessary
                 if ($course_group->get_name() != $values[CourseGroup::PROPERTY_NAME . $counter])
                 {
                     $old_name = $course_group->get_name();
@@ -452,108 +472,18 @@ class CourseGroupForm extends FormValidator
                     {
                         $counter ++;
                         $this->course_group->add_error(
-                            Translation::get(
+                            Translation::getInstance()->getTranslation(
                                 'CourseGroupNotUpdated',
                                 array('NAME_OLD' => $old_name, 'NAME_NEW' => $course_group->get_name())
                             )
                         );
                         continue;
                     }
-                    $document_category_id = $course_group->get_optional_property(
-                        CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID
-                    );
-                    if ($document_category_id)
-                    {
-                        $document_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $document_category_id
-                        );
-                        $document_category->set_name($values[CourseGroup::PROPERTY_NAME . $counter]);
-                        $document_category->update();
-                    }
-                    $forum_category_id = $course_group->get_optional_property(CourseGroup::PROPERTY_FORUM_CATEGORY_ID);
-                    if ($forum_category_id)
-                    {
-                        $forum_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $forum_category_id
-                        );
-                        $forum_category->set_name($values[CourseGroup::PROPERTY_NAME . $counter]);
-                        $forum_category->update();
-
-                        // TODO :: Should we rename the actual forum that was created by checking the checkbox too? Do
-                        // note that it might not exist anymore or may have been renamed manually.
-                    }
-                }
-                $createDocumentCategory = boolval($values[CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter]);
-                $createForum = boolval($values[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter]);
-
-                if ($createDocumentCategory)
-                {
-                    if ($course_group->get_document_category_id() == 0) // it
-                        // doesn't
-                        // exist
-                        // yet
-                    {
-                        $courseGroupService->createDocumentCategoryForCourseGroup($course_group);
-                    }
-                }
-                else
-                {
-                    if ($course_group->get_document_category_id() != 0) // unlink
-                        // the
-                        // document
-                        // category
-                    {
-                        $document_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $course_group->get_document_category_id()
-                        );
-                        if ($document_category)
-                        {
-                            $document_category->set_allow_change(1);
-                            // $document_category->update();
-                            $document_category->delete();
-                        }
-                        $course_group->set_document_category_id(0);
-                    }
                 }
 
-                if ($createForum)
-                {
-                    if ($course_group->get_forum_category_id() == 0) // it
-                        // doesn't
-                        // exist yet
-                    {
-                        $user = new User();
-                        $user->setId(Session::get_user_id());
+                $course_group->update();
 
-                        $courseGroupService->createForumCategoryAndPublicationForCourseGroup($course_group, $user);
-                    }
-                }
-                else
-                {
-                    if ($course_group->get_forum_category_id() != 0) // unlink
-                        // the
-                        // document
-                        // category
-                    {
-                        $forum_category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
-                            $course_group->get_forum_category_id()
-                        );
-                        if ($forum_category)
-                        {
-                            $forum_category->set_allow_change(1);
-                            $forum_category->delete();
-                        }
-                        $course_group->set_forum_category_id(0);
-                    }
-                }
-                if (!$course_group->update())
-                {
-                    return false;
-                }
+                $this->courseGroupDecoratorsManager->updateGroup($course_group, $this->currentUser, $values);
 
                 // Change the parent
                 if ($course_group->get_parent_id() != $values[CourseGroup::PROPERTY_PARENT_ID . $counter])
@@ -580,125 +510,62 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_NAME,
-            Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
             array("size" => "50")
         );
 
         $this->addElement(
             'select',
             CourseGroup::PROPERTY_PARENT_ID,
-            Translation::get('GroupParent'),
+            Translation::getInstance()->getTranslation('GroupParent'),
             $this->get_groups()
         );
         $this->addRule(
             CourseGroup::PROPERTY_PARENT_ID,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required'
         );
 
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS,
-            Translation::get('MaxNumberOfMembers'),
+            Translation::getInstance()->getTranslation('MaxNumberOfMembers'),
             'size="4"'
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
             'regex',
             '/^[0-9]*$/'
         );
 
-        $this->addElement('textarea', CourseGroup::PROPERTY_DESCRIPTION, Translation::get('Description'), 'cols="50"');
+        $this->addElement(
+            'textarea', CourseGroup::PROPERTY_DESCRIPTION, Translation::getInstance()->getTranslation('Description'),
+            'cols="50"'
+        );
 
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_SELF_REG,
-            Translation::get('Registration'),
-            Translation::get('SelfRegAllowed')
+            Translation::getInstance()->getTranslation('Registration'),
+            Translation::getInstance()->getTranslation('SelfRegAllowed')
         );
-        $this->addElement('checkbox', CourseGroup::PROPERTY_SELF_UNREG, null, Translation::get('SelfUnRegAllowed'));
+        $this->addElement(
+            'checkbox', CourseGroup::PROPERTY_SELF_UNREG, null,
+            Translation::getInstance()->getTranslation('SelfUnRegAllowed')
+        );
 
-        $this->add_tools($this->course_group, null);
+        $this->add_tools($this->course_group);
         $this->close_header();
     }
 
     /**
-     * Adds the Documents and Forum checkboxes in the form, If the course group does not have the document and forum
-     * tool activated, show the chechboxes to activate them
-     *
      * @param $course_group CourseGroup
-     * @param $i int Number to couple the element to the course group
      */
-    public function add_tools($course_group, $counter)
+    public function add_tools($course_group)
     {
         $this->addElement('category', Translation::getInstance()->getTranslation('Integrations'));
-        if ($course_group->get_document_category_id() > 0)
-        {
-            // Editing form with linked document category
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter,
-                Translation::get('Document'),
-                null,
-                array("value" => $course_group->get_document_category_id())
-            );
-            $this->addElement(
-                'html',
-                '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter .
-                '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
-                '<div class="warning-message">' . Translation::get('DocumentToolUncheckedWarning') . '</div>' .
-                '</div></div>'
-            );
-        }
-        else
-        {
-            // Creation form or editing form without linked document category
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter,
-                Translation::get('Document')
-            );
-        }
-
-        if ($course_group->get_forum_category_id() > 0)
-        {
-            // Editing form with linked forum
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter,
-                Translation::get('Forum'),
-                null,
-                array("value" => $course_group->get_forum_category_id())
-            );
-            $this->addElement(
-                'html',
-                '<div id="tool_unchecked_warning_' . CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter .
-                '" class="form-row tool_unchecked_warning hidden"><div class="formw">' .
-                '<div class="warning-message">' . Translation::get('ForumToolUncheckedWarning') . '</div>' .
-                '</div></div>'
-            );
-        }
-
-        else
-        {
-            // Creation form or editing form without linked forum
-            $this->addElement(
-                'checkbox',
-                CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter,
-                Translation::get('Forum')
-            );
-        }
-
-        $integrationPackages = Configuration::getInstance()->getIntegrationRegistrations(Manager::context());
-        foreach($integrationPackages as $integrationPackage)
-        {
-            $formDecorator = $integrationPackage['context'] . '\\Form\\CourseGroupFormDecorator';
-            if(class_exists($formDecorator) && is_subclass_of($formDecorator, CourseGroupFormDecoratorInterface::class))
-            {
-
-            }
-        }
+        $this->courseGroupDecoratorsManager->decorateCourseGroupForm($this, $course_group);
     }
 
     /**
@@ -718,31 +585,33 @@ class CourseGroupForm extends FormValidator
             $this->addElement(
                 'text',
                 CourseGroup::PROPERTY_NAME . $counter,
-                Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
                 array("size" => "50")
             );
 
             $this->addElement(
                 'select',
                 CourseGroup::PROPERTY_PARENT_ID . $counter,
-                Translation::get('GroupParent'),
+                Translation::getInstance()->getTranslation('GroupParent'),
                 $this->get_groups()
             );
             $this->addRule(
                 CourseGroup::PROPERTY_PARENT_ID . $counter,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                 'required'
             );
 
             $this->addElement(
                 'text',
                 CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-                Translation::get('MaxNumberOfMembers'),
+                Translation::getInstance()->getTranslation('MaxNumberOfMembers'),
                 'size="4"'
             );
             $this->addRule(
                 CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-                Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation(
+                    'ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES
+                ),
                 'regex',
                 '/^[0-9]*$/'
             );
@@ -750,23 +619,23 @@ class CourseGroupForm extends FormValidator
             $this->addElement(
                 'textarea',
                 CourseGroup::PROPERTY_DESCRIPTION . $counter,
-                Translation::get('Description'),
+                Translation::getInstance()->getTranslation('Description'),
                 'cols="100"'
             );
             $this->addElement(
                 'checkbox',
                 CourseGroup::PROPERTY_SELF_REG . $counter,
-                Translation::get('Registration'),
-                Translation::get('SelfRegAllowed')
+                Translation::getInstance()->getTranslation('Registration'),
+                Translation::getInstance()->getTranslation('SelfRegAllowed')
             );
             $this->addElement(
                 'checkbox',
                 CourseGroup::PROPERTY_SELF_UNREG . $counter,
                 null,
-                Translation::get('SelfUnRegAllowed')
+                Translation::getInstance()->getTranslation('SelfUnRegAllowed')
             );
 
-            $this->add_tools($course_groups, $counter);
+            $this->add_tools($course_groups);
 
             $this->addElement('hidden', CourseGroup::PROPERTY_ID . $counter);
             $this->addElement('hidden', CourseGroup::PROPERTY_PARENT_ID . $counter . 'old');
@@ -784,7 +653,7 @@ class CourseGroupForm extends FormValidator
         $element = $this->createElement(
             'text',
             CourseGroup::PROPERTY_NAME . $number,
-            Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
             array("size" => "50")
         );
 
@@ -794,7 +663,7 @@ class CourseGroupForm extends FormValidator
     public function get_groups()
     {
         $course = new Course();
-        $course->set_id($this->course_group->get_course_code());
+        $course->setId($this->course_group->get_course_code());
         $menu = new CourseGroupMenu($course, 0);
         $renderer = new OptionsMenuRenderer();
         $menu->render($renderer, 'sitemap');
@@ -802,11 +671,11 @@ class CourseGroupForm extends FormValidator
         return $renderer->toArray();
     }
 
-    public function build_editing_form($counter)
+    public function build_editing_form()
     {
         if ($this->course_group->count_children(false) > 0)
         {
-            $tabs_renderer = new DynamicFormTabsRenderer($this->form_name, $this);
+            $tabs_renderer = new DynamicFormTabsRenderer('course_groups', $this);
 
             $tabs_renderer->add_tab(
                 new DynamicFormTab('parent', $this->course_group->get_name(), null, 'build_parent_tab_form_elements')
@@ -815,7 +684,7 @@ class CourseGroupForm extends FormValidator
             $tabs_renderer->add_tab(
                 new DynamicFormTab(
                     'children',
-                    Translation::get('CourseGroupChildren'),
+                    Translation::getInstance()->getTranslation('CourseGroupChildren'),
                     null,
                     'build_children_tab_form_elements'
                 )
@@ -833,7 +702,7 @@ class CourseGroupForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Update', null, Utilities::COMMON_LIBRARIES),
             null,
             null,
             'arrow-right'
@@ -842,7 +711,7 @@ class CourseGroupForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -869,7 +738,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text',
             CourseGroup::PROPERTY_NAME . $counter,
-            Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
             array("size" => "50")
         );
 
@@ -920,8 +789,6 @@ class CourseGroupForm extends FormValidator
 
         $defaults = array();
 
-        $qty = $qty_groups;
-
         $this->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
@@ -961,7 +828,7 @@ class CourseGroupForm extends FormValidator
                 $this->addGroup(
                     $group,
                     CourseGroup::PROPERTY_NAME . $option_number,
-                    Translation::get('CountedTitle', array('COUNT' => $numbering)),
+                    Translation::getInstance()->getTranslation('CountedTitle', array('COUNT' => $numbering)),
                     '',
                     false
                 );
@@ -971,18 +838,19 @@ class CourseGroupForm extends FormValidator
                 parent::setDefaults($defaults);
                 $this->addRule(
                     CourseGroup::PROPERTY_NAME . $option_number,
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                    Translation::getInstance()->getTranslation(
+                        'ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES
+                    ),
                     'required'
                 );
             }
         }
-        // parent :: setDefaults($defaults);
 
         $this->addElement(
             'image',
             'add[]',
             Theme::getInstance()->getCommonImagePath('Action/ListAdd'),
-            array("title" => Translation::get('AddGroupExplained'))
+            array("title" => Translation::getInstance()->getTranslation('AddGroupExplained'))
         );
         $this->addElement(
             'html',
@@ -994,31 +862,30 @@ class CourseGroupForm extends FormValidator
             )
         );
 
-        $this->build_header(Translation::get('CourseGroupParent'));
+        $this->build_header(Translation::getInstance()->getTranslation('CourseGroupParent'));
         $this->build_parent_form_create();
         $this->close_header();
 
-        $this->build_header(Translation::get('CourseGroupOptions'));
+        $this->build_header(Translation::getInstance()->getTranslation('CourseGroupOptions'));
         $this->build_options_form_create();
         $this->close_header();
 
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Create', null, Utilities::COMMON_LIBRARIES)
         );
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     * A course_group title should be unique per course as a document and forum category names correspond to the
-     * course_group name This method checks if a course group witht the same title already exists for this course
+     * A course_group title should be unique per course
      *
      * @param $course_group CourseGroup
      *
@@ -1043,11 +910,11 @@ class CourseGroupForm extends FormValidator
         // If updating, the name will already exist in the database if the name has not been changed -
         // Exclude course group being updated.
         // If creating, course group will not yet have an id.
-        if ($course_group->get_id())
+        if ($course_group->getId())
         {
             $not_condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
-                new StaticConditionVariable($course_group->get_id())
+                new StaticConditionVariable($course_group->getId())
             );
             $conditions[] = new NotCondition($not_condition);
         }
@@ -1059,31 +926,12 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * This methos creates one or several course_groups for the given course If checked document and forum publications
-     * are created with the same name as the course_group titel.
-     *
-     * @param
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * This methos creates one or several course_groups for the given course
      *
      * @return boolean
      */
     public function create_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
-
         $this->rights = array();
         $this->rights[] = WeblcmsRights::VIEW_RIGHT;
         $this->rights[] = WeblcmsRights::ADD_RIGHT;
@@ -1095,7 +943,6 @@ class CourseGroupForm extends FormValidator
         $new_titles = preg_grep('/^name*[0-9]*$/', array_keys($values));
         $qty = sizeof($new_titles);
         $groups = array();
-        $errors = array();
 
         // check parent's max size >= combined total size of parent's children (could be more than just this group)
         // new children size
@@ -1115,12 +962,14 @@ class CourseGroupForm extends FormValidator
                     return false;
                 }
 
-                $parent_group_id = $parent_course_group->get_id();
+                $parent_group_id = $parent_course_group->getId();
                 $values[CourseGroup::PROPERTY_PARENT_ID] = $parent_group_id;
                 $groups = $this->construct_course_groups($new_titles, $course_code, $values);
                 break;
             case self::OPTION_PARENT_GROUP_EXISTING :
                 $parent_group_id = $values[CourseGroup::PROPERTY_PARENT_ID];
+
+                /** @var CourseGroup $parent_course_group */
                 $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $parent_group_id);
                 if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
                 {
@@ -1139,25 +988,29 @@ class CourseGroupForm extends FormValidator
                 $parent_values[CourseGroup::PROPERTY_SELF_REG] = false;
                 $parent_values[CourseGroup::PROPERTY_SELF_UNREG] = false;
                 $parent_values[CourseGroup::PROPERTY_PARENT_ID] =
-                    DataManager::retrieve_course_group_root($course_code)->get_id();
+                    DataManager::retrieve_course_group_root($course_code)->getId();
 
                 $parent_group = $this->construct_course_group(CourseGroup::PROPERTY_NAME, $course_code, $parent_values);
 
                 if ($this->course_group_name_exists($parent_group))
                 {
                     $this->course_group->add_error(
-                        Translation::get('CourseGroupTitleExists', array('NAME' => $parent_group->get_name()))
+                        Translation::getInstance()->getTranslation(
+                            'CourseGroupTitleExists', array('NAME' => $parent_group->get_name())
+                        )
                     );
                 }
 
                 if (!$parent_group->create())
                 {
                     $course_group->add_error(
-                        Translation::get('CannotCreateCourseGroup', array('NAME' => $parent_group->get_name()))
+                        Translation::getInstance()->getTranslation(
+                            'CannotCreateCourseGroup', array('NAME' => $parent_group->get_name())
+                        )
                     );
                 }
 
-                $parent_group_id = $parent_group->get_id();
+                $parent_group_id = $parent_group->getId();
                 $values[CourseGroup::PROPERTY_PARENT_ID] = $parent_group_id;
                 $groups = $this->construct_course_groups($new_titles, $course_code, $values);
                 break;
@@ -1179,34 +1032,23 @@ class CourseGroupForm extends FormValidator
                 {
                     if ($course_group->create())
                     {
-                        $createDocumentCategory = boolval($values[CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID]);
-                        if ($createDocumentCategory)
-                        {
-                            $courseGroupService->createDocumentCategoryForCourseGroup($course_group);
-                        }
-
-                        $createForum = boolval($values[CourseGroup::PROPERTY_FORUM_CATEGORY_ID]);
-                        if ($createForum)
-                        {
-                            $user = new User();
-                            $user->setId(Session::get_user_id());
-
-                            $courseGroupService->createForumCategoryAndPublicationForCourseGroup($course_group, $user);
-                        }
-
-                        $course_group->update();
+                        $this->courseGroupDecoratorsManager->createGroup($course_group, $this->currentUser, $values);
                     }
                     else
                     {
                         $course_group->add_error(
-                            Translation::get('CreationFailed', array('NAME' => $course_group->get_name()))
+                            Translation::getInstance()->getTranslation(
+                                'CreationFailed', array('NAME' => $course_group->get_name())
+                            )
                         );
                     }
                 }
                 else
                 {
                     $this->course_group->add_error(
-                        Translation::get('CourseGroupTitleExists', array('NAME' => $course_group->get_name()))
+                        Translation::getInstance()->getTranslation(
+                            'CourseGroupTitleExists', array('NAME' => $course_group->get_name())
+                        )
                     );
                 }
             }
@@ -1227,12 +1069,12 @@ class CourseGroupForm extends FormValidator
             }
         }
 
-        return ($this->course_group->get_errors());
+        return !$this->course_group->has_errors();
     }
 
     /**
      *
-     * @param \application\weblcms\tool\implementation\course_group\CourseGroup $parent_course_group
+     * @param CourseGroup $parent_course_group
      * @param int $child_max_size
      *
      * @return bool
@@ -1247,7 +1089,7 @@ class CourseGroupForm extends FormValidator
         // existing groups size
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parent_course_group->get_id())
+            new StaticConditionVariable($parent_course_group->getId())
         );
         $course_groups =
             DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
@@ -1260,7 +1102,9 @@ class CourseGroupForm extends FormValidator
 
         if ($size_children + $child_max_size > $parent_course_group->get_max_number_of_members())
         {
-            $this->course_group->add_error(Translation::get('MaxMembersTooBigForParentCourseGroup'));
+            $this->course_group->add_error(
+                Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
+            );
 
             return false;
         }
@@ -1292,7 +1136,7 @@ class CourseGroupForm extends FormValidator
      * Creates a new CourseGroup.
      *
      * @param string $new_title The title of the new CourseGroup.
-     * @param string The course code.
+     * @param string $course_code
      * @param mixed[] $values The form values.
      *
      * @return CourseGroup The constructed, but not created CourseGroup.
@@ -1362,9 +1206,11 @@ class CourseGroupForm extends FormValidator
         // }
     }
 
-    /*
+    /**
      * randomly selects the users from the course users and subscribes to course group takes into the account the max
      * number of members
+     *
+     * @param CourseGroup $course_group
      */
     public function random_user_subscription_to_course_group($course_group)
     {
@@ -1372,6 +1218,7 @@ class CourseGroupForm extends FormValidator
         $max_num_members = $course_group->get_max_number_of_members();
 
         // randomize course_users
+        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $course_users_data_set */
         $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code, null, null, null);
         $course_users = array();
         while ($course_user = $course_users_data_set->next_result())
@@ -1400,23 +1247,26 @@ class CourseGroupForm extends FormValidator
             $member = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
                 $course_users[$count]->get_username()
             );
-            $members_to_add[] = $member->get_id();
+            $members_to_add[] = $member->getId();
 
             $count ++;
         }
         $course_group->subscribe_users($members_to_add);
     }
 
-    /*
+    /**
      * Randomly selects the users from the course users and subscribes them in the course groups directly under the
      * given parent course group. It takes into the account the max number of members and the maximum number of
      * subscriptions allowed for a course user. This method front-loads (it will fill up spaces as soon as it gets them.
-     * If there are no more users with unused subscriptions, all remaining groups will remain empty). @param CourseGroup
-     * $parent_course_group The parent of the course groups to which the random subscription applies. @return bool True
-     * if all the available spaces are filled. False otherwise.
+     * If there are no more users with unused subscriptions, all remaining groups will remain empty).
+     *
+     * @param CourseGroup $parent_course_group The parent of the course groups to which the random subscription applies.
+     *
+     * @return bool True if all the available spaces are filled. False otherwise.
      */
     public function random_user_subscription_to_course_groups($parent_course_group)
     {
+        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $course_users_drs */
         $course_users_drs = CourseDataManager::retrieve_all_course_users(
             $parent_course_group->get_course_code(),
             null,
@@ -1435,6 +1285,7 @@ class CourseGroupForm extends FormValidator
             }
         }
 
+        /** @var CourseGroup[] $course_groups */
         $course_groups = $parent_course_group->get_children(false)->as_array();
 
         $max_number_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
@@ -1442,6 +1293,7 @@ class CourseGroupForm extends FormValidator
 
         foreach ($course_groups as $course_group)
         {
+            /** @var int[] $subscribed_users */
             $subscribed_users = $course_group->get_members(true, true);
             if ($subscribed_users)
             {
@@ -1468,6 +1320,7 @@ class CourseGroupForm extends FormValidator
             {
                 break;
             }
+            /** @var int[] $subscribed_users_drs */
             $subscribed_users_drs = $course_group->get_members(true, true);
             $subscribed_users = array();
             if ($subscribed_users_drs)
@@ -1485,15 +1338,15 @@ class CourseGroupForm extends FormValidator
             while (count($new_users) < $max_subscribed_users - count($subscribed_users) && count($course_users) > 0)
             {
                 $random_int = mt_rand(0, count($course_users) - 1);
-                if (!array_key_exists($course_users[$random_int]->get_id(), $new_users) &&
-                    !array_key_exists($course_users[$random_int]->get_id(), $subscribed_users))
+                if (!array_key_exists($course_users[$random_int]->getId(), $new_users) &&
+                    !array_key_exists($course_users[$random_int]->getId(), $subscribed_users))
                 {
-                    $new_users[$course_users[$random_int]->get_id()] = $course_users[$random_int];
-                    $user_number_subscriptions[$course_users[$random_int]->get_id()] =
-                        $user_number_subscriptions[$course_users[$random_int]->get_id()] +
+                    $new_users[$course_users[$random_int]->getId()] = $course_users[$random_int];
+                    $user_number_subscriptions[$course_users[$random_int]->getId()] =
+                        $user_number_subscriptions[$course_users[$random_int]->getId()] +
                         1;
 
-                    if ($user_number_subscriptions[$course_users[$random_int]->get_id()] >= $max_number_subscriptions)
+                    if ($user_number_subscriptions[$course_users[$random_int]->getId()] >= $max_number_subscriptions)
                     {
                         unset($course_users[$random_int]);
                         $course_users = array_values($course_users);
@@ -1503,11 +1356,6 @@ class CourseGroupForm extends FormValidator
             if (count($new_users) > 0)
             {
                 $course_group->subscribe_users($new_users);
-            }
-            if ($course_group->count_members() < $max_subscribed_users)
-            {
-                // TODO :: Why was this needed? This means that only the first group will be filled ...
-                // $all_groups_filled = false;
             }
         }
 
@@ -1520,8 +1368,9 @@ class CourseGroupForm extends FormValidator
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
+     * @param string $counter
      */
-    public function setDefaults($defaults = array(), $counter = '')
+    public function setDefaultValues($defaults = array(), $counter = '')
     {
         $course_group = $this->course_group;
         $defaults[CourseGroup::PROPERTY_NAME . $counter] = $course_group->get_name();
@@ -1554,8 +1403,6 @@ class CourseGroupForm extends FormValidator
         $defaults[CourseGroup::PROPERTY_SELF_UNREG . $counter] = $course_group->is_self_unregistration_allowed();
         $defaults[CourseGroup::PROPERTY_RANDOM_REG . $counter] = $course_group->is_random_registration_done();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter] = $course_group->get_parent_id();
-        $defaults[CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter] = $course_group->get_document_category_id();
-        $defaults[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter] = $course_group->get_forum_category_id();
         parent::setDefaults($defaults);
     }
 
@@ -1564,13 +1411,13 @@ class CourseGroupForm extends FormValidator
      * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
-     * @param $counternteger .
-     * @param $course_group Object CourseGroup
+     * @param int $counter
+     * @param CourseGroup $course_group
      */
     public function setDefaults_extended($counter, $course_group)
     {
         $defaults[CourseGroup::PROPERTY_NAME . $counter] = $course_group->get_name();
-        $defaults[CourseGroup::PROPERTY_ID . $counter] = $course_group->get_id();
+        $defaults[CourseGroup::PROPERTY_ID . $counter] = $course_group->getId();
         $defaults[CourseGroup::PROPERTY_COURSE_CODE . $counter] = $course_group->get_course_code();
         $defaults[CourseGroup::PROPERTY_DESCRIPTION . $counter] = $course_group->get_description();
         $defaults[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter] = $course_group->get_max_number_of_members();
@@ -1578,8 +1425,6 @@ class CourseGroupForm extends FormValidator
         $defaults[CourseGroup::PROPERTY_SELF_UNREG . $counter] = $course_group->is_self_unregistration_allowed();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter] = $course_group->get_parent_id();
         $defaults[CourseGroup::PROPERTY_PARENT_ID . $counter . 'old'] = $course_group->get_parent_id();
-        $defaults[CourseGroup::PROPERTY_DOCUMENT_CATEGORY_ID . $counter] = $course_group->get_document_category_id();
-        $defaults[CourseGroup::PROPERTY_FORUM_CATEGORY_ID . $counter] = $course_group->get_forum_category_id();
         parent::setDefaults($defaults);
     }
 

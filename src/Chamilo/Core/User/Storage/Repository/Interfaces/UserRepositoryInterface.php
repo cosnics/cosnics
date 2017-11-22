@@ -29,7 +29,7 @@ interface UserRepositoryInterface
      * @param int $offset
      * @param OrderBy[] $order_by
      *
-     * @return User[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = array());
 
@@ -38,19 +38,19 @@ interface UserRepositoryInterface
      * 
      * @param string $email
      *
-     * @return User;
+     * @return \Chamilo\Core\User\Storage\DataClass\User;
      */
     public function findUserByEmail($email);
 
     /**
      *
-     * @return User[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findActiveStudents();
 
     /**
      *
-     * @return User[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findActiveTeachers();
 }

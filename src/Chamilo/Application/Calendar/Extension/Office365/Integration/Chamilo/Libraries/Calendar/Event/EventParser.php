@@ -23,7 +23,7 @@ class EventParser
 
     /**
      *
-     * @var \stdClass
+     * @var \Microsoft\Graph\Model\Event
      */
     private $office365CalendarEvent;
 
@@ -42,12 +42,12 @@ class EventParser
     /**
      *
      * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
-     * @param \Office365_Service_Calendar_Event $office365CalendarEvent
+     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(AvailableCalendar $availableCalendar, \stdClass $office365CalendarEvent, $fromDate,
-        $toDate)
+    public function __construct(AvailableCalendar $availableCalendar,
+        \Microsoft\Graph\Model\Event $office365CalendarEvent, $fromDate, $toDate)
     {
         $this->availableCalendar = $availableCalendar;
         $this->office365CalendarEvent = $office365CalendarEvent;
@@ -76,7 +76,7 @@ class EventParser
 
     /**
      *
-     * @return \stdClass
+     * @return \Microsoft\Graph\Model\Event
      */
     public function getOffice365CalendarEvent()
     {
@@ -85,9 +85,9 @@ class EventParser
 
     /**
      *
-     * @param \stdClass $office365CalendarEvent
+     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
      */
-    public function setOffice365CalendarEvent($office365CalendarEvent)
+    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
     {
         $this->office365CalendarEvent = $office365CalendarEvent;
     }
@@ -139,20 +139,20 @@ class EventParser
         $url = null;
 
         $event = new Event(
-            $office365CalendarEvent->Id,
+            $office365CalendarEvent->getId(),
             $this->getTimestamp(
-                $office365CalendarEvent->Start->DateTime,
-                $office365CalendarEvent->Start->TimeZone,
-                $office365CalendarEvent->IsAllDay),
+                $office365CalendarEvent->getStart()->getDateTime(),
+                $office365CalendarEvent->getStart()->getTimeZone(),
+                $office365CalendarEvent->getIsAllDay()),
             $this->getTimestamp(
-                $office365CalendarEvent->End->DateTime,
-                $office365CalendarEvent->End->TimeZone,
-                $office365CalendarEvent->IsAllDay),
-            $this->getRecurrence($office365CalendarEvent->Recurrence),
+                $office365CalendarEvent->getEnd()->getDateTime(),
+                $office365CalendarEvent->getEnd()->getTimeZone(),
+                $office365CalendarEvent->getIsAllDay()),
+            $this->getRecurrence($office365CalendarEvent->getRecurrence()),
             $url,
-            $office365CalendarEvent->Subject,
-            $office365CalendarEvent->Body->Content,
-            $office365CalendarEvent->location->displayName,
+            $office365CalendarEvent->getSubject(),
+            $office365CalendarEvent->getBody()->getContent(),
+            $office365CalendarEvent->getLocation()->getDisplayName(),
             $this->getSource($this->getAvailableCalendar()->getName()),
             \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
 
@@ -217,50 +217,50 @@ class EventParser
 
     /**
      *
-     * @param string[] $recurrenceRules
+     * @param \Microsoft\Graph\Model\PatternedRecurrence $recurrence
      * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
      */
-    private function getRecurrence(\stdClass $recurrence = null)
+    private function getRecurrence(\Microsoft\Graph\Model\PatternedRecurrence $recurrence = null)
     {
         $recurrenceRules = new RecurrenceRules();
 
-        if ($recurrence instanceof \stdClass)
+        if ($recurrence instanceof \Microsoft\Graph\Model\PatternedRecurrence)
         {
-            $recurrenceRules->setFrequency($this->getFrequency($recurrence->Pattern->Type));
+            // $recurrenceRules->setFrequency($this->getFrequency($recurrence->getPattern()->getType()));
 
-            if ($recurrence->Pattern->Interval > 0)
-            {
-                $recurrenceRules->setInterval((string) $recurrence->Pattern->Interval);
-            }
+            // if ($recurrence->getPattern()->getInterval() > 0)
+            // {
+            // $recurrenceRules->setInterval((string) $recurrence->getPattern()->getInterval());
+            // }
 
-            if ($recurrence->Range->Type == 'Numbered')
-            {
-                $recurrenceRules->setCount((string) $recurrence->Range->NumberOfOccurrences);
-            }
+            // if ($recurrence->getRange()->getType() == 'Numbered')
+            // {
+            // $recurrenceRules->setCount((string) $recurrence->getRange()->getNumberOfOccurrences());
+            // }
 
-            if ($recurrence->Range->Type == 'EndDate')
-            {
-                $recurrenceRules->setUntil($this->getTimestamp($recurrence->Range->EndDate));
-            }
+            // if ($recurrence->getRange()->getType() == 'EndDate')
+            // {
+            // $recurrenceRules->setUntil($this->getTimestamp($recurrence->getRange()->getEndDate()));
+            // }
 
-            if ($recurrence->Pattern->DayOfMonth != 0)
-            {
-                $recurrenceRules->setByMonthDay(array($recurrence->Pattern->DayOfMonth));
-            }
+            // if ($recurrence->getPattern()->getDayOfMonth() != 0)
+            // {
+            // $recurrenceRules->setByMonthDay(array($recurrence->getPattern()->getDayOfMonth()));
+            // }
 
-            if ($recurrence->Pattern->Month != 0)
-            {
-                $recurrenceRules->setByMonth(array($recurrence->Pattern->Month));
-            }
+            // if ($recurrence->getPattern()->getMonth() != 0)
+            // {
+            // $recurrenceRules->setByMonth(array($recurrence->getPattern()->getMonth()));
+            // }
 
-            if (count($recurrence->Pattern->DaysOfWeek) > 0)
-            {
-                $recurrenceRules->setByDay(
-                    $this->getByDay(
-                        $recurrence->Pattern->Type,
-                        $recurrence->Pattern->Index,
-                        $recurrence->Pattern->DaysOfWeek));
-            }
+            // if (count($recurrence->getPattern()->getDaysOfWeek()) > 0)
+            // {
+            // $recurrenceRules->setByDay(
+            // $this->getByDay(
+            // $recurrence->getPattern()->getType(),
+            // $recurrence->getPattern()->getIndex(),
+            // $recurrence->getPattern()->getDaysOfWeek()));
+            // }
         }
 
         return $recurrenceRules;

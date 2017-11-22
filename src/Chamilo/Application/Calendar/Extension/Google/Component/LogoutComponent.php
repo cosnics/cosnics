@@ -4,8 +4,6 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
@@ -24,14 +22,22 @@ class LogoutComponent extends Manager implements DelegateComponent
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $isSuccessful = $calendarService->logout();
-        
+
         if ($isSuccessful)
         {
-            $availabilityService = new AvailabilityService(new AvailabilityRepository());
-            $availabilityService->deleteAvailabilityByCalendarType(self::package());
+            $this->getAvailabilityService()->deleteAvailabilityByCalendarType(self::package());
         }
-        
+
         $nextAction = new Redirect(array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
         $nextAction->toUrl();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService('chamilo.application.calendar.service.availability_service');
     }
 }

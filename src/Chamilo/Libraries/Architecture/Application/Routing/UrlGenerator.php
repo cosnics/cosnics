@@ -18,7 +18,7 @@ class UrlGenerator
      *
      * @var \Symfony\Component\HttpFoundation\ParameterBag
      */
-    private $url_parameter_bag;
+    private $urlParameterBag;
 
     /**
      * Constructor
@@ -32,20 +32,20 @@ class UrlGenerator
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\ParameterBag $url_parameter_bag
+     * @param \Symfony\Component\HttpFoundation\ParameterBag $urlParameterBag
      *
      * @throws \InvalidArgumentException
      */
-    public function setUrlParameterBag($url_parameter_bag)
+    public function setUrlParameterBag($urlParameterBag)
     {
-        if (! $url_parameter_bag instanceof ParameterBag)
+        if (! $urlParameterBag instanceof ParameterBag)
         {
             throw new \InvalidArgumentException(
                 'The given url parameter bag is not an instance of "\Symfony\Component\HttpFoundation\ParameterBag", ' .
-                     'instead "' . get_class($url_parameter_bag) . '" was given.');
+                     'instead "' . get_class($urlParameterBag) . '" was given.');
         }
 
-        $this->url_parameter_bag = $url_parameter_bag;
+        $this->urlParameterBag = $urlParameterBag;
     }
 
     /**
@@ -57,18 +57,18 @@ class UrlGenerator
      */
     public function generateURL($parameters = array(), $filters = array())
     {
-        $base_parameters = $this->url_parameter_bag->all();
-        $this->url_parameter_bag->add($parameters);
+        $baseParameters = $this->urlParameterBag->all();
+        $this->urlParameterBag->add($parameters);
 
         foreach ($filters as $filter)
         {
-            $this->url_parameter_bag->remove($filter);
+            $this->urlParameterBag->remove($filter);
         }
 
-        $parameters = $this->url_parameter_bag->all();
+        $parameters = $this->urlParameterBag->all();
         $parameters_url_string = count($parameters) ? '?' . urldecode(http_build_query($parameters)) : '';
 
-        $this->url_parameter_bag->replace($base_parameters);
+        $this->urlParameterBag->replace($baseParameters);
 
         return 'index.php' . $parameters_url_string;
     }

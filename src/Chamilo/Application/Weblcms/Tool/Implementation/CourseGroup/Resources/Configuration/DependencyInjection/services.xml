@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.decorator.manager"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager" />
+
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService">
+            <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.repository.course_group_publication_category_repository" />
+            <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
+            <argument type="service" id="chamilo.application.weblcms.service.weblcms_rights" />
+        </service>
+
+        <service id="chamilo.application.weblcms.tool.implementation.course_group.repository.course_group_publication_category_repository"
+                 class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository">
+            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+    </services>
+</container>

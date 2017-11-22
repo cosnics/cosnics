@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.application.calendar.service.availability_service"
+            class="Chamilo\Application\Calendar\Service\AvailabilityService">
+            <argument
+                type="service"
+                id="chamilo.application.calendar.repository.availibility_repository" />
+        </service>
+
+        <service
+            id="chamilo.application.calendar.repository.availibility_repository"
+            class="Chamilo\Application\Calendar\Repository\AvailabilityRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+    </services>
+</container>

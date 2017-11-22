@@ -67,13 +67,15 @@ class ConfigurationForm extends FormValidator
     {
         $connector_class = $this->context . '\SettingsConnector';
 
-        $is_user_setting = isset($setting['user_setting']) && $setting['user_setting'] == 1;
+        $is_user_setting = $this->isUserSetting($setting);
+        $isHidden = $this->isHidden($setting);
+
         $has_availability_method = isset($setting['availability']) && isset($setting['availability']['source']) &&
              StringUtilities::getInstance()->hasValue($setting['availability']['source']);
 
         if ($this->is_user_setting_form)
         {
-            if ($is_user_setting)
+            if ($is_user_setting && !$isHidden)
             {
                 if ($has_availability_method)
                 {
@@ -101,8 +103,23 @@ class ConfigurationForm extends FormValidator
         }
         else
         {
-            return true;
+            return !$isHidden;
         }
+    }
+
+    protected function isHidden($setting)
+    {
+        return isset($setting['hidden']) && ($setting['hidden'] == 1 || $setting['hidden'] == 'true');
+    }
+
+    protected function isLocked($setting)
+    {
+        return isset($setting['locked']) && ($setting['locked'] == 1 || $setting['locked'] == 'true');
+    }
+
+    protected function isUserSetting($setting)
+    {
+        return isset($setting['user_setting']) && ($setting['user_setting'] == 1 || $setting['user_setting'] == 'true');
     }
 
     /**
@@ -142,7 +159,7 @@ class ConfigurationForm extends FormValidator
                         $has_settings = true;
                     }
 
-                    if ($setting['locked'] == 'true')
+                    if ($this->isLocked($setting))
                     {
                         $this->addElement(
                             'static',
@@ -332,7 +349,7 @@ class ConfigurationForm extends FormValidator
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
-                $attributes = array('field', 'default', 'locked', 'user_setting');
+                $attributes = array('field', 'default', 'locked', 'user_setting', 'hidden');
 
                 foreach ($properties as $index => $property)
                 {
@@ -477,7 +494,7 @@ class ConfigurationForm extends FormValidator
         {
             foreach ($settings as $name => $setting)
             {
-                if ($setting['locked'] != 'true')
+                if (!$this->isLocked($setting) && !$this->isHidden($setting))
                 {
                     $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
                         $name,

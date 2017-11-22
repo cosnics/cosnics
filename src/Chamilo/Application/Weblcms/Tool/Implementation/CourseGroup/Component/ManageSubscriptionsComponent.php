@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -16,13 +17,15 @@ class ManageSubscriptionsComponent extends TabComponent
 
     public function renderTabContent()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
         $courseGroup = $this->getCurrentCourseGroup();
-        $form = new CourseGroupSubscriptionsForm($courseGroup, $this->get_url(), $this);
+        $form = new CourseGroupSubscriptionsForm(
+            $courseGroup, $this->get_url(), $this, $this->getCourseGroupDecoratorsManager()
+        );
 
         if ($form->validate())
         {
@@ -31,18 +34,20 @@ class ManageSubscriptionsComponent extends TabComponent
             if ($succes)
             {
                 $message = Translation::get(
-                    'CourseGroupSubscriptionsUpdated',
-                    array('OBJECT' => Translation::get('CourseGroup'))) . '<br />' .
-                     implode('<br />', $courseGroup->get_errors());
+                        'CourseGroupSubscriptionsUpdated',
+                        array('OBJECT' => Translation::get('CourseGroup'))
+                    ) . '<br />' .
+                    implode('<br />', $courseGroup->get_errors());
             }
             else
             {
                 $message = Translation::get(
-                    'ObjectNotUpdated',
-                    array('OBJECT' => Translation::get('CourseGroup')),
-                    Utilities::COMMON_LIBRARIES) . '<br />' . implode('<br />', $courseGroup->get_errors());
+                        'ObjectNotUpdated',
+                        array('OBJECT' => Translation::get('CourseGroup')),
+                        Utilities::COMMON_LIBRARIES
+                    ) . '<br />' . implode('<br />', $courseGroup->get_errors());
             }
-            $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
 
         return $form->toHtml();

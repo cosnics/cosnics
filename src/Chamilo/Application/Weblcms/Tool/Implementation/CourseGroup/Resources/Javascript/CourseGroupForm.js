@@ -114,15 +114,11 @@
                     parentCourseGroup.max_number_of_members = 20;
                     parentCourseGroup.self_reg_allowed = false;
                     parentCourseGroup.self_unreg_allowed = true;
-                    parentCourseGroup.document_category_id = 0;
-                    parentCourseGroup.forum_category_id = 0;
                 }
 
                 $("[name='max_number_of_members']").val(parentCourseGroup.max_number_of_members);
                 $("[name='self_reg_allowed']").val([parentCourseGroup.self_reg_allowed]); // Note: this must match the value of the checkbox to select.
                 $("[name='self_unreg_allowed']").val([parentCourseGroup.self_unreg_allowed]);
-                $("[name='document_category_id']").val([parentCourseGroup.document_category_id > 0 ? 1 : 0]);
-                $("[name='forum_category_id']").val([parentCourseGroup.forum_category_id > 0 ? 1 : 0]);
             });
         //}
     }

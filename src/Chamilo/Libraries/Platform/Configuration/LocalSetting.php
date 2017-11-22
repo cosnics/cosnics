@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Platform\Configuration;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -44,7 +45,7 @@ class LocalSetting
      *
      * @var integer
      */
-    private $userIdentifier;
+    private $currentUserIdentifier;
 
     /**
      *
@@ -55,13 +56,13 @@ class LocalSetting
     /**
      *
      * @param \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService $localSettingCacheService
-     * @param integer $userIdentifier
+     * @param integer $currentUserIdentifier
      */
-    public function __construct(LocalSettingCacheService $localSettingCacheService, $userIdentifier = 0)
+    public function __construct(LocalSettingCacheService $localSettingCacheService, $currentUserIdentifier = 0)
     {
         $this->localSettingCacheService = $localSettingCacheService;
-        $this->userIdentifier = $userIdentifier;
-        $this->localSettings = $localSettingCacheService->getForUserIdentifier($userIdentifier);
+        $this->currentUserIdentifier = $currentUserIdentifier;
+        $this->localSettings = $localSettingCacheService->getForUserIdentifier($currentUserIdentifier);
     }
 
     /**
@@ -86,18 +87,18 @@ class LocalSetting
      *
      * @return integer
      */
-    public function getUserIdentifier()
+    public function getCurrentUserIdentifier()
     {
-        return $this->userIdentifier;
+        return $this->currentUserIdentifier;
     }
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param number $currentUserIdentifier
      */
-    public function setUserIdentifier($userIdentifier)
+    public function setCurrentUserIdentifier($currentUserIdentifier)
     {
-        $this->userIdentifier = $userIdentifier;
+        $this->currentUserIdentifier = $currentUserIdentifier;
     }
 
     /**
@@ -139,14 +140,22 @@ class LocalSetting
     /**
      * Gets a parameter from the configuration.
      *
-     * @param $variable
+     * @param string $variable
      * @param string $application
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
      *
      * @return string The parameter value.
      */
-    public function get($variable, $application = 'Chamilo\Core\Admin')
+    public function get($variable, $application = 'Chamilo\Core\Admin', User $user = null)
     {
-        $localSettings = $this->getLocalSettings();
+        if($user instanceof User)
+        {
+            $localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($user->getId());
+        }
+        else
+        {
+            $localSettings = $this->getLocalSettings();
+        }
 
         if (!$localSettings)
         {
@@ -167,11 +176,14 @@ class LocalSetting
      * @param string $variable
      * @param string $value
      * @param string $application
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
      *
      * @return bool
      */
-    public function create($variable, $value, $application = 'Chamilo\Core\Admin')
+    public function create($variable, $value, $application = 'Chamilo\Core\Admin', User $user = null)
     {
+        $userIdentifier = $user instanceof User ? $user->getId() : $this->currentUserIdentifier;
+
         $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
             $variable,
             $application
@@ -182,7 +194,7 @@ class LocalSetting
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
-                new StaticConditionVariable($this->getUserIdentifier())
+                new StaticConditionVariable($userIdentifier)
             );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
@@ -205,7 +217,7 @@ class LocalSetting
             {
                 $user_setting = new UserSetting();
                 $user_setting->set_setting_id($setting->get_id());
-                $user_setting->set_user_id($this->getUserIdentifier());
+                $user_setting->set_user_id($userIdentifier);
                 $user_setting->set_value($value);
                 $result = $user_setting->create();
             }
@@ -215,9 +227,7 @@ class LocalSetting
                 return false;
             }
 
-            return $this->getLocalSettingCacheService()->clearAndWarmUpForIdentifiers(
-                array($this->getUserIdentifier())
-            );
+            return $this->getLocalSettingCacheService()->clearAndWarmUpForIdentifiers(array($userIdentifier));
         }
 
         return false;
@@ -228,8 +238,8 @@ class LocalSetting
      */
     public function resetCache()
     {
-        $this->getLocalSettingCacheService()->clearForIdentifier($this->userIdentifier);
+        $this->getLocalSettingCacheService()->clearForIdentifier($this->currentUserIdentifier);
         DataClassCache::truncate(UserSetting::class_name());
-        $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->userIdentifier);
+        $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->currentUserIdentifier);
     }
 }

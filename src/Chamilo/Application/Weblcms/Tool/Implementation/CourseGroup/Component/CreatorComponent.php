@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -19,11 +20,10 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::ADD_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::ADD_RIGHT))
         {
             throw new NotAllowedException();
         }
-
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
 
         // $trail = BreadcrumbTrail :: getInstance();
@@ -33,15 +33,19 @@ class CreatorComponent extends Manager
         $course_group->set_course_code($course->get_id());
         $course_group->set_parent_id($course_group_id);
 
-        $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_ADD_COURSE_GROUP;
+        $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+            self::ACTION_ADD_COURSE_GROUP;
         $param_add_course_group[self::PARAM_COURSE_GROUP] = $course_group_id;
 
         if ($_REQUEST['submit'] == 'AddTitles')
         {
             $form = new CourseGroupForm(
+                $this->getCourseGroupDecoratorsManager(),
                 CourseGroupForm::TYPE_ADD_COURSE_GROUP_TITLES,
                 $course_group,
-                $this->get_url($param_add_course_group));
+                $this->get_url($param_add_course_group),
+                $this->getUser()
+            );
             if ($form->validate())
             {
                 $form->add_titles();
@@ -49,9 +53,12 @@ class CreatorComponent extends Manager
             else
             {
                 $form = new CourseGroupForm(
+                    $this->getCourseGroupDecoratorsManager(),
                     CourseGroupForm::TYPE_CREATE,
                     $course_group,
-                    $this->get_url($param_add_course_group));
+                    $this->get_url($param_add_course_group),
+                    $this->getUser()
+                );
             }
 
             $html = array();
@@ -65,34 +72,41 @@ class CreatorComponent extends Manager
         else
         {
             $form = new CourseGroupForm(
+                $this->getCourseGroupDecoratorsManager(),
                 CourseGroupForm::TYPE_CREATE,
                 $course_group,
-                $this->get_url($param_add_course_group));
+                $this->get_url($param_add_course_group),
+                $this->getUser()
+            );
 
             if ($form->validate())
             {
-                $succes = count($form->create_course_group()) == 0;
+                $succes = $form->create_course_group();
 
                 if ($succes)
                 {
                     $message = Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('CourseGroup')),
-                        Utilities::COMMON_LIBRARIES);
+                        Utilities::COMMON_LIBRARIES
+                    );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectNotCreated',
-                        array('OBJECT' => Translation::get('CourseGroup')),
-                        Utilities::COMMON_LIBRARIES) . '<br />' . implode('<br />', $course_group->get_errors());
+                            'ObjectNotCreated',
+                            array('OBJECT' => Translation::get('CourseGroup')),
+                            Utilities::COMMON_LIBRARIES
+                        ) . '<br />' . implode('<br />', $course_group->get_errors());
                 }
                 $this->redirect(
                     $message,
-                    ! $succes,
+                    !$succes,
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_GROUPS,
-                        self::PARAM_COURSE_GROUP => $course_group->get_parent_id()));
+                        self::PARAM_COURSE_GROUP => $course_group->get_parent_id()
+                    )
+                );
             }
             else
             {
@@ -106,4 +120,5 @@ class CreatorComponent extends Manager
             }
         }
     }
+
 }

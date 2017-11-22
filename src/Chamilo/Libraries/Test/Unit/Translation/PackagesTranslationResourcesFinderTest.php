@@ -59,7 +59,7 @@ class PackagesTranslationResourcesFinderTest extends ChamiloTestCase
         $this->mock_package_files_finder_return_value($return_array);
 
         $translation_resources = $this->packages_translation_resources_finder->findTranslationResources();
-        $this->assertEquals($translation_resources['en_EN']['ini']['Chamilo\Libraries'], 'Resources/i18n/en.i18n');
+        $this->assertEquals($translation_resources['en']['ini']['Chamilo\Libraries'], 'Resources/i18n/en.i18n');
     }
 
     /**
@@ -71,7 +71,7 @@ class PackagesTranslationResourcesFinderTest extends ChamiloTestCase
         $this->mock_package_files_finder_return_value($return_array);
 
         $translation_resources = $this->packages_translation_resources_finder->findTranslationResources();
-        $this->assertEquals($translation_resources['en_EN']['xliff']['Chamilo\Libraries'], 'Resources/i18n/en.xliff');
+        $this->assertEquals($translation_resources['en']['xliff']['Chamilo\Libraries'], 'Resources/i18n/en.xliff');
     }
 
     /**
@@ -83,7 +83,7 @@ class PackagesTranslationResourcesFinderTest extends ChamiloTestCase
         $this->mock_package_files_finder_return_value($return_array);
 
         $translation_resources = $this->packages_translation_resources_finder->findTranslationResources();
-        $this->assertEquals($translation_resources['en_EN']['unknown']['Chamilo\Libraries'], 'Resources/i18n/en.temp');
+        $this->assertEquals($translation_resources['en']['unknown']['Chamilo\Libraries'], 'Resources/i18n/en.temp');
     }
 
     /**

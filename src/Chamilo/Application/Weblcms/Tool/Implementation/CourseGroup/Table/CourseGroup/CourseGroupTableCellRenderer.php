@@ -87,14 +87,6 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             {
                 $confirm_messages[] = Translation::get('DeleteConfirmChildren');
             }
-            if ($course_group->get_document_category_id())
-            {
-                $confirm_messages[] = Translation::get('DeleteConfirmDocument');
-            }
-            if ($course_group->get_forum_category_id())
-            {
-                $confirm_messages[] = Translation::get('DeleteConfirmForum');
-            }
             $confirm_message = implode(" ", $confirm_messages);
 
             $toolbar->add_item(

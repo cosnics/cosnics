@@ -13,13 +13,13 @@ class Event extends \Chamilo\Libraries\Calendar\Event\Event
 
     /**
      *
-     * @var \stdClass
+     * @var \Microsoft\Graph\Model\Event
      */
     private $office365CalendarEvent;
 
     /**
      *
-     * @return \stdClass
+     * @return \Microsoft\Graph\Model\Event
      */
     public function getOffice365CalendarEvent()
     {
@@ -28,9 +28,9 @@ class Event extends \Chamilo\Libraries\Calendar\Event\Event
 
     /**
      *
-     * @param \stdClass $office365CalendarEvent
+     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
      */
-    public function setOffice365CalendarEvent(\stdClass $office365CalendarEvent)
+    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
     {
         $this->office365CalendarEvent = $office365CalendarEvent;
     }

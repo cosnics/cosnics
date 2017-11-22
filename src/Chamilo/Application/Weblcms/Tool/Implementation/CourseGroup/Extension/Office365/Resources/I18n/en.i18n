@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Application\Calendar\Extension\Office365
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Office 365"
+TypeCategory = "Course Group Extensions"
+AccessToken = "Login token (is automatically filled in by the system)"
+ExternalUserId = "External user id (is automatically filled in by the system)"
+ClientId = "Client ID"
+ClientSecret = "Client Secret"

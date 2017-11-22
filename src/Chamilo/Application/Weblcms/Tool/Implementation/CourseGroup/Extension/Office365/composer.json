@@ -1,0 +1,45 @@
+{
+    "name": "cosnics/application-weblcms-tool-implementation-course-group-extension-office365",
+    "version": "1.0.0",
+    "description": "Application Weblcms Tool Course Group Extension Office365",
+    "keywords": [
+        "Application",
+        "Calendar",
+        "Extension",
+        "Office365"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "thenetworg/oauth2-azure": "^1.3",
+        "microsoft/microsoft-graph": "^1.1",
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Office 365",
+            "context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365",
+            "type": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension",
+            "install": {
+                "default": 0,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

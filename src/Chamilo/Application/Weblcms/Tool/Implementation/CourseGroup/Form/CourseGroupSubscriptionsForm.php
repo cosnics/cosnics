@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -25,13 +27,22 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
     private $parent;
 
+    /**
+     * @var CourseGroup
+     */
     private $course_group;
 
-    public function __construct($course_group, $action, $parent)
+    /**
+     * @var CourseGroupDecoratorsManager
+     */
+    protected $courseGroupDecoratorsManager;
+
+    public function __construct($course_group, $action, $parent, CourseGroupDecoratorsManager $courseGroupDecoratorsManager)
     {
         parent::__construct('course_settings', 'post', $action);
         $this->course_group = $course_group;
         $this->parent = $parent;
+        $this->courseGroupDecoratorsManager = $courseGroupDecoratorsManager;
 
         $this->build_basic_form();
     }
@@ -268,6 +279,13 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if (count($members_to_delete) > 0)
         {
             $succes = $this->course_group->unsubscribe_users($members_to_delete);
+
+            foreach($members_to_delete as $userId)
+            {
+                $user = new User();
+                $user->setId($userId);
+                $this->courseGroupDecoratorsManager->unsubscribeUser($this->course_group, $user);
+            }
         }
 
         if (count($members_to_add) > 0)
@@ -280,6 +298,11 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 $parameters)->as_array();
             $succes &= $this->course_group->subscribe_users($users_to_add);
+
+            foreach($users_to_add as $user)
+            {
+                $this->courseGroupDecoratorsManager->subscribeUser($this->course_group, $user);
+            }
         }
 
         return $succes;

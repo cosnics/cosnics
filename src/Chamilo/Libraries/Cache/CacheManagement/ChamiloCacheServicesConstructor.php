@@ -178,10 +178,10 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_repository_type_selector',
             new TypeSelectorCacheService(new TypeSelectorFactory()));
 
-        $cacheManager->addCacheService(
-            'chamilo_office365_requests',
-            new RequestCacheService(
-                new \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository('', '', '', '')));
+//        $cacheManager->addCacheService(
+//            'chamilo_office365_requests',
+//            new RequestCacheService(
+//                new \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository('', '', '', '')));
 
         $googleCalendarRepository = new \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository(
             '',

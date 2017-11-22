@@ -113,13 +113,13 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
      */
     public function test_get_optimized_translation_resources()
     {
-        $return_value['en_EN']['ini']['Chamilo\Libraries'] = 'en_EN.php';
+        $return_value['en']['ini']['Chamilo\Libraries'] = 'en.php';
 
         $this->translationResourcesFinderMock->expects($this->once())->method('findTranslationResources')->will(
             $this->returnValue($return_value));
 
         $messages = array('Hello' => 'Welkom', 'HowAreYou' => 'Hoe gaat het met je');
-        $message_catalogue = new MessageCatalogue('en_EN');
+        $message_catalogue = new MessageCatalogue('en');
         $message_catalogue->add($messages, 'Chamilo\Libraries');
 
         $this->translationLoadersMocks['ini']->expects($this->once())->method('load')->will(
@@ -132,9 +132,9 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
 
         $resources = $translation_resources_optimizer->getOptimizedTranslationResources();
 
-        $this->assertEquals($resources['en_EN'], $this->cache_path . '/en_EN.php');
+        $this->assertEquals($resources['en'], $this->cache_path . '/en.php');
 
-        $cached_messages = require ($this->cache_path . '/en_EN.php');
+        $cached_messages = require ($this->cache_path . '/en.php');
         $this->assertEquals($messages, $cached_messages['Chamilo\Libraries']);
     }
 
@@ -155,7 +155,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
 
         $resources = $translation_resources_optimizer->getOptimizedTranslationResources();
 
-        $this->assertEquals($resources['de_DE'], $this->cache_path . '/de_DE.php');
+        $this->assertEquals($resources['de'], $this->cache_path . '/de.php');
     }
 
     /**
@@ -165,7 +165,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
      */
     public function test_get_optimized_translation_resources_with_invalid_resources()
     {
-        $return_value['en_EN']['xml']['Chamilo\Libraries'] = 'en_EN.xml';
+        $return_value['en']['xml']['Chamilo\Libraries'] = 'en.xml';
 
         $this->translationResourcesFinderMock->expects($this->once())->method('findTranslationResources')->will(
             $this->returnValue($return_value));
