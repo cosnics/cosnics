@@ -22,14 +22,14 @@ class GroupRepository
      */
     public function __construct(GraphRepository $graphRepository)
     {
-        $this->graphRepository = $graphRepository;
+        $this->setGraphRepository($graphRepository);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
      */
-    public function getGraphRepository()
+    protected function getGraphRepository()
     {
         return $this->graphRepository;
     }
@@ -38,7 +38,7 @@ class GroupRepository
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
      */
-    public function setGraphRepository(GraphRepository $graphRepository)
+    protected function setGraphRepository(GraphRepository $graphRepository)
     {
         $this->graphRepository = $graphRepository;
     }
@@ -48,7 +48,7 @@ class GroupRepository
      *
      * @param string $groupName
      *
-     * @return \Microsoft\Graph\Model\Group
+     * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
      */
     public function createGroup($groupName)
     {
@@ -71,7 +71,7 @@ class GroupRepository
      * @param string $groupIdentifier
      * @param string $groupName
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      */
     public function updateGroup($groupIdentifier, $groupName)
     {
@@ -89,7 +89,7 @@ class GroupRepository
      * @param string $groupIdentifier
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      */
     public function subscribeOwnerInGroup($groupIdentifier, $azureUserIdentifier)
     {
@@ -105,7 +105,7 @@ class GroupRepository
      * @param string $groupIdentifier
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      */
     public function removeOwnerFromGroup($groupIdentifier, $azureUserIdentifier)
     {
@@ -119,7 +119,7 @@ class GroupRepository
      * @param string $groupId
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\User
+     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
      */
     public function getGroupOwner($groupId, $azureUserIdentifier)
     {
@@ -131,7 +131,7 @@ class GroupRepository
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
-            if ($exception->getCode() == self::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
                 return null;
             }
@@ -145,7 +145,7 @@ class GroupRepository
      *
      * @param string $groupIdentifier
      *
-     * @return \Microsoft\Graph\Model\User[]
+     * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
      */
     public function listGroupOwners($groupIdentifier)
     {
@@ -159,7 +159,7 @@ class GroupRepository
      * @param string $groupIdentifier
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      */
     public function subscribeMemberInGroup($groupIdentifier, $azureUserIdentifier)
     {
@@ -175,7 +175,7 @@ class GroupRepository
      * @param string $groupIdentifier
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\Event
+     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      */
     public function removeMemberFromGroup($groupIdentifier, $azureUserIdentifier)
     {
@@ -189,7 +189,7 @@ class GroupRepository
      * @param string $groupId
      * @param string $azureUserIdentifier
      *
-     * @return \Microsoft\Graph\Model\User
+     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
      */
     public function getGroupMember($groupId, $azureUserIdentifier)
     {
@@ -201,7 +201,7 @@ class GroupRepository
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
-            if ($exception->getCode() == self::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
                 return null;
             }
@@ -215,7 +215,7 @@ class GroupRepository
      *
      * @param string $groupIdentifier
      *
-     * @return \Microsoft\Graph\Model\User[]
+     * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
      */
     public function listGroupMembers($groupIdentifier)
     {
@@ -229,7 +229,7 @@ class GroupRepository
      *
      * @param string $groupIdentifier
      *
-     * @return \Microsoft\Graph\Model\PlannerPlan[]
+     * @return \Microsoft\Graph\Model\PlannerPlan[] | \Microsoft\Graph\Model\Entity
      */
     public function listGroupPlans($groupIdentifier)
     {
