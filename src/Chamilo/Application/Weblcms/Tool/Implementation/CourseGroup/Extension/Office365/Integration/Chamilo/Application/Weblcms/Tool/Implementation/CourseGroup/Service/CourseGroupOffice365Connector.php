@@ -6,12 +6,13 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use Microsoft\Graph\Model\Group;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service
@@ -21,14 +22,19 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 class CourseGroupOffice365Connector
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service
+     * @var GroupService
      */
-    protected $office365Service;
+    protected $groupService;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository
+     * @var GroupRepository
      */
-    protected $office365Repository;
+    protected $groupRepository;
+
+    /**
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
+     */
+    protected $userService;
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
@@ -48,20 +54,22 @@ class CourseGroupOffice365Connector
     /**
      * CourseGroupServiceDecorator constructor.
      *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service $office365Service
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository $office365Repository
+     * @param GroupService $groupService
+     * @param GroupRepository $groupRepository
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService
      * @param \Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface $courseService
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
-        Office365Service $office365Service, Office365Repository $office365Repository,
+        GroupService $groupService, GroupRepository $groupRepository, UserService $userService,
         CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService,
         CourseServiceInterface $courseService, ConfigurationConsulter $configurationConsulter
     )
     {
-        $this->office365Service = $office365Service;
-        $this->office365Repository = $office365Repository;
+        $this->groupService = $groupService;
+        $this->groupRepository = $groupRepository;
+        $this->userService = $userService;
         $this->courseGroupOffice365ReferenceService = $courseGroupOffice365ReferenceService;
         $this->courseService = $courseService;
         $this->configurationConsulter = $configurationConsulter;
@@ -86,7 +94,7 @@ class CourseGroupOffice365Connector
         }
 
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
-        $groupId = $this->office365Service->createGroupByName($user, $courseGroupName);
+        $groupId = $this->groupService->createGroupByName($user, $courseGroupName);
 
         $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $groupId);
 
@@ -115,15 +123,15 @@ class CourseGroupOffice365Connector
         if ($reference->isLinked())
         {
             $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
-            $this->office365Service->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
+            $this->groupService->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
 
             return;
         }
 
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
-        $this->office365Service->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
+        $this->groupService->updateGroupName($reference->getOffice365GroupId(), $courseGroupName);
         $this->courseGroupOffice365ReferenceService->linkCourseGroupReference($reference);
-        $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         $this->subscribeCourseGroupUsers($courseGroup, $reference->getOffice365GroupId());
         $this->subscribeTeachers($courseGroup, $reference->getOffice365GroupId());
 
@@ -144,11 +152,11 @@ class CourseGroupOffice365Connector
         }
 
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        $this->office365Service->removeAllMembersFromGroup($reference->getOffice365GroupId());
+        $this->groupService->removeAllMembersFromGroup($reference->getOffice365GroupId());
 
         try
         {
-            $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         }
         catch (Office365UserNotExistsException $ex)
         {
@@ -174,7 +182,7 @@ class CourseGroupOffice365Connector
 
         try
         {
-            $this->office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+            $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
         }
         catch (Office365UserNotExistsException $ex)
         {
@@ -199,7 +207,7 @@ class CourseGroupOffice365Connector
 
         try
         {
-            $this->office365Service->removeMemberFromGroup($reference->getOffice365GroupId(), $user);
+            $this->groupService->removeMemberFromGroup($reference->getOffice365GroupId(), $user);
         }
         catch (Office365UserNotExistsException $ex)
         {
@@ -226,10 +234,10 @@ class CourseGroupOffice365Connector
         $courseGroupUsers = $courseGroup->get_members(false, false, true);
         foreach ($courseGroupUsers as $courseGroupUser)
         {
-            $office365UserIdentifier = $this->office365Service->getOffice365UserIdentifier($courseGroupUser);
-            if (!empty($office365UserIdentifier))
+            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($courseGroupUser);
+            if (!empty($azureUserIdentifier))
             {
-                $currentCourseGroupMemberIdentifiers[] = $office365UserIdentifier;
+                $currentCourseGroupMemberIdentifiers[] = $azureUserIdentifier;
             }
         }
 
@@ -239,25 +247,25 @@ class CourseGroupOffice365Connector
         $teachers = $this->courseService->getTeachersFromCourse($course);
         foreach ($teachers as $user)
         {
-            $office365UserIdentifier = $this->office365Service->getOffice365UserIdentifier($user);
-            if (!empty($office365UserIdentifier))
+            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
+            if (!empty($azureUserIdentifier))
             {
-                $currentCourseGroupMemberIdentifiers[] = $office365UserIdentifier;
+                $currentCourseGroupMemberIdentifiers[] = $azureUserIdentifier;
             }
         }
 
-        $office365GroupMemberIdentifiers = $this->office365Service->getGroupMembers($reference->getOffice365GroupId());
+        $office365GroupMemberIdentifiers = $this->groupService->getGroupMembers($reference->getOffice365GroupId());
 
         $usersToAdd = array_diff($currentCourseGroupMemberIdentifiers, $office365GroupMemberIdentifiers);
         foreach ($usersToAdd as $userToAdd)
         {
-            $this->office365Repository->subscribeMemberInGroup($reference->getOffice365GroupId(), $userToAdd);
+            $this->groupRepository->subscribeMemberInGroup($reference->getOffice365GroupId(), $userToAdd);
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentCourseGroupMemberIdentifiers);
         foreach ($usersToRemove as $userToRemove)
         {
-            $this->office365Repository->removeMemberFromGroup($reference->getOffice365GroupId(), $userToRemove);
+            $this->groupRepository->removeMemberFromGroup($reference->getOffice365GroupId(), $userToRemove);
         }
     }
 
@@ -280,18 +288,16 @@ class CourseGroupOffice365Connector
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
-
-        $office365Service = $this->office365Service;
-        $office365Service->addMemberToGroup($reference->getOffice365GroupId(), $user);
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
         $baseUrl = $this->configurationConsulter->getSetting(
-            ['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri']
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri']
         );
 
         $planId = $reference->getOffice365PlanId();
         if (empty($planId))
         {
-            $planId = $office365Service->getOrCreatePlanIdForGroup($reference->getOffice365GroupId());
+            $planId = $this->groupService->getOrCreatePlanIdForGroup($reference->getOffice365GroupId());
 
             $office365ReferenceService->storePlannerReferenceForCourseGroup(
                 $courseGroup, $reference->getOffice365GroupId(), $planId
@@ -302,6 +308,43 @@ class CourseGroupOffice365Connector
         $plannerUrl = sprintf($plannerUrl, $reference->getOffice365GroupId(), $planId);
 
         return $plannerUrl;
+    }
+
+    /**
+     * Returns the link for the group space and makes sure that the user has access to it
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    public function getGroupUrlForVisit(CourseGroup $courseGroup, User $user)
+    {
+        $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
+        if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
+        {
+            throw new \RuntimeException();
+        }
+
+        $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
+        $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
+        $groupUrl = $this->configurationConsulter->getSetting(
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
+        );
+
+        $group = $this->groupRepository->getGroup($reference->getOffice365GroupId());
+        if (!$group instanceof Group)
+        {
+            throw new \RuntimeException(
+                'The group with identifier ' . $reference->getOffice365GroupId() . ' could not be found'
+            );
+        }
+
+        return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
+
     }
 
     /**
@@ -318,7 +361,7 @@ class CourseGroupOffice365Connector
         {
             try
             {
-                $this->office365Service->addMemberToGroup($office365GroupId, $groupUser);
+                $this->groupService->addMemberToGroup($office365GroupId, $groupUser);
             }
             catch (Office365UserNotExistsException $ex)
             {
@@ -343,7 +386,7 @@ class CourseGroupOffice365Connector
         {
             try
             {
-                $this->office365Service->addMemberToGroup($office365GroupId, $user);
+                $this->groupService->addMemberToGroup($office365GroupId, $user);
             }
             catch (Office365UserNotExistsException $ex)
             {

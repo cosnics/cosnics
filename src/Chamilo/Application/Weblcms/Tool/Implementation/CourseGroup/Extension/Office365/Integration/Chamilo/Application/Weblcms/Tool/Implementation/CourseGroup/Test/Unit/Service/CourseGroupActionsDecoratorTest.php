@@ -89,7 +89,7 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
         $splitDropDownButton = $buttonToolbar->getItems()[0];
         $this->assertInstanceOf(SplitDropdownButton::class, $splitDropDownButton);
 
-        $this->assertCount(1, $splitDropDownButton->getSubButtons());
+        $this->assertCount(2, $splitDropDownButton->getSubButtons());
     }
 
     public function testAddCourseGroupActionsNoTeacher()
@@ -105,7 +105,11 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
 
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, false);
 
-        $this->assertInstanceOf(Button::class, $buttonToolbar->getItems()[0]);
+        /** @var SplitDropdownButton $splitDropDownButton */
+        $splitDropDownButton = $buttonToolbar->getItems()[0];
+        $this->assertInstanceOf(SplitDropdownButton::class, $splitDropDownButton);
+
+        $this->assertCount(1, $splitDropDownButton->getSubButtons());
     }
 
     public function testAddCourseGroupActionsNoReference()

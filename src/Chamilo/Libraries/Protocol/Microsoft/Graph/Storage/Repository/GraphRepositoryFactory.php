@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
@@ -41,8 +42,10 @@ class GraphRepositoryFactory
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function __construct(ConfigurationConsulter $configurationConsulter,
-        AccessTokenRepositoryInterface $accessTokenRepository, ChamiloRequest $request)
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter,
+        AccessTokenRepositoryInterface $accessTokenRepository, ChamiloRequest $request
+    )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->accessTokenRepository = $accessTokenRepository;
@@ -57,13 +60,16 @@ class GraphRepositoryFactory
     public function buildGraphRepository()
     {
         $clientId = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_id']);
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_id']
+        );
 
         $clientSecret = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_secret']);
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_secret']
+        );
 
         $tenantId = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'tenant_id']);
+            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'tenant_id']
+        );
 
         if (empty($tenantId))
         {
@@ -77,7 +83,9 @@ class GraphRepositoryFactory
 
         $state = base64_encode(
             json_encode(
-                ['landingPageParameters' => $landingPageParameters, 'currentUrlParameters' => $currentParameters]));
+                ['landingPageParameters' => $landingPageParameters, 'currentUrlParameters' => $currentParameters]
+            )
+        );
 
         $oauthClient = $provider = new \League\OAuth2\Client\Provider\GenericProvider(
             [
@@ -87,12 +95,14 @@ class GraphRepositoryFactory
                 'urlAccessToken' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/token',
                 'redirectUri' => $redirect->getUrl(),
                 'urlResourceOwnerDetails' => new \stdClass(),
-                'state' => $state]);
+                'state' => $state
+            ]
+        );
 
         return new GraphRepository(
             $oauthClient,
             new Graph(),
-            $this->accessTokenRepository,
-            $this->chamiloRequest->getUri());
+            $this->accessTokenRepository
+        );
     }
 }

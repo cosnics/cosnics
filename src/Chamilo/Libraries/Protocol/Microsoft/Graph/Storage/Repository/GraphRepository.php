@@ -45,22 +45,15 @@ class GraphRepository
     protected $delegatedAccessToken;
 
     /**
-     *
-     * @var string
-     */
-    protected $currentRequestUrl;
-
-    /**
      * GraphRepository constructor.
      *
      * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
      * @param \Microsoft\Graph\Graph $graph
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
-     * @param string $currentRequestUrl
      */
     public function __construct(
         AbstractProvider $oauthProvider, Graph $graph,
-        AccessTokenRepositoryInterface $accessTokenRepository, $currentRequestUrl
+        AccessTokenRepositoryInterface $accessTokenRepository
     )
     {
         $this->setOauthProvider($oauthProvider);

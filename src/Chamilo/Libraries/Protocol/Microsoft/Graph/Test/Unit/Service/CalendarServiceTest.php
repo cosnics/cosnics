@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
@@ -74,6 +73,16 @@ class CalendarServiceTest extends ChamiloTestCase
         $this->assertEquals($calendars, $this->calendarService->listOwnedCalendars($user));
     }
 
+    /**
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     */
+    public function testListOwnedCalendarsWithoutUser()
+    {
+        $user = new User();
+        $this->mockGetAzureUser($user, null);
+        $this->calendarService->listOwnedCalendars($user);
+    }
+
     public function testGetCalendarByIdentifier()
     {
         $user = new User();
@@ -90,6 +99,18 @@ class CalendarServiceTest extends ChamiloTestCase
             ->will($this->returnValue($calendar));
 
         $this->assertEquals($calendar, $this->calendarService->getCalendarByIdentifier($calendarIdentifier, $user));
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     */
+    public function testGetCalendarByIdentifierWithoutUser()
+    {
+        $user = new User();
+        $calendarIdentifier = 10;
+
+        $this->mockGetAzureUser($user, null);
+        $this->calendarService->getCalendarByIdentifier($calendarIdentifier, $user);
     }
 
     public function testFindEventsForCalendarIdentifierAndBetweenDates()
@@ -114,6 +135,24 @@ class CalendarServiceTest extends ChamiloTestCase
             $this->calendarService->findEventsForCalendarIdentifierAndBetweenDates(
                 $calendarIdentifier, $user, $fromDate, $toDate
             )
+        );
+    }
+
+    /**
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     */
+    public function testFindEventsForCalendarIdentifierAndBetweenDatesWithoutUser()
+    {
+        $user = new User();
+        $azureUserIdentifier = 5;
+        $calendarIdentifier = 10;
+        $fromDate = time() - 1000;
+        $toDate = time() + 1000;
+
+        $this->mockGetAzureUser($user, null);
+
+        $this->calendarService->findEventsForCalendarIdentifierAndBetweenDates(
+            $calendarIdentifier, $user, $fromDate, $toDate
         );
     }
 
