@@ -308,7 +308,8 @@ class GraphRepository
     }
 
     /**
-     * Parses a collection response. Bugfix for the microsoft graph library parsing everything to a single
+     * Parses a collection response.
+     * Bugfix for the microsoft graph library parsing everything to a single
      * object when an empty collection is returned from the graph API
      *
      * @param \Microsoft\Graph\Http\GraphResponse $graphResponse
@@ -320,10 +321,17 @@ class GraphRepository
     {
         $body = $graphResponse->getBody();
 
-        $count = 0;
         if (array_key_exists('@odata.count', $body))
         {
             $count = $body['@odata.count'];
+        }
+        elseif (array_key_exists('value', $body))
+        {
+            $count = count($body['value']);
+        }
+        else
+        {
+            $count = 0;
         }
 
         return ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
