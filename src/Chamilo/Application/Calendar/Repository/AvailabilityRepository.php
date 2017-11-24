@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Repository;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -13,10 +14,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
- * @package Chamilo\Application\Calendar\Extension\Google\Repository
+ * @package Chamilo\Application\Calendar\Repository$AvailabilityRepository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AvailabilityRepository
 {
