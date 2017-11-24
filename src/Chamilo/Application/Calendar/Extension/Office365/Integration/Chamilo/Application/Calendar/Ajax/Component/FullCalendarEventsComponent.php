@@ -48,11 +48,13 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
 
         foreach ($events as $event)
         {
+
             $eventsCollection[] = array(
                 'title' => $event->getTitle(),
                 'url' => $event->getUrl(),
                 'start' => date('c', $event->getStartDate()),
-                'end' => date('c', $event->getEndDate()));
+                'end' => date('c', $event->getEndDate()),
+                'allDay' => $event->isAllDay());
         }
 
         $response = new JsonResponse($eventsCollection);

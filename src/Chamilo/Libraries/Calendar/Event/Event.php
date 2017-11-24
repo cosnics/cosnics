@@ -222,6 +222,29 @@ class Event
 
     /**
      *
+     * @return boolean
+     */
+    public function isAllDay()
+    {
+        $startDate = new \DateTime();
+        $startDate->setTimestamp($this->getStartDate());
+
+        $endDate = new \DateTime();
+        $endDate->setTimestamp($this->getEndDate());
+
+        if ($startDate->format('H') == 0 && $startDate->format('i') == 0 &&
+             $this->getEndDate() >= $startDate->modify('+1 day')->getTimestamp())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     *
      * @param string $url
      */
     public function setUrl($url)

@@ -1,5 +1,35 @@
 @import url('../Aqua/Stylesheet.css');
 
 .table-calendar-mini tbody tr td.table-calendar-highlight span.badge {
-	background-color: #9e021b;
+    background-color: #9e021b;
+}
+
+.fc-day-header {
+    padding: 10px 0px !important;
+    line-height: 35px;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    border-bottom: 0px !important;
+    color: dimgray !important;
+    text-transform: uppercase !important;
+    border-left: 0px !important;
+}
+
+.fc-head-container {
+    border-left: 0px !important;
+    border-right: 0px !important;
+    border-bottom: 0px !important;
+}
+
+.fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
+    float: left !important;
+}
+
+.fc-event {
+    font-size: 13px !important;
+    line-height: inherit !important;
+}
+
+.fc-view>table.table-bordered {
+    border: 0px !important;
 }
