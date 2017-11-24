@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -21,14 +21,19 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
-    public function __construct(RegistrationConsulter $registrationConsulter, User $dataUser, User $viewingUser)
+    private $classnameUtilities;
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function __construct(RegistrationConsulter $registrationConsulter, ClassnameUtilities $classnameUtilities)
     {
-        parent::__construct($dataUser, $viewingUser);
         $this->registrationConsulter = $registrationConsulter;
+        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -38,6 +43,15 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
     public function getRegistrationConsulter()
     {
         return $this->registrationConsulter;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->classnameUtilities;
     }
 
     /**
@@ -66,7 +80,7 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
                         continue;
                     }
 
-                    $sources[] = $context;
+                    $sources[] = $this->getClassnameUtilities()->getNamespaceParent($context, 4);
                 }
             }
         }

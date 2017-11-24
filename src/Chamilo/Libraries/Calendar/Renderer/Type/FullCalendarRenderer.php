@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface;
 
 /**
  *
@@ -15,41 +16,37 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class FullCalendarRenderer
 {
-    // Parameters
-    const PARAM_TIME = 'time';
-    const PARAM_TYPE = 'type';
 
-    // Types
-    const TYPE_DAY = 'Day';
-    const TYPE_LIST = 'List';
-    const TYPE_MONTH = 'Month';
-    const TYPE_WEEK = 'Week';
-
-    private $displayTime;
+    /**
+     *
+     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface
+     */
+    private $fullCalendarRendererProvider;
 
     /**
      *
      * @param integer $displayTime
      */
-    public function __construct($displayTime)
+    public function __construct(FullCalendarRendererProviderInterface $fullCalendarRendererProvider)
     {
-        $this->displayTime = $displayTime;
+        $this->fullCalendarRendererProvider = $fullCalendarRendererProvider;
     }
 
     /**
      *
-     * @return integer
+     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface
      */
-    public function getDisplayTime()
+    public function getFullCalendarRendererProvider()
     {
-        return $this->displayTime;
+        return $this->fullCalendarRendererProvider;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @param integer $displayTime
+     * @return string
      */
-    public function render()
+    public function render($displayTime)
     {
         $html = array();
 
@@ -58,7 +55,7 @@ class FullCalendarRenderer
         $html[] = '<script>';
         $html[] = '	$(document).ready(function() {';
         $html[] = '    		$(\'#calendar\').fullCalendar({';
-        $html[] = $this->getConfiguration();
+        $html[] = $this->getConfiguration($displayTime);
         $html[] = '    		});';
 
         $html[] = '	});';
@@ -76,7 +73,12 @@ class FullCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
-    protected function getConfiguration()
+    /**
+     *
+     * @param integer $displayTime
+     * @return string
+     */
+    protected function getConfiguration($displayTime)
     {
         $ajaxUrl = new Redirect(
             array(
@@ -89,7 +91,7 @@ class FullCalendarRenderer
                                left: "today prev,next title",
                                right: "month,agendaWeek,agendaDay,listWeek"
                            },
-		                           defaultDate: "' . date('Y-m-d', $this->getDisplayTime()) . '",
+		                           defaultDate: "' . date('Y-m-d', $displayTime) . '",
                            navLinks: true,
                            height: "auto",
                            firstDay: 1,
@@ -99,18 +101,34 @@ class FullCalendarRenderer
                                start: "10:00",
                                end: "18:00"
                            },
-                           			events: {
-                               				url: ' . json_encode($ajaxUrl->getUrl()) . ',
-                               				error: function() {
-                               					    $("#script-warning").show();
-                               				}
-                           			},
+                           			eventSources: ' . $this->getEventSources() . ',
                            themeSystem: "bootstrap3",
                            			loading: function(bool, view) {
                                				$("#loading").toggle(bool);
                            			}';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function getEventSources()
+    {
+        $eventSources = $this->getFullCalendarRendererProvider()->getEventSources();
+        $parsedEventSources = array();
+
+        foreach ($eventSources as $eventSource)
+        {
+            $eventSourceAjaxUrl = new Redirect(
+                array(
+                    Application::PARAM_CONTEXT => $eventSource . '\Ajax',
+                    Application::PARAM_ACTION => 'FullCalendarEvents'));
+
+            $parsedEventSource = new \stdClass();
+            $parsedEventSource->url = $eventSourceAjaxUrl->getUrl();
+
+            $parsedEventSources[] = $parsedEventSource;
+        }
+
+        return json_encode($parsedEventSources);
     }
 
     protected function getDependencies()

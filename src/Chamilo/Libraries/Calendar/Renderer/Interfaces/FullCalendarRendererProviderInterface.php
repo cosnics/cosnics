@@ -13,16 +13,4 @@ interface FullCalendarRendererProviderInterface
 {
 
     public function getEventSources();
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getDataUser();
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getViewingUser();
 }
