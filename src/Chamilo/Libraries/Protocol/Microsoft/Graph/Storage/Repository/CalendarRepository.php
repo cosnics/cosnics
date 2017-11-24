@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 /**
@@ -54,8 +53,8 @@ class CalendarRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars',
-            \Microsoft\Graph\Model\Calendar::class, true
-        );
+            \Microsoft\Graph\Model\Calendar::class,
+            true);
     }
 
     /**
@@ -69,8 +68,7 @@ class CalendarRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
-            \Microsoft\Graph\Model\Calendar::class, true
-        );
+            \Microsoft\Graph\Model\Calendar::class);
     }
 
     /**
@@ -82,19 +80,15 @@ class CalendarRepository
      *
      * @return \Microsoft\Graph\Model\Event[] | \Microsoft\Graph\Model\Entity[]
      */
-    public function findEventsForCalendarIdentifierAndBetweenDates(
-        $calendarIdentifier, $azureUserIdentifier, $fromDate,
-        $toDate
-    )
+    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $azureUserIdentifier, $fromDate,
+        $toDate)
     {
         $queryParameters = http_build_query(
-            ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
-        );
+            ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]);
 
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' .
-            $queryParameters,
-            \Microsoft\Graph\Model\Event::class, true
-        );
+            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
+            \Microsoft\Graph\Model\Event::class,
+            true);
     }
 }
