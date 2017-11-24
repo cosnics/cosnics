@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Unit\Service;
+namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Service;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;

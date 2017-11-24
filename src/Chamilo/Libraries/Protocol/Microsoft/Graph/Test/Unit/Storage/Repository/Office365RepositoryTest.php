@@ -1,8 +1,10 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
+namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Storage\Repository;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Stub\ClientExceptionStub;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Stub\ClientExceptionStub;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -62,153 +64,6 @@ class Office365RepositoryTest extends ChamiloTestCase
         unset($this->graphMock);
         unset($this->accessTokenRepositoryMock);
         unset($this->office365Repository);
-    }
-
-    public function testConstructorWithAccessTokenStored()
-    {
-        $this->constructWithStoredAccessToken();
-    }
-
-    public function testConstructorAsksNewAccessToken()
-    {
-        $accessToken = new AccessToken(
-            ['access_token' => 'eyJ0eXAiOiJKV1QiLCJub25jZSI6SnzA', 'expires' => time() + 1000]
-        );
-
-        $this->oauthProviderMock->expects($this->once())
-            ->method('getAccessToken')
-            ->with('client_credentials', ['resource' => 'https://graph.microsoft.com/'])
-            ->will($this->returnValue($accessToken));
-
-        $this->accessTokenRepositoryMock->expects($this->once())
-            ->method('storeApplicationAccessToken')
-            ->with($accessToken);
-
-        $this->office365Repository =
-            new Office365Repository($this->oauthProviderMock, $this->graphMock, $this->accessTokenRepositoryMock, '');
-    }
-
-    public function testConstructorAsksNewAccessTokenWhenExpired()
-    {
-        $accessToken = new AccessToken(
-            ['access_token' => 'eyJ0eXAiOiJKV1QiLCJub25jZSI6SnzA', 'expires' => (int) (time() - 1000)]
-        );
-
-        $this->accessTokenRepositoryMock->expects($this->once())
-            ->method('getApplicationAccessToken')
-            ->will($this->returnValue($accessToken));
-
-        $this->oauthProviderMock->expects($this->once())
-            ->method('getAccessToken')
-            ->with('client_credentials', ['resource' => 'https://graph.microsoft.com/'])
-            ->will($this->returnValue($accessToken));
-
-        $this->accessTokenRepositoryMock->expects($this->once())
-            ->method('storeApplicationAccessToken')
-            ->with($accessToken);
-
-        $this->office365Repository =
-            new Office365Repository($this->oauthProviderMock, $this->graphMock, $this->accessTokenRepositoryMock, '');
-    }
-
-    public function testAuthorizeUserByAuthorizationCode()
-    {
-        $this->constructWithStoredAccessToken();
-
-        $accessToken = new AccessToken(
-            ['access_token' => 'eyJ0eXAiOiJKV1QiLCJub25jZSI6SnzA', 'expires' => (int) (time() + 1000)]
-        );
-
-        $authorizationCode = 'VGhpcyBpcyBhbiBhdXRob3JpemF0aW9uIGNvZGU=';
-
-        $this->oauthProviderMock->expects($this->once())
-            ->method('getAccessToken')
-            ->with('authorization_code', ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/'])
-            ->will($this->returnValue($accessToken));
-
-        $this->accessTokenRepositoryMock->expects($this->once())
-            ->method('storeDelegatedAccessToken')
-            ->with($accessToken);
-
-        $this->office365Repository->authorizeUserByAuthorizationCode($authorizationCode);
-    }
-
-    public function testGetOffice365User()
-    {
-        $this->constructWithStoredAccessToken();
-
-        $user = new User();
-        $user->set_email('no-reply@example.com');
-
-        $microsoftUser = new \Microsoft\Graph\Model\User();
-
-        $this->mockRequest(
-            'GET', '/users/' . $user->get_email(), \Microsoft\Graph\Model\User::class,
-            $this->returnValue($microsoftUser)
-        );
-
-        $this->assertEquals($microsoftUser, $this->office365Repository->getOffice365User($user));
-    }
-
-    public function testGetOffice365UserWithResourceNotFoundException()
-    {
-        $this->constructWithStoredAccessToken();
-
-        $user = new User();
-
-        $this->mockRequest(
-            'GET', '/users/' . $user->get_email(), \Microsoft\Graph\Model\User::class,
-            $this->throwException(new ClientExceptionStub(Office365Repository::RESPONSE_CODE_RESOURCE_NOT_FOUND))
-        );
-
-        $this->assertEmpty($this->office365Repository->getOffice365User($user));
-    }
-
-    /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Stub\ClientExceptionStub
-     */
-    public function testGetOffice365UserWithOtherException()
-    {
-        $this->constructWithStoredAccessToken();
-
-        $user = new User();
-
-        $this->mockRequest(
-            'GET', '/users/' . $user->get_email(), \Microsoft\Graph\Model\User::class,
-            $this->throwException(new ClientExceptionStub(301))
-        );
-
-        $this->assertEmpty($this->office365Repository->getOffice365User($user));
-    }
-
-    /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Stub\ClientExceptionStub
-     */
-    public function testGetOffice365UserWillRetryWhenAccessTokenInvalid()
-    {
-        $this->constructWithStoredAccessToken();
-
-        $user = new User();
-
-        $this->mockRequest(
-            'GET', '/users/' . $user->get_email(), \Microsoft\Graph\Model\User::class,
-            $this->throwException(new ClientExceptionStub(Office365Repository::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED))
-        );
-
-        $accessToken = new AccessToken(
-            ['access_token' => 'eyJ0eXAiOiJKV1QiLCJub25jZSI6SnzA', 'expires' => time() + 1000]
-        );
-
-        $this->oauthProviderMock->expects($this->once())
-            ->method('getAccessToken')
-            ->with('client_credentials', ['resource' => 'https://graph.microsoft.com/'])
-            ->will($this->returnValue($accessToken));
-
-        $this->accessTokenRepositoryMock->expects($this->once())
-            ->method('storeApplicationAccessToken')
-            ->with($accessToken);
-
-        $this->assertEmpty($this->office365Repository->getOffice365User($user));
     }
 
     public function testCreateGroup()
@@ -337,7 +192,7 @@ class Office365RepositoryTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Stub\ClientExceptionStub
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Stub\ClientExceptionStub
      */
     public function testGetGroupOwnerWithOtherException()
     {
@@ -439,7 +294,7 @@ class Office365RepositoryTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Test\Stub\ClientExceptionStub
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Stub\ClientExceptionStub
      */
     public function testGetGroupMemberWithOtherException()
     {
@@ -532,7 +387,7 @@ class Office365RepositoryTest extends ChamiloTestCase
         );
 
         $newAccessToken = new AccessToken(
-            ['access_token' => 'eyJ0eXA57892ASWZO435SZSI6SnzA', 'expires' => time() - 1000]
+            ['access_token' => 'eyJ0eXA57892ASWZO435SZSI6SnzA', 'expires' => time() + 1000]
         );
 
         $this->accessTokenRepositoryMock->expects($this->atLeastOnce())

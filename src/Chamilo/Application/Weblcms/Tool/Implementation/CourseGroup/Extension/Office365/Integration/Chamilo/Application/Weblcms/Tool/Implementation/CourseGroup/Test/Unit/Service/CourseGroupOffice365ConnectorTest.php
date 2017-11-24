@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
@@ -47,6 +48,11 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
     protected $courseServiceMock;
 
     /**
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configurationConsulterMock;
+
+    /**
      * Setup before each test
      */
     public function setUp()
@@ -64,9 +70,12 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $this->courseServiceMock = $this->getMockBuilder(CourseServiceInterface::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)
+            ->disableOriginalConstructor()->getMock();
+
         $this->courseGroupOffice365Connector = new CourseGroupOffice365Connector(
             $this->office365ServiceMock, $this->office365RepositoryMock,
-            $this->courseGroupOffice365ReferenceServiceMock, $this->courseServiceMock
+            $this->courseGroupOffice365ReferenceServiceMock, $this->courseServiceMock, $this->configurationConsulterMock
         );
     }
 
@@ -76,6 +85,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
     public function tearDown()
     {
         unset($this->office365ServiceMock);
+        unset($this->configurationConsulterMock);
         unset($this->office365RepositoryMock);
         unset($this->courseGroupOffice365ReferenceServiceMock);
         unset($this->courseServiceMock);
@@ -243,6 +253,18 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('get_name')
             ->will($this->returnValue($groupName));
 
+        $courseName = 'How to create a course group in 10 steps';
+        $courseCode = 'CURMOBFBO123452017';
+        $office365GroupName = $courseName . ' - ' . $groupName . ' (' . $courseCode . ')';
+
+        $course = new Course();
+        $course->set_visual_code($courseCode);
+        $course->set_title($courseName);
+
+        $this->courseServiceMock->expects($this->once())
+            ->method('getCourseById')
+            ->will($this->returnValue($course));
+
         $user = new User();
 
         $reference = new CourseGroupOffice365Reference();
@@ -256,7 +278,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->office365ServiceMock->expects($this->once())
             ->method('updateGroupName')
-            ->with('5', $groupName);
+            ->with('5', $office365GroupName);
 
         $this->courseGroupOffice365Connector->createOrUpdateGroupFromCourseGroup($courseGroup, $user);
     }
@@ -279,6 +301,18 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $reference->setLinked(false);
         $reference->setOffice365GroupId(5);
 
+        $courseName = 'How to create a course group in 10 steps';
+        $courseCode = 'CURMOBFBO123452017';
+        $office365GroupName = $courseName . ' - ' . $groupName . ' (' . $courseCode . ')';
+
+        $course = new Course();
+        $course->set_visual_code($courseCode);
+        $course->set_title($courseName);
+
+        $this->courseServiceMock->expects($this->once())
+            ->method('getCourseById')
+            ->will($this->returnValue($course));
+
         $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
             ->method('getCourseGroupReference')
             ->with($courseGroup)
@@ -290,7 +324,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->office365ServiceMock->expects($this->once())
             ->method('updateGroupName')
-            ->with('5', $groupName);
+            ->with('5', $office365GroupName);
 
         $this->office365ServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
@@ -635,6 +669,100 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('removeMemberFromGroup');
 
         $this->courseGroupOffice365Connector->syncCourseGroupSubscriptions($courseGroup);
+    }
+
+    public function testGetPlannerUrlForVisit()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(true));
+
+        $reference = new CourseGroupOffice365Reference();
+        $reference->setOffice365GroupId(5);
+        $reference->setOffice365PlanId(10);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
+        $this->office365ServiceMock->expects($this->once())
+            ->method('addMemberToGroup')
+            ->with(5, $user);
+
+        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
+
+        $this->configurationConsulterMock->expects($this->once())
+            ->method('getSetting')
+            ->with(['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri'])
+            ->will($this->returnValue($baseUrl));
+
+        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
+
+        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetPlannerUrlForVisitWithoutValidReference()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(false));
+
+        $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user);
+    }
+
+    public function testGetPlannerUrlForVisitNoPlanId()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(true));
+
+        $reference = new CourseGroupOffice365Reference();
+        $reference->setOffice365GroupId(5);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
+        $this->office365ServiceMock->expects($this->once())
+            ->method('addMemberToGroup')
+            ->with(5, $user);
+
+        $baseUrl = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#/';
+
+        $this->configurationConsulterMock->expects($this->once())
+            ->method('getSetting')
+            ->with(['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri'])
+            ->will($this->returnValue($baseUrl));
+
+        $this->office365ServiceMock->expects($this->once())
+            ->method('getOrCreatePlanIdForGroup')
+            ->with(5)
+            ->will($this->returnValue(10));
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('storePlannerReferenceForCourseGroup')
+            ->with($courseGroup, 5, 10);
+
+        $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
+
+        $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
     }
     
 }

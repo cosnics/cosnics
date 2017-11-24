@@ -24,14 +24,14 @@ class UserRepository
      */
     public function __construct(GraphRepository $graphRepository)
     {
-        $this->graphRepository = $graphRepository;
+        $this->setGraphRepository($graphRepository);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
      */
-    public function getGraphRepository()
+    protected function getGraphRepository()
     {
         return $this->graphRepository;
     }
@@ -40,7 +40,7 @@ class UserRepository
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
      */
-    public function setGraphRepository(GraphRepository $graphRepository)
+    protected function setGraphRepository(GraphRepository $graphRepository)
     {
         $this->graphRepository = $graphRepository;
     }
@@ -48,7 +48,8 @@ class UserRepository
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Microsoft\Graph\Model\User
+     *
+     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
      */
     public function getAzureUser(User $user)
     {

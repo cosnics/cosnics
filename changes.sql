@@ -314,4 +314,5 @@ INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user
   (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'access_token', NULL, '1'),
   (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'external_user_id', NULL, '1'),
   (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'tenant_id', NULL, '0'),
+  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'cosnics_prefix', NULL, 'cosnics_'),
   (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0');

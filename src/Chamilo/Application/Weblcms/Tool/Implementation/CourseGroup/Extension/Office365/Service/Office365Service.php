@@ -306,6 +306,45 @@ class Office365Service
     }
 
     /**
+     * Creates a new plan for a given group
+     *
+     * @param string $groupId
+     * @param string $planName
+     *
+     * @return string
+     */
+    public function createPlanForGroup($groupId, $planName = null)
+    {
+        if(empty($planName))
+        {
+            $group = $this->office365Repository->getGroup($groupId);
+            $planName = $group->getDisplayName();
+        }
+
+        $plan = $this->office365Repository->createPlanForGroup($groupId, $planName);
+        return $plan->getId();
+    }
+
+    /**
+     * Returns or creates a new plan based on a given group
+     *
+     * @param string $groupId
+     *
+     * @return string
+     */
+    public function getOrCreatePlanIdForGroup($groupId)
+    {
+        $planId = $this->getDefaultGroupPlanId($groupId);
+
+        if (empty($planId))
+        {
+            $planId = $this->createPlanForGroup($groupId);
+        }
+
+        return $planId;
+    }
+
+    /**
      * Returns the identifier in office365 for a given user
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Utilities\UUID;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
@@ -42,9 +43,11 @@ class Office365Repository
     protected $delegatedAccessToken;
 
     /**
+     * A prefix to be used in e.g. group nicknames
+     *
      * @var string
      */
-    protected $currentRequestUrl;
+    protected $cosnicsPrefix;
 
     /**
      * Office365Repository constructor.
@@ -52,17 +55,18 @@ class Office365Repository
      * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
      * @param \Microsoft\Graph\Graph $graph
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
-     * @param string $currentRequestUrl
+     * @param string $cosnicsPrefix
      */
     public function __construct(
         AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository,
-        $currentRequestUrl
+        $cosnicsPrefix = ''
+
     )
     {
         $this->oauthProvider = $oauthProvider;
         $this->graph = $graph;
         $this->accessTokenRepository = $accessTokenRepository;
-        $this->currentRequestUrl = $currentRequestUrl;
+        $this->cosnicsPrefix = $cosnicsPrefix;
 
         $this->initializeApplicationAccessToken();
     }
@@ -120,7 +124,7 @@ class Office365Repository
         {
             $this->requestNewDelegatedAccessToken();
         }
-        elseif($this->delegatedAccessToken->hasExpired())
+        elseif ($this->delegatedAccessToken->hasExpired())
         {
             $this->delegatedAccessToken = $this->oauthProvider->getAccessToken(
                 'refresh_token', ['refresh_token' => $this->delegatedAccessToken->getRefreshToken()]
@@ -213,7 +217,10 @@ class Office365Repository
             'description' => $groupName,
             'displayName' => $groupName,
             'mailEnabled' => false,
-            'mailNickname' => str_replace(' ', '_', $groupName),
+            'mailNickname' => str_replace(
+                '-', '_',
+                $this->cosnicsPrefix . UUID::v4()
+            ),
             'groupTypes' => [
                 'Unified',
             ],
@@ -247,6 +254,21 @@ class Office365Repository
             $this->graph->createRequest('PATCH', '/groups/' . $groupIdentifier)
                 ->attachBody($groupData)
                 ->setReturnType(\Microsoft\Graph\Model\Event::class)
+        );
+    }
+
+    /**
+     * Returns a group by a given identifier
+     *
+     * @param string $groupIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Group
+     */
+    public function getGroup($groupIdentifier)
+    {
+        return $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier)
+                ->setReturnType(\Microsoft\Graph\Model\Group::class)
         );
     }
 
@@ -422,6 +444,29 @@ class Office365Repository
     }
 
     /**
+     * Creates a new plan for a given group
+     *
+     * @param string $groupIdentifier
+     * @param string $planName
+     *
+     * @return \Microsoft\Graph\Model\PlannerPlan
+     */
+    public function createPlanForGroup($groupIdentifier, $planName)
+    {
+        $this->activateDelegatedAccessToken();
+
+        $result = $this->executeRequestWithAccessTokenExpirationRetry(
+            $this->graph->createRequest('POST', '/planner/plans')
+                ->attachBody(['owner' => $groupIdentifier, 'title' => $planName])
+                ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class)
+        );
+
+        $this->initializeApplicationAccessToken();
+
+        return $result;
+    }
+
+    /**
      * Parses a collection response. Bugfix for the microsoft graph library parsing everything to a single
      * object when an empty collection is returned from the graph API
      *
@@ -435,7 +480,7 @@ class Office365Repository
         $body = $graphResponse->getBody();
 
         $count = 0;
-        if(array_key_exists('@odata.count', $body))
+        if (array_key_exists('@odata.count', $body))
         {
             $count = $body['@odata.count'];
         }
