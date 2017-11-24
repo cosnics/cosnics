@@ -172,6 +172,44 @@ class GraphRepositoryTest extends ChamiloTestCase
         );
     }
 
+    public function testExecuteGetWithAccessTokenExpirationRetryWithCollectionNoDataCount()
+    {
+        $this->constructWithStoredAccessToken();
+
+        $microsoftUser = new \Microsoft\Graph\Model\User();
+
+        $this->mockCollectionRequest(
+            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            $this->returnValue([$microsoftUser]), 1, false
+        );
+
+        $this->assertEquals(
+            [$microsoftUser],
+            $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
+                '/users', \Microsoft\Graph\Model\User::class, true
+            )
+        );
+    }
+
+    public function testExecuteGetWithAccessTokenExpirationRetryWithNoDataCount()
+    {
+        $this->constructWithStoredAccessToken();
+
+        $microsoftUser = new \Microsoft\Graph\Model\User();
+
+        $this->mockCollectionRequest(
+            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            $this->returnValue([$microsoftUser])
+        );
+
+        $this->assertEquals(
+            [$microsoftUser],
+            $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
+                '/users', \Microsoft\Graph\Model\User::class, true
+            )
+        );
+    }
+
     public function testExecuteGetWithAccessTokenExpirationRetryWithEmptyCount()
     {
         $this->constructWithStoredAccessToken();
@@ -469,7 +507,7 @@ class GraphRepositoryTest extends ChamiloTestCase
             ->method('getApplicationAccessToken')
             ->will($this->returnValue($accessToken));
 
-        if($includeDelegatedAccessToken)
+        if ($includeDelegatedAccessToken)
         {
             $this->accessTokenRepositoryMock->expects($this->atLeastOnce())
                 ->method('getDelegatedAccessToken')
@@ -540,7 +578,7 @@ class GraphRepositoryTest extends ChamiloTestCase
      */
     protected function mockCollectionRequest(
         $requestMethod = null, $requestUrl = null, $returnType = null,
-        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $returnCount = 1
+        \PHPUnit_Framework_MockObject_Stub $executeStub = null, $returnCount = 1, $useDataCount = true
     )
     {
         $graphRequest = $this->getMockBuilder(GraphRequest::class)
@@ -549,9 +587,18 @@ class GraphRepositoryTest extends ChamiloTestCase
         $graphResponse = $this->getMockBuilder(GraphResponse::class)
             ->disableOriginalConstructor()->getMock();
 
-        $graphResponse->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue(['@odata.count' => $returnCount]));
+        if ($useDataCount)
+        {
+            $graphResponse->expects($this->once())
+                ->method('getBody')
+                ->will($this->returnValue(['@odata.count' => $returnCount]));
+        }
+        else
+        {
+            $graphResponse->expects($this->once())
+                ->method('getBody')
+                ->will($this->returnValue(['value' => array_fill(0, $returnCount, 1)]));
+        }
 
         $createRequestMock = $this->graphMock->expects($this->once())
             ->method('createCollectionRequest')

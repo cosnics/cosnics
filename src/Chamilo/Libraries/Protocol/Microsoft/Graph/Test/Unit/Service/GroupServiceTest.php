@@ -1,47 +1,50 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Service;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 
 /**
- * Tests the Office365Service
+ * Tests the GroupService
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class Office365ServiceTest extends ChamiloTestCase
+class GroupServiceTest extends ChamiloTestCase
 {
     /**
-     * @var Office365Service
+     *
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $office365Service;
+    protected $groupRepositoryMock;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository | \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $office365RepositoryMock;
+    protected $userServiceMock;
 
     /**
-     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting | \PHPUnit_Framework_MockObject_MockObject
+     * @var GroupService
      */
-    protected $localSettingMock;
+    protected $groupService;
 
     /**
      * Setup before each test
      */
     public function setUp()
     {
-        $this->office365RepositoryMock = $this->getMockBuilder(Office365Repository::class)
+        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepository::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->localSettingMock = $this->getMockBuilder(LocalSetting::class)
+        $this->userServiceMock = $this->getMockBuilder(UserService::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->office365Service = new Office365Service($this->office365RepositoryMock, $this->localSettingMock);
+
+        $this->groupService = new GroupService($this->userServiceMock, $this->groupRepositoryMock);
     }
 
     /**
@@ -49,9 +52,9 @@ class Office365ServiceTest extends ChamiloTestCase
      */
     public function tearDown()
     {
-        unset($this->office365RepositoryMock);
-        unset($this->localSettingMock);
-        unset($this->office365Service);
+        unset($this->userServiceMock);
+        unset($this->groupRepositoryMock);
+        unset($this->groupService);
     }
 
     public function testCreateGroupByName()
@@ -60,30 +63,30 @@ class Office365ServiceTest extends ChamiloTestCase
         $user = new User();
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('createGroup')
             ->with($groupName)
             ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5])));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeMemberInGroup')
             ->with(5, $externalUserIdentifier);
 
-        $this->assertEquals(5, $this->office365Service->createGroupByName($user, $groupName));
+        $this->assertEquals(5, $this->groupService->createGroupByName($user, $groupName));
     }
 
     /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function testCreateGroupByNameWithInvalidUser()
     {
         $groupName = 'TestGroup 101';
         $user = new User();
-        $this->mockGetExternalUserIdentifier($user, null);
+        $this->mockGetAzureUser($user, null);
 
-        $this->office365Service->createGroupByName($user, $groupName);
+        $this->groupService->createGroupByName($user, $groupName);
     }
 
     public function testUpdateGroupName()
@@ -91,11 +94,11 @@ class Office365ServiceTest extends ChamiloTestCase
         $groupName = 'TestGroup 101';
         $groupId = 5;
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('updateGroup')
             ->with($groupId, $groupName);
 
-        $this->office365Service->updateGroupName($groupId, $groupName);
+        $this->groupService->updateGroupName($groupId, $groupName);
     }
 
     public function testAddMemberToGroup()
@@ -104,14 +107,14 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeMemberInGroup')
             ->with($groupId, $externalUserIdentifier);
 
-        $this->office365Service->addMemberToGroup($groupId, $user);
+        $this->groupService->addMemberToGroup($groupId, $user);
     }
 
     public function testAddMemberToGroupWhenAlreadyInGroup()
@@ -120,24 +123,24 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('subscribeMemberInGroup');
 
-        $this->office365Service->addMemberToGroup($groupId, $user);
+        $this->groupService->addMemberToGroup($groupId, $user);
     }
 
     /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function testAddMemberToGroupWithInvalidUser()
     {
         $user = new User();
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user);
-        $this->office365Service->addMemberToGroup($groupId, $user);
+        $this->mockGetAzureUser($user, null);
+        $this->groupService->addMemberToGroup($groupId, $user);
     }
 
     public function testRemoveMemberFromGroup()
@@ -146,14 +149,14 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('removeMemberFromGroup')
             ->with($groupId, $externalUserIdentifier);
 
-        $this->office365Service->removeMemberFromGroup($groupId, $user);
+        $this->groupService->removeMemberFromGroup($groupId, $user);
     }
 
     public function testRemoveMemberFromGroupNotInGroup()
@@ -162,13 +165,13 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('removeMemberFromGroup');
 
-        $this->office365Service->removeMemberFromGroup($groupId, $user);
+        $this->groupService->removeMemberFromGroup($groupId, $user);
     }
 
     public function testRemoveMemberFromGroupInvalidUser()
@@ -176,12 +179,12 @@ class Office365ServiceTest extends ChamiloTestCase
         $user = new User();
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user);
+        $this->mockGetAzureUser($user);
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('removeMemberFromGroup');
 
-        $this->office365Service->removeMemberFromGroup($groupId, $user);
+        $this->groupService->removeMemberFromGroup($groupId, $user);
     }
 
     public function testIsMemberOfGroup()
@@ -190,10 +193,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
 
-        $this->assertTrue($this->office365Service->isMemberOfGroup($groupId, $user));
+        $this->assertTrue($this->groupService->isMemberOfGroup($groupId, $user));
     }
 
     public function testIsMemberOfGroupNotSubscribed()
@@ -202,10 +205,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
 
-        $this->assertFalse($this->office365Service->isMemberOfGroup($groupId, $user));
+        $this->assertFalse($this->groupService->isMemberOfGroup($groupId, $user));
     }
 
     public function testIsMemberOfGroupInvalidUser()
@@ -214,10 +217,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
 
-        $this->assertFalse($this->office365Service->isMemberOfGroup($groupId, $user));
+        $this->assertFalse($this->groupService->isMemberOfGroup($groupId, $user));
     }
 
     public function testGetGroupMembers()
@@ -229,12 +232,12 @@ class Office365ServiceTest extends ChamiloTestCase
 
         $groupId = 5;
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupMembers')
             ->with($groupId)
             ->will($this->returnValue($groupMembers));
 
-        $this->assertEquals([4, 6], $this->office365Service->getGroupMembers($groupId));
+        $this->assertEquals([4, 6], $this->groupService->getGroupMembers($groupId));
     }
 
     public function testRemoveAllMembersFromGroup()
@@ -245,16 +248,16 @@ class Office365ServiceTest extends ChamiloTestCase
 
         $groupId = 5;
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupMembers')
             ->with($groupId)
             ->will($this->returnValue($groupMembers));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('removeMemberFromGroup')
             ->with($groupId, 4);
 
-        $this->office365Service->removeAllMembersFromGroup($groupId);
+        $this->groupService->removeAllMembersFromGroup($groupId);
     }
 
     public function testAddOwnerToGroup()
@@ -263,14 +266,14 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeOwnerInGroup')
             ->with($groupId, $externalUserIdentifier);
 
-        $this->office365Service->addOwnerToGroup($groupId, $user);
+        $this->groupService->addOwnerToGroup($groupId, $user);
     }
 
     public function testAddOwnerToGroupWhenAlreadyInGroup()
@@ -279,24 +282,24 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('subscribeMemberInGroup');
 
-        $this->office365Service->addOwnerToGroup($groupId, $user);
+        $this->groupService->addOwnerToGroup($groupId, $user);
     }
 
     /**
-     * @expectedException \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception\Office365UserNotExistsException
+     * @expectedException \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
     public function testAddOwnerToGroupWithInvalidUser()
     {
         $user = new User();
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user);
-        $this->office365Service->addOwnerToGroup($groupId, $user);
+        $this->mockGetAzureUser($user, null);
+        $this->groupService->addOwnerToGroup($groupId, $user);
     }
 
     public function testRemoveOwnerFromGroup()
@@ -305,14 +308,14 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('removeOwnerFromGroup')
             ->with($groupId, $externalUserIdentifier);
 
-        $this->office365Service->removeOwnerFromGroup($groupId, $user);
+        $this->groupService->removeOwnerFromGroup($groupId, $user);
     }
 
     public function testRemoveOwnerFromGroupNotInGroup()
@@ -321,13 +324,13 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('removeOwnerFromGroup');
 
-        $this->office365Service->removeOwnerFromGroup($groupId, $user);
+        $this->groupService->removeOwnerFromGroup($groupId, $user);
     }
 
     public function testRemoveOwnerFromGroupInvalidUser()
@@ -335,12 +338,12 @@ class Office365ServiceTest extends ChamiloTestCase
         $user = new User();
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user);
+        $this->mockGetAzureUser($user);
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('removeOwnerFromGroup');
 
-        $this->office365Service->removeOwnerFromGroup($groupId, $user);
+        $this->groupService->removeOwnerFromGroup($groupId, $user);
     }
 
     public function testIsOwnerOfGroup()
@@ -349,10 +352,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, new \Microsoft\Graph\Model\User());
 
-        $this->assertTrue($this->office365Service->isOwnerOfGroup($groupId, $user));
+        $this->assertTrue($this->groupService->isOwnerOfGroup($groupId, $user));
     }
 
     public function testIsOwnerOfGroupNotSubscribed()
@@ -361,10 +364,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
 
-        $this->assertFalse($this->office365Service->isOwnerOfGroup($groupId, $user));
+        $this->assertFalse($this->groupService->isOwnerOfGroup($groupId, $user));
     }
 
     public function testIsOwnerOfGroupInvalidUser()
@@ -373,10 +376,10 @@ class Office365ServiceTest extends ChamiloTestCase
         $externalUserIdentifier = 'a987-asqfqsa-wvcaer465486';
         $groupId = 5;
 
-        $this->mockGetExternalUserIdentifier($user, $externalUserIdentifier);
+        $this->mockGetAzureUser($user, $externalUserIdentifier);
         $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
 
-        $this->assertFalse($this->office365Service->isOwnerOfGroup($groupId, $user));
+        $this->assertFalse($this->groupService->isOwnerOfGroup($groupId, $user));
     }
 
     public function testGetGroupOwners()
@@ -388,12 +391,12 @@ class Office365ServiceTest extends ChamiloTestCase
 
         $groupId = 5;
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupOwners')
             ->with($groupId)
             ->will($this->returnValue($groupOwners));
 
-        $this->assertEquals([4, 6], $this->office365Service->getGroupOwners($groupId));
+        $this->assertEquals([4, 6], $this->groupService->getGroupOwners($groupId));
     }
 
     public function testRemoveAllOwnersFromGroup()
@@ -404,16 +407,16 @@ class Office365ServiceTest extends ChamiloTestCase
 
         $groupId = 5;
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupOwners')
             ->with($groupId)
             ->will($this->returnValue($groupOwners));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('removeOwnerFromGroup')
             ->with($groupId, 4);
 
-        $this->office365Service->removeAllOwnersFromGroup($groupId);
+        $this->groupService->removeAllOwnersFromGroup($groupId);
     }
 
     public function testGetGroupPlanIds()
@@ -425,12 +428,12 @@ class Office365ServiceTest extends ChamiloTestCase
             new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
         ];
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupPlans')
             ->with($groupId)
             ->will($this->returnValue($groupPlans));
 
-        $this->assertEquals([3, 9], $this->office365Service->getGroupPlanIds($groupId));
+        $this->assertEquals([3, 9], $this->groupService->getGroupPlanIds($groupId));
     }
 
     public function testGetDefaultGroupPlanId()
@@ -442,12 +445,12 @@ class Office365ServiceTest extends ChamiloTestCase
             new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
         ];
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupPlans')
             ->with($groupId)
             ->will($this->returnValue($groupPlans));
 
-        $this->assertEquals(3, $this->office365Service->getDefaultGroupPlanId($groupId));
+        $this->assertEquals(3, $this->groupService->getDefaultGroupPlanId($groupId));
     }
 
     public function testGetDefaultGroupPlanIdNoPlans()
@@ -455,12 +458,12 @@ class Office365ServiceTest extends ChamiloTestCase
         $groupId = 5;
         $groupPlans = [];
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupPlans')
             ->with($groupId)
             ->will($this->returnValue($groupPlans));
 
-        $this->assertEmpty($this->office365Service->getDefaultGroupPlanId($groupId));
+        $this->assertEmpty($this->groupService->getDefaultGroupPlanId($groupId));
     }
 
     public function testCreatePlanForGroup()
@@ -468,12 +471,12 @@ class Office365ServiceTest extends ChamiloTestCase
         $groupId = 5;
         $planName = 'Planning for Groups 101';
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
             ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
 
-        $this->assertEquals(3, $this->office365Service->createPlanForGroup($groupId, $planName));
+        $this->assertEquals(3, $this->groupService->createPlanForGroup($groupId, $planName));
     }
 
     public function testCreatePlanForGroupNoPlanName()
@@ -481,17 +484,17 @@ class Office365ServiceTest extends ChamiloTestCase
         $groupId = 5;
         $planName = 'Planning for Groups 101';
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')
             ->with($groupId)
             ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
             ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
 
-        $this->assertEquals(3, $this->office365Service->createPlanForGroup($groupId));
+        $this->assertEquals(3, $this->groupService->createPlanForGroup($groupId));
     }
 
     public function testGetOrCreatePlanIdForGroup()
@@ -503,12 +506,12 @@ class Office365ServiceTest extends ChamiloTestCase
             new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
         ];
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupPlans')
             ->with($groupId)
             ->will($this->returnValue($groupPlans));
 
-        $this->assertEquals(3, $this->office365Service->getOrCreatePlanIdForGroup($groupId));
+        $this->assertEquals(3, $this->groupService->getOrCreatePlanIdForGroup($groupId));
     }
 
     public function testGetOrCreatePlanIdForGroupNoPlanFound()
@@ -516,73 +519,27 @@ class Office365ServiceTest extends ChamiloTestCase
         $groupId = 5;
         $planName = 'Planning for Groups 101';
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('listGroupPlans')
             ->with($groupId)
             ->will($this->returnValue([]));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')
             ->with($groupId)
             ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
             ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
 
-        $this->assertEquals(3, $this->office365Service->getOrCreatePlanIdForGroup($groupId));
+        $this->assertEquals(3, $this->groupService->getOrCreatePlanIdForGroup($groupId));
     }
-
-    public function testGetOffice365UserIdentifier()
-    {
-        $user = new User();
-
-        $this->mockGetExternalUserIdentifier($user, null);
-
-        $this->office365RepositoryMock->expects($this->once())
-            ->method('getOffice365User')
-            ->with($user)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\User(['id' => 200])));
-
-        $this->localSettingMock->expects($this->once())
-            ->method('create')
-            ->with(
-                'external_user_id', 200,
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', $user
-            );
-
-        $this->assertEquals(200, $this->office365Service->getOffice365UserIdentifier($user));
-    }
-
-    public function testGetOffice365UserIdentifierFromCache()
-    {
-        $user = new User();
-
-        $this->mockGetExternalUserIdentifier($user, 200);
-
-        $this->office365RepositoryMock->expects($this->never())
-            ->method('getOffice365User');
-
-        $this->localSettingMock->expects($this->never())
-            ->method('create');
-
-        $this->assertEquals(200, $this->office365Service->getOffice365UserIdentifier($user));
-    }
-
-    public function testAuthorizeUserByAuthorizationCode()
-    {
-        $authorizationCode = 'VGhpcyBpcyBhbiBhdXRob3JpemF0aW9uIGNvZGU=';
-
-        $this->office365RepositoryMock->expects($this->once())
-            ->method('authorizeUserByAuthorizationCode')
-            ->with($authorizationCode);
-
-        $this->office365Service->authorizeUserByAuthorizationCode($authorizationCode);
-    }
+    
 
     /**
-     * Mocks the getGroupMember function of the Office365Repository
+     * Mocks the getGroupMember function of the GroupRepository
      *
      * @param string $groupId
      * @param string $externalUserIdentifier
@@ -590,14 +547,14 @@ class Office365ServiceTest extends ChamiloTestCase
      */
     protected function mockGetGroupMember($groupId, $externalUserIdentifier, $returnValue = null)
     {
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('getGroupMember')
             ->with($groupId, $externalUserIdentifier)
             ->will($this->returnValue($returnValue));
     }
 
     /**
-     * Mocks the getGroupMember function of the Office365Repository
+     * Mocks the getGroupMember function of the GroupRepository
      *
      * @param string $groupId
      * @param string $externalUserIdentifier
@@ -605,27 +562,18 @@ class Office365ServiceTest extends ChamiloTestCase
      */
     protected function mockGetGroupOwner($groupId, $externalUserIdentifier, $returnValue = null)
     {
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('getGroupOwner')
             ->with($groupId, $externalUserIdentifier)
             ->will($this->returnValue($returnValue));
     }
 
-    /**
-     * Mocks the get function of the local setting for the external_user_id
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $returnValue
-     */
-    protected function mockGetExternalUserIdentifier(User $user, $returnValue = null)
+    protected function mockGetAzureUser(User $user, $azureUserIdentifier = 5)
     {
-        $this->localSettingMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->with(
-                'external_user_id', 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
-                $user
-            )
-            ->will($this->returnValue($returnValue));
+        $this->userServiceMock->expects($this->atLeastOnce())
+            ->method('getAzureUserIdentifier')
+            ->with($user)
+            ->will($this->returnValue($azureUserIdentifier));
     }
 }
 

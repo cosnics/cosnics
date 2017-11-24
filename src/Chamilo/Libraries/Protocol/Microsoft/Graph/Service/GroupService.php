@@ -34,15 +34,15 @@ class GroupService
      */
     public function __construct(UserService $userService, GroupRepository $groupRepository)
     {
-        $this->userService = $userService;
-        $this->groupRepository = $groupRepository;
+        $this->setUserService($userService);
+        $this->setGroupRepository($groupRepository);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    public function getUserService()
+    protected function getUserService()
     {
         return $this->userService;
     }
@@ -51,7 +51,7 @@ class GroupService
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      */
-    public function setUserService(UserService $userService)
+    protected function setUserService(UserService $userService)
     {
         $this->userService = $userService;
     }
@@ -60,7 +60,7 @@ class GroupService
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository
      */
-    public function getGroupRepository()
+    protected function getGroupRepository()
     {
         return $this->groupRepository;
     }
@@ -69,7 +69,7 @@ class GroupService
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
      */
-    public function setGroupRepository(GroupRepository $groupRepository)
+    protected function setGroupRepository(GroupRepository $groupRepository)
     {
         $this->groupRepository = $groupRepository;
     }
@@ -95,8 +95,6 @@ class GroupService
      */
     public function createGroupByName(User $owner, $groupName)
     {
-        // TODO: Temporarily hardcode this to avoid new groups being created
-        return 'e5dcbd72-8938-4ed2-9b31-fbac1b04ea3b';
         $azureUserIdentifier = $this->getAzureUserIdentifier($owner);
 
         if (empty($azureUserIdentifier))
@@ -105,7 +103,7 @@ class GroupService
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);
-        $this->getGroupRepository()->subscribeMemberInGroup($group, $azureUserIdentifier);
+        $this->getGroupRepository()->subscribeMemberInGroup($group->getId(), $azureUserIdentifier);
 
         return $group->getId();
     }
@@ -157,12 +155,6 @@ class GroupService
         if ($this->isMemberOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-            if (empty($azureUserIdentifier))
-            {
-                throw new AzureUserNotExistsException($user);
-            }
-
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
     }
@@ -256,12 +248,6 @@ class GroupService
         if ($this->isOwnerOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-            if (empty($azureUserIdentifier))
-            {
-                throw new AzureUserNotExistsException($user);
-            }
-
             $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
         }
     }
@@ -355,5 +341,44 @@ class GroupService
         }
 
         return $groupPlans[0]->getId();
+    }
+
+    /**
+     * Creates a new plan for a given group
+     *
+     * @param string $groupId
+     * @param string $planName
+     *
+     * @return string
+     */
+    public function createPlanForGroup($groupId, $planName = null)
+    {
+        if(empty($planName))
+        {
+            $group = $this->groupRepository->getGroup($groupId);
+            $planName = $group->getDisplayName();
+        }
+
+        $plan = $this->groupRepository->createPlanForGroup($groupId, $planName);
+        return $plan->getId();
+    }
+
+    /**
+     * Returns or creates a new plan based on a given group
+     *
+     * @param string $groupId
+     *
+     * @return string
+     */
+    public function getOrCreatePlanIdForGroup($groupId)
+    {
+        $planId = $this->getDefaultGroupPlanId($groupId);
+
+        if (empty($planId))
+        {
+            $planId = $this->createPlanForGroup($groupId);
+        }
+
+        return $planId;
     }
 }

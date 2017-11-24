@@ -321,6 +321,8 @@ class GraphRepository
     {
         $body = $graphResponse->getBody();
 
+        $count = 0;
+
         if (array_key_exists('@odata.count', $body))
         {
             $count = $body['@odata.count'];
@@ -328,10 +330,6 @@ class GraphRepository
         elseif (array_key_exists('value', $body))
         {
             $count = count($body['value']);
-        }
-        else
-        {
-            $count = 0;
         }
 
         return ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
