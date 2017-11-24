@@ -34,9 +34,6 @@
             <argument
                 type="service"
                 id="chamilo.configuration.service.registration_consulter" />
-            <argument
-                type="service"
-                id="chamilo.libraries.architecture.classname_utilities" />
         </service>
 
     </services>

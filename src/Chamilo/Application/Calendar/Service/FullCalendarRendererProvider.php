@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -21,19 +20,11 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
-
-    /**
-     *
      * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    public function __construct(RegistrationConsulter $registrationConsulter, ClassnameUtilities $classnameUtilities)
+    public function __construct(RegistrationConsulter $registrationConsulter)
     {
         $this->registrationConsulter = $registrationConsulter;
-        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -43,15 +34,6 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
     public function getRegistrationConsulter()
     {
         return $this->registrationConsulter;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
-    {
-        return $this->classnameUtilities;
     }
 
     /**
@@ -80,7 +62,7 @@ class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\
                         continue;
                     }
 
-                    $sources[] = $this->getClassnameUtilities()->getNamespaceParent($context, 4);
+                    $sources[] = $context;
                 }
             }
         }

@@ -162,6 +162,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         try
         {
             $calendar = $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
+
             $availableCalendar->setType(self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
