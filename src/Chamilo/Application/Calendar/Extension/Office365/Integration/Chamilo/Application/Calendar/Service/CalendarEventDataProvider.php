@@ -33,7 +33,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     /**
      *
-     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
+     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getEvents()
      */
     public function getEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,

@@ -95,7 +95,7 @@ class FullCalendarRenderer
                            navLinks: true,
                            height: "auto",
                            firstDay: 1,
-                           timeFormat: "hh:mm",
+                           timeFormat: "HH:mm",
                            businessHours: {
                                dow: [ 1, 2, 3, 4, 5 ],
                                start: "10:00",
@@ -103,6 +103,13 @@ class FullCalendarRenderer
                            },
                            			eventSources: ' . $this->getEventSources() . ',
                            themeSystem: "bootstrap3",
+                           bootstrapGlyphicons: {
+    close: "glyphicon-remove",
+    prev: "glyphicon-triangle-left",
+    next: "glyphicon-triangle-right",
+    prevYear: "glyphicon-backward",
+    nextYear: "glyphicon-forward"
+},
                            			loading: function(bool, view) {
                                				$("#loading").toggle(bool);
                            			}';
@@ -113,7 +120,7 @@ class FullCalendarRenderer
     protected function getEventSources()
     {
         $eventSources = $this->getFullCalendarRendererProvider()->getEventSources();
-        $parsedEventSources = array();
+        $parsedEventSources = [];
 
         foreach ($eventSources as $eventSource)
         {
@@ -122,13 +129,15 @@ class FullCalendarRenderer
                     Application::PARAM_CONTEXT => $eventSource . '\Ajax',
                     Application::PARAM_ACTION => 'FullCalendarEvents'));
 
-            $parsedEventSource = new \stdClass();
-            $parsedEventSource->url = $eventSourceAjaxUrl->getUrl();
+            $parsedEventSource = '{
+                                        url: ' .
+                 json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
+                                  }';
 
             $parsedEventSources[] = $parsedEventSource;
         }
 
-        return json_encode($parsedEventSources);
+        return '[' . implode(',', $parsedEventSources) . ']';
     }
 
     protected function getDependencies()
