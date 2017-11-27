@@ -5,7 +5,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 
 /**
  *
@@ -92,11 +91,11 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
         if (! isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
+                $this->getService('chamilo.application.calendar.service.visibility_service'),
                 $this->getUserCalendar(),
                 $this->getUser(),
                 $this->getDisplayParameters(),
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                \Chamilo\Application\Calendar\Manager::context());
         }
 
         return $this->calendarRendererProvider;

@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Repository;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;

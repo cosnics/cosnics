@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
 use Chamilo\Application\Weblcms\Component\CourseViewerComponent;
@@ -48,6 +47,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
+     *
      * @return string
      *
      * @throws NotAllowedException
@@ -56,8 +56,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     {
         $authenticationValidator = new AuthenticationValidator(
             $this->getRequest(),
-            $this->getService('chamilo.configuration.service.configuration_consulter')
-        );
+            $this->getService('chamilo.configuration.service.configuration_consulter'));
 
         $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
 
@@ -70,7 +69,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
-                if(!$alreadyAuthenticated)
+                if (! $alreadyAuthenticated)
                 {
                     $authentication->logout($user);
                 }
@@ -90,7 +89,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             }
             else
             {
-                if (!$this->get_application() instanceof CourseViewerComponent)
+                if (! $this->get_application() instanceof CourseViewerComponent)
                 {
                     throw new NotAllowedException();
                 }
@@ -101,25 +100,22 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $icalDownloadUrl = new Redirect($downloadParameters);
 
                 $externalParameters = $this->get_parameters();
-                $externalParameters[Application::PARAM_CONTEXT] =
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Calendar';
+                $externalParameters[Application::PARAM_CONTEXT] = 'Chamilo\Application\Weblcms\Tool\Implementation\Calendar';
                 $externalParameters[User::PROPERTY_SECURITY_TOKEN] = $this->getUser()->get_security_token();
 
                 $icalExternalUrl = new Redirect(
-                    $externalParameters, [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]
-                );
+                    $externalParameters,
+                    [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]);
 
                 $html = array();
 
                 $html[] = $this->render_header();
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl()))
-                );
+                    Translation::get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl())));
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl()))
-                );
+                    Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
 
                 $html[] = $this->render_footer();
 
@@ -136,7 +132,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
      */
     private function getCalendarRendererProvider(User $user)
     {
-        if (!isset($this->calendarRendererProvider))
+        if (! isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
                 $this->getPublicationService(),
@@ -144,8 +140,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $this->get_tool_id(),
                 $user,
                 $user,
-                array()
-            );
+                array());
         }
 
         return $this->calendarRendererProvider;
@@ -175,8 +170,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         return $this->getPublicationService()->getPublicationsForUser(
             $this->getUser(),
             $this->get_course(),
-            $this->get_tool_id()
-        );
+            $this->get_tool_id());
     }
 
     public function get_course()

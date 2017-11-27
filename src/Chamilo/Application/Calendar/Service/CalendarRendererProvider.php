@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -23,15 +22,14 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport,
-    \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
+    VisibilitySupport, ActionSupport
 {
 
     /**
      *
-     * @var \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
+     * @var \Chamilo\Application\Calendar\Service\VisibilityService
      */
-    private $dataProviderRepository;
+    private $visibilityService;
 
     /**
      *
@@ -41,16 +39,16 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
+     * @param \Chamilo\Application\Calendar\Service\VisibilityService $visibilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser,
-        User $viewingUser, $displayParameters, $visibilityContext)
+    public function __construct(VisibilityService $visibilityService, User $dataUser, User $viewingUser,
+        $displayParameters, $visibilityContext)
     {
-        $this->dataProviderRepository = $dataProviderRepository;
+        $this->visibilityService = $visibilityService;
         $this->visibilityContext = $visibilityContext;
 
         parent::__construct($dataUser, $viewingUser, $displayParameters);
@@ -58,20 +56,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
+     * @return \Chamilo\Application\Calendar\Service\VisibilityService
      */
-    public function getCalendarRendererProviderRepository()
+    public function getVisibilityService()
     {
-        return $this->dataProviderRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
-     */
-    public function setCalendarRendererProviderRepository(CalendarRendererProviderRepository $dataProviderRepository)
-    {
-        $this->dataProviderRepository = $dataProviderRepository;
+        return $this->visibilityService;
     }
 
     /**
@@ -112,9 +101,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $userIdentifier = $this->getViewingUser()->getId();
         }
 
-        $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
-            $source,
-            $userIdentifier);
+        $visibility = $this->getVisibilityService()->findVisibilityBySourceAndUserIdentifier($source, $userIdentifier);
         return ! $visibility instanceof Visibility;
     }
 
@@ -307,23 +294,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function getAllSourceNames()
     {
         return $this->getSourceNames(self::SOURCE_TYPE_BOTH);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsVisibility()
-    {
-        return $this instanceof VisibilitySupport;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsActions()
-    {
-        return $this instanceof ActionSupport;
     }
 }

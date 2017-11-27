@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
@@ -64,13 +63,13 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
         if (! isset($this->calendarRenderer))
         {
             $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
+                $this->getService('chamilo.application.calendar.service.visibility_service'),
                 $this->getUser(),
                 $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                     MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY),
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                \Chamilo\Application\Calendar\Manager::context());
 
             $calendarLegend = new Legend($dataProvider);
 

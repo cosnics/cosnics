@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
@@ -16,7 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface, 
+class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
     const CONFIGURATION_HOUR_STEP = 'hour_step';
@@ -31,9 +30,9 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
     public function getConfigurationVariables()
     {
         return array(
-            self::CONFIGURATION_HOUR_STEP, 
-            self::CONFIGURATION_TIME_START, 
-            self::CONFIGURATION_TIME_END, 
+            self::CONFIGURATION_HOUR_STEP,
+            self::CONFIGURATION_TIME_START,
+            self::CONFIGURATION_TIME_END,
             self::CONFIGURATION_TIME_HIDE);
     }
 
@@ -51,16 +50,16 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
     public function renderContentHeader()
     {
         $html = array();
-        
+
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function renderContentFooter()
     {
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -73,33 +72,33 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
         if (! isset($this->calendarRenderer))
         {
             $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), 
-                $this->getUser(), 
-                $this->getUser(), 
-                array(), 
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
-            
+                $this->getService('chamilo.application.calendar.service.visibility_service'),
+                $this->getUser(),
+                $this->getUser(),
+                array(),
+                \Chamilo\Application\Calendar\Manager::context());
+
             $calendarLegend = new Legend($dataProvider);
             $time = Request::get('time') ? intval(Request::get('time')) : time();
 
             $hourStep = (int) $this->getBlock()->getSetting(self::CONFIGURATION_HOUR_STEP, 1);
-            if(!is_integer($hourStep) || $hourStep < 1)
+            if (! is_integer($hourStep) || $hourStep < 1)
             {
                 $hourStep = 1;
             }
 
             return new MiniDayRenderer(
-                $dataProvider, 
-                $calendarLegend, 
-                $time, 
-                array(), 
-                $this->getLinkTarget(), 
+                $dataProvider,
+                $calendarLegend,
+                $time,
+                array(),
+                $this->getLinkTarget(),
                 $hourStep,
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8), 
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17), 
+                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8),
+                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17),
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_HIDE, 17));
         }
-        
+
         return $this->calendarRenderer;
     }
 }

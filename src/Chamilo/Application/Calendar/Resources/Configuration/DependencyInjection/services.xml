@@ -21,6 +21,22 @@
         </service>
 
         <service
+            id="chamilo.application.calendar.service.visibility_service"
+            class="Chamilo\Application\Calendar\Service\VisibilityService">
+            <argument
+                type="service"
+                id="chamilo.application.calendar.repository.visibility_repository" />
+        </service>
+
+        <service
+            id="chamilo.application.calendar.repository.visibility_repository"
+            class="Chamilo\Application\Calendar\Repository\VisibilityRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service
             id="chamilo.application.calendar.service.full_calendar_renderer"
             class="Chamilo\Libraries\Calendar\Renderer\Type\FullCalendarRenderer">
             <argument

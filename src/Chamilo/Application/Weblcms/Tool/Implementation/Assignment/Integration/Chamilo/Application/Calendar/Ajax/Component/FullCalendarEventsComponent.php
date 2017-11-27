@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Integration\Chamilo\Application\Calendar\Ajax\Component;
 
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -93,11 +92,11 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
         if (! isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
+                $this->getService('chamilo.application.calendar.service.visibility_service'),
                 $this->getUserCalendar(),
                 $this->getUser(),
                 $this->getDisplayParameters(),
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                \Chamilo\Application\Calendar\Manager::context());
         }
 
         return $this->calendarRendererProvider;
@@ -123,7 +122,6 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
                         $this->getUserIdForCalendar()));
             }
         }
-
         return $this->userCalendar;
     }
 

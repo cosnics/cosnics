@@ -11,10 +11,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
- * @package Chamilo\Application\Calendar\Extension\Google\Service
+ * @package Chamilo\Application\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AvailabilityService
 {

@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -76,11 +75,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                 ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime());
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
+                $this->getService('chamilo.application.calendar.service.visibility_service'),
                 $this->get_user(),
                 $this->get_user(),
                 $displayParameters,
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                \Chamilo\Application\Calendar\Manager::context());
         }
 
         return $this->calendarDataProvider;
