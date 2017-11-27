@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
-use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -100,27 +99,6 @@ class EventListRenderer extends EventRenderer
                 $dateFormat,
                 $this->getEvent()->getStartDate()) . '</div>';
         }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function getActions()
-    {
-        $html = array();
-
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
-        if ($this->getRenderer()->getDataProvider()->supportsActions())
-        {
-            foreach ($this->getRenderer()->getActions($this->getEvent()) as $action)
-            {
-                $toolbar->add_item($action);
-            }
-        }
-
-        $html[] = '<div style="float: right; margin-top: 2px;">';
-        $html[] = $toolbar->as_html();
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

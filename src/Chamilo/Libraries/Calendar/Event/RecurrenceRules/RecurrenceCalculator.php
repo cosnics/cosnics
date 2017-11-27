@@ -14,96 +14,13 @@ class RecurrenceCalculator
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Event
-     */
-    private $event;
-
-    /**
-     *
-     * @var integer
-     */
-    private $startTime;
-
-    /**
-     *
-     * @var integer
-     */
-    private $endTime;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $startTime
      * @param integer $endTime
-     */
-    public function __construct(Event $event, $startTime, $endTime)
-    {
-        $this->event = $event;
-        $this->startTime = $startTime;
-        $this->endTime = $endTime;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartTime()
-    {
-        return $this->startTime;
-    }
-
-    /**
-     *
-     * @param integer $startTime
-     */
-    public function setStartTime($startTime)
-    {
-        $this->startTime = $startTime;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getEndTime()
-    {
-        return $this->endTime;
-    }
-
-    /**
-     *
-     * @param integer $endTime
-     */
-    public function setEndTime($endTime)
-    {
-        $this->endTime = $endTime;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents()
+    public function getEvents(Event $event, $startTime, $endTime)
     {
-        $event = $this->getEvent();
         $recurrenceRules = $event->getRecurrenceRules();
 
         if ($recurrenceRules->hasRecurrence())
@@ -129,10 +46,10 @@ class RecurrenceCalculator
             $vEvent->add('UID', uniqid());
 
             $fromDateTime = new \DateTime();
-            $fromDateTime->setTimestamp($this->getStartTime());
+            $fromDateTime->setTimestamp($startTime);
 
             $toDateTime = new \DateTime();
-            $toDateTime->setTimestamp($this->getEndTime());
+            $toDateTime->setTimestamp($endTime);
 
             $vCalendar->expand($fromDateTime, $toDateTime);
             $calculatedEvents = $vCalendar->VEVENT;
@@ -152,7 +69,7 @@ class RecurrenceCalculator
         }
         else
         {
-            if ($this->isVisible($event, $this->getStartTime(), $this->getEndTime()))
+            if ($this->isVisible($event, $startTime, $endTime))
             {
                 $events[] = $event;
             }

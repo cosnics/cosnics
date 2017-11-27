@@ -12,7 +12,6 @@ use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -76,10 +75,10 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
+                \Chamilo\Application\Calendar\Manager::context(),
                 $this->get_user(),
                 $this->get_user(),
-                $displayParameters,
-                \Chamilo\Application\Calendar\Manager::context());
+                $displayParameters);
         }
 
         return $this->calendarDataProvider;
@@ -190,20 +189,5 @@ class BrowserComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton($splitDropdownButton);
 
         return $buttonGroup;
-    }
-
-    public function getMiniMonthMarkPeriod()
-    {
-        switch ($this->getCurrentRendererType())
-        {
-            case ViewRenderer::TYPE_DAY :
-                return MiniMonthCalendar::PERIOD_DAY;
-            case ViewRenderer::TYPE_MONTH :
-                return MiniMonthCalendar::PERIOD_MONTH;
-            case ViewRenderer::TYPE_WEEK :
-                return MiniMonthCalendar::PERIOD_WEEK;
-            default :
-                return MiniMonthCalendar::PERIOD_DAY;
-        }
     }
 }

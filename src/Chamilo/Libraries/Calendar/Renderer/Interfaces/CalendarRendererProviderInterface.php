@@ -77,12 +77,6 @@ interface CalendarRendererProviderInterface
 
     /**
      *
-     * @return boolean
-     */
-    public function supportsActions();
-
-    /**
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getDataUser();

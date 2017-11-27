@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
@@ -66,27 +64,19 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
-     * @var string
-     */
-    private $linkTarget;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     * @param string $linkTarget
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '')
+        $viewActions = array())
     {
         parent::__construct($dataProvider);
 
         $this->legend = $legend;
         $this->displayTime = $displayTime;
         $this->viewActions = $viewActions;
-        $this->linkTarget = $linkTarget;
     }
 
     /**
@@ -105,24 +95,6 @@ abstract class ViewRenderer extends Renderer
     public function setViewActions($viewActions)
     {
         $this->viewActions = $viewActions;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLinkTarget()
-    {
-        return $this->linkTarget;
-    }
-
-    /**
-     *
-     * @param string $value
-     */
-    public function setLinkTarget($linkTarget)
-    {
-        $this->linkTarget = $linkTarget;
     }
 
     /**
@@ -199,22 +171,6 @@ abstract class ViewRenderer extends Renderer
             });
 
         return $events;
-    }
-
-    /**
-     * Get the actions available in the renderer for the given event
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     */
-    public function getActions(Event $event)
-    {
-        if (! $this->getDataProvider() instanceof ActionSupport)
-        {
-            return array();
-        }
-
-        return $this->getDataProvider()->getEventActions($event);
     }
 
     /**

@@ -5,8 +5,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -139,23 +137,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
         return $redirect->getUrl();
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsVisibility()
-    {
-        return $this instanceof VisibilitySupport;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsActions()
-    {
-        return $this instanceof ActionSupport;
     }
 }

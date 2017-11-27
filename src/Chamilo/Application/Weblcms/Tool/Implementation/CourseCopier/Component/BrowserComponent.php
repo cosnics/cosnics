@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms\CourseCopierForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Repository\CourseCopierRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Service\CourseCopier;
@@ -20,7 +18,6 @@ use Chamilo\Libraries\Translation\Translation;
 /*
  * This tool is for copying information from othe current course to another @author Mattias De Pauw - Hogeschool Gent
  */
-
 class BrowserComponent extends Manager
 {
 
@@ -40,15 +37,13 @@ class BrowserComponent extends Manager
         $courseGroupService = new CourseGroupService(new CourseGroupRepository());
 
         // $trail = BreadcrumbTrail :: getInstance();
-        if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
+        if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
-        $contentObjectPublicationsCount =
-            \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
-                $course_id
-            );
+        $contentObjectPublicationsCount = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
+            $course_id);
 
         $courseGroupsCount = $courseGroupService->countCourseGroupsInCourse($course_id);
 
@@ -58,8 +53,7 @@ class BrowserComponent extends Manager
         }
 
         if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_courses_from_user_where_user_is_teacher(
-                $this->get_user()
-            ) <= 1)
+            $this->get_user()) <= 1)
         {
             throw new UserException(Translation::get('NoCoursesToCopy'));
         }
@@ -68,13 +62,10 @@ class BrowserComponent extends Manager
 
         $publications = $publicationSelectorDataMapper->getContentObjectPublicationsForPublicationSelector($course_id);
         $categories = $publicationSelectorDataMapper->getContentObjectPublicationCategoriesForPublicationSelector(
-            $course_id
-        );
+            $course_id);
 
-        $courses =
-            \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_from_user_where_user_is_teacher(
-                $this->get_parent()->get_user()
-            );
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_from_user_where_user_is_teacher(
+            $this->get_parent()->get_user());
 
         $this->course_copier_form = new CourseCopierForm($this, $publications, $categories, $courses);
         $this->course_copier_form->buildForm();
@@ -88,16 +79,15 @@ class BrowserComponent extends Manager
             {
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
                     Course::class_name(),
-                    $course_id
-                );
-                if (!$course->is_course_admin($this->get_user()))
+                    $course_id);
+                if (! $course->is_course_admin($this->get_user()))
                 {
                     throw new NotAllowedException();
                 }
             }
 
             if (isset($values['publications']) || isset($values["course_sections"]) ||
-                $values['content_object_categories'] == 0 || $values['course_groups'] == 1)
+                 $values['content_object_categories'] == 0 || $values['course_groups'] == 1)
             {
                 $publications_ids = array_keys($values['publications']);
                 $ignore_categories = $values['content_object_categories'];
@@ -113,16 +103,13 @@ class BrowserComponent extends Manager
                     $publications_ids,
                     $categories_ids,
                     $ignore_categories,
-                    $copyCourseGroups
-                );
+                    $copyCourseGroups);
 
                 $this->redirect(
                     Translation::get('CopySucceeded'),
                     false,
                     array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME
-                    )
-                );
+                        \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME));
             }
             else
             {
@@ -143,7 +130,7 @@ class BrowserComponent extends Manager
             $html[] = $this->render_header();
 
             $html[] = '<div class="alert alert-warning">' .
-                Translation::getInstance()->getTranslation('CopyNotification', array(), Manager::context()) . '</div>';
+                 Translation::getInstance()->getTranslation('CopyNotification', array(), Manager::context()) . '</div>';
 
             $html[] = $this->course_copier_form->toHtml();
             $html[] = $this->render_footer();

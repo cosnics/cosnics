@@ -1,18 +1,16 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Unit\Service;
 
+use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
+use \Symfony\Component\Translation\Translator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupActionsDecorator;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use \Symfony\Component\Translation\Translator;
-use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 
 /**
  * Tests the CourseGroupActionsDecorator
@@ -21,23 +19,29 @@ use \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Offic
  */
 class CourseGroupActionsDecoratorTest extends ChamiloTestCase
 {
+
     /**
+     *
      * @var CourseGroupActionsDecorator
      */
     protected $courseGroupActionsDecorator;
 
     /**
+     *
      * @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlGeneratorMock;
 
     /**
+     *
      * @var \Symfony\Component\Translation\Translator | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $translatorMock;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService | \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
+     *      | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $courseGroupOffice365ReferenceServiceMock;
 
@@ -46,19 +50,17 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
      */
     public function setUp()
     {
-        $this->urlGeneratorMock = $this->getMockBuilder(UrlGenerator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->urlGeneratorMock = $this->getMockBuilder(UrlGenerator::class)->disableOriginalConstructor()->getMock();
 
-        $this->translatorMock = $this->getMockBuilder(Translator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->translatorMock = $this->getMockBuilder(Translator::class)->disableOriginalConstructor()->getMock();
 
-        $this->courseGroupOffice365ReferenceServiceMock =
-            $this->getMockBuilder(CourseGroupOffice365ReferenceService::class)
-                ->disableOriginalConstructor()->getMock();
+        $this->courseGroupOffice365ReferenceServiceMock = $this->getMockBuilder(
+            CourseGroupOffice365ReferenceService::class)->disableOriginalConstructor()->getMock();
 
         $this->courseGroupActionsDecorator = new CourseGroupActionsDecorator(
-            $this->urlGeneratorMock, $this->translatorMock, $this->courseGroupOffice365ReferenceServiceMock
-        );
+            $this->urlGeneratorMock,
+            $this->translatorMock,
+            $this->courseGroupOffice365ReferenceServiceMock);
     }
 
     /**
@@ -78,11 +80,9 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
         $buttonToolbar = new ButtonToolBar();
         $user = new User();
 
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
-        
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())->method('courseGroupHasLinkedReference')->with(
+            $courseGroup)->will($this->returnValue(true));
+
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, true);
 
         /** @var SplitDropdownButton $splitDropDownButton */
@@ -98,10 +98,8 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
         $buttonToolbar = new ButtonToolBar();
         $user = new User();
 
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(true));
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())->method('courseGroupHasLinkedReference')->with(
+            $courseGroup)->will($this->returnValue(true));
 
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, false);
 
@@ -114,10 +112,8 @@ class CourseGroupActionsDecoratorTest extends ChamiloTestCase
         $buttonToolbar = new ButtonToolBar();
         $user = new User();
 
-        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
-            ->method('courseGroupHasLinkedReference')
-            ->with($courseGroup)
-            ->will($this->returnValue(false));
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())->method('courseGroupHasLinkedReference')->with(
+            $courseGroup)->will($this->returnValue(false));
 
         $this->courseGroupActionsDecorator->addCourseGroupActions($buttonToolbar, $courseGroup, $user, false);
 

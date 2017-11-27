@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\UUID;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
@@ -13,8 +11,8 @@ use Microsoft\Graph\Http\GraphResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
  *
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Office365Repository
@@ -23,27 +21,32 @@ class Office365Repository
     const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
 
     /**
+     *
      * @var \League\OAuth2\Client\Provider\AbstractProvider
      */
     protected $oauthProvider;
 
     /**
+     *
      * @var \Microsoft\Graph\Graph
      */
     protected $graph;
 
     /**
+     *
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface
      */
     protected $accessTokenRepository;
 
     /**
+     *
      * @var AccessToken
      */
     protected $delegatedAccessToken;
 
     /**
-     * A prefix to be used in e.g. group nicknames
+     * A prefix to be used in e.g.
+     * group nicknames
      *
      * @var string
      */
@@ -57,11 +60,9 @@ class Office365Repository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      * @param string $cosnicsPrefix
      */
-    public function __construct(
-        AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository,
-        $cosnicsPrefix = ''
+    public function __construct(AbstractProvider $oauthProvider, Graph $graph,
+        AccessTokenRepositoryInterface $accessTokenRepository, $cosnicsPrefix = '')
 
-    )
     {
         $this->oauthProvider = $oauthProvider;
         $this->graph = $graph;
@@ -77,7 +78,7 @@ class Office365Repository
     protected function initializeApplicationAccessToken()
     {
         $accessToken = $this->accessTokenRepository->getApplicationAccessToken();
-        if (!$accessToken instanceof AccessToken || $accessToken->hasExpired())
+        if (! $accessToken instanceof AccessToken || $accessToken->hasExpired())
         {
             $accessToken = $this->requestNewApplicationAccessToken();
         }
@@ -96,8 +97,7 @@ class Office365Repository
     {
         $accessToken = $this->oauthProvider->getAccessToken(
             'client_credentials',
-            ['resource' => 'https://graph.microsoft.com/']
-        );
+            ['resource' => 'https://graph.microsoft.com/']);
 
         $this->accessTokenRepository->storeApplicationAccessToken($accessToken);
 
@@ -120,15 +120,15 @@ class Office365Repository
      */
     protected function activateDelegatedAccessToken()
     {
-        if (empty($this->delegatedAccessToken) || !$this->delegatedAccessToken instanceof AccessToken)
+        if (empty($this->delegatedAccessToken) || ! $this->delegatedAccessToken instanceof AccessToken)
         {
             $this->requestNewDelegatedAccessToken();
         }
         elseif ($this->delegatedAccessToken->hasExpired())
         {
             $this->delegatedAccessToken = $this->oauthProvider->getAccessToken(
-                'refresh_token', ['refresh_token' => $this->delegatedAccessToken->getRefreshToken()]
-            );
+                'refresh_token',
+                ['refresh_token' => $this->delegatedAccessToken->getRefreshToken()]);
 
             $this->accessTokenRepository->storeDelegatedAccessToken($this->delegatedAccessToken);
         }
@@ -144,13 +144,14 @@ class Office365Repository
     public function authorizeUserByAuthorizationCode($authorizationCode)
     {
         $this->delegatedAccessToken = $this->oauthProvider->getAccessToken(
-            'authorization_code', ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']
-        );
+            'authorization_code',
+            ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']);
 
         $this->accessTokenRepository->storeDelegatedAccessToken($this->delegatedAccessToken);
     }
 
     /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Microsoft\Graph\Model\User
@@ -160,9 +161,8 @@ class Office365Repository
         try
         {
             return $this->executeRequestWithAccessTokenExpirationRetry(
-                $this->graph->createRequest('GET', '/users/' . $user->get_email())
-                    ->setReturnType(\Microsoft\Graph\Model\User::class)
-            );
+                $this->graph->createRequest('GET', '/users/' . $user->get_email())->setReturnType(
+                    \Microsoft\Graph\Model\User::class));
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
@@ -217,22 +217,14 @@ class Office365Repository
             'description' => $groupName,
             'displayName' => $groupName,
             'mailEnabled' => false,
-            'mailNickname' => str_replace(
-                '-', '_',
-                $this->cosnicsPrefix . UUID::v4()
-            ),
-            'groupTypes' => [
-                'Unified',
-            ],
+            'mailNickname' => str_replace('-', '_', $this->cosnicsPrefix . UUID::v4()),
+            'groupTypes' => ['Unified'],
             'securityEnabled' => false,
-            'visibility' => 'private'
-        ];
+            'visibility' => 'private'];
 
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups')
-                ->attachBody($groupData)
-                ->setReturnType(\Microsoft\Graph\Model\Group::class)
-        );
+            $this->graph->createRequest('POST', '/groups')->attachBody($groupData)->setReturnType(
+                \Microsoft\Graph\Model\Group::class));
     }
 
     /**
@@ -245,16 +237,11 @@ class Office365Repository
      */
     public function updateGroup($groupIdentifier, $groupName)
     {
-        $groupData = [
-            'description' => $groupName,
-            'displayName' => $groupName
-        ];
+        $groupData = ['description' => $groupName, 'displayName' => $groupName];
 
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('PATCH', '/groups/' . $groupIdentifier)
-                ->attachBody($groupData)
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
+            $this->graph->createRequest('PATCH', '/groups/' . $groupIdentifier)->attachBody($groupData)->setReturnType(
+                \Microsoft\Graph\Model\Event::class));
     }
 
     /**
@@ -267,9 +254,8 @@ class Office365Repository
     public function getGroup($groupIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier)
-                ->setReturnType(\Microsoft\Graph\Model\Group::class)
-        );
+            $this->graph->createRequest('GET', '/groups/' . $groupIdentifier)->setReturnType(
+                \Microsoft\Graph\Model\Group::class));
     }
 
     /**
@@ -283,10 +269,9 @@ class Office365Repository
     public function subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/owners/$ref')
-                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/owners/$ref')->attachBody(
+                ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])->setReturnType(
+                \Microsoft\Graph\Model\Event::class));
     }
 
     /**
@@ -301,13 +286,13 @@ class Office365Repository
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
             $this->graph->createRequest(
-                'DELETE', '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier . '/$ref'
-            )
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
+                'DELETE',
+                '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier . '/$ref')->setReturnType(
+                \Microsoft\Graph\Model\Event::class));
     }
 
     /**
+     *
      * @param string $groupId
      * @param string $office365UserIdentifier
      *
@@ -318,9 +303,8 @@ class Office365Repository
         try
         {
             return $this->executeRequestWithAccessTokenExpirationRetry(
-                $this->graph->createRequest('GET', '/groups/' . $groupId . '/owners/' . $office365UserIdentifier)
-                    ->setReturnType(\Microsoft\Graph\Model\User::class)
-            );
+                $this->graph->createRequest('GET', '/groups/' . $groupId . '/owners/' . $office365UserIdentifier)->setReturnType(
+                    \Microsoft\Graph\Model\User::class));
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
@@ -343,13 +327,13 @@ class Office365Repository
     public function listGroupOwners($groupIdentifier)
     {
         $response = $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/owners')
-        );
+            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/owners'));
 
         return $this->parseCollectionResponse($response, \Microsoft\Graph\Model\User::class);
     }
 
     /**
+     *
      * @param string $groupIdentifier
      * @param string $office365UserIdentifier
      *
@@ -358,10 +342,9 @@ class Office365Repository
     public function subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier)
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/members/$ref')
-                ->attachBody(['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
+            $this->graph->createRequest('POST', '/groups/' . $groupIdentifier . '/members/$ref')->attachBody(
+                ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $office365UserIdentifier])->setReturnType(
+                \Microsoft\Graph\Model\Event::class));
     }
 
     /**
@@ -376,13 +359,13 @@ class Office365Repository
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
             $this->graph->createRequest(
-                'DELETE', '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier . '/$ref'
-            )
-                ->setReturnType(\Microsoft\Graph\Model\Event::class)
-        );
+                'DELETE',
+                '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier . '/$ref')->setReturnType(
+                \Microsoft\Graph\Model\Event::class));
     }
 
     /**
+     *
      * @param string $groupId
      * @param string $office365UserIdentifier
      *
@@ -393,9 +376,8 @@ class Office365Repository
         try
         {
             return $this->executeRequestWithAccessTokenExpirationRetry(
-                $this->graph->createRequest('GET', '/groups/' . $groupId . '/members/' . $office365UserIdentifier)
-                    ->setReturnType(\Microsoft\Graph\Model\User::class)
-            );
+                $this->graph->createRequest('GET', '/groups/' . $groupId . '/members/' . $office365UserIdentifier)->setReturnType(
+                    \Microsoft\Graph\Model\User::class));
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
@@ -418,8 +400,7 @@ class Office365Repository
     public function listGroupMembers($groupIdentifier)
     {
         $response = $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/members')
-        );
+            $this->graph->createCollectionRequest('GET', '/groups/' . $groupIdentifier . '/members'));
 
         return $this->parseCollectionResponse($response, \Microsoft\Graph\Model\User::class);
     }
@@ -456,10 +437,9 @@ class Office365Repository
         $this->activateDelegatedAccessToken();
 
         $result = $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->graph->createRequest('POST', '/planner/plans')
-                ->attachBody(['owner' => $groupIdentifier, 'title' => $planName])
-                ->setReturnType(\Microsoft\Graph\Model\PlannerPlan::class)
-        );
+            $this->graph->createRequest('POST', '/planner/plans')->attachBody(
+                ['owner' => $groupIdentifier, 'title' => $planName])->setReturnType(
+                \Microsoft\Graph\Model\PlannerPlan::class));
 
         $this->initializeApplicationAccessToken();
 
@@ -467,7 +447,8 @@ class Office365Repository
     }
 
     /**
-     * Parses a collection response. Bugfix for the microsoft graph library parsing everything to a single
+     * Parses a collection response.
+     * Bugfix for the microsoft graph library parsing everything to a single
      * object when an empty collection is returned from the graph API
      *
      * @param \Microsoft\Graph\Http\GraphResponse $graphResponse

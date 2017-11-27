@@ -3,10 +3,10 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -64,17 +64,17 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
         {
             $dataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
+                \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUser(),
                 $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
-                    MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY),
-                \Chamilo\Application\Calendar\Manager::context());
+                    MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY));
 
             $calendarLegend = new Legend($dataProvider);
 
             $time = Request::get('time') ? intval(Request::get('time')) : time();
-            return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array(), $this->getLinkTarget());
+            return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array());
         }
 
         return $this->calendarRenderer;

@@ -7,5 +7,24 @@
         <service
             id="chamilo.libraries.translation.translator_factory"
             class="Chamilo\Libraries\Translation\TranslatorFactory" />
+
+        <service
+            id="chamilo.libraries.platform.translator"
+            class="Chamilo\Libraries\Translation\Translation">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+        </service>
+
+        <service
+            id="chamilo.libraries.translation.translation"
+            class="Chamilo\Libraries\Translation\Translation">
+            <factory
+                class="Chamilo\Libraries\Translation\Translation"
+                method="getInstance" />
+        </service>
     </services>
 </container>

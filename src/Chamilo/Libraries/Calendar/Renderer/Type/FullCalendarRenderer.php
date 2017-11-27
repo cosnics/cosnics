@@ -251,7 +251,8 @@ locale : "nl",
                     Application::PARAM_ACTION => 'FullCalendarEvents'));
 
             $parsedEventSource = '{
-                                        url: ' . json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
+                                        url: ' .
+                 json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
                                   }';
 
             $parsedEventSources[] = $parsedEventSource;

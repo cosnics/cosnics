@@ -1,10 +1,8 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
@@ -22,7 +20,7 @@ class DeleterComponent extends Manager
 
     public function run()
     {
-        if (!$this->is_allowed(WeblcmsRights::DELETE_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::DELETE_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -36,7 +34,7 @@ class DeleterComponent extends Manager
             $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID];
         }
 
-        if (!is_array($publication_ids))
+        if (! is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
@@ -45,8 +43,7 @@ class DeleterComponent extends Manager
         {
             if ($publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
                 ContentObjectPublication::class_name(),
-                $pid
-            ))
+                $pid))
             {
                 $publication->delete();
             }
@@ -56,7 +53,7 @@ class DeleterComponent extends Manager
 
         if ($ids)
         {
-            if (!is_array($ids))
+            if (! is_array($ids))
             {
                 $ids = array($ids);
             }
@@ -66,7 +63,7 @@ class DeleterComponent extends Manager
             {
                 $cg = DataManager::retrieve_by_id(CourseGroup::class_name(), $group_id);
 
-                if (!$cg instanceof CourseGroup)
+                if (! $cg instanceof CourseGroup)
                 {
                     continue;
                 }
@@ -79,8 +76,7 @@ class DeleterComponent extends Manager
             $message = Translation::get(
                 'ObjectDeleted',
                 array('OBJECT' => Translation::get('CourseGroup')),
-                Utilities::COMMON_LIBRARIES
-            );
+                Utilities::COMMON_LIBRARIES);
             $this->redirect($message, '', array('course_group' => null, self::PARAM_ACTION => null));
         }
 

@@ -24,7 +24,6 @@ abstract class FullRenderer extends ViewRenderer
             $this->getDataProvider(),
             $this->getLegend(),
             $this->getDisplayTime(),
-            null,
             null);
 
         return $renderer->render();

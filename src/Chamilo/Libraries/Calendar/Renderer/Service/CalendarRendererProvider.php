@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 
@@ -186,8 +184,8 @@ abstract class CalendarRendererProvider implements
 
                 foreach ($events as $event)
                 {
-                    $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
-                    $parsedEvents = $recurrenceCalculator->getEvents();
+                    $recurrenceCalculator = new RecurrenceCalculator();
+                    $parsedEvents = $recurrenceCalculator->getEvents($event, $startTime, $endTime);
 
                     foreach ($parsedEvents as $parsedEvent)
                     {
@@ -223,8 +221,7 @@ abstract class CalendarRendererProvider implements
     {
         if ($this instanceof VisibilitySupport)
         {
-            $ajaxVisibilityClassName = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $this->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
+            $ajaxVisibilityClassName = $this->getVisibilityContext() . '\Ajax\Component\CalendarEventVisibilityComponent';
 
             if (! class_exists($ajaxVisibilityClassName))
             {
@@ -240,15 +237,6 @@ abstract class CalendarRendererProvider implements
         {
             return false;
         }
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsActions()
-    {
-        return $this instanceof ActionSupport;
     }
 
     /**

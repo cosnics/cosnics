@@ -1,19 +1,13 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
-use Psr\Log\InvalidArgumentException;
 
 /**
- * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
  *
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class IntegrationLauncherComponent extends Manager
@@ -24,7 +18,6 @@ class IntegrationLauncherComponent extends Manager
      * Runs this component and returns it's result
      *
      * @return \Chamilo\Libraries\Format\Response\Response | string
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     public function run()
@@ -39,11 +32,11 @@ class IntegrationLauncherComponent extends Manager
 
         return $this->getApplicationFactory()->getApplication(
             $integrationPackage,
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
-        )->run();
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 
     /**
+     *
      * @return array
      */
     public function get_additional_parameters()

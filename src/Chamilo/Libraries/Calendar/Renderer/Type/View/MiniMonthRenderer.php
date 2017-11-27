@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
@@ -20,47 +18,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class MiniMonthRenderer extends ViewRenderer
 {
     use \Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
-
-    /**
-     * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
-     * MiniMonthCalendar :: PERIOD_DAY;
-     *
-     * @var integer
-     */
-    private $markPeriod;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param integer $displayTime
-     * @param string $linkTarget
-     * @param integer $markPeriod
-     */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '', $markPeriod = null)
-    {
-        $this->markPeriod = $markPeriod;
-
-        parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getMarkPeriod()
-    {
-        return $this->markPeriod;
-    }
-
-    /**
-     *
-     * @param integer $markPeriod
-     */
-    public function setMarkPeriod($markPeriod)
-    {
-        $this->markPeriod = $markPeriod;
-    }
 
     /**
      *

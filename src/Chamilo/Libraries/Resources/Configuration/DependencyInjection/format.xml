@@ -28,6 +28,14 @@
         </service>
 
         <service
+            id="chamilo.libraries.format.utilities.resource_manager"
+            class="Chamilo\Libraries\Format\Utilities\ResourceManager">
+            <factory
+                class="Chamilo\Libraries\Format\Utilities\ResourceManager"
+                method="getInstance" />
+        </service>
+
+        <service
             id="chamilo.libraries.format.utilities.resource_processor"
             class="Chamilo\Libraries\Format\Utilities\ResourceProcessor">
             <argument

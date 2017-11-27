@@ -52,7 +52,8 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
                 'title' => $event->getTitle(),
                 'url' => $event->getUrl(),
                 'start' => date('c', $event->getStartDate()),
-                'end' => date('c', $event->getEndDate()));
+                'end' => date('c', $event->getEndDate()),
+                'allDay' => $event->isAllDay());
         }
 
         $response = new JsonResponse($eventsCollection);
@@ -93,10 +94,10 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
+                \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUserCalendar(),
                 $this->getUser(),
-                $this->getDisplayParameters(),
-                \Chamilo\Application\Calendar\Manager::context());
+                $this->getDisplayParameters());
         }
 
         return $this->calendarRendererProvider;

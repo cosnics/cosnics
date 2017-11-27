@@ -47,7 +47,7 @@ class EventParser
      * @param integer $toDate
      */
     public function __construct(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, 
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         Publication $publication, $fromDate, $toDate)
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
@@ -136,38 +136,39 @@ class EventParser
     public function getEvents()
     {
         $events = array();
-        
+
         $publisher = $this->getPublication()->get_publisher();
         $publishingUser = $this->getPublication()->get_publication_publisher();
-        
+
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
-            $this->getPublication()->get_publication_object(), 
-            $this->getFromDate(), 
-            $this->getToDate(), 
+            $this->getPublication()->get_publication_object(),
+            $this->getFromDate(),
+            $this->getToDate(),
             Event::class_name());
-        
+
         $parsedEvents = $parser->getEvents();
+
         foreach ($parsedEvents as &$parsedEvent)
         {
             if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
             {
                 $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }
-            
+
             $parsedEvent->setId($this->getPublication()->get_id());
             $parsedEvent->setContext(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
-            
+
             $parameters = array();
             $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Calendar\Extension\Personal\Manager::context();
             $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW;
             $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID] = $this->getPublication()->get_id();
-            
+
             $redirect = new Redirect($parameters);
             $parsedEvent->setUrl($redirect->getUrl());
-            
+
             $events[] = $parsedEvent;
         }
-        
+
         return $events;
     }
 }

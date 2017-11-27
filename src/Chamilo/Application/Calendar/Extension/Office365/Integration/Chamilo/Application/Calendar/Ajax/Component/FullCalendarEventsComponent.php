@@ -35,9 +35,7 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
      */
     public function run()
     {
-        $calendarEventDataProvider = $this->getCalendarEventDataProvider();
-
-        $events = $calendarEventDataProvider->getEvents(
+        $events = $this->getCalendarEventDataProvider()->getEvents(
             $this->getCalendarRendererProvider(),
             CalendarRendererProvider::SOURCE_TYPE_BOTH,
             $this->getFromDate(),
@@ -47,7 +45,6 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
 
         foreach ($events as $event)
         {
-
             $eventsCollection[] = array(
                 'title' => $event->getTitle(),
                 'url' => $event->getUrl(),
@@ -94,10 +91,10 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
+                \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUserCalendar(),
                 $this->getUser(),
-                $this->getDisplayParameters(),
-                \Chamilo\Application\Calendar\Manager::context());
+                $this->getDisplayParameters());
         }
 
         return $this->calendarRendererProvider;

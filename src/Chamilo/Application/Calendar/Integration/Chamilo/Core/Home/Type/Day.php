@@ -73,10 +73,10 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
         {
             $dataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
+                \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUser(),
                 $this->getUser(),
-                array(),
-                \Chamilo\Application\Calendar\Manager::context());
+                array());
 
             $calendarLegend = new Legend($dataProvider);
             $time = Request::get('time') ? intval(Request::get('time')) : time();
@@ -92,7 +92,6 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
                 $calendarLegend,
                 $time,
                 array(),
-                $this->getLinkTarget(),
                 $hourStep,
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8),
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17),

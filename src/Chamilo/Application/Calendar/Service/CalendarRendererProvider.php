@@ -5,14 +5,8 @@ use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -22,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
-    VisibilitySupport, ActionSupport
+    VisibilitySupport
 {
 
     /**
@@ -45,8 +39,8 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(VisibilityService $visibilityService, User $dataUser, User $viewingUser,
-        $displayParameters, $visibilityContext)
+    public function __construct(VisibilityService $visibilityService, $visibilityContext, User $dataUser,
+        User $viewingUser, $displayParameters)
     {
         $this->visibilityService = $visibilityService;
         $this->visibilityContext = $visibilityContext;
@@ -103,65 +97,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
         $visibility = $this->getVisibilityService()->findVisibilityBySourceAndUserIdentifier($source, $userIdentifier);
         return ! $visibility instanceof Visibility;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
-     */
-    public function getEventActions($event)
-    {
-        $actions = array();
-
-        if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager::context())
-        {
-            $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                $this->getPublicationEditingUrl($event->getId()),
-                ToolbarItem::DISPLAY_ICON);
-
-            $actions[] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                $this->getPublicationDeletingUrl($event->getId()),
-                ToolbarItem::DISPLAY_ICON,
-                true);
-        }
-
-        return $actions;
-    }
-
-    /**
-     *
-     * @param integer $eventIdentifier
-     * @return string
-     */
-    private function getPublicationEditingUrl($eventIdentifier)
-    {
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::context(),
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_EDIT,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier));
-
-        return $redirect->getUrl();
-    }
-
-    /**
-     *
-     * @param integer $eventIdentifier
-     * @return string
-     */
-    private function getPublicationDeletingUrl($eventIdentifier)
-    {
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::context(),
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_DELETE,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier));
-
-        return $redirect->getUrl();
     }
 
     /**

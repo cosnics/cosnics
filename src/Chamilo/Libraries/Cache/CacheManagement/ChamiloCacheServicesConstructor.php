@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
-use Chamilo\Application\Calendar\Extension\Office365\Service\RequestCacheService;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;
@@ -178,10 +177,10 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_repository_type_selector',
             new TypeSelectorCacheService(new TypeSelectorFactory()));
 
-//        $cacheManager->addCacheService(
-//            'chamilo_office365_requests',
-//            new RequestCacheService(
-//                new \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository('', '', '', '')));
+        // $cacheManager->addCacheService(
+        // 'chamilo_office365_requests',
+        // new RequestCacheService(
+        // new \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository('', '', '', '')));
 
         $googleCalendarRepository = new \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository(
             '',
