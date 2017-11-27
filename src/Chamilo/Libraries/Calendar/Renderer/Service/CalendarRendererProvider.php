@@ -21,13 +21,7 @@ abstract class CalendarRendererProvider implements
      *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
-    private $dataUser;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $viewingUser;
+    private $user;
 
     /**
      *
@@ -43,51 +37,31 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string[] $displayParameters;
      */
-    public function __construct(User $dataUser, User $viewingUser, $displayParameters)
+    public function __construct(User $user, $displayParameters)
     {
-        $this->dataUser = $dataUser;
-        $this->viewingUser = $viewingUser;
+        $this->user = $user;
         $this->displayParameters = $displayParameters;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getDataUser()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUser()
      */
-    public function getDataUser()
+    public function getUser()
     {
-        return $this->dataUser;
+        return $this->user;
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      */
-    public function setDataUser(User $dataUser)
+    public function setUser(User $user)
     {
-        $this->dataUser = $dataUser;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getViewingUser()
-     */
-    public function getViewingUser()
-    {
-        return $this->viewingUser;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     */
-    public function setViewingUser(User $viewingUser)
-    {
-        $this->viewingUser = $viewingUser;
+        $this->user = $user;
     }
 
     /**

@@ -51,11 +51,11 @@ abstract class CalendarEventDataProvider extends InternalCalendar
         $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getUser(),
             $packageContext,
             $packageName))
         {
-            $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
+            $publications = $this->getPublications($calendarRendererProvider->getUser(), $fromDate, $toDate);
 
             foreach ($publications as $publication)
             {
@@ -63,7 +63,7 @@ abstract class CalendarEventDataProvider extends InternalCalendar
                 $course->setId($publication->get_course_id());
 
                 if (! $rightsService->canUserViewPublication(
-                    $calendarRendererProvider->getDataUser(),
+                    $calendarRendererProvider->getUser(),
                     $publication,
                     $course))
                 {

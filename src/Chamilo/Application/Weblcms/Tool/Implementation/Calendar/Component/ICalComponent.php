@@ -139,7 +139,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $this->get_course(),
                 $this->get_tool_id(),
                 $user,
-                $user,
                 array());
         }
 

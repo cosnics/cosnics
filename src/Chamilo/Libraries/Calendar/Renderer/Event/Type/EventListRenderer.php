@@ -31,7 +31,9 @@ class EventListRenderer extends EventRenderer
 
         $html = array();
 
-        if (! $this->getRenderer()->isSourceVisible($event->getSource()))
+        if (! $this->getRenderer()->isSourceVisible(
+            $event->getSource(),
+            $this->getRenderer()->getDataProvider()->getUser()->getId()))
         {
             $rowClasses = ' event-container-hidden';
         }

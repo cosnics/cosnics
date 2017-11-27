@@ -75,7 +75,6 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUser(),
-                $this->getUser(),
                 array());
 
             $calendarLegend = new Legend($dataProvider);

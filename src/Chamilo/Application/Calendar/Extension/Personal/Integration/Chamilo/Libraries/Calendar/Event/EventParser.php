@@ -58,7 +58,7 @@ class EventParser
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @return \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
      */
     public function getCalendarRendererProvider()
     {
@@ -67,7 +67,7 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $renderer
      */
     public function setCalendarRendererProvider(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
@@ -150,7 +150,7 @@ class EventParser
 
         foreach ($parsedEvents as &$parsedEvent)
         {
-            if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
+            if ($publisher != $this->getCalendarRendererProvider()->getUser()->getId())
             {
                 $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }

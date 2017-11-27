@@ -102,7 +102,7 @@ class ListRenderer extends FullRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    if (! $this->isSourceVisible($dateEvent->getSource()))
+                    if (! $this->isSourceVisible($dateEvent->getSource(), $this->getDataProvider()->getUser()->getId()))
                     {
                         $hiddenEvents ++;
                     }

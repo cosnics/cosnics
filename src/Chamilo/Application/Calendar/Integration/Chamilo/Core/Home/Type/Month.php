@@ -66,7 +66,6 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUser(),
-                $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                     MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY));

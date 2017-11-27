@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 
 /**
  *
@@ -20,7 +20,7 @@ class LegendRenderer
      *
      * @var \Chamilo\Libraries\Calendar\Service\LegendService
      */
-    private $legendService;
+    private $calendarSourceService;
 
     /**
      *
@@ -42,15 +42,15 @@ class LegendRenderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Service\LegendService $legendService
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarSourceService $calendarSourceService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
      */
-    public function __construct(LegendService $legendService, Translator $translator, PathBuilder $pathBuilder,
-        ResourceManager $resourceManager)
+    public function __construct(CalendarSourceService $calendarSourceService, Translator $translator,
+        PathBuilder $pathBuilder, ResourceManager $resourceManager)
     {
-        $this->legendService = $legendService;
+        $this->calendarSourceService = $calendarSourceService;
         $this->translator = $translator;
         $this->pathBuilder = $pathBuilder;
         $this->resourceManager = $resourceManager;
@@ -58,11 +58,11 @@ class LegendRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\LegendService
+     * @return \Chamilo\Libraries\Calendar\Service\CalendarSourceService
      */
-    protected function getLegendService()
+    protected function getCalendarSourceService()
     {
-        return $this->legendService;
+        return $this->calendarSourceService;
     }
 
     /**
@@ -142,7 +142,7 @@ class LegendRenderer
 
                 if ($dataProvider->supportsVisibility())
                 {
-                    $isSourceVisible = $dataProvider->isSourceVisible($source);
+                    $isSourceVisible = $dataProvider->isSourceVisible($source, $dataProvider->getUser()->getId());
                     $eventClasses = ! $isSourceVisible ? ' event-container-source-faded' : '';
                 }
                 else

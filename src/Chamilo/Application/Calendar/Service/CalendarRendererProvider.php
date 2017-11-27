@@ -39,13 +39,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(VisibilityService $visibilityService, $visibilityContext, User $dataUser,
-        User $viewingUser, $displayParameters)
+    public function __construct(VisibilityService $visibilityService, $visibilityContext, User $user, $displayParameters)
     {
         $this->visibilityService = $visibilityService;
         $this->visibilityContext = $visibilityContext;
 
-        parent::__construct($dataUser, $viewingUser, $displayParameters);
+        parent::__construct($user, $displayParameters);
     }
 
     /**
@@ -88,13 +87,8 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
      */
-    public function isSourceVisible($source, $userIdentifier = null)
+    public function isSourceVisible($source, $userIdentifier)
     {
-        if (is_null($userIdentifier))
-        {
-            $userIdentifier = $this->getViewingUser()->getId();
-        }
-
         $visibility = $this->getVisibilityService()->findVisibilityBySourceAndUserIdentifier($source, $userIdentifier);
         return ! $visibility instanceof Visibility;
     }

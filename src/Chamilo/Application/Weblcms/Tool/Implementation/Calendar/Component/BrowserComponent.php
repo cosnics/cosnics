@@ -161,7 +161,6 @@ class BrowserComponent extends Manager
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getDefaultComponent(),
                 $this->get_user(),
-                $this->get_user(),
                 $displayParameters);
         }
 

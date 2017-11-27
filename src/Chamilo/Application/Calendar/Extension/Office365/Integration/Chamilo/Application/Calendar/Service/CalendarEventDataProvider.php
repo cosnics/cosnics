@@ -47,7 +47,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 
             $identifier = [
                 __METHOD__,
-                $calendarRendererProvider->getDataUser()->getId(),
+                $calendarRendererProvider->getUser()->getId(),
                 $calendarIdentifiers,
                 $requestedSourceType,
                 $fromDate,
@@ -65,7 +65,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                         $events,
                         $this->getCalendarEvents(
                             $calendarIdentifier,
-                            $calendarRendererProvider->getDataUser(),
+                            $calendarRendererProvider->getUser(),
                             $fromDate,
                             $toDate));
                 }
@@ -99,14 +99,14 @@ class CalendarEventDataProvider extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getUser(),
             self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
 
         $calendarIdentifiers = array();
 
         if ($availabilities->count() == 0)
         {
-            $availableCalendars = $this->getCalendars($calendarRendererProvider->getDataUser());
+            $availableCalendars = $this->getCalendars($calendarRendererProvider->getUser());
 
             foreach ($availableCalendars as $availableCalendar)
             {

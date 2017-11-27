@@ -51,7 +51,7 @@ class CalendarEventDataProvider extends MixedCalendar
         $availabilityService = $this->getAvailabilityService();
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getUser(),
             $package,
             'personal'))
         {
@@ -63,7 +63,7 @@ class CalendarEventDataProvider extends MixedCalendar
         }
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getUser(),
             $package,
             'shared'))
         {
@@ -91,7 +91,7 @@ class CalendarEventDataProvider extends MixedCalendar
     {
         $repository = new CalendarEventDataProviderRepository();
         $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
-            $calendarRendererProvider->getDataUser());
+            $calendarRendererProvider->getUser());
 
         return $this->getEventsByParameters(
             $calendarRendererProvider,
@@ -114,7 +114,7 @@ class CalendarEventDataProvider extends MixedCalendar
     {
         $repository = new CalendarEventDataProviderRepository();
         $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
-            $calendarRendererProvider->getDataUser());
+            $calendarRendererProvider->getUser());
 
         return $this->getEventsByParameters($calendarRendererProvider, $recordRetrievesParameters, $fromDate, $toDate);
     }

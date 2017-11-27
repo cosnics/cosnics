@@ -123,7 +123,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
                 $user,
-                $user,
                 array());
         }
 

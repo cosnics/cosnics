@@ -70,7 +70,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
 
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(),
+            $calendarRendererProvider->getUser(),
             $package);
 
         $calendarIdentifiers = array();

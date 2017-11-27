@@ -76,8 +76,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
-                $this->get_user(),
-                $this->get_user(),
+                $this->getUser(),
                 $displayParameters);
         }
 

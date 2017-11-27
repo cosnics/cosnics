@@ -95,7 +95,6 @@ class FullCalendarEventsComponent extends \Chamilo\Application\Weblcms\Ajax\Mana
                 $this->getService('chamilo.application.calendar.service.visibility_service'),
                 \Chamilo\Application\Calendar\Manager::context(),
                 $this->getUserCalendar(),
-                $this->getUser(),
                 $this->getDisplayParameters());
         }
 
