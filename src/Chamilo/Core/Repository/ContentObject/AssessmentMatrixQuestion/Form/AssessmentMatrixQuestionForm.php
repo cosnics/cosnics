@@ -41,6 +41,13 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                     true) . 'AssessmentMatrixQuestion.js'));
     }
 
+    public function prepareTabs()
+    {
+        $this->addDefaultTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
+    }
+
     /**
      * Adds the options and matches to the form
      */
