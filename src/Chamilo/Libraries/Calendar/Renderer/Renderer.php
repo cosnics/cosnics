@@ -13,6 +13,8 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
 abstract class Renderer
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
 
     /**
      *
@@ -33,6 +35,7 @@ abstract class Renderer
         }
 
         $this->dataProvider = $dataProvider;
+        $this->initializeContainer();
     }
 
     /**

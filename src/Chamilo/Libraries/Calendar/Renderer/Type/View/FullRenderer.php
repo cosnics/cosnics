@@ -95,7 +95,7 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
-        $html[] = $this->renderMiniMonth();
+//         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = $this->getJumpForm()->render();
         $html[] = '</div>';

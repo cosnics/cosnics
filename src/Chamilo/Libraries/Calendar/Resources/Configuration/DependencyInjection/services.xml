@@ -41,5 +41,16 @@
             factory-method="getCalendarConfiguration">
         </service>
 
+        <service
+            id="chamilo.libraries.calendar.service.table.month_calendar_builder"
+            class="Chamilo\Libraries\Calendar\Service\Table\MonthCalendarBuilder">
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.table.calendar_configuration" />
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+        </service>
+
     </services>
 </container>

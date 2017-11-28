@@ -18,7 +18,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     public function __construct($displayTime)
     {
-        parent::__construct($displayTime, null, array('table-calendar-mini'));
+        parent::__construct($displayTime, array('table-calendar-mini'));
     }
 
     /**

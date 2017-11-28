@@ -101,7 +101,7 @@ abstract class Calendar extends HTML_Table
      *
      * @return integer
      */
-    abstract public function getStartTime();
+    abstract public function getStartTime($firstDayOfTheWeek = null);
 
     /**
      * Gets the end date which will be displayed by this calendar.

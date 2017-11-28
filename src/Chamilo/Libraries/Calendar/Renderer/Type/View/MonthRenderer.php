@@ -5,7 +5,6 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -24,9 +23,29 @@ class MonthRenderer extends FullTableRenderer
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-        $dayUrlTemplate = new Redirect($displayParameters);
 
-        return new MonthCalendar($this->getDisplayTime(), $dayUrlTemplate->getUrl(), array('table-calendar-month'));
+        return $this->getMonthCalendarBuilder()->buildCalendar(
+            $this->getDisplayTime(),
+            $displayParameters,
+            array('table-calendar-month'));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Service\Table\MonthCalendarBuilder
+     */
+    protected function getMonthCalendarBuilder()
+    {
+        return $this->getService('chamilo.libraries.calendar.service.table.month_calendar_builder');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
     }
 
     /**
@@ -35,10 +54,11 @@ class MonthRenderer extends FullTableRenderer
      */
     public function renderFullCalendar()
     {
+        $configuration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
 
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
+        $startTime = $calendar->getStartTime($this->getDisplayTime(), $configuration->getFirstDayOfTheWeek());
+        $endTime = $calendar->getEndTime($this->getDisplayTime());
 
         $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;

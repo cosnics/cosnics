@@ -119,7 +119,7 @@ class LegendRenderer
      */
     public function render(CalendarRendererProviderInterface $dataProvider)
     {
-        $result = array();
+        $result = [];
 
         if ($this->hasSources())
         {
@@ -128,7 +128,7 @@ class LegendRenderer
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
             $result[] = '<h4 class="panel-title">' .
-                 $this->getTranslator()->trans('Legend', array(), 'Chamilo\Libraries\Calendar') . '</h4>';
+                 $this->getTranslator()->trans('Legend', [], 'Chamilo\Libraries\Calendar') . '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
 
@@ -185,7 +185,7 @@ class LegendRenderer
                     $notificationMessageManager = new NotificationMessageManager();
                     $notificationMessageManager->addMessage(
                         new NotificationMessage(
-                            $this->getTranslator()->trans('AllEventSourcesHidden', array(), 'Chamilo\Libraries\Calendar'),
+                            $this->getTranslator()->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
                             NotificationMessage::TYPE_WARNING));
                 }
             }
