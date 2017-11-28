@@ -25,5 +25,21 @@
                 type="service"
                 id="chamilo.libraries.format.utilities.resource_manager" />
         </service>
+
+        <service
+            id="chamilo.libraries.calendar.service.calendar_configuration_factory"
+            class="Chamilo\Libraries\Calendar\Service\CalendarConfigurationFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.configuration.local_setting" />
+        </service>
+
+        <service
+            id="chamilo.libraries.calendar.table.calendar_configuration"
+            class="Chamilo\Libraries\Calendar\Table\CalendarConfiguration"
+            factory-service="chamilo.libraries.calendar.service.calendar_configuration_factory"
+            factory-method="getCalendarConfiguration">
+        </service>
+
     </services>
 </container>
