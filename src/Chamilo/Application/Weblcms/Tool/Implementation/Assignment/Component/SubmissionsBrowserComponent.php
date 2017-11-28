@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -310,7 +311,6 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         $html = array();
         
         $html[] = $this->render_header($display_add);
-        $html[] = $this->generate_navigation_bar_html();
         $html[] = '<div class="panel panel-default">';
 
         $html[] = $this->generate_assignment_details_html();
@@ -347,20 +347,6 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         return implode(PHP_EOL, $html);
     }
 
-    private function generate_navigation_bar_html()
-    {
-        $html = array();
-        $html[] = '<div class="announcements level_2" style="background-image:url(' .
-             Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ';width=100%">';
-        
-        if ($this->assignment->get_visibility_submissions() || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            $html[] = $this->generate_submitters_navigator();
-        }
-        $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div><br/>';
-        return implode(PHP_EOL, $html);
-    }
 
     private function generate_submitters_navigator()
     {
@@ -623,6 +609,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
+            $submittersNavigatorActions = new ButtonGroup();
             
             if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
             {
@@ -651,6 +638,42 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
                                 self::PARAM_SUBMITTER_TYPE => $this->get_submitter_type(), 
                                 \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW)), 
                         ToolbarItem::DISPLAY_ICON_AND_LABEL));
+
+                $previous_submitter_url = $this->get_previous_submitter_url();
+
+                $submitterPosition =
+                    $this->get_position_submitter($this->get_submitter_type(), $this->get_target_id());
+
+                $submittersCount = $this->get_count_submitters($this->get_submitter_type());
+
+                $next_submitter_url = $this->get_next_submitter_url();
+
+                $submittersNavigatorActions->addButton(
+                    new Button(
+                        Translation::get('PreviousSubmitter'),
+                        new FontAwesomeGlyph('backward'),
+                        $previous_submitter_url,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+
+                $submittersNavigatorActions->addButton(
+                    new Button(
+                        '<span class="badge" style="color: white; background-color: #5bc0de;">' . $submitterPosition . ' / ' . $submittersCount . '</span>',
+                        null,
+                        '#',
+                        ToolbarItem::DISPLAY_LABEL
+                    )
+                );
+
+                $submittersNavigatorActions->addButton(
+                    new Button(
+                        Translation::get('NextSubmitter'),
+                        new FontAwesomeGlyph('forward'),
+                        $next_submitter_url,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
             
             if ($display_add)
@@ -666,7 +689,8 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
                         ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
             $buttonToolbar->addButtonGroup($commonActions);
-            
+            $buttonToolbar->addButtonGroup($submittersNavigatorActions);
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
         

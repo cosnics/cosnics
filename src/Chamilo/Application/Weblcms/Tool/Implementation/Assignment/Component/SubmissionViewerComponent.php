@@ -417,8 +417,6 @@ class SubmissionViewerComponent extends SubmissionsManager
     {
         $html = array();
 
-        $html[] = $this->display_navigation_bar();
-
         $tabs = new DynamicTabsRenderer('admin');
         $general_info_section = new SubmissionDetailGeneralInfoSection($this);
 
@@ -472,31 +470,9 @@ class SubmissionViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Displays the navigation bar.
-     */
-    private function display_navigation_bar()
-    {
-        $html = array();
-
-//        $html[] = '<div class="announcements level_2" style="background-image:url(' .
-//            Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ';width=100%;">';
-        $html[] = '<div class="row">';
-        if ($this->assignment->get_visibility_submissions() || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            $html[] = $this->generate_submitters_navigator();
-        }
-        $html[] = $this->generate_submissions_navigator();
-        $html[] = '</div>';
-//        $html[] = '</div>';
-//        $html[] = '<div class="clear">&nbsp;</div><br/>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      * Gets the url associated with the previous submission submitted earlier (when ordered chronologically).
      *
-     * @return type the url associated with the submission submitted earlier or null if none found.
+     * @return string
      */
     private function get_earlier_submission_url()
     {
@@ -516,7 +492,7 @@ class SubmissionViewerComponent extends SubmissionsManager
     /**
      * Gets the url associated with the next submission submitted later (when ordered chronologically).
      *
-     * @return type the url associated with the submission submitted later or null if none found.
+     * @return string
      */
     private function get_later_submission_url()
     {
@@ -534,187 +510,9 @@ class SubmissionViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Generates the HTML associated with the navigation bar for the submissions of the current submitter.
-     *
-     * @return type the HTML associated with the submissions navigation bar.
-     */
-    private function generate_submissions_navigator()
-    {
-        $html = array();
-
-        $html[] = '<div style="text-align:center;">';
-        $earlier_submission_url = $this->get_earlier_submission_url();
-        if ($earlier_submission_url)
-        {
-            $html[] = '<a href="' . $earlier_submission_url . '">';
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Prev') . '"/>';
-            $html[] = Translation::get('EarlierSubmission');
-            $html[] = '</a>';
-        }
-        else
-        {
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/PrevNa') . '"/>';
-            $html[] = Translation::get('EarlierSubmission');
-        }
-        $submissionPosition = $this->get_position_submissions($this->get_submission_id());
-        $submissionsCount = $this->get_count_submissions();
-
-        $html[] = ' [' . $submissionPosition . '/' . $submissionsCount . '] ';
-
-        $later_submission_url = $this->get_later_submission_url();
-        if ($later_submission_url)
-        {
-            $html[] = '<a href="' . $later_submission_url . '">';
-            $html[] = Translation::get('LaterSubmission');
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Next') . '"/>';
-            $html[] = '</a>';
-        }
-        else
-        {
-            $html[] = Translation::get('LaterSubmission');
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/NextNa') . '"/>';
-        }
-        $html[] = '</div>';
-
-        $html = array();
-//        $html[] = '<div style="float: left;">';
-//        $html[] = '<div style="border-radius: 5px; padding: 7px 15px; margin: 10px 10px 10px 0; background-color: #23c6c8; color: white;">';
-//        $html[] = '<div class="row">';
-//        $html[] = '<div class="col-xs-3">';
-//        $html[] = '<i class="fa fa-file-text-o fa-2x" style="margin-top: 7px; margin-right: 10px;"></i>';
-//        $html[] = '</div>';
-//        $html[] = '<div class="col-xs-9 text-right" style="font-size: 2em;">';
-//        $html[] = $submissionPosition . '/' . $submissionsCount;
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-
-        $html[] = '<div class="col-lg-6 col-sm-4">';
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-left">';
-        $html[] = '<h5 class="panel-title">';
-        $html[] = '<i class="fa fa-file-text-o" style="font-size: 16px; margin-top: 2px; margin-right: 3px;"></i>';
-        $html[] = Translation::get('Submissions');
-        $html[] = '</h5>';
-        $html[] = '</div>';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<span class="badge" style="color: white; background-color: #5bc0de;">';
-        $html[] = $submissionPosition . ' / ' . $submissionsCount;
-        $html[] = '</span>';
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-
-        $html[] = '<div class="btn-group">';
-        $html[] = '<button class="btn btn-default"><i class="fa fa-backward" style="font-size: 16px; margin-right: 10px;"></i>' . Translation::get('EarlierSubmission') . '</button>';
-        $html[] = '<div class="btn btn-default"><span class="badge" style="color: white; background-color: #28a745;">' . $submissionPosition . ' / ' . $submissionsCount . '</span></div>';
-        $html[] = '<button class="btn btn-default"><i class="fa fa-forward" style="font-size: 16px; margin-right: 10px;"></i>' . Translation::get('LaterSubmission') . '</button>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Creates the navigation bar for navigating between submitters.
-     *
-     * @return type the HTML associated with the submitters navigation bar.
-     */
-    private function generate_submitters_navigator()
-    {
-        $html = array();
-        $html[] = '<div style="text-align:center;">';
-        $previous_submitter_url = $this->get_previous_submitter_url();
-        if ($previous_submitter_url)
-        {
-            $html[] = '<a href="' . $previous_submitter_url . '">';
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Prev') . '"/>';
-            $html[] = Translation::get('PreviousSubmitter');
-            $html[] = '</a>';
-        }
-        else
-        {
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/PrevNa') . '"/>';
-            $html[] = Translation::get('PreviousSubmitter');
-        }
-        $submitterPosition =
-            $this->get_position_submitter_with_submissions($this->get_submitter_type(), $this->get_target_id());
-
-        $submittersCount = $this->get_count_submitters($this->get_submitter_type());
-
-        $html[] = ' [' . $submitterPosition . '/' . $submittersCount . '] ';
-        $next_submitter_url = $this->get_next_submitter_url();
-        if ($next_submitter_url)
-        {
-            $html[] = '<a href="' . $next_submitter_url . '">';
-            $html[] = Translation::get('NextSubmitter');
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/Next') . '"/>';
-            $html[] = '</a>';
-        }
-        else
-        {
-            $html[] = Translation::get('NextSubmitter');
-            $html[] = '<img src="' . Theme::getInstance()->getCommonImagePath('Action/NextNa') . '"/>';
-        }
-        $html[] = '</div>';
-
-        $html = array();
-
-        $html[] = '<div class="col-lg-6 col-sm-4">';
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-left">';
-        $html[] = '<h5 class="panel-title">';
-        $html[] = '<i class="fa fa-user" style="font-size: 16px; margin-top: 2px; margin-right: 3px;"></i>';
-        $html[] = Translation::get('Submitters');
-        $html[] = '</h5>';
-        $html[] = '</div>';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<span class="badge" style="color: white; background-color: #28a745;">';
-        $html[] = $submitterPosition . ' / ' . $submittersCount;
-        $html[] = '</span>';
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-
-        $html[] = '<div class="btn-group">';
-        $html[] = '<button class="btn btn-default"><i class="fa fa-backward" style="font-size: 16px; margin-right: 10px;"></i>' . Translation::get('PreviousSubmitter') . '</button>';
-        $html[] = '<div class="btn btn-default"><span class="badge" style="color: white; background-color: #28a745;">' . $submitterPosition . ' / ' . $submittersCount . '</span></div>';
-        $html[] = '<button class="btn btn-default"><i class="fa fa-forward" style="font-size: 16px; margin-right: 10px;"></i>' . Translation::get('NextSubmitter') . '</button>';
-        $html[] = '</div>';
-
-//        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-
-//        $html[] = '<div style="float: left;">';
-//        $html[] = '<div style="border-radius: 5px; padding: 7px 15px; margin: 10px 10px 10px 0; background-color: #1ab394; color: white;">';
-//        $html[] = '<div class="row">';
-//        $html[] = '<div class="col-xs-3">';
-//        $html[] = '<i class="fa fa-user fa-2x" style="margin-top: 7px; margin-right: 5px;"></i>';
-//        $html[] = '</div>';
-//        $html[] = '<div class="col-xs-9 text-right" style="font-size: 2em;">';
-//        $html[] = $submitterPosition . '/' . $submittersCount;
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-//        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      * Gets the url for the previous submitter with submissions.
      *
-     * @return type the url of the previous submitter's latest submission or null if none found.
+     * @return string
      */
     private function get_previous_submitter_url()
     {
@@ -750,7 +548,7 @@ class SubmissionViewerComponent extends SubmissionsManager
     /**
      * Gets the url for the next submitter with submissions.
      *
-     * @return type the url of the next submitter's latest submission or null if none found.
+     * @return string
      */
     private function get_next_submitter_url()
     {
@@ -758,6 +556,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $this->get_submitter_type(),
             $this->get_target_id()
         );
+
         if (!$next_submitter_information)
         {
             return null;
@@ -1164,11 +963,13 @@ class SubmissionViewerComponent extends SubmissionsManager
                 );
 
                 $previous_submitter_url = $this->get_previous_submitter_url();
-                $next_submitter_url = $this->get_next_submitter_url();
+
                 $submitterPosition =
                     $this->get_position_submitter_with_submissions($this->get_submitter_type(), $this->get_target_id());
 
                 $submittersCount = $this->get_count_submitters($this->get_submitter_type());
+
+                $next_submitter_url = $this->get_next_submitter_url();
 
                 $submittersNavigatorActions->addButton(
                     new Button(
