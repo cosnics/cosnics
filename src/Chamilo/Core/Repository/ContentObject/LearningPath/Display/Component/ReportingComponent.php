@@ -183,7 +183,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
+                    array(self::PARAM_ACTION => $this->get_action()),
                     array(self::PARAM_REPORTING_USER_ID)
                 ),
                 $translator->getTranslation('UserProgressComponent')

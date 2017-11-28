@@ -276,7 +276,7 @@ $(function() {
 			});
 
 			newLabel = getTranslation('SwitchToSingleMatch', null,
-					'repository/content_object/assessment_matrix_question');
+					'Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatrixQuestion');
 		} else {
 			$('.option_matches').attr('multiple', null);
 
@@ -292,7 +292,7 @@ $(function() {
 			});
 
 			newLabel = getTranslation('SwitchToMultipleMatches', null,
-					'repository/content_object/assessment_matrix_question');
+					'Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatrixQuestion');
 		}
 
 		$('.change_matrix_type').val(newLabel);
