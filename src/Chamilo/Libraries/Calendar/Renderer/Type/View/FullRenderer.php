@@ -20,11 +20,7 @@ abstract class FullRenderer extends ViewRenderer
      */
     public function renderMiniMonth()
     {
-        $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            null);
+        $renderer = new MiniMonthRenderer($this->getDataProvider(), $this->getLegend(), $this->getDisplayTime(), null);
 
         return $renderer->render();
     }
@@ -95,7 +91,7 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
-//         $html[] = $this->renderMiniMonth();
+        $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = $this->getJumpForm()->render();
         $html[] = '</div>';

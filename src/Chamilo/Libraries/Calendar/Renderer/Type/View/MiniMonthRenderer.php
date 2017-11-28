@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,7 +24,28 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function initializeCalendar()
     {
-        return new MiniMonthCalendar($this->getDisplayTime());
+        return $this->getMiniMonthCalendarBuilder()->buildCalendar(
+            $this->getDisplayTime(),
+            [],
+            array('table-calendar-mini'));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Service\Table\MiniMonthCalendarBuilder
+     */
+    protected function getMiniMonthCalendarBuilder()
+    {
+        return $this->getService('chamilo.libraries.calendar.service.table.mini_month_calendar_builder');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
     }
 
     /**

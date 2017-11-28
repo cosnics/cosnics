@@ -80,26 +80,39 @@ class MonthCalendar extends Calendar
         foreach ($events as $time => $items)
         {
             $cellMappingKey = date('Ymd', $time);
+            $cellMapping = $this->getCellMapping();
 
-            $row = $this->cellMapping[$cellMappingKey][0];
-            $column = $this->cellMapping[$cellMappingKey][1];
+            $row = $cellMapping[$cellMappingKey][0];
+            $column = $cellMapping[$cellMappingKey][1];
 
             if (is_null($row) || is_null($column))
             {
                 continue;
             }
 
-            foreach ($items as $index => $item)
+            $this->handleItems($time, $items, $row, $column);
+        }
+    }
+
+    /**
+     *
+     * @param integer $time
+     * @param string[] $items
+     * @param integer $row
+     * @param integer $column
+     */
+    protected function handleItems($time, $items, $row, $column)
+    {
+        foreach ($items as $index => $item)
+        {
+            try
             {
-                try
-                {
-                    $cellContent = $this->getCellContents($row, $column);
-                    $cellContent .= $item;
-                    $this->setCellContents($row, $column, $cellContent);
-                }
-                catch (\Exception $exception)
-                {
-                }
+                $cellContent = $this->getCellContents($row, $column);
+                $cellContent .= $item;
+                $this->setCellContents($row, $column, $cellContent);
+            }
+            catch (\Exception $exception)
+            {
             }
         }
     }

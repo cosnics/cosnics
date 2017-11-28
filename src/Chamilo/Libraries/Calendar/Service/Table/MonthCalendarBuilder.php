@@ -70,13 +70,24 @@ class MonthCalendarBuilder
     /**
      *
      * @param integer $displayTime
+     * @param string[] $classes
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     */
+    protected function getCalendar($displayTime, $classes = [])
+    {
+        return new MonthCalendar($displayTime, $classes);
+    }
+
+    /**
+     *
+     * @param integer $displayTime
      * @param string[] $displayParameters
      * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
      */
     public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
     {
-        $monthCalendar = new MonthCalendar($displayTime, $classes);
+        $monthCalendar = $this->getCalendar($displayTime, $classes);
 
         $firstDay = mktime(0, 0, 0, date('m', $displayTime), 1, date('Y', $displayTime));
         $tableDate = $this->getFirstTableDate($firstDay);
