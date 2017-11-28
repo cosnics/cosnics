@@ -517,9 +517,11 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
         $html = array();
         
         // Title
-        $html[] = '<div class="title" style="width:100%;">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h5 class="panel-title">';
         $html[] = Translation::get('Details');
-        $html[] = '</div><div class="clear">&nbsp;</div><br />';
+        $html[] = '</h5></div>';
+        $html[] = '<div class="panel-body">';
         
         // Time titles
         $html[] = '<div style="font-weight:bold;float:left;">';
@@ -536,6 +538,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
             Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
             $this->get_assignment()->get_end_time()) . '<br />';
         $html[] = '<br /></div><br />';
+        $html[] = '<div class="clearfix"></div>';
         
         // Description title
         $html[] = '<div class="description" style="font-weight:bold;">';

@@ -52,9 +52,9 @@ class SubmissionDetailGeneralInfoSection
     /**
      * Returns the contents of this section as an array of strings.
      *
-     * @return array The content as html code
+     * @return string
      */
-    private function get_section_content()
+    public function get_section_content()
     {
         $html = array();
 
@@ -134,6 +134,8 @@ class SubmissionDetailGeneralInfoSection
             );
 
             $html[] = $rendition_implementation->render();
+
+            $html[] = '</div>';
         }
         else
         {

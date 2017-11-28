@@ -311,10 +311,10 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         
         $html[] = $this->render_header($display_add);
         $html[] = $this->generate_navigation_bar_html();
-        $html[] = '<div class="announcements level_1" style="background-image: url(' .
-             Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ')">';
+        $html[] = '<div class="panel panel-default">';
+
         $html[] = $this->generate_assignment_details_html();
-        
+
         // Display group members
         if ($this->submitter_type !=
              \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)
@@ -328,7 +328,8 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         }
         $html[] = $this->get_reporting_as_html();
         $html[] = '</div>';
-        
+        $html[] = '</div>';
+
         if ($this->submitter_type ==
              \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER)
         {

@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -41,12 +42,12 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
             case StudentSubmissionsOwnGroupsTableColumnModel::PROPERTY_PUBLICATION_TITLE :
                 return $this->construct_title_link($submission);
             case StudentSubmissionsOwnGroupsTableColumnModel::PROPERTY_CONTENT_OBJECT_DESCRIPTION :
-                if($submission->get_content_object() instanceof ContentObject)
-                {
-                    return $submission->get_content_object()->get_description();
-                }
+                $content_object = $submission->get_content_object();
+                $description = $content_object ? $content_object->get_description() : Translation::get('ContentObjectUnknown');
+                $description = strip_tags($description);
+                $trimmedDescription = StringUtilities::getInstance()->createString($description)->truncate(100, '...');
 
-                return null;
+                return $trimmedDescription;
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_DATE_SUBMITTED :
                 return $this->format_date($submission->get_date_submitted());
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID :

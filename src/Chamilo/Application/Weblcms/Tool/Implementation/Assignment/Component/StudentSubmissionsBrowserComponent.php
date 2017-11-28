@@ -143,10 +143,10 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     private function display_assignment()
     {
         $html = array();
-        $html[] = '<div class="announcements level_1" style="background-image:url(' .
-            Theme::getInstance()->getCommonImagePath('ContentObject/Introduction') . ')">';
+        $html[] = '<div class="panel panel-default">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_as_html();
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

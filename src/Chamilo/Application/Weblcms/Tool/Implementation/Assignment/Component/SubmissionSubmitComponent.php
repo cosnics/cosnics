@@ -347,9 +347,12 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent implemen
     /**
      * Creates an assignment submission tracker
      *
-     * @param $authors string
-     * @param $submitter_type int
-     * @param int $submitter id
+     * @param int $submitter_id
+     * @param int $repo_object
+     * @param int $submitter_type
+     *
+     * @return string
+     *
      */
     public function create_tracker($submitter_id, $repo_object, $submitter_type = null)
     {
@@ -358,77 +361,14 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent implemen
             $repo_object = $repo_object[0];
         }
 
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $repo_object);
-
-        // Create a folder assignment in the root folder
-        $assignement_category_id = \Chamilo\Core\Repository\Storage\DataManager::get_repository_category_by_name_or_create_new(
-            $this->assignment->get_owner_id(),
-            Translation::get("Assignments"));
-
-        // Create a folder course in the assignment folder
-        $course_category_id = \Chamilo\Core\Repository\Storage\DataManager::get_repository_category_by_name_or_create_new(
-            $this->assignment->get_owner_id(),
-            $this->get_course()->get_visual_code() . ' - ' . $this->get_course()->get_title(),
-            $assignement_category_id);
-
-        // Create a folder with the name of the assignment in the course folder
-        $category_id = \Chamilo\Core\Repository\Storage\DataManager::get_repository_category_by_name_or_create_new(
-            $this->assignment->get_owner_id(),
-            $this->assignment->get_title(),
-            $course_category_id);
-
         if (is_null($submitter_type))
         {
             $submitter_type = $this->get_submitter_type();
         }
 
-        $copier = new ContentObjectCopier(
-            $this->get_user(),
-            array($object->get_id()),
-            new PersonalWorkspace($this->get_user()),
-            $this->get_user_id(),
-            new PersonalWorkspace($this->assignment->get_owner()),
-            $this->assignment->get_owner_id(),
-            $category_id);
-        $content_object_ids = $copier->run();
-
-        if (count($content_object_ids) > 0)
-        {
-            foreach ($content_object_ids as $content_object_id)
-            {
-                $submitter_name = $this->get_submitter_name($submitter_type, $submitter_id);
-                $new_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $content_object_id);
-                $new_object->set_title($submitter_name . ' - ' . $new_object->get_title());
-                if (self::is_downloadable($new_object))
-                {
-                    $new_object->set_filename($submitter_name . ' - ' . $new_object->get_filename());
-                }
-                $new_object->update();
-            }
-        }
-        else
-        {
-            foreach ($copier->get_messages() as $type)
-            {
-                $messages .= implode(PHP_EOL, $type);
-            }
-
-            $this->redirect(
-                $messages,
-                true,
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE_SUBMISSIONS,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication_id,
-                    self::PARAM_SUBMITTER_TYPE => $submitter_type,
-                    self::PARAM_TARGET_ID => $submitter_id));
-        }
         $arguments = array(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_PUBLICATION_ID => $this->publication_id,
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_CONTENT_OBJECT_ID => $content_object_id,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_CONTENT_OBJECT_ID => $repo_object,
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID => $submitter_id,
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_DATE_SUBMITTED => time(),
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_TYPE => $submitter_type,
@@ -437,31 +377,6 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent implemen
         Event::trigger('SubmissionAssignment', \Chamilo\Application\Weblcms\Manager::context(), $arguments);
 
         return $submitter_type . $submitter_id;
-    }
-
-    /**
-     * Returns the name of the submitter as a string.
-     *
-     * @param $submitter_type int
-     * @param $submitter_id int
-     *
-     * @return string The name of the submitter
-     */
-    private function get_submitter_name($submitter_type, $submitter_id)
-    {
-        switch ($submitter_type)
-        {
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_USER :
-                return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    $submitter_id)->get_fullname();
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_COURSE_GROUP :
-                return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                    CourseGroup::class_name(),
-                    $submitter_id)->get_name();
-            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::SUBMITTER_TYPE_PLATFORM_GROUP :
-                return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $submitter_id)->get_name();
-        }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
