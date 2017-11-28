@@ -29,7 +29,7 @@ class CreatorComponent extends Manager
         
         $element = new Element();
         $element->set_schema_id($this->getSchemaId());
-        $element->set_value_type(Element::VALUE_TYPE_PREDEFINED);
+        $element->set_value_type(Element::VALUE_TYPE_VOCABULARY_PREDEFINED);
         
         $form = new ElementForm($this->get_url(), $element);
         

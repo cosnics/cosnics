@@ -15,9 +15,10 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'Office365CourseGroupAction';
 
     const ACTION_VISIT_PLANNER = 'VisitPlanner';
+    const ACTION_VISIT_GROUP = 'VisitGroup';
     const ACTION_SYNC_COURSE_GROUP = 'SyncCourseGroup';
 
-    const DEFAULT_ACTION = self::ACTION_VISIT_PLANNER;
+    const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
 
     /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component\IntegrationLauncherComponent
@@ -33,16 +34,6 @@ abstract class Manager extends Application
         }
 
         return $application;
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service
-     */
-    protected function getOffice365Service()
-    {
-        return $this->getService(
-            'chamilo.application.weblcms.tool.implementation.course_group.extension.office365.service.office365_service'
-        );
     }
 
     /**

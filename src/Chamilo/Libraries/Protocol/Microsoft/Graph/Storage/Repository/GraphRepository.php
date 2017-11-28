@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -57,8 +58,14 @@ class GraphRepository
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      * @param string $currentRequestUrl
      */
-    public function __construct(AbstractProvider $oauthProvider, Graph $graph,
-        AccessTokenRepositoryInterface $accessTokenRepository, $currentRequestUrl)
+    public function __construct(
+        AbstractProvider $oauthProvider, Graph $graph,
+        AccessTokenRepositoryInterface $accessTokenRepository, $currentRequestUrl
+    )
+    public function __construct(
+        AbstractProvider $oauthProvider, Graph $graph,
+        AccessTokenRepositoryInterface $accessTokenRepository
+    )
     {
         $this->setOauthProvider($oauthProvider);
         $this->setGraph($graph);
@@ -146,7 +153,7 @@ class GraphRepository
     {
         $accessToken = $this->getAccessTokenRepository()->getApplicationAccessToken();
 
-        if (! $accessToken instanceof AccessToken || $accessToken->hasExpired())
+        if (!$accessToken instanceof AccessToken || $accessToken->hasExpired())
         {
             $accessToken = $this->requestNewApplicationAccessToken();
         }
@@ -164,7 +171,8 @@ class GraphRepository
     {
         $accessToken = $this->getOauthProvider()->getAccessToken(
             'client_credentials',
-            ['resource' => 'https://graph.microsoft.com/']);
+            ['resource' => 'https://graph.microsoft.com/']
+        );
 
         $this->getAccessTokenRepository()->storeApplicationAccessToken($accessToken);
 
@@ -177,7 +185,8 @@ class GraphRepository
     protected function requestNewDelegatedAccessToken()
     {
         $authorizationUrl = $this->getOauthProvider()->getAuthorizationUrl(
-            ['state' => $this->oauthProvider->getState()]);
+            ['state' => $this->oauthProvider->getState()]
+        );
 
         $redirectResponse = new RedirectResponse($authorizationUrl);
         $redirectResponse->send();
@@ -190,7 +199,7 @@ class GraphRepository
     {
         $delegatedAccessToken = $this->getDelegatedAccessToken();
 
-        if (empty($delegatedAccessToken) || ! $delegatedAccessToken instanceof AccessToken)
+        if (empty($delegatedAccessToken) || !$delegatedAccessToken instanceof AccessToken)
         {
             $this->requestNewDelegatedAccessToken();
         }
@@ -199,7 +208,9 @@ class GraphRepository
             $this->setDelegatedAccessToken(
                 $this->getOauthProvider()->getAccessToken(
                     'refresh_token',
-                    ['refresh_token' => $delegatedAccessToken->getRefreshToken()]));
+                    ['refresh_token' => $delegatedAccessToken->getRefreshToken()]
+                )
+            );
 
             $this->accessTokenRepository->storeDelegatedAccessToken($this->getDelegatedAccessToken());
         }
@@ -217,7 +228,9 @@ class GraphRepository
         $this->setDelegatedAccessToken(
             $this->getOauthProvider()->getAccessToken(
                 'authorization_code',
-                ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']));
+                ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']
+            )
+        );
 
         $this->getAccessTokenRepository()->storeDelegatedAccessToken($this->getDelegatedAccessToken());
     }
@@ -277,10 +290,11 @@ class GraphRepository
      *
      * @return \Microsoft\Graph\Http\GraphRequest
      */
-    protected function createRequest($requestType, $endpoint, $requestBody = [], $returnClass = null,
-        $isCollectionRequest = false)
+    protected function createRequest(
+        $requestType, $endpoint, $requestBody = [], $returnClass = null, $isCollectionRequest = false
+    )
     {
-        if (! $isCollectionRequest)
+        if(!$isCollectionRequest)
         {
             $request = $this->getGraph()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
         }
@@ -289,7 +303,7 @@ class GraphRepository
             $request = $this->getGraph()->createCollectionRequest($requestType, $endpoint);
         }
 
-        if (! empty($requestBody))
+        if (!empty($requestBody))
         {
             $request->attachBody($requestBody);
         }
@@ -298,6 +312,7 @@ class GraphRepository
     }
 
     /**
+     * Parses a collection response. Bugfix for the microsoft graph library parsing everything to a single
      * Parses a collection response.
      * Bugfix for the microsoft graph library parsing everything to a single
      * object when an empty collection is returned from the graph API
@@ -311,18 +326,24 @@ class GraphRepository
     {
         $body = $graphResponse->getBody();
 
+        $count = 0;
+
         if (array_key_exists('@odata.count', $body))
         {
             $count = $body['@odata.count'];
         }
+
+
+
+
         elseif (array_key_exists('value', $body))
         {
             $count = count($body['value']);
         }
-        else
-        {
-            $count = 0;
-        }
+
+
+
+
 
         return ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
     }
@@ -337,13 +358,16 @@ class GraphRepository
      * @param bool $isCollectionRequest
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Http\GraphResponse -
-     *         A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
+     *      A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
      */
-    protected function createAndExecuteRequestWithAccessTokenExpirationRetry($requestType, $endpoint, $requestBody = [],
-        $returnClass = null, $isCollectionRequest = false)
+    protected function createAndExecuteRequestWithAccessTokenExpirationRetry(
+        $requestType, $endpoint, $requestBody = [],
+        $returnClass = null, $isCollectionRequest = false
+    )
     {
         return $this->executeRequestWithAccessTokenExpirationRetry(
-            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest));
+            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest)
+        );
     }
 
     /**
@@ -355,13 +379,16 @@ class GraphRepository
      * @param bool $isCollectionRequest
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Http\GraphResponse -
-     *         A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
+     *      A Microsoft Graph Entity-instance of type $returnClass or a dry collection response
      */
-    protected function createAndExecuteRequestWithDelegatedAccessToken($requestType, $endpoint, $requestBody = [],
-        $returnClass = null, $isCollectionRequest = false)
+    protected function createAndExecuteRequestWithDelegatedAccessToken(
+        $requestType, $endpoint, $requestBody = [],
+        $returnClass = null, $isCollectionRequest = false
+    )
     {
         return $this->executeRequestWithDelegatedAccess(
-            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest));
+            $this->createRequest($requestType, $endpoint, $requestBody, $returnClass, $isCollectionRequest)
+        );
     }
 
     /**
@@ -371,18 +398,17 @@ class GraphRepository
      * @param bool $isCollectionRequest
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\Entity[]
-     *         A Microsoft Graph Entity-instance of type $returnClass
+     *  A Microsoft Graph Entity-instance of type $returnClass
      */
-    public function executeGetWithAccessTokenExpirationRetry($endpoint, $returnClass = null, $isCollectionRequest = false)
+    public function executeGetWithAccessTokenExpirationRetry(
+        $endpoint, $returnClass = null, $isCollectionRequest = false
+    )
     {
         $response = $this->createAndExecuteRequestWithAccessTokenExpirationRetry(
-            'GET',
-            $endpoint,
-            [],
-            $returnClass,
-            $isCollectionRequest);
+            'GET', $endpoint, [], $returnClass, $isCollectionRequest
+        );
 
-        if ($isCollectionRequest)
+        if($isCollectionRequest)
         {
             return $this->parseCollectionResponse($response, $returnClass);
         }
@@ -397,18 +423,15 @@ class GraphRepository
      * @param bool $isCollectionRequest
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\Entity[]
-     *         A Microsoft Graph Entity-instance of type $returnClass
+     *  A Microsoft Graph Entity-instance of type $returnClass
      */
     public function executeGetWithDelegatedAccess($endpoint, $returnClass = null, $isCollectionRequest = false)
     {
         $response = $this->createAndExecuteRequestWithDelegatedAccessToken(
-            'GET',
-            $endpoint,
-            [],
-            $returnClass,
-            $isCollectionRequest);
+            'GET', $endpoint, [], $returnClass, $isCollectionRequest
+        );
 
-        if ($isCollectionRequest)
+        if($isCollectionRequest)
         {
             return $this->parseCollectionResponse($response, $returnClass);
         }
@@ -430,7 +453,8 @@ class GraphRepository
             'POST',
             $endpoint,
             $requestBody,
-            $returnClass);
+            $returnClass
+        );
     }
 
     /**
@@ -460,7 +484,8 @@ class GraphRepository
             'PATCH',
             $endpoint,
             $requestBody,
-            $returnClass);
+            $returnClass
+        );
     }
 
     /**

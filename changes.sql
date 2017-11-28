@@ -291,6 +291,7 @@ INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Forum\\Integration', 'Integration', 'Forum', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension', 'Extension', 'Office365', '1', '1.0.0', '1');
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365\\Integration', 'Integration', 'Office365', '1', '1.0.0', '1');
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'Chamilo\\Libraries', NULL, 'MicrosoftGraph', '1', '1.0.0', '1');
 
 CREATE TABLE `weblcms_course_group_publication_category` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -309,10 +310,11 @@ CREATE TABLE `weblcms_course_group_office365_reference` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_id', NULL, '0'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'client_secret', NULL, '0'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'access_token', NULL, '1'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'external_user_id', NULL, '1'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'tenant_id', NULL, '0'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'cosnics_prefix', NULL, 'cosnics_'),
-  (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup\\Extension\\Office365', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0');
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'client_id', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'client_secret', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'access_token', NULL, '1'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'external_user_id', NULL, '1'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'tenant_id', NULL, '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'cosnics_prefix', NULL, 'cosnics_'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'planner_base_uri', 'https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner', '0'),
+  (NULL, 'Chamilo\\Libraries\\Protocol\\Microsoft\\Graph', 'group_base_uri', 'https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people', '0');

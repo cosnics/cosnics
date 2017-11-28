@@ -62,7 +62,7 @@ class BrowserComponent extends Manager implements TableSupport
         
         $html = array();
         
-        $html[] = $this->buttonToolbarRenderer()->render();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
         
         return implode(PHP_EOL, $html);
@@ -108,7 +108,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         
-        $searchCondition = $this->getButtonToolbarRenderer()->get_conditions(
+        $searchCondition = $this->getButtonToolbarRenderer()->getConditions(
             array(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_NAME)));
         
         if ($searchCondition)

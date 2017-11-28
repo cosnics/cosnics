@@ -1,5 +1,8 @@
 <?php
+
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
+
+use Chamilo\Libraries\Utilities\UUID;
 
 /**
  *
@@ -17,12 +20,19 @@ class GroupRepository
     private $graphRepository;
 
     /**
+     * @var string
+     */
+    protected $cosnicsPrefix;
+
+    /**
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
+     * @param string $cosnicsPrefix
      */
-    public function __construct(GraphRepository $graphRepository)
+    public function __construct(GraphRepository $graphRepository, $cosnicsPrefix = '')
     {
         $this->setGraphRepository($graphRepository);
+        $this->cosnicsPrefix = $cosnicsPrefix;
     }
 
     /**
@@ -56,13 +66,22 @@ class GroupRepository
             'description' => $groupName,
             'displayName' => $groupName,
             'mailEnabled' => false,
-            'groupTypes' => ['Unified'],
-            'securityEnabled' => false];
+            'mailNickname' => str_replace(
+                '-', '_',
+                $this->cosnicsPrefix . UUID::v4()
+            ),
+            'groupTypes' => [
+                'Unified',
+            ],
+            'securityEnabled' => false,
+            'visibility' => 'private'
+        ];
 
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups',
             $groupData,
-            \Microsoft\Graph\Model\Group::class);
+            \Microsoft\Graph\Model\Group::class
+        );
     }
 
     /**
@@ -80,7 +99,22 @@ class GroupRepository
         return $this->getGraphRepository()->executePatchWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier,
             $groupData,
-            \Microsoft\Graph\Model\Event::class);
+            \Microsoft\Graph\Model\Event::class
+        );
+    }
+
+    /**
+     * Returns a group by a given identifier
+     *
+     * @param string $groupIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
+     */
+    public function getGroup($groupIdentifier)
+    {
+        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+            '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class
+        );
     }
 
     /**
@@ -96,7 +130,8 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners/$ref',
             ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class);
+            \Microsoft\Graph\Model\Event::class
+        );
     }
 
     /**
@@ -111,7 +146,8 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class);
+            \Microsoft\Graph\Model\Event::class
+        );
     }
 
     /**
@@ -127,7 +163,8 @@ class GroupRepository
         {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/owners/' . $azureUserIdentifier,
-                \Microsoft\Graph\Model\User::class);
+                \Microsoft\Graph\Model\User::class
+            );
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
@@ -151,7 +188,8 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners',
-            \Microsoft\Graph\Model\User::class);
+            \Microsoft\Graph\Model\User::class
+        );
     }
 
     /**
@@ -166,7 +204,8 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members/$ref',
             ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class);
+            \Microsoft\Graph\Model\Event::class
+        );
     }
 
     /**
@@ -181,7 +220,8 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class);
+            \Microsoft\Graph\Model\Event::class
+        );
     }
 
     /**
@@ -197,7 +237,8 @@ class GroupRepository
         {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/members/' . $azureUserIdentifier,
-                \Microsoft\Graph\Model\User::class);
+                \Microsoft\Graph\Model\User::class
+            );
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
@@ -221,7 +262,8 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members',
-            \Microsoft\Graph\Model\User::class);
+            \Microsoft\Graph\Model\User::class
+        );
     }
 
     /**
@@ -235,6 +277,24 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithDelegatedAccess(
             '/groups/' . $groupIdentifier . '/planner/plans',
-            \Microsoft\Graph\Model\PlannerPlan::class);
+            \Microsoft\Graph\Model\PlannerPlan::class
+        );
+    }
+
+    /**
+     * Creates a new plan for a given group
+     *
+     * @param string $groupIdentifier
+     * @param string $planName
+     *
+     * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\PlannerPlan
+     */
+    public function createPlanForGroup($groupIdentifier, $planName)
+    {
+        return $this->getGraphRepository()->executePostWithDelegatedAccess(
+            '/planner/plans',
+            ['owner' => $groupIdentifier, 'title' => $planName],
+            \Microsoft\Graph\Model\PlannerPlan::class
+        );
     }
 }

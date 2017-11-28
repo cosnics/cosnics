@@ -1,6 +1,7 @@
 Typename = "Office 365 integratie voor cursusgroepen"
-UsePlanner = "Planner (Office365)"
+UseOffice365Group = "Office365 Groep (BETA)"
 CourseGroupSyncSuccessful = "De cursusgroep en cursusbeheerder inschrijvingen werden successvol gesynchroniseerd met de gekoppelde office365 groep"
 CourseGroupSyncFailed = "De cursusgroep en cursusbeheerder inschrijvingen konden niet worden gesynchroniseerd in de gekoppelde office365 groep"
 VisitPlanner = "Ga naar planner (Office365)"
+VisitGroup = "Ga naar de Office365 groep"
 SynchronizeUsersToPlanner = "Synchroniseer de gebruikers met planner"

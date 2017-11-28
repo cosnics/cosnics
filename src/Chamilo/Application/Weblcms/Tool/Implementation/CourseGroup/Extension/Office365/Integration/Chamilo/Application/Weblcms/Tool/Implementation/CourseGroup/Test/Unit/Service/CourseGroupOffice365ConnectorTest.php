@@ -8,12 +8,13 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365Connector;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 
 /**
  * Tests the CourseGroupOffice365Connector
@@ -28,14 +29,19 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
     protected $courseGroupOffice365Connector;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service\Office365Service | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $office365ServiceMock;
+    protected $groupServiceMock;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\Repository\Office365Repository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $office365RepositoryMock;
+    protected $groupRepositoryMock;
+
+    /**
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $userServiceMock;
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService | \PHPUnit_Framework_MockObject_MockObject
@@ -57,10 +63,13 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
      */
     public function setUp()
     {
-        $this->office365ServiceMock = $this->getMockBuilder(Office365Service::class)
+        $this->groupServiceMock = $this->getMockBuilder(GroupService::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->office365RepositoryMock = $this->getMockBuilder(Office365Repository::class)
+        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepository::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->userServiceMock = $this->getMockBuilder(UserService::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->courseGroupOffice365ReferenceServiceMock =
@@ -74,7 +83,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->courseGroupOffice365Connector = new CourseGroupOffice365Connector(
-            $this->office365ServiceMock, $this->office365RepositoryMock,
+            $this->groupServiceMock, $this->groupRepositoryMock, $this->userServiceMock,
             $this->courseGroupOffice365ReferenceServiceMock, $this->courseServiceMock, $this->configurationConsulterMock
         );
     }
@@ -84,9 +93,10 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
      */
     public function tearDown()
     {
-        unset($this->office365ServiceMock);
+        unset($this->groupServiceMock);
+        unset($this->userServiceMock);
         unset($this->configurationConsulterMock);
-        unset($this->office365RepositoryMock);
+        unset($this->groupRepositoryMock);
         unset($this->courseGroupOffice365ReferenceServiceMock);
         unset($this->courseServiceMock);
         unset($this->courseGroupOffice365Connector);
@@ -123,7 +133,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(false));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('createGroupByName')
             ->with($user, $office365GroupName)
             ->will($this->returnValue(5));
@@ -139,7 +149,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('getTeachersFromCourse')
             ->will($this->returnValue($courseTeachers));
 
-        $this->office365ServiceMock->expects($this->at(1))
+        $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
             ->with(5, $teacher);
 
@@ -151,7 +161,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->office365ServiceMock->expects($this->at(2))
+        $this->groupServiceMock->expects($this->at(2))
             ->method('addMemberToGroup')
             ->with(5, $courseGroupMember);
 
@@ -189,7 +199,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('getTeachersFromCourse')
             ->will($this->returnValue($courseTeachers));
 
-        $this->office365ServiceMock->expects($this->at(1))
+        $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
             ->will($this->throwException(new Office365UserNotExistsException($teacher)));
 
@@ -212,7 +222,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->office365ServiceMock->expects($this->at(1))
+        $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
             ->will($this->throwException(new Office365UserNotExistsException($courseGroupMember)));
 
@@ -233,7 +243,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $user = new User();
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('createGroupByName')
             ->with($user, $groupName)
             ->will($this->returnValue(5));
@@ -276,7 +286,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('updateGroupName')
             ->with('5', $office365GroupName);
 
@@ -322,11 +332,11 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('linkCourseGroupReference')
             ->with($reference);
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('updateGroupName')
             ->with('5', $office365GroupName);
 
-        $this->office365ServiceMock->expects($this->at(1))
+        $this->groupServiceMock->expects($this->at(1))
             ->method('addMemberToGroup')
             ->with(5, $user);
 
@@ -337,7 +347,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->method('getTeachersFromCourse')
             ->will($this->returnValue($courseTeachers));
 
-        $this->office365ServiceMock->expects($this->at(2))
+        $this->groupServiceMock->expects($this->at(2))
             ->method('addMemberToGroup')
             ->with(5, $teacher);
 
@@ -349,7 +359,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->office365ServiceMock->expects($this->at(3))
+        $this->groupServiceMock->expects($this->at(3))
             ->method('addMemberToGroup')
             ->with(5, $courseGroupMember);
 
@@ -377,11 +387,11 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('removeAllMembersFromGroup')
             ->with(5);
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->with(5, $user);
 
@@ -406,7 +416,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->will($this->returnValue(false));
 
 
-        $this->office365ServiceMock->expects($this->never())
+        $this->groupServiceMock->expects($this->never())
             ->method('removeAllMembersFromGroup');
 
         $this->courseGroupOffice365ReferenceServiceMock->expects($this->never())
@@ -436,7 +446,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->will($this->throwException(new Office365UserNotExistsException($user)));
 
@@ -464,7 +474,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->with(5, $user);
 
@@ -484,7 +494,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(false));
 
-        $this->office365ServiceMock->expects($this->never())
+        $this->groupServiceMock->expects($this->never())
             ->method('addMemberToGroup');
 
         $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
@@ -511,7 +521,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->will($this->throwException(new Office365UserNotExistsException($user)));
 
@@ -539,7 +549,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('removeMemberFromGroup')
             ->with(5, $user);
 
@@ -559,7 +569,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(false));
 
-        $this->office365ServiceMock->expects($this->never())
+        $this->groupServiceMock->expects($this->never())
             ->method('removeMemberFromGroup');
 
         $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
@@ -586,7 +596,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('removeMemberFromGroup')
             ->will($this->throwException(new Office365UserNotExistsException($user)));
 
@@ -629,22 +639,22 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(false, false, true)
             ->will($this->returnValue($courseGroupMembers));
 
-        $this->office365ServiceMock->expects($this->exactly(2))
-            ->method('getOffice365UserIdentifier')
+        $this->userServiceMock->expects($this->exactly(2))
+            ->method('getAzureUserIdentifier')
             ->will($this->returnCallback(function(User $user) { return $user->getId(); }));
 
         $availableIds = [3, 5];
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('getGroupMembers')
             ->with(5)
             ->will($this->returnValue($availableIds));
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeMemberInGroup')
             ->with(5, 1);
 
-        $this->office365RepositoryMock->expects($this->once())
+        $this->groupRepositoryMock->expects($this->once())
             ->method('removeMemberFromGroup')
             ->with(5, 5);
 
@@ -662,10 +672,10 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue(false));
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('subscribeMemberInGroup');
 
-        $this->office365RepositoryMock->expects($this->never())
+        $this->groupRepositoryMock->expects($this->never())
             ->method('removeMemberFromGroup');
 
         $this->courseGroupOffice365Connector->syncCourseGroupSubscriptions($courseGroup);
@@ -690,7 +700,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->with(5, $user);
 
@@ -698,7 +708,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->configurationConsulterMock->expects($this->once())
             ->method('getSetting')
-            ->with(['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri'])
+            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
             ->will($this->returnValue($baseUrl));
 
         $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
@@ -740,7 +750,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with($courseGroup)
             ->will($this->returnValue($reference));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('addMemberToGroup')
             ->with(5, $user);
 
@@ -748,10 +758,10 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
 
         $this->configurationConsulterMock->expects($this->once())
             ->method('getSetting')
-            ->with(['Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365', 'planner_base_uri'])
+            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'planner_base_uri'])
             ->will($this->returnValue($baseUrl));
 
-        $this->office365ServiceMock->expects($this->once())
+        $this->groupServiceMock->expects($this->once())
             ->method('getOrCreatePlanIdForGroup')
             ->with(5)
             ->will($this->returnValue(10));
@@ -763,6 +773,103 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
         $url = 'https://tasks.office.com/example.onmicrosoft.com/nl-NL/Home/Planner/#//#/plantaskboard?groupId=5&planId=10';
 
         $this->assertEquals($url, $this->courseGroupOffice365Connector->getPlannerUrlForVisit($courseGroup, $user));
+    }
+
+    public function testGetGroupUrlForVisit()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(true));
+
+        $reference = new CourseGroupOffice365Reference();
+        $reference->setOffice365GroupId(5);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
+        $this->groupServiceMock->expects($this->once())
+            ->method('addMemberToGroup')
+            ->with(5, $user);
+
+        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
+
+        $this->configurationConsulterMock->expects($this->once())
+            ->method('getSetting')
+            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
+            ->will($this->returnValue($baseUrl));
+
+        $group = new \Microsoft\Graph\Model\Group(['mailNickname' => 'MyFirstGroup']);
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with(5)
+            ->will($this->returnValue($group));
+
+        $url = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/MyFirstGroup@example.onmicrosoft.com/mail';
+
+        $this->assertEquals($url, $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetGroupUrlForVisitValidReference()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(false));
+
+        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetGroupUrlForVisitWithoutValidGroup()
+    {
+        $courseGroup = new CourseGroup();
+        $user = new User();
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('courseGroupHasLinkedReference')
+            ->with($courseGroup)
+            ->will($this->returnValue(true));
+
+        $reference = new CourseGroupOffice365Reference();
+        $reference->setOffice365GroupId(5);
+
+        $this->courseGroupOffice365ReferenceServiceMock->expects($this->once())
+            ->method('getCourseGroupReference')
+            ->with($courseGroup)
+            ->will($this->returnValue($reference));
+
+        $this->groupServiceMock->expects($this->once())
+            ->method('addMemberToGroup')
+            ->with(5, $user);
+
+        $baseUrl = 'https://outlook.office.com/owa/?realm=example.com&exsvurl=1&ll-cc=1043&modurl=0&path=/group/{GROUP_ID}@example.onmicrosoft.com/mail';
+
+        $this->configurationConsulterMock->expects($this->once())
+            ->method('getSetting')
+            ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
+            ->will($this->returnValue($baseUrl));
+
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getGroup')
+            ->with(5)
+            ->will($this->returnValue(null));
+
+        $this->courseGroupOffice365Connector->getGroupUrlForVisit($courseGroup, $user);
     }
     
 }

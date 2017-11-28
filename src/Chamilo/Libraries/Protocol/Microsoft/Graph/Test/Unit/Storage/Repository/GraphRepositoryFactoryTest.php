@@ -12,7 +12,7 @@ use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Tests the Office365RepositoryFactory
+ * Tests the GraphRepositoryFactory
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -68,7 +68,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
         unset($this->graphRepositoryFactory);
     }
 
-    public function testBuildOffice365Repository()
+    public function testBuildGraphRepository()
     {
         $this->chamiloRequestMock->query = new ParameterBag();
 
@@ -90,7 +90,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
         );
     }
 
-    public function testBuildOffice365RepositorySetsClientId()
+    public function testBuildGraphRepositorySetsClientId()
     {
         $this->chamiloRequestMock->query = new ParameterBag();
 
@@ -116,7 +116,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
         $this->assertEquals('testClientId', $clientId);
     }
 
-    public function testBuildOffice365RepositorySetsClientSecret()
+    public function testBuildGraphRepositorySetsClientSecret()
     {
         $this->chamiloRequestMock->query = new ParameterBag();
 
@@ -142,7 +142,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
         $this->assertEquals('testClientSecret', $clientSecret);
     }
 
-    public function testBuildOffice365RepositorySetsTenantId()
+    public function testBuildGraphRepositorySetsTenantId()
     {
         $this->chamiloRequestMock->query = new ParameterBag();
 
@@ -170,7 +170,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
         $this->assertEquals('https://login.microsoftonline.com/test.onmicrosoft.com/oauth2/token', $urlAccessToken);
     }
 
-    public function testBuildOffice365RepositorySetsState()
+    public function testBuildGraphRepositorySetsState()
     {
         $this->chamiloRequestMock->query = new ParameterBag(['application' => 'Chamilo\Core\Repository']);
 

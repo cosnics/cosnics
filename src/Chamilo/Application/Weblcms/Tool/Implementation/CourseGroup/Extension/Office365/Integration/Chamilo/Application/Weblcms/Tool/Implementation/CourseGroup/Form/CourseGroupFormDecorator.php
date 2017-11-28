@@ -47,7 +47,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
         // Creation form or editing form without linked forum category
         $courseGroupForm->addElement(
             'checkbox', self::PROPERTY_USE_PLANNER . '[' . $id . ']',
-            Translation::getInstance()->getTranslation('UsePlanner')
+            Translation::getInstance()->getTranslation('UseOffice365Group')
         );
 
         $defaults = [

@@ -70,6 +70,18 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             return;
         }
 
+        $visitGroupUrl = $this->urlGenerator->generateURL(
+            [
+                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
+                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
+                IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
+                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
+                Manager::PARAM_ACTION => Manager::ACTION_VISIT_GROUP
+            ]
+        );
+
+        $visitGroupLabel = $this->translator->trans('VisitGroup', [], Manager::context());
+
         $visitPlannerUrl = $this->urlGenerator->generateURL(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
@@ -94,25 +106,22 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $synchronizePlannerLabel = $this->translator->trans('SynchronizeUsersToPlanner', [], Manager::context());
 
-        if(!$isCourseTeacher)
+        $visitGroupButton = new SplitDropdownButton(
+            $visitGroupLabel, null, $visitGroupUrl,
+            Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+        );
+
+        $visitGroupButton->addSubButton(
+            new SubButton(
+                $visitPlannerLabel, null, $visitPlannerUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            )
+        );
+
+        if ($isCourseTeacher)
         {
-            $visitPlannerButton = new Button(
-                $visitPlannerLabel, null, $visitPlannerUrl,
-                Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
-            );
-        }
-        else
-        {
-            $visitPlannerButton = new SplitDropdownButton(
-                $visitPlannerLabel, null, $visitPlannerUrl,
-                Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
-            );
-
-            $visitPlannerButton->addSubButton(new SubButton($synchronizePlannerLabel, null, $synchronizePlannerUrl));
+            $visitGroupButton->addSubButton(new SubButton($synchronizePlannerLabel, null, $synchronizePlannerUrl));
         }
 
-        $courseGroupActionsToolbar->addItem($visitPlannerButton);
-
-
+        $courseGroupActionsToolbar->addItem($visitGroupButton);
     }
 }

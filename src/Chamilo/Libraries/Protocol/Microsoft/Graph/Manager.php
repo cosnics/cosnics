@@ -17,10 +17,10 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GraphService
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
     protected function getGraphService()
     {
-        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.graph_service');
+        return $this->getService('chamilo.libraries.protocol.microsoft.graph.service.user_service');
     }
 }

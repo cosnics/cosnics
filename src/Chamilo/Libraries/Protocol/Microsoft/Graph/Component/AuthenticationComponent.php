@@ -18,8 +18,8 @@ class AuthenticationComponent extends Manager
     const PARAM_AUTHORIZATION_STATE = 'state';
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     function run()
     {

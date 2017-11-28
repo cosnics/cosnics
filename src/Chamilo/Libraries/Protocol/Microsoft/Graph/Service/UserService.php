@@ -34,15 +34,15 @@ class UserService
      */
     public function __construct(UserRepository $userRepository, LocalSetting $localSetting)
     {
-        $this->userRepository = $userRepository;
-        $this->localSetting = $localSetting;
+        $this->setUserRepository($userRepository);
+        $this->setLocalSetting($localSetting);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
      */
-    public function getUserRepository()
+    protected function getUserRepository()
     {
         return $this->userRepository;
     }
@@ -51,7 +51,7 @@ class UserService
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository $userRepository
      */
-    public function setUserRepository(UserRepository $userRepository)
+    protected function setUserRepository(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -60,7 +60,7 @@ class UserService
      *
      * @return \Chamilo\Libraries\Platform\Configuration\LocalSetting
      */
-    public function getLocalSetting()
+    protected function getLocalSetting()
     {
         return $this->localSetting;
     }
@@ -69,7 +69,7 @@ class UserService
      *
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
      */
-    public function setLocalSetting(LocalSetting $localSetting)
+    protected function setLocalSetting(LocalSetting $localSetting)
     {
         $this->localSetting = $localSetting;
     }
