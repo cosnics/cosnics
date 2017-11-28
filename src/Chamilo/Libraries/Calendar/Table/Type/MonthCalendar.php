@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\Calendar\Table\CalendarConfiguration;
 
 /**
  *
@@ -21,12 +22,13 @@ class MonthCalendar extends Calendar
     /**
      * Creates a new month calendar
      *
+     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
      * @param string[] $classes
      */
-    public function __construct($displayTime, $classes = [])
+    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime, $classes = [])
     {
-        parent::__construct($displayTime, $classes);
+        parent::__construct($calendarConfiguration, $displayTime, $classes);
 
         $this->cellMapping = array();
     }
@@ -39,11 +41,11 @@ class MonthCalendar extends Calendar
      * @param string $firstDayOfTheWeek
      * @return integer
      */
-    public function getStartTime($firstDayOfTheWeek = null)
+    public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
 
-        if ($firstDayOfTheWeek == 'sunday')
+        if ($this->getCalendarConfiguration()->getFirstDayOfTheWeek() == 'sunday')
         {
             return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
         }
@@ -115,16 +117,6 @@ class MonthCalendar extends Calendar
             {
             }
         }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $this->addEvents();
-        return $this->toHtml();
     }
 
     /**

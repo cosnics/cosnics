@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Renderer\Type\Backup;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class ViewRenderer extends Renderer
+abstract class BackupViewRenderer extends Renderer
 {
     // Parameters
     const PARAM_TIME = 'time';
@@ -206,10 +206,10 @@ abstract class ViewRenderer extends Renderer
     public function renderTypeButton()
     {
         $rendererTypes = array(
-            ViewRenderer::TYPE_MONTH,
-            ViewRenderer::TYPE_WEEK,
-            ViewRenderer::TYPE_DAY,
-            ViewRenderer::TYPE_LIST);
+            BackupViewRenderer::TYPE_MONTH,
+            BackupViewRenderer::TYPE_WEEK,
+            BackupViewRenderer::TYPE_DAY,
+            BackupViewRenderer::TYPE_LIST);
 
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];

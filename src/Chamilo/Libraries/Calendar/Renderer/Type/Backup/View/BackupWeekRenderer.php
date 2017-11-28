@@ -1,9 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
+namespace Chamilo\Libraries\Calendar\Renderer\Type\Backup\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
+use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -11,32 +12,32 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthRenderer extends FullTableRenderer
+class BackupWeekRenderer extends BackupFullTableRenderer
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
      */
     public function initializeCalendar()
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
 
-        return $this->getMonthCalendarBuilder()->buildCalendar(
+        return $this->getWeekCalendarBuilder()->buildCalendar(
             $this->getDisplayTime(),
             $displayParameters,
-            array('table-calendar-month'));
+            array('table-calendar-week'));
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\Table\MonthCalendarBuilder
+     * @return \Chamilo\Libraries\Calendar\Service\Table\WeekCalendarBuilder
      */
-    protected function getMonthCalendarBuilder()
+    protected function getWeekCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.table.month_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.table.week_calendar_builder');
     }
 
     /**
@@ -54,17 +55,22 @@ class MonthRenderer extends FullTableRenderer
      */
     public function render()
     {
+        $calendarConfiguration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
 
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
+        $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
+        $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
 
-        $events = $this->getEvents($startTime, $endTime);
+        $events = $this->getEvents($fromDate, $toDate);
+
+        $startTime = $calendar->getStartTime();
+        $endTime = $toDate;
+
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+1 Day', $tableDate);
+            $nextTableDate = strtotime('+' . $calendarConfiguration->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -77,27 +83,31 @@ class MonthRenderer extends FullTableRenderer
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
+                    $configuration->setHourStep($calendarConfiguration->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-
             $tableDate = $nextTableDate;
         }
 
-        return '<div class="month-calendar">' . $calendar->render() . '</div>';
+        return $calendar->render();
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
+     * @return string
      */
     public function renderTitle()
     {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
+        $weekNumber = date('W', $this->getDisplayTime());
+
+        return Translation::get('Week', null, Utilities::COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
+             DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getCalendar()->getStartTime()) . ' - ' . DatetimeUtilities::format_locale_date(
+                '%A %d %B %Y',
+                strtotime('+6 Days', $this->getCalendar()->getStartTime()));
     }
 
     /**
@@ -106,7 +116,7 @@ class MonthRenderer extends FullTableRenderer
      */
     public function getPreviousDisplayTime()
     {
-        return strtotime('first day of previous month', $this->getDisplayTime());
+        return strtotime('-1 Week', $this->getDisplayTime());
     }
 
     /**
@@ -115,6 +125,6 @@ class MonthRenderer extends FullTableRenderer
      */
     public function getNextDisplayTime()
     {
-        return strtotime('first day of next month', $this->getDisplayTime());
+        return strtotime('+1 Week', $this->getDisplayTime());
     }
 }

@@ -2,61 +2,18 @@
 namespace Chamilo\Libraries\Calendar\Service\Table;
 
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Table\CalendarConfiguration;
+use Chamilo\Libraries\Calendar\Service\CalendarBuilder;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\Utilities;
-use Symfony\Component\Translation\Translator;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Service\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthCalendarBuilder
+class MonthCalendarBuilder extends CalendarBuilder
 {
-    const TIME_PLACEHOLDER = '__TIME__';
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
-     */
-    private $calendarConfiguration;
-
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function __construct(CalendarConfiguration $calendarConfiguration, Translator $translator)
-    {
-        $this->calendarConfiguration = $calendarConfiguration;
-        $this->translator = $translator;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
-     */
-    protected function getCalendarConfiguration()
-    {
-        return $this->calendarConfiguration;
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator()
-    {
-        return $this->translator;
-    }
 
     /**
      *
@@ -75,7 +32,7 @@ class MonthCalendarBuilder
      */
     protected function getCalendar($displayTime, $classes = [])
     {
-        return new MonthCalendar($displayTime, $classes);
+        return new MonthCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
     }
 
     /**

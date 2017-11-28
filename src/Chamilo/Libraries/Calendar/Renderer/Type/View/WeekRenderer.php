@@ -2,13 +2,10 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -20,124 +17,6 @@ class WeekRenderer extends FullTableRenderer
 
     /**
      *
-     * @var integer
-     */
-    private $hourStep;
-
-    /**
-     *
-     * @var integer
-     */
-    private $startHour;
-
-    /**
-     *
-     * @var integer
-     */
-    private $endHour;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $hideOtherHours;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $displayTime
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     * @param integer $hourStep
-     * @param integer $startHour
-     * @param integer $endHour
-     * @param boolean $hideOtherHours
-     */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
-    {
-        $this->hourStep = $hourStep;
-        $this->startHour = $startHour;
-        $this->endHour = $endHour;
-        $this->hideOtherHours = $hideOtherHours;
-
-        parent::__construct($dataProvider, $legend, $displayTime, $viewActions);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getHourStep()
-    {
-        return $this->hourStep;
-    }
-
-    /**
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
-    {
-        $this->hourStep = $hourStep;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getEndHour()
-    {
-        return $this->endHour;
-    }
-
-    /**
-     *
-     * @param integer $endHour
-     */
-    public function setEndHour($endHour)
-    {
-        $this->endHour = $endHour;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function getHideOtherHours()
-    {
-        return $this->hideOtherHours;
-    }
-
-    /**
-     *
-     * @param boolean $hideOtherHours
-     */
-    public function setHideOtherHours($hideOtherHours)
-    {
-        $this->hideOtherHours = $hideOtherHours;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
      */
     public function initializeCalendar()
@@ -145,25 +24,40 @@ class WeekRenderer extends FullTableRenderer
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-        $dayUrlTemplate = new Redirect($displayParameters);
 
-        return new WeekCalendar(
+        return $this->getWeekCalendarBuilder()->buildCalendar(
             $this->getDisplayTime(),
-            $dayUrlTemplate->getUrl(),
-            $this->getHourStep(),
-            $this->getStartHour(),
-            $this->getEndHour(),
-            $this->getHideOtherHours(),
+            $displayParameters,
             array('table-calendar-week'));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Service\Table\WeekCalendarBuilder
+     */
+    protected function getWeekCalendarBuilder()
+    {
+        return $this->getService('chamilo.libraries.calendar.service.table.week_calendar_builder');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
     }
 
     /**
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
      */
-    public function renderFullCalendar()
+    public function render()
     {
+        $calendarConfiguration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
+
         $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
         $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
 
@@ -176,7 +70,7 @@ class WeekRenderer extends FullTableRenderer
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+' . $calendar->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+' . $calendarConfiguration->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -189,7 +83,7 @@ class WeekRenderer extends FullTableRenderer
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($calendar->getHourStep());
+                    $configuration->setHourStep($calendarConfiguration->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 

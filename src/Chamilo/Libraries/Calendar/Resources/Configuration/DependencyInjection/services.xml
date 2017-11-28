@@ -63,5 +63,27 @@
                 id="symfony.component.translation.translator" />
         </service>
 
+        <service
+            id="chamilo.libraries.calendar.service.table.day_calendar_builder"
+            class="Chamilo\Libraries\Calendar\Service\Table\DayCalendarBuilder">
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.table.calendar_configuration" />
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+        </service>
+
+        <service
+            id="chamilo.libraries.calendar.service.table.week_calendar_builder"
+            class="Chamilo\Libraries\Calendar\Service\Table\WeekCalendarBuilder">
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.table.calendar_configuration" />
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+        </service>
+
     </services>
 </container>

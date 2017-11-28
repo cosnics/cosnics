@@ -20,7 +20,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -95,16 +94,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getCurrentRendererTime(),
             $this->getViewActions());
         $renderer = $rendererFactory->getRenderer();
-
-        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
-             $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
-        {
-            $renderer->setStartHour(
-                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
-            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
-            $renderer->setHideOtherHours(
-                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar'));
-        }
 
         return $renderer->render();
     }

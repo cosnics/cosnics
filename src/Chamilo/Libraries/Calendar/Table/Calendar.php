@@ -14,6 +14,12 @@ abstract class Calendar extends HTML_Table
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    private $calendarConfiguration;
+
+    /**
+     *
      * @var integer
      */
     private $displayTime;
@@ -26,11 +32,14 @@ abstract class Calendar extends HTML_Table
 
     /**
      *
+     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
      * @param string[] $classes
      */
-    public function __construct($displayTime, $classes = array())
+    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime, $classes = array())
     {
+        $this->calendarConfiguration = $calendarConfiguration;
+
         if (is_null($displayTime))
         {
             $this->displayTime = time();
@@ -44,6 +53,15 @@ abstract class Calendar extends HTML_Table
         array_unshift($classes, 'table-calendar');
 
         parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->calendarConfiguration;
     }
 
     /**
@@ -101,7 +119,7 @@ abstract class Calendar extends HTML_Table
      *
      * @return integer
      */
-    abstract public function getStartTime($firstDayOfTheWeek = null);
+    abstract public function getStartTime();
 
     /**
      * Gets the end date which will be displayed by this calendar.
@@ -109,4 +127,16 @@ abstract class Calendar extends HTML_Table
      * @return integer
      */
     abstract public function getEndTime();
+
+    abstract protected function addEvents();
+
+    /**
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $this->addEvents();
+        return $this->toHtml();
+    }
 }

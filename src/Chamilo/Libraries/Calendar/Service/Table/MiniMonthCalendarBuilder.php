@@ -19,7 +19,7 @@ class MiniMonthCalendarBuilder extends MonthCalendarBuilder
      */
     protected function getCalendar($displayTime, $classes = [])
     {
-        return new MiniMonthCalendar($displayTime, $classes);
+        return new MiniMonthCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
     }
 
     /**
