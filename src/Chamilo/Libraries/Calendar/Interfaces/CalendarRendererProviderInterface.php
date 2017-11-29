@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Interfaces;
+namespace Chamilo\Libraries\Calendar\Interfaces;
 
 /**
  * An interface which forces the implementing Application to provide a given set of methods
