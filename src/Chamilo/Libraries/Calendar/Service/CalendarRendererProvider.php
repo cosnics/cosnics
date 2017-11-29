@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Service;
+namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
