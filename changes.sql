@@ -286,3 +286,7 @@ ALTER TABLE `repository_learning_path_tree_node_data` ADD `enforce_default_trave
 
 /** 16 OCT 2017 **/
 INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration\\Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup', 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Document\\Integration', 'Integration', 'Document', '1', '1.0.0', '1');
+
+
+
+INSERT INTO `configuration_registration` (`id`, `context`, `type`, `category`, `name`, `status`, `version`, `priority`) VALUES (NULL, 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\LearningPath', 'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Integration', NULL, 'Repository', '1', '1.0.0', '1');
