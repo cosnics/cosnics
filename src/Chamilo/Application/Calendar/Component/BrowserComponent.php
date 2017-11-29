@@ -9,9 +9,7 @@ use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -82,20 +80,35 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->calendarDataProvider;
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function renderNormalCalendar()
     {
-        $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
-
-        $rendererFactory = new ViewRendererFactory(
+        return $this->getViewRendererFactory()->renderView(
             $this->getCurrentRendererType(),
-            $dataProvider,
-            $calendarLegend,
-            $this->getCurrentRendererTime(),
-            $this->getViewActions());
-        $renderer = $rendererFactory->getRenderer();
+            $this->getCalendarDataProvider(),
+            $this->getCalendarSources(),
+            $this->getCurrentRendererTime());
+    }
 
-        return $renderer->render();
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
+     */
+    protected function getCalendarSources()
+    {
+        return $this->getService('chamilo.application.calendar.calendar_sources');
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Service\ViewRendererFactory
+     */
+    protected function getViewRendererFactory()
+    {
+        return $this->getService('chamilo.libraries.calendar.renderer.service.view_renderer_factory');
     }
 
     protected function getViewActions()

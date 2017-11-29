@@ -19,7 +19,7 @@ abstract class EventTableRenderer extends EventRenderer
     public function determineEventClasses()
     {
         $eventClasses = $this->getEventClasses($this->getEvent()->getStartDate());
-        $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses(
+        $sourceClasses = $this->getRenderer()->getCalendarSources()->getSourceClasses(
             $this->getEvent()->getSource(),
             $this->isFadedEvent());
         return implode(' ', array($eventClasses, $sourceClasses));
@@ -114,7 +114,7 @@ abstract class EventTableRenderer extends EventRenderer
         $html = array();
 
         $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
-             $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
+             $this->getRenderer()->getCalendarSources()->getSourceKey($this->getEvent()->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);

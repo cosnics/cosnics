@@ -1,64 +1,64 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
+namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar;
+use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthRenderer extends HtmlTableRenderer
+class WeekRenderer extends HtmlTableRenderer
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
     public function initializeCalendar()
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
 
-        return $this->getMonthCalendarBuilder()->buildCalendar(
+        return $this->getWeekCalendarBuilder()->buildCalendar(
             $this->getDisplayTime(),
             $displayParameters,
-            array('table-calendar-month'));
+            array('table-calendar-week'));
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\MonthCalendarBuilder
+     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\WeekCalendarBuilder
      */
-    protected function getMonthCalendarBuilder()
+    protected function getWeekCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.html_table.month_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.html_table.week_calendar_builder');
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
-    protected function getCalendarConfiguration()
-    {
-        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
-    }
-
     public function render()
     {
+        $calendarConfiguration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
 
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
+        $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
+        $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
 
-        $events = $this->getEvents($startTime, $endTime);
+        $events = $this->getEvents($fromDate, $toDate);
+
+        $startTime = $calendar->getStartTime();
+        $endTime = $toDate;
+
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+1 Day', $tableDate);
+            $nextTableDate = strtotime('+' . $calendarConfiguration->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -71,16 +71,16 @@ class MonthRenderer extends HtmlTableRenderer
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
+                    $configuration->setHourStep($calendarConfiguration->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-
             $tableDate = $nextTableDate;
         }
 
-        return '<div class="month-calendar">' . $calendar->render() . '</div>';
+        return $calendar->render();
     }
 }

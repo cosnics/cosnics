@@ -19,9 +19,9 @@ class EventMiniMonthRenderer extends EventMonthRenderer
         $html = array();
 
         $event = $this->getEvent();
-        $legend = $this->getRenderer()->getLegend();
+        $calendarSources = $this->getRenderer()->getCalendarSources();
 
-        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html[] = '<div class="tooltip-event-container">';

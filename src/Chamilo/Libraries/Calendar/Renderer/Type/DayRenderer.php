@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
+namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayRenderer extends HtmlTableRenderer
@@ -13,7 +13,7 @@ class DayRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
      */
     public function initializeCalendar()
     {
@@ -22,7 +22,7 @@ class DayRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\Table\DayCalendarBuilder
+     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\DayCalendarBuilder
      */
     protected function getDayCalendarBuilder()
     {
@@ -31,16 +31,7 @@ class DayRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
-     */
-    protected function getCalendarConfiguration()
-    {
-        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {

@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
+namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class HtmlTableRenderer extends ViewRenderer
@@ -46,4 +46,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
      * @return \Chamilo\Libraries\Calendar\Table\Calendar
      */
     abstract public function initializeCalendar();
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     */
+    protected function getCalendarConfiguration()
+    {
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
+    }
 }

@@ -94,25 +94,6 @@ class LegendRenderer
     }
 
     /**
-     * Determine the classes for a specific source
-     *
-     * @param string $key
-     * @param boolean $fade
-     * @return string
-     */
-    public function getSourceClasses($source = null, $fade = false)
-    {
-        $classes = 'event-container-source event-container-source-' . $this->getCalendarSources()->getSourceKey($source);
-
-        if ($fade)
-        {
-            $classes .= ' event-container-source-faded';
-        }
-
-        return $classes;
-    }
-
-    /**
      * Builds a color-based legend for the calendar to help users to see the origin of the the published events
      *
      * @param CalendarRendererProviderInterface $dataProvider
@@ -139,7 +120,7 @@ class LegendRenderer
 
             foreach ($sources as $source)
             {
-                $sourceClasses = $this->getSourceClasses($source);
+                $sourceClasses = $this->getCalendarSources()->getSourceClasses($source);
 
                 if ($dataProvider->supportsVisibility())
                 {

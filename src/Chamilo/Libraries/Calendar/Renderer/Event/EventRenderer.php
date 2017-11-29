@@ -47,7 +47,7 @@ abstract class EventRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @return \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer
      */
     public function getRenderer()
     {

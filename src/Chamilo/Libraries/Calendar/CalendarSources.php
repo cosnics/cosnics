@@ -59,16 +59,43 @@ class CalendarSources
     /**
      *
      * @param string $source
-     * @return integer
      */
-    public function getSourceKey($source)
+    public function addSource($source)
     {
         if (! in_array($source, $this->getSources()))
         {
             $this->sources[] = $source;
         }
+    }
 
+    /**
+     *
+     * @param string $source
+     * @return integer
+     */
+    public function getSourceKey($source)
+    {
+        $this->addSource($source);
         return array_search($source, $this->getSources());
+    }
+
+    /**
+     * Determine the classes for a specific source
+     *
+     * @param string $key
+     * @param boolean $fade
+     * @return string
+     */
+    public function getSourceClasses($source = null, $fade = false)
+    {
+        $classes = 'event-container-source event-container-source-' . $this->getSourceKey($source);
+
+        if ($fade)
+        {
+            $classes .= ' event-container-source-faded';
+        }
+
+        return $classes;
     }
 }
 

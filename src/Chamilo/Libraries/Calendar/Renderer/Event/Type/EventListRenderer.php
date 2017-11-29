@@ -24,9 +24,9 @@ class EventListRenderer extends EventRenderer
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
         $event = $this->getEvent();
-        $legend = $this->getRenderer()->getLegend();
+        $calendarSources = $this->getRenderer()->getCalendarSources();
 
-        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html = array();
@@ -42,8 +42,8 @@ class EventListRenderer extends EventRenderer
             $rowClasses = '';
         }
 
-        $html[] = '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) .
-             '">';
+        $html[] = '<div class="row' . $rowClasses . '" data-source-key="' .
+             $calendarSources->getSourceKey($event->getSource()) . '">';
 
         $html[] = '<div class="col-xs-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';

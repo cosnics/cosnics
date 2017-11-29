@@ -1,21 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
+use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -51,49 +39,23 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Legend
+     * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
-    private $legend;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     */
-    private $viewActions;
+    private $calendarSources;
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param integer $displayTime
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array())
+    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources,
+        $displayTime)
     {
         parent::__construct($dataProvider);
 
-        $this->legend = $legend;
+        $this->calendarSources = $calendarSources;
         $this->displayTime = $displayTime;
-        $this->viewActions = $viewActions;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     */
-    public function getViewActions()
-    {
-        return $this->viewActions;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     */
-    public function setViewActions($viewActions)
-    {
-        $this->viewActions = $viewActions;
     }
 
     /**
@@ -107,20 +69,11 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
      */
-    public function getLegend()
+    public function getCalendarSources()
     {
-        return $this->legend;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     */
-    public function setLegend(Legend $legend)
-    {
-        $this->legend = $legend;
+        return $this->calendarSources;
     }
 
     /**
@@ -170,102 +123,5 @@ abstract class ViewRenderer extends Renderer
             });
 
         return $events;
-    }
-
-    /**
-     *
-     * @param string[] $types
-     * @param string $typeUrl
-     * @param string $todayUrl
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    public static function getToolbarItems($types, $typeUrl, $todayUrl)
-    {
-        $items = array();
-
-        foreach ($types as $type)
-        {
-            $items[] = new ToolbarItem(
-                Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
-                Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Type/' . $type),
-                str_replace(self::MARKER_TYPE, $type, $typeUrl));
-        }
-
-        $items[] = new ToolbarItem(
-            Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
-            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'),
-            $todayUrl);
-
-        return $items;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
-     */
-    public function renderTypeButton()
-    {
-        $rendererTypes = array(
-            ViewRenderer::TYPE_MONTH,
-            ViewRenderer::TYPE_WEEK,
-            ViewRenderer::TYPE_DAY,
-            ViewRenderer::TYPE_LIST);
-
-        $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $currentRendererType = $displayParameters[self::PARAM_TYPE];
-
-        $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar'));
-        $button->setDropdownClasses('dropdown-menu-right');
-
-        foreach ($rendererTypes as $rendererType)
-        {
-            $displayParameters[self::PARAM_TYPE] = $rendererType;
-            $typeUrl = new Redirect($displayParameters);
-
-            $button->addSubButton(
-                new SubButton(
-                    Translation::get($rendererType . 'View'),
-                    null,
-                    $typeUrl->getUrl(),
-                    SubButton::DISPLAY_LABEL,
-                    false,
-                    $currentRendererType == $rendererType ? 'selected' : 'not-selected'));
-        }
-
-        return $button;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function determineNavigationUrl()
-    {
-        $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[self::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
-
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderViewActions()
-    {
-        $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        foreach ($this->getViewActions() as $viewAction)
-        {
-            $buttonToolBar->addItem($viewAction);
-        }
-
-        $buttonToolBar->addItem($this->renderTypeButton());
-
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
     }
 }
