@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
 use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 use Chamilo\Libraries\File\Path;
@@ -15,27 +15,6 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
  */
 class MiniMonthRenderer extends HtmlTableRenderer
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar
-     */
-    public function initializeCalendar()
-    {
-        return $this->getMiniMonthCalendarBuilder()->buildCalendar(
-            $this->getDisplayTime(),
-            [],
-            array('table-calendar-mini'));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\MiniMonthCalendarBuilder
-     */
-    protected function getMiniMonthCalendarBuilder()
-    {
-        return $this->getService('chamilo.libraries.calendar.service.html_table.mini_month_calendar_builder');
-    }
 
     /**
      *
@@ -66,7 +45,7 @@ class MiniMonthRenderer extends HtmlTableRenderer
                 {
                     $this->getCalendarSources()->addSource($event->getSource());
 
-                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
+                    $eventRendererFactory = new HtmlTableRendererFactory($this, $event, $tableDate);
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }

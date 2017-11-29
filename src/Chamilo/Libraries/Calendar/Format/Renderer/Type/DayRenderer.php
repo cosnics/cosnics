@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 
 /**
@@ -11,24 +11,6 @@ use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
  */
 class DayRenderer extends HtmlTableRenderer
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
-     */
-    public function initializeCalendar()
-    {
-        return $this->getDayCalendarBuilder()->buildCalendar($this->getDisplayTime(), [], array('table-calendar-day'));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\DayCalendarBuilder
-     */
-    protected function getDayCalendarBuilder()
-    {
-        return $this->getService('chamilo.libraries.calendar.service.html_table.day_calendar_builder');
-    }
 
     /**
      *
@@ -58,7 +40,7 @@ class DayRenderer extends HtmlTableRenderer
                      $tableDate < $endDate && $endDate < $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
+                    $eventRendererFactory = new HtmlTableRendererFactory($this, $event, $tableDate);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }

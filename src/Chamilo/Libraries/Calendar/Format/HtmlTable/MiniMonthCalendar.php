@@ -11,6 +11,15 @@ class MiniMonthCalendar extends MonthCalendar
 
     /**
      *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getClasses()
+     */
+    protected function getClasses($classes = [])
+    {
+        return Calendar::getClasses(['table-calendar-mini']);
+    }
+
+    /**
+     *
      * @param string $urlFormat
      */
     public function addNavigationLinks($urlFormat)

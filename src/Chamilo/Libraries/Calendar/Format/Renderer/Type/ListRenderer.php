@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
@@ -93,7 +93,7 @@ class ListRenderer extends ViewRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    if (! $this->isSourceVisible($dateEvent->getSource(), $this->getDataProvider()->getUser()->getId()))
+                    if (! $this->isSourceVisible($dateEvent->getSource()))
                     {
                         $hiddenEvents ++;
                     }
@@ -112,7 +112,7 @@ class ListRenderer extends ViewRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    $eventRendererFactory = new ViewRendererFactory($this, $dateEvent, $startTime);
+                    $eventRendererFactory = new HtmlTableRendererFactory($this, $dateEvent, $startTime);
 
                     $html[] = '<li class="list-group-item ">';
                     $html[] = $eventRendererFactory->render();

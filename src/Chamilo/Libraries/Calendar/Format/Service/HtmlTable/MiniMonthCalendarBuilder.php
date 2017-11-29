@@ -17,9 +17,9 @@ class MiniMonthCalendarBuilder extends MonthCalendarBuilder
      * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar
      */
-    protected function getCalendar($displayTime, $classes = [])
+    protected function getCalendar($displayTime)
     {
-        return new MiniMonthCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
+        return new MiniMonthCalendar($this->getCalendarConfiguration(), $displayTime);
     }
 
     /**

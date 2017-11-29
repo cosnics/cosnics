@@ -86,20 +86,10 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderNormalCalendar()
     {
-        return $this->getViewRendererFactory()->renderView(
+        return $this->getViewRendererFactory()->getHtmlTableRenderer(
             $this->getCurrentRendererType(),
             $this->getCalendarDataProvider(),
-            $this->getCalendarSources(),
-            $this->getCurrentRendererTime());
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\CalendarSources
-     */
-    protected function getCalendarSources()
-    {
-        return $this->getService('chamilo.application.calendar.calendar_sources');
+            $this->getCurrentRendererTime())->render();
     }
 
     /**
@@ -108,7 +98,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function getViewRendererFactory()
     {
-        return $this->getService('chamilo.libraries.calendar.format.service.view_renderer_factory');
+        return $this->getService('chamilo.libraries.calendar.format.service.html_table_renderer_factory');
     }
 
     protected function getViewActions()

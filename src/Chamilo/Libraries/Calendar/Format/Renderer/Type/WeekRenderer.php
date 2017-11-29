@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Format\HtmlTable\WeekCalendar;
+use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 
 /**
@@ -12,31 +11,6 @@ use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
  */
 class WeekRenderer extends HtmlTableRenderer
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
-     */
-    public function initializeCalendar()
-    {
-        $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-
-        return $this->getWeekCalendarBuilder()->buildCalendar(
-            $this->getDisplayTime(),
-            $displayParameters,
-            array('table-calendar-week'));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\WeekCalendarBuilder
-     */
-    protected function getWeekCalendarBuilder()
-    {
-        return $this->getService('chamilo.libraries.calendar.service.html_table.week_calendar_builder');
-    }
 
     /**
      *
@@ -70,7 +44,7 @@ class WeekRenderer extends HtmlTableRenderer
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
+                    $eventRendererFactory = new HtmlTableRendererFactory($this, $event, $tableDate);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }

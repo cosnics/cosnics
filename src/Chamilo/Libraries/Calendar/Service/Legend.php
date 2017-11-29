@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer;
+namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Path;
@@ -197,9 +197,7 @@ class Legend
 
                 if ($this->getDataProvider()->supportsVisibility())
                 {
-                    $isSourceVisible = $this->getDataProvider()->isSourceVisible(
-                        $source,
-                        $this->getDataProvider()->getUser()->getId());
+                    $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
                     $eventClasses = ! $isSourceVisible ? ' event-container-source-faded' : '';
                 }
                 else

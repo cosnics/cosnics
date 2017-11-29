@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
  * @package Chamilo\Libraries\Calendar\Event\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ViewRendererFactory
+class HtmlTableRendererFactory
 {
 
     /**

@@ -53,28 +53,6 @@
         </service>
 
         <service
-            id="chamilo.application.calendar.calendar_sources"
-            class="Chamilo\Libraries\Calendar\CalendarSources">
-        </service>
-
-        <service
-            id="chamilo.application.calendar.service.legend_renderer"
-            class="Chamilo\Libraries\Calendar\Service\LegendRenderer">
-            <argument
-                type="service"
-                id="chamilo.application.calendar.calendar_sources" />
-            <argument
-                type="service"
-                id="symfony.component.translation.translator" />
-            <argument
-                type="service"
-                id="chamilo.libraries.file.path_builder" />
-            <argument
-                type="service"
-                id="chamilo.libraries.format.utilities.resource_manager" />
-        </service>
-
-        <service
             id="chamilo.application.calendar.service.calendar_renderer_provider"
             class="Chamilo\Libraries\Calendar\Service\CalendarRendererProvider">
             <argument

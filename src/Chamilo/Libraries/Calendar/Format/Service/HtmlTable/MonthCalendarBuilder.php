@@ -17,24 +17,22 @@ class MonthCalendarBuilder extends CalendarBuilder
     /**
      *
      * @param integer $displayTime
-     * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
      */
-    protected function getCalendar($displayTime, $classes = [])
+    protected function getCalendar($displayTime)
     {
-        return new MonthCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
+        return new MonthCalendar($this->getCalendarConfiguration(), $displayTime);
     }
 
     /**
      *
      * @param integer $displayTime
      * @param string[] $displayParameters
-     * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
      */
-    public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
+    public function buildCalendar($displayTime, $displayParameters = [])
     {
-        $monthCalendar = $this->getCalendar($displayTime, $classes);
+        $monthCalendar = $this->getCalendar($displayTime);
 
         $firstDay = mktime(0, 0, 0, date('m', $displayTime), 1, date('Y', $displayTime));
         $tableDate = $this->getFirstTableDate($firstDay);

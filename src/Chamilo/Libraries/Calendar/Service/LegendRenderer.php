@@ -124,7 +124,7 @@ class LegendRenderer
 
                 if ($dataProvider->supportsVisibility())
                 {
-                    $isSourceVisible = $dataProvider->isSourceVisible($source, $dataProvider->getUser()->getId());
+                    $isSourceVisible = $dataProvider->isSourceVisible($source);
                     $eventClasses = ! $isSourceVisible ? ' event-container-source-faded' : '';
                 }
                 else

@@ -31,9 +31,7 @@ class ListRenderer extends ViewRenderer
 
         $html = array();
 
-        if (! $this->getRenderer()->isSourceVisible(
-            $event->getSource(),
-            $this->getRenderer()->getDataProvider()->getUser()->getId()))
+        if (! $this->getRenderer()->isSourceVisible($event->getSource()))
         {
             $rowClasses = ' event-container-hidden';
         }

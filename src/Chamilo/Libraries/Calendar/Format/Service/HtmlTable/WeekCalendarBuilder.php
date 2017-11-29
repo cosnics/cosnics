@@ -20,21 +20,20 @@ class WeekCalendarBuilder extends CalendarBuilder
      * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
-    protected function getCalendar($displayTime, $classes = [])
+    protected function getCalendar($displayTime)
     {
-        return new WeekCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
+        return new WeekCalendar($this->getCalendarConfiguration(), $displayTime);
     }
 
     /**
      *
      * @param integer $displayTime
      * @param string[] $displayParameters
-     * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
-    public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
+    public function buildCalendar($displayTime, $displayParameters = [])
     {
-        $weekCalendar = $this->getCalendar($displayTime, $classes);
+        $weekCalendar = $this->getCalendar($displayTime);
 
         $header = $weekCalendar->getHeader();
         $header->setRowType(0, 'th');

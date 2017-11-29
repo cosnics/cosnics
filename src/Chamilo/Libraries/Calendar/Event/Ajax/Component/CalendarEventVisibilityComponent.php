@@ -43,7 +43,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->getUser->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_SOURCE),
             new StaticConditionVariable($source));
@@ -75,7 +75,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
             $data = $this->getPostDataValue(self::PARAM_DATA);
 
             $visibility = new $visibilityClass();
-            $visibility->setUserId($this->get_user_id());
+            $visibility->setUserId($this->getUser()->getId());
             $visibility->setSource($source);
 
             if ($visibility->create())

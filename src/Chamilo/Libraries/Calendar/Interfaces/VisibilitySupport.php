@@ -16,10 +16,9 @@ interface VisibilitySupport
      * Check whether the given source is visible for the user
      *
      * @param string $source
-     * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source, $userIdentifier);
+    public function isSourceVisible($source);
 
     /**
      * Return the additional Application data needed for the storage of the Visibility instance

@@ -35,9 +35,8 @@ abstract class Calendar extends HTML_Table
      *
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
-     * @param string[] $classes
      */
-    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime, $classes = array())
+    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime)
     {
         $this->calendarConfiguration = $calendarConfiguration;
 
@@ -51,9 +50,18 @@ abstract class Calendar extends HTML_Table
         }
         $this->eventsToShow = array();
 
-        array_unshift($classes, 'table-calendar');
+        parent::__construct(array('class' => implode(' ', $this->getClasses()), 'cellspacing' => 0));
+    }
 
-        parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
+    /**
+     *
+     * @param string[] $classes
+     * @return string[]
+     */
+    protected function getClasses($classes = [])
+    {
+        array_unshift($classes, 'table-calendar');
+        return $classes;
     }
 
     /**

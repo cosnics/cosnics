@@ -19,17 +19,25 @@ class MonthCalendar extends Calendar
     private $cellMapping;
 
     /**
-     * Creates a new month calendar
      *
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
      * @param string[] $classes
      */
-    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime, $classes = [])
+    public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime)
     {
-        parent::__construct($calendarConfiguration, $displayTime, $classes);
+        parent::__construct($calendarConfiguration, $displayTime);
 
         $this->cellMapping = array();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getClasses()
+     */
+    protected function getClasses($classes = [])
+    {
+        return parent::getClasses(['table-calendar-month']);
     }
 
     /**

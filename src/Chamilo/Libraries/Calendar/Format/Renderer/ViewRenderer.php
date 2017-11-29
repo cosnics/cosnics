@@ -77,14 +77,13 @@ abstract class ViewRenderer extends Renderer
      * Check whether the given source is visible for the user
      *
      * @param string $source
-     * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source, $userIdentifier)
+    public function isSourceVisible($source)
     {
         if ($this->getDataProvider()->supportsVisibility())
         {
-            return $this->getDataProvider()->isSourceVisible($source, $userIdentifier);
+            return $this->getDataProvider()->isSourceVisible($source);
         }
 
         return true;

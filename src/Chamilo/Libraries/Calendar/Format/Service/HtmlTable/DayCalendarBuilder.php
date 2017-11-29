@@ -15,12 +15,11 @@ class DayCalendarBuilder extends CalendarBuilder
     /**
      *
      * @param integer $displayTime
-     * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
      */
-    protected function getCalendar($displayTime, $classes = [])
+    protected function getCalendar($displayTime)
     {
-        return new DayCalendar($this->getCalendarConfiguration(), $displayTime, $classes);
+        return new DayCalendar($this->getCalendarConfiguration(), $displayTime);
     }
 
     /**
@@ -30,9 +29,9 @@ class DayCalendarBuilder extends CalendarBuilder
      * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
      */
-    public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
+    public function buildCalendar($displayTime, $displayParameters = [])
     {
-        $dayCalendar = $this->getCalendar($displayTime, $classes);
+        $dayCalendar = $this->getCalendar($displayTime);
 
         $yearDay = date('z', $displayTime) + 1;
         $yearWeek = date('W', $displayTime);

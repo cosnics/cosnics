@@ -45,7 +45,7 @@ abstract class ViewRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer
+     * @return \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
      */
     public function getRenderer()
     {
@@ -105,9 +105,7 @@ abstract class ViewRenderer
     {
         $eventClasses = 'event-container';
 
-        if (! $this->getRenderer()->isSourceVisible(
-            $this->getEvent()->getSource(),
-            $this->getRenderer()->getDataProvider()->getUser()->getId()))
+        if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
             $eventClasses .= ' event-container-hidden';
         }

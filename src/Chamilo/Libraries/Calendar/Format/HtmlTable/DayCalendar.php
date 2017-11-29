@@ -10,6 +10,15 @@ class DayCalendar extends Calendar
 {
 
     /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getClasses()
+     */
+    protected function getClasses($classes = [])
+    {
+        return parent::getClasses(['table-calendar-day']);
+    }
+
+    /**
      * Gets the first date which will be displayed by this calendar.
      *
      * @return integer

@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Format\HtmlTable\MonthCalendar;
+use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 
 /**
@@ -12,31 +11,6 @@ use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
  */
 class MonthRenderer extends HtmlTableRenderer
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
-     */
-    public function initializeCalendar()
-    {
-        $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-
-        return $this->getMonthCalendarBuilder()->buildCalendar(
-            $this->getDisplayTime(),
-            $displayParameters,
-            array('table-calendar-month'));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\MonthCalendarBuilder
-     */
-    protected function getMonthCalendarBuilder()
-    {
-        return $this->getService('chamilo.libraries.calendar.service.html_table.month_calendar_builder');
-    }
 
     /**
      *
@@ -65,7 +39,7 @@ class MonthRenderer extends HtmlTableRenderer
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
+                    $eventRendererFactory = new HtmlTableRendererFactory($this, $event, $tableDate);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }

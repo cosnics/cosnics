@@ -11,6 +11,15 @@ class WeekCalendar extends Calendar
     const TIME_PLACEHOLDER = '__TIME__';
 
     /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar::getClasses()
+     */
+    protected function getClasses($classes = [])
+    {
+        return parent::getClasses(['table-calendar-week']);
+    }
+
+    /**
      * Gets the first date which will be displayed by this calendar.
      * This is always a monday.
      *

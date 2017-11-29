@@ -94,9 +94,8 @@ abstract class CalendarBuilder
      *
      * @param integer $displayTime
      * @param string[] $displayParameters
-     * @param string[] $classes
      * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
      */
-    abstract public function buildCalendar($displayTime, $displayParameters = [], $classes = []);
+    abstract public function buildCalendar($displayTime, $displayParameters = []);
 }
 
