@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service;
+namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
 
-use Chamilo\Libraries\Calendar\Table\CalendarConfiguration;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Libraries\Calendar\CalendarConfiguration;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service
+ * @package Chamilo\Libraries\Calendar\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarBuilder
@@ -15,7 +15,7 @@ abstract class CalendarBuilder
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @var \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     private $calendarConfiguration;
 
@@ -38,7 +38,7 @@ abstract class CalendarBuilder
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     protected function getCalendarConfiguration()
     {
@@ -56,10 +56,55 @@ abstract class CalendarBuilder
 
     /**
      *
+     * @return string
+     */
+    protected function getFirstDayOfTheWeek()
+    {
+        return $this->getCalendarConfiguration()->getFirstDayOfTheWeek();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    protected function getHourStep()
+    {
+        return $this->getCalendarConfiguration()->getHourStep();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    protected function getWorkingHoursStart()
+    {
+        return $this->getCalendarConfiguration()->getWorkingHoursStart();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    protected function getWorkingHoursEnd()
+    {
+        return $this->getCalendarConfiguration()->getWorkingHoursEnd();
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function getHideNonWorkingHours()
+    {
+        return $this->getCalendarConfiguration()->getHideNonWorkingHours();
+    }
+
+    /**
+     *
      * @param integer $displayTime
      * @param string[] $displayParameters
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Calendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
      */
     abstract public function buildCalendar($displayTime, $displayParameters = [], $classes = []);
 }

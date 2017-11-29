@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service;
+namespace Chamilo\Libraries\Calendar;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CalendarSourceService
+class CalendarSources
 {
 
     /**

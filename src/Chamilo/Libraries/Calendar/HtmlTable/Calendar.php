@@ -1,7 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Table;
+namespace Chamilo\Libraries\Calendar\HtmlTable;
 
 use HTML_Table;
+use Chamilo\Libraries\Calendar\CalendarConfiguration;
 
 /**
  *
@@ -14,7 +15,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @var \Chamilo\Libraries\Calendar\HtmlTable\CalendarConfiguration
      */
     private $calendarConfiguration;
 
@@ -32,7 +33,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
+     * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
      * @param string[] $classes
      */
@@ -57,7 +58,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     protected function getCalendarConfiguration()
     {

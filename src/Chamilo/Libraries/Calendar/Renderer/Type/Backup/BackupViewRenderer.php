@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\Backup;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -24,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class BackupViewRenderer extends Renderer
+abstract class BackupViewRenderer extends BackupRenderer
 {
     // Parameters
     const PARAM_TIME = 'time';

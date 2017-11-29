@@ -1,13 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\Table;
+namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
 
-use Chamilo\Libraries\Calendar\Service\CalendarBuilder;
-use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
+use Chamilo\Libraries\Calendar\HtmlTable\DayCalendar;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\Table
+ * @package Chamilo\Libraries\Calendar\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayCalendarBuilder extends CalendarBuilder
@@ -15,45 +14,9 @@ class DayCalendarBuilder extends CalendarBuilder
 
     /**
      *
-     * @return integer
-     */
-    protected function getHourStep()
-    {
-        return $this->getCalendarConfiguration()->getHourStep();
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    protected function getWorkingHoursStart()
-    {
-        return $this->getCalendarConfiguration()->getWorkingHoursStart();
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    protected function getWorkingHoursEnd()
-    {
-        return $this->getCalendarConfiguration()->getWorkingHoursEnd();
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    protected function getHideNonWorkingHours()
-    {
-        return $this->getCalendarConfiguration()->getHideNonWorkingHours();
-    }
-
-    /**
-     *
      * @param integer $displayTime
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
      */
     protected function getCalendar($displayTime, $classes = [])
     {
@@ -65,7 +28,7 @@ class DayCalendarBuilder extends CalendarBuilder
      * @param integer $displayTime
      * @param string[] $displayParameters
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\DayCalendar
      */
     public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
     {

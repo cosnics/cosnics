@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BackupICalRenderer extends Renderer
+class BackupICalRenderer extends BackupRenderer
 {
     const TIMEZONE_START = 100;
     const TIMEZONE_END = 2145916799;

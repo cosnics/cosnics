@@ -1,15 +1,14 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\Table;
+namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
 
+use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Service\CalendarBuilder;
-use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\Table
+ * @package Chamilo\Libraries\Calendar\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WeekCalendarBuilder extends CalendarBuilder
@@ -17,18 +16,9 @@ class WeekCalendarBuilder extends CalendarBuilder
 
     /**
      *
-     * @return string
-     */
-    protected function getFirstDayOfTheWeek()
-    {
-        return $this->getCalendarConfiguration()->getFirstDayOfTheWeek();
-    }
-
-    /**
-     *
      * @param integer $displayTime
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
     protected function getCalendar($displayTime, $classes = [])
     {
@@ -40,11 +30,10 @@ class WeekCalendarBuilder extends CalendarBuilder
      * @param integer $displayTime
      * @param string[] $displayParameters
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
     public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
     {
-        $calendarConfiguration = $this->getCalendarConfiguration();
         $weekCalendar = $this->getCalendar($displayTime, $classes);
 
         $header = $weekCalendar->getHeader();
@@ -57,10 +46,10 @@ class WeekCalendarBuilder extends CalendarBuilder
         $firstDay = $weekCalendar->getStartTime();
         $lastDay = $weekCalendar->getEndTime();
 
-        $workingStart = $calendarConfiguration->getWorkingHoursStart();
-        $workingEnd = $calendarConfiguration->getWorkingHoursEnd();
-        $hide = $calendarConfiguration->getHideNonWorkingHours();
-        $hourStep = $calendarConfiguration->getHourStep();
+        $workingStart = $this->getWorkingHoursStart();
+        $workingEnd = $this->getWorkingHoursEnd();
+        $hide = $this->getHideNonWorkingHours();
+        $hourStep = $this->getHourStep();
 
         $start = 0;
         $end = 24;
@@ -152,7 +141,7 @@ class WeekCalendarBuilder extends CalendarBuilder
 
         if ($today == date('Y-m-d', $weekDay))
         {
-            if (date('H') >= $hour && date('H') < $hour + $this->getCalendarConfiguration()->getHourStep())
+            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
             {
                 $class[] = 'table-calendar-highlight';
             }

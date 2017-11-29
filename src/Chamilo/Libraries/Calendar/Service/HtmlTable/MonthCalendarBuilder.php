@@ -1,15 +1,14 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\Table;
+namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
 
+use Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Service\CalendarBuilder;
-use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\Table
+ * @package Chamilo\Libraries\Calendar\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MonthCalendarBuilder extends CalendarBuilder
@@ -17,18 +16,9 @@ class MonthCalendarBuilder extends CalendarBuilder
 
     /**
      *
-     * @return string
-     */
-    protected function getFirstDayOfTheWeek()
-    {
-        return $this->getCalendarConfiguration()->getFirstDayOfTheWeek();
-    }
-
-    /**
-     *
      * @param integer $displayTime
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
      */
     protected function getCalendar($displayTime, $classes = [])
     {
@@ -40,7 +30,7 @@ class MonthCalendarBuilder extends CalendarBuilder
      * @param integer $displayTime
      * @param string[] $displayParameters
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
      */
     public function buildCalendar($displayTime, $displayParameters = [], $classes = [])
     {

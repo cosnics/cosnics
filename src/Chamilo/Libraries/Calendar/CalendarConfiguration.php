@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Table;
+namespace Chamilo\Libraries\Calendar;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Table
+ * @package Chamilo\Libraries\Calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarConfiguration

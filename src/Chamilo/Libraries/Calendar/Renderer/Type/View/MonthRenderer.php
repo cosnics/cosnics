@@ -1,22 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthRenderer extends FullTableRenderer
+class MonthRenderer extends HtmlTableRenderer
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\MonthCalendar
      */
     public function initializeCalendar()
     {
@@ -32,26 +30,22 @@ class MonthRenderer extends FullTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\Table\MonthCalendarBuilder
+     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\MonthCalendarBuilder
      */
     protected function getMonthCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.table.month_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.html_table.month_calendar_builder');
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     protected function getCalendarConfiguration()
     {
-        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
-     */
     public function render()
     {
         $calendar = $this->getCalendar();
@@ -88,33 +82,5 @@ class MonthRenderer extends FullTableRenderer
         }
 
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
-     */
-    public function renderTitle()
-    {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('first day of previous month', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('first day of next month', $this->getDisplayTime());
     }
 }

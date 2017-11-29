@@ -1,14 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait TableRenderer
+abstract class HtmlTableRenderer extends ViewRenderer
 {
 
     /**
@@ -33,7 +34,7 @@ trait TableRenderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Table\Calendar $calendar
+     * @param \Chamilo\Libraries\Calendar\HtmlTable\Calendar $calendar
      */
     public function setCalendar(Calendar $calendar)
     {

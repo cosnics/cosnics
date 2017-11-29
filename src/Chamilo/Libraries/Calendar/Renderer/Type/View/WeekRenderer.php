@@ -1,23 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WeekRenderer extends FullTableRenderer
+class WeekRenderer extends HtmlTableRenderer
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar
      */
     public function initializeCalendar()
     {
@@ -33,26 +30,22 @@ class WeekRenderer extends FullTableRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\Table\WeekCalendarBuilder
+     * @return \Chamilo\Libraries\Calendar\Service\HtmlTable\WeekCalendarBuilder
      */
     protected function getWeekCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.table.week_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.html_table.week_calendar_builder');
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     protected function getCalendarConfiguration()
     {
-        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
-     */
     public function render()
     {
         $calendarConfiguration = $this->getCalendarConfiguration();
@@ -94,37 +87,5 @@ class WeekRenderer extends FullTableRenderer
         }
 
         return $calendar->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderTitle()
-    {
-        $weekNumber = date('W', $this->getDisplayTime());
-
-        return Translation::get('Week', null, Utilities::COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
-             DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getCalendar()->getStartTime()) . ' - ' . DatetimeUtilities::format_locale_date(
-                '%A %d %B %Y',
-                strtotime('+6 Days', $this->getCalendar()->getStartTime()));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('-1 Week', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('+1 Week', $this->getDisplayTime());
     }
 }

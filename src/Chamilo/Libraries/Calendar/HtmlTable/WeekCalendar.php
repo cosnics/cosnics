@@ -1,11 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Table\Type;
-
-use Chamilo\Libraries\Calendar\Table\Calendar;
+namespace Chamilo\Libraries\Calendar\HtmlTable;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
+ * @package Chamilo\Libraries\Calendar\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WeekCalendar extends Calendar

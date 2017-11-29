@@ -2,14 +2,13 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DayRenderer extends FullTableRenderer
+class DayRenderer extends HtmlTableRenderer
 {
 
     /**
@@ -27,7 +26,7 @@ class DayRenderer extends FullTableRenderer
      */
     protected function getDayCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.table.day_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.html_table.day_calendar_builder');
     }
 
     /**
@@ -36,7 +35,7 @@ class DayRenderer extends FullTableRenderer
      */
     protected function getCalendarConfiguration()
     {
-        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
     }
 
     /**
@@ -81,32 +80,5 @@ class DayRenderer extends FullTableRenderer
         }
 
         return $calendar->render();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
-     */
-    public function renderTitle()
-    {
-        return DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('-1 Day', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('+1 Day', $this->getDisplayTime());
     }
 }

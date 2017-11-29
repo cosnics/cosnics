@@ -3,13 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -82,10 +76,6 @@ class ListRenderer extends ViewRenderer
         return strtotime('+6 Months', $this->getStartTime());
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
-     */
     public function render()
     {
         $startTime = $this->getDisplayTime();
@@ -143,33 +133,5 @@ class ListRenderer extends ViewRenderer
         }
 
         return implode('', $html);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderNavigation()
-     */
-    public function renderNavigation()
-    {
-        $urlFormat = $this->determineNavigationUrl();
-        $todayUrl = str_replace(Calendar::TIME_PLACEHOLDER, time(), $urlFormat);
-
-        $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON));
-
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-        return $buttonToolbarRenderer->render();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
-     */
-    public function renderTitle()
-    {
-        return date('d M Y', $this->getStartTime()) . ' - ' . date('d M Y', $this->getEndTime());
     }
 }

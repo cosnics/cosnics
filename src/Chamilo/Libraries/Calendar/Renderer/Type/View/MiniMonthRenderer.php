@@ -2,21 +2,16 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MiniMonthRenderer extends ViewRenderer
+class MiniMonthRenderer extends HtmlTableRenderer
 {
-    use \Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 
     /**
      *
@@ -36,7 +31,7 @@ class MiniMonthRenderer extends ViewRenderer
      */
     protected function getMiniMonthCalendarBuilder()
     {
-        return $this->getService('chamilo.libraries.calendar.service.table.mini_month_calendar_builder');
+        return $this->getService('chamilo.libraries.calendar.service.html_table.mini_month_calendar_builder');
     }
 
     /**
@@ -45,35 +40,14 @@ class MiniMonthRenderer extends ViewRenderer
      */
     protected function getCalendarConfiguration()
     {
-        return $this->getService('chamilo.libraries.calendar.table.calendar_configuration');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-        $html[] = $this->renderNavigation();
-
-        $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $this->renderCalendar();
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->getService('chamilo.libraries.calendar.calendar_configuration');
     }
 
     /**
      *
      * @return string
      */
-    public function renderCalendar()
+    public function render()
     {
         $calendar = $this->getCalendar();
 
@@ -122,61 +96,5 @@ class MiniMonthRenderer extends ViewRenderer
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Adds a navigation bar to the calendar
-     *
-     * @return string
-     */
-    public function renderNavigation()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
-        $html[] = $this->renderPreviousMonthNavigation();
-        $html[] = $this->renderNextMonthNavigation();
-        $html[] = '<h4 class="panel-title">';
-        $html[] = $this->renderTitle();
-        $html[] = '</h4>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderTitle()
-    {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderPreviousMonthNavigation()
-    {
-        $urlFormat = $this->determineNavigationUrl();
-        $previousTime = strtotime('-1 Month', $this->getDisplayTime());
-        $previousUrl = str_replace(Calendar::TIME_PLACEHOLDER, $previousTime, $urlFormat);
-
-        return '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderNextMonthNavigation()
-    {
-        $urlFormat = $this->determineNavigationUrl();
-        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
-        $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
-
-        return '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
     }
 }

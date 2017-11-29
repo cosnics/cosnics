@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;

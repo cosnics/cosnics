@@ -1,12 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Table\Type;
+namespace Chamilo\Libraries\Calendar\HtmlTable;
 
-use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Calendar\Table\CalendarConfiguration;
+use Chamilo\Libraries\Calendar\CalendarConfiguration;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
+ * @package Chamilo\Libraries\Calendar\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MonthCalendar extends Calendar
@@ -22,7 +21,7 @@ class MonthCalendar extends Calendar
     /**
      * Creates a new month calendar
      *
-     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
+     * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param integer $displayTime
      * @param string[] $classes
      */

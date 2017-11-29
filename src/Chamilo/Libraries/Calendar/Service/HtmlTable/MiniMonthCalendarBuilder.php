@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\Table;
+namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
 
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
+use Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\Table
+ * @package Chamilo\Libraries\Calendar\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarBuilder extends MonthCalendarBuilder
@@ -15,7 +15,7 @@ class MiniMonthCalendarBuilder extends MonthCalendarBuilder
      *
      * @param integer $displayTime
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar
      */
     protected function getCalendar($displayTime, $classes = [])
     {

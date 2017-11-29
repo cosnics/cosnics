@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
+use Chamilo\Libraries\Calendar\CalendarConfiguration;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Calendar\Table\CalendarConfiguration;
 
 class CalendarConfigurationFactory
 {
@@ -33,7 +33,7 @@ class CalendarConfigurationFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\CalendarConfiguration
+     * @return \Chamilo\Libraries\Calendar\CalendarConfiguration
      */
     public function getCalendarConfiguration()
     {
