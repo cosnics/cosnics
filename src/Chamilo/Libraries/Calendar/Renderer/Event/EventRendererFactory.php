@@ -119,6 +119,18 @@ class EventRendererFactory
         $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
              '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
 
+        var_dump($eventRendererClassName);
+
+        if (! class_exists($eventRendererClassName))
+        {
+            $eventRendererClassName = 'Chamilo\Libraries\Calendar\Renderer\Event\Type\Event' .
+                 $this->getRenderer()->class_name(false);
+        }
+
+        var_dump($eventRendererClassName);
+
+        echo '<hr />';
+
         return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
     }
 }
