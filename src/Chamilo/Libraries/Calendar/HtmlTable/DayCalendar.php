@@ -70,7 +70,7 @@ class DayCalendar extends Calendar
                 continue;
             }
 
-            $row = (date('H', $time) - $start) / $calenderConfiguration->getHourStep();
+            $row = (date('H', $time) - $start);
 
             foreach ($items as $index => $item)
             {

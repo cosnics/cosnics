@@ -1,17 +1,15 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Event;
+namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event
+ * @package Chamilo\Libraries\Calendar\Event\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EventRenderer
+abstract class ViewRenderer
 {
 
     /**
@@ -28,21 +26,21 @@ abstract class EventRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+     * @var integer
      */
-    private $configuration;
+    private $startDate;
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
+     * @param integer $startDate
      */
-    public function __construct(Renderer $renderer, Event $event, Configuration $configuration = null)
+    public function __construct(Renderer $renderer, Event $event, $startDate)
     {
         $this->renderer = $renderer;
         $this->event = $event;
-        $this->configuration = $configuration ?: new Configuration();
+        $this->startDate = $startDate;
     }
 
     /**
@@ -83,20 +81,20 @@ abstract class EventRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+     * @return integer
      */
-    public function getConfiguration()
+    public function getStartDate()
     {
-        return $this->configuration;
+        return $this->startDate;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
+     * @param integer $startDate
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setStartDate($startDate)
     {
-        $this->configuration = $configuration;
+        $this->startDate = $startDate;
     }
 
     /**

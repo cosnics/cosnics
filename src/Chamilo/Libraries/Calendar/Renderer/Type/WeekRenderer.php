@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -58,7 +58,7 @@ class WeekRenderer extends HtmlTableRenderer
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+' . $calendarConfiguration->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+1 hour', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -69,11 +69,7 @@ class WeekRenderer extends HtmlTableRenderer
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
-                    $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($calendarConfiguration->getHourStep());
-
-                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
 
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }

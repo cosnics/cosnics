@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -65,10 +65,7 @@ class MiniMonthRenderer extends HtmlTableRenderer
                 {
                     $this->getCalendarSources()->addSource($event->getSource());
 
-                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
-                    $configuration->setStartDate($tableDate);
-
-                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+                    $eventRendererFactory = new ViewRendererFactory($this, $event, $tableDate);
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }

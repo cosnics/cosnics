@@ -1,13 +1,33 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
+namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
+ * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EventMonthRenderer extends EventTableRenderer
+class DayRenderer extends HtmlTableRenderer
 {
+
+    /**
+     *
+     * @var integer
+     */
+    private $tableEndDate;
+
+    /**
+     *
+     * @return integer
+     */
+    public function getTableEndDate()
+    {
+        if (! isset($this->tableEndDate))
+        {
+            $this->tableEndDate = strtotime('+1 hour', $this->getStartDate());
+        }
+
+        return $this->tableEndDate;
+    }
 
     /**
      *
@@ -15,12 +35,11 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function showPrefixDate()
     {
-        $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
 
-        return ($startDate >= $configuration->getStartDate() &&
-             $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate != $configuration->getStartDate());
+        return ($startDate >= $this->getStartDate() && $startDate <= $this->getTableEndDate() &&
+             ($startDate != $this->getStartDate() || $endDate < $this->getTableEndDate()));
     }
 
     /**
@@ -29,7 +48,7 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function showPrefixSymbol()
     {
-        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+        return ($this->getEvent()->getStartDate() < $this->getStartDate());
     }
 
     /**
@@ -38,7 +57,7 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function getPrefixSymbol()
     {
-        return $this->getSymbol('chevron-left');
+        return $this->getSymbol('chevron-up');
     }
 
     /**
@@ -47,12 +66,10 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function showPostfixDate()
     {
-        $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
-        return ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate < $configuration->getStartDate());
+        return ($startDate != $endDate) && ($endDate < $this->getTableEndDate() && $startDate < $this->getStartDate());
     }
 
     /**
@@ -61,11 +78,10 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function showPostfixSymbol()
     {
-        $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
-        return ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()));
+        return ($startDate != $endDate) && ($endDate > $this->getTableEndDate());
     }
 
     /**
@@ -74,7 +90,7 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function getPostfixSymbol()
     {
-        return $this->getSymbol('chevron-right');
+        return $this->getSymbol('chevron-down');
     }
 
     /**
@@ -83,12 +99,6 @@ class EventMonthRenderer extends EventTableRenderer
      */
     public function isFadedEvent()
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-
-        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
-        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
-
-        return (($startDate < $fromDate || $startDate > $toDate) ? true : false);
+        return false;
     }
 }

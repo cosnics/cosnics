@@ -49,7 +49,6 @@ class WeekCalendarBuilder extends CalendarBuilder
         $workingStart = $this->getWorkingHoursStart();
         $workingEnd = $this->getWorkingHoursEnd();
         $hide = $this->getHideNonWorkingHours();
-        $hourStep = $this->getHourStep();
 
         $start = 0;
         $end = 24;
@@ -60,9 +59,9 @@ class WeekCalendarBuilder extends CalendarBuilder
             $end = $workingEnd;
         }
 
-        for ($hour = $start; $hour < $end; $hour += $hourStep)
+        for ($hour = $start; $hour < $end; $hour += 1)
         {
-            $rowId = ($hour / $hourStep) - $start;
+            $rowId = $hour - $start;
             $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
             $weekCalendar->setCellContents($rowId, 0, $cellContent);
 
@@ -86,9 +85,9 @@ class WeekCalendarBuilder extends CalendarBuilder
             $weekDayTime = strtotime('+' . $day . ' days', $firstDay);
             $header->setHeaderContents(0, $day + 1, $this->getHeaderContent($weekDayTime, $displayParameters));
 
-            for ($hour = $start; $hour < $end; $hour += $hourStep)
+            for ($hour = $start; $hour < $end; $hour += 1)
             {
-                $row = ($hour / $hourStep) - $start;
+                $row = $hour - $start;
 
                 $classes = $this->determineCellClasses($today, $weekDayTime, $hour, $workingStart, $workingEnd);
 
@@ -141,7 +140,7 @@ class WeekCalendarBuilder extends CalendarBuilder
 
         if ($today == date('Y-m-d', $weekDay))
         {
-            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
+            if (date('H') >= $hour && date('H') < $hour + 1)
             {
                 $class[] = 'table-calendar-highlight';
             }

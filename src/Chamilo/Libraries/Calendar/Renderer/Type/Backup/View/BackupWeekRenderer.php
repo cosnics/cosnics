@@ -70,7 +70,7 @@ class BackupWeekRenderer extends BackupFullTableRenderer
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+' . $calendarConfiguration->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+1 hour', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -83,7 +83,6 @@ class BackupWeekRenderer extends BackupFullTableRenderer
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($calendarConfiguration->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 

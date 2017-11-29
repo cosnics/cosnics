@@ -8,6 +8,12 @@
             id="chamilo.libraries.calendar.renderer.service.view_renderer_factory"
             class="Chamilo\Libraries\Calendar\Renderer\Service\ViewRendererFactory">
         </service>
+        
+        <service
+            id="chamilo.libraries.calendar.event.renderer.service.view_renderer_factory"
+            class="Chamilo\Libraries\Calendar\Event\Renderer\Service\ViewRendererFactory">
+        </service>
+
 
         <service
             id="chamilo.libraries.calendar.calendar_sources"

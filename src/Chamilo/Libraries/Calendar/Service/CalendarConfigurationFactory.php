@@ -43,7 +43,6 @@ class CalendarConfigurationFactory
             $localSettingConsulter->get('working_hours_start', 'Chamilo\Libraries\Calendar'),
             $localSettingConsulter->get('working_hours_end', 'Chamilo\Libraries\Calendar'),
             $localSettingConsulter->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'),
-            $localSettingConsulter->get('hour_step', 'Chamilo\Libraries\Calendar'),
             $localSettingConsulter->get('first_day_of_week', 'Chamilo\Libraries\Calendar'));
     }
 }

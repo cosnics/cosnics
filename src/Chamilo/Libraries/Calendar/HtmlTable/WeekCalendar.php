@@ -65,7 +65,7 @@ class WeekCalendar extends Calendar
 
         foreach ($events as $time => $items)
         {
-            $row = (date('H', $time) / $calendarConfiguration->getHourStep()) - $start;
+            $row = date('H', $time) - $start;
 
             if ($row > $end - $start - 1)
             {

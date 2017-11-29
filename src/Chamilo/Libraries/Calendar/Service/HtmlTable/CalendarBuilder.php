@@ -67,15 +67,6 @@ abstract class CalendarBuilder
      *
      * @return integer
      */
-    protected function getHourStep()
-    {
-        return $this->getCalendarConfiguration()->getHourStep();
-    }
-
-    /**
-     *
-     * @return integer
-     */
     protected function getWorkingHoursStart()
     {
         return $this->getCalendarConfiguration()->getWorkingHoursStart();

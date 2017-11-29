@@ -14,13 +14,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Table\Calendar
+     * @var \Chamilo\Libraries\Calendar\HtmlTable\Calendar
      */
     private $calendar;
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Calendar
+     * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
      */
     public function getCalendar()
     {

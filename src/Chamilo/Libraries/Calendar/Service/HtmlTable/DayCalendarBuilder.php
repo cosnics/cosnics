@@ -57,9 +57,9 @@ class DayCalendarBuilder extends CalendarBuilder
             $endHour = $this->getWorkingHoursEnd();
         }
 
-        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
+        for ($hour = $startHour; $hour < $endHour; $hour += 1)
         {
-            $rowId = ($hour / $this->getHourStep()) - $startHour;
+            $rowId = $hour - $startHour;
             $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
             $dayCalendar->setCellContents($rowId, 0, $cellContent);
 
@@ -75,9 +75,9 @@ class DayCalendarBuilder extends CalendarBuilder
             $dayCalendar->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
         }
 
-        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
+        for ($hour = $startHour; $hour < $endHour; $hour += 1)
         {
-            $rowId = ($hour / $this->getHourStep()) - $startHour;
+            $rowId = $hour - $startHour;
 
             $tableStartDate = mktime(
                 $hour,
@@ -87,7 +87,7 @@ class DayCalendarBuilder extends CalendarBuilder
                 date('d', $displayTime),
                 date('Y', $displayTime));
 
-            $tableEndDate = strtotime('+' . $this->getHourStep() . ' hours', $tableStartDate);
+            $tableEndDate = strtotime('+1 hour', $tableStartDate);
             $dayCalendar->setCellContents($rowId, 1, '');
 
             $classes = $this->determineCellClasses($hour, $displayTime);
@@ -114,7 +114,7 @@ class DayCalendarBuilder extends CalendarBuilder
         // Highlight current hour
         if (date('Y-m-d') == date('Y-m-d', $displayTime))
         {
-            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
+            if (date('H') >= $hour && date('H') < $hour + 1)
             {
                 $classes[] = 'table-calendar-highlight';
             }

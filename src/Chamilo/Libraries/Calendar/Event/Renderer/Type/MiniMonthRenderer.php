@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
+namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EventMiniMonthRenderer extends EventMonthRenderer
+class MiniMonthRenderer extends MonthRenderer
 {
 
     /**

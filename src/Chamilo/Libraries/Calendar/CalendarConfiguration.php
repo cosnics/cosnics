@@ -29,12 +29,6 @@ class CalendarConfiguration
 
     /**
      *
-     * @var integer
-     */
-    private $hourStep;
-
-    /**
-     *
      * @var string
      */
     private $firstDayOfTheWeek;
@@ -44,16 +38,13 @@ class CalendarConfiguration
      * @param integer $workingHoursStart
      * @param integer $workingHoursEnd
      * @param boolean $hideNonWorkingHours
-     * @param integer $hourStep
      * @param string $firstDayOfTheWeek
      */
-    public function __construct($workingHoursStart, $workingHoursEnd, $hideNonWorkingHours, $hourStep,
-        $firstDayOfTheWeek)
+    public function __construct($workingHoursStart, $workingHoursEnd, $hideNonWorkingHours, $firstDayOfTheWeek)
     {
         $this->workingHoursStart = $workingHoursStart;
         $this->workingHoursEnd = $workingHoursEnd;
         $this->hideNonWorkingHours = $hideNonWorkingHours;
-        $this->hourStep = $hourStep;
         $this->firstDayOfTheWeek = $firstDayOfTheWeek;
     }
 
@@ -109,24 +100,6 @@ class CalendarConfiguration
     public function setHideNonWorkingHours($hideNonWorkingHours)
     {
         $this->hideNonWorkingHours = $hideNonWorkingHours;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getHourStep()
-    {
-        return $this->hourStep;
-    }
-
-    /**
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
-    {
-        $this->hourStep = $hourStep;
     }
 
     /**

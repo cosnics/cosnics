@@ -1,15 +1,15 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
+namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
+use Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
+ * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class EventTableRenderer extends EventRenderer
+abstract class HtmlTableRenderer extends ViewRenderer
 {
 
     /**
