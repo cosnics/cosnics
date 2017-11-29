@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Format\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
-use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
 
 /**
  *

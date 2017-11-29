@@ -9,7 +9,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
  * @package Chamilo\Application\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\FullCalendarRendererProvider
+class FullCalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\FullCalendarRendererProvider
 {
 
     /**

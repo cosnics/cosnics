@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider implements
     VisibilitySupport
 {
 

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Architecture;
 
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
  *
@@ -15,7 +15,7 @@ abstract class InternalCalendar implements CalendarInterface
 
     /**
      * Get the source type of the implementing context
-     * 
+     *
      * @return integer
      */
     public function getSourceType()

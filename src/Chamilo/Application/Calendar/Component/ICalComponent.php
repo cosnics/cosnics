@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
-use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\Type\ICalRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;

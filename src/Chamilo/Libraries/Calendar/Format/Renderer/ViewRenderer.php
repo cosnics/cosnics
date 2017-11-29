@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
 use Chamilo\Libraries\Calendar\CalendarSources;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 
 /**
  *

@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\Eve
 use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
  *

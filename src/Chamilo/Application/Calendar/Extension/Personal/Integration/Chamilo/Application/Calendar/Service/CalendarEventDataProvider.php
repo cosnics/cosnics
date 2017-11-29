@@ -44,7 +44,7 @@ class CalendarEventDataProvider extends MixedCalendar
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
@@ -79,14 +79,14 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
      *
      * @return array
      */
     public function getUserEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
         $toDate)
     {
         $repository = new CalendarEventDataProviderRepository();
@@ -102,14 +102,14 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
      *
      * @return array
      */
     public function getSharedEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
         $toDate)
     {
         $repository = new CalendarEventDataProviderRepository();
@@ -121,7 +121,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param RecordRetrievesParameters $recordRetrievesParameters
      * @param int $fromDate
      * @param int $toDate
@@ -129,7 +129,7 @@ class CalendarEventDataProvider extends MixedCalendar
      * @return array
      */
     protected function getEventsByParameters(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider,
         RecordRetrievesParameters $recordRetrievesParameters, $fromDate, $toDate)
     {
         $publications = array();
@@ -165,7 +165,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[] $publications
      * @param integer $fromDate
      * @param integer $toDate
@@ -173,7 +173,7 @@ class CalendarEventDataProvider extends MixedCalendar
      * @return array
      */
     private function renderEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $publications,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider, $publications,
         $fromDate, $toDate)
     {
         $events = array();

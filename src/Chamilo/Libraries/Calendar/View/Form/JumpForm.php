@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Form;
 
-use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -10,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
 
 /**
  *

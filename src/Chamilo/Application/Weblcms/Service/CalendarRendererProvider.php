@@ -16,7 +16,7 @@ use Chamilo\Libraries\File\Redirect;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
 {
 
     /**

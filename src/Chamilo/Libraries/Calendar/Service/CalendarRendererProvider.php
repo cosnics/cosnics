@@ -3,15 +3,15 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class CalendarRendererProvider implements
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+abstract class CalendarRendererProvider implements CalendarRendererProviderInterface
 {
     const SOURCE_TYPE_INTERNAL = 1;
     const SOURCE_TYPE_EXTERNAL = 2;

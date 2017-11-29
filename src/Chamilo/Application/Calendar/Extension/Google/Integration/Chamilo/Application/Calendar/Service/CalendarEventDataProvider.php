@@ -28,8 +28,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+    public function getEvents(\Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
@@ -61,11 +60,11 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @return string[]
      */
     private function getCalendarIdentifiers(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider)
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
 

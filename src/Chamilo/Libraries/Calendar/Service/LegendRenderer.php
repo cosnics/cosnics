@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\CalendarSources;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;

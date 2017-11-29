@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
-use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
+use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
 
 /**
  *

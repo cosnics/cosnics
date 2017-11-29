@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Service\HtmlTable;
 
+use Chamilo\Libraries\Calendar\Format\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
-use Chamilo\Libraries\Calendar\HtmlTable\WeekCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\Utilities;
 

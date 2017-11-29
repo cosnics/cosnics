@@ -17,7 +17,7 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+     * @var \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
 
@@ -41,13 +41,13 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      * @param integer $fromDate
      * @param integer $toDate
      */
     public function __construct(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider,
         Publication $publication, $fromDate, $toDate)
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
@@ -58,7 +58,7 @@ class EventParser
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+     * @return \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
      */
     public function getCalendarRendererProvider()
     {
@@ -67,10 +67,10 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $renderer
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $renderer
      */
     public function setCalendarRendererProvider(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+        \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider)
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
     }

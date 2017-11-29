@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Interfaces\FullCalendarRendererProviderInterface;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -111,7 +111,8 @@ locale : "nl",
                     Application::PARAM_ACTION => 'FullCalendarEvents'));
 
             $parsedEventSource = '{
-                                        url: ' . json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
+                                        url: ' .
+                 json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
                                   }';
 
             $parsedEventSources[] = $parsedEventSource;

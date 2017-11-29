@@ -4,8 +4,9 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniMonthRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -68,7 +69,7 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
-                    MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY));
+                    ViewRenderer::PARAM_TYPE => ViewRenderer::TYPE_DAY));
 
             $calendarLegend = new Legend($dataProvider);
 

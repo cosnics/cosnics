@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Format\Service\HtmlTable;
 
-use Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar;
+use Chamilo\Libraries\Calendar\Format\HtmlTable\MiniMonthCalendar;
 
 /**
  *

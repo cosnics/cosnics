@@ -4,8 +4,8 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Libraries\Calendar\Format\Renderer\Type\MiniDayRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
