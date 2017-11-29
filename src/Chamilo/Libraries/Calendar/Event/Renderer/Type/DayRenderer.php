@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Event\Renderer\Type

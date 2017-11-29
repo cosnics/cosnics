@@ -1,20 +1,18 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
+use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ICalRenderer extends Renderer
 {

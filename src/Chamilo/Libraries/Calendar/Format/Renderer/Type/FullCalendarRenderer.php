@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface;
@@ -9,10 +9,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class FullCalendarRenderer
 {

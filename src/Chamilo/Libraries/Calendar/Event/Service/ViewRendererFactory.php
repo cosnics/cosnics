@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Event\Service;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
 
 /**
  *
@@ -59,7 +59,7 @@ class ViewRendererFactory
      */
     public function getStartDate()
     {
-        return $this->configuration;
+        return $this->startDate;
     }
 
     /**

@@ -1,14 +1,14 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ListRenderer extends ViewRenderer

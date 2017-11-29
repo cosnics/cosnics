@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
 
 /**
  *

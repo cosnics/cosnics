@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer;
+namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer
+ * @package Chamilo\Libraries\Calendar\Format\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -14,7 +14,6 @@ abstract class Renderer
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
     use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-
 
     /**
      *

@@ -1,11 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayRenderer extends HtmlTableRenderer

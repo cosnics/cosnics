@@ -1,12 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
 use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer$HtmlTableRenderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class HtmlTableRenderer extends ViewRenderer

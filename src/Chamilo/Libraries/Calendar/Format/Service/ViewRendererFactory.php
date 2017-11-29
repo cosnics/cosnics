@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Service;
+namespace Chamilo\Libraries\Calendar\Format\Service;
 
 use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Service
+ * @package Chamilo\Libraries\Calendar\Format\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ViewRendererFactory
@@ -34,12 +34,12 @@ class ViewRendererFactory
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param integer $displayTime
      * @throws \Exception
-     * @return \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer
+     * @return \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
      */
     public function getViewRenderer($rendererType, CalendarRendererProviderInterface $dataProvider,
         CalendarSources $calendarSources, $displayTime)
     {
-        $className = 'Chamilo\Libraries\Calendar\Renderer\Type\\' . $rendererType . 'Renderer';
+        $className = 'Chamilo\Libraries\Calendar\Format\Renderer\Type\\' . $rendererType . 'Renderer';
 
         return new $className($dataProvider, $calendarSources, $displayTime);
     }

@@ -9,7 +9,6 @@ use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 
 /**
  *
@@ -104,11 +104,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Service\ViewRendererFactory
+     * @return \Chamilo\Libraries\Calendar\Format\Service\ViewRendererFactory
      */
     protected function getViewRendererFactory()
     {
-        return $this->getService('chamilo.libraries.calendar.renderer.service.view_renderer_factory');
+        return $this->getService('chamilo.libraries.calendar.format.service.view_renderer_factory');
     }
 
     protected function getViewActions()

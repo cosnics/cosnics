@@ -5,13 +5,13 @@ use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Calendar\Format\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
 
 class BrowserComponent extends Manager
 {

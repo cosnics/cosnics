@@ -1,7 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Event\Service\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer;
 use Chamilo\Libraries\Calendar\HtmlTable\Calendar;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthRenderer extends HtmlTableRenderer
