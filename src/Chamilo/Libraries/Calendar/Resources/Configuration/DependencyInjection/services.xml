@@ -73,41 +73,5 @@
             factory-method="getCalendarConfiguration">
         </service>
 
-        <service
-            id="chamilo.libraries.calendar.format.service.html_table.calendar_builder"
-            class="Chamilo\Libraries\Calendar\Format\Service\HtmlTable\CalendarBuilder"
-            abstract="true">
-            <argument
-                type="service"
-                id="chamilo.libraries.calendar.calendar_configuration" />
-            <argument
-                type="service"
-                id="symfony.component.translation.translator" />
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.format.service.html_table.month_calendar_builder"
-            class="Chamilo\Libraries\Calendar\Format\Service\HtmlTable\MonthCalendarBuilder"
-            parent="chamilo.libraries.calendar.format.service.html_table.calendar_builder">
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.format.service.html_table.mini_month_calendar_builder"
-            class="Chamilo\Libraries\Calendar\Format\Service\HtmlTable\MiniMonthCalendarBuilder"
-            parent="chamilo.libraries.calendar.format.service.html_table.calendar_builder">
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.format.service.html_table.day_calendar_builder"
-            class="Chamilo\Libraries\Calendar\Format\Service\HtmlTable\DayCalendarBuilder"
-            parent="chamilo.libraries.calendar.format.service.html_table.calendar_builder">
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.format.service.html_table.week_calendar_builder"
-            class="Chamilo\Libraries\Calendar\Format\Service\HtmlTable\WeekCalendarBuilder"
-            parent="chamilo.libraries.calendar.format.service.html_table.calendar_builder">
-        </service>
-
     </services>
 </container>
