@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
+namespace Chamilo\Libraries\Calendar\Format\Service\HtmlTable;
 
 use Symfony\Component\Translation\Translator;
 use Chamilo\Libraries\Calendar\CalendarConfiguration;

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\HtmlTable;
+namespace Chamilo\Libraries\Calendar\Format\Service\HtmlTable;
 
 use Chamilo\Libraries\Calendar\HtmlTable\DayCalendar;
 use Chamilo\Libraries\Utilities\Utilities;
