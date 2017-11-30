@@ -10,6 +10,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
+    const PARAM_ACTION = 'assignment_display_action';
+
     // Configuration
     const CONFIGURATION_DATA_PROVIDER = 'data_provider';
     

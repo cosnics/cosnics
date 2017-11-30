@@ -5,13 +5,34 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class AssignmentDataProvider
     implements \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
 {
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
+     * AssignmentDataProvider constructor.
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function __construct(\Symfony\Component\Translation\Translator $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      *
@@ -21,7 +42,7 @@ class AssignmentDataProvider
      */
     public function countDistinctEntriesByEntityType($entityType)
     {
-        // TODO: Implement countDistinctEntriesByEntityType() method.
+        return 0;
     }
 
     /**
@@ -32,7 +53,7 @@ class AssignmentDataProvider
      */
     public function countDistinctFeedbackByEntityType($entityType)
     {
-        // TODO: Implement countDistinctFeedbackByEntityType() method.
+        return 0;
     }
 
     /**
@@ -43,7 +64,7 @@ class AssignmentDataProvider
      */
     public function countDistinctLateEntriesByEntityType($entityType)
     {
-        // TODO: Implement countDistinctLateEntriesByEntityType() method.
+        return 0;
     }
 
     /**
@@ -54,7 +75,7 @@ class AssignmentDataProvider
      */
     public function countEntitiesByEntityType($entityType)
     {
-        // TODO: Implement countEntitiesByEntityType() method.
+        return 13;
     }
 
     /**
@@ -65,7 +86,10 @@ class AssignmentDataProvider
      */
     public function getEntityNameByType($entityType)
     {
-        // TODO: Implement getEntityNameByType() method.
+        return $this->translator->trans(
+            'Users', [],
+            'Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath'
+        );
     }
 
     /**
@@ -77,7 +101,7 @@ class AssignmentDataProvider
      */
     public function getEntityTableForType(Application $application, $entityType)
     {
-        // TODO: Implement getEntityTableForType() method.
+        return new EntityTable($application, $this);
     }
 
     /**
@@ -90,7 +114,7 @@ class AssignmentDataProvider
      */
     public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId)
     {
-        // TODO: Implement getEntryTableForEntityTypeAndId() method.
+        return new EntryTable($application, $this, $entityId);
     }
 
     /**
@@ -99,7 +123,7 @@ class AssignmentDataProvider
      */
     public function getCurrentEntityType()
     {
-        // TODO: Implement getCurrentEntityType() method.
+        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Entry::ENTITY_TYPE_USER;
     }
 
     /**
@@ -110,7 +134,7 @@ class AssignmentDataProvider
      */
     public function isDateAfterAssignmentEndTime($date)
     {
-        // TODO: Implement isDateAfterAssignmentEndTime() method.
+        return false;
     }
 
     /**

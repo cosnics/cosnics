@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -26,18 +27,19 @@ abstract class Entry extends DataClass
     /**
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[]
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
-        return parent::get_default_property_names(
-            array(
-                self::PROPERTY_CONTENT_OBJECT_ID, 
-                self::PROPERTY_SUBMITTED, 
-                self::PROPERTY_ENTITY_TYPE, 
-                self::PROPERTY_ENTITY_ID, 
-                self::PROPERTY_USER_ID, 
-                self::PROPERTY_IP_ADDRESS));
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_SUBMITTED;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_IP_ADDRESS;
+
+        return parent::get_default_property_names($extendedPropertyNames);
     }
 
     /**
@@ -156,13 +158,14 @@ abstract class Entry extends DataClass
     {
         try
         {
-            if (! isset($this->contentObject))
+            if (!isset($this->contentObject))
             {
                 $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
-                    $this->getContentObjectId());
+                    ContentObject::class_name(),
+                    $this->getContentObjectId()
+                );
             }
-            
+
             return $this->contentObject;
         }
         catch (\Exception $ex)

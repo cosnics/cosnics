@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -22,6 +23,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -39,7 +41,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     {
         $translator = Translation::getInstance();
 
-        $learning_path = $this->get_root_content_object();
+        $learning_path = $this->learningPath;
 
         if (! $learning_path)
         {
@@ -49,7 +51,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $trackingService = $this->getTrackingService();
 
         $trackingService->trackAttemptForUser(
-            $this->get_root_content_object(),
+            $this->learningPath,
             $this->getCurrentTreeNode(),
             $this->getUser());
 
@@ -60,7 +62,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             $html = array();
 
-            $html[] = $this->render_header();
+            $html[] = parent::render_header();
             $html[] = '<div class="alert alert-danger">';
             $html[] = Translation::get('NotYetAllowedToView');
 
@@ -107,14 +109,14 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $embedder = Embedder::factory(
             $this,
             $this->getTrackingService(),
-            $this->get_root_content_object(),
+            $this->learningPath,
             $this->getCurrentTreeNode());
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
 
         $html = array();
 
-        $html[] = $this->render_header();
+        $html[] = parent::render_header();
         $html[] = $buttonToolbarRenderer->render();
 
         if ($this->canEditCurrentTreeNode())
@@ -248,7 +250,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
             $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getId();
 
-            $allowedTypes = $this->get_root_content_object()->get_allowed_types();
+            $allowedTypes = $this->learningPath->get_allowed_types();
 
             $actionSelector = new \Chamilo\Core\Repository\ContentObject\LearningPath\Display\ActionSelector(
                 $this,
@@ -386,7 +388,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     protected function addBlockedStatusButton(SplitDropdownButton $button, Translation $translator, TreeNode $treeNode)
     {
         /** @var LearningPath $learningPath */
-        $learningPath = $this->get_root_content_object();
+        $learningPath = $this->learningPath;
 
         if (!$this->canEditCurrentTreeNode()
             || $treeNode->isInDefaultTraversingOrder()
@@ -587,5 +589,18 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function get_root_content_object()
+    {
+        return $this->getCurrentTreeNode()->getContentObject();
+    }
+
+    public function render_header()
+    {
+        $page = Page::getInstance();
+        $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
+
+        return Application::render_header();
     }
 }

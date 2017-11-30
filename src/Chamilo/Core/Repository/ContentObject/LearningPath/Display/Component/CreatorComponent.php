@@ -86,7 +86,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                     $parentNode = $this->getCurrentTreeNode();
 
                     $treeNodeData = $learningPathService->addContentObjectToLearningPath(
-                        $this->get_root_content_object(),
+                        $this->learningPath,
                         $parentNode,
                         $object,
                         $this->getUser());
@@ -178,7 +178,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
             return array(Section::class_name());
         }
 
-        return $this->get_root_content_object()->get_allowed_types();
+        return $this->learningPath->get_allowed_types();
     }
 
     /**

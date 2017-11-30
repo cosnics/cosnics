@@ -145,13 +145,13 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $data = [
             $trackingService->countTargetUsersWithFullLearningPathAttempts(
-                $this->get_root_content_object(),
+                $this->learningPath,
                 $this->getCurrentTreeNode()),
             $trackingService->countTargetUsersWithPartialLearningPathAttempts(
-                $this->get_root_content_object(),
+                $this->learningPath,
                 $this->getCurrentTreeNode()),
             $trackingService->countTargetUsersWithoutLearningPathAttempts(
-                $this->get_root_content_object(),
+                $this->learningPath,
                 $this->getCurrentTreeNode())];
 
         $panelHtml = array();

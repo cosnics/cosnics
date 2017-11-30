@@ -85,12 +85,12 @@ class ViewerComponent extends Manager implements TableSupport
         $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
         
         $properties = array();
-        $properties[Translation::get('EntriesForEntityType', array('NAME' => $entityName))] = $entryCount . '/' .
-             $entityCount;
-        $properties[Translation::get('FeedbackForEntityType', array('NAME' => $entityName))] = $feedbackCount . '/' .
-             $entityCount;
-        $properties[Translation::get('LateEntriesForEntityType', array('NAME' => $entityName))] = $lateEntryCount . '/' .
-             $entityCount;
+        $properties[Translation::get('EntriesForEntityType', array('NAME' => $entityName))] = '<div class="badge">' . $entryCount . ' / ' .
+             $entityCount . '</div>';
+        $properties[Translation::get('FeedbackForEntityType', array('NAME' => $entityName))] = '<div class="badge">' . $feedbackCount . ' / ' .
+             $entityCount . '</div>';
+        $properties[Translation::get('LateEntriesForEntityType', array('NAME' => $entityName))] = '<div class="badge">' . $lateEntryCount . ' / ' .
+             $entityCount . '</div>';
         
         $table = new PropertiesTable($properties);
         
