@@ -43,8 +43,6 @@ class MiniMonthRenderer extends HtmlTableRenderer
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $this->getCalendarSources()->addSource($event->getSource());
-
                     $eventRendererFactory = new HtmlTableRendererFactory($this);
                     $calendar->addEvent($tableDate, $eventRendererFactory->render($event, $tableDate));
                 }
