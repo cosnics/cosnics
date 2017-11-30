@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service
+ * @package Chamilo\Libraries\Calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarSources
@@ -86,16 +86,9 @@ class CalendarSources
      * @param boolean $fade
      * @return string
      */
-    public function getSourceClasses($source = null, $fade = false)
+    public function getSourceClasses($source = null)
     {
-        $classes = 'event-container-source event-container-source-' . $this->getSourceKey($source);
-
-        if ($fade)
-        {
-            $classes .= ' event-container-source-faded';
-        }
-
-        return $classes;
+        return 'event-container-source event-container-source-' . $this->getSourceKey($source);
     }
 }
 

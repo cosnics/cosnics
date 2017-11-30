@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer;
 
 /**
@@ -21,11 +22,11 @@ class DayRenderer extends HtmlTableRenderer
      *
      * @return integer
      */
-    public function getTableEndDate()
+    public function getTableEndDate($startDate)
     {
         if (! isset($this->tableEndDate))
         {
-            $this->tableEndDate = strtotime('+1 hour', $this->getStartDate());
+            $this->tableEndDate = strtotime('+1 hour', $startDate);
         }
 
         return $this->tableEndDate;
@@ -33,29 +34,29 @@ class DayRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPrefixDate()
      */
-    public function showPrefixDate()
+    public function showPrefixDate(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $eventStartDate = $event->getStartDate();
+        $eventEndDate = $event->getEndDate();
 
-        return ($startDate >= $this->getStartDate() && $startDate <= $this->getTableEndDate() &&
-             ($startDate != $this->getStartDate() || $endDate < $this->getTableEndDate()));
+        return ($eventStartDate >= $startDate && $eventStartDate <= $this->getTableEndDate($startDate) &&
+             ($eventStartDate != $startDate || $eventEndDate < $this->getTableEndDate($startDate)));
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPrefixSymbol()
      */
-    public function showPrefixSymbol()
+    public function showPrefixSymbol(Event $event, $startDate)
     {
-        return ($this->getEvent()->getStartDate() < $this->getStartDate());
+        return ($event->getStartDate() < $startDate);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPrefixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::getPrefixSymbol()
      */
     public function getPrefixSymbol()
     {
@@ -64,43 +65,35 @@ class DayRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixDate()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPostfixDate()
      */
-    public function showPostfixDate()
+    public function showPostfixDate(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $eventStartDate = $event->getStartDate();
+        $eventEndDate = $event->getEndDate();
 
-        return ($startDate != $endDate) && ($endDate < $this->getTableEndDate() && $startDate < $this->getStartDate());
+        return ($eventStartDate != $eventEndDate) &&
+             ($eventEndDate < $this->getTableEndDate($startDate) && $eventStartDate < $startDate);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPostfixSymbol()
      */
-    public function showPostfixSymbol()
+    public function showPostfixSymbol(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $eventStartDate = $event->getStartDate();
+        $eventEndDate = $event->getEndDate();
 
-        return ($startDate != $endDate) && ($endDate > $this->getTableEndDate());
+        return ($eventStartDate != $eventEndDate) && ($eventEndDate > $this->getTableEndDate($startDate));
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::getPostfixSymbol()
      */
     public function getPostfixSymbol()
     {
         return $this->getSymbol('chevron-down');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
-     */
-    public function isFadedEvent()
-    {
-        return false;
     }
 }

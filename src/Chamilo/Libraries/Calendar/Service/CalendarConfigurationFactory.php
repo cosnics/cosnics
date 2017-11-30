@@ -4,6 +4,11 @@ namespace Chamilo\Libraries\Calendar\Service;
 use Chamilo\Libraries\Calendar\CalendarConfiguration;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
+/**
+ *
+ * @package Chamilo\Libraries\Calendar\Service
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class CalendarConfigurationFactory
 {
 
@@ -38,11 +43,11 @@ class CalendarConfigurationFactory
     public function getCalendarConfiguration()
     {
         $localSettingConsulter = $this->getLocalSettingConsulter();
-
+        
         return new CalendarConfiguration(
-            $localSettingConsulter->get('working_hours_start', 'Chamilo\Libraries\Calendar'),
-            $localSettingConsulter->get('working_hours_end', 'Chamilo\Libraries\Calendar'),
-            $localSettingConsulter->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'),
+            $localSettingConsulter->get('working_hours_start', 'Chamilo\Libraries\Calendar'), 
+            $localSettingConsulter->get('working_hours_end', 'Chamilo\Libraries\Calendar'), 
+            $localSettingConsulter->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'), 
             $localSettingConsulter->get('first_day_of_week', 'Chamilo\Libraries\Calendar'));
     }
 }

@@ -21,45 +21,13 @@ class HtmlTableRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Event
-     */
-    private $event;
-
-    /**
-     *
-     * @var integer
-     */
-    private $startDate;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $startDate
      */
-    public function __construct(Renderer $renderer, Event $event, $startDate)
+    public function __construct(Renderer $renderer)
     {
         $this->renderer = $renderer;
-        $this->event = $event;
-        $this->startDate = $startDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartDate()
-    {
-        return $this->startDate;
     }
 
     /**
@@ -73,21 +41,23 @@ class HtmlTableRendererFactory
 
     /**
      *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param integer $startDate
      * @return string
      */
-    public function render()
+    public function render(Event $event, $startDate)
     {
-        return $this->getEventRenderer()->render();
+        return $this->getEventRenderer($event->getContext())->render($event, $startDate);
     }
 
     /**
      *
-     * @throws \Exception
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @param string $eventContext
+     * @return \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer
      */
-    public function getEventRenderer()
+    public function getEventRenderer($eventContext)
     {
-        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
+        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($eventContext) .
              '\Event\Renderer\Type\\' . $this->getRenderer()->class_name(false);
 
         if (! class_exists($eventRendererClassName))
@@ -96,6 +66,6 @@ class HtmlTableRendererFactory
                  $this->getRenderer()->class_name(false);
         }
 
-        return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getStartDate());
+        return new $eventRendererClassName($this->getRenderer());
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer;
 
 /**
@@ -13,28 +14,28 @@ class MonthRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPrefixDate()
      */
-    public function showPrefixDate()
+    public function showPrefixDate(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
+        $eventStartDate = $event->getStartDate();
 
-        return ($startDate >= $this->getStartDate() && $startDate <= strtotime('+1 Day', $this->getStartDate()) &&
-             $startDate != $this->getStartDate());
+        return ($eventStartDate >= $startDate && $eventStartDate <= strtotime('+1 Day', $startDate) &&
+             $eventStartDate != $startDate);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPrefixSymbol()
      */
-    public function showPrefixSymbol()
+    public function showPrefixSymbol(Event $event, $startDate)
     {
-        return ($this->getEvent()->getStartDate() < $this->getStartDate());
+        return ($event->getStartDate() < $startDate);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPrefixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::getPrefixSymbol()
      */
     public function getPrefixSymbol()
     {
@@ -43,50 +44,35 @@ class MonthRenderer extends HtmlTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixDate()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPostfixDate()
      */
-    public function showPostfixDate()
+    public function showPostfixDate(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $eventStartDate = $event->getStartDate();
+        $eventEndDate = $event->getEndDate();
 
-        return ($startDate != $endDate && $endDate < strtotime('+1 Day', $this->getStartDate()) &&
-             $startDate < $this->getStartDate());
+        return ($eventStartDate != $eventEndDate && $eventEndDate < strtotime('+1 Day', $startDate) &&
+             $eventStartDate < $startDate);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::showPostfixSymbol()
      */
-    public function showPostfixSymbol()
+    public function showPostfixSymbol(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $eventStartDate = $event->getStartDate();
+        $eventEndDate = $event->getEndDate();
 
-        return ($startDate != $endDate && $endDate > strtotime('+1 Day', $this->getStartDate()));
+        return ($eventStartDate != $eventEndDate && $eventEndDate > strtotime('+1 Day', $startDate));
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::getPostfixSymbol()
      */
     public function getPostfixSymbol()
     {
         return $this->getSymbol('chevron-right');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
-     */
-    public function isFadedEvent()
-    {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-
-        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
-        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
-
-        return (($startDate < $fromDate || $startDate > $toDate) ? true : false);
     }
 }

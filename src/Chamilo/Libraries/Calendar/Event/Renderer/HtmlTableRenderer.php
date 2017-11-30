@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
@@ -16,12 +17,11 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function determineEventClasses()
+    public function determineEventClasses(Event $event)
     {
-        $eventClasses = $this->getEventClasses($this->getEvent()->getStartDate());
-        $sourceClasses = $this->getRenderer()->getCalendarSources()->getSourceClasses(
-            $this->getEvent()->getSource(),
-            $this->isFadedEvent());
+        $eventClasses = $this->getEventClasses($event);
+        $sourceClasses = $this->getViewRenderer()->getCalendarSources()->getSourceClasses(
+            $event->getSource());
         return implode(' ', array($eventClasses, $sourceClasses));
     }
 
@@ -29,16 +29,15 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderLink()
+    public function renderLink(Event $event, $startDate)
     {
         $html = array();
 
-        $fullTitle = $this->renderFullTitle();
+        $fullTitle = $this->renderFullTitle($event, $startDate);
 
-        if ($this->getEvent()->getUrl())
+        if ($event->getUrl())
         {
-            $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) .
-                 '">';
+            $html[] = '<a href="' . $event->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) . '">';
         }
         else
         {
@@ -47,7 +46,7 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
         $html[] = $fullTitle;
 
-        if ($this->getEvent()->getUrl())
+        if ($event->getUrl())
         {
             $html[] = '</a>';
         }
@@ -63,19 +62,19 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderFullTitle()
+    public function renderFullTitle(Event $event, $startDate)
     {
         $fullTitle = '';
 
-        $prefix = $this->renderPrefix();
+        $prefix = $this->renderPrefix($event, $startDate);
         if ($prefix)
         {
             $fullTitle .= $prefix . ' ';
         }
 
-        $fullTitle .= htmlentities($this->getEvent()->getTitle());
+        $fullTitle .= htmlentities($event->getTitle());
 
-        $postfix = $this->renderPostfix();
+        $postfix = $this->renderPostfix($event, $startDate);
         if ($postfix)
         {
             $fullTitle .= ' ' . $postfix;
@@ -86,20 +85,14 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
     /**
      *
-     * @return boolean
-     */
-    abstract public function isFadedEvent();
-
-    /**
-     *
      * @return string
      */
-    public function render()
+    public function render(Event $event, $startDate)
     {
         $html = array();
 
-        $html[] = $this->renderHeader();
-        $html[] = $this->renderLink();
+        $html[] = $this->renderHeader($event, $startDate);
+        $html[] = $this->renderLink($event, $startDate);
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
@@ -109,12 +102,12 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderHeader()
+    public function renderHeader(Event $event)
     {
         $html = array();
 
-        $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
-             $this->getRenderer()->getCalendarSources()->getSourceKey($this->getEvent()->getSource()) . '">';
+        $html[] = '<div class="' . $this->determineEventClasses($event) . '" data-source-key="' .
+             $this->getViewRenderer()->getCalendarSources()->getSourceKey($event->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);
@@ -148,13 +141,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderPrefix()
+    public function renderPrefix(Event $event, $startDate)
     {
-        if ($this->showPrefixDate())
+        if ($this->showPrefixDate($event, $startDate))
         {
-            return $this->renderTime($this->getEvent()->getStartDate());
+            return $this->renderTime($event->getStartDate());
         }
-        elseif ($this->showPrefixSymbol())
+        elseif ($this->showPrefixSymbol($event, $startDate))
         {
             return $this->getPrefixSymbol();
         }
@@ -164,13 +157,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function renderPostfix()
+    public function renderPostfix(Event $event, $startDate)
     {
-        if ($this->showPostfixDate())
+        if ($this->showPostfixDate($event, $startDate))
         {
-            return $this->renderTime($this->getEvent()->getEndDate());
+            return $this->renderTime($event->getEndDate());
         }
-        elseif ($this->showPostFixSymbol())
+        elseif ($this->showPostFixSymbol($event, $startDate))
         {
             return $this->getPostfixSymbol();
         }
@@ -191,13 +184,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return boolean
      */
-    abstract public function showPrefixDate();
+    abstract public function showPrefixDate(Event $event, $startDate);
 
     /**
      *
      * @return boolean
      */
-    abstract public function showPrefixSymbol();
+    abstract public function showPrefixSymbol(Event $event, $startDate);
 
     /**
      *
@@ -209,13 +202,13 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return boolean
      */
-    abstract public function showPostfixDate();
+    abstract public function showPostfixDate(Event $event, $startDate);
 
     /**
      *
      * @return boolean
      */
-    abstract public function showPostfixSymbol();
+    abstract public function showPostfixSymbol(Event $event, $startDate);
 
     /**
      *

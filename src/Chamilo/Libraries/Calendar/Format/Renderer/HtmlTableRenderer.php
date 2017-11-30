@@ -32,13 +32,12 @@ abstract class HtmlTableRenderer extends ViewRenderer
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar $calendar
-     * @param integer $displayTime
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources, 
-        CalendarConfiguration $calendarConfiguration, Calendar $calendar, $displayTime)
+    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources,
+        CalendarConfiguration $calendarConfiguration, Calendar $calendar)
     {
-        parent::__construct($dataProvider, $calendarSources, $displayTime);
-        
+        parent::__construct($dataProvider, $calendarSources);
+
         $this->calendarConfiguration = $calendarConfiguration;
         $this->calendar = $calendar;
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Event\Renderer\Type
@@ -10,23 +12,21 @@ class MiniMonthRenderer extends MonthRenderer
 {
 
     /**
-     * Gets an html representation of an event for the renderer
      *
-     * @return string
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::render()
      */
-    public function render()
+    public function render(Event $event, $startDate)
     {
         $html = array();
 
-        $event = $this->getEvent();
-        $calendarSources = $this->getRenderer()->getCalendarSources();
+        $calendarSources = $this->getViewRenderer()->getCalendarSources();
 
         $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html[] = '<div class="tooltip-event-container">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
-        $html[] = '<span class="tooltip-event-content">' . $this->renderFullTitle() . '</span>';
+        $html[] = '<span class="tooltip-event-content">' . $this->renderFullTitle($event, $startDate) . '</span>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -34,36 +34,26 @@ class MiniMonthRenderer extends MonthRenderer
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer::renderFullTitle()
      */
-    public function renderFullTitle()
+    public function renderFullTitle(Event $event, $startDate)
     {
         $fullTitle = '';
 
-        $prefix = $this->renderPrefix();
+        $prefix = $this->renderPrefix($event, $startDate);
         if ($prefix)
         {
             $fullTitle .= '<span class="tooltip-event-prefix">' . $prefix . '</span> ';
         }
 
-        $fullTitle .= htmlentities($this->getEvent()->getTitle());
+        $fullTitle .= htmlentities($event->getTitle());
 
-        $postfix = $this->renderPostfix();
+        $postfix = $this->renderPostfix($event, $startDate);
         if ($postfix)
         {
             $fullTitle .= '<span class="tooltip-event-postfix"> ' . $postfix . '</span>';
         }
 
         return $fullTitle;
-    }
-
-    /**
-     *
-     * @param integer $date
-     * @return string
-     */
-    public function renderTime($date)
-    {
-        return date('H:i', $date);
     }
 }

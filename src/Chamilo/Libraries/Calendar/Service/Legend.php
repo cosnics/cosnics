@@ -10,7 +10,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer
+ * @package Chamilo\Libraries\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Legend
@@ -18,13 +18,13 @@ class Legend
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Legend[]
+     * @var \Chamilo\Libraries\Calendar\Service\Legend[]
      */
     protected static $instance = array();
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+     * @var \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface
      */
     private $dataProvider;
 
@@ -36,24 +36,24 @@ class Legend
 
     /**
      * Return 'this' as singleton
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Renderer\Legend
      */
     static public function getInstance(CalendarRendererProviderInterface $dataProvider)
     {
         $dataProviderType = get_class($dataProvider);
-
+        
         if (is_null(static::$instance[$dataProviderType]))
         {
             self::$instance[$dataProviderType] = new static($dataProvider);
         }
-
+        
         return static::$instance[$dataProviderType];
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
@@ -107,13 +107,13 @@ class Legend
         {
             $this->sources[] = $source;
         }
-
+        
         return $this->getSourceKey($source);
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+     * @return \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface
      */
     public function getDataProvider()
     {
@@ -122,7 +122,7 @@ class Legend
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      */
     public function setDataProvider(CalendarRendererProviderInterface $dataProvider)
     {
@@ -138,7 +138,7 @@ class Legend
     public function getSourceKey($source)
     {
         $sourceKey = array_search($source, $this->getSources());
-
+        
         if ($sourceKey === false)
         {
             throw new \Exception(Translation::get('InvalidLegendSource'));
@@ -151,7 +151,7 @@ class Legend
 
     /**
      * Determine the classes for a specific source
-     *
+     * 
      * @param string $key
      * @param boolean $fade
      * @return string
@@ -159,42 +159,42 @@ class Legend
     public function getSourceClasses($source = null, $fade = false)
     {
         $classes = 'event-container-source event-container-source-' . $this->addSource($source);
-
+        
         if ($fade)
         {
             $classes .= ' event-container-source-faded';
         }
-
+        
         return $classes;
     }
 
     /**
      * Builds a color-based legend for the calendar to help users to see the origin of the the published events
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $result = array();
-
+        
         if ($this->hasSources())
         {
             $visibleSources = 0;
-
+            
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
             $result[] = '<h4 class="panel-title">' . Translation::get('Legend') . '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
-
+            
             $sources = $this->getSources();
-
+            
             sort($sources);
-
+            
             foreach ($sources as $source)
             {
                 $sourceClasses = $this->getSourceClasses($source);
-
+                
                 if ($this->getDataProvider()->supportsVisibility())
                 {
                     $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
@@ -202,10 +202,10 @@ class Legend
                 }
                 else
                 {
-
+                    
                     $eventClasses = '';
                 }
-
+                
                 $result[] = '<li class="list-group-item">';
                 $result[] = '<div class="event-source' . $eventClasses . '" data-source-key="' .
                      $this->addSource($source) . '" data-source="' . $source . '">';
@@ -213,7 +213,7 @@ class Legend
                 $result[] = $source;
                 $result[] = '</div>';
                 $result[] = '</li>';
-
+                
                 if ($this->getDataProvider()->supportsVisibility())
                 {
                     if ($isSourceVisible)
@@ -222,31 +222,31 @@ class Legend
                     }
                 }
             }
-
+            
             $result[] = '</ul>';
             $result[] = '</div>';
-
+            
             if ($this->getDataProvider()->supportsVisibility())
             {
                 $result[] = '<script type="text/javascript">';
                 $result[] = 'var calendarVisibilityContext = ' .
                      json_encode($this->getDataProvider()->getVisibilityContext()) . ';';
                 $result[] = '</script>';
-
+                
                 $result[] = ResourceManager::getInstance()->get_resource_html(
                     Path::getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
-
+                
                 if ($visibleSources == 0)
                 {
                     $notificationMessageManager = new NotificationMessageManager();
                     $notificationMessageManager->addMessage(
                         new NotificationMessage(
-                            Translation::get('AllEventSourcesHidden'),
+                            Translation::get('AllEventSourcesHidden'), 
                             NotificationMessage::TYPE_WARNING));
                 }
             }
         }
-
+        
         return implode(PHP_EOL, $result);
     }
 }

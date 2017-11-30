@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
 
 /**
  *
@@ -14,98 +13,39 @@ abstract class ViewRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
      */
-    private $renderer;
+    private $viewRenderer;
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Event
-     */
-    private $event;
-
-    /**
-     *
-     * @var integer
-     */
-    private $startDate;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer $viewRenderer
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $startDate
      */
-    public function __construct(Renderer $renderer, Event $event, $startDate)
+    public function __construct(\Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer $viewRenderer)
     {
-        $this->renderer = $renderer;
-        $this->event = $event;
-        $this->startDate = $startDate;
+        $this->viewRenderer = $viewRenderer;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
      */
-    public function getRenderer()
+    public function getViewRenderer()
     {
-        return $this->renderer;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     */
-    public function setRenderer(Renderer $renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartDate()
-    {
-        return $this->startDate;
-    }
-
-    /**
-     *
-     * @param integer $startDate
-     */
-    public function setStartDate($startDate)
-    {
-        $this->startDate = $startDate;
+        return $this->viewRenderer;
     }
 
     /**
      *
      * @return string
      */
-    public function getEventClasses()
+    public function getEventClasses(Event $event)
     {
         $eventClasses = 'event-container';
 
-        if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
+        if (! $this->getViewRenderer()->isSourceVisible($event->getSource()))
         {
             $eventClasses .= ' event-container-hidden';
         }
@@ -116,7 +56,9 @@ abstract class ViewRenderer
     /**
      * Gets an html representation of an event for the renderer
      *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param integer $startDate
      * @return string
      */
-    abstract public function render();
+    abstract public function render(Event $event, $startDate);
 }

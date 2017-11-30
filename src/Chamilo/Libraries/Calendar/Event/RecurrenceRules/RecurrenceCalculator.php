@@ -22,48 +22,48 @@ class RecurrenceCalculator
     public function getEvents(Event $event, $startTime, $endTime)
     {
         $recurrenceRules = $event->getRecurrenceRules();
-
+        
         if ($recurrenceRules->hasRecurrence())
         {
             $vCalendar = new VObject\Component\VCalendar();
-
+            
             $startDateTime = new \DateTime();
             $startDateTime->setTimestamp($event->getStartDate());
-
+            
             $endDateTime = new \DateTime();
             $endDateTime->setTimestamp($event->getEndDate());
-
+            
             $vEvent = $vCalendar->add('VEVENT');
-
+            
             $vEvent->add('SUMMARY', $event->getTitle());
             $vEvent->add('DESCRIPTION', $event->getContent());
             $vEvent->add('DTSTART', $startDateTime);
             $vEvent->add('DTEND', $endDateTime);
-
+            
             $vObjectRecurrenceRules = new VObjectRecurrenceRulesFormatter();
-
+            
             $vEvent->add('RRULE', $vObjectRecurrenceRules->format(($event->getRecurrenceRules())));
             $vEvent->add('UID', uniqid());
-
+            
             $fromDateTime = new \DateTime();
             $fromDateTime->setTimestamp($startTime);
-
+            
             $toDateTime = new \DateTime();
             $toDateTime->setTimestamp($endTime);
-
+            
             $vCalendar->expand($fromDateTime, $toDateTime);
             $calculatedEvents = $vCalendar->VEVENT;
-
+            
             $events = array();
-
+            
             foreach ($calculatedEvents as $calculatedEvent)
             {
                 $repeatEvent = clone $event;
-
+                
                 $repeatEvent->setRecurrenceRules(new RecurrenceRules());
                 $repeatEvent->setStartDate($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
                 $repeatEvent->setEndDate($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
-
+                
                 $events[] = $repeatEvent;
             }
         }
@@ -74,7 +74,7 @@ class RecurrenceCalculator
                 $events[] = $event;
             }
         }
-
+        
         return $events;
     }
 

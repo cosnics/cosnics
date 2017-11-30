@@ -49,9 +49,9 @@ class RecurrenceRulesIcalParser
     public function getRules()
     {
         $icalRecurrenceRules = $this->getParts($this->getIcalRecurrenceRules());
-
+        
         $recurrenceRules = new RecurrenceRules();
-
+        
         if ($icalRecurrenceRules['FREQ'])
         {
             switch ($icalRecurrenceRules['FREQ'])
@@ -69,38 +69,38 @@ class RecurrenceRulesIcalParser
                     $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_YEARLY);
                     break;
             }
-
+            
             if ($icalRecurrenceRules['COUNT'])
             {
                 $recurrenceRules->setCount($icalRecurrenceRules['COUNT']);
             }
-
+            
             if ($icalRecurrenceRules['INTERVAL'])
             {
                 $recurrenceRules->setCount($icalRecurrenceRules['INTERVAL']);
             }
-
+            
             if ($icalRecurrenceRules['BYDAY'])
             {
                 $recurrenceRules->setByDay($icalRecurrenceRules['BYDAY']);
             }
-
+            
             if ($icalRecurrenceRules['BYMONTHDAY'])
             {
                 $recurrenceRules->setByMonthDay($icalRecurrenceRules['BYMONTHDAY']);
             }
-
+            
             if ($icalRecurrenceRules['BYMONTH'])
             {
                 $recurrenceRules->setByMonth($icalRecurrenceRules['BYMONTH']);
             }
-
+            
             if ($icalRecurrenceRules['BYWEEKNO'])
             {
                 $recurrenceRules->setByWeekNumber($icalRecurrenceRules['BYWEEKNO']);
             }
         }
-
+        
         return $recurrenceRules;
     }
 
@@ -113,20 +113,20 @@ class RecurrenceRulesIcalParser
     {
         // Make sure everything is uppercase
         $icalRecurrenceRules = strtoupper($icalRecurrenceRules);
-
+        
         // Strip the "RRULE:" part if it is still present
         $icalRecurrenceRules = str_replace('RRULE:', '', $icalRecurrenceRules);
-
+        
         // Split the different parts
         $icalRecurrenceRules = explode(';', $icalRecurrenceRules);
-
+        
         $parts = array();
-
+        
         foreach ($icalRecurrenceRules as $rulePart)
         {
             // Split the part name and value
             list($rulePartName, $rulePartValue) = explode('=', $rulePart);
-
+            
             if (in_array($rulePartName, array('FREQ', 'UNTIL', 'COUNT', 'INTERVAL')))
             {
                 $parts[$rulePartName] = $rulePartValue;
@@ -136,7 +136,7 @@ class RecurrenceRulesIcalParser
                 $parts[$rulePartName] = explode(',', $rulePartValue);
             }
         }
-
+        
         return $parts;
     }
 }

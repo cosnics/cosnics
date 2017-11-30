@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules$RecurrenceRules
+ * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RecurrenceRules
@@ -75,7 +75,7 @@ class RecurrenceRules
      * @param integer[] $byMonth
      * @param integer[] $byWeekNumber
      */
-    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(),
+    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(), 
         $byMonth = array(), $byWeekNumber = array())
     {
         $this->frequency = $frequency;

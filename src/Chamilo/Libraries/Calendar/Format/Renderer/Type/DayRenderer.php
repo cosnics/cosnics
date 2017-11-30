@@ -20,35 +20,35 @@ class DayRenderer extends HtmlTableRenderer
     {
         $calendarConfiguration = $this->getCalendarConfiguration();
         $calendar = $this->getCalendar();
-        
+
         $events = $this->getEvents($calendar->getStartTime(), $calendar->getEndTime());
-        
+
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
         $tableDate = $startTime;
-        
+
         while ($tableDate <= $endTime)
         {
             $nextTableDate = strtotime('+1 hour', $tableDate);
-            
+
             foreach ($events as $index => $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
-                
+
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                      $tableDate < $endDate && $endDate < $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $eventRendererFactory = new HtmlTableRendererFactory($this, $event, $tableDate);
-                    
-                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
+                    $eventRendererFactory = new HtmlTableRendererFactory($this);
+
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render($event, $tableDate));
                 }
             }
-            
+
             $tableDate = $nextTableDate;
         }
-        
+
         return $calendar->render();
     }
 }

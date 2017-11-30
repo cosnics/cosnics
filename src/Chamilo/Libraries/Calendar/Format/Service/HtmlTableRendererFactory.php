@@ -37,7 +37,7 @@ class HtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory $calendarBuilderFactory
      */
-    public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration, 
+    public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration,
         CalendarBuilderFactory $calendarBuilderFactory)
     {
         $this->calendarSources = $calendarSources;
@@ -83,13 +83,12 @@ class HtmlTableRendererFactory
     public function getHtmlTableRenderer($rendererType, CalendarRendererProviderInterface $dataProvider, $displayTime)
     {
         $className = 'Chamilo\Libraries\Calendar\Format\Renderer\Type\\' . $rendererType . 'Renderer';
-        
+
         return new $className(
-            $dataProvider, 
-            $this->getCalendarSources(), 
-            $this->getCalendarConfiguration(), 
-            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()), 
-            $displayTime);
+            $dataProvider,
+            $this->getCalendarSources(),
+            $this->getCalendarConfiguration(),
+            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()));
     }
 
     /**
@@ -102,7 +101,7 @@ class HtmlTableRendererFactory
     protected function getCalendar($calendarType, $displayTime, $displayParameters)
     {
         return $this->getCalendarBuilderFactory()->getCalendarBuilder($calendarType)->buildCalendar(
-            $displayTime, 
+            $displayTime,
             $displayParameters);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer\Type;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -15,23 +16,19 @@ class ListRenderer extends ViewRenderer
 {
 
     /**
-     * Gets a html representation of an event for a month renderer
      *
-     * @return string
+     * @see \Chamilo\Libraries\Calendar\Event\Renderer\ViewRenderer::render()
      */
-    public function render()
+    public function render(Event $event, $startDate)
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-        $event = $this->getEvent();
-        $calendarSources = $this->getRenderer()->getCalendarSources();
+        $calendarSources = $this->getViewRenderer()->getCalendarSources();
 
         $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html = array();
 
-        if (! $this->getRenderer()->isSourceVisible($event->getSource()))
+        if (! $this->getViewRenderer()->isSourceVisible($event->getSource()))
         {
             $rowClasses = ' event-container-hidden';
         }
@@ -48,19 +45,19 @@ class ListRenderer extends ViewRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-3 list-event-item-time">';
-        $html[] = $this->getRange();
+        $html[] = $this->getRange($event);
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-7 list-event-item-data">';
 
-        if ($this->getEvent()->getUrl())
+        if ($event->getUrl())
         {
             $html[] = '<a href="' . $event->getUrl() . '">';
         }
 
         $html[] = htmlspecialchars($event->getTitle());
 
-        if ($this->getEvent()->getUrl())
+        if ($event->getUrl())
         {
             $html[] = '</a>';
         }
@@ -76,28 +73,28 @@ class ListRenderer extends ViewRenderer
      *
      * @return string
      */
-    public function getRange()
+    public function getRange(Event $event)
     {
         $html = array();
 
         $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
 
-        if ($this->getEvent()->getEndDate() != '')
+        if ($event->getEndDate() != '')
         {
-            if (date('Y m d', $this->getEvent()->getStartDate()) == date('Y m d', $this->getEvent()->getEndDate()))
+            if (date('Y m d', $event->getStartDate()) == date('Y m d', $event->getEndDate()))
             {
                 $dateFormat = Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES);
             }
 
             $html[] = '<div class="calendar-event-range">' . htmlentities(
-                DatetimeUtilities::format_locale_date($dateFormat, $this->getEvent()->getStartDate()) . ' - ' .
-                     DatetimeUtilities::format_locale_date($dateFormat, $this->getEvent()->getEndDate())) . '</div>';
+                DatetimeUtilities::format_locale_date($dateFormat, $event->getStartDate()) . ' - ' .
+                     DatetimeUtilities::format_locale_date($dateFormat, $event->getEndDate())) . '</div>';
         }
         else
         {
             $html[] = '<div class="calendar-event-range">' . DatetimeUtilities::format_locale_date(
                 $dateFormat,
-                $this->getEvent()->getStartDate()) . '</div>';
+                $event->getStartDate()) . '</div>';
         }
 
         return implode(PHP_EOL, $html);

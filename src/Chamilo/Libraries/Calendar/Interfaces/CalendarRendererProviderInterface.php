@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Calendar\Interfaces;
 
 /**
  * An interface which forces the implementing Application to provide a given set of methods
- *
- * @package Chamilo\Libraries\Calendar\Renderer\Interfaces
+ * 
+ * @package Chamilo\Libraries\Calendar\Interfaces
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -14,7 +14,7 @@ interface CalendarRendererProviderInterface
 
     /**
      * Get the internal events between $startTime and $endTime
-     *
+     * 
      * @param integer $startTime
      * @param integer $endTime
      * @param boolean $calculateRecurrence
@@ -24,7 +24,7 @@ interface CalendarRendererProviderInterface
 
     /**
      * Get the external events between $startTime and $endTime
-     *
+     * 
      * @param integer $startTime
      * @param integer $endTime
      * @param boolean $calculateRecurrence
@@ -34,7 +34,7 @@ interface CalendarRendererProviderInterface
 
     /**
      * Get the events between $startTime and $endTime
-     *
+     * 
      * @param integer $startTime
      * @param integer $endTime
      * @param boolean $calculateRecurrence
@@ -44,21 +44,21 @@ interface CalendarRendererProviderInterface
 
     /**
      * Get the internal events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEvents();
 
     /**
      * Get the external events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEvents();
 
     /**
      * Get the events
-     *
+     * 
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEvents();
