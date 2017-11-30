@@ -27,7 +27,7 @@ class MiniMonthCalendar extends MonthCalendar
         $day = $this->getStartTime();
         $row = 0;
         $maxRows = $this->getRowCount();
-
+        
         while ($row < $maxRows)
         {
             for ($col = 0; $col < 7; $col ++)
@@ -38,7 +38,7 @@ class MiniMonthCalendar extends MonthCalendar
                 $this->setCellContents($row, $col, $content);
                 $day = strtotime('+24 Hours', $day);
             }
-
+            
             $row ++;
         }
     }
@@ -53,14 +53,14 @@ class MiniMonthCalendar extends MonthCalendar
     protected function handleItems($time, $items, $row, $column)
     {
         $tooltip = htmlentities(implode("\n", $items));
-
+        
         if (date('Ymd', $time) != date('Ymd'))
         {
             try
             {
                 $this->setCellContents(
-                    $row,
-                    $column,
+                    $row, 
+                    $column, 
                     '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
                          $this->getCellContents($row, $column) . '</span>');
             }

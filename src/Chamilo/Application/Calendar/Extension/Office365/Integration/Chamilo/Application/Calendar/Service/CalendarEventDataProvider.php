@@ -44,7 +44,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $events = array();
 
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
-
+            
             $identifier = [
                 __METHOD__,
                 $calendarRendererProvider->getUser()->getId(),

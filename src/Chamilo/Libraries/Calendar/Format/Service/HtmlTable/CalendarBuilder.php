@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\CalendarConfiguration;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\HtmlTable
+ * @package Chamilo\Libraries\Calendar\Format\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarBuilder
@@ -27,7 +27,7 @@ abstract class CalendarBuilder
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
+     * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(CalendarConfiguration $calendarConfiguration, Translator $translator)
@@ -94,7 +94,7 @@ abstract class CalendarBuilder
      *
      * @param integer $displayTime
      * @param string[] $displayParameters
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
+     * @return \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar
      */
     abstract public function buildCalendar($displayTime, $displayParameters = []);
 }

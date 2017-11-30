@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Format\HtmlTable\MiniMonthCalendar;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Service\HtmlTable
+ * @package Chamilo\Libraries\Calendar\Format\Service\HtmlTable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarBuilder extends MonthCalendarBuilder
@@ -15,7 +15,7 @@ class MiniMonthCalendarBuilder extends MonthCalendarBuilder
      *
      * @param integer $displayTime
      * @param string[] $classes
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\MiniMonthCalendar
+     * @return \Chamilo\Libraries\Calendar\Format\HtmlTable\MiniMonthCalendar
      */
     protected function getCalendar($displayTime)
     {
@@ -30,13 +30,13 @@ class MiniMonthCalendarBuilder extends MonthCalendarBuilder
     protected function determineCellContent($tableDate)
     {
         $cellContent = date('j', $tableDate);
-
+        
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))
         {
             $cellContent = '<span class="badge">' . $cellContent . '</span>';
         }
-
+        
         return $cellContent;
     }
 }

@@ -17,7 +17,7 @@ class FullCalendarRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface
+     * @var \Chamilo\Libraries\Calendar\Interfaces\FullCalendarRendererProviderInterface
      */
     private $fullCalendarRendererProvider;
 
@@ -32,7 +32,7 @@ class FullCalendarRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\FullCalendarRendererProviderInterface
+     * @return \Chamilo\Libraries\Calendar\Interfaces\FullCalendarRendererProviderInterface
      */
     public function getFullCalendarRendererProvider()
     {
@@ -48,16 +48,16 @@ class FullCalendarRenderer
     public function render($displayTime, $viewActions = array())
     {
         $html = array();
-
+        
         $html[] = '<div class="table-calendar-main">';
         $html[] = '<div id="loading">Loading...</div>';
         $html[] = '<div id="calendar"></div>';
         $html[] = '<div id="legend"></div>';
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
-
+        
         $html[] = $this->getDependencies($displayTime);
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -69,7 +69,7 @@ class FullCalendarRenderer
     protected function getConfiguration($displayTime)
     {
         $html = array();
-
+        
         $html[] = '    		    		header: false,
 		                           defaultDate: "' . date('Y-m-d', $displayTime) . '",
                            navLinks: true,
@@ -94,7 +94,7 @@ locale : "nl",
                            			loading: function(bool, view) {
                                				$("#loading").toggle(bool);
                            			}';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -102,22 +102,21 @@ locale : "nl",
     {
         $eventSources = $this->getFullCalendarRendererProvider()->getEventSources();
         $parsedEventSources = [];
-
+        
         foreach ($eventSources as $eventSource)
         {
             $eventSourceAjaxUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => $eventSource . '\Ajax',
+                    Application::PARAM_CONTEXT => $eventSource . '\Ajax', 
                     Application::PARAM_ACTION => 'FullCalendarEvents'));
-
+            
             $parsedEventSource = '{
-                                        url: ' .
-                 json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
+                                        url: ' . json_encode($eventSourceAjaxUrl->getUrl()) . ', cache: true
                                   }';
-
+            
             $parsedEventSources[] = $parsedEventSource;
         }
-
+        
         return '[' . implode(',', $parsedEventSources) . ']';
     }
 
@@ -129,31 +128,31 @@ locale : "nl",
     protected function getDependencies($displayTime)
     {
         $html = array();
-
+        
         $html[] = ResourceManager::getInstance()->get_resource_html(
             PathBuilder::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
                  'fullcalendar/lib/moment.min.js');
         $html[] = ResourceManager::getInstance()->get_resource_html(
             PathBuilder::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
                  'fullcalendar/fullcalendar.min.js');
-
+        
         $html[] = ResourceManager::getInstance()->get_resource_html(
             PathBuilder::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
                  'fullcalendar/locale-all.js');
-
+        
         $html[] = ResourceManager::getInstance()->get_resource_html(
             PathBuilder::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
                  'fullcalendar/fullcalendar.min.css');
-
+        
         $html[] = '<script>';
         $html[] = '	$(document).ready(function() {';
         $html[] = '    		var fullCalendar = $(\'#calendar\').fullCalendar({';
         $html[] = $this->getConfiguration($displayTime);
         $html[] = '    		});';
-
+        
         $html[] = '	});';
         $html[] = '</script>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

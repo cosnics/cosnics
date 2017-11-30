@@ -27,12 +27,12 @@ class ICalRenderer extends Renderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
         parent::__construct($dataProvider);
-
+        
         $this->calendar = new VCalendar();
     }
 
@@ -56,7 +56,7 @@ class ICalRenderer extends Renderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Format\Renderer\Renderer::render()
      */
     public function render()
     {
@@ -68,7 +68,7 @@ class ICalRenderer extends Renderer
     private function addEvents()
     {
         $providedEvents = $this->getDataProvider()->getInternalEvents();
-
+        
         foreach ($providedEvents as $providedEvent)
         {
             $this->addEvent($providedEvent);
@@ -90,10 +90,10 @@ class ICalRenderer extends Renderer
     private function sendResponse($serializedCalendar)
     {
         $headers = array();
-
+        
         $headers['Content-Type'] = 'text/calendar; charset=utf-8';
         $headers['Content-Disposition'] = 'attachment; filename="myCalendar.ics"';
-
+        
         $response = new Response($serializedCalendar, 200, $headers);
         $response->send();
     }
@@ -104,8 +104,8 @@ class ICalRenderer extends Renderer
     private function addTimeZone()
     {
         \iCalUtilityFunctions::createTimezone(
-            new TimeZoneCalendarWrapper($this->getCalendar()),
-            date_default_timezone_get(),
+            new TimeZoneCalendarWrapper($this->getCalendar()), 
+            date_default_timezone_get(), 
             array()/*,
             self :: TIMEZONE_START,
             self :: TIMEZONE_END*/);
@@ -118,47 +118,47 @@ class ICalRenderer extends Renderer
     private function addEvent(Event $providedEvent)
     {
         $event = $this->getCalendar()->add('VEVENT');
-
+        
         $event->add(
-            'DTSTART',
+            'DTSTART', 
             new \DateTime(
-                date('Y-m-d\TH:i:s', $providedEvent->getStartDate()),
+                date('Y-m-d\TH:i:s', $providedEvent->getStartDate()), 
                 new \DateTimeZone(date_default_timezone_get())));
-
+        
         $event->add(
-            'DTEND',
+            'DTEND', 
             new \DateTime(
-                date('Y-m-d\TH:i:s', $providedEvent->getEndDate()),
+                date('Y-m-d\TH:i:s', $providedEvent->getEndDate()), 
                 new \DateTimeZone(date_default_timezone_get())));
-
+        
         $description = trim(strip_tags($providedEvent->getContent()));
-
+        
         $event->add('LOCATION', trim($providedEvent->getLocation()));
         $event->add('SUMMARY', trim($providedEvent->getTitle()));
         $event->add('DESCRIPTION', $description);
-
+        
         $event->add(
-            'CREATED',
+            'CREATED', 
             new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
         $event->add(
-            'DTSTAMP',
+            'DTSTAMP', 
             new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
-
+        
         $uniqueIdentifiers = array(
-            $providedEvent->getSource(),
-            $providedEvent->getId(),
-            $providedEvent->getStartDate(),
+            $providedEvent->getSource(), 
+            $providedEvent->getId(), 
+            $providedEvent->getStartDate(), 
             $providedEvent->getEndDate());
-
+        
         $event->add('UID', md5(serialize($uniqueIdentifiers)));
-
+        
         if ($providedEvent->getUrl())
         {
             $event->add('URL', $providedEvent->getUrl());
         }
-
+        
         $vObjectRecurrenceRulesFormatter = new VObjectRecurrenceRulesFormatter();
-
+        
         if ($providedEvent->getRecurrenceRules()->hasRecurrence())
         {
             $event->add('RRULE', $vObjectRecurrenceRulesFormatter->format($providedEvent->getRecurrenceRules()));

@@ -37,7 +37,7 @@ class HtmlTableRendererFactory
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory $calendarBuilderFactory
      */
-    public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration,
+    public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration, 
         CalendarBuilderFactory $calendarBuilderFactory)
     {
         $this->calendarSources = $calendarSources;
@@ -75,7 +75,7 @@ class HtmlTableRendererFactory
     /**
      *
      * @param string $rendererType
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param integer $displayTime
      * @throws \Exception
      * @return \Chamilo\Libraries\Calendar\Format\Renderer\HtmlTableRenderer
@@ -83,12 +83,12 @@ class HtmlTableRendererFactory
     public function getHtmlTableRenderer($rendererType, CalendarRendererProviderInterface $dataProvider, $displayTime)
     {
         $className = 'Chamilo\Libraries\Calendar\Format\Renderer\Type\\' . $rendererType . 'Renderer';
-
+        
         return new $className(
-            $dataProvider,
-            $this->getCalendarSources(),
-            $this->getCalendarConfiguration(),
-            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()),
+            $dataProvider, 
+            $this->getCalendarSources(), 
+            $this->getCalendarConfiguration(), 
+            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()), 
             $displayTime);
     }
 
@@ -97,12 +97,12 @@ class HtmlTableRendererFactory
      * @param string $calendarType
      * @param integer $displayTime
      * @param string[] $displayParameters
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
+     * @return \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar
      */
     protected function getCalendar($calendarType, $displayTime, $displayParameters)
     {
         return $this->getCalendarBuilderFactory()->getCalendarBuilder($calendarType)->buildCalendar(
-            $displayTime,
+            $displayTime, 
             $displayParameters);
     }
 }

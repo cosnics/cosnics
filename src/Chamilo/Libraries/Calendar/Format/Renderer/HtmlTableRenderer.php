@@ -22,23 +22,23 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\HtmlTable\Calendar
+     * @var \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar
      */
     private $calendar;
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar $calendar
      * @param integer $displayTime
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources, 
         CalendarConfiguration $calendarConfiguration, Calendar $calendar, $displayTime)
     {
         parent::__construct($dataProvider, $calendarSources, $displayTime);
-
+        
         $this->calendarConfiguration = $calendarConfiguration;
         $this->calendar = $calendar;
     }
@@ -54,7 +54,7 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\HtmlTable\Calendar
+     * @return \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar
      */
     protected function getCalendar()
     {

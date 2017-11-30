@@ -26,7 +26,7 @@ class CalendarBuilderFactory
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Table\CalendarConfiguration $calendarConfiguration
+     * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(CalendarConfiguration $calendarConfiguration, Translator $translator)
@@ -61,7 +61,7 @@ class CalendarBuilderFactory
     public function getCalendarBuilder($calendarType)
     {
         $className = 'Chamilo\Libraries\Calendar\Format\Service\HtmlTable\\' . $calendarType . 'CalendarBuilder';
-
+        
         return new $className($this->getCalendarConfiguration(), $this->getTranslator());
     }
 }

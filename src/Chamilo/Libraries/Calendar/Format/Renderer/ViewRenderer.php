@@ -14,10 +14,10 @@ abstract class ViewRenderer extends Renderer
     // Parameters
     const PARAM_TIME = 'time';
     const PARAM_TYPE = 'type';
-
+    
     // Markers
     const MARKER_TYPE = '__TYPE__';
-
+    
     // Types
     const TYPE_DAY = 'Day';
     const TYPE_LIST = 'List';
@@ -29,7 +29,7 @@ abstract class ViewRenderer extends Renderer
 
     /**
      * The time of the moment to render
-     *
+     * 
      * @var integer
      */
     private $displayTime;
@@ -42,15 +42,15 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param integer $displayTime
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources, 
         $displayTime)
     {
         parent::__construct($dataProvider);
-
+        
         $this->calendarSources = $calendarSources;
         $this->displayTime = $displayTime;
     }
@@ -75,7 +75,7 @@ abstract class ViewRenderer extends Renderer
 
     /**
      * Check whether the given source is visible for the user
-     *
+     * 
      * @param string $source
      * @return boolean
      */
@@ -85,13 +85,13 @@ abstract class ViewRenderer extends Renderer
         {
             return $this->getDataProvider()->isSourceVisible($source);
         }
-
+        
         return true;
     }
 
     /**
      * Get the events between $start_time and $end_time which should be displayed in the calendar
-     *
+     * 
      * @param integer $startTime
      * @param integer $endTime
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
@@ -99,9 +99,9 @@ abstract class ViewRenderer extends Renderer
     public function getEvents($startTime, $endTime)
     {
         $events = $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
-
+        
         usort(
-            $events,
+            $events, 
             function ($eventLeft, $eventRight)
             {
                 if ($eventLeft->getStartDate() < $eventRight->getStartDate())
@@ -117,7 +117,7 @@ abstract class ViewRenderer extends Renderer
                     return 0;
                 }
             });
-
+        
         return $events;
     }
 }
