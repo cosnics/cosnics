@@ -88,28 +88,29 @@ class CalendarService
     {
         $eventsCacheService = new EventsCacheService($this->getCalendarRepository());
         $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier, 
-            $fromDate, 
+            $calendarIdentifier,
+            $fromDate,
             $toDate);
-        
+
         return new EventResultSet(
             $this->getCalendarProperties(
-                $googleCalendarEvents->getSummary(), 
-                $googleCalendarEvents->getDescription(), 
-                $googleCalendarEvents->getTimeZone()), 
+                $calendarIdentifier,
+                $googleCalendarEvents->getSummary(),
+                $googleCalendarEvents->getDescription(),
+                $googleCalendarEvents->getTimeZone()),
             $googleCalendarEvents->getItems());
     }
 
     /**
-     *
+     * @param string $calendarIdentifier
      * @param string $summary
      * @param string $description
      * @param string $timeZone
      * @return \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
      */
-    private function getCalendarProperties($summary, $description, $timeZone)
+    private function getCalendarProperties($calendarIdentifier, $summary, $description, $timeZone)
     {
-        return new CalendarProperties($summary, $description, $timeZone);
+        return new CalendarProperties($calendarIdentifier, $summary, $description, $timeZone);
     }
 
     /**

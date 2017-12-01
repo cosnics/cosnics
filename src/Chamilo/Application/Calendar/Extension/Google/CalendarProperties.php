@@ -15,6 +15,12 @@ class CalendarProperties
      *
      * @var string
      */
+    private $id;
+
+    /**
+     *
+     * @var string
+     */
     private $summary;
 
     /**
@@ -31,15 +37,35 @@ class CalendarProperties
 
     /**
      *
+     * @param string $id
      * @param string $summary
      * @param string $description
      * @param string $timeZone
      */
-    public function __construct($summary, $description, $timeZone)
+    public function __construct($id, $summary, $description, $timeZone)
     {
+        $this->id = $id;
         $this->summary = $summary;
         $this->description = $description;
         $this->timeZone = $timeZone;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     *
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

@@ -225,6 +225,8 @@ class EventParser
         $eventContext = \Chamilo\Application\Calendar\Extension\Google\Manager::context();
 
         $eventSource = new EventSource();
+        $eventSource->setId($calendarProperties->getId());
+        $eventSource->setContent($calendarProperties->getDescription());
         $eventSource->setTitle(
             Translation::get('SourceName', array('CALENDAR' => $calendarProperties->getSummary()), $eventContext));
         $eventSource->setContext($eventContext);
