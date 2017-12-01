@@ -13,6 +13,11 @@
             unsigned="1"
             notnull="1" />
         <property
+            name="tree_node_data_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
             name="content_object_id"
             type="integer"
             unsigned="1"
@@ -49,6 +54,9 @@
     </index>
     <index name="tree_node_attempt_id">
         <indexproperty name="tree_node_attempt_id" />
+    </index>
+    <index name="tree_node_data_id">
+        <indexproperty name="tree_node_data_id" />
     </index>
     <index name="entity_id">
         <indexproperty name="entity_id" />

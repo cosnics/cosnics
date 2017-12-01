@@ -4,17 +4,23 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  *
- * @package Ehb\Application\Weblcms\Tool\Implementation\Assignment\Service
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssignmentService
+class LearningPathAssignmentService
 {
 
     /**
@@ -34,90 +40,77 @@ class AssignmentService
 
     /**
      *
-     * @param integer $treeNodeAttemptIdentifier
+     * @param integer $treeNodeDataIdentifier
      *
      * @return integer
      */
-    public function countEntriesForTreeNodeAttemptIdentifier($treeNodeAttemptIdentifier)
+    public function countEntriesForTreeNodeDataIdentifier($treeNodeDataIdentifier)
     {
-        return $this->assignmentRepository->countEntriesForTreeNodeAttemptIdentifier($treeNodeAttemptIdentifier);
+        return $this->assignmentRepository->countEntriesForTreeNodeDataIdentifier($treeNodeDataIdentifier);
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param integer $entityType
      *
      * @return integer
      */
-    public function countDistinctEntriesByTreeNodeAttemptAndEntityType(TreeNodeAttempt $treeNodeAttempt, $entityType)
+    public function countDistinctEntriesByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData, $entityType)
     {
-        return $this->assignmentRepository->countDistinctEntriesByTreeNodeAttemptAndEntityType(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->countDistinctEntriesByTreeNodeDataAndEntityType(
+            $treeNodeData,
             $entityType
         );
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param integer $entityType
      *
      * @return integer
      */
-    public function countDistinctFeedbackByTreeNodeAttemptAndEntityType(TreeNodeAttempt $treeNodeAttempt, $entityType)
+    public function countDistinctFeedbackByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData, $entityType)
     {
-        return $this->assignmentRepository->countDistinctFeedbackByTreeNodeAttemptAndEntityType(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->countDistinctFeedbackByTreeNodeDataAndEntityType(
+            $treeNodeData,
             $entityType
         );
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param integer $entityType
      *
-     * @return integer
+     * @return int
      */
-    public function countDistinctLateEntriesByTreeNodeAttemptAndEntityType(
-        TreeNodeAttempt $treeNodeAttempt,
-        $entityType
+    public function countDistinctLateEntriesByTreeNodeDataAndEntityType(
+        Assignment $assignment, TreeNodeData $treeNodeData, $entityType
     )
     {
-        return $this->assignmentRepository->countDistinctLateEntriesByTreeNodeAttemptAndEntityType(
-            $treeNodeAttempt,
-            $entityType
+        return $this->assignmentRepository->countDistinctLateEntriesByTreeNodeDataAndEntityType(
+            $assignment, $treeNodeData, $entityType
         );
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
-     * @param integer $entityType
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return integer
      */
-    public function countEntitiesByTreeNodeAttemptAndEntityType(TreeNodeAttempt $treeNodeAttempt, $entityType)
+    public function countEntitiesByTreeNodeDataAndEntityType(TreeNodeData $treeNodeData)
     {
-        switch ($entityType)
-        {
-            case Entry::ENTITY_TYPE_USER :
-                return $this->countTargetUsersForTreeNodeAttempt($treeNodeAttempt);
-                break;
-
-            case Entry::ENTITY_TYPE_COURSE_GROUP :
-                return $this->countTargetCourseGroupsForTreeNodeAttempt($treeNodeAttempt);
-                break;
-            case Entry::ENTITY_TYPE_PLATFORM_GROUP :
-                return $this->countTargetGroupsForTreeNodeAttempt($treeNodeAttempt);
-                break;
-        }
+        return $this->countTargetUsersForTreeNodeData($treeNodeData);
     }
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
+     * @param int[] $userIds
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
@@ -125,13 +118,14 @@ class AssignmentService
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findTargetUsersForTreeNodeAttempt(
-        TreeNodeAttempt $treeNodeAttempt, $condition, $offset, $count,
-        $orderProperty
+    public function findTargetUsersForTreeNodeData(
+        TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null,
+        $orderProperty = null
     )
     {
-        return $this->assignmentRepository->findTargetUsersForTreeNodeAttempt(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->findTargetUsersForTreeNodeData(
+            $treeNodeData,
+            $userIds,
             $condition,
             $offset,
             $count,
@@ -141,31 +135,34 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
+     * @param int[] $userIds
      * @param Condition $condition
      *
-     * @return integer
+     * @return int
      */
-    public function countTargetUsersForTreeNodeAttempt(TreeNodeAttempt $treeNodeAttempt, $condition = null)
+    public function countTargetUsersForTreeNodeData(
+        TreeNodeData $treeNodeData, $userIds = [], $condition = null
+    )
     {
-        return $this->assignmentRepository->countTargetUsersForTreeNodeAttempt($treeNodeAttempt, $condition);
+        return $this->findTargetUsersForTreeNodeData($treeNodeData, $userIds, $condition)->count();
     }
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
      * @return integer
      */
-    public function countFeedbackForTreeNodeAttemptByEntityTypeAndEntityId(
-        TreeNodeAttempt $treeNodeAttempt,
+    public function countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
+        TreeNodeData $treeNodeData,
         $entityType, $entityId
     )
     {
-        return $this->assignmentRepository->countFeedbackForTreeNodeAttemptByEntityTypeAndEntityId(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
+            $treeNodeData,
             $entityType,
             $entityId
         );
@@ -173,91 +170,19 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
-     */
-    public function findTargetCourseGroupsForTreeNodeAttempt(
-        TreeNodeAttempt $treeNodeAttempt, $condition, $offset,
-        $count, $orderProperty
-    )
-    {
-        return $this->assignmentRepository->findTargetCourseGroupsForTreeNodeAttempt(
-            $treeNodeAttempt,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
-        );
-    }
-
-    /**
-     *
-     * @param TreeNodeAttempt $treeNodeAttempt
-     * @param Condition $condition
-     *
-     * @return integer
-     */
-    public function countTargetCourseGroupsForTreeNodeAttempt(TreeNodeAttempt $treeNodeAttempt, $condition = null)
-    {
-        return $this->assignmentRepository->countTargetCourseGroupsForTreeNodeAttempt($treeNodeAttempt, $condition);
-    }
-
-    /**
-     *
-     * @param TreeNodeAttempt $treeNodeAttempt
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
-     */
-    public function findTargetGroupsForTreeNodeAttempt(
-        TreeNodeAttempt $treeNodeAttempt, $condition, $offset, $count,
-        $orderProperty
-    )
-    {
-        return $this->assignmentRepository->findTargetGroupsForTreeNodeAttempt(
-            $treeNodeAttempt,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
-        );
-    }
-
-    /**
-     *
-     * @param TreeNodeAttempt $treeNodeAttempt
-     * @param Condition $condition
-     *
-     * @return integer
-     */
-    public function countTargetGroupsForTreeNodeAttempt(TreeNodeAttempt $treeNodeAttempt, $condition = null)
-    {
-        return $this->assignmentRepository->countTargetGroupsForTreeNodeAttempt($treeNodeAttempt, $condition);
-    }
-
-    /**
-     *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
      * @return integer
      */
-    public function countEntriesForTreeNodeAttemptEntityTypeAndId(
-        TreeNodeAttempt $treeNodeAttempt, $entityType,
+    public function countEntriesForTreeNodeDataEntityTypeAndId(
+        TreeNodeData $treeNodeData, $entityType,
         $entityId
     )
     {
-        return $this->assignmentRepository->countEntriesForTreeNodeAttemptEntityTypeAndId(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->countEntriesForTreeNodeDataEntityTypeAndId(
+            $treeNodeData,
             $entityType,
             $entityId,
             null
@@ -266,19 +191,19 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
      * @return integer
      */
     public function countDistinctFeedbackForEntityTypeAndId(
-        TreeNodeAttempt $treeNodeAttempt, $entityType,
+        TreeNodeData $treeNodeData, $entityType,
         $entityId
     )
     {
         return $this->assignmentRepository->countDistinctFeedbackForEntityTypeAndId(
-            $treeNodeAttempt,
+            $treeNodeData,
             $entityType,
             $entityId
         );
@@ -286,16 +211,16 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
      * @return integer
      */
-    public function countDistinctScoreForEntityTypeAndId(TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId)
+    public function countDistinctScoreForEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
     {
         return $this->assignmentRepository->countDistinctScoreForEntityTypeAndId(
-            $treeNodeAttempt,
+            $treeNodeData,
             $entityType,
             $entityId
         );
@@ -303,16 +228,16 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
-     * @return string[]
+     * @return int
      */
-    public function getAverageScoreForEntityTypeAndId(TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId)
+    public function getAverageScoreForEntityTypeAndId(TreeNodeData $treeNodeData, $entityType, $entityId)
     {
         return $this->assignmentRepository->retrieveAverageScoreForEntityTypeAndId(
-            $treeNodeAttempt,
+            $treeNodeData,
             $entityType,
             $entityId
         );
@@ -320,7 +245,7 @@ class AssignmentService
 
     /**
      *
-     * @param TreeNodeAttempt $treeNodeAttempt
+     * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -330,13 +255,13 @@ class AssignmentService
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesForTreeNodeAttemptEntityTypeAndId(
-        TreeNodeAttempt $treeNodeAttempt, $entityType,
+    public function findEntriesForTreeNodeDataEntityTypeAndId(
+        TreeNodeData $treeNodeData, $entityType,
         $entityId, $condition, $offset, $count, $orderProperty
     )
     {
-        return $this->assignmentRepository->retrieveEntriesForTreeNodeAttemptEntityTypeAndId(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->retrieveEntriesForTreeNodeDataEntityTypeAndId(
+            $treeNodeData,
             $entityType,
             $entityId,
             $condition,
@@ -440,19 +365,19 @@ class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesByTreeNodeAttemptEntityTypeAndIdentifiers(
-        TreeNodeAttempt $treeNodeAttempt, $entityType,
+    public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
+        TreeNodeData $treeNodeData, $entityType,
         $entityIdentifiers
     )
     {
-        return $this->assignmentRepository->findEntriesByTreeNodeAttemptEntityTypeAndIdentifiers(
-            $treeNodeAttempt,
+        return $this->assignmentRepository->findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
+            $treeNodeData,
             $entityType,
             $entityIdentifiers
         );
@@ -460,12 +385,171 @@ class AssignmentService
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findEntriesByTreeNodeAttempt(TreeNodeAttempt $treeNodeAttempt)
+    public function findEntriesByTreeNodeData(TreeNodeData $treeNodeData)
     {
-        return $this->assignmentRepository->findEntriesByTreeNodeAttempt($treeNodeAttempt);
+        return $this->assignmentRepository->findEntriesByTreeNodeData($treeNodeData);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param integer $userId
+     * @param integer $contentObjectId
+     * @param string $ipAddress
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     */
+    public function createEntry(
+        TreeNodeData $treeNodeData, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
+    )
+    {
+        $entry = $this->createEntryInstance();
+
+        $entry->setTreeNodeDataId($treeNodeData->getId());
+        $entry->setContentObjectId($contentObjectId);
+        $entry->setSubmitted(time());
+        $entry->setEntityId($entityId);
+        $entry->setEntityType($entityType);
+        $entry->setUserId($userId);
+        $entry->setIpAddress($ipAddress);
+
+        if(!$this->assignmentRepository->createEntry($entry))
+        {
+            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+        }
+
+        return $entry;
+
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $submittedScore
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score
+     */
+    public function createScore(Entry $entry, User $user, $submittedScore)
+    {
+        $score = $this->createScoreInstance();
+
+        $score->setScore($submittedScore);
+        $score->setEntryId($entry->getId());
+        $score->setCreated(time());
+        $score->setModified(time());
+        $score->setUserId($user->getId());
+
+        if(!$this->assignmentRepository->createScore($score))
+        {
+            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+        }
+
+        return $score;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     */
+    public function updateScore(Score $score)
+    {
+        if(!$this->assignmentRepository->updateScore($score))
+        {
+            throw new \RuntimeException('Could not update the score ' . $score->getId());
+        }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $submittedNote
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note
+     */
+    public function createNote(Entry $entry, User $user, $submittedNote)
+    {
+        $note = $this->createNoteInstance();
+
+        $note->setNote($submittedNote);
+        $note->setEntryId($entry->getId());
+        $note->setCreated(time());
+        $note->setModified(time());
+        $note->setUserId($user->getId());
+
+        if(!$this->assignmentRepository->createNote($note))
+        {
+            throw new \RuntimeException('Could not create a new note for entry ' . $note->getId());
+        }
+
+        return $note;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
+     */
+    public function updateNote(Note $note)
+    {
+        if(!$this->assignmentRepository->updateNote($note))
+        {
+            throw new \RuntimeException('Could not update the note ' . $note->getId());
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     */
+    public function initializeFeedback()
+    {
+        return $this->createFeedbackInstance();
+    }
+
+    /**
+     * Creates a new instance for an entry
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry
+     */
+    protected function createEntryInstance()
+    {
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Entry();
+    }
+
+    /**
+     * Creates a new instance for a score
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score
+     */
+    protected function createScoreInstance()
+    {
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Score();
+    }
+
+    /**
+     * Creates a new instance for a score
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback
+     */
+    protected function createFeedbackInstance()
+    {
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Feedback();
+    }
+
+    /**
+     * Creates a new instance for a score
+     *
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note
+     */
+    protected function createNoteInstance()
+    {
+        return new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPath\Assignment\Note();
     }
 }
