@@ -145,7 +145,7 @@ class ICalRenderer extends Renderer
             new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
 
         $uniqueIdentifiers = array(
-            $providedEvent->getSource()->getTitle(),
+            $providedEvent->getSource(),
             $providedEvent->getId(),
             $providedEvent->getStartDate(),
             $providedEvent->getEndDate());

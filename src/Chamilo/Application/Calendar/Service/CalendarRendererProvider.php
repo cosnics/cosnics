@@ -7,6 +7,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 
 /**
  *
@@ -87,10 +88,10 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
      */
-    public function isSourceVisible($source)
+    public function isSourceVisible(EventSource $source)
     {
         $visibility = $this->getVisibilityService()->findVisibilityBySourceAndUserIdentifier(
-            $source,
+            $source->getHash(),
             $this->getUser()->getId());
         return ! $visibility instanceof Visibility;
     }

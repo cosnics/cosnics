@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
 use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 
 /**
  *
@@ -58,10 +59,10 @@ abstract class ViewRenderer extends Renderer
     /**
      * Check whether the given source is visible for the user
      *
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      * @return boolean
      */
-    public function isSourceVisible($source)
+    public function isSourceVisible(EventSource $source)
     {
         if ($this->getDataProvider()->supportsVisibility())
         {

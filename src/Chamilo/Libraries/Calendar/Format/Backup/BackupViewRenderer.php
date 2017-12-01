@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 
 /**
  *
@@ -125,11 +126,11 @@ abstract class BackupViewRenderer extends BackupRenderer
     /**
      * Check whether the given source is visible for the user
      *
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source, $userIdentifier)
+    public function isSourceVisible(EventSource $source, $userIdentifier)
     {
         if ($this->getDataProvider()->supportsVisibility())
         {

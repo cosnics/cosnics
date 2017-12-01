@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Interfaces;
 
+use Chamilo\Libraries\Calendar\Event\EventSource;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Interfaces
@@ -11,15 +13,16 @@ interface VisibilitySupport
 
     /**
      * Check whether the given source is visible for the user
-     * 
-     * @param string $source
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
+     * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source);
+    public function isSourceVisible(EventSource $source);
 
     /**
      * Return the additional Application data needed for the storage of the Visibility instance
-     * 
+     *
      * @return string[]
      */
     public function getVisibilityData();
@@ -27,7 +30,7 @@ interface VisibilitySupport
     /**
      * Return the executable application containing the VisibilityComponent which will be called when setting a source
      * visible or invisible
-     * 
+     *
      * @return string
      */
     public function getVisibilityContext();
