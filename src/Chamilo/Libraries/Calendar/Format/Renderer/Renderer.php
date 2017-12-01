@@ -31,7 +31,7 @@ abstract class Renderer
         {
             throw new \Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
         }
-        
+
         $this->dataProvider = $dataProvider;
     }
 
@@ -46,7 +46,7 @@ abstract class Renderer
 
     /**
      * Render the calendar
-     * 
+     *
      * @return string
      */
     abstract public function render();

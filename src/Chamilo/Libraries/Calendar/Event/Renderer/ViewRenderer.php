@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Renderer;
 
+use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
 
 /**
  *
@@ -13,44 +15,43 @@ abstract class ViewRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
+     * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
-    private $viewRenderer;
+    private $calendarSources;
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer $viewRenderer
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport $dataProvider
+     * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param integer $startDate
      */
-    public function __construct(\Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer $viewRenderer)
+    public function __construct(VisibilitySupport $dataProvider, CalendarSources $calendarSources)
     {
-        $this->viewRenderer = $viewRenderer;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer
-     */
-    public function getViewRenderer()
-    {
-        return $this->viewRenderer;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getEventClasses(Event $event)
-    {
-        $eventClasses = 'event-container';
-
-        if (! $this->getViewRenderer()->isSourceVisible($event->getSource()))
+        if (! $dataProvider instanceof VisibilitySupport)
         {
-            $eventClasses .= ' event-container-hidden';
+            throw new \Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
         }
 
-        return $eventClasses;
+        $this->dataProvider = $dataProvider;
+        $this->calendarSources = $calendarSources;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport
+     */
+    public function getDataProvider()
+    {
+        return $this->dataProvider;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
+     */
+    protected function getCalendarSources()
+    {
+        return $this->calendarSources;
     }
 
     /**

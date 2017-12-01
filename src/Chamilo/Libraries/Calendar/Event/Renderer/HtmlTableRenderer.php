@@ -17,11 +17,26 @@ abstract class HtmlTableRenderer extends ViewRenderer
      *
      * @return string
      */
+    public function getEventClasses(Event $event)
+    {
+        $eventClasses = 'event-container';
+
+        if (! $this->getDataProvider()->isSourceVisible($event->getSource()))
+        {
+            $eventClasses .= ' event-container-hidden';
+        }
+
+        return $eventClasses;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function determineEventClasses(Event $event)
     {
         $eventClasses = $this->getEventClasses($event);
-        $sourceClasses = $this->getViewRenderer()->getCalendarSources()->getSourceClasses(
-            $event->getSource());
+        $sourceClasses = $this->getCalendarSources()->getSourceClasses($event->getSource());
         return implode(' ', array($eventClasses, $sourceClasses));
     }
 
@@ -107,7 +122,7 @@ abstract class HtmlTableRenderer extends ViewRenderer
         $html = array();
 
         $html[] = '<div class="' . $this->determineEventClasses($event) . '" data-source-key="' .
-             $this->getViewRenderer()->getCalendarSources()->getSourceKey($event->getSource()) . '">';
+             $this->getCalendarSources()->getSourceKey($event->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);

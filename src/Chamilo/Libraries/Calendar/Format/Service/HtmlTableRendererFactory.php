@@ -33,16 +33,25 @@ class HtmlTableRendererFactory
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     */
+    private $eventHtmlTableRendererFactory;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\Service\CalendarBuilderFactory $calendarBuilderFactory
+     * @param \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory $eventHtmlTableRendererFactory
      */
     public function __construct(CalendarSources $calendarSources, CalendarConfiguration $calendarConfiguration,
-        CalendarBuilderFactory $calendarBuilderFactory)
+        CalendarBuilderFactory $calendarBuilderFactory,
+        \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory $eventHtmlTableRendererFactory)
     {
         $this->calendarSources = $calendarSources;
         $this->calendarConfiguration = $calendarConfiguration;
         $this->calendarBuilderFactory = $calendarBuilderFactory;
+        $this->eventHtmlTableRendererFactory = $eventHtmlTableRendererFactory;
     }
 
     /**
@@ -74,6 +83,15 @@ class HtmlTableRendererFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     */
+    protected function getEventHtmlTableRendererFactory()
+    {
+        return $this->eventHtmlTableRendererFactory;
+    }
+
+    /**
+     *
      * @param string $rendererType
      * @param \Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param integer $displayTime
@@ -88,7 +106,8 @@ class HtmlTableRendererFactory
             $dataProvider,
             $this->getCalendarSources(),
             $this->getCalendarConfiguration(),
-            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()));
+            $this->getCalendar($rendererType, $displayTime, $dataProvider->getDisplayParameters()),
+            $this->getEventHtmlTableRendererFactory());
     }
 
     /**

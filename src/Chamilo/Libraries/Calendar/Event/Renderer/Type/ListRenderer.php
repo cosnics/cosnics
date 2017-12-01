@@ -21,14 +21,14 @@ class ListRenderer extends ViewRenderer
      */
     public function render(Event $event, $startDate)
     {
-        $calendarSources = $this->getViewRenderer()->getCalendarSources();
+        $calendarSources = $this->getCalendarSources();
 
         $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html = array();
 
-        if (! $this->getViewRenderer()->isSourceVisible($event->getSource()))
+        if (! $this->getDataProvider()->isSourceVisible($event->getSource()))
         {
             $rowClasses = ' event-container-hidden';
         }

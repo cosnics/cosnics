@@ -2,12 +2,13 @@
 namespace Chamilo\Libraries\Calendar\Event\Service;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Calendar\CalendarSources;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Format\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Event\Renderer
+ * @package Chamilo\Libraries\Calendar\Event\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlTableRendererFactory
@@ -15,57 +16,63 @@ class HtmlTableRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\CalendarSources
      */
-    private $renderer;
+    private $calendarSources;
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param integer $startDate
      */
-    public function __construct(Renderer $renderer)
+    public function __construct(CalendarSources $calendarSources)
     {
-        $this->renderer = $renderer;
+        $this->calendarSources = $calendarSources;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @return \Chamilo\Libraries\Calendar\CalendarSources
      */
-    public function getRenderer()
+    protected function getCalendarSources()
     {
-        return $this->renderer;
+        return $this->calendarSources;
     }
 
     /**
      *
+     * @param string $htmlTableRendererType
+     * @param \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport $dataProvider
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $startDate
      * @return string
      */
-    public function render(Event $event, $startDate)
+    public function render($htmlTableRendererType, VisibilitySupport $dataProvider, Event $event, $startDate)
     {
-        return $this->getEventRenderer($event->getContext())->render($event, $startDate);
+        return $this->getEventRenderer($htmlTableRendererType, $event->getContext(), $dataProvider)->render(
+            $event,
+            $startDate);
     }
 
     /**
      *
+     * @param string $htmlTableRendererType
+     * @param \Chamilo\Libraries\Calendar\Interfaces\VisibilitySupport $dataProvider
      * @param string $eventContext
      * @return \Chamilo\Libraries\Calendar\Event\Renderer\HtmlTableRenderer
      */
-    public function getEventRenderer($eventContext)
+    public function getEventRenderer($htmlTableRendererType, $eventContext, VisibilitySupport $dataProvider)
     {
         $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($eventContext) .
-             '\Event\Renderer\Type\\' . $this->getRenderer()->class_name(false);
+             '\Event\Renderer\Type\\' . $htmlTableRendererType;
+        // $this->getRenderer()->class_name(false);
 
         if (! class_exists($eventRendererClassName))
         {
-            $eventRendererClassName = 'Chamilo\Libraries\Calendar\Event\Renderer\Type\\' .
-                 $this->getRenderer()->class_name(false);
+            $eventRendererClassName = 'Chamilo\Libraries\Calendar\Event\Renderer\Type\\' . $htmlTableRendererType;
+            // $this->getRenderer()->class_name(false);
         }
 
-        return new $eventRendererClassName($this->getRenderer());
+        return new $eventRendererClassName($dataProvider, $this->getCalendarSources());
     }
 }
