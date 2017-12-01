@@ -5,10 +5,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 
 /**
  * Abstract base-class for the parsing of content object to renderable calendar events
- * 
+ *
  * @package libraries\calendar\event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -68,7 +69,7 @@ abstract class EventParser
     {
         $type = $contentObject->package();
         $class = $type . '\Integration\Chamilo\Libraries\Calendar\Event\EventParser';
-        
+
         if (! class_exists($class))
         {
             $message = array();
@@ -80,7 +81,7 @@ abstract class EventParser
             $message[] = '<li>' . Translation::get('EventParser') . '</li>';
             $message[] = '<li>' . Translation::get('TypeName', null, $type) . '</li>';
             $message[] = '</ul>';
-            
+
             throw new ClassNotExistException($class);
         }
         return new $class($contentObject, $startDate, $endDate, $eventClassName);
@@ -165,7 +166,7 @@ abstract class EventParser
     public function getEventInstance()
     {
         $eventClassName = $this->getEventClassName();
-        
+
         if (! $eventClassName)
         {
             throw new \Exception(
@@ -175,7 +176,7 @@ abstract class EventParser
         else
         {
             $event = new $eventClassName();
-            
+
             if (! $event instanceof ContentObjectSupport)
             {
                 throw new \Exception(
@@ -194,4 +195,18 @@ abstract class EventParser
      * @return Event[]
      */
     abstract public function getEvents();
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource
+     */
+    protected function getEventSource()
+    {
+        $object = $this->getContentObject();
+
+        $eventSource = new EventSource();
+        $eventSource->setTitle(Translation::get('TypeName', null, $object->context()));
+
+        return $eventSource;
+    }
 }

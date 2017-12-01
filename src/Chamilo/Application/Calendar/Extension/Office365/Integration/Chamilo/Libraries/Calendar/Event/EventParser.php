@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -153,7 +154,7 @@ class EventParser
             $office365CalendarEvent->getSubject(),
             $office365CalendarEvent->getBody()->getContent(),
             $office365CalendarEvent->getLocation()->getDisplayName(),
-            $this->getSource($this->getAvailableCalendar()->getName()),
+            $this->getEventSource($this->getAvailableCalendar()->getName()),
             \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
 
         $event->setOffice365CalendarEvent($office365CalendarEvent);
@@ -207,12 +208,15 @@ class EventParser
      * @param string $calendarName
      * @return string
      */
-    private function getSource($calendarName)
+    private function getEventSource($calendarName)
     {
-        return Translation::get(
-            'SourceName',
-            array('CALENDAR' => $calendarName),
-            \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
+        $eventContext = \Chamilo\Application\Calendar\Extension\Office365\Manager::context();
+
+        $eventSource = new EventSource();
+        $eventSource->setTitle(Translation::get('SourceName', array('CALENDAR' => $calendarName), $eventContext));
+        $eventSource->setContext($eventContext);
+
+        return $eventSource;
     }
 
     /**

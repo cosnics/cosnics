@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRulesIcalParser;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -47,7 +48,7 @@ class EventParser
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(CalendarProperties $calendarProperties, 
+    public function __construct(CalendarProperties $calendarProperties,
         \Google_Service_Calendar_Event $googleCalendarEvent, $fromDate, $toDate)
     {
         $this->calendarProperties = $calendarProperties;
@@ -135,30 +136,30 @@ class EventParser
     public function getEvents()
     {
         $googleCalendarEvent = $this->getGoogleCalendarEvent();
-        
+
         if (is_null($googleCalendarEvent) || is_null($googleCalendarEvent->getStart()) ||
              is_null($googleCalendarEvent->getEnd()))
         {
             return array();
         }
-        
+
         $url = null;
-        
+
         $event = new Event(
-            $googleCalendarEvent->getId(), 
-            $this->getTimestamp($googleCalendarEvent->getStart(), $this->getCalendarProperties()->getTimeZone()), 
-            $this->getTimestamp($googleCalendarEvent->getEnd(), $this->getCalendarProperties()->getTimeZone()), 
-            $this->getRecurrence($googleCalendarEvent->getRecurrence()), 
-            $url, 
-            $googleCalendarEvent->getSummary(), 
-            $googleCalendarEvent->getDescription(), 
-            $googleCalendarEvent->getLocation(), 
-            $this->getSource($this->getCalendarProperties()), 
+            $googleCalendarEvent->getId(),
+            $this->getTimestamp($googleCalendarEvent->getStart(), $this->getCalendarProperties()->getTimeZone()),
+            $this->getTimestamp($googleCalendarEvent->getEnd(), $this->getCalendarProperties()->getTimeZone()),
+            $this->getRecurrence($googleCalendarEvent->getRecurrence()),
+            $url,
+            $googleCalendarEvent->getSummary(),
+            $googleCalendarEvent->getDescription(),
+            $googleCalendarEvent->getLocation(),
+            $this->getEventSource($this->getCalendarProperties()),
             \Chamilo\Application\Calendar\Extension\Google\Manager::context());
-        
+
         $event->setCalendarProperties($this->getCalendarProperties());
         $event->setGoogleCalendarEvent($googleCalendarEvent);
-        
+
         return array($event);
     }
 
@@ -170,9 +171,9 @@ class EventParser
     private function getTimestamp(\Google_Service_Calendar_EventDateTime $eventDateTime, $calendarTimeZone)
     {
         $dateTime = new \DateTime(
-            $this->determineTime($eventDateTime), 
+            $this->determineTime($eventDateTime),
             $this->determineTimeZone($eventDateTime->getTimeZone(), $calendarTimeZone));
-        
+
         return $dateTime->getTimestamp();
     }
 
@@ -219,12 +220,16 @@ class EventParser
      *
      * @return string
      */
-    private function getSource(CalendarProperties $calendarProperties)
+    private function getEventSource(CalendarProperties $calendarProperties)
     {
-        return Translation::get(
-            'SourceName', 
-            array('CALENDAR' => $calendarProperties->getSummary()), 
-            \Chamilo\Application\Calendar\Extension\Google\Manager::context());
+        $eventContext = \Chamilo\Application\Calendar\Extension\Google\Manager::context();
+
+        $eventSource = new EventSource();
+        $eventSource->setTitle(
+            Translation::get('SourceName', array('CALENDAR' => $calendarProperties->getSummary()), $eventContext));
+        $eventSource->setContext($eventContext);
+
+        return $eventSource;
     }
 
     /**
@@ -236,7 +241,7 @@ class EventParser
     private function getRecurrence($recurrenceRules)
     {
         $recurrenceRulesIcalParser = new RecurrenceRulesIcalParser($recurrenceRules[0]);
-        
+
         return $recurrenceRulesIcalParser->getRules();
     }
 }

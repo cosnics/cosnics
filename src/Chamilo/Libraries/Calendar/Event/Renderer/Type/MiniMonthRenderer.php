@@ -19,7 +19,7 @@ class MiniMonthRenderer extends MonthRenderer
     {
         $html = array();
 
-        $sourceClasses = $this->getCalendarSources()->getSourceClasses($event->getSource());
+        $sourceClasses = $this->getCalendarSources()->getSourceClasses($event->getSource()->getTitle());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html[] = '<div class="tooltip-event-container">';

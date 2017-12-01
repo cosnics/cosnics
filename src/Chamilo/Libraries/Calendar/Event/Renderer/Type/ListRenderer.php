@@ -23,12 +23,12 @@ class ListRenderer extends ViewRenderer
     {
         $calendarSources = $this->getCalendarSources();
 
-        $sourceClasses = $calendarSources->getSourceClasses($event->getSource());
+        $sourceClasses = $calendarSources->getSourceClasses($event->getSource()->getTitle());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html = array();
 
-        if (! $this->getDataProvider()->isSourceVisible($event->getSource()))
+        if (! $this->getDataProvider()->isSourceVisible($event->getSource()->getTitle()))
         {
             $rowClasses = ' event-container-hidden';
         }
@@ -38,7 +38,7 @@ class ListRenderer extends ViewRenderer
         }
 
         $html[] = '<div class="row' . $rowClasses . '" data-source-key="' .
-             $calendarSources->getSourceKey($event->getSource()) . '">';
+             $calendarSources->getSourceKey($event->getSource()->getTitle()) . '">';
 
         $html[] = '<div class="col-xs-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';

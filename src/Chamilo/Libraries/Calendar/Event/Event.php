@@ -65,7 +65,7 @@ class Event
 
     /**
      *
-     * @var string
+     * @var \Chamilo\Libraries\Calendar\Event\EventSource
      */
     private $source;
 
@@ -85,11 +85,11 @@ class Event
      * @param string $title
      * @param string $content
      * @param string $location
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      * @param string $context
      */
     public function __construct($id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
-        $title = null, $content = null, $location = null, $source = null, $context = null)
+        $title = null, $content = null, $location = null, EventSource $source = null, $context = null)
     {
         $this->id = $id;
         $this->startDate = $startDate;
@@ -132,11 +132,29 @@ class Event
 
     /**
      *
+     * @param integer $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     *
      * @return integer
      */
     public function getEndDate()
     {
         return $this->endDate;
+    }
+
+    /**
+     *
+     * @param integer $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
     }
 
     /**
@@ -168,11 +186,29 @@ class Event
 
     /**
      *
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 
     /**
@@ -186,11 +222,29 @@ class Event
 
     /**
      *
-     * @return string
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource
      */
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
     }
 
     /**
@@ -204,20 +258,29 @@ class Event
 
     /**
      *
-     * @param integer $startDate
+     * @param string $context
      */
-    public function setStartDate($startDate)
+    public function setContext($context)
     {
-        $this->startDate = $startDate;
+        $this->context = $context;
     }
 
     /**
      *
-     * @param integer $endDate
+     * @return string
      */
-    public function setEndDate($endDate)
+    public function getLocation()
     {
-        $this->endDate = $endDate;
+        return $this->location;
+    }
+
+    /**
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 
     /**
@@ -241,69 +304,6 @@ class Event
         {
             return false;
         }
-    }
-
-    /**
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     *
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     *
-     * @param string $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     *
-     * @param string $source
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-    }
-
-    /**
-     *
-     * @param string $context
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
     }
 
     /**
