@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.calendar.calendar_sources"
+            class="Chamilo\Libraries\Calendar\CalendarSources">
+        </service>
+
+        <service
+            id="chamilo.libraries.calendar.service.legend_renderer"
+            class="Chamilo\Libraries\Calendar\Service\LegendRenderer">
+            <argument
+                type="service"
+                id="twig.environment" />
+            <argument
+                type="service"
+                id="chamilo.libraries.calendar.calendar_sources" />
+        </service>
+
+        <service
+            id="chamilo.libraries.calendar.service.calendar_configuration_factory"
+            class="Chamilo\Libraries\Calendar\Service\CalendarConfigurationFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.configuration.local_setting" />
+        </service>
+
+        <service
+            id="chamilo.libraries.calendar.calendar_configuration"
+            class="Chamilo\Libraries\Calendar\CalendarConfiguration"
+            factory-service="chamilo.libraries.calendar.service.calendar_configuration_factory"
+            factory-method="getCalendarConfiguration">
+        </service>
+    </services>
+</container>

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar;
 
-use Chamilo\Libraries\Calendar\Event\EventSource;
-
 /**
  *
  * @package Chamilo\Libraries\Calendar
@@ -13,7 +11,7 @@ class CalendarSources
 
     /**
      *
-     * @var string[]
+     * @var \Chamilo\Libraries\Calendar\Event\EventSource[]
      */
     private $sources;
 
@@ -25,17 +23,8 @@ class CalendarSources
 
     public function __construct()
     {
-        $this->sources = [];
-        $this->sourceKeys = [];
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getSources()
-    {
-        return $this->sources;
+        $this->sources = array();
+        $this->sourceKeys = array();
     }
 
     /**
@@ -45,6 +34,15 @@ class CalendarSources
     public function getSourceKeys()
     {
         return $this->sourceKeys;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource[]
+     */
+    public function getSources()
+    {
+        return $this->sources;
     }
 
     /**
@@ -67,14 +65,14 @@ class CalendarSources
 
     /**
      *
-     * @param string $source
+     * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      */
-    public function addSource(EventSource $eventSource)
+    public function addSource($source)
     {
-        if (! in_array($eventSource->hash(), $this->getSourceKeys()))
+        if (! in_array($source->hash(), $this->getSourceKeys()))
         {
-            $this->sources[$eventSource->hash()] = $eventSource;
-            $this->sourceKeys[] = $eventSource->hash();
+            $this->sources[$source->hash()] = $source;
+            $this->sourceKeys[] = $source->hash();
         }
     }
 
@@ -83,21 +81,22 @@ class CalendarSources
      * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
      * @return integer
      */
-    public function getSourceKey(EventSource $eventSource)
+    public function getSourceKey($source)
     {
-        $this->addSource($eventSource);
-        return array_search($eventSource->hash(), $this->getSourceKeys());
+        $this->addSource($source);
+        return array_search($source->hash(), $this->getSourceKeys());
     }
 
     /**
      * Determine the classes for a specific source
      *
-     * @param \Chamilo\Libraries\Calendar\Event\EventSource $eventSource
+     * @param string $key
+     * @param boolean $fade
      * @return string
      */
-    public function getSourceClasses(EventSource $eventSource)
+    public function getSourceClasses($source = null)
     {
-        return 'event-container-source event-container-source-' . $this->getSourceKey($eventSource);
+        return 'event-container-source event-container-source-' . $this->getSourceKey($source);
     }
 }
 

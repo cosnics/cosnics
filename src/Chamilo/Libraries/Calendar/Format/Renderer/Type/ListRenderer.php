@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Format\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\CalendarSources;
-use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
-use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
+use Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package Chamilo\Libraries\Calendar\Format\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ListRenderer extends ViewRenderer
+class ListRenderer extends FormatHtmlRenderer
 {
 
     /**
@@ -39,7 +39,7 @@ class ListRenderer extends ViewRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer::getEvents()
+     * @see \Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer::getEvents()
      */
     public function getEvents($startTime, $endTime)
     {
@@ -135,7 +135,7 @@ class ListRenderer extends ViewRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    $eventRendererFactory = new HtmlTableRendererFactory($this);
+                    $eventRendererFactory = new EventHtmlTableRendererFactory($this);
 
                     $html[] = '<li class="list-group-item ">';
                     $html[] = $eventRendererFactory->render($dateEvent, $startTime);

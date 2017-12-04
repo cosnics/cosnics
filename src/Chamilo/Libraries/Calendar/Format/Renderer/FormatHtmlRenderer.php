@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Event\EventSource;
  * @package Chamilo\Libraries\Calendar\Format\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class ViewRenderer extends Renderer
+abstract class FormatHtmlRenderer extends FormatRenderer
 {
     // Parameters
     const PARAM_TIME = 'time';

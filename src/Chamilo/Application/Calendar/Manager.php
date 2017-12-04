@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Format\Renderer\ViewRenderer;
+use Chamilo\Libraries\Calendar\Format\Renderer\FormatHtmlRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
@@ -44,18 +44,18 @@ abstract class Manager extends Application
      */
     public function getCurrentRendererType()
     {
-        $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
+        $rendererType = $this->getRequest()->query->get(FormatHtmlRenderer::PARAM_TYPE);
 
         if (! $rendererType)
         {
             $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
 
-            if ($rendererType == ViewRenderer::TYPE_MONTH)
+            if ($rendererType == FormatHtmlRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
                 if ($detect->isMobile() && ! $detect->isTablet())
                 {
-                    $rendererType = ViewRenderer::TYPE_LIST;
+                    $rendererType = FormatHtmlRenderer::TYPE_LIST;
                 }
             }
         }
@@ -75,7 +75,7 @@ abstract class Manager extends Application
             $defaultRenderDate->setTime(0, 0, 0);
 
             $this->currentTime = $this->getRequest()->query->get(
-                ViewRenderer::PARAM_TIME,
+                FormatHtmlRenderer::PARAM_TIME,
                 $defaultRenderDate->getTimestamp());
         }
 

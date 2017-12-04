@@ -39,7 +39,7 @@ abstract class Calendar extends HTML_Table
     public function __construct(CalendarConfiguration $calendarConfiguration, $displayTime)
     {
         $this->calendarConfiguration = $calendarConfiguration;
-        
+
         if (is_null($displayTime))
         {
             $this->displayTime = time();
@@ -49,7 +49,7 @@ abstract class Calendar extends HTML_Table
             $this->displayTime = $displayTime;
         }
         $this->eventsToShow = array();
-        
+
         parent::__construct(array('class' => implode(' ', $this->getClasses()), 'cellspacing' => 0));
     }
 
@@ -93,7 +93,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Add an event to the calendar
-     * 
+     *
      * @param integer $time A time in the day on which the event should be displayed
      * @param string $content The html content to insert in the month calendar
      */
@@ -104,7 +104,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the list of events to show sorted by their starting time
-     * 
+     *
      * @return string[]
      */
     public function getEventsToShow()
@@ -125,17 +125,29 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the first date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     abstract public function getStartTime();
 
     /**
      * Gets the end date which will be displayed by this calendar.
-     * 
+     *
      * @return integer
      */
     abstract public function getEndTime();
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getStrictStartTime();
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getStrictEndTime();
 
     abstract protected function addEvents();
 

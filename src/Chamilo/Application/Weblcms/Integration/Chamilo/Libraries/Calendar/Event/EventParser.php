@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Calendar\Event\EventSource;
 
 /**
  *
@@ -109,15 +110,15 @@ class EventParser
     public function getEvents()
     {
         $course = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            Course::class_name(), 
+            Course::class_name(),
             $this->getPublication()->get_course_id());
-        
+
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
-            $this->getPublication()->get_content_object(), 
-            $this->getFromDate(), 
-            $this->getToDate(), 
+            $this->getPublication()->get_content_object(),
+            $this->getFromDate(),
+            $this->getToDate(),
             Event::class_name());
-        
+
         $events = $parser->getEvents();
         foreach ($events as &$parsedEvent)
         {
@@ -128,21 +129,37 @@ class EventParser
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getPublication()->get_course_id();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $this->getPublication()->get_tool();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublication()->get_id();
-            
+
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-            
+
             $parsedEvent->setUrl($link);
-            $parsedEvent->setSource(
-                Translation::get('Course', null, \Chamilo\Application\Weblcms\Manager::context()) . ' - ' .
-                     $course->get_title());
+            $parsedEvent->setSource($this->getEventSource($course));
             $parsedEvent->setId($this->getPublication()->get_id());
             $parsedEvent->setContext(\Chamilo\Application\Weblcms\Manager::context());
             $parsedEvent->setCourseId($this->getPublication()->get_course_id());
-            
+
             $result[] = $parsedEvent;
         }
-        
+
         return $result;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @return \Chamilo\Libraries\Calendar\Event\EventSource
+     */
+    protected function getEventSource(Course $course)
+    {
+        $eventSource = new EventSource();
+
+        $eventSource->setId($course->getId());
+        $eventSource->setTitle(
+            Translation::get('Course', null, \Chamilo\Application\Weblcms\Manager::context()) . ' - ' .
+                 $course->get_title());
+        $eventSource->setContext(\Chamilo\Application\Weblcms\Manager::context());
+
+        return $eventSource;
     }
 }

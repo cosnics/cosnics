@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Renderer
+abstract class FormatRenderer
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 

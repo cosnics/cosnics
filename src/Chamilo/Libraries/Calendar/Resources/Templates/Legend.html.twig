@@ -1,0 +1,36 @@
+{% set appContext = 'Chamilo\\Libraries\\Calendar' %}
+
+{% if calendarSources.hasSources() == true %}
+<div class="panel panel-default table-calendar-legend">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            {{ 'Legend'|trans({}, appContext) }}
+        </h4>
+    </div>
+    <ul class="list-group">
+        {% for source in calendarSources.getSources() %}
+        <li class="list-group-item">
+            {% if dataProvider.supportsVisibility() and not dataProvider.isSourceVisible(source) %}
+            {% set eventClass = 'event-source event-container-source-faded' %}
+            {% else %}
+            {% set eventClass = 'event-source' %}
+            {% endif %}
+
+            <div class="{{ eventClass }}" data-source-key="{{ calendarSources.getSourceKey(source) }}"
+                data-source="{{ source.hash() }}">
+                <span class="event-container {{ calendarSources.getSourceClasses(source) }}"></span>
+                {{ source.getTitle() }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if dataProvider.supportsVisibility() %}
+<script type="text/javascript">
+    var calendarVisibilityContext = {{ dataProvider.getVisibilityContext()|json_encode|raw }};
+</script>
+{{ getJavascript('Highlight.js','Chamilo\\Libraries\\Calendar') }}
+{% endif %}
+
+{% endif %}

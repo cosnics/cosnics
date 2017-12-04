@@ -37,7 +37,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
                 $event->setContent($calendarEvent->DESCRIPTION->getValue());
             }
 
-            $event->setSource($object->get_title());
+            $event->setSource($this->getEventSource());
             $event->setContentObject($object);
 
             $events[] = $event;

@@ -3,16 +3,16 @@ namespace Chamilo\Libraries\Calendar\Format\Renderer;
 
 use Chamilo\Libraries\Calendar\CalendarConfiguration;
 use Chamilo\Libraries\Calendar\CalendarSources;
+use Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory;
 use Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar;
 use Chamilo\Libraries\Calendar\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory;
 
 /**
  *
  * @package Chamilo\Libraries\Calendar\Format\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class HtmlTableRenderer extends ViewRenderer
+abstract class FormatHtmlTableRenderer extends FormatHtmlRenderer
 {
 
     /**
@@ -29,7 +29,7 @@ abstract class HtmlTableRenderer extends ViewRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory
+     * @var \Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory
      */
     private $eventHtmlTableRendererFactory;
 
@@ -39,11 +39,11 @@ abstract class HtmlTableRenderer extends ViewRenderer
      * @param \Chamilo\Libraries\Calendar\CalendarSources $calendarSources
      * @param \Chamilo\Libraries\Calendar\CalendarConfiguration $calendarConfiguration
      * @param \Chamilo\Libraries\Calendar\Format\HtmlTable\Calendar $calendar
-     * @param \Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory $eventHtmlTableRendererFactory
+     * @param \Chamilo\Libraries\Calendar\Event\Service\EventHtmlTableRendererFactory $eventHtmlTableRendererFactory
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, CalendarSources $calendarSources,
         CalendarConfiguration $calendarConfiguration, Calendar $calendar,
-        HtmlTableRendererFactory $eventHtmlTableRendererFactory)
+        EventHtmlTableRendererFactory $eventHtmlTableRendererFactory)
     {
         parent::__construct($dataProvider, $calendarSources);
 
@@ -78,5 +78,4 @@ abstract class HtmlTableRenderer extends ViewRenderer
     {
         return $this->eventHtmlTableRendererFactory;
     }
-
 }

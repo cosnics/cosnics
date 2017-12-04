@@ -15,7 +15,6 @@ interface VisibilitySupport
      * Check whether the given source is visible for the user
      *
      * @param \Chamilo\Libraries\Calendar\Event\EventSource $source
-     * @param integer $userIdentifier
      * @return boolean
      */
     public function isSourceVisible(EventSource $source);
