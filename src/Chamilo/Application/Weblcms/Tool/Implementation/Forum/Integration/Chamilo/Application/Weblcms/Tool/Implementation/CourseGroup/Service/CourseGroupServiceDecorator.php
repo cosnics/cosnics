@@ -31,7 +31,7 @@ class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceD
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        $hasCategory = boolval($formValues[$this->getFormProperty()][$courseGroup->getId()]);
+        $hasCategory = boolval($formValues[$this->getFormProperty()][0]);
 
         if ($hasCategory)
         {
