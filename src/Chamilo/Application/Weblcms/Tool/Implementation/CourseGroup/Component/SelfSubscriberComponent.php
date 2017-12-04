@@ -32,6 +32,8 @@ class SelfSubscriberComponent extends Manager
                 $this->get_user_id()))
         {
             $course_group->subscribe_users($this->get_user());
+            $this->getCourseGroupDecoratorsManager()->subscribeUser($course_group, $this->getUser());
+
             $this->redirect(
                 Translation::get('UserSubscribed'),
                 false,

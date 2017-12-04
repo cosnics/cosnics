@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Repository;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -23,28 +23,63 @@ class AvailabilityRepository
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    private $dataClassRepository;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function __construct(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        return $this->dataClassRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    protected function setDataClassRepository($dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findAvailabilitiesForUser(User $user, $isAvailable = null)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
-        
+
         if (! is_null($isAvailable))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY), 
+                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable));
         }
-        
+
         $condition = new AndCondition($conditions);
-        
-        return DataManager::retrieves(Availability::class_name(), new DataClassRetrievesParameters($condition));
+
+        return $this->getDataClassRepository()->retrieves(
+            Availability::class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -52,30 +87,32 @@ class AvailabilityRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {
         $conditions = array();
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
-        
+
         if (! is_null($isAvailable))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY), 
+                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable));
         }
-        
+
         $condition = new AndCondition($conditions);
-        
-        return DataManager::retrieves(Availability::class_name(), new DataClassRetrievesParameters($condition));
+
+        return $this->getDataClassRepository()->retrieves(
+            Availability::class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -85,22 +122,24 @@ class AvailabilityRepository
      * @param string $calendarIdentifier
      * @return \Chamilo\Application\Calendar\Extension\Google\Storage\DataClass\Availability
      */
-    public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType, 
+    public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType,
         $calendarIdentifier)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_ID), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_ID),
             new StaticConditionVariable($calendarIdentifier));
         $condition = new AndCondition($conditions);
-        
-        return DataManager::retrieve(Availability::class_name(), new DataClassRetrieveParameters($condition));
+
+        return $this->getDataClassRepository()->retrieve(
+            Availability::class_name(),
+            new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -111,9 +150,9 @@ class AvailabilityRepository
     public function removeAvailabilityByCalendarType($calendarType)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE), 
+            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
-        
-        return DataManager::deletes(Availability::class_name(), $condition);
+
+        return $this->getDataClassRepository()->deletes(Availability::class_name(), $condition);
     }
 }

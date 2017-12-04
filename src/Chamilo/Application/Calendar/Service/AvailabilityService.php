@@ -59,7 +59,7 @@ class AvailabilityService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getAvailabilitiesForUser(User $user, $isAvailable = null)
     {
@@ -71,7 +71,7 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {
@@ -115,7 +115,13 @@ class AvailabilityService
     public function createAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
         $availability = new Availability();
-        $this->setAvailabilityProperties($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
+        $this->setAvailabilityProperties(
+            $availability,
+            $user,
+            $calendarType,
+            $calendarIdentifier,
+            $isAvailable,
+            $colour);
 
         if (! $availability->create())
         {
@@ -233,7 +239,8 @@ class AvailabilityService
         return new ActionResult(
             count($calendarAvailabilityTypes),
             $failedActions,
-            __METHOD__,
+            __NAMESPACE__,
+            __FUNCTION__,
             Availability::class_name(false));
     }
 
@@ -255,9 +262,10 @@ class AvailabilityService
 
     /**
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getAvailableCalendars()
+    public function getAvailableCalendars(User $user)
     {
         $availableCalendars = array();
 
@@ -279,7 +287,7 @@ class AvailabilityService
 
                 $package = ClassnameUtilities::getInstance()->getNamespaceParent($context, 4);
                 $implementor = new $class_name();
-                $availableCalendars[$package] = $implementor->getCalendars();
+                $availableCalendars[$package] = $implementor->getCalendars($user);
             }
         }
 

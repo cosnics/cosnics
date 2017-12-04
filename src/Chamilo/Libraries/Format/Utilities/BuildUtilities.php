@@ -95,7 +95,21 @@ class BuildUtilities
             if (file_exists($packageComposerPath))
             {
                 $jsonLoader = new JsonLoader(new ArrayLoader());
-                $completePackage = $jsonLoader->load($packageComposerPath);
+
+                try
+                {
+                    $completePackage = $jsonLoader->load($packageComposerPath);
+                }
+                catch(\Exception $ex)
+                {
+                    continue;
+                }
+
+//                if(!array_key_exists('cosnics', $completePackage->getExtra()))
+//                {
+//                    var_dump($packageComposerPath);
+//                    continue;
+//                }
 
                 // Process require
                 foreach ($completePackage->getRequires() as $requireName => $requirePackage)

@@ -64,8 +64,6 @@ RandomRegistration = "Willekeurige inschrijvingen"
 RegisterCourseUsersRandomly = "Schrijf cursusleden willekeurig in"
 
 NoCourseGroupFound = "Geen cursusgroep gevonden."
-DocumentToolUncheckedWarning = "Je hebt de Documenten tool uitgevinkt. De gerelateerde documentencategorie en ALLE onderliggende documenten zullen worden verwijderd als je dit formulier verzendt."
-ForumToolUncheckedWarning = "Je hebt de Forum tool uitgevinkt. De gerelateerde forumcategorie en ALLE onderliggende subfora, topics en posts zullen worden verwijderd als je dit formulier verzendt."
 
 CourseGroupParent = "Bovenliggende cursusgroep"
 ParentGroupType = "Bovenliggende cursusgroep"
@@ -80,9 +78,7 @@ CourseGroups = "Cursusgroepen"
 
 DeleteConfirm = "Weet je zeker dat je de cursusgroep {NAME} wilt verwijderen?"
 DeleterConfirm = "Weet je zeker dat je de geselecteerde cursusgroepen wilt verwijderen?"
-DeleteConfirmChildren = "Deze cursusgroep bevat overige cursusgroepen. Deze zullen mee verwijderd worden, alsook hun gerelateerde documentencategorieën, forumcategorieën en de onderliggende documenten, subfora, topics en posts."
-DeleteConfirmDocument = "Deze cursusgroep is gelinkt aan een documentencategorie. Deze categorie en ALLE onderliggende documenten zullen worden verwijderd."
-DeleteConfirmForum = "Deze cursusgroep is gelinkt aan een forumcategorie. Deze categorie en ALLE onderliggende subfora, topics en posts zullen worden verwijderd."
+DeleteConfirmChildren = "Deze cursusgroep bevat overige cursusgroepen. Deze zullen mee verwijderd worden."
 
 CourseGroupChildren = "Onderliggende cursusgroepen"
 CourseGroupTitleExists = "Er bestaat al een cursusgroep met naam {NAME}"

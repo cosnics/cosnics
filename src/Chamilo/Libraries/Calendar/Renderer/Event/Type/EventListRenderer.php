@@ -54,9 +54,18 @@ class EventListRenderer extends EventRenderer
 
         $html[] = '<div class="col-xs-7 list-event-item-data">';
 
-        $html[] = '<a href="' . $event->getUrl() . '">';
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] = '<a href="' . $event->getUrl() . '">';
+        }
+
         $html[] = htmlspecialchars($event->getTitle());
-        $html[] = '</a>';
+
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] = '</a>';
+        }
+
         $html[] = '</div>';
 
         $html[] = '</div>';

@@ -1,0 +1,7 @@
+Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference:
+  course_group_office365_reference:
+    id: 1
+    course_group_id: 4
+    office365_group_id: e5dcaf72-8938-4ed2-9b31-fbac1cadea3b
+    office365_plan_id: lZyU6AEpUku8n3bbk_HJKJYAHLdQ
+    linked: 1

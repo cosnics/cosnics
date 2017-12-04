@@ -25,7 +25,6 @@ class DeleterComponent extends Manager
     public function run()
     {
         $workspaceIdentifiers = $this->getRequest()->getFromPostOrUrl(self::PARAM_WORKSPACE_ID);
-
         try
         {
             if (empty($workspaceIdentifiers))
