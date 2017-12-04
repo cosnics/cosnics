@@ -31,52 +31,5 @@
                 type="service"
                 id="symfony.component.translation.translator" />
         </service>
-
-        <service
-            id="chamilo.libraries.calendar.event.service.html_table_renderer_factory"
-            class="Chamilo\Libraries\Calendar\Event\Service\HtmlTableRendererFactory">
-            <argument
-                type="service"
-                id="chamilo.libraries.calendar.calendar_sources" />
-        </service>
-
-
-        <service
-            id="chamilo.libraries.calendar.calendar_sources"
-            class="Chamilo\Libraries\Calendar\CalendarSources">
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.service.legend_renderer"
-            class="Chamilo\Libraries\Calendar\Service\LegendRenderer">
-            <argument
-                type="service"
-                id="chamilo.libraries.calendar.calendar_sources" />
-            <argument
-                type="service"
-                id="symfony.component.translation.translator" />
-            <argument
-                type="service"
-                id="chamilo.libraries.file.path_builder" />
-            <argument
-                type="service"
-                id="chamilo.libraries.format.utilities.resource_manager" />
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.service.calendar_configuration_factory"
-            class="Chamilo\Libraries\Calendar\Service\CalendarConfigurationFactory">
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.configuration.local_setting" />
-        </service>
-
-        <service
-            id="chamilo.libraries.calendar.calendar_configuration"
-            class="Chamilo\Libraries\Calendar\CalendarConfiguration"
-            factory-service="chamilo.libraries.calendar.service.calendar_configuration_factory"
-            factory-method="getCalendarConfiguration">
-        </service>
-
     </services>
 </container>

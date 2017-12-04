@@ -31,7 +31,9 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             new FileLocator(
                 Path::getInstance()->getConfigurationPath('Chamilo\Libraries\Calendar') . 'DependencyInjection'));
 
-        $loader->load('services.xml');
+        $loader->load('calendar.xml');
+        $loader->load('calendar.event.xml');
+        $loader->load('calendar.format.xml');
     }
 
     /**
